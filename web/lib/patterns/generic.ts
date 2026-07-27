@@ -9466,6 +9466,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-seller-preview-ssti-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop seller preview SSTI live oracle (PWN-040)",
+    description:
+      "GET /seller/preview?template= passes raw query input to ejs.render() with no sandbox — confirm with <%= 7*7 %> rendering 49 after seller registration.",
+    impactOneline:
+      "Unsandboxed template rendering in seller preview enables full server-side template injection and RCE.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopSellerPreviewSstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to ejs.render(); use a sandboxed template engine or static previews.",
+      steps: [
+        "Remove ejs.render() from seller preview endpoints.",
+        "Use a logic-less template engine or server-side HTML escaping.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /seller/preview?template= endpoint evaluates <%= 7*7 %> to 49 via ejs.render(). Show sandboxed template rendering fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-download-path-traversal-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop invoice download path traversal live oracle (PWN-038)",
+    description:
+      "GET /download?file=../../package.json returns application package.json via path.join traversal without resolved-path validation.",
+    impactOneline:
+      "Path traversal on invoice downloads can expose server files and source configuration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopDownloadPathTraversalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Resolve and validate download paths against an allowlisted invoices directory.",
+      steps: [
+        "Use path.resolve() and verify the resolved path stays under the invoices root.",
+        "Reject .. segments and absolute paths in file= query parameters.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /download?file= endpoint returns ../../package.json via path traversal. Show resolved-path validation for file downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-seller-preview-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop seller preview SSTI route live oracle (PWN-040)",
+    description:
+      "When scanning /seller/preview, template= query evaluates <%= 7*7 %> to 49 via ejs.render() — route-specific SSTI oracle.",
+    impactOneline:
+      "Route scans on seller preview surfaces need live SSTI confirmation beyond client-bundle evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopSellerPreviewSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sandbox or remove ejs.render() from seller preview — Pwnshop is intentional lab software.",
+      steps: [
+        "Block template= reflection into ejs.render().",
+        "Use static preview HTML instead of server-side template evaluation.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /seller/preview route evaluates <%= 7*7 %> to 49. Show route-specific SSTI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-download-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop download path traversal route live oracle (PWN-038)",
+    description:
+      "When scanning /download, file=../../package.json returns package.json via path traversal — route-specific file disclosure oracle.",
+    impactOneline:
+      "Route scans on download endpoints need live path-traversal confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopDownloadPathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate download paths against an allowlisted directory — Pwnshop is intentional lab software.",
+      steps: [
+        "Reject .. traversal in file= parameters.",
+        "Verify resolved paths remain under the invoices directory.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /download route returns ../../package.json via path traversal. Show route-specific download validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-loans-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank loans route live oracle",
+    description:
+      "When scanning /loans, POST /api/loans creates a pending loan visible in GET /api/loans — route-specific loan-module business-logic oracle.",
+    impactOneline:
+      "Route scans on loan pages need live loan-creation confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLoansRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate loan eligibility and amounts before creating pending loans.",
+      steps: [
+        "Enforce credit checks and amount limits on POST /api/loans.",
+        "Require staff approval before loans enter pending status.",
+        "Rate-limit loan applications per user."
+      ]
+    },
+    fixPrompt:
+      "Our /loans route allows POST /api/loans to create pending loans. Show route-specific loan validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-userlogin-css-injection-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
