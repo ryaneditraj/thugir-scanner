@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T07:06:53.734Z",
+  "updated_at": "2026-07-27T08:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets v1.13.3 — challenge-63 hardcoded AES encryption key oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+      "source": "OWASP WrongSecrets v1.13.3 — challenge-64 Swift binary reverse-engineering oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — challenge-65 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+      "source": "OWASP WrongSecrets — challenge-66 advanced binary reverse-engineering oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/allowlist",
+      "source": "sampsonc/vulnlab.dev — SSRF allowlist bypass lab (vulnlab.dev must contain substring bypass)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-54",
       "source": "OWASP WrongSecrets — challenge-54 .gitignore AES-256-CBC secret oracle (public Heroku benchmark)",
