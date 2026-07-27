@@ -13133,6 +13133,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-allowlist-bypass-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+    description:
+      "GET /allowlist/?url=http://169.254.169.254/latest/meta-data/?vulnlab.dev bypasses a naive substring 'vulnlab.dev' allowlist via query string and returns AWS IMDS metadata — the ssrf.vulnlab.dev allowlist-bypass SSRF oracle.",
+    impactOneline:
+      "Substring allowlists are bypassed when trusted tokens appear in paths or query strings, enabling metadata SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabAllowlistBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse and validate URL hosts against an allowlist — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Extract and validate the hostname from parsed URLs; never rely on substring checks of the full URL string.",
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /allowlist endpoint checks 'vulnlab.dev' in the URL string instead of the host. Show proper SSRF egress filtering with hostname validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-vulnlab-basic-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -13233,6 +13259,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /redirect route allow-lists *.vulnlab.dev but follows redirects to internal metadata. Show SSRF redirect-chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-allowlist-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /allowlist route SSRF live oracle",
+    description:
+      "When scanning /allowlist, GET /allowlist/?url= bypasses substring 'vulnlab.dev' allowlist via query string and returns AWS metadata — route-specific allowlist-bypass SSRF oracle.",
+    impactOneline:
+      "Substring allowlists are bypassed when trusted tokens appear in paths or query strings, enabling metadata SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabAllowlistRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse and validate URL hosts against an allowlist — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Extract and validate the hostname from parsed URLs; never rely on substring checks of the full URL string.",
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /allowlist route checks 'vulnlab.dev' in the URL string instead of the host. Show proper SSRF egress filtering with hostname validation.",
     version: 1,
     enabled: true
   },
@@ -21426,7 +21478,85 @@ export const genericPatterns: Pattern[] = [
     version: 1,
     enabled: true
   },
-{
+  {
+    slug: "juice-shop-jwt-alg-none-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Juice Shop JWT none-algorithm live oracle",
+    description:
+      "GET /rest/user/authentication-details accepts a forged unsigned JWT with alg:none and returns admin credentials — the Juice Shop JWT none-algorithm training oracle.",
+    impactOneline:
+      "Accepting alg:none JWTs lets attackers forge admin tokens without the signing secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopJwtAlgNoneLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to a specific algorithm and reject alg:none.",
+      steps: [
+        "Configure your JWT library to allow only HS256/RS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Add a test that rejects unsigned alg:none tokens."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop accepts alg:none JWTs on /rest/user/authentication-details. Pin verification to HS256/RS256 and explicitly reject alg:none.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-chatbot-api-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "Juice Shop chatbot LLM proxy live oracle",
+    description:
+      "POST /rest/chat accepts unauthenticated SSE chat messages and proxies them to a backend LLM — the Juice Shop chatbot prompt-injection surface.",
+    impactOneline:
+      "Unauthenticated LLM proxy endpoints enable prompt injection, data exfiltration, and tool abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopChatbotApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chatbot endpoints and harden LLM system prompts against injection.",
+      steps: [
+        "Require authentication before accepting chat messages.",
+        "Isolate LLM backends from sensitive data and privileged tools.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/chat endpoint accepts unauthenticated SSE messages. Show chatbot auth hardening and prompt-injection defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-chatbot-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "Juice Shop chatbot route live oracle",
+    description:
+      "When scanning /#/chatbot, POST /rest/chat accepts unauthenticated SSE chat messages — route-specific chatbot prompt-injection oracle with scannedUrl evidence.",
+    impactOneline:
+      "Unauthenticated LLM proxy endpoints enable prompt injection, data exfiltration, and tool abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopChatbotRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chatbot endpoints and harden LLM system prompts against injection.",
+      steps: [
+        "Require authentication before accepting chat messages.",
+        "Isolate LLM backends from sensitive data and privileged tools.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /chatbot route exposes an unauthenticated /rest/chat LLM proxy. Show chatbot auth hardening and prompt-injection defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "thugir-jwt-weak-claims",
     platform: "generic",
     category: "Broken authentication",
