@@ -9492,6 +9492,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-coupon-category-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Pwnshop coupon category bypass route live oracle (PWN-016)",
+    description:
+      "When scanning /apply-coupon, PHONE20 is phones-only at /apply-coupon but checkout accepts coupon_code=PHONE20 on fashion cart items without re-validating allowed_category — route-specific coupon category bypass oracle.",
+    impactOneline:
+      "Category-restricted coupons can be applied at checkout without the required product category in cart.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopCouponCategoryBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate coupon category restrictions at checkout settlement — Pwnshop PWN-016 is intentional lab software.",
+      steps: [
+        "Enforce allowed_category checks again when processing checkout coupon_code.",
+        "Reject checkout when cart contents no longer match coupon category restrictions.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /apply-coupon route scan confirms PHONE20 bypasses category restrictions at checkout. Show coupon re-validation at checkout.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-seller-preview-ssti-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -14641,6 +14667,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-ldap-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals LDAP injection route live oracle",
+    description:
+      "When scanning /api/users/ldap, GET with attacker-controlled query returns LDAP directory entries or javax.naming naming errors — route-specific LDAP injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals passes unsanitized LDAP filter fragments to the directory service.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsLdapRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize LDAP queries and escape filter metacharacters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate user input into LDAP filter strings.",
+        "Use parameterized LDAP APIs or strict allow-list validation on query fragments.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/ldap route scan confirms LDAP injection via query parameter. Show LDAP filter sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-secrets-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -15911,6 +15963,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /marketplace bundle uses prototypePollutionDomXss as a dynamic script source after __proto__ query parsing. Show prototype pollution and DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-marketplace-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals marketplace route live oracle",
+    description:
+      "When scanning /marketplace, the JS bundle ships prototypePollutionDomXss script-gadget code and __proto__ marketplace parsing — route-specific prototype pollution DOM XSS oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals marketplace query parsing enables prototype pollution DOM XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMarketplaceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block __proto__ keys during query parsing and never load script src from polluted prototype properties — Broken Crystals is intentional lab software.",
+      steps: [
+        "Parse query strings with libraries that block __proto__ and constructor keys.",
+        "Validate dynamic script src values against an allowlist.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /marketplace route scan confirms prototypePollutionDomXss in the JS bundle. Show prototype pollution and DOM XSS remediation.",
     version: 1,
     enabled: true
   },

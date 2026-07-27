@@ -18063,6 +18063,23 @@ const brokencrystalsMarketplacePrototypePollutionLiveOracle: Rule = async (ctx) 
   };
 };
 
+const brokencrystalsMarketplaceRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/marketplace/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMarketplacePrototypePollutionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /marketplace route scan — JS bundle ships prototypePollutionDomXss script gadget and __proto__ marketplace parsing — prototype pollution DOM XSS oracle"
+    }
+  };
+};
+
 const clientSideVulnExposeEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}`;
@@ -27262,6 +27279,23 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/apply-coupon/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopCouponCategoryBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+    }
+  };
+};
+
 async function pwnshopEnsureSellerSession(ctx: RuleContext): Promise<string | null> {
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return null;
@@ -36099,6 +36133,23 @@ const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const brokencrystalsLdapRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/ldap/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsLdapInjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/ldap route scan — GET with attacker-controlled query returns LDAP directory entries or naming errors — LDAP injection oracle"
+    }
+  };
+};
+
 const BROKENCRYSTALS_SAFE_FILES_RFI_PROBE = {
   name: "thugir-rfi-probe",
   url: "https://filedealer.nexploit.app/rfi.md5.txt",
@@ -39320,6 +39371,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankRequestLoanNegativeAmountLiveOracle,
   vulnbankCheckBalanceIdorLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
+  brokencrystalsMarketplaceRouteLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
@@ -39470,6 +39522,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopCouponCategoryBypassLiveOracle,
   pwnshopAvatarUploadRouteLiveOracle,
   pwnshopApplyCouponRouteLiveOracle,
+  pwnshopCouponCategoryBypassRouteLiveOracle,
   pwnshopSellerPreviewSstiLiveOracle,
   pwnshopDownloadPathTraversalLiveOracle,
   pwnshopSellerPreviewSstiRouteLiveOracle,
@@ -39678,6 +39731,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAzureMetadataSsrfLiveOracle,
   brokencrystalsDigitalOceanMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
+  brokencrystalsLdapRouteLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsMcpToolsLiveOracle,
   brokencrystalsMcpRouteLiveOracle,
