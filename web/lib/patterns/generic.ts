@@ -16253,6 +16253,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api1-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API1 BOLA live oracle",
+    description:
+      "GET /api1/user/1 with a newly registered user's Authorization-Token returns user id=1 record including flag — the vAPI broken object level authorization oracle.",
+    impactOneline:
+      "Missing object-level checks let any authenticated user read other users' records by changing the object ID.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi1BolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — enforce object-level authorization on every user fetch in production.",
+      steps: [
+        "Verify the authenticated principal owns or may access the requested user ID.",
+        "Never rely on sequential IDs without authorization checks.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api1/user/{id} endpoint returns other users' records when the ID changes. Show BOLA remediation for REST user routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api2-broken-auth-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "vAPI API2 broken authentication live oracle",
+    description:
+      "POST /api2/user/login accepts credential-stuffing pairs and GET /api2/user/details returns every user record including flag data — the vAPI broken authentication oracle.",
+    impactOneline:
+      "Weak login controls and excessive user export let attackers recover accounts and dump every profile.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi2BrokenAuthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — rate-limit login and scope user detail endpoints in production.",
+      steps: [
+        "Apply strict rate limiting and lockouts on /login endpoints.",
+        "Return only the authenticated user's profile from /user/details routes.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api2/user/login accepts credential stuffing and /api2/user/details leaks every user. Show broken-auth remediation with rate limits and scoped responses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api3-comment-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -16405,6 +16457,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api8/user/login is vulnerable to SQL injection authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api6-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API6 route mass assignment live oracle",
+    description:
+      "When scanning /api6/user, POST accepts attacker-controlled credit and GET /api6/user/me returns inflated balance with flag — route-specific mass assignment oracle.",
+    impactOneline:
+      "Writable object fields let attackers grant themselves credits when signup is reachable from a route-specific scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi6RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — allowlist writable fields on user creation in production.",
+      steps: [
+        "Bind only username/password on signup; ignore credit/isAdmin in request bodies.",
+        "Validate mass-assignment payloads against a server-side schema.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api6/user route scan confirms credit mass assignment. Show mass-assignment hardening for user registration APIs.",
     version: 1,
     enabled: true
   },
