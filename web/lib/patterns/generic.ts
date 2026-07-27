@@ -16383,6 +16383,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api3-comment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API3 comment route BOLA live oracle",
+    description:
+      "When scanning /api3/comment, GET returns every comment JSON without authentication including flag device IDs — route-specific BOLA / excessive data exposure oracle.",
+    impactOneline:
+      "Unauthenticated comment export exposes every user's device identifiers when the API3 comment route is scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi3CommentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — require authentication and object-level checks on comment APIs in production.",
+      steps: [
+        "Require authentication before returning comment collections.",
+        "Scope comment queries to the authenticated user's device or account.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api3/comment route scan confirms unauthenticated bulk comment export. Show BOLA remediation for comment APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api4-otp-broken-auth-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -16561,32 +16587,6 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api7/user/key reflects arbitrary Origin with credentials and returns auth keys. Show CORS hardening for authenticated API routes.",
-    version: 1,
-    enabled: true
-  },
-  {
-    slug: "vapi-api7-route-live-oracle",
-    platform: "generic",
-    category: "Security misconfiguration",
-    severityDefault: "high",
-    title: "vAPI API7 route CORS misconfiguration live oracle",
-    description:
-      "When scanning /api7/user, GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials: true and returns authkey — route-specific CORS misconfiguration oracle.",
-    impactOneline:
-      "Permissive CORS with credentials lets any third-party site read sensitive API keys when the API7 user route is scanned directly.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "vapiApi7RouteLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "vAPI is intentional API security training — restrict CORS origins and never combine reflected origins with credentials in production.",
-      steps: [
-        "Allowlist trusted origins instead of reflecting arbitrary Origin headers.",
-        "Never set Access-Control-Allow-Credentials: true with reflected origins.",
-        "Run vAPI only on isolated lab infrastructure with no production data."
-      ]
-    },
-    fixPrompt:
-      "Our /api7/user route scan confirms CORS reflects arbitrary Origin with credentials. Show CORS hardening for authenticated API routes.",
     version: 1,
     enabled: true
   },

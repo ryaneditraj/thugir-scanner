@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api1/user fires vapi-api1-route-live-oracle with scannedUrl + GET /api1/user/1 returns flag{api1_d0cd9be2324cc237235b}; vapi.apisec.ai/vapi/api1/user findings 9→11; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api2-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api2/user/login fires vapi-api2-route-live-oracle with scannedUrl + POST login savanna48@ortiz.com + GET /api2/user/details dumps all users with flag{api2_*}; vapi.apisec.ai/vapi/api2/user/login findings 9→11; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-comment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api3/comment fires vapi-api3-comment-route-live-oracle with scannedUrl + GET returns commenttext/deviceid JSON including flag{api3_*}; vapi.apisec.ai/vapi/api3/comment findings 10→11; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "extract-api-path-protocol-relative-fix",
       "status": "shipped",
