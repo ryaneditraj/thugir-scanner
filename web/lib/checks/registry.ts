@@ -6865,6 +6865,51 @@ const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatLearnOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const cookie = await nodegoatRegisterSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const learnUrl = new URL("/learn", ctx.origin);
+  learnUrl.searchParams.set("url", `https://${probeHost}/`);
+  const doc = await ctx.probe.get(learnUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual",
+    headers: { Cookie: cookie }
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!location.includes(probeHost)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      learnUrl: learnUrl.toString(),
+      location,
+      snippet: location.slice(0, 160),
+      note: "NodeGoat GET /learn?url= reflects attacker-controlled URL in 302 Location without validation — unvalidated open redirect oracle"
+    }
+  };
+};
+
+const nodegoatLearnOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/learn(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatLearnOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /learn route scan — GET /learn?url= reflects attacker URL in 302 Location without validation"
+    }
+  };
+};
+
 // --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
 const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
   {
@@ -17093,6 +17138,25 @@ const vulnExposeXssCspBypassRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "VulnSite /xss/csp-bypass route scan — CSP bypass lab with policy simulator and JSONP/Angular/DOM/WebSocket bypass methods"
+    }
+  };
+};
+
+const vulnExposeNetworkToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/network-tools(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/network-tools"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/network-tools", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /network-tools route scan — server-side ping connectivity lab with ICMP Echo Request tooling (SSRF-prone)"
     }
   };
 };
@@ -32507,7 +32571,23 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     },
     {
       label: "Git history secret walkthrough",
-      re: /Git history|trufflehog3|aws_secret_access_key/i
+      re: /Git history|trufflehog3?|Git-secrets|aws_secret_access_key/i
+    },
+    {
+      label: "Git hardcoded password walkthrough",
+      re: /secret called.*password|hardcoded secrets.*grep|clone the repo and use.*grep/i
+    },
+    {
+      label: "Intro challenge walkthrough",
+      re: /Welcome to OWASP WrongSecrets|opening challenge|challenge focuses on.*Intro/i
+    },
+    {
+      label: "Every challenge secret-hunt walkthrough",
+      re: /Every challenge is about finding a secret|table-of-contents/i
+    },
+    {
+      label: "WrongSecrets desktop Docker run walkthrough",
+      re: /wrongsecrets-desktop|docker run -p 3000:3000/i
     },
     {
       label: "Front-end secret walkthrough",
@@ -32635,8 +32715,12 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                   ? "AWS Secrets Manager via K8s CSI driver"
                   : /IAM privilege escalation|Parameter Store/i.test(doc.body)
                   ? "IAM privilege escalation / AWS Parameter Store secrets"
-                  : /Git history|trufflehog3|aws_secret_access_key/i.test(doc.body)
-                    ? "Git history secrets"
+                  : /Git history|trufflehog3?|Git-secrets|secret called.*password/i.test(doc.body)
+                    ? "Git history / hardcoded password secrets"
+                    : /Welcome to OWASP WrongSecrets|challenge focuses on.*Intro|Every challenge is about finding a secret/i.test(
+                          doc.body
+                        )
+                      ? "WrongSecrets intro / onboarding secrets"
                     : /Secrets in front-end code|Development Tools in the browser/i.test(doc.body)
                       ? "front-end hardcoded secrets"
                       : /\.bash_history|bash_history file within a running container/i.test(doc.body)
@@ -39352,6 +39436,7 @@ export const RULES: Record<string, Rule> = {
   vulnExposeBlindSqliApiLiveOracle,
   vulnExposeSqliBlindRouteLiveOracle,
   vulnExposeXssCspBypassRouteLiveOracle,
+  vulnExposeNetworkToolsRouteLiveOracle,
   brokencrystalsUsersSearchRouteLiveOracle,
   brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
@@ -39855,6 +39940,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA8RouteLiveOracle,
   nodegoatTutorialA9RouteLiveOracle,
   nodegoatTutorialA10RouteLiveOracle,
+  nodegoatLearnOpenRedirectLiveOracle,
+  nodegoatLearnOpenRedirectRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
