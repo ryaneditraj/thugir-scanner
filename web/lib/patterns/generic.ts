@@ -9128,6 +9128,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-track-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop /track route IDOR live oracle (PWN-002)",
+    description:
+      "When scanning /track, GET /track/1 returns full order tracking with shippingAddress without authentication — route-specific order tracking IDOR oracle.",
+    impactOneline:
+      "Unauthenticated order tracking on the /track route exposes shipping addresses for sequential order IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopTrackIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and verify order ownership before returning tracking data — Pwnshop is intentional lab software.",
+      steps: [
+        "Bind order tracking to authenticated sessions and verify the order belongs to the current user.",
+        "Reject GET /track/:id requests without a valid session or signed tracking token.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /track route scan confirms order tracking IDOR via /track/1. Show IDOR remediation for order tracking endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-product-search-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -14251,6 +14277,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Broken Crystals /secrets route live oracle",
+    description:
+      "When scanning /secrets, GET /api/secrets returns live API tokens (Slack, Facebook, Google OAuth, PayPal, CodeClimate) without authentication — route-specific secrets exposure oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals exposes third-party API tokens on /secrets scans.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose secret tokens via unauthenticated API routes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove /api/secrets from production deployments and rotate all exposed tokens immediately.",
+        "Store secrets in a vault and inject them server-side at runtime.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /secrets route scan confirms unauthenticated /api/secrets token exposure. Show secrets management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-safe-files-rfi-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -17003,6 +17055,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /tutorial/a10 route documents unvalidated /learn?url= redirect labs. Show how to isolate NodeGoat training from production redirect validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-benefits-nosql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "NodeGoat /benefits NoSQL injection route live oracle",
+    description:
+      "When scanning /benefits, the RetireEasy benefits module combines with MongoDB $gt/$ne operator injection patterns and live allocations IDOR/NoSQL threshold probes — route-specific NodeGoat NoSQL training oracle.",
+    impactOneline:
+      "NodeGoat benefits/allocations routes document NoSQL injection via MongoDB comparison operators and unsanitized $where threshold filters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatBenefitsNosqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — validate input types and avoid $where with user input in production MongoDB queries.",
+      steps: [
+        "Cast and validate all MongoDB query inputs to expected scalar types.",
+        "Never concatenate user input into $where JavaScript expressions.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /benefits route scan documents NoSQL injection on allocations threshold filters. Show MongoDB input validation remediation.",
     version: 1,
     enabled: true
   },
