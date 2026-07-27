@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T02:10:00.000Z",
+  "updated_at": "2026-07-27T02:20:17.306Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2841,
-  "total_findings": 28499,
+  "total_sites_scanned": 2857,
+  "total_findings": 28805,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2024,
-  "discovery_findings": 24192,
-  "improvements_shipped": 1161,
-  "last_run": "2026-07-27T02:10:00.000Z",
+  "discovery_urls_added": 2029,
+  "discovery_findings": 24345,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-27T02:20:17.306Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -48,33 +48,44 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (12 findings); no category gaps"
+      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (12 findings); reflexion-escalated-ssti + juice-shop-leaked-api-key present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 23,
-      "focus": "nodegoat A9/A10 tutorial route oracles + wrongsecrets challenge-21 Go binary markers",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 153,
+      "focus": "WrongSecrets challenge-23/24/25 + NodeGoat /benefits + brokencrystals /secrets + queue drain (pwnshop track, vulnbank forgot-password, check_balance)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — primary Heroku 503, no category gaps",
-      "nodegoat-websec.herokuapp.com/tutorial/a9: 6→7 findings — nodegoat-tutorial-a9-route-live-oracle shipped (Marked library known-vuln XSS)",
-      "nodegoat-websec.herokuapp.com/tutorial/a10: 6→7 findings — nodegoat-tutorial-a10-route-live-oracle shipped (/learn?url= unvalidated redirect)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-21: 8→9 findings — wrongsecrets-challenge-live-oracle extended with Go binary markers"
+      "wrongsecrets.herokuapp.com/challenge/challenge-23: 9 findings — wrongsecrets-challenge-live-oracle (front-end secrets)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-24: 9 findings — wrongsecrets-challenge-live-oracle (cryptography)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-25: 8 findings — client-side evidence only, no Web3 live oracle",
+      "nodegoat-websec.herokuapp.com/benefits: 6-finding hub with server-side-eval-evidence + client-side-nosql-evidence, no route-specific NoSQL live oracle",
+      "brokencrystals.com/secrets: 55-finding shared hub fingerprint without route-specific secrets oracle",
+      "pwnshop.ctfsecurity.com/track: 26 findings — sql-error-disclosure + reflected-xss-query-param (queue drain)",
+      "vulnbank.org/api/v1/forgot-password + check_balance: 20 findings each — vulnbank route oracle cluster (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "nodegoat /learn?url= live redirect probe blocked — public Heroku signup returns MongoDB E11000 duplicate key",
-      "wrongsecrets challenge-22+ beyond Go/C/C++ binary family may need per-language markers"
+      "wrongsecrets challenge-25: Web3 challenge — client-side evidence only (challenge-23/24 live oracle present)",
+      "nodegoat /benefits: NoSQL injection route-specific live oracle absent despite server-side-eval-evidence",
+      "brokencrystals.com/secrets: route-specific exposed-credentials oracle absent (55-finding shared hub)",
+      "pwnshop.ctfsecurity.com/track: track-IDOR live oracle absent despite sql-error-disclosure on search param"
     ]
   },
   "discovery_highlights": {
-    "nodegoat-websec.herokuapp.com/tutorial/a9": 7,
-    "nodegoat-websec.herokuapp.com/tutorial/a10": 7,
-    "wrongsecrets.herokuapp.com/challenge/challenge-21": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-23": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-24": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-25": 8,
+    "nodegoat-websec.herokuapp.com/benefits": 6,
+    "brokencrystals.com/secrets": 55,
+    "pwnshop.ctfsecurity.com/track": 26,
+    "vulnbank.org/api/v1/forgot-password": 20,
+    "vulnbank.org/check_balance/3518655174": 20,
     "juice-shop-staging.herokuapp.com": 12
   }
 }
