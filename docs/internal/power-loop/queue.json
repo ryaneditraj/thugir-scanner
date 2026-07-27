@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T22:10:17.648Z",
+  "updated_at": "2026-07-27T23:05:38.382Z",
   "discovery_urls": [
+    {
+      "url": "https://vuln-expose.vercel.app/blog",
+      "source": "JuaniVeltri/vuln-expose — corporate blog with hidden stored XSS in comments (Vercel OSS README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/invoices",
+      "source": "JuaniVeltri/vuln-expose — invoice search SQLi corporate app module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/scheme",
+      "source": "sampsonc/vulnlab.dev — unrestricted URL scheme SSRF lab (file:// read)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/gopher",
+      "source": "sampsonc/vulnlab.dev — gopher:// SSRF to non-HTTP TCP service lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/parser",
+      "source": "sampsonc/vulnlab.dev — URL-parser disagreement SSRF bypass lab (userinfo host confusion)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vuln-expose.vercel.app/network-tools",
       "source": "JuaniVeltri/vuln-expose — network ping/SSRF CMDi lab module (Vercel OSS README)",
