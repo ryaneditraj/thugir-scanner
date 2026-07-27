@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "extract-api-path-protocol-relative-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractApiPaths returned protocol-relative '//' from Angular bundles; jwtAlgNoneProbe new URL('//', origin) threw Invalid URL and aborted ginandjuice.shop/catalog?searchTerm=test discovery scans; filter // paths + try/catch in jwtAlgNoneProbe; scan now completes with 9 findings; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/users/ lists admin username + GET /api/v1/users/550e8400-e29b-41d4-a716-446655440000 returns admin@duck-store.escape role:admin without auth; duck-store.escape.tech/api/v1/users/ findings 6→10 with users-bola + users-route oracles; testimonials 6→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-search-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?searchTerm=thugirXSScanary reflects into var searchText = \"canary\" script assignment; ginandjuice.shop/catalog?searchTerm=test findings error→9 with catalog-search-xss + catalog-route oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api1-bola-live-oracle",
       "status": "shipped",
