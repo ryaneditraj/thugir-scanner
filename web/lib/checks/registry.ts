@@ -24808,15 +24808,24 @@ const clientSideFauxbankLabEvidence: Rule = async (ctx) => {
 async function ensureFauxbankSession(ctx: RuleContext): Promise<string | null> {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return null;
   const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
-  const r = await ctx.probe.get(loginUrl, {
-    method: "POST",
-    body: JSON.stringify({ username: "alice", password: "password" }),
-    headers: { "Content-Type": "application/json" },
-    maxBytes: 4096
-  });
-  if (r.status < 200 || r.status >= 300) return null;
-  if (!/"ok"\s*:\s*true|"user"\s*:/i.test(r.body)) return null;
-  return r.setCookies.find((c) => /^fb_session=/i.test(c))?.split(";")[0] ?? null;
+  const body = JSON.stringify({ username: "alice", password: "password" });
+  const headers = { "Content-Type": "application/json" };
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, 1500));
+    const r = await fetchDoc(loginUrl, {
+      method: "POST",
+      body,
+      headers,
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    if (/Vercel Security Checkpoint|Enable JavaScript/i.test(r.body.slice(0, 500))) continue;
+    if (!/"ok"\s*:\s*true|"user"\s*:/i.test(r.body)) continue;
+    const cookie = r.setCookies.find((c) => /^fb_session=/i.test(c))?.split(";")[0] ?? null;
+    if (cookie) return cookie;
+  }
+  return null;
 }
 
 async function ensureFauxbankAdminSession(ctx: RuleContext): Promise<string | null> {
