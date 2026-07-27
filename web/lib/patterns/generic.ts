@@ -16825,6 +16825,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-tutorial-a5-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "NodeGoat A5 misconfiguration tutorial live oracle",
+    description:
+      "When scanning /tutorial/a5, the canonical tutorial documents security misconfiguration across the application stack (privileged runtime, header/cookie leaks) — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A5 misconfiguration training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA5RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never deploy misconfiguration tutorial patterns to production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Harden default configs, disable verbose errors, and avoid running apps as root in production.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a5 route documents security misconfiguration labs. Show how to isolate NodeGoat training from production hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-a6-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "NodeGoat A6 sensitive data exposure tutorial live oracle",
+    description:
+      "When scanning /tutorial/a6, the canonical tutorial documents sensitive data exposure (encryption at rest/in transit, weak crypto) — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A6 sensitive-data training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA6RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never store sensitive data without encryption in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Encrypt sensitive data at rest and in transit with strong algorithms.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a6 route documents sensitive data exposure labs. Show how to isolate NodeGoat training from production data protection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-a7-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat A7 access control tutorial live oracle",
+    description:
+      "When scanning /tutorial/a7, the canonical tutorial documents missing function-level access control (benefits module bypass) — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A7 access-control training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA7RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never rely on UI-only access control in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Enforce server-side authorization on every privileged function endpoint.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a7 route documents missing function-level access control labs. Show how to isolate NodeGoat training from production authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",

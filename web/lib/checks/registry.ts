@@ -6474,6 +6474,84 @@ const nodegoatTutorialA4RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatTutorialA5RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a5\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a5", [
+    {
+      label: "A5 security misconfiguration title",
+      re: /A5-Security Misconfiguration|A5 Misconfig/i
+    },
+    {
+      label: "Stack-level misconfiguration walkthrough",
+      re: /Security misconfiguration can happen at any level|web server, application server, database/i
+    },
+    {
+      label: "Privileged runtime / header leak topics",
+      re: /run application with root privileges|leak internal implementation details via cookie names/i
+    }
+  ], "NodeGoat /tutorial/a5 documents security misconfiguration training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA6RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a6\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a6", [
+    {
+      label: "A6 sensitive data exposure title",
+      re: /A6-Sensitive Data Exposure|A6 Sensitive Data/i
+    },
+    {
+      label: "Sensitive data protection walkthrough",
+      re: /access sensitive data such as credit cards|encryption at rest or in transit/i
+    },
+    {
+      label: "Weak encryption / database theft topics",
+      re: /steal the sensitive information not encrypted|Encrypt all sensitive data at rest/i
+    }
+  ], "NodeGoat /tutorial/a6 documents sensitive data exposure training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA7RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a7\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a7", [
+    {
+      label: "A7 missing function level access control title",
+      re: /A7-Missing Function Level Access Control|A7 Access Controls/i
+    },
+    {
+      label: "Server-side authorization walkthrough",
+      re: /perform the same access control checks on the server|verify function level access rights/i
+    },
+    {
+      label: "Benefits module bypass topics",
+      re: /forge requests in order to access functionality without proper authorization|benefits module/i
+    }
+  ], "NodeGoat /tutorial/a7 documents missing function-level access control training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 // --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
 const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
   {
@@ -31442,6 +31520,18 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "AWS SSM Parameter Store walkthrough",
       re: /Parameter Store|SSM Parameter/i
+    },
+    {
+      label: "Git history secret walkthrough",
+      re: /Git history|trufflehog3|aws_secret_access_key/i
+    },
+    {
+      label: "Front-end secret walkthrough",
+      re: /Secrets in front-end code|Development Tools in the browser/i
+    },
+    {
+      label: "Docker bash history walkthrough",
+      re: /\.bash_history|bash_history file within a running container/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -31464,10 +31554,16 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                 : /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(doc.body)
                   ? "AWS Secrets Manager via K8s CSI driver"
                   : /IAM privilege escalation|Parameter Store/i.test(doc.body)
-                    ? "IAM privilege escalation / AWS Parameter Store secrets"
-                    : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
-                      ? "container/K8s log secrets"
-                      : "hardcoded secrets";
+                  ? "IAM privilege escalation / AWS Parameter Store secrets"
+                  : /Git history|trufflehog3|aws_secret_access_key/i.test(doc.body)
+                    ? "Git history secrets"
+                    : /Secrets in front-end code|Development Tools in the browser/i.test(doc.body)
+                      ? "front-end hardcoded secrets"
+                      : /\.bash_history|bash_history file within a running container/i.test(doc.body)
+                        ? "Docker container bash history secrets"
+                        : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
+                          ? "container/K8s log secrets"
+                          : "hardcoded secrets";
   return {
     fired: true,
     confidence: markers.length >= 3 ? 0.92 : 0.9,
@@ -37750,6 +37846,9 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA3RouteLiveOracle,
   nodegoatTutorialA1RouteLiveOracle,
   nodegoatTutorialA4RouteLiveOracle,
+  nodegoatTutorialA5RouteLiveOracle,
+  nodegoatTutorialA6RouteLiveOracle,
+  nodegoatTutorialA7RouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,
