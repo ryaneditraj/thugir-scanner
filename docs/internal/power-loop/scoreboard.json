@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T07:14:34.146Z",
+  "updated_at": "2026-07-27T07:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2054,
   "discovery_findings": 24822,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T07:14:34.146Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-27T07:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -55,27 +55,27 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 75,
-      "focus": "wrongsecrets challenge-54/55/60/61/62 + drained demo.owasp-juice.shop search/login + ai-security-platform sqli",
-      "improvements_shipped_this_run": 0
+      "focus": "wrongsecrets challenge-54/55/60/61/62 + oracle tuning (challenge-43/52 markers, path-traversal fetchDoc)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — jwt-alg-none-accepted restored, no category gaps",
+      "wrongsecrets.herokuapp.com/challenge/challenge-43: 8→9 findings — wrongsecrets-challenge-live-oracle (documentation/social-media markers shipped)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 8→9 findings — wrongsecrets-challenge-live-oracle (secrets-management markers shipped)",
       "wrongsecrets.herokuapp.com/challenge/challenge-60: 9 findings — wrongsecrets-challenge-live-oracle (insecure MCP env-var leak)",
       "wrongsecrets.herokuapp.com/challenge/challenge-61: 9 findings — wrongsecrets-challenge-live-oracle (Telegram bot credentials in source)",
       "wrongsecrets.herokuapp.com/challenge/challenge-54: 8 findings — client-side evidence only (.gitignore AES secret)",
       "wrongsecrets.herokuapp.com/challenge/challenge-55: 8 findings — client-side evidence only (SSH keypair in repo)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-62: 8 findings — client-side evidence only (AI prompt-injection)",
-      "demo.owasp-juice.shop/rest/products/search: 13-finding hub without route-specific SQLi oracle",
-      "demo.owasp-juice.shop/rest/user/login: 14 findings incl jwt-alg-none-accepted + sql-error-disclosure hub",
-      "ai-security-platform-iota.vercel.app/challenges/sqli: 6 findings — client-side-ai-security-platform-evidence only"
+      "hack-this-site-eta.vercel.app/api/validate/path-traversal: vulnlab-validate-path-traversal fetchDoc fix + route wrapper (Vercel checkpoint intermittent)",
+      "demo.owasp-juice.shop/rest/products/search: 13-finding hub without route-specific SQLi oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "wrongsecrets challenge-54/55/62: secrets/AI challenges — client-side evidence only, no wrongsecrets-challenge-live-oracle",
-      "wrongsecrets challenge-60 MCP: live oracle fires but route-specific execute_command env-var oracle still shallow",
-      "demo.owasp-juice.shop/*: route-specific REST oracles absent — hub fingerprint dominates (search/login 13-14 findings)",
-      "ai-security-platform sqli challenge: no live SQLi oracle without authenticated session"
+      "hack-this-site-eta.vercel.app: Vercel Security Checkpoint intermittently blocks /api/include LFI probe during deep scans",
+      "pwnshop.ctfsecurity.com/wallet: wallet top-up oracles (PWN-042/043) require self-hosted VULNBANK_LAB_VULN=1",
+      "demo.owasp-juice.shop/*: route-specific REST oracles absent — hub fingerprint dominates"
     ]
   },
   "discovery_highlights": {
@@ -84,9 +84,10 @@
     "demo.owasp-juice.shop/rest/products/search": 13,
     "wrongsecrets.herokuapp.com/challenge/challenge-60": 9,
     "wrongsecrets.herokuapp.com/challenge/challenge-61": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-43": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 9,
     "wrongsecrets.herokuapp.com/challenge/challenge-54": 8,
     "wrongsecrets.herokuapp.com/challenge/challenge-55": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-62": 8,
-    "ai-security-platform-iota.vercel.app/challenges/sqli": 6
+    "wrongsecrets.herokuapp.com/challenge/challenge-62": 8
   }
 }

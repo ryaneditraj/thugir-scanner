@@ -10767,6 +10767,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-validate-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab path-traversal validate route live oracle",
+    description:
+      "When scanning /api/validate/path-traversal, GET /api/include?page=../../etc/passwd returns /etc/passwd contents — route-specific path traversal oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-specific LFI probe confirms path traversal lab oracle distinct from generic VulnLab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidatePathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and canonicalize file paths; block traversal sequences.",
+      steps: [
+        "Reject ../ and ..\\ sequences in include/page parameters.",
+        "Use an allow-list of readable files instead of user-supplied paths.",
+        "Gate lab LFI endpoints behind authenticated sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/path-traversal route is paired with an LFI /api/include endpoint. Show path traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-jwt-decode-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -13217,7 +13243,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "OWASP WrongSecrets challenge live oracle",
     description:
-      "Resolves /challenge/N to /challenge/challenge-N and confirms challenge walkthrough content (Docker ENV/arg layers, Spring application.properties, K8s configmap, AWS Secrets Manager CSI, IAM/Parameter Store) with answer submission UI.",
+      "Resolves /challenge/N to /challenge/challenge-N and confirms challenge walkthrough content (Docker ENV/arg layers, Spring application.properties, K8s configmap, AWS Secrets Manager CSI, IAM/Parameter Store, documentation/social media, password shucking, Spring Actuator audit logs, weak MD5 AES keys) with answer submission UI.",
     impactOneline:
       "WrongSecrets challenge pages document real secret-hiding patterns in containers, config files, and cloud infrastructure.",
     detectorKind: "rule_ref",
@@ -13233,6 +13259,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our app mirrors OWASP WrongSecrets challenge pages. Show how to detect secrets in Docker layers, Spring config, and K8s configmaps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge route live oracle",
+    description:
+      "When scanning /challenge/challenge-N, confirms canonical challenge walkthrough content with answer submission UI — route-specific WrongSecrets oracle with scannedUrl evidence.",
+    impactOneline:
+      "WrongSecrets challenge pages document real secret-hiding patterns in containers, config files, and cloud infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallengeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenges are intentional — ensure similar secrets never ship in production.",
+      steps: [
+        "Scan repos and containers for hardcoded secrets before deploy.",
+        "Use secret managers instead of application.properties or env files in images.",
+        "Rotate any secrets that appeared in Git history or Docker layers."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge route exposes secret walkthrough content. Show how to detect secrets in Docker layers, Spring config, and K8s configmaps.",
     version: 1,
     enabled: true
   },

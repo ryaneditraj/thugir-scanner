@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T06:05:30.984Z",
-  "total": 886,
-  "uniqueSlugs": 881,
+  "generatedAt": "2026-07-27T07:17:35.262Z",
+  "total": 888,
+  "uniqueSlugs": 883,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,25 +9,25 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 868,
+    "generic": 870,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 801,
+    "deep": 803,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 218,
-    "Exposed secret": 27,
+    "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 69,
     "Security misconfiguration": 74,
     "Broken authentication": 61,
-    "Injection": 180,
+    "Injection": 181,
     "Cross-site scripting": 129,
     "general": 20,
     "SSRF": 5,
@@ -913,6 +913,7 @@
     "vulnlab-utilities-hash-live-oracle",
     "vulnlab-validate-idor-live-oracle",
     "vulnlab-validate-path-traversal-live-oracle",
+    "vulnlab-validate-path-traversal-route-live-oracle",
     "vulnlab-validate-sqli-live-oracle",
     "vulnlab-validate-xss-live-oracle",
     "vulnshop-debug-api-live-oracle",
@@ -920,6 +921,7 @@
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
     "wrongsecrets-challenge-live-oracle",
+    "wrongsecrets-challenge-route-live-oracle",
     "xpath-injection-disclosure",
     "xxe-xml-post-probe"
   ],
