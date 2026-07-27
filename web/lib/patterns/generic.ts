@@ -9336,6 +9336,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-mail-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop mail inbox IDOR route live oracle (PWN-004)",
+    description:
+      "When scanning /mail/:id, GET /mail/<inbox_token> returns another user's OTP mail without ownership validation — route-specific PwnMail inbox IDOR oracle.",
+    impactOneline:
+      "Route scans on mail inbox pages need live IDOR confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopMailIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind mail inbox tokens to the authenticated session — Pwnshop PWN-004 is intentional lab software.",
+      steps: [
+        "Verify the session user owns the inbox_token before returning messages.",
+        "Use unpredictable per-session inbox URLs instead of static user tokens.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /mail/:id route exposes other users' OTP mail. Show inbox ownership validation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-avatar-svg-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -9566,6 +9592,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /loans route allows POST /api/loans to create pending loans. Show route-specific loan validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-profile-sensitive-data-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "FauxBank profile API exposes sensitive PII",
+    description:
+      "GET /api/profile returns ssnFake and full customer PII in JSON without field-level redaction — the FauxBank profile sensitive-data oracle.",
+    impactOneline:
+      "Profile APIs that return fake SSN and full PII enable data harvesting when over-exposed to client consumers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankProfileSensitiveDataLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact sensitive profile fields from API responses — FauxBank is intentional training software.",
+      steps: [
+        "Return only fields required for the UI; mask or omit ssnFake from client-facing APIs.",
+        "Enforce field-level authorization on profile reads.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/profile returns ssnFake in JSON. Show profile API field redaction.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-profile-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "FauxBank profile route live oracle",
+    description:
+      "When scanning /profile, GET /api/profile returns ssnFake and full customer PII without redaction — route-specific profile sensitive-data oracle.",
+    impactOneline:
+      "Route scans on profile pages need live sensitive-data confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankProfileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact sensitive profile fields from API responses.",
+      steps: [
+        "Return only fields required for the UI; mask or omit ssnFake from client-facing APIs.",
+        "Enforce field-level authorization on profile reads.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route exposes ssnFake via GET /api/profile. Show route-specific profile API redaction.",
     version: 1,
     enabled: true
   },
