@@ -6763,6 +6763,82 @@ const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isAgentpwnHost(ctx: RuleContext): boolean {
+  return /agentpwn\.com/i.test(ctx.origin);
+}
+
+function isVulnforgeAcademyHost(ctx: RuleContext): boolean {
+  return /vulnforge-academy\.vercel\.app/i.test(ctx.origin);
+}
+
+const vulnforgeAcademyLevelSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const sqlHit = await sqlErrorDisclosure(ctx);
+  if (!sqlHit.fired) return NEGATIVE;
+  const hitUrl = String(sqlHit.evidence?.url ?? "");
+  if (!/\/api\/portal/i.test(hitUrl) && !/\/level\d+\.php/i.test(hitUrl)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sqlHit.confidence,
+    evidence: {
+      ...sqlHit.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnForge Academy level route scan — /api/portal (or level) search parameter returns SQL syntax error disclosure"
+    }
+  };
+};
+
+const vulnbankUploadProfilePictureUrlRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/upload/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankUploadProfilePictureUrlSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /profile/upload route scan — POST /upload_profile_picture_url fetches attacker-controlled image_url server-side (profile-picture SSRF oracle)"
+    }
+  };
+};
+
+const agentpwnAttackRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAgentpwnHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/attacks\/[^/]+\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const attackIdMatch = corpus.match(
+    /<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i
+  );
+  const aiInstructionsMatch = corpus.match(
+    /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
+  );
+  const hiddenDan =
+    /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
+    /DAN MODE ENABLED/i.test(corpus);
+  const reportApi = /agentpwn\.com\/api\/report/i.test(corpus);
+  if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) return NEGATIVE;
+  const attackId = attackIdMatch?.[1];
+  const categoryMatch = pageUrl.match(/\/attacks\/([^/]+)\//i);
+  return {
+    fired: true,
+    confidence: attackId && aiInstructionsMatch ? 0.94 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      attackId,
+      category: categoryMatch?.[1],
+      aiInstructionsSample: aiInstructionsMatch?.[1]?.slice(0, 120),
+      reportApi,
+      note: "AgentPwn /attacks route scan — ai-instructions meta + off-screen SYSTEM INSTRUCTIONS smuggle jailbreak/prompt-injection payloads (APWN honeypot oracle)"
+    }
+  };
+};
+
 const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -39359,6 +39435,9 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA9RouteLiveOracle,
   nodegoatTutorialA10RouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
+  vulnforgeAcademyLevelSqliRouteLiveOracle,
+  vulnbankUploadProfilePictureUrlRouteLiveOracle,
+  agentpwnAttackRouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,

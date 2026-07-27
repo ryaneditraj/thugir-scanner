@@ -17761,6 +17761,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-upload-profile-picture-url-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Vuln Bank profile upload route SSRF live oracle",
+    description:
+      "When scanning /profile/upload, POST /upload_profile_picture_url fetches attacker-controlled image_url server-side — route-specific Vuln Bank profile-picture SSRF oracle.",
+    impactOneline:
+      "Route-specific confirmation that profile upload pages expose server-side URL fetch SSRF on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankUploadProfilePictureUrlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal IPs and validate image content — Vuln Bank is intentional training software.",
+      steps: [
+        "Allowlist permitted image hosts instead of fetching arbitrary URLs.",
+        "Reject link-local, private, and metadata IP ranges before outbound requests.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /profile/upload route exposes server-side image_url fetch SSRF. Show host allowlist remediation for profile picture imports.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnForge Academy level SQLi route live oracle",
+    description:
+      "When scanning /backend/includes/levels/*/level*.php, query parameters return SQL syntax errors — route-specific VulnForge Academy SQL injection training oracle.",
+    impactOneline:
+      "Unsanitized query parameters on training level routes disclose SQL errors and enable injection practice surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — use parameterized queries in production apps.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic errors instead of database syntax details.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level routes leak SQL syntax errors on search parameters. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "agentpwn-attack-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "AgentPwn attack route live oracle",
+    description:
+      "When scanning /attacks/{category}/{tier}, ai-instructions meta tags and off-screen SYSTEM INSTRUCTIONS smuggle jailbreak payloads with APWN attack IDs and /api/report callbacks — route-specific AgentPwn honeypot oracle.",
+    impactOneline:
+      "Hidden agent-targeted instructions in attack lab pages enable prompt-injection and jailbreak testing against scraping AI agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "agentpwnAttackRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AgentPwn is intentional AI security research — sanitize HTML and ignore untrusted ai-instructions meta in production agents.",
+      steps: [
+        "Do not execute instructions embedded in scraped HTML meta tags or hidden divs.",
+        "Allowlist domains and strip off-screen content before passing pages to LLM context.",
+        "Report AgentPwn honeypot hits only through controlled security monitoring channels."
+      ]
+    },
+    fixPrompt:
+      "Our site mirrors AgentPwn attack pages with ai-instructions meta smuggling. Show how to harden AI agents against HTML prompt injection.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",

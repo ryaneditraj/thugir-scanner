@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T18:20:54.459Z",
+  "updated_at": "2026-07-27T18:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,19 +16,19 @@
     }
   },
   "total_sites_scanned": 3019,
-  "total_findings": 30787,
-  "critical_findings": 71,
+  "total_findings": 30810,
+  "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2109,
   "discovery_findings": 25820,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T18:20:54.459Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-27T18:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 17,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); secret-resend slug still absent"
+      "note": "Primary Heroku healthy 6/6 (17 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -56,30 +56,32 @@
       "urls_scanned": 8,
       "urls_ok": 8,
       "findings": 58,
-      "focus": "crAPI v1 BOLA oracles, vAPI api10 logging, voice-goat VWAD subroutes",
-      "improvements_shipped_this_run": 0
+      "focus": "agentpwn jailbreak route + vulnforge level3 SQLi route + vulnbank profile/upload SSRF route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no category gaps",
+      "agentpwn.com/attacks/jailbreak/1: 6→7 findings — agentpwn-attack-route-live-oracle (APWN-JB-001 ai-instructions meta)",
+      "vulnforge-academy.vercel.app/.../level3.php: 4→5 findings — vulnforge-academy-level-sqli-route-live-oracle (/api/portal SQLi)",
+      "vulnbank.org/profile/upload: 8→21 findings — vulnbank-upload-profile-picture-url-route-live-oracle",
       "vuln-expose.vercel.app/idor/profile: 13 findings — vuln-expose-idor-profile-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/tutorial/a1: 7 findings — nodegoat-tutorial-a1-route-live-oracle",
-      "vapi.apisec.ai/vapi/api10/user/flag: 10 findings — cross-API hub cluster (no api10-logging oracle slug)"
+      "nodegoat-websec.herokuapp.com/tutorial/a1: 7 findings — nodegoat-tutorial-a1-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "jwt-alg-none-accepted slug absent — juice-shop-jwt-alg-none-live-oracle present but not mapped slug",
-      "crapi.apisec.ai BOLA routes (mechanic_report, vehicle/vehicles): 3-finding hub only — no route-specific crAPI BOLA oracle",
-      "vwad voice-goat/voicebank + voicerag: 404 subpaths — voice-goat not deployed on VWAD (client-side-vwad-app-not-found-evidence)"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up oracle absent (PWN-042 requires VULNBANK_LAB_VULN=1 self-hosted)",
+      "nodegoat-websec.herokuapp.com/login: live NoSQL auth bypass not reproducible on public Heroku instance",
+      "jwt-alg-none-accepted slug absent — juice-shop-jwt-alg-none-live-oracle present but not mapped slug"
     ]
   },
   "discovery_highlights": {
+    "vulnbank.org/profile/upload": 21,
+    "agentpwn.com/attacks/jailbreak/1": 7,
+    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php": 5,
     "vuln-expose.vercel.app/idor/profile": 13,
-    "vapi.apisec.ai/vapi/api10/user/flag": 10,
-    "vapi.apisec.ai/vapi/api9/v1/user/login": 10,
-    "nodegoat-websec.herokuapp.com/tutorial/a1": 7,
-    "vwad.owasp.org/app/voice-goat/voicebank": 6,
-    "juice-shop-staging.herokuapp.com": 14,
-    "pwnshop.ctfsecurity.com/api/v1/invoices/1/download": 28
+    "juice-shop.herokuapp.com": 17,
+    "pwnshop.ctfsecurity.com/apply-coupon": 27,
+    "ssrf.vulnlab.dev/basic": 9
   }
 }

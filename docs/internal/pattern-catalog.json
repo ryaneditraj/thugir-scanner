@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T17:43:27.289Z",
-  "total": 913,
-  "uniqueSlugs": 908,
+  "generatedAt": "2026-07-27T18:26:58.235Z",
+  "total": 916,
+  "uniqueSlugs": 911,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 895,
+    "generic": 898,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 828,
+    "deep": 831,
     "continuous": 0
   },
   "byCategory": {
@@ -27,13 +27,13 @@
     "Information disclosure": 69,
     "Security misconfiguration": 74,
     "Broken authentication": 66,
-    "Injection": 181,
+    "Injection": 182,
     "Cross-site scripting": 131,
     "general": 20,
     "SSRF": 5,
-    "Server-side request forgery": 24,
+    "Server-side request forgery": 25,
     "Sensitive data exposure": 24,
-    "AI security": 40,
+    "AI security": 41,
     "Business logic": 3,
     "Open redirect": 1,
     "Authentication bypass": 2,
@@ -42,6 +42,7 @@
     "Prompt injection": 2
   },
   "slugs": [
+    "agentpwn-attack-route-live-oracle",
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "brokencrystals-adminpermission-route-live-oracle",
@@ -915,10 +916,12 @@
     "vulnbank-sqli-login-live-oracle",
     "vulnbank-sup3r-secret-admin-live-oracle",
     "vulnbank-transfer-negative-amount-live-oracle",
+    "vulnbank-upload-profile-picture-url-route-live-oracle",
     "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
     "vulnbank-v1-forgot-password-pin-leak-live-oracle",
     "vulnbank-v2-forgot-password-enumeration-live-oracle",
     "vulnbank-virtual-cards-bola-live-oracle",
+    "vulnforge-academy-level-sqli-route-live-oracle",
     "vulnlab-admin-secrets-live-oracle",
     "vulnlab-auth-login-enumeration-live-oracle",
     "vulnlab-auth-session-live-oracle",
