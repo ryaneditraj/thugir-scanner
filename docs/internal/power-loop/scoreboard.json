@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T22:38:11.524Z",
+  "updated_at": "2026-07-27T23:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3062,
-  "total_findings": 31306,
+  "total_sites_scanned": 3064,
+  "total_findings": 31340,
   "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2134,
   "discovery_findings": 26225,
   "improvements_shipped": 1158,
-  "last_run": "2026-07-27T22:38:11.524Z",
+  "last_run": "2026-07-27T23:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 17,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 455,
+      "probes_run": 463,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,35 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com error; staging fallback 6/6 (14 findings); jwt-alg-none-live-oracle + chatbot + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (17 findings); jwt-alg-none-accepted + juice-shop-jwt-alg-none-live-oracle + chatbot + reflexion-escalated-ssti; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 122,
-      "focus": "vuln-expose network-tools + cmdi landing + WrongSecrets challenge-0/1/2; queue drain challenge-18/19 + hack-this-site path-traversal",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 43,
+      "focus": "wrongsecrets challenge-0/1 intro+Git markers + vuln-expose network-tools route oracle + nodegoat /learn open-redirect route oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku error, no category gaps",
-      "vuln-expose.vercel.app/network-tools: 15 findings — client-side-ssrf-evidence + vuln-expose lab oracles; route-specific ping SSRF oracle still absent",
-      "vuln-expose.vercel.app/cmdi: 15 findings — shared VulnSite hub fingerprint without /cmdi/execute route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-2: 10 findings — wrongsecrets-challenge-live-oracle + route oracle",
-      "hack-this-site-eta.vercel.app/api/validate/path-traversal: 46 findings — queue drain path-traversal hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-0: 8→10 findings — wrongsecrets-challenge-live-oracle via Intro/onboarding markers",
+      "wrongsecrets.herokuapp.com/challenge/challenge-1: 8→10 findings — wrongsecrets-challenge-live-oracle via Git/Trufflehog markers",
+      "vuln-expose.vercel.app/network-tools: 15→16 findings — vuln-expose-network-tools-route-live-oracle shipped",
+      "nodegoat-websec.herokuapp.com/learn: 6→7 findings — nodegoat-learn-open-redirect-route-live-oracle via A10 tutorial marker fallback"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vuln-expose.vercel.app/network-tools: no vuln-expose-network-tools-ssrf-ping-lab route oracle despite Herramienta de Ping lab page",
-      "vuln-expose.vercel.app/cmdi landing: shared 15-finding hub without CMDi execute-route live oracle",
-      "wrongsecrets challenge-0/1: client-side evidence only (8 each) — wrongsecrets-challenge-live-oracle absent on intro/Git challenges"
+      "nodegoat /learn live redirect probe blocked on public Heroku without session — marker oracle via /tutorial/a10 only",
+      "vulnweb.netlify.app/* routes return Netlify 404 — dead discovery queue URLs"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 14,
-    "vuln-expose.vercel.app/network-tools": 15,
-    "vuln-expose.vercel.app/cmdi": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-2": 10,
-    "hack-this-site-eta.vercel.app/api/validate/path-traversal": 46,
-    "wrongsecrets.herokuapp.com/challenge/challenge-18": 10
+    "juice-shop.herokuapp.com": 17,
+    "wrongsecrets.herokuapp.com/challenge/challenge-0": 10,
+    "wrongsecrets.herokuapp.com/challenge/challenge-1": 10,
+    "vuln-expose.vercel.app/network-tools": 16,
+    "nodegoat-websec.herokuapp.com/learn": 7
   }
 }

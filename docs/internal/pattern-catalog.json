@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T22:05:46.137Z",
-  "total": 930,
-  "uniqueSlugs": 925,
+  "generatedAt": "2026-07-27T23:16:44.019Z",
+  "total": 932,
+  "uniqueSlugs": 927,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 912,
+    "generic": 914,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 845,
+    "deep": 847,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 234,
+    "Broken access control": 235,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -31,7 +31,7 @@
     "Cross-site scripting": 133,
     "general": 20,
     "SSRF": 5,
-    "Server-side request forgery": 25,
+    "Server-side request forgery": 26,
     "Sensitive data exposure": 24,
     "AI security": 41,
     "Business logic": 4,
@@ -763,6 +763,7 @@
     "lovable-supabase-storage-public",
     "missing-security-headers",
     "nodegoat-benefits-nosql-route-live-oracle",
+    "nodegoat-learn-open-redirect-route-live-oracle",
     "nodegoat-tutorial-a1-route-live-oracle",
     "nodegoat-tutorial-a10-route-live-oracle",
     "nodegoat-tutorial-a2-route-live-oracle",
@@ -914,6 +915,7 @@
     "vuln-expose-blind-sqli-api-live-oracle",
     "vuln-expose-cmdi-route-live-oracle",
     "vuln-expose-idor-profile-route-live-oracle",
+    "vuln-expose-network-tools-route-live-oracle",
     "vuln-expose-sqli-blind-route-live-oracle",
     "vuln-expose-sqli-search-api-live-oracle",
     "vuln-expose-sqli-search-route-live-oracle",
