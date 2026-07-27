@@ -2,12 +2,12 @@
   "updated_at": "2026-07-27T13:05:00.000Z",
   "discovery_urls": [
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-secrets",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
       "source": "AI Security Platform — CWE-200 environment variables/API keys exposed client-side (14-challenge OWASP Top 10 lab)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
       "source": "AI Security Platform — CWE-732 misconfigured Supabase Row Level Security oracle (public Vercel demo)",
       "auth": "public_demo"
     },
