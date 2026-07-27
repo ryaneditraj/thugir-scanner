@@ -1,147 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-26T07:16:04.234Z",
-      "url": "https://pwnshop.ctfsecurity.com/api/settings/css",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 18,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-prototype-pollution-evidence",
-          "title": "Client bundle documents prototype pollution via __proto__ merge",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-evidence",
-          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-ssti-oracle",
-          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-pwnshop-path-traversal-oracle",
-          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-debug-info-live-oracle",
-          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "pwnshop-events-audit-live-oracle",
-          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
-          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
-          "title": "Pwnshop forgot-password form enables email enumeration",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-track-idor-live-oracle",
-          "title": "Pwnshop order tracking IDOR live oracle (PWN-002)",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-product-search-sqli-live-oracle",
-          "title": "Pwnshop product search SQL injection live oracle (PWN-010)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "pwnshop-admin-login-sqli-live-oracle",
-          "title": "Pwnshop admin login SQL injection live oracle (PWN-009)",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 583,
-      "status": "ok",
-      "scanned_at": "2026-07-26T07:16:04.234Z"
-    },
-    {
       "run_id": "2026-07-26T07:16:27.081Z",
       "url": "https://pwnshop.ctfsecurity.com/search?q=test",
       "auth": "oss_deploy",
@@ -24085,6 +23944,113 @@
       "teacher_delta": [],
       "notes": "No teacher tools available. 05 UTC run: stable 6/6 first-pass recall with deep crawl; jwt-alg-none-accepted + reflexion-escalated-ssti + juice-shop-leaked-api-key + security-question-disclosure + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-36–40) + drained challenge-29/30 + fauxbank/loans → 73 discovery findings across 8 URLs; challenge-37/39/40 fire wrongsecrets-challenge-live-oracle; challenge-36/38/29/30 client-side evidence only (8 each); fauxbank/loans 14 incl fauxbank-loans-request-live-oracle + fauxbank-loans-negative-amount-live-oracle + fauxbank-admin-panel-live-oracle.",
       "scanned_at": "2026-07-27T05:20:05.873Z"
+    },
+    {
+      "run_id": "2026-07-25T05:02:37.010Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 13,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 474,
+      "status": "ok",
+      "scanned_at": "2026-07-25T05:02:37.010Z"
     }
   ],
   "teacher_delta_runs": [
