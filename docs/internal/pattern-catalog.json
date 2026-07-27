@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T11:07:30.791Z",
-  "total": 898,
-  "uniqueSlugs": 893,
+  "generatedAt": "2026-07-27T12:16:00.987Z",
+  "total": 900,
+  "uniqueSlugs": 895,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 880,
+    "generic": 882,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 813,
+    "deep": 815,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 69,
     "Security misconfiguration": 74,
-    "Broken authentication": 62,
+    "Broken authentication": 64,
     "Injection": 181,
     "Cross-site scripting": 129,
     "general": 20,
@@ -53,6 +53,8 @@
     "brokencrystals-file-raw-lfi-live-oracle",
     "brokencrystals-goto-open-redirect-live-oracle",
     "brokencrystals-hidden-upload-live-oracle",
+    "brokencrystals-jwt-alg-none-live-oracle",
+    "brokencrystals-jwt-route-live-oracle",
     "brokencrystals-ldap-injection-live-oracle",
     "brokencrystals-marketplace-prototype-pollution-live-oracle",
     "brokencrystals-mass-assignment-live-oracle",
