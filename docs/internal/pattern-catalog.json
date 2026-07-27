@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T19:14:47.415Z",
-  "total": 920,
-  "uniqueSlugs": 915,
+  "generatedAt": "2026-07-27T20:05:38.284Z",
+  "total": 924,
+  "uniqueSlugs": 919,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 902,
+    "generic": 906,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 835,
+    "deep": 839,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 232,
+    "Broken access control": 234,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 66,
-    "Injection": 182,
+    "Injection": 184,
     "Cross-site scripting": 131,
     "general": 20,
     "SSRF": 5,
@@ -686,6 +686,8 @@
     "cors-reflect-origin",
     "crapi-mechanic-report-bola-live-oracle",
     "crapi-mechanic-report-route-live-oracle",
+    "crapi-vehicle-bola-live-oracle",
+    "crapi-vehicle-route-live-oracle",
     "crapi2-auth-login-route-live-oracle",
     "crapi2-shop-orders-bfla-route-live-oracle",
     "crapi2-shop-orders-id-bola-route-live-oracle",
@@ -745,6 +747,8 @@
     "idor-sequential-ids",
     "inline-state-secrets",
     "insecure-cookies",
+    "ist-edu-notices-lfi-route-live-oracle",
+    "ist-edu-portal-sqli-route-live-oracle",
     "ist-edu-search-xss-route-live-oracle",
     "juice-shop-chatbot-api-live-oracle",
     "juice-shop-chatbot-route-live-oracle",

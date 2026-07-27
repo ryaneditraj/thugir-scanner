@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T19:15:00.000Z",
+  "updated_at": "2026-07-27T20:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3028,
-  "total_findings": 30881,
+  "total_sites_scanned": 3032,
+  "total_findings": 30910,
   "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2114,
-  "discovery_findings": 25874,
-  "improvements_shipped": 1161,
-  "last_run": "2026-07-27T19:15:00.000Z",
+  "discovery_findings": 25889,
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-27T20:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 17,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,33 +48,34 @@
           ]
         }
       },
-      "note": "Primary Heroku healthy 6/6 (17 findings); jwt-alg-none-accepted now fires alongside juice-shop-jwt-alg-none-live-oracle"
+      "note": "Primary Heroku unreachable; staging fallback 6/6 (14 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_validated": 3,
-      "findings": 34,
-      "focus": "crAPI mechanic_report BOLA + vAPI API10 logging oracle + Juice Shop jwt-alg-none-accepted probe path",
+      "findings": 16,
+      "focus": "crAPI vehicle BOLA chain + IST Edu notices LFI + portal SQLi route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — jwt-alg-none-accepted slug now present",
-      "crapi.apisec.ai/workshop/api/mechanic/mechanic_report: 3→5 findings — crapi-mechanic-report-route-live-oracle (sequential report_id BOLA)",
-      "vapi.apisec.ai/vapi/api10/user/flag: 10→12 findings — vapi-api10-route-live-oracle (unauthenticated flag{api10_...})"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no category gaps",
+      "crapi.apisec.ai/identity/api/v2/vehicle/vehicles: 3→6 findings — crapi-vehicle-route-live-oracle (community vehicleid leak + cross-user GPS location BOLA)",
+      "ist-edu-bd.vercel.app/api/notices?file=etc/passwd: 4→5 findings — ist-edu-notices-lfi-route-live-oracle (/etc/passwd via file= traversal)",
+      "ist-edu-bd.vercel.app/api/portal: 4→5 findings — ist-edu-portal-sqli-route-live-oracle (admin' OR '1'='1 auth bypass)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up oracle absent (PWN-042 requires VULNBANK_LAB_VULN=1 self-hosted)",
-      "crapi.apisec.ai/identity/api/v2/vehicle/vehicles: vehicle BOLA oracle still absent (needs vehicle ID leak chain)"
+      "crapi2.apisec.ai/community/api/v2/community/posts/recent: community excessive-data oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 17,
-    "crapi.apisec.ai/workshop/api/mechanic/mechanic_report": 5,
+    "juice-shop-staging.herokuapp.com": 14,
+    "crapi.apisec.ai/identity/api/v2/vehicle/vehicles": 6,
+    "ist-edu-bd.vercel.app/api/notices?file=etc/passwd": 5,
+    "ist-edu-bd.vercel.app/api/portal": 5,
     "vapi.apisec.ai/vapi/api10/user/flag": 12,
-    "wrongsecrets.herokuapp.com/challenge/challenge-12": 10,
-    "vulnbank.org/profile/upload": 21,
     "pwnshop.ctfsecurity.com/apply-coupon": 27
   }
 }
