@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T07:17:35.262Z",
-  "total": 888,
-  "uniqueSlugs": 883,
+  "generatedAt": "2026-07-27T09:09:50.229Z",
+  "total": 893,
+  "uniqueSlugs": 888,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 870,
+    "generic": 875,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 803,
+    "deep": 808,
     "continuous": 0
   },
   "byCategory": {
@@ -26,19 +26,20 @@
     "Information exposure": 1,
     "Information disclosure": 69,
     "Security misconfiguration": 74,
-    "Broken authentication": 61,
+    "Broken authentication": 62,
     "Injection": 181,
     "Cross-site scripting": 129,
     "general": 20,
     "SSRF": 5,
-    "Server-side request forgery": 22,
+    "Server-side request forgery": 24,
     "Sensitive data exposure": 24,
     "AI security": 38,
     "Business logic": 3,
     "Open redirect": 1,
     "Authentication bypass": 2,
     "Path traversal": 2,
-    "XSS": 1
+    "XSS": 1,
+    "Prompt injection": 2
   },
   "slugs": [
     "bolt-demo-mode-shipped",
@@ -728,7 +729,10 @@
     "inline-state-secrets",
     "insecure-cookies",
     "ist-edu-search-xss-route-live-oracle",
+    "juice-shop-chatbot-api-live-oracle",
+    "juice-shop-chatbot-route-live-oracle",
     "juice-shop-forgotten-backup-disclosure",
+    "juice-shop-jwt-alg-none-live-oracle",
     "juice-shop-leaked-api-key",
     "jwt-alg-none-accepted",
     "leaky-jar-recipe-review-stored-xss",
@@ -824,6 +828,8 @@
     "sqli-header-error-disclosure",
     "sqli-query-param-injection",
     "ssrf-endpoint-fetch",
+    "ssrf-vulnlab-allowlist-bypass-live-oracle",
+    "ssrf-vulnlab-allowlist-route-live-oracle",
     "ssrf-vulnlab-basic-live-oracle",
     "ssrf-vulnlab-basic-route-live-oracle",
     "ssrf-vulnlab-blocklist-bypass-live-oracle",

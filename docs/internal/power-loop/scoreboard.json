@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T09:10:41.000Z",
+  "updated_at": "2026-07-27T09:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2064,
   "discovery_findings": 25101,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T09:10:41.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-27T09:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_findings": 17,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,45 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (13 findings); reflexion-escalated-ssti + vibe-unauthenticated-api-routes present; jwt-alg-none-accepted absent vs 14-finding pass; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (17 findings, up from 13); juice-shop-jwt-alg-none-live-oracle shipped; secret-resend slug still absent"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 156,
-      "focus": "WrongSecrets challenge-56\u201359 + brokencrystals /api/mcp + queue drain (pwnshop /api/chat, vulnbank loans/apply, fauxbank /admin)",
-      "improvements_shipped_this_run": 0
+      "focus": "ssrf.vulnlab.dev/allowlist + juice-shop JWT/chatbot oracles + WrongSecrets challenge-56–59 queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) \u2014 no category gaps; jwt-alg-none-accepted absent this pass",
-      "wrongsecrets.herokuapp.com/challenge/challenge-57: 10 findings \u2014 wrongsecrets-challenge-live-oracle + route-live-oracle (AI challenge)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-58: 11 findings \u2014 live oracle + stack-database-url-in-bundle (logging challenge)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-59: 11 findings \u2014 live oracle + client-side-prompt-injection-evidence (CI/CD challenge)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 8 findings \u2014 client-side evidence only (AI project-spec challenge, no live oracle)",
-      "brokencrystals.com/api/mcp: 54 findings \u2014 full BC hub fingerprint without route-specific MCP get_config/SSTI/LFI tool oracles",
-      "pwnshop.ctfsecurity.com/api/chat: 27 findings incl pwnshop-chat-prompt-injection-live-oracle + pwnshop-coupon-category-bypass-live-oracle",
-      "vulnbank.org/api/v1/loans/apply: 20 findings incl vulnbank-request-loan-live-oracle + vulnbank-request-loan-negative-amount-live-oracle",
-      "pentest-fauxbank.vercel.app/admin: 15 findings incl fauxbank-admin-panel-live-oracle + fauxbank-loans-negative-amount-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings, up from 13) — juice-shop-jwt-alg-none-live-oracle shipped",
+      "ssrf.vulnlab.dev/allowlist: 7→9 findings — ssrf-vulnlab-allowlist-bypass + route live oracles shipped",
+      "demo.owasp-juice.shop/#/chatbot: chatbot-specific oracle path wired (juice-shop-chatbot-api/route-live-oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-57: 10 findings — wrongsecrets-challenge-live-oracle + route-live-oracle",
+      "brokencrystals.com/api/mcp: 54 findings — hub fingerprint without route-specific MCP tool oracles"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "jwt-alg-none-accepted intermittent on juice-shop benchmark (present in 14-finding passes, absent in 13-finding pass)",
-      "wrongsecrets challenge-56: AI project-spec challenge \u2014 client-side evidence only, no wrongsecrets-challenge-live-oracle",
-      "brokencrystals.com/api/mcp: route-specific MCP JSON-RPC tool oracles (get_config/render_template/read_file) absent \u2014 hub fingerprint dominates",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
+      "wrongsecrets challenge-56/64/65/66: client-side evidence only, no live secret oracle",
+      "brokencrystals.com/api/mcp: route-specific MCP JSON-RPC tool oracles absent",
+      "demo.owasp-juice.shop chatbot LLM backend unreachable (Ollama ECONNREFUSED) — SSE endpoint oracle fires but prompt-injection content probe blocked"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 13,
+    "juice-shop.herokuapp.com": 17,
+    "ssrf.vulnlab.dev/allowlist": 9,
     "brokencrystals.com/api/mcp": 54,
     "pwnshop.ctfsecurity.com/api/chat": 27,
     "vulnbank.org/api/v1/loans/apply": 20,
     "pentest-fauxbank.vercel.app/admin": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-58": 11,
-    "wrongsecrets.herokuapp.com/challenge/challenge-59": 11,
-    "wrongsecrets.herokuapp.com/challenge/challenge-57": 10,
-    "wrongsecrets.herokuapp.com/challenge/challenge-56": 8
+    "demo.owasp-juice.shop/#/chatbot": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-58": 11
   }
 }
