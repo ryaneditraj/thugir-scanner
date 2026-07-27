@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T10:06:32.644Z",
+  "updated_at": "2026-07-27T11:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
+      "source": "OWASP WrongSecrets — challenge-47 HashiCorp Vault template injection part 2 (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-48",
+      "source": "OWASP WrongSecrets — challenge-48 Kubernetes secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-50",
+      "source": "OWASP WrongSecrets — challenge-50 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-51",
+      "source": "OWASP WrongSecrets — challenge-51 secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt",
+      "source": "NeuraLegion/brokencrystals — broken JWT authentication oracle GET /api/auth/jwt (public demo README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-56",
       "source": "OWASP WrongSecrets v1.13.5 — challenge-56 AI agentic plan secret in project-specification.mdc (public Heroku benchmark)",
