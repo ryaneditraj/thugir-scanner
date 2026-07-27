@@ -25424,6 +25424,9 @@ const jwtAlgNoneProbe: Rule = async (ctx) => {
   for (const p of ["/api/me", "/api/user", "/api/profile", "/api/auth/session", "/api/users"]) {
     paths.add(p);
   }
+  if (JUICE_SHOP_HOST_RE.test(ctx.origin) || JUICE_SHOP_HOST_RE.test(ctx.combined)) {
+    paths.add("/rest/user/authentication-details");
+  }
   if (paths.size === 0 && !usesJwt) return NEGATIVE;
 
   const now = Math.floor(Date.now() / 1000);
@@ -36502,6 +36505,70 @@ function isCrapi2Host(ctx: RuleContext): boolean {
   return /crapi2\.apisec\.ai/i.test(ctx.origin);
 }
 
+function isCrapiLabHost(ctx: RuleContext): boolean {
+  return /crapi2?\.apisec\.ai/i.test(ctx.origin);
+}
+
+const crapiMechanicReportBolaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const reportUrl = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
+  reportUrl.searchParams.set("report_id", "1");
+  const doc = await ctx.probe.get(reportUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as {
+      id?: number;
+      mechanic?: { user?: { email?: string } };
+      vehicle?: { owner?: { email?: string; number?: string }; vin?: string };
+      problem_details?: string;
+    };
+    const ownerEmail = data.vehicle?.owner?.email;
+    if (!data.id || !ownerEmail || !data.problem_details) return NEGATIVE;
+    const report2Url = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
+    report2Url.searchParams.set("report_id", "2");
+    const doc2 = await ctx.probe.get(report2Url.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc2.status >= 200 && doc2.status < 400) {
+      try {
+        const data2 = JSON.parse(doc2.body) as { vehicle?: { owner?: { email?: string } } };
+        if (data2.vehicle?.owner?.email === ownerEmail) return NEGATIVE;
+      } catch {
+        /* report_id=2 parse failure still allows report_id=1 BOLA proof */
+      }
+    }
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        reportUrl: reportUrl.toString(),
+        reportId: data.id,
+        ownerEmail,
+        vin: data.vehicle?.vin,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "crAPI GET /workshop/api/mechanic/mechanic_report?report_id=N returns other users' mechanic reports with vehicle PII without object-level authorization — BOLA oracle (API1)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const crapiMechanicReportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mechanic_report/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiMechanicReportBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /workshop/api/mechanic/mechanic_report route scan — sequential report_id returns another user's vehicle owner PII — BOLA oracle (API1)"
+    }
+  };
+};
+
 const crapi2AuthLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapi2Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -37568,6 +37635,43 @@ const vapiApi6RouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "vAPI /api6/user route scan — POST credit inflation and GET /api6/user/me returns flag — mass assignment oracle (API6)"
+    }
+  };
+};
+
+const vapiApi10LoggingLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const flagUrl = new URL("/vapi/api10/user/flag", ctx.origin).toString();
+  const doc = await ctx.probe.get(flagUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const flagMatch = doc.body.match(/flag\{api10_[^"]+/i);
+  const noLoggingMsg = /didn.?t log and monitor|logging and monitoring/i.test(doc.body);
+  if (!flagMatch && !noLoggingMsg) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.9,
+    evidence: {
+      flagUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api10/user/flag returns challenge flag without authentication — insufficient logging and monitoring oracle (API10)"
+    }
+  };
+};
+
+const vapiApi10RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api10\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi10LoggingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api10/user route scan — GET /api10/user/flag returns flag without auth — insufficient logging and monitoring oracle (API10)"
     }
   };
 };
@@ -39339,6 +39443,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMassAssignmentPutLiveOracle,
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
+  crapiMechanicReportBolaLiveOracle,
+  crapiMechanicReportRouteLiveOracle,
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
   crapi2ShopOrdersIdBolaRouteLiveOracle,
@@ -39364,6 +39470,8 @@ export const RULES: Record<string, Rule> = {
   vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
+  vapiApi10LoggingLiveOracle,
+  vapiApi10RouteLiveOracle,
   duckStoreUsersBolaLiveOracle,
   duckStoreUsersRouteLiveOracle,
   duckStoreTestimonialsBolaLiveOracle,

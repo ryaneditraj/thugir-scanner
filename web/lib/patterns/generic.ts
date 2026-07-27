@@ -16591,6 +16591,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api10-logging-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "vAPI API10 insufficient logging live oracle",
+    description:
+      "GET /api10/user/flag returns the challenge flag without authentication — the vAPI insufficient logging and monitoring oracle.",
+    impactOneline:
+      "Missing request logging lets attackers exfiltrate flags and abuse APIs without detection or alerting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi10LoggingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — log and monitor every sensitive API access in production.",
+      steps: [
+        "Require authentication before returning challenge flags or sensitive resources.",
+        "Emit structured audit logs for every flag/secret access with user identity and source IP.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api10/user/flag returns a challenge flag without auth or logging. Show logging and monitoring hardening for sensitive API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api10-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "vAPI API10 route insufficient logging live oracle",
+    description:
+      "When scanning /api10/user, GET /api10/user/flag returns the challenge flag without authentication — route-specific insufficient logging oracle.",
+    impactOneline:
+      "Unauthenticated flag endpoints reachable from route scans indicate missing logging and monitoring controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi10RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — log and monitor every sensitive API access in production.",
+      steps: [
+        "Require authentication before returning challenge flags or sensitive resources.",
+        "Emit structured audit logs for every flag/secret access with user identity and source IP.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api10/user route scan confirms unauthenticated flag disclosure. Show logging and monitoring hardening for sensitive API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-mechanic-report-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI mechanic report BOLA live oracle",
+    description:
+      "GET /workshop/api/mechanic/mechanic_report?report_id=N returns another user's mechanic report with vehicle owner PII — the crAPI broken object level authorization oracle.",
+    impactOneline:
+      "Sequential report IDs let attackers read other users' service requests and vehicle contact details without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiMechanicReportBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — bind mechanic report reads to the submitting user in production.",
+      steps: [
+        "Verify report ownership before returning mechanic report details.",
+        "Use non-guessable report identifiers instead of sequential integers.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/mechanic/mechanic_report endpoint returns other users' reports when report_id changes. Show BOLA remediation for mechanic report APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-mechanic-report-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI mechanic report route BOLA live oracle",
+    description:
+      "When scanning /workshop/api/mechanic/mechanic_report, sequential report_id returns another user's vehicle owner PII — route-specific BOLA oracle.",
+    impactOneline:
+      "Predictable report IDs expose other customers' mechanic service history when the report route is scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiMechanicReportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — bind mechanic report reads to the submitting user in production.",
+      steps: [
+        "Verify report ownership before returning mechanic report details.",
+        "Use non-guessable report identifiers instead of sequential integers.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/mechanic/mechanic_report route scan confirms BOLA via report_id enumeration. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-shop-orders-bfla-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
