@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T12:05:00.000Z",
+  "updated_at": "2026-07-27T13:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-secrets",
+      "source": "AI Security Platform — CWE-200 environment variables/API keys exposed client-side (14-challenge OWASP Top 10 lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
+      "source": "AI Security Platform — CWE-732 misconfigured Supabase Row Level Security oracle (public Vercel demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/security-headers",
+      "source": "AI Security Platform — CWE-693 missing CSP/X-Frame-Options/HSTS headers oracle (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "AI Security Platform — CWE-494 typosquatted packages / malicious postinstall scripts oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/phishing",
+      "source": "AI Security Platform — CWE-1021 AI-assisted phishing / cloned login page oracle",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
       "source": "OWASP WrongSecrets — challenge-44 secrets oracle (public Heroku benchmark)",
