@@ -22017,5 +22017,135 @@ export const genericPatterns: Pattern[] = [
       "SSTI was confirmed (7*7 rendered as 49). Stop passing query parameters into template expressions and show the safe render path.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "duck-store-users-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store user BOLA live oracle",
+    description:
+      "GET /api/v1/users/ lists accounts and GET /api/v1/users/{uuid} returns admin email and role without authentication — the Escape Duck Store BOLA training oracle.",
+    impactOneline:
+      "Unauthenticated user enumeration and profile disclosure enable account takeover and privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreUsersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and object-level authorization on user profile endpoints.",
+      steps: [
+        "Return only the authenticated user's record from /users/me.",
+        "Enforce owner checks on /users/{id} before returning PII.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store API exposes /api/v1/users and /api/v1/users/{uuid} without auth. Show BOLA remediation for user profile routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-users-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/users route BOLA live oracle",
+    description:
+      "When scanning /api/v1/users, unauthenticated list+detail probes return admin email and role — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-specific scans should surface broken object-level authorization on user APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on user list and detail routes.",
+      steps: [
+        "Gate /api/v1/users behind admin roles.",
+        "Enforce per-user authorization on detail endpoints.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/users route leaks admin profiles without auth. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Duck Store testimonials BOLA live oracle",
+    description:
+      "GET /api/v1/testimonials returns user-linked testimonial records with names, roles, and user_id without authentication.",
+    impactOneline:
+      "Excessive data exposure on testimonial APIs leaks customer identities and linked account metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal user identifiers from public testimonial responses.",
+      steps: [
+        "Return only public guest_name fields for unauthenticated clients.",
+        "Require auth to read user_id-linked testimonial metadata.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/testimonials endpoint returns user_id and linked user objects without auth. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-search-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop catalog searchTerm XSS live oracle",
+    description:
+      "GET /catalog?searchTerm= reflects attacker input into the searchText JavaScript variable without encoding — the PortSwigger Gin & Juice catalog XSS/SQLi training oracle.",
+    impactOneline:
+      "Reflected input in client-side script context enables DOM XSS and scanner evaluation of encoding failures.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogSearchXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before embedding in script context; use parameterized SQL for category filters.",
+      steps: [
+        "Never interpolate query parameters into inline JavaScript.",
+        "Use context-appropriate output encoding in catalog templates.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog?searchTerm= reflects raw input into searchText. Show XSS/SQLi remediation for the catalog route.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /catalog route XSS live oracle",
+    description:
+      "When scanning /catalog, searchTerm is reflected into the searchText script variable — route-specific Gin & Juice XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm catalog search reflection for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode catalog search parameters before client-side use.",
+      steps: [
+        "Use safe DOM APIs instead of string-building script variables.",
+        "Parameterize SQL category filters.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog route reflects searchTerm into searchText. Show route-specific encoding remediation.",
+    version: 1,
+    enabled: true
   }
 ];

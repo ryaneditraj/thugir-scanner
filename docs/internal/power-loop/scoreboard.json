@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T16:13:46.984Z",
+  "updated_at": "2026-07-27T16:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 3001,
-  "total_findings": 30617,
+  "total_findings": 30644,
   "critical_findings": 71,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2099,
-  "discovery_findings": 25658,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T16:13:46.984Z",
+  "discovery_findings": 25685,
+  "improvements_shipped": 1167,
+  "last_run": "2026-07-27T16:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 455,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,41 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); jwt-alg-none-accepted slug absent; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 7,
-      "findings": 83,
-      "focus": "vAPI API3 comment BOLA + API5 BFLA + API4 OTP login; pwnshop invoice path-traversal route; oopssec BFLA walkthrough",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "urls_ok": 10,
+      "findings": 110,
+      "focus": "Duck Store BOLA + Gin & Juice catalog XSS oracles; vAPI API3/API4/API5; pwnshop invoice path-traversal",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503",
-      "vapi.apisec.ai/vapi/api3/comment: 10 findings — vapi-api3-comment-bola-live-oracle (unauth comment rows incl flag)",
-      "vapi.apisec.ai/vapi/api5/users: 10 findings — vapi-api5-bfla-live-oracle (hidden /users list)",
-      "vapi.apisec.ai/vapi/api4/login: 10 findings — vapi-api4-otp-broken-auth-live-oracle",
-      "pwnshop.ctfsecurity.com/api/v1/invoices/1/download: 28 findings — pwnshop-download-path-traversal-route-live-oracle (PWN-038)",
-      "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack: 5 findings incl client-side-oopssec-store-evidence",
-      "wrongsecrets challenge-6/7: 10 findings each with wrongsecrets-challenge-live-oracle"
+      "ginandjuice.shop/catalog?searchTerm=test: Invalid URL fixed — 9 findings with ginandjuice-catalog-search-xss + route oracles",
+      "duck-store.escape.tech/api/v1/users/: 6→10 findings — duck-store-users-bola + users-route live oracles",
+      "duck-store.escape.tech/api/v1/testimonials: 6→8 findings — duck-store-testimonials-bola live oracle",
+      "vapi.apisec.ai/vapi/api3/comment: 10 findings — vapi-api3-comment-bola-live-oracle",
+      "pwnshop.ctfsecurity.com/api/v1/invoices/1/download: 28 findings — pwnshop-download-path-traversal-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "jwt-alg-none-accepted slug absent; juice-shop-jwt-alg-none-live-oracle covers auth_bypass category",
-      "ginandjuice.shop/catalog?searchTerm=test: Invalid URL error — scanner URL parser rejects query-string discovery targets",
-      "oopssec live-stream-hijack: walkthrough docs only — no route-specific BFLA live oracle on GitHub Pages"
+      "trojan-trap-seven.vercel.app + ai-security-platform-iota.vercel.app: Vercel Security Checkpoint blocks scanner egress",
+      "vulnforge-academy level3/level4: Vercel Forbidden from scanner egress",
+      "crapi2.apisec.ai mechanic_report: unreachable from cloud agent (connection reset)"
     ]
   },
   "discovery_highlights": {
     "pwnshop.ctfsecurity.com/api/v1/invoices/1/download": 28,
+    "duck-store.escape.tech/api/v1/users": 10,
     "vapi.apisec.ai/vapi/api3/comment": 10,
-    "vapi.apisec.ai/vapi/api5/users": 10,
-    "vapi.apisec.ai/vapi/api4/login": 10,
-    "wrongsecrets.herokuapp.com/challenge/challenge-6": 10,
-    "wrongsecrets.herokuapp.com/challenge/challenge-7": 10,
+    "ginandjuice.shop/catalog": 9,
+    "duck-store.escape.tech/api/v1/testimonials": 8,
     "juice-shop-staging.herokuapp.com": 14,
-    "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack": 5
+    "vapi.apisec.ai/vapi/api6/user": 11,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

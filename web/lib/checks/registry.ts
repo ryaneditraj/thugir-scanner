@@ -25360,7 +25360,12 @@ const jwtAlgNoneProbe: Rule = async (ctx) => {
   const badToken = "thugir.invalid.probe.token";
 
   for (const path of [...paths].slice(0, 6)) {
-    const url = new URL(path, ctx.origin).toString();
+    let url: string;
+    try {
+      url = new URL(path, ctx.origin).toString();
+    } catch {
+      continue;
+    }
     const [noAuth, badAuth, noneAuth] = await Promise.all([
       ctx.probe.get(url, { maxBytes: 4096 }),
       ctx.probe.get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
@@ -31020,6 +31025,150 @@ const clientSideCybersecLabEvidence: Rule = async (ctx) => {
       note: isKnownCybersecLab && hits.length < 3
         ? "cybersec-lab.vercel.app is a known Spanish OWASP training SPA (URL oracle; bundle markers may be absent when only the shell HTML is fetched)"
         : "CYBERSEC LAB is a Spanish interactive OWASP training SPA with SQLi login-bypass, XSS, buffer overflow, and CTF challenge modules"
+    }
+  };
+};
+
+// --- Escape Duck Store BOLA lab (duck-store.escape.tech) ----------------------------
+function isDuckStoreHost(ctx: RuleContext): boolean {
+  return /duck-store\.escape\.tech/i.test(ctx.origin);
+}
+
+const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let rows: Array<{ id?: string; username?: string }>;
+  try {
+    rows = JSON.parse(listDoc.body) as Array<{ id?: string; username?: string }>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+  const adminRow = rows.find((r) => /admin/i.test(String(r.username || "")));
+  if (!adminRow?.id) return NEGATIVE;
+  const detailUrl = new URL(`/api/v1/users/${adminRow.id}`, ctx.origin).toString();
+  const detailDoc = await ctx.probe.get(detailUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (detailDoc.status < 200 || detailDoc.status >= 400) return NEGATIVE;
+  if (!/"email"\s*:\s*"admin@duck-store\.escape"/i.test(detailDoc.body)) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(detailDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      listUrl,
+      detailUrl,
+      adminUsername: adminRow.username,
+      snippet: detailDoc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/users/ lists accounts and GET /api/v1/users/{uuid} returns admin email+role without auth — BOLA oracle"
+    }
+  };
+};
+
+const duckStoreUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/users/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreUsersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/users route scan — unauthenticated user list and admin profile disclosure (BOLA)"
+    }
+  };
+};
+
+const duckStoreTestimonialsBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/v1/testimonials", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let rows: Array<{ user?: { username?: string }; name?: string; role?: string; content?: string }>;
+  try {
+    rows = JSON.parse(doc.body) as typeof rows;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+  const featured = rows.find((r) => /CISO|DevOps|patricia/i.test(`${r.role || ""} ${r.name || ""}`));
+  if (!featured?.user?.username && !featured?.name) return NEGATIVE;
+  if (!/"user_id"\s*:/.test(doc.body) || !/"content"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: featured.user?.username ? 0.92 : 0.9,
+    evidence: {
+      url,
+      rowCount: rows.length,
+      sampleUser: featured.user?.username || featured.name,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/testimonials returns user-linked testimonial records with names and roles without auth — BOLA/information disclosure oracle"
+    }
+  };
+};
+
+const duckStoreTestimonialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/testimonials route scan — unauthenticated testimonial records with linked user metadata"
+    }
+  };
+};
+
+// --- Gin & Juice Shop catalog route oracles (ginandjuice.shop) ----------------------
+function isGinAndJuiceHost(ctx: RuleContext): boolean {
+  return /ginandjuice\.shop/i.test(ctx.origin);
+}
+
+const ginAndJuiceCatalogSearchXssLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("searchTerm", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const reflected =
+    new RegExp(`searchText\\s*=\\s*["']${canary}["']`).test(doc.body) ||
+    doc.body.includes(canary);
+  if (!reflected) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /searchText\s*=/.test(doc.body) ? 0.91 : 0.88,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.match(new RegExp(`.{0,40}${canary}.{0,40}`))?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET /catalog?searchTerm= reflects attacker input into searchText script variable — DOM/reflected XSS oracle"
+    }
+  };
+};
+
+const ginAndJuiceCatalogRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogSearchXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — searchTerm reflected into client-side searchText variable (SQLi/XSS training oracle)"
     }
   };
 };
@@ -39085,6 +39234,12 @@ export const RULES: Record<string, Rule> = {
   vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
+  duckStoreUsersBolaLiveOracle,
+  duckStoreUsersRouteLiveOracle,
+  duckStoreTestimonialsBolaLiveOracle,
+  duckStoreTestimonialsRouteLiveOracle,
+  ginAndJuiceCatalogSearchXssLiveOracle,
+  ginAndJuiceCatalogRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
