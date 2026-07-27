@@ -9596,6 +9596,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-transfer-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank transfer route live oracle",
+    description:
+      "When scanning /api/transfer, POST accepts authenticated fund transfers without a CSRF token — route-specific transfer forgery oracle.",
+    impactOneline:
+      "Route scans on transfer APIs need live CSRF-missing confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankTransferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens on all state-changing banking endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens and validate them on POST /api/transfer.",
+        "Reject cross-origin requests unless Origin/Referer match an allowlist.",
+        "Use SameSite=strict cookies for session authentication."
+      ]
+    },
+    fixPrompt:
+      "Our /api/transfer route processes POST requests with only a session cookie. Show route-specific CSRF token validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-accounts-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank accounts route live oracle",
+    description:
+      "When scanning /api/accounts/{id}, GET returns another customer's balance and owner by predictable account ID — route-specific BOLA/IDOR oracle.",
+    impactOneline:
+      "Route scans on account APIs need live cross-account read confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankAccountsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize every account lookup against the session user.",
+      steps: [
+        "Verify account.ownerId matches the authenticated user before returning data.",
+        "Use non-guessable account identifiers.",
+        "Add automated IDOR regression tests on /api/accounts/*."
+      ]
+    },
+    fixPrompt:
+      "Our /api/accounts/{id} route returns another customer's balance. Show route-specific ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fauxbank-profile-sensitive-data-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",

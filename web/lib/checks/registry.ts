@@ -24806,7 +24806,7 @@ const clientSideFauxbankLabEvidence: Rule = async (ctx) => {
 };
 
 async function ensureFauxbankSession(ctx: RuleContext): Promise<string | null> {
-  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined)) return null;
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return null;
   const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
   const r = await ctx.probe.get(loginUrl, {
     method: "POST",
@@ -27246,6 +27246,40 @@ const fauxbankLoansRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "FauxBank /loans route scan — POST /api/loans creates pending loan visible in GET /api/loans"
+    }
+  };
+};
+
+const fauxbankTransferRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/transfer/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankCsrfTransferProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /api/transfer route scan — POST executes fund transfer without CSRF token (lesson #7)"
+    }
+  };
+};
+
+const fauxbankAccountsRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/accounts/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankIdorAccountsProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /api/accounts route scan — authenticated user reads another customer's account by predictable ID (lesson #1)"
     }
   };
 };
@@ -32076,6 +32110,22 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
       re: /K8s Configmap|config-map in the default namespace/i
     },
     {
+      label: "HashiCorp Vault metadata walkthrough",
+      re: /Vault Metadata Challenge|secret metadata on a.*wrongsecret|logged root token|port 8200/i
+    },
+    {
+      label: "HashiCorp Vault subkey walkthrough",
+      re: /Vault subkey challenge|root token as below|K8s environment.*root token/i
+    },
+    {
+      label: "HashiCorp Vault template injection walkthrough",
+      re: /HashiCorp Vault Template Injection|Vault Agent sidecar|injected into application environment/i
+    },
+    {
+      label: "Vault challenge focus",
+      re: /challenge focuses on.*Vault|Vault<\/strong>/i
+    },
+    {
       label: "CI/CD pipeline secrets walkthrough",
       re: /CI\/CD pipeline|CI\/CD tooling|Github Actions|Exfiltrate the secret using Github/i
     },
@@ -32205,7 +32255,15 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
               ? "Spring application.properties secrets"
               : /K8s Configmap/i.test(doc.body)
                 ? "Kubernetes configmap secrets"
-                : /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(doc.body)
+                : /Vault Metadata Challenge|secret metadata on a.*wrongsecret/i.test(doc.body)
+                  ? "HashiCorp Vault metadata secrets"
+                  : /Vault subkey challenge/i.test(doc.body)
+                    ? "HashiCorp Vault subkey secrets"
+                    : /HashiCorp Vault Template Injection|Vault Agent sidecar/i.test(doc.body)
+                      ? "HashiCorp Vault template injection secrets"
+                      : /challenge focuses on.*Vault|Vault<\/strong>/i.test(doc.body)
+                        ? "HashiCorp Vault secrets"
+                        : /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(doc.body)
                   ? "AWS Secrets Manager via K8s CSI driver"
                   : /IAM privilege escalation|Parameter Store/i.test(doc.body)
                   ? "IAM privilege escalation / AWS Parameter Store secrets"
@@ -38639,6 +38697,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopSellerPreviewSstiRouteLiveOracle,
   pwnshopDownloadPathTraversalRouteLiveOracle,
   fauxbankLoansRouteLiveOracle,
+  fauxbankTransferRouteLiveOracle,
+  fauxbankAccountsRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,

@@ -1240,6 +1240,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopSellerPreviewSstiRouteLiveOracle",
   "pwnshopDownloadPathTraversalRouteLiveOracle",
   "fauxbankLoansRouteLiveOracle",
+  "fauxbankTransferRouteLiveOracle",
+  "fauxbankAccountsRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
   "fauxbankProfileRouteLiveOracle",
   "brokencrystalsUserloginCssInjectionLiveOracle",
