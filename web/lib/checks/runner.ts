@@ -1235,7 +1235,6 @@ const DEEP_RULES = new Set<string>([
   "pwnshopAvatarUploadRouteLiveOracle",
   "pwnshopApplyCouponRouteLiveOracle",
   "pwnshopSellerPreviewSstiLiveOracle",
-  "pwnshopDownloadPathTraversalLiveOracle",
   "pwnshopSellerPreviewSstiRouteLiveOracle",
   "pwnshopDownloadPathTraversalRouteLiveOracle",
   "fauxbankLoansRouteLiveOracle",
