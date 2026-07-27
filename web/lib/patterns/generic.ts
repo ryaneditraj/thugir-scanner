@@ -16279,6 +16279,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api1-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API1 route BOLA live oracle",
+    description:
+      "When scanning /api1/user, POST registers a user and GET /api1/user/1 with Authorization-Token returns Michaels flag — route-specific BOLA oracle.",
+    impactOneline:
+      "Missing object-level checks let any authenticated user read other users' records when the API1 route is scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — enforce object-level authorization on every user fetch in production.",
+      steps: [
+        "Verify the authenticated principal owns or may access the requested user ID.",
+        "Never rely on sequential IDs without authorization checks.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api1/user/{id} route scan confirms BOLA. Show object-level authorization remediation for REST user routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api2-broken-auth-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -16301,6 +16327,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api2/user/login accepts credential stuffing and /api2/user/details leaks every user. Show broken-auth remediation with rate limits and scoped responses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api2-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "vAPI API2 route broken authentication live oracle",
+    description:
+      "When scanning /api2/user/login, POST accepts credential-stuffing pairs and GET /api2/user/details returns every user record including flag — route-specific broken authentication oracle.",
+    impactOneline:
+      "Weak login controls and excessive user export let attackers recover accounts when the API2 login route is scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi2RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — rate-limit login and scope user detail endpoints in production.",
+      steps: [
+        "Apply strict rate limiting and lockouts on /login endpoints.",
+        "Return only the authenticated user's profile from /user/details routes.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api2/user/login route scan confirms credential stuffing and bulk user export. Show broken-auth remediation with rate limits and scoped responses.",
     version: 1,
     enabled: true
   },
@@ -16509,6 +16561,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api7/user/key reflects arbitrary Origin with credentials and returns auth keys. Show CORS hardening for authenticated API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api7-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "vAPI API7 route CORS misconfiguration live oracle",
+    description:
+      "When scanning /api7/user, GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials: true and returns authkey — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Permissive CORS with credentials lets any third-party site read sensitive API keys when the API7 user route is scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi7RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — restrict CORS origins and never combine reflected origins with credentials in production.",
+      steps: [
+        "Allowlist trusted origins instead of reflecting arbitrary Origin headers.",
+        "Never set Access-Control-Allow-Credentials: true with reflected origins.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api7/user route scan confirms CORS reflects arbitrary Origin with credentials. Show CORS hardening for authenticated API routes.",
     version: 1,
     enabled: true
   },
