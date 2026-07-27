@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T21:06:58.924628Z",
+  "updated_at": "2026-07-27T21:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2129,
   "discovery_findings": 25988,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T21:06:58.924628Z",
+  "improvements_shipped": 1167,
+  "last_run": "2026-07-27T21:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -48,39 +48,37 @@
           ]
         }
       },
-      "note": "Primary Heroku healthy 6/6 (17 findings); jwt-alg-none-accepted + juice-shop-jwt-alg-none-live-oracle + chatbot oracles + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent"
+      "note": "Primary Heroku 6/6 (17 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti oracles; secret-resend slug still absent"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 40,
-      "focus": "vulnweb sqli/xss/idor + vulnforge level5/6 + wrongsecrets challenge-10/11 + nodegoat a2 queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "vuln-expose blind SQLi + CSP bypass route oracles shipped; prior queue drain vulnweb/vulnforge/wrongsecrets",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) \u2014 no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-10: 10 findings \u2014 wrongsecrets-challenge-live-oracle + wrongsecrets-challenge-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-11: 10 findings \u2014 wrongsecrets-challenge-live-oracle",
-      "nodegoat-websec.herokuapp.com/tutorial/a2: 7 findings \u2014 nodegoat-tutorial-a2-route-live-oracle",
-      "vulnforge-academy.vercel.app/.../level5.php: 5 findings \u2014 vulnforge-academy-level-sqli-route-live-oracle (shared PHP hub)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
+      "vuln-expose.vercel.app/sqli/blind: 13→16 — vuln-expose-sqli-blind-route-live-oracle + vuln-expose-blind-sqli-api-live-oracle",
+      "vuln-expose.vercel.app/xss/csp-bypass: 12→14 — vuln-expose-xss-csp-bypass-route-live-oracle + client-side-vuln-expose-lab-module-evidence",
+      "wrongsecrets.herokuapp.com/challenge/challenge-10: 10 findings — wrongsecrets-challenge-live-oracle",
+      "nodegoat-websec.herokuapp.com/tutorial/a2: 7 findings — nodegoat-tutorial-a2-route-live-oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnweb.netlify.app/sqli|xss|idor: 1-finding hubs (missing-security-headers only) \u2014 route-specific lab oracles absent",
-      "vulnforge-academy level5/6: shared SQLi hub fingerprint without route-specific stored/DOM XSS oracles"
+      "vulnweb.netlify.app/sqli|xss|idor: 1-finding hubs — route-specific lab oracles absent",
+      "vulnerable-web-site.vercel.app/ssrf: auth-gated — SSRF route oracle needs session cookie",
+      "oopssec-store /api/tracking XFF SQLi: live app deploy not found on Vercel"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+    "vuln-expose.vercel.app/sqli/blind": 16,
+    "vuln-expose.vercel.app/xss/csp-bypass": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-10": 10,
-    "wrongsecrets.herokuapp.com/challenge/challenge-11": 10,
     "nodegoat-websec.herokuapp.com/tutorial/a2": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level5.php": 5,
-    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level6.php": 5,
-    "vulnweb.netlify.app/sqli": 1,
-    "vulnweb.netlify.app/xss": 1,
-    "vulnweb.netlify.app/idor": 1
+    "vulnweb.netlify.app/sqli": 1
   }
 }

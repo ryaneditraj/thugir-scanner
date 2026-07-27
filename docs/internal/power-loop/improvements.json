@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-blind-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /sqli/blind LABORATORIO DE BLIND SQL INJECTION + boolean/time-based panels + GET /api/users?id=1 AND (SELECT SUBSTRING(password,1,1)...) echoes raw SQL; vuln-expose.vercel.app/sqli/blind findings 13→16; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-csp-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /xss/csp-bypass LABORATORIO DE CSP BYPASS + CSP Policy Simulator + JSONP/Angular/DOM/WebSocket bypass methods; vuln-expose.vercel.app/xss/csp-bypass findings 12→14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-blind-sqli-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users?id=1 AND (SELECT SUBSTRING(password,1,1) FROM users WHERE id=1)='a' returns query field with SUBSTRING(password,…) echoed; vuln-expose.vercel.app/sqli/blind route scan fires API oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:crapi.apisec.ai",
       "slug": "crapi-vehicle-route-live-oracle",
       "status": "shipped",
