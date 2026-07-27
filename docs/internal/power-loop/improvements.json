@@ -14339,6 +14339,21 @@
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-50-dotnet-ilspy-markers",
       "shipped_at": "2026-07-27T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "extract-api-path-protocol-relative-fix",
+      "shipped_at": "2026-07-27T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-bola-live-oracle",
+      "shipped_at": "2026-07-27T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-search-xss-live-oracle",
+      "shipped_at": "2026-07-27T16:25:00.000Z"
     }
   ]
 }
