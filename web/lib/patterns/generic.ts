@@ -16955,6 +16955,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-tutorial-a9-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "NodeGoat A9 insecure components tutorial live oracle",
+    description:
+      "When scanning /tutorial/a9, the canonical tutorial documents using components with known vulnerabilities (insecure Marked library XSS via rich-text parsing) — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A9 known-vulnerable-component training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA9RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — never ship known-vulnerable npm dependencies to production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Run npm audit / Dependabot and patch vulnerable Marked and other dependency versions.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a9 route documents insecure Marked library XSS labs. Show how to isolate NodeGoat training from production dependency management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-a10-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat A10 unvalidated redirects tutorial live oracle",
+    description:
+      "When scanning /tutorial/a10, the canonical tutorial documents unvalidated redirects and forwards via /learn?url= without destination validation — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A10 open-redirect training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA10RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — always validate redirect destinations against an allow-list in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Validate redirect URL hosts against an allow-list before calling res.redirect().",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a10 route documents unvalidated /learn?url= redirect labs. Show how to isolate NodeGoat training from production redirect validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",
