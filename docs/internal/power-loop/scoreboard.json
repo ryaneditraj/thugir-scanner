@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T05:22:00.000Z",
+  "updated_at": "2026-07-27T06:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2894,
-  "total_findings": 29183,
+  "total_sites_scanned": 2896,
+  "total_findings": 29228,
   "critical_findings": 69,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2044,
-  "discovery_findings": 24597,
-  "improvements_shipped": 1164,
-  "last_run": "2026-07-27T05:22:00.000Z",
+  "discovery_findings": 24642,
+  "improvements_shipped": 1167,
+  "last_run": "2026-07-27T06:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 12,
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 396,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (12 findings); jwt-alg-none-accepted + reflexion-escalated-ssti present; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (14 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "focus": "pwnshop seller/preview SSTI + download path traversal + fauxbank loans route oracles",
+      "urls_validated": 2,
+      "focus": "pwnshop mail/1 IDOR route oracle + fauxbank profile sensitive-data route oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/seller/preview: 13→28 findings — pwnshop-seller-preview-ssti-live-oracle shipped (<%= 7*7 %> → 49 via ejs.render, PWN-040)",
-      "pwnshop.ctfsecurity.com/download: 11→33 findings — pwnshop-download-path-traversal-route-live-oracle shipped (../../package.json disclosure, PWN-038)",
-      "pentest-fauxbank.vercel.app/loans: 11→14 findings — fauxbank-loans-route-live-oracle shipped (POST /api/loans pending loan oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-37: 9 findings — wrongsecrets-challenge-live-oracle (CI/CD base64 auth bypass)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-39: 9 findings — wrongsecrets-challenge-live-oracle (cryptography)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/mail/1: 20→29 findings — pwnshop-mail-idor-route-live-oracle shipped (PWN-004 inbox IDOR with scannedUrl evidence)",
+      "pentest-fauxbank.vercel.app/profile: 11→16 findings — fauxbank-profile-sensitive-data-live-oracle + route oracle shipped (GET /api/profile ssnFake leak)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "pwnshop api/orders/submit + api/settings/less/imports: endpoints return 404 on live deploy — XXE/SSTI-RCE oracles deferred",
       "wrongsecrets challenge-36/38: binary RE and Git challenges — client-side evidence only, no live oracle",
-      "pwnshop.ctfsecurity.com/mail/1: mail-IDOR route wrapper still absent for /mail/:id discovery scans",
-      "pentest-fauxbank.vercel.app/profile: profile sensitive-data route oracle still absent"
+      "ai-security-platform-iota.vercel.app/challenges/*: requires login — live XSS/SQLi/IDOR oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 12,
+    "juice-shop.herokuapp.com": 14,
+    "pwnshop.ctfsecurity.com/mail/1": 29,
+    "pentest-fauxbank.vercel.app/profile": 16,
     "pwnshop.ctfsecurity.com/seller/preview": 28,
     "pwnshop.ctfsecurity.com/download": 33,
     "pentest-fauxbank.vercel.app/loans": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-37": 9,
-    "wrongsecrets.herokuapp.com/challenge/challenge-39": 9,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20
+    "wrongsecrets.herokuapp.com/challenge/challenge-37": 9
   }
 }
