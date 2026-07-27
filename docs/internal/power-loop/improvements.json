@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-54-gitignore-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-54 .gitignore Secret Challenge + AES-256-CBC key-in-.gitignore walkthrough markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-54 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-55-ssh-bastion-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-55 .ssh Bastion + committed SSH keypair walkthrough markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-55 findings 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-62-mcp-google-sa-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-62 MCP Server Privilege Escalation via Google Service Account markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-62 findings 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-vault-metadata-subkey-markers",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenge-44 Vault Metadata Challenge + challenge-45 Vault subkey challenge markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-44|45 findings 8→10 with wrongsecrets-challenge-live-oracle; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
@@ -14011,6 +14029,21 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-54-gitignore-markers",
+      "shipped_at": "2026-07-27T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-55-ssh-bastion-markers",
+      "shipped_at": "2026-07-27T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-62-mcp-google-sa-markers",
+      "shipped_at": "2026-07-27T14:15:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-live-oracle",
