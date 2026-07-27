@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T05:16:04.679Z",
+  "updated_at": "2026-07-27T06:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-41",
+      "source": "OWASP WrongSecrets — challenge-41 password-shucking cryptography oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-42",
+      "source": "OWASP WrongSecrets — challenge-42 Spring Boot Actuator audit-events API key leak (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
+      "source": "OWASP WrongSecrets — challenge-43 documentation/social-media secret oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-49",
+      "source": "OWASP WrongSecrets — challenge-49 weak MD5 AES key brute-force oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-52",
+      "source": "OWASP WrongSecrets — challenge-52 secrets-management oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-36",
       "source": "OWASP WrongSecrets — challenge-36 binary reverse-engineering oracle (public Heroku benchmark)",
