@@ -16695,6 +16695,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-vehicle-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI vehicle location BOLA live oracle",
+    description:
+      "Community posts leak vehicleid UUIDs; GET /identity/api/v2/vehicle/{uuid}/location returns another user's GPS coordinates — the crAPI vehicle BOLA oracle.",
+    impactOneline:
+      "Excessive data exposure in community posts enables cross-user vehicle location tracking without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiVehicleBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on vehicle location endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI vehicle location endpoint returns GPS coordinates for UUIDs leaked via community posts. Show BOLA remediation for /vehicle/{uuid}/location.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-vehicle-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI vehicle route BOLA live oracle",
+    description:
+      "When scanning /identity/api/v2/vehicle/vehicles, community vehicleid leaks confirm cross-user location reads — route-specific crAPI BOLA oracle.",
+    impactOneline:
+      "Route scans on vehicle list endpoints should confirm object-level authorization failures when community posts expose other users' vehicle UUIDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiVehicleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on vehicle location endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/v2/vehicle/vehicles route scan confirms BOLA via community vehicleid leaks. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-shop-orders-bfla-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -16821,6 +16873,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/search route reflects raw script tags in HTML. Show output encoding remediation for reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-notices-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu notices LFI route live oracle",
+    description:
+      "GET /api/notices?file= accepts path traversal and returns /etc/passwd when scanning the notices route — IST Edu local file inclusion training oracle.",
+    impactOneline:
+      "Unsanitized file parameters on notices endpoints let attackers read arbitrary server files.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduNoticesLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — validate file paths and block directory traversal in production.",
+      steps: [
+        "Allowlist permitted notice filenames instead of accepting arbitrary paths.",
+        "Reject ../ sequences and encoded traversal payloads.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/notices?file= route accepts path traversal to /etc/passwd. Show input validation remediation for file inclusion.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-portal-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu portal SQLi auth bypass route live oracle",
+    description:
+      "POST /api/portal with admin' OR '1'='1 bypasses authentication when scanning the portal route — IST Edu SQL injection login oracle.",
+    impactOneline:
+      "String-concatenated SQL in login queries lets attackers bypass authentication without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduPortalSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic login failure messages without SQL error details.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/portal route accepts SQL injection in the username field for authentication bypass. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },

