@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/challenges returns 19 challenges incl recon-onboarding system_prompt_leak + AML.T0043 Prompt Injection labels; owasp-finbot-ctf.org/portals findings 8→9 and /ctf 8→10; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-sidecar-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/sidecar returns total:19 challenge progress JSON on /ctf route scan; owasp-finbot-ctf.org/ctf findings 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JWT via test@test.com + GET /workshop/api/shop/orders/{id} returns order with user.email != test@test.com on route scan — BOLA API1 oracle; crapi2 host intermittently resets TLS from cloud agent (4-finding hub during validation) but mirrors shipped crapi2-shop-orders-bfla-route-live-oracle auth path; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-mcp-tools-live-oracle",
       "status": "shipped",
@@ -14186,6 +14204,21 @@
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-chatbot-route-live-oracle",
       "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-route-live-oracle",
+      "shipped_at": "2026-07-27T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-sidecar-route-live-oracle",
+      "shipped_at": "2026-07-27T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
+      "shipped_at": "2026-07-27T11:10:00.000Z"
     }
   ]
 }

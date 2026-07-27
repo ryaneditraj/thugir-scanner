@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T10:11:39.770Z",
-  "total": 895,
-  "uniqueSlugs": 890,
+  "generatedAt": "2026-07-27T11:07:30.791Z",
+  "total": 898,
+  "uniqueSlugs": 893,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 877,
+    "generic": 880,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 810,
+    "deep": 813,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 220,
+    "Broken access control": 221,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -33,7 +33,7 @@
     "SSRF": 5,
     "Server-side request forgery": 24,
     "Sensitive data exposure": 24,
-    "AI security": 38,
+    "AI security": 40,
     "Business logic": 3,
     "Open redirect": 1,
     "Authentication bypass": 2,
@@ -683,6 +683,7 @@
     "cors-reflect-origin",
     "crapi2-auth-login-route-live-oracle",
     "crapi2-shop-orders-bfla-route-live-oracle",
+    "crapi2-shop-orders-id-bola-route-live-oracle",
     "cursor-next-public-secret",
     "dangerous-html-sinks",
     "directory-listing-enabled",
@@ -718,6 +719,8 @@
     "fauxbank-profile-route-live-oracle",
     "fauxbank-profile-sensitive-data-live-oracle",
     "fauxbank-stored-xss-support-probe",
+    "finbot-ctf-challenges-route-live-oracle",
+    "finbot-ctf-sidecar-route-live-oracle",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
     "graphiql-ui-exposed",
