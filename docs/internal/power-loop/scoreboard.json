@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T15:14:00.000Z",
+  "updated_at": "2026-07-27T15:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2990,
-  "total_findings": 30489,
+  "total_sites_scanned": 2993,
+  "total_findings": 30520,
   "critical_findings": 71,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2094,
   "discovery_findings": 25575,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T15:14:00.000Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-27T15:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "503 error",
       "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 453,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,7 +48,7 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); juice-shop-jwt-alg-none-live-oracle present; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -58,31 +56,35 @@
       "urls_scanned": 8,
       "urls_ok": 7,
       "findings": 46,
-      "focus": "trojan-trap file upload + untrusted-python RCE + duck-store vuln catalog/testimonials + queue drain vapi/api1-2 + ai-security supabase-data"
+      "focus": "vAPI API1 BOLA + API2 broken-auth + API6 route oracles; trojan-trap file upload + duck-store vuln catalog",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503",
+      "vapi.apisec.ai/vapi/api1/user: 5→10 findings — vapi-api1-bola-live-oracle shipped (GET /api1/user/1 IDOR)",
+      "vapi.apisec.ai/vapi/api6/user: 5→11 findings — vapi-api6-route-live-oracle shipped (credit mass assignment)",
+      "vapi.apisec.ai routes: vapi-api2-broken-auth-live-oracle fires on credential-stuffing login + user/details export",
       "trojan-trap-seven.vercel.app: 5 findings incl reflexion-escalated-ssti on file-upload lab",
-      "duck-store.escape.tech/vulnerabilities: 8 findings with vibe-unauthenticated-api-routes + vibe-openapi-docs-exposed",
-      "duck-store.escape.tech/api/v1/testimonials: 6 findings — unauthenticated API route oracle (BOLA benchmark route)",
-      "vapi.apisec.ai/vapi/api1/user: 9 findings incl vapi-api7-cors-misconfig-live-oracle",
-      "ginandjuice.shop/catalog?searchTerm=test: scan error Invalid URL — query-string URL rejected by scanner"
+      "duck-store.escape.tech/vulnerabilities: 8 findings with vibe-unauthenticated-api-routes + vibe-openapi-docs-exposed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "jwt-alg-none-accepted slug absent; juice-shop-jwt-alg-none-live-oracle covers auth_bypass category",
       "ginandjuice.shop/catalog?searchTerm=test: Invalid URL error — scanner URL parser rejects query-string discovery targets",
-      "duck-store /api/v1/testimonials: vibe-unauthenticated-api-routes present but no route-specific BOLA write-oracle for testimonial update",
-      "untrusted-python.vercel.app: reflexion-escalated-ssti false-positive risk on static exec demo page without server-side template engine"
+      "crapi2.apisec.ai mechanic_report: unreachable from cloud agent (connection reset)",
+      "vulnforge-academy level3/level4: Vercel Forbidden from scanner egress"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "vapi.apisec.ai/vapi/api1/user": 9,
+    "vapi.apisec.ai/vapi/api6/user": 11,
+    "vapi.apisec.ai/vapi/api1/user": 10,
     "duck-store.escape.tech/vulnerabilities": 8,
     "vapi.apisec.ai/vapi/api2/user/login": 8,
     "trojan-trap-seven.vercel.app": 5,
-    "duck-store.escape.tech/api/v1/testimonials": 6
+    "duck-store.escape.tech/api/v1/testimonials": 6,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }
