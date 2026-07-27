@@ -32245,6 +32245,22 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "ILSpy reverse-engineering walkthrough",
       re: /ILSpy|ilspycmd|sfextract/i
+    },
+    {
+      label: ".gitignore AES-256-CBC secret walkthrough",
+      re: /\.gitignore Secret Challenge|encrypted using AES-256-CBC|key found in "\.gitignore"/i
+    },
+    {
+      label: "SSH bastion keypair walkthrough",
+      re: /\.ssh Bastion|bastion containers|private key is located inside the \.ssh|embed the "secret" to authenticate to the host/i
+    },
+    {
+      label: "MCP Google service account privilege escalation walkthrough",
+      re: /MCP Server Privilege Escalation via Google Service Account|Google Drive documents|service account used by the MCP server/i
+    },
+    {
+      label: "Hardcoded encryption key walkthrough",
+      re: /Hardcoded Encryption Key Challenge|hardcoding the encryption key in the same source file|hardcoded directly in the Java source code/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -32326,6 +32342,22 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                                                         doc.body
                                                       )
                                                     ? "documentation/social media secret exposure"
+                                                    : /\.gitignore Secret Challenge|key found in "\.gitignore"/i.test(
+                                                          doc.body
+                                                        )
+                                                      ? ".gitignore AES-256-CBC encrypted secrets"
+                                                      : /\.ssh Bastion|bastion containers|private key is located inside the \.ssh/i.test(
+                                                            doc.body
+                                                          )
+                                                        ? "SSH bastion container / committed keypair secrets"
+                                                        : /MCP Server Privilege Escalation via Google Service Account|Google Drive documents/i.test(
+                                                              doc.body
+                                                            )
+                                                          ? "MCP Google service account privilege escalation secrets"
+                                                          : /Hardcoded Encryption Key Challenge|hardcoding the encryption key in the same source file/i.test(
+                                                                doc.body
+                                                              )
+                                                            ? "hardcoded AES encryption key in source code"
                                           : /challenge focuses on.*Secrets<\/strong>/i.test(doc.body)
                                             ? "secrets management"
                                             : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
