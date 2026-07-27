@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T13:05:00.000Z",
+  "updated_at": "2026-07-27T14:07:14.286Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php",
+      "source": "webspoilt/vulnforge-academy — Level 3 reflected XSS challenge (GitHub repo structure)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level4.php",
+      "source": "webspoilt/vulnforge-academy — Level 4 stored XSS challenge (GitHub repo structure)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/attacks/jailbreak/1",
+      "source": "opena2a/agentpwn — APWN-JB-001 jailbreak payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/attacks/supply-chain/1",
+      "source": "opena2a/agentpwn — APWN-SC-001 supply-chain injection payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/attacks/capability-abuse/1",
+      "source": "opena2a/agentpwn — APWN-CA-001 capability-abuse payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-secrets",
       "source": "AI Security Platform — CWE-200 environment variables/API keys exposed client-side (14-challenge OWASP Top 10 lab)",
