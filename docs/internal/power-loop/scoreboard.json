@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-27T19:10:07.211Z",
+=======
+  "updated_at": "2026-07-27T19:15:00.000Z",
+>>>>>>> a6a681fb (docs: log 3 discovery improvements from 19 UTC power-loop run)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 3028,
   "total_findings": 30881,
   "critical_findings": 72,
@@ -24,6 +29,17 @@
   "discovery_findings": 25874,
   "improvements_shipped": 1155,
   "last_run": "2026-07-27T19:10:07.211Z",
+=======
+  "total_sites_scanned": 3027,
+  "total_findings": 30827,
+  "critical_findings": 72,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2109,
+  "discovery_findings": 25839,
+  "improvements_shipped": 1161,
+  "last_run": "2026-07-27T19:15:00.000Z",
+>>>>>>> a6a681fb (docs: log 3 discovery improvements from 19 UTC power-loop run)
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
@@ -48,6 +64,7 @@
           ]
         }
       },
+<<<<<<< HEAD
       "note": "Primary Heroku healthy 6/6 (17 findings); jwt-alg-none-accepted present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
@@ -67,17 +84,38 @@
       "ist-edu-bd.vercel.app/api/notices?file=etc/passwd: 4 findings — sql-error-disclosure but no LFI live oracle",
       "ist-edu-bd.vercel.app/api/portal: 4 findings — sql-error-disclosure but no portal SQLi-bypass live oracle",
       "wrongsecrets.herokuapp.com/challenge/challenge-12/13/14: 10 findings each — wrongsecrets-challenge-live-oracle + route-live-oracle"
+=======
+      "note": "Primary Heroku healthy 6/6 (17 findings); jwt-alg-none-accepted now fires alongside juice-shop-jwt-alg-none-live-oracle"
+    },
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "discovery": {
+      "urls_validated": 3,
+      "findings": 34,
+      "focus": "crAPI mechanic_report BOLA + vAPI API10 logging oracle + Juice Shop jwt-alg-none-accepted probe path",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — jwt-alg-none-accepted slug now present",
+      "crapi.apisec.ai/workshop/api/mechanic/mechanic_report: 3→5 findings — crapi-mechanic-report-route-live-oracle (sequential report_id BOLA)",
+      "vapi.apisec.ai/vapi/api10/user/flag: 10→12 findings — vapi-api10-route-live-oracle (unauthenticated flag{api10_...})"
+>>>>>>> a6a681fb (docs: log 3 discovery improvements from 19 UTC power-loop run)
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+<<<<<<< HEAD
       "vulnerable-web-site.vercel.app/ssrf: route-specific SSRF live oracle absent (5-finding hub)",
       "ist-edu-bd.vercel.app/api/notices: LFI path-traversal live oracle absent despite sql-error-disclosure",
       "ist-edu-bd.vercel.app/api/portal: SQLi login-bypass live oracle absent on direct API route scan"
+=======
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up oracle absent (PWN-042 requires VULNBANK_LAB_VULN=1 self-hosted)",
+      "crapi.apisec.ai/identity/api/v2/vehicle/vehicles: vehicle BOLA oracle still absent (needs vehicle ID leak chain)"
+>>>>>>> a6a681fb (docs: log 3 discovery improvements from 19 UTC power-loop run)
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+<<<<<<< HEAD
     "wrongsecrets.herokuapp.com/challenge/challenge-12": 10,
     "wrongsecrets.herokuapp.com/challenge/challenge-13": 10,
     "wrongsecrets.herokuapp.com/challenge/challenge-14": 10,
@@ -86,5 +124,12 @@
     "vulnerable-web-site.vercel.app/ssrf": 5,
     "ist-edu-bd.vercel.app/api/notices?file=etc/passwd": 4,
     "ist-edu-bd.vercel.app/api/portal": 4
+=======
+    "crapi.apisec.ai/workshop/api/mechanic/mechanic_report": 5,
+    "vapi.apisec.ai/vapi/api10/user/flag": 12,
+    "vulnbank.org/profile/upload": 21,
+    "pwnshop.ctfsecurity.com/apply-coupon": 27,
+    "ssrf.vulnlab.dev/basic": 9
+>>>>>>> a6a681fb (docs: log 3 discovery improvements from 19 UTC power-loop run)
   }
 }
