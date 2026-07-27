@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-coupon-category-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PHONE20 valid:false only valid for phones at /apply-coupon on fashion cart but POST /checkout coupon_code=PHONE20 proceeds with Insufficient wallet balance; pwnshop.ctfsecurity.com/apply-coupon findings 23→31 with pwnshop-coupon-category-bypass-route-live-oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries; brokencrystals.com/api/users/ldap findings 54→56 with brokencrystals-ldap-route-live-oracle + scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-marketplace-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /marketplace route scan fires brokencrystals-marketplace-route-live-oracle with scannedUrl + prototypePollutionDomXss/__proto__ markers in /assets/index-*.js bundle; brokencrystals.com/marketplace findings 45→48; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-sqli-blind-route-live-oracle",
       "status": "shipped",
@@ -14494,6 +14512,21 @@
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-portal-sqli-route-live-oracle",
       "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-coupon-category-bypass-route-live-oracle",
+      "shipped_at": "2026-07-27T22:00:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-route-live-oracle",
+      "shipped_at": "2026-07-27T22:00:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-marketplace-route-live-oracle",
+      "shipped_at": "2026-07-27T22:00:00.000Z"
     }
   ]
 }
