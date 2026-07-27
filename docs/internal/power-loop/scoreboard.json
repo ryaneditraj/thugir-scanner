@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T08:12:00.000Z",
+  "updated_at": "2026-07-27T09:03:09.233Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2923,
-  "total_findings": 29571,
+  "total_sites_scanned": 2924,
+  "total_findings": 29584,
   "critical_findings": 69,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2059,
   "discovery_findings": 24945,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-27T08:12:00.000Z",
+  "last_run": "2026-07-27T09:03:09.233Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
