@@ -15395,6 +15395,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-network-tools-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnSite /network-tools route SSRF ping oracle",
+    description:
+      "When scanning /network-tools, the ping connectivity lab exposes ICMP Echo Request tooling that fetches attacker-supplied hosts server-side — route-specific SSRF-prone network-tools oracle.",
+    impactOneline:
+      "Server-side ping tools that accept arbitrary hosts enable SSRF to internal networks and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeNetworkToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal/metadata destinations on server-side network tools — VulnSite is intentional training software.",
+      steps: [
+        "Allowlist ping destinations and reject RFC1918/link-local/metadata IPs.",
+        "Use language-native ICMP libraries with strict host validation.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /network-tools route scan confirms a server-side ping lab. Show SSRF-safe network diagnostic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-blind-sqli-api-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -18095,6 +18121,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /tutorial/a10 route documents unvalidated /learn?url= redirect labs. Show how to isolate NodeGoat training from production redirect validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-learn-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat /learn open redirect route live oracle",
+    description:
+      "When scanning /learn, GET /learn?url= reflects attacker-controlled URLs in a 302 Location header without validation — route-specific unvalidated open-redirect oracle.",
+    impactOneline:
+      "Unvalidated open redirects let attackers phish users via trusted application domains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatLearnOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect destinations against an allow-list — NodeGoat is intentional OWASP training software.",
+      steps: [
+        "Allowlist redirect URL hosts before calling res.redirect().",
+        "Reject protocol-relative and external URLs unless explicitly permitted.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /learn route scan confirms unvalidated open redirects via ?url=. Show redirect destination validation remediation.",
     version: 1,
     enabled: true
   },
