@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T04:08:58.844Z",
+  "updated_at": "2026-07-27T04:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2039,
   "discovery_findings": 24524,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T04:08:58.844Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-27T04:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -48,36 +48,36 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (12 findings); reflexion-escalated-ssti + juice-shop-leaked-api-key + security-question-disclosure present; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (12 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 65,
-      "focus": "WrongSecrets challenge-31–35 (front-end secrets) + queue drain challenge-26–28",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 23,
+      "focus": "SSRF vulnlab canonical-origin fix + WrongSecrets Web3 challenge-26 live oracle validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — primary Heroku 503 fallback",
-      "wrongsecrets.herokuapp.com/challenge/challenge-34: 9 findings — wrongsecrets-challenge-live-oracle fired (only challenge-34 in batch)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-31–33,35: 8 findings each — client-side-wrongsecrets-challenge-evidence only",
-      "wrongsecrets.herokuapp.com/challenge/challenge-26–28: 8 findings each — queue drain, client-side evidence only (Web3)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
+      "ssrf.vulnlab.dev/metadata-aws: 2→7 findings — ssrf-vulnlab-metadata-aws-route-live-oracle restored via canonical https://ssrf.vulnlab.dev probe origin",
+      "ssrf.vulnlab.dev/redirect: 3→8 findings — ssrf-vulnlab-redirect-route-live-oracle restored with 503 retry",
+      "wrongsecrets.herokuapp.com/challenge/challenge-26: 8→9 findings — wrongsecrets-challenge-live-oracle fires Web3 smart-contract markers"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question-disclosure)",
-      "wrongsecrets challenge-31–33,35: front-end secrets challenges — client-side evidence only, no wrongsecrets-challenge-live-oracle",
-      "wrongsecrets challenge-26–28: Web3 challenges — client-side evidence only"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "wrongsecrets challenge-27–30: Web3 live oracle may need per-challenge marker tuning beyond challenge-26",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle absent (OTP-gated)"
     ]
   },
   "discovery_highlights": {
+    "ssrf.vulnlab.dev/metadata-aws": 7,
+    "ssrf.vulnlab.dev/redirect": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-26": 9,
     "wrongsecrets.herokuapp.com/challenge/challenge-34": 9,
-    "wrongsecrets.herokuapp.com/challenge/challenge-31": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-32": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-35": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-26": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-27": 8,
+    "nodegoat-websec.herokuapp.com/benefits": 7,
+    "brokencrystals.com/secrets": 56,
     "juice-shop-staging.herokuapp.com": 12
   }
 }
