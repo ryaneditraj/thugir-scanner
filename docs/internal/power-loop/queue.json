@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T16:04:05.950Z",
+  "updated_at": "2026-07-27T18:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://crapi.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
+      "source": "OWASP crAPI v1 — API1 BOLA mechanic report IDOR oracle (Hacking Blogs walkthrough)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api10/user/flag",
+      "source": "roottusk/vAPI — API10 insufficient logging/monitoring flag oracle (Postman Get Flag)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/identity/api/v2/vehicle/vehicles",
+      "source": "OWASP crAPI v1 — API1 BOLA vehicle list endpoint (Zero Day Hacker walkthrough)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/voice-goat/voicebank",
+      "source": "OWASP VWAD — redcaller/voice-goat VoiceBank prompt-injection lab (Show HN 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/voice-goat/voicerag",
+      "source": "OWASP VWAD — redcaller/voice-goat VoiceRAG cross-tenant leakage lab (Show HN 2025)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://vapi.apisec.ai/vapi/api3/comment",
       "source": "roottusk/vAPI — API3 excessive data exposure hidden /comment endpoint (Postman docs + writeups)",
