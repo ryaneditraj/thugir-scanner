@@ -27037,6 +27037,23 @@ const pwnshopCouponCategoryBypassLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopMailIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mail(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopMailInboxIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /mail/:id route scan — GET /mail/<inbox_token> returns another user's OTP mail without ownership check (PWN-004)"
+    }
+  };
+};
+
 const pwnshopAvatarUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -27168,6 +27185,50 @@ const pwnshopDownloadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Pwnshop /download route scan — file=../../package.json returns package.json via path traversal (PWN-038)"
+    }
+  };
+};
+
+const fauxbankProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/api/profile", ctx.origin).toString();
+  const doc = await ctx.probe.get(profileUrl, { maxBytes: 4096, headers: { Cookie: cookie } });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"ssnFake"\s*:\s*"[^"]+"/i.test(doc.body)) return NEGATIVE;
+  if (!/"fullName"\s*:\s*"[^"]+"/i.test(doc.body) || !/"email"\s*:\s*"[^"]+"/i.test(doc.body)) {
+    return NEGATIVE;
+  }
+  const ssn = doc.body.match(/"ssnFake"\s*:\s*"([^"]+)"/i)?.[1];
+  const fullName = doc.body.match(/"fullName"\s*:\s*"([^"]+)"/i)?.[1];
+  if (!ssn || !fullName) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: profileUrl,
+      fullName,
+      ssnFake: ssn,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "GET /api/profile returns ssnFake and PII in JSON without field-level redaction — FauxBank profile sensitive-data oracle"
+    }
+  };
+};
+
+const fauxbankProfileRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankProfileSensitiveDataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /profile route scan — GET /api/profile exposes ssnFake and PII without redaction"
     }
   };
 };
@@ -37685,6 +37746,8 @@ export const RULES: Record<string, Rule> = {
   fauxbankLoansRequestLiveOracle,
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
+  fauxbankProfileSensitiveDataLiveOracle,
+  fauxbankProfileRouteLiveOracle,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
@@ -38026,6 +38089,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopOpenRedirectRegisterLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
   pwnshopMailInboxIdorLiveOracle,
+  pwnshopMailIdorRouteLiveOracle,
   pwnshopAvatarSvgXssLiveOracle,
   pwnshopApplyCouponLiveOracle,
   pwnshopCouponCategoryBypassLiveOracle,
