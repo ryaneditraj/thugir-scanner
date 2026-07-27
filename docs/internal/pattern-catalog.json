@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T12:16:00.987Z",
-  "total": 900,
-  "uniqueSlugs": 895,
+  "generatedAt": "2026-07-27T13:16:14.234Z",
+  "total": 902,
+  "uniqueSlugs": 897,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 882,
+    "generic": 884,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 815,
+    "deep": 817,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 221,
+    "Broken access control": 223,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -711,6 +711,7 @@
     "exposed-git-dir",
     "exposed-infra-artifacts",
     "exposed-source-maps",
+    "fauxbank-accounts-route-live-oracle",
     "fauxbank-admin-panel-live-oracle",
     "fauxbank-authenticated-sqli-search",
     "fauxbank-csrf-transfer-probe",
@@ -721,6 +722,7 @@
     "fauxbank-profile-route-live-oracle",
     "fauxbank-profile-sensitive-data-live-oracle",
     "fauxbank-stored-xss-support-probe",
+    "fauxbank-transfer-route-live-oracle",
     "finbot-ctf-challenges-route-live-oracle",
     "finbot-ctf-sidecar-route-live-oracle",
     "firebase-config-exposed",
