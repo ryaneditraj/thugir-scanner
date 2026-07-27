@@ -10529,6 +10529,31 @@
       "url": "https://juice-shop.demo.escape.tech/rest/products/search?q=test",
       "source": "Escape.tech Juice Shop demo — SQLi/XSS search oracle (benchmark fallback host)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "Escape.tech DVGA — GraphQL introspection/injection oracle endpoint (dolevf/DVGA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphiql",
+      "source": "Escape.tech DVGA — GraphiQL IDE exposure oracle (dolevf/DVGA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/admin/application-configuration",
+      "source": "Escape.tech Juice Shop demo — unauthenticated admin config oracle (benchmark fallback)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/1",
+      "source": "Escape Duck Store — BOLA user IDOR oracle GET /api/v1/users/1",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://nodegoat.herokuapp.com/login",
+      "source": "OWASP NodeGoat — SQLi login-form oracle (official Heroku demo)",
+      "auth": "public_demo"
     }
   ]
 }
