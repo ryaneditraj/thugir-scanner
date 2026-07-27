@@ -6552,6 +6552,32 @@ const nodegoatTutorialA7RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatTutorialA8RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a8\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a8", [
+    {
+      label: "A8 CSRF tutorial title",
+      re: /A8-Cross-Site Request Forgery \(CSRF\)|A8[\s-]+CSRF/i
+    },
+    {
+      label: "CSRF forged-request walkthrough",
+      re: /CSRF attack forces a logged-on victim|forged HTTP request/i
+    },
+    {
+      label: "Profile form CSRF exploit topics",
+      re: /CSRF vulnerability can be exploited on profile form|host a forged form/i
+    }
+  ], "NodeGoat /tutorial/a8 documents cross-site request forgery training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 // --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
 const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
   {
@@ -31532,6 +31558,18 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "Docker bash history walkthrough",
       re: /\.bash_history|bash_history file within a running container/i
+    },
+    {
+      label: "Cryptography hash walkthrough",
+      re: /challenge focuses on.*Cryptography|MD5 and SHA1 hash|rockyou\.txt password list/i
+    },
+    {
+      label: "Binary C secret walkthrough",
+      re: /Hiding in binaries part 1|wrongsecrets-c(?:-arm|-linux)?|secret in a C binary/i
+    },
+    {
+      label: "Binary C++ secret walkthrough",
+      re: /Hiding in binaries part 2|wrongsecrets-cplus(?:-arm|-linux)?|secret in a C\+\+ binary/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -31561,9 +31599,19 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                       ? "front-end hardcoded secrets"
                       : /\.bash_history|bash_history file within a running container/i.test(doc.body)
                         ? "Docker container bash history secrets"
-                        : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(doc.body)
-                          ? "container/K8s log secrets"
-                          : "hardcoded secrets";
+                        : /challenge focuses on.*Cryptography|MD5 and SHA1 hash|rockyou\.txt/i.test(
+                              doc.body
+                            )
+                          ? "weak cryptography / double-hashed password secrets"
+                          : /Hiding in binaries part 2|wrongsecrets-cplus/i.test(doc.body)
+                            ? "C++ binary embedded secrets"
+                            : /Hiding in binaries part 1|wrongsecrets-c/i.test(doc.body)
+                              ? "C binary embedded secrets"
+                              : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
+                                    doc.body
+                                  )
+                                ? "container/K8s log secrets"
+                                : "hardcoded secrets";
   return {
     fired: true,
     confidence: markers.length >= 3 ? 0.92 : 0.9,
@@ -31830,6 +31878,26 @@ const vulnlabValidateXssLiveOracle: Rule = (ctx) =>
 
 const vulnlabValidateIdorLiveOracle: Rule = (ctx) =>
   probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[2]!);
+
+const vulnlabValidatePathTraversalLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (!/\/api\/validate\/path-traversal/i.test(urlHint)) return NEGATIVE;
+  const lfiUrl = new URL("/api/include?page=../../etc/passwd", ctx.origin).toString();
+  const doc = await ctx.probe.get(lfiUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/root:x:0:0:/.test(doc.body) || !/\/bin\/(?:bash|sh)/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      lfiUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "VulnLab GET /api/include?page=../../etc/passwd returns /etc/passwd via path traversal — route-specific path-traversal live oracle for /api/validate/path-traversal scans"
+    }
+  };
+};
 
 const VULNLAB_JWT_NONE_TOKEN = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJyb2xlIjoiYWRtaW4ifQ.";
 
@@ -37652,6 +37720,7 @@ export const RULES: Record<string, Rule> = {
   vulnlabValidateSqliLiveOracle,
   vulnlabValidateXssLiveOracle,
   vulnlabValidateIdorLiveOracle,
+  vulnlabValidatePathTraversalLiveOracle,
   vulnlabJwtDecodeLiveOracle,
   vulnlabAuthSessionLiveOracle,
   vulnlabAuthLoginEnumerationLiveOracle,
@@ -37849,6 +37918,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA5RouteLiveOracle,
   nodegoatTutorialA6RouteLiveOracle,
   nodegoatTutorialA7RouteLiveOracle,
+  nodegoatTutorialA8RouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,
