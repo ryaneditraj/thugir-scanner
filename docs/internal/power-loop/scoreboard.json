@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T03:12:00.000Z",
+  "updated_at": "2026-07-27T03:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2034,
   "discovery_findings": 24459,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-27T03:12:00.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-27T03:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -55,32 +55,32 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 104,
-      "focus": "WrongSecrets challenge-26–30 (Web3) + queue drain (pwnshop wishlist/1, search/filters, export-orders)",
-      "improvements_shipped_this_run": 0
+      "focus": "WrongSecrets challenge-26–30 (Web3) + queue drain + 03 UTC engine evolve route oracles (nodegoat benefits, pwnshop track, brokencrystals secrets)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku healthy; jwt-alg-none-accepted newly detected",
+      "nodegoat-websec.herokuapp.com/benefits: 6→7 findings — nodegoat-benefits-nosql-route-live-oracle shipped (RetireEasy + MongoDB $gt markers)",
+      "pwnshop.ctfsecurity.com/track: 26→27 findings — pwnshop-track-idor-route-live-oracle shipped (GET /track/1 shippingAddress IDOR)",
+      "brokencrystals.com/secrets: 55→56 findings — brokencrystals-secrets-route-live-oracle shipped (GET /api/secrets token exposure)",
       "wrongsecrets.herokuapp.com/challenge/challenge-26–30: 8 findings each — client-side-wrongsecrets-challenge-evidence only, no Web3 live oracle",
-      "pwnshop.ctfsecurity.com/export-orders: 30 findings — pwnshop-track-idor-live-oracle + apply-coupon + coupon-category-bypass + mail-inbox-idor + avatar-svg-xss live oracles",
-      "pwnshop.ctfsecurity.com/wishlist/1: 22 findings — pwnshop-track-idor-live-oracle + debug-info + events-audit live oracles",
-      "pwnshop.ctfsecurity.com/search/filters: 12 findings — chat-init email enumeration + reflexion-escalated-ssti"
+      "pwnshop.ctfsecurity.com/export-orders: 30 findings — pwnshop-track-idor-live-oracle + apply-coupon + coupon-category-bypass + mail-inbox-idor + avatar-svg-xss live oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + jwt-alg-none-accepted)",
       "wrongsecrets challenge-26–30: Web3 smart-contract challenges — client-side evidence only, no wrongsecrets-challenge-live-oracle",
-      "pwnshop export-orders rich hub (30 findings) — wallet-top-up credited_amount oracle still absent without authenticated session"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle absent (PWN-042 requires self-hosted VULNBANK_LAB_VULN=1)"
     ]
   },
   "discovery_highlights": {
+    "nodegoat-websec.herokuapp.com/benefits": 7,
+    "pwnshop.ctfsecurity.com/track": 27,
+    "brokencrystals.com/secrets": 56,
     "pwnshop.ctfsecurity.com/export-orders": 30,
     "pwnshop.ctfsecurity.com/wishlist/1": 22,
     "wrongsecrets.herokuapp.com/challenge/challenge-26": 8,
     "wrongsecrets.herokuapp.com/challenge/challenge-27": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-28": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-29": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-30": 8,
-    "pwnshop.ctfsecurity.com/search/filters": 12,
     "juice-shop.herokuapp.com": 14
   }
 }

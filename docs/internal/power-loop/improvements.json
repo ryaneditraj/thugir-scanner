@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-benefits-nosql-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /benefits returns RetireEasy login gate + combined corpus has MongoDB $gt password bypass payload; nodegoat-websec.herokuapp.com/benefits findings 6→7 with route-specific NoSQL oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-track-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: scanning /track probes GET /track/1 → Order #1 Tracking + shippingAddress const without auth; pwnshop.ctfsecurity.com/track findings 26→27 with route-specific track-IDOR oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/secrets returns Slack xoxb- + Facebook EAAC + Google OAuth client + PayPal access_token when scanning /secrets; brokencrystals.com/secrets findings 55→56 with route-specific secrets exposure oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-tutorial-a9-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a9 returns A9-Using Components with Known Vulnerabilities + insecure Marked library XSS scenario + npm audit dependency topics; nodegoat-websec.herokuapp.com/tutorial/a9 findings 6→7 with route-specific insecure-components oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
