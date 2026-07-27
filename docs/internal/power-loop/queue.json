@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T19:05:21.893Z",
+  "updated_at": "2026-07-27T20:05:51.212Z",
   "discovery_urls": [
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/blind",
+      "source": "JuaniVeltri/vuln-expose — blind SQLi lab module (Vercel OSS deploy homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/csp-bypass",
+      "source": "JuaniVeltri/vuln-expose — CSP bypass XSS lab module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/idor/dashboard",
+      "source": "JuaniVeltri/vuln-expose — IDOR dashboard lab module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/data-exfiltration/1",
+      "source": "opena2a/agentpwn — APWN-DE-001 credential exfiltration payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/prompt-injection/2",
+      "source": "opena2a/agentpwn — APWN-PI-002 indirect prompt-injection payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/",
       "source": "kOaDT/oss-oopssec-store — X-Forwarded-For SQLi walkthrough with /api/tracking oracle docs (GitHub Pages)",

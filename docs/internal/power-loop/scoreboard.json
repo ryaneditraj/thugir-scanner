@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T20:10:00.000Z",
+  "updated_at": "2026-07-27T20:42:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 3032,
-  "total_findings": 30910,
+  "total_sites_scanned": 3041,
+  "total_findings": 30998,
   "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2114,
-  "discovery_findings": 25889,
+  "discovery_urls_added": 2124,
+  "discovery_findings": 25948,
   "improvements_shipped": 1164,
-  "last_run": "2026-07-27T20:10:00.000Z",
+  "last_run": "2026-07-27T20:42:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "primary_status": "503 — Heroku dyno unavailable",
       "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 463,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +50,40 @@
           ]
         }
       },
-      "note": "Primary Heroku unreachable; staging fallback 6/6 (14 findings)"
+      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); juice-shop-jwt-alg-none-live-oracle + chatbot oracles present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "findings": 16,
-      "focus": "crAPI vehicle BOLA chain + IST Edu notices LFI + portal SQLi route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 74,
+      "focus": "vuln-expose blind SQLi + CSP bypass XSS + IDOR dashboard + agentpwn DE-001/PI-002 + nodegoat a4/a5/a7 queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no category gaps",
-      "crapi.apisec.ai/identity/api/v2/vehicle/vehicles: 3→6 findings — crapi-vehicle-route-live-oracle (community vehicleid leak + cross-user GPS location BOLA)",
-      "ist-edu-bd.vercel.app/api/notices?file=etc/passwd: 4→5 findings — ist-edu-notices-lfi-route-live-oracle (/etc/passwd via file= traversal)",
-      "ist-edu-bd.vercel.app/api/portal: 4→5 findings — ist-edu-portal-sqli-route-live-oracle (admin' OR '1'='1 auth bypass)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "vuln-expose.vercel.app/sqli/blind: 13 findings — client-side-vuln-expose-lab-module-evidence + vuln-expose-sqli-search-api-live-oracle",
+      "vuln-expose.vercel.app/idor/dashboard: 14 findings — vuln-expose-idor-profile-route-live-oracle on IDOR module route",
+      "agentpwn.com/attacks/data-exfiltration/1: 7 findings — agentpwn-attack-route-live-oracle + hidden-prompt-injection",
+      "nodegoat-websec.herokuapp.com/tutorial/a4: 7 findings — client-side-nodegoat-evidence without A04-specific live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up oracle absent (PWN-042 requires VULNBANK_LAB_VULN=1 self-hosted)",
-      "crapi2.apisec.ai/community/api/v2/community/posts/recent: community excessive-data oracle still absent"
+      "vuln-expose.vercel.app/xss/csp-bypass: 12-finding hub without route-specific CSP-bypass XSS live oracle",
+      "vuln-expose.vercel.app/sqli/blind: blind-SQLi route-specific oracle still absent (error-based sqli fires from shared API)",
+      "nodegoat-websec.herokuapp.com/tutorial/a4/a5/a7: tutorial-route live oracles absent (generic nodegoat client-side evidence only)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "crapi.apisec.ai/identity/api/v2/vehicle/vehicles": 6,
-    "ist-edu-bd.vercel.app/api/notices?file=etc/passwd": 5,
-    "ist-edu-bd.vercel.app/api/portal": 5,
-    "vapi.apisec.ai/vapi/api10/user/flag": 12,
-    "pwnshop.ctfsecurity.com/apply-coupon": 27
+    "vuln-expose.vercel.app/idor/dashboard": 14,
+    "vuln-expose.vercel.app/sqli/blind": 13,
+    "vuln-expose.vercel.app/xss/csp-bypass": 12,
+    "www.agentpwn.com/attacks/data-exfiltration/1": 7,
+    "www.agentpwn.com/attacks/prompt-injection/2": 7,
+    "nodegoat-websec.herokuapp.com/tutorial/a4": 7,
+    "nodegoat-websec.herokuapp.com/tutorial/a5": 7,
+    "nodegoat-websec.herokuapp.com/tutorial/a7": 7
   }
 }
