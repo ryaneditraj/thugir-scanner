@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T23:06:00.000Z",
+  "updated_at": "2026-07-27T00:04:05.829Z",
   "discovery_urls": [
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/path-traversal",
+      "source": "dkyazzentwatwa/hack-this-site — path traversal validation API lab endpoint (GitHub api/validate/path-traversal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-18",
+      "source": "OWASP WrongSecrets — challenge-18 cryptography secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-19",
+      "source": "OWASP WrongSecrets — challenge-19 binary secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
+      "source": "OWASP WrongSecrets — challenge-20 binary secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a8",
+      "source": "OWASP NodeGoat — A8 cross-site request forgery / injection tutorial route (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a6",
       "source": "OWASP NodeGoat — A6 cross-site request forgery tutorial route (public Heroku benchmark)",
