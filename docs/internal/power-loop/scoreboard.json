@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T13:03:22.005Z",
+  "updated_at": "2026-07-27T13:10:38.295Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2964,
-  "total_findings": 30208,
+  "total_sites_scanned": 2972,
+  "total_findings": 30261,
   "critical_findings": 71,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2079,
-  "discovery_findings": 25522,
+  "discovery_urls_added": 2084,
+  "discovery_findings": 25575,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-27T13:03:22.005Z",
+  "last_run": "2026-07-27T13:10:38.295Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 15,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,33 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); secret-resend slug still absent"
+      "note": "Primary Heroku healthy 6/6 (15 findings); reflexion-escalated-ssti + chatbot oracles present; jwt-alg-none-accepted absent vs 17-finding pass; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 67,
-      "focus": "brokencrystals JWT alg:none + wrongsecrets challenge-50 ILSpy markers",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 53,
+      "focus": "AI Security Platform leaked-secrets/weak-rls/security-headers/supply-chain/phishing + wrongsecrets challenge-44/45/46 queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503 fallback",
-      "brokencrystals.com/api/auth/jwt: 55→57 findings — brokencrystals-jwt-alg-none + jwt-route live oracles shipped",
-      "wrongsecrets.herokuapp.com/challenge/challenge-50: 8→10 findings — wrongsecrets-challenge-live-oracle restored via .NET/ILSpy markers"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (15 findings) — primary healthy, no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-46: 10 findings — wrongsecrets-challenge-live-oracle + route-live-oracle fired",
+      "wrongsecrets.herokuapp.com/challenge/challenge-44: 8 findings — client-side-wrongsecrets-challenge-evidence only, no live oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-45: 8 findings — client-side evidence only, no live oracle",
+      "ai-security-platform-iota.vercel.app/challenges/weak-rls: 7 findings incl reflexion-escalated-ssti but no route-specific Supabase RLS oracle",
+      "ai-security-platform-iota.vercel.app/challenges/leaked-secrets: 6 findings — client-side-ai-security-platform-evidence without secrets-exposure live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "wrongsecrets challenge-44/45: client-side evidence only — no live secret oracle",
-      "fauxbank /api/accounts/1: hub fingerprint without route-specific IDOR confirmation oracle",
-      "ai-security-platform /challenges/jwt: route-specific JWT live oracle absent (login-gated)"
+      "jwt-alg-none-accepted intermittent on juice-shop primary (absent this 15-finding pass vs 17-finding pass)",
+      "wrongsecrets challenge-44/45: client-side evidence only — no live secret oracle (challenge-46 fires live oracle)",
+      "ai-security-platform /challenges/leaked-secrets: no route-specific env-var/API-key exposure live oracle",
+      "ai-security-platform /challenges/weak-rls: no Supabase RLS bypass live oracle (login-gated challenge pages)",
+      "ai-security-platform /challenges/phishing: 3-finding hub without AI-phishing clone-page live oracle",
+      "fauxbank /api/transfer + /api/accounts/1: queued but not drained this run (8-URL limit)"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/auth/jwt": 57,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 10,
-    "juice-shop.herokuapp.com": 17,
-    "juice-shop-staging.herokuapp.com": 14
+    "wrongsecrets.herokuapp.com/challenge/challenge-46": 10,
+    "wrongsecrets.herokuapp.com/challenge/challenge-44": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-45": 8,
+    "ai-security-platform-iota.vercel.app/challenges/weak-rls": 7,
+    "ai-security-platform-iota.vercel.app/challenges/security-headers": 7,
+    "ai-security-platform-iota.vercel.app/challenges/leaked-secrets": 6,
+    "juice-shop.herokuapp.com": 15
   }
 }
