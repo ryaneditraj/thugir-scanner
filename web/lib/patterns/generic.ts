@@ -10533,6 +10533,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-validate-path-traversal-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab path traversal validate route live oracle",
+    description:
+      "When scanning /api/validate/path-traversal, GET /api/include?page=../../etc/passwd returns /etc/passwd contents via local file inclusion — route-specific path traversal oracle.",
+    impactOneline:
+      "Route-specific LFI probe confirms path traversal lab oracle distinct from generic VulnLab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidatePathTraversalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and canonicalize file paths; block traversal sequences.",
+      steps: [
+        "Reject ../ and ..\\ sequences in include/page parameters.",
+        "Use an allow-list of readable files instead of user-supplied paths.",
+        "Gate lab LFI endpoints behind authenticated sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /api/include endpoint reads /etc/passwd via page=../../etc/passwd. Show path traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-jwt-decode-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -16899,6 +16925,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /tutorial/a7 route documents missing function-level access control labs. Show how to isolate NodeGoat training from production authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-a8-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat A8 CSRF tutorial live oracle",
+    description:
+      "When scanning /tutorial/a8, the canonical tutorial documents cross-site request forgery (forged profile form requests) — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP A8 CSRF training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialA8RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — always use CSRF tokens on state-changing forms in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Implement CSRF tokens on all state-changing forms and validate server-side.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/a8 route documents CSRF labs. Show how to isolate NodeGoat training from production CSRF protections.",
     version: 1,
     enabled: true
   },
