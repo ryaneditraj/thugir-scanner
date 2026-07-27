@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T18:05:00.000Z",
+  "updated_at": "2026-07-27T19:05:21.893Z",
   "discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — X-Forwarded-For SQLi walkthrough with /api/tracking oracle docs (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/signup",
+      "source": "megmogmog1965/vulnerable-web-site — signup/auth surface for mass-assignment and weak validation (Vercel OSS)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/ssrf",
+      "source": "megmogmog1965/vulnerable-web-site — SSRF lab module (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/notices?file=etc/passwd",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI /api/notices?file= path traversal oracle (Vercel OSS)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/portal",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi login bypass POST /api/portal oracle (Vercel OSS)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://crapi.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
       "source": "OWASP crAPI v1 — API1 BOLA mechanic report IDOR oracle (Hacking Blogs walkthrough)",
