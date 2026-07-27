@@ -37428,6 +37428,40 @@ const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vapiApi1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api1\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi1BolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api1/user route scan — GET /api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
+    }
+  };
+};
+
+const vapiApi2RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api2\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi2BrokenAuthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api2/user route scan — credential-stuffing login and GET /api2/user/details dumps every user with flag — broken authentication oracle (API2)"
+    }
+  };
+};
+
 const vapiApi6RouteLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -37441,6 +37475,23 @@ const vapiApi6RouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "vAPI /api6/user route scan — POST credit inflation and GET /api6/user/me returns flag — mass assignment oracle (API6)"
+    }
+  };
+};
+
+const vapiApi7RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api7\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi7CorsMisconfigLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api7/user route scan — GET /api7/user/key reflects arbitrary Origin with credentials and returns authkey — CORS misconfiguration oracle (API7)"
     }
   };
 };
@@ -39225,7 +39276,9 @@ export const RULES: Record<string, Rule> = {
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
   vapiApi1BolaLiveOracle,
+  vapiApi1RouteLiveOracle,
   vapiApi2BrokenAuthLiveOracle,
+  vapiApi2RouteLiveOracle,
   vapiApi3CommentBolaLiveOracle,
   vapiApi4OtpBrokenAuthLiveOracle,
   vapiApi4UserExposureLiveOracle,
@@ -39234,6 +39287,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
+  vapiApi7RouteLiveOracle,
   duckStoreUsersBolaLiveOracle,
   duckStoreUsersRouteLiveOracle,
   duckStoreTestimonialsBolaLiveOracle,
