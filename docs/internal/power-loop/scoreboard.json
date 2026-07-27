@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2896,
-  "total_findings": 29228,
+  "total_sites_scanned": 2904,
+  "total_findings": 29333,
   "critical_findings": 69,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2044,
-  "discovery_findings": 24642,
+  "discovery_urls_added": 2049,
+  "discovery_findings": 24747,
   "improvements_shipped": 1167,
   "last_run": "2026-07-27T06:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 474,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (14 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (13 findings); reflexion-escalated-ssti + vibe-unauthenticated-api-routes present; jwt-alg-none-accepted absent vs prior 14-finding pass; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 2,
-      "focus": "pwnshop mail/1 IDOR route oracle + fauxbank profile sensitive-data route oracle",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 105,
+      "focus": "wrongsecrets challenge-41–43/49/52 + drained pwnshop settings/css + fauxbank profile + vulnbank v2/forgot-password",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/mail/1: 20→29 findings — pwnshop-mail-idor-route-live-oracle shipped (PWN-004 inbox IDOR with scannedUrl evidence)",
-      "pentest-fauxbank.vercel.app/profile: 11→16 findings — fauxbank-profile-sensitive-data-live-oracle + route oracle shipped (GET /api/profile ssnFake leak)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-41: 9 findings — wrongsecrets-challenge-live-oracle (password-shucking cryptography)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-42: 9 findings — wrongsecrets-challenge-live-oracle + spring-boot-actuator-exposed (audit-events API key leak)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-49: 9 findings — wrongsecrets-challenge-live-oracle (weak MD5 AES key brute-force)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-43: 8 findings — client-side evidence only, no live oracle (documentation/social-media)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 8 findings — client-side evidence only, no live oracle",
+      "pwnshop.ctfsecurity.com/api/settings/css: 29 findings — full live-oracle cluster (coupon-bypass, svg-xss, seller-preview-ssti, verify-otp-bruteforce, mail-inbox-idor, mass-assignment-admin)",
+      "pentest-fauxbank.vercel.app/profile: 13 findings — fauxbank-loans-request + admin-panel live oracles",
+      "vulnbank.org/api/v2/forgot-password: 20 findings — vulnbank-v2-forgot-password-enumeration-live-oracle + full API oracle cluster"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop api/orders/submit + api/settings/less/imports: endpoints return 404 on live deploy — XXE/SSTI-RCE oracles deferred",
-      "wrongsecrets challenge-36/38: binary RE and Git challenges — client-side evidence only, no live oracle",
-      "ai-security-platform-iota.vercel.app/challenges/*: requires login — live XSS/SQLi/IDOR oracles still absent"
+      "jwt-alg-none-accepted intermittent on juice-shop primary (present in 14-finding passes, absent this 13-finding pass)",
+      "wrongsecrets challenge-43/52: documentation and secrets challenges — client-side evidence only, no wrongsecrets-challenge-live-oracle",
+      "challenge-42 actuator audit-events: spring-boot-actuator-exposed fires but route-specific /actuator/auditevents API_KEY_RECEIVED oracle still absent",
+      "pwnshop api/orders/submit + api/settings/less/imports: endpoints return 404 on live deploy — XXE/SSTI-RCE oracles deferred"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 14,
+    "juice-shop.herokuapp.com": 13,
+    "pwnshop.ctfsecurity.com/api/settings/css": 29,
     "pwnshop.ctfsecurity.com/mail/1": 29,
+    "vulnbank.org/api/v2/forgot-password": 20,
     "pentest-fauxbank.vercel.app/profile": 16,
-    "pwnshop.ctfsecurity.com/seller/preview": 28,
-    "pwnshop.ctfsecurity.com/download": 33,
-    "pentest-fauxbank.vercel.app/loans": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-37": 9
+    "wrongsecrets.herokuapp.com/challenge/challenge-41": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-42": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-49": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-43": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 8
   }
 }
