@@ -16357,6 +16357,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi2-shop-orders-id-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI v2 shop orders/{id} BOLA route live oracle",
+    description:
+      "GET /workshop/api/shop/orders/{id} returns another user's order for an authenticated regular user — the crAPI v2 broken object level authorization oracle.",
+    impactOneline:
+      "Predictable order IDs let authenticated users read other customers' purchase history without authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapi2ShopOrdersIdBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI v2 is intentional API security training — bind order reads to the authenticated principal in production.",
+      steps: [
+        "Verify order.user_id matches the JWT subject before returning order details.",
+        "Return 404 for orders the caller does not own instead of leaking existence.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/shop/orders/{id} route returns other users' orders. Show BOLA remediation for shop order endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-ctf-challenges-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot CTF prompt-injection challenges route live oracle",
+    description:
+      "When scanning /ctf or /portals, GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) including recon-onboarding — route-specific FinBot CTF oracle.",
+    impactOneline:
+      "Publicly reachable agentic AI challenge APIs document prompt-injection attack surfaces for FinBot vendor and invoice agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfChallengesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate challenge APIs behind authentication in production.",
+      steps: [
+        "Do not expose agent challenge metadata on unauthenticated routes.",
+        "Isolate FinBot demo namespaces from production LLM deployments.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/challenges route exposes prompt-injection challenge metadata. Show how to protect agentic CTF APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-ctf-sidecar-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot CTF sidecar route live oracle",
+    description:
+      "When scanning /ctf, GET /ctf/api/v1/sidecar returns public challenge progress and toolkit metadata — route-specific FinBot agentic CTF oracle.",
+    impactOneline:
+      "Unauthenticated CTF sidecar APIs leak challenge counts and agentic toolkit state on FinBot training platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfSidecarRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict sidecar APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/sidecar.",
+        "Avoid exposing toolkit dead-drop and exfil metadata without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/sidecar route is publicly reachable. Show how to gate agentic CTF progress APIs behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ist-edu-search-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

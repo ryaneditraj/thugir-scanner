@@ -37212,6 +37212,117 @@ const crapi2ShopOrdersAllRouteLiveOracle: Rule = async (ctx) => {
   }
 };
 
+const crapi2ShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderMatch = pageUrl.match(/\/shop\/orders\/(\d+)/i);
+  if (!orderMatch || /\/all\b/i.test(pageUrl)) return NEGATIVE;
+  const orderId = orderMatch[1];
+  const jwt = await tryApiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const orderUrl = new URL(`/workshop/api/shop/orders/${orderId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(orderUrl, {
+    maxBytes: 16384,
+    timeoutMs: 20000,
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as {
+      id?: number;
+      user?: { email?: string };
+      items?: unknown[];
+    };
+    if (!data.id) return NEGATIVE;
+    const ownerEmail = data.user?.email;
+    if (!ownerEmail || /^test@test\.com$/i.test(ownerEmail)) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        orderUrl,
+        orderId: data.id,
+        ownerEmail,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `crAPI v2 GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated test@test.com — BOLA oracle (API1)`
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+function isFinbotCtfHost(ctx: RuleContext): boolean {
+  return /owasp-finbot-ctf\.org/i.test(ctx.origin);
+}
+
+const finbotCtfChallengesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:ctf|portals)(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const challengesUrl = new URL("/ctf/api/v1/challenges", ctx.origin).toString();
+  const doc = await ctx.probe.get(challengesUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let challenges: Array<{
+    id?: string;
+    subcategory?: string;
+    labels?: Record<string, string[]>;
+  }>;
+  try {
+    challenges = JSON.parse(doc.body);
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(challenges) || challenges.length < 5) return NEGATIVE;
+  const promptInjection = challenges.filter(
+    (c) =>
+      c.subcategory === "system_prompt_leak" ||
+      /prompt injection/i.test(JSON.stringify(c.labels ?? {}))
+  );
+  if (promptInjection.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      challengesUrl,
+      challengeCount: challenges.length,
+      promptInjectionChallenges: promptInjection.slice(0, 4).map((c) => c.id),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "OWASP FinBot CTF exposes agentic prompt-injection challenges (system_prompt_leak) via public /ctf/api/v1/challenges — recon-onboarding/invoice oracle"
+    }
+  };
+};
+
+const finbotCtfSidecarRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ctf(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const sidecarUrl = new URL("/ctf/api/v1/sidecar", ctx.origin).toString();
+  const doc = await ctx.probe.get(sidecarUrl, { maxBytes: 8192, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { total?: number; completed?: number; points?: number };
+    if (typeof data.total !== "number" || data.total < 5) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        sidecarUrl,
+        totalChallenges: data.total,
+        completed: data.completed,
+        points: data.points,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "OWASP FinBot CTF /ctf route scan — public sidecar API exposes agentic challenge progress and toolkit metadata"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
 function isIstEduHost(ctx: RuleContext): boolean {
   return /ist-edu-bd/i.test(ctx.origin);
 }
@@ -38686,6 +38797,9 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileAwsRouteLiveOracle,
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
+  crapi2ShopOrdersIdBolaRouteLiveOracle,
+  finbotCtfChallengesRouteLiveOracle,
+  finbotCtfSidecarRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
