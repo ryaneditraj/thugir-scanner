@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-vault-metadata-subkey-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-44 Vault Metadata Challenge + challenge-45 Vault subkey challenge markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-44|45 findings 8→10 with wrongsecrets-challenge-live-oracle; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-transfer-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-fauxbank.vercel.app/api/transfer with session cookie returns ok:true without CSRF token; pentest-fauxbank.vercel.app/api/transfer findings 12→9 with fauxbank-transfer-route-live-oracle (route-specific scannedUrl); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-accounts-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/accounts/2001 returns Bob Roberts balance while authenticated as alice; pentest-fauxbank.vercel.app/api/accounts/1 findings 4→8 with fauxbank-accounts-route-live-oracle; ensureFauxbankSession uses fetchDoc checkpoint retries; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-alg-none-live-oracle",
       "status": "shipped",
