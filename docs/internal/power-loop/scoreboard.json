@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27T01:10:00.000Z",
+  "updated_at": "2026-07-27T02:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2024,
   "discovery_findings": 24192,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-27T01:10:00.000Z",
+  "improvements_shipped": 1161,
+  "last_run": "2026-07-27T02:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 12,
@@ -48,41 +48,33 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (12 findings); reflexion-escalated-ssti + juice-shop-leaked-api-key present; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (12 findings); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 158,
-      "focus": "NodeGoat A9/A10 + open redirect + WrongSecrets Go/Rust binaries + queue drain (challenge-17, burpbounty path/linux, vulnbank graphql)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 23,
+      "focus": "nodegoat A9/A10 tutorial route oracles + wrongsecrets challenge-21 Go binary markers",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — primary Heroku 503, no category gaps",
-      "burpbountylab.com/path/linux: 94 findings — burpbounty-pt-read-live-oracle fires (shared hub + path-traversal read oracle)",
-      "vulnbank.org/graphql: 20 findings — vulnbank-graphql-introspection-live-oracle + 13 vulnbank route oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-22: 9 findings — wrongsecrets-challenge-live-oracle (Rust binary markers)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-17: 9 findings — wrongsecrets-challenge-live-oracle (Docker bash_history markers, queue drain)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-21: 8 findings — client-side evidence only, no challenge-specific live oracle",
-      "nodegoat-websec.herokuapp.com/tutorial/a9|a10|/learn: 6-finding shared tutorial hub without A9 known-vuln / A10 open-redirect route oracles"
+      "nodegoat-websec.herokuapp.com/tutorial/a9: 6→7 findings — nodegoat-tutorial-a9-route-live-oracle shipped (Marked library known-vuln XSS)",
+      "nodegoat-websec.herokuapp.com/tutorial/a10: 6→7 findings — nodegoat-tutorial-a10-route-live-oracle shipped (/learn?url= unvalidated redirect)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-21: 8→9 findings — wrongsecrets-challenge-live-oracle extended with Go binary markers"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "nodegoat A9/A10 + /learn?url=: route-specific known-vuln-component XSS and open-redirect live oracles absent",
-      "wrongsecrets challenge-21: Go binary challenge — client-side evidence only (challenge-22 Rust oracle present)",
-      "hack-this-site-eta/api/validate/path-traversal: route-specific PT live oracle still absent despite 44-finding vulnlab hub"
+      "nodegoat /learn?url= live redirect probe blocked — public Heroku signup returns MongoDB E11000 duplicate key",
+      "wrongsecrets challenge-22+ beyond Go/C/C++ binary family may need per-language markers"
     ]
   },
   "discovery_highlights": {
-    "burpbountylab.com/path/linux": 94,
-    "vulnbank.org/graphql": 20,
-    "wrongsecrets.herokuapp.com/challenge/challenge-22": 9,
-    "wrongsecrets.herokuapp.com/challenge/challenge-17": 9,
-    "wrongsecrets.herokuapp.com/challenge/challenge-21": 8,
-    "nodegoat-websec.herokuapp.com/tutorial/a9": 6,
-    "nodegoat-websec.herokuapp.com/tutorial/a10": 6,
+    "nodegoat-websec.herokuapp.com/tutorial/a9": 7,
+    "nodegoat-websec.herokuapp.com/tutorial/a10": 7,
+    "wrongsecrets.herokuapp.com/challenge/challenge-21": 9,
     "juice-shop-staging.herokuapp.com": 12
   }
 }

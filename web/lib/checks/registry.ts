@@ -6578,6 +6578,58 @@ const nodegoatTutorialA8RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatTutorialA9RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a9\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a9", [
+    {
+      label: "A9 insecure components tutorial title",
+      re: /A9-Using Components with Known Vulnerabilities|A9[\s-]+Insecure Components/i
+    },
+    {
+      label: "Vulnerable dependency walkthrough",
+      re: /Components, such as libraries, frameworks|vulnerable component is exploited/i
+    },
+    {
+      label: "Marked library XSS scenario",
+      re: /insecure version of the Marked library|Marked library isn't filtering very well|vulnerable to XSS exploits/i
+    }
+  ], "NodeGoat /tutorial/a9 documents using components with known vulnerabilities (Marked library XSS) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a10\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a10", [
+    {
+      label: "A10 unvalidated redirects tutorial title",
+      re: /A10-Unvalidated Redirects and Forwards|A10[\s-]+Redirects/i
+    },
+    {
+      label: "/learn?url= open redirect walkthrough",
+      re: /\/learn\?url=|res\.redirect\(req\.query\.url\)/i
+    },
+    {
+      label: "Redirect validation mitigation topics",
+      re: /redirect victims to phishing|Without proper validation, attackers can redirect|Simply avoid using redirects and forwards/i
+    }
+  ], "NodeGoat /tutorial/a10 documents unvalidated redirects and forwards (/learn?url=) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 // --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
 const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
   {
@@ -31570,6 +31622,10 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
     {
       label: "Binary C++ secret walkthrough",
       re: /Hiding in binaries part 2|wrongsecrets-cplus(?:-arm|-linux)?|secret in a C\+\+ binary/i
+    },
+    {
+      label: "Binary Go secret walkthrough",
+      re: /Hiding in binaries part 3|wrongsecrets-golang(?:-arm|-linux)?|secret in a Go binary|the Go binary/i
     }
   ]) {
     const m = doc.body.match(re);
@@ -31603,10 +31659,12 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                               doc.body
                             )
                           ? "weak cryptography / double-hashed password secrets"
-                          : /Hiding in binaries part 2|wrongsecrets-cplus/i.test(doc.body)
-                            ? "C++ binary embedded secrets"
-                            : /Hiding in binaries part 1|wrongsecrets-c/i.test(doc.body)
-                              ? "C binary embedded secrets"
+                          : /Hiding in binaries part 3|wrongsecrets-golang/i.test(doc.body)
+                            ? "Go binary embedded secrets"
+                            : /Hiding in binaries part 2|wrongsecrets-cplus/i.test(doc.body)
+                              ? "C++ binary embedded secrets"
+                              : /Hiding in binaries part 1|wrongsecrets-c/i.test(doc.body)
+                                ? "C binary embedded secrets"
                               : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
                                     doc.body
                                   )
@@ -37919,6 +37977,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA6RouteLiveOracle,
   nodegoatTutorialA7RouteLiveOracle,
   nodegoatTutorialA8RouteLiveOracle,
+  nodegoatTutorialA9RouteLiveOracle,
+  nodegoatTutorialA10RouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a9-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a9 returns A9-Using Components with Known Vulnerabilities + insecure Marked library XSS scenario + npm audit dependency topics; nodegoat-websec.herokuapp.com/tutorial/a9 findings 6→7 with route-specific insecure-components oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a10-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a10 returns A10-Unvalidated Redirects and Forwards + /learn?url= res.redirect(req.query.url) walkthrough + redirect validation mitigation topics; nodegoat-websec.herokuapp.com/tutorial/a10 findings 6→7 with route-specific open-redirect oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-21 documents Hiding in binaries part 3: the Go binary + wrongsecrets-golang executables; wrongsecrets.herokuapp.com/challenge/challenge-21 findings 8→9 with extended Go binary markers in wrongsecrets-challenge-live-oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-validate-path-traversal-live-oracle",
       "status": "shipped",
