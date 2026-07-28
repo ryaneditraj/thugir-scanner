@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T13:10:00.000Z",
+  "updated_at": "2026-07-28T14:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://www.agentpwn.com/attacks/supply-chain/3",
+      "source": "opena2a/agentpwn — APWN-SS-003 supply-chain injection attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/prompt-injection/3",
+      "source": "opena2a/agentpwn — APWN-PI-003 indirect prompt-injection payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/jailbreak/5",
+      "source": "opena2a/agentpwn — APWN-JB-005 jailbreak attack payload page (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/context-manipulation/3",
+      "source": "opena2a/agentpwn — APWN-CM-003 context-manipulation attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-4",
+      "source": "OWASP WrongSecrets — public Heroku demo challenge-4 (wrongsecrets.herokuapp.com)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop.demo.escape.tech/rest/basket/2",
       "source": "Escape.tech Juice Shop demo — BOLA basket IDOR oracle GET /rest/basket/2 (juice-shop.demo.escape.tech)",
