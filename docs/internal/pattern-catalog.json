@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T07:18:16.951Z",
-  "total": 955,
-  "uniqueSlugs": 950,
+  "generatedAt": "2026-07-28T08:06:25.722Z",
+  "total": 959,
+  "uniqueSlugs": 954,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 937,
+    "generic": 941,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 870,
+    "deep": 874,
     "continuous": 0
   },
   "byCategory": {
@@ -27,11 +27,11 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 68,
-    "Injection": 194,
+    "Injection": 196,
     "Cross-site scripting": 140,
     "general": 20,
     "SSRF": 5,
-    "Server-side request forgery": 33,
+    "Server-side request forgery": 35,
     "Sensitive data exposure": 24,
     "AI security": 41,
     "Business logic": 4,
@@ -43,6 +43,8 @@
   },
   "slugs": [
     "agentpwn-attack-route-live-oracle",
+    "all-seeing-eye-hello-route-live-oracle",
+    "all-seeing-eye-read-route-live-oracle",
     "auth-security-project-dashboard-xss-route-live-oracle",
     "auth-security-project-login-sqli-route-live-oracle",
     "bolt-demo-mode-shipped",
@@ -721,6 +723,7 @@
     "dvwu-notices-lfi-route-live-oracle",
     "dvwu-portal-sqli-route-live-oracle",
     "dvwu-search-xss-route-live-oracle",
+    "dvwu-ssrf-redirect-route-live-oracle",
     "exposed-api-config",
     "exposed-config-backup",
     "exposed-env-file",
@@ -759,6 +762,7 @@
     "ist-edu-notices-lfi-route-live-oracle",
     "ist-edu-portal-sqli-route-live-oracle",
     "ist-edu-search-xss-route-live-oracle",
+    "ist-edu-ssrf-redirect-route-live-oracle",
     "juice-shop-chatbot-api-live-oracle",
     "juice-shop-chatbot-route-live-oracle",
     "juice-shop-forgotten-backup-disclosure",
