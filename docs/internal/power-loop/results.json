@@ -1,84 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-27T10:07:12.414Z",
-      "url": "https://ssrf.vulnlab.dev/basic",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 9,
-      "findings": [
-        {
-          "slug": "ssrf-vulnlab-basic-live-oracle",
-          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
-          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
-          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "ssrf-vulnlab-redirect-live-oracle",
-          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
-          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "ssrf-vulnlab-basic-route-live-oracle",
-          "title": "ssrf.vulnlab.dev /basic route SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "unprotected-webhook-endpoint",
-          "title": "Payment webhook endpoint without signature verification",
-          "severity": "high",
-          "confidence": 0.5,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 4,
-      "probes_run": 214,
-      "status": "ok",
-      "scanned_at": "2026-07-27T10:07:12.414Z"
-    },
-    {
       "run_id": "2026-07-27T10:06:41.029Z",
       "url": "https://wrongsecrets.herokuapp.com/challenge/2",
       "auth": "public_demo",
@@ -16637,9 +16559,121 @@
       "probes_run": 496,
       "status": "ok",
       "scanned_at": "2026-07-28T14:19:11.303Z"
+    },
+    {
+      "run_id": "2026-07-28T15:02:01.218Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 10,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 272,
+      "status": "ok",
+      "scanned_at": "2026-07-28T15:02:01.218Z"
     }
   ],
   "teacher_delta_runs": [
+    {
+      "run_id": "2026-07-28T15:23:10.365Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku (pages=6 probes=272; gap=[])",
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "teacher_delta": [],
+      "notes": "No teacher tools available. 15 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (10 findings) with sql-error-disclosure + idor-sequential-ids + unauthenticated-admin-endpoint + security-question-disclosure + dangerous-html-sinks + juice-shop-leaked-api-key + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; jwt-alg-none + chatbot oracles absent this pass; secret-resend slug still absent. Discovery: +5 agentpwn prompt-injection/4 + context-manipulation/4 + data-exfiltration/4 + data-exfiltration/5 + prompt-injection/5.",
+      "scanned_at": "2026-07-28T15:23:10.365Z"
+    },
     {
       "run_id": "2026-07-28T14:19:14.000Z",
       "scan_kind": "teacher_delta",
@@ -16666,6 +16700,8 @@
       "notes": "No teacher tools available. 14 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 (13 findings) with sql-error-disclosure + jwt-alg-none + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; juice-shop-chatbot-api-live-oracle absent this pass; secret-resend slug still absent. Discovery: +5 URLs (agentpwn supply-chain/3, prompt-injection/3, jailbreak/5, context-manipulation/3, wrongsecrets challenge-4) + drained vuln-expose idor/dashboard + agentpwn data-exfiltration/1 + prompt-injection/2 → 60 discovery findings (8 URLs); agentpwn supply-chain/prompt-injection/jailbreak fire agentpwn-attack-route-live-oracle; wrongsecrets challenge-4 fires wrongsecrets-challenge-live-oracle; vuln-expose idor/dashboard 16 findings incl vuln-expose-idor-profile-route-live-oracle; context-manipulation/3 thin pass (3 findings) without attack-route oracle.",
       "scanned_at": "2026-07-28T14:19:14.000Z"
     },
+    {
+      "run_id": "2026-07-28T13:37:10.000Z",
       "scan_kind": "teacher_delta",
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
