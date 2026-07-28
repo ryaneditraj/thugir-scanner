@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T00:04:32.812Z",
-  "total": 938,
-  "uniqueSlugs": 933,
+  "generatedAt": "2026-07-28T01:02:54.964Z",
+  "total": 940,
+  "uniqueSlugs": 935,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 920,
+    "generic": 922,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 853,
+    "deep": 855,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 66,
-    "Injection": 187,
-    "Cross-site scripting": 133,
+    "Injection": 188,
+    "Cross-site scripting": 134,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 32,
@@ -919,8 +919,10 @@
     "vuln-expose-auth-bypass-api-live-oracle",
     "vuln-expose-auth-bypass-route-live-oracle",
     "vuln-expose-blind-sqli-api-live-oracle",
+    "vuln-expose-blog-stored-xss-route-live-oracle",
     "vuln-expose-cmdi-route-live-oracle",
     "vuln-expose-idor-profile-route-live-oracle",
+    "vuln-expose-invoices-sqli-route-live-oracle",
     "vuln-expose-network-tools-route-live-oracle",
     "vuln-expose-sqli-blind-route-live-oracle",
     "vuln-expose-sqli-search-api-live-oracle",

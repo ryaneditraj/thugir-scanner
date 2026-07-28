@@ -8429,6 +8429,18 @@
       "slug": "ssrf-vulnlab-parser-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /parser/?url=http://images.vulnlab.dev@169.254.169.254/latest/meta-data/ bypasses allowlist via userinfo and returns ami-id/iam/instance-id metadata; ssrf.vulnlab.dev/parser findings 7→11 with parser-live-oracle + parser-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-blog-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog returns TechCorp Blog + dangerouslySetInnerHTML comment sink markers; vuln-expose.vercel.app/blog findings 13→14 with route-specific stored-XSS oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-invoices-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /invoices JS bundle builds SELECT * FROM invoices WHERE client_name LIKE via string concat (hidden_sqli_search); vuln-expose.vercel.app/invoices findings 13→14 with route-specific SQLi oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -14593,6 +14605,16 @@
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-parser-route-live-oracle",
       "shipped_at": "2026-07-28T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-blog-stored-xss-route-live-oracle",
+      "shipped_at": "2026-07-28T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-invoices-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T01:10:00.000Z"
     }
   ]
 }
