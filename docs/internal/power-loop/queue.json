@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T14:10:00.000Z",
+  "updated_at": "2026-07-28T15:00:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://www.agentpwn.com/attacks/prompt-injection/4",
+      "source": "opena2a/agentpwn — APWN-PI-004 indirect prompt-injection payload page (DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/context-manipulation/4",
+      "source": "opena2a/agentpwn — APWN-CM-004 context-manipulation attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/data-exfiltration/4",
+      "source": "opena2a/agentpwn — APWN-DE-004 data-exfiltration attack demo (DVAA wild-testing target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/data-exfiltration/5",
+      "source": "opena2a/agentpwn — APWN-DE-005 data-exfiltration attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/prompt-injection/5",
+      "source": "opena2a/agentpwn — APWN-PI-005 prompt-injection payload page (public CTF lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.agentpwn.com/attacks/supply-chain/3",
       "source": "opena2a/agentpwn — APWN-SS-003 supply-chain injection attack demo (public CTF lab)",
