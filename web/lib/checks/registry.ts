@@ -17194,6 +17194,69 @@ const vulnExposeNetworkToolsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnExposeBlogStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/blog"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/blog", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /blog route scan — TechCorp corporate blog with stored XSS comment sink via dangerouslySetInnerHTML (hidden_xss_comments lab)"
+    }
+  };
+};
+
+const vulnExposeInvoicesSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/invoices(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/invoices"));
+  if (!spec) return NEGATIVE;
+  const pageResult = await vulnExposeModulePageMarkers(ctx, "/invoices", spec);
+  if (!pageResult.fired) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(new URL("/invoices", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 60000
+  });
+  const chunkRe = /\/_next\/static\/chunks\/[a-f0-9]+\.js/gi;
+  let jsCorpus = "";
+  const chunks = [...new Set(pageDoc.body.match(chunkRe) ?? [])].slice(0, 8);
+  for (const chunkPath of chunks) {
+    const chunkUrl = new URL(chunkPath, ctx.origin).toString();
+    const chunkDoc = await ctx.probe.get(chunkUrl, { maxBytes: 65536, timeoutMs: 60000 });
+    if (/SELECT \* FROM invoices WHERE client_name LIKE/i.test(chunkDoc.body)) {
+      jsCorpus = chunkDoc.body;
+      break;
+    }
+  }
+  const sqlConcat =
+    /SELECT \* FROM invoices WHERE client_name LIKE/i.test(jsCorpus) ||
+    /hidden_sqli_search/i.test(jsCorpus);
+  return {
+    fired: true,
+    confidence: sqlConcat ? 0.94 : pageResult.confidence,
+    evidence: {
+      ...pageResult.evidence,
+      scannedUrl: pageUrl,
+      ...(sqlConcat
+        ? {
+            jsSnippet: jsCorpus
+              .match(/SELECT \* FROM invoices WHERE[\s\S]{0,120}/i)?.[0]
+              ?.slice(0, 120)
+          }
+        : {}),
+      note: "VulnSite /invoices route scan — corporate invoice search builds client-side SQL via string concatenation (hidden_sqli_search lab)"
+    }
+  };
+};
+
 const brokencrystalsUsersSearchRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -18336,6 +18399,46 @@ const VULN_EXPOSE_MODULE_SPECS: {
       }
     ],
     note: "VulnSite /network-tools module documents server-side ping/fetch connectivity lab (SSRF-prone)"
+  },
+  {
+    pathRe: /\/blog(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "TechCorp corporate blog header",
+        re: /TechCorp Blog/i
+      },
+      {
+        label: "Featured article section",
+        re: /Artículo Destacado|Artículos Recientes/i
+      },
+      {
+        label: "Stored XSS dangerouslySetInnerHTML sink",
+        re: /dangerouslySetInnerHTML/i
+      },
+      {
+        label: "Corporate blog tagline",
+        re: /Noticias, actualizaciones y recursos tecnológicos/i
+      }
+    ],
+    note: "VulnSite /blog corporate app documents stored XSS via comment dangerouslySetInnerHTML (hidden_xss_comments lab)"
+  },
+  {
+    pathRe: /\/invoices(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "Corporate invoice system header",
+        re: /Sistema de Facturas/i
+      },
+      {
+        label: "Invoice search panel",
+        re: /Buscar facturas|Buscar por cliente, número de factura o email/i
+      },
+      {
+        label: "Invoice dashboard metrics",
+        re: /Total Facturas|Total Monto|Gestión y seguimiento de facturas/i
+      }
+    ],
+    note: "VulnSite /invoices corporate app documents client-side SQL concatenation in invoice search (hidden_sqli_search lab)"
   }
 ];
 
@@ -39597,6 +39700,8 @@ export const RULES: Record<string, Rule> = {
   vulnExposeSqliBlindRouteLiveOracle,
   vulnExposeXssCspBypassRouteLiveOracle,
   vulnExposeNetworkToolsRouteLiveOracle,
+  vulnExposeBlogStoredXssRouteLiveOracle,
+  vulnExposeInvoicesSqliRouteLiveOracle,
   brokencrystalsUsersSearchRouteLiveOracle,
   brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
