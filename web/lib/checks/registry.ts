@@ -6766,7 +6766,7 @@ const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
 };
 
 function isAgentpwnHost(ctx: RuleContext): boolean {
-  return /agentpwn\.com/i.test(ctx.origin);
+  return /agentpwn\.com/i.test(`${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`);
 }
 
 function isVulnforgeAcademyHost(ctx: RuleContext): boolean {
@@ -6879,35 +6879,37 @@ const vulnbankUploadProfilePictureUrlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function agentpwnAttackMarkers(corpus: string): {
+  attackIdMatch: RegExpMatchArray | null;
+  aiInstructionsMatch: RegExpMatchArray | null;
+  hiddenDan: boolean;
+} {
+  const attackIdMatch =
+    corpus.match(/<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i) ??
+    corpus.match(/\bAttack ID<\/dt>\s*<dd[^>]*>\s*(APWN-[A-Z]{2}-\d{3})\b/i) ??
+    corpus.match(/\b(APWN-[A-Z]{2}-\d{3})\b/i);
+  const aiInstructionsMatch = corpus.match(
+    /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
+  );
+  const hiddenDan =
+    /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,200}(?:safety|restricted|unrestricted access)/i.test(corpus) ||
+    /DAN MODE ENABLED/i.test(corpus);
+  return { attackIdMatch, aiInstructionsMatch, hiddenDan };
+}
+
 const agentpwnAttackRouteLiveOracle: Rule = async (ctx) => {
   if (!isAgentpwnHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/attacks\/[^/]+\/\d+/i.test(pageUrl)) return NEGATIVE;
   let corpus = ctx.combined;
-  let attackIdMatch = corpus.match(
-    /<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i
-  );
-  let aiInstructionsMatch = corpus.match(
-    /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
-  );
-  let hiddenDan =
-    /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
-    /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
-    /DAN MODE ENABLED/i.test(corpus);
+  let { attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus);
   if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) {
-    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+    const pageDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
     if (pageDoc.status >= 200 && pageDoc.status < 400) {
       corpus = `${corpus}\n${pageDoc.body}`;
-      attackIdMatch = corpus.match(
-        /<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i
-      );
-      aiInstructionsMatch = corpus.match(
-        /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
-      );
-      hiddenDan =
-        /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
-        /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
-        /DAN MODE ENABLED/i.test(corpus);
+      ({ attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus));
     }
   }
   const reportApi = /agentpwn\.com\/api\/report/i.test(corpus);
@@ -33249,6 +33251,22 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
       re: /secret called.*password|hardcoded secrets.*grep|clone the repo and use.*grep/i
     },
     {
+      label: "Git notes metadata walkthrough",
+      re: /Git [Nn]otes|refs\/notes\/\*|git notes show|git fetch origin ['"]refs\/notes/i
+    },
+    {
+      label: "Advanced C binary reverse-engineering walkthrough",
+      re: /wrongsecrets-advanced-c|GDB and Radare2|encrypted the secret.*reverse engineering/i
+    },
+    {
+      label: "Binary challenge focus",
+      re: /challenge focuses on.*Binary<\/strong>/i
+    },
+    {
+      label: "Git challenge focus",
+      re: /challenge focuses on.*Git<\/strong>/i
+    },
+    {
       label: "Intro challenge walkthrough",
       re: /Welcome to OWASP WrongSecrets|opening challenge|challenge focuses on.*Intro/i
     },
@@ -33386,12 +33404,16 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                   ? "AWS Secrets Manager via K8s CSI driver"
                   : /IAM privilege escalation|Parameter Store/i.test(doc.body)
                   ? "IAM privilege escalation / AWS Parameter Store secrets"
-                  : /Git history|trufflehog3?|Git-secrets|secret called.*password/i.test(doc.body)
-                    ? "Git history / hardcoded password secrets"
-                    : /Welcome to OWASP WrongSecrets|challenge focuses on.*Intro|Every challenge is about finding a secret/i.test(
+                  : /Git [Nn]otes|refs\/notes\/\*|git notes show/i.test(doc.body)
+                    ? "Git notes metadata secrets"
+                    : /wrongsecrets-advanced-c|GDB and Radare2/i.test(doc.body)
+                      ? "advanced C binary reverse-engineering secrets"
+                      : /Git history|trufflehog3?|Git-secrets|secret called.*password/i.test(doc.body)
+                        ? "Git history / hardcoded password secrets"
+                        : /Welcome to OWASP WrongSecrets|challenge focuses on.*Intro|Every challenge is about finding a secret/i.test(
                           doc.body
                         )
-                      ? "WrongSecrets intro / onboarding secrets"
+                          ? "WrongSecrets intro / onboarding secrets"
                     : /Secrets in front-end code|Development Tools in the browser/i.test(doc.body)
                       ? "front-end hardcoded secrets"
                       : /\.bash_history|bash_history file within a running container/i.test(doc.body)
