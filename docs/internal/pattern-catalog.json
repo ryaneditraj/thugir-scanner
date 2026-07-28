@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T10:08:46.522Z",
-  "total": 964,
-  "uniqueSlugs": 959,
+  "generatedAt": "2026-07-28T11:15:07.656Z",
+  "total": 965,
+  "uniqueSlugs": 960,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 946,
+    "generic": 947,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 879,
+    "deep": 880,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 238,
+    "Broken access control": 239,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -992,6 +992,7 @@
     "vulnlab-validate-xss-live-oracle",
     "vulnshop-debug-api-live-oracle",
     "vulnweb-comments-xss-route-live-oracle",
+    "vulnweb-csrf-route-live-oracle",
     "vulnweb-profile-idor-route-live-oracle",
     "vulnweb-search-sqli-route-live-oracle",
     "weak-api-default-credentials",
