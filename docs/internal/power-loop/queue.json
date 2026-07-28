@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T20:03:46.865Z",
+  "updated_at": "2026-07-28T21:05:20.961Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
@@ -11174,7 +11174,27 @@
       "url": "http://nodegoat.herokuapp.com/login",
       "source": "OWASP NodeGoat — SQLi login-form oracle (official Heroku demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/logger",
+      "source": "PortSwigger Gin & Juice Shop — OAST/logger interaction oracle (/logger)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post",
+      "source": "PortSwigger Gin & Juice Shop — DOM XSS + prototype pollution + CTI oracle (/blog/post)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product?productId=1",
+      "source": "PortSwigger Gin & Juice Shop — catalog product page oracle (/catalog/product)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvaib.com/scenarios",
+      "source": "Damn Vulnerable AI Bank — prompt-injection scenario hub (dvaib.com public demo)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 15
+  "discovery_urls_added": 19
 }
