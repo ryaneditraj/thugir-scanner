@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-orders-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/orders/1 returns user_id, line items, total_price, status without auth; duck-store.escape.tech/api/v1/orders/1 findings 8→11 with duck-store-orders-bola-live-oracle + duck-store-orders-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-coupons-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/orders/coupons lists is_public:false codes (VIP50, EMPLOYEE75, INTERNAL100) without auth; duck-store.escape.tech/api/v1/orders/coupons findings 8→12 with duck-store-coupons-disclosure-live-oracle + duck-store-coupons-route-live-oracle; queue URL corrected from /api/v1/coupons; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga.tools.escape.tech",
+      "slug": "dvga-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities 404 thin pass — dvgaRouteLiveOracle re-fetches https://dvga.tools.escape.tech/ (canonical origin; crawl had poisoned http://www.dvga.tools.escape.tech) + POST /graphql __schema introspection; dvga.tools.escape.tech/vulnerabilities findings 1→2 with dvga-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:www.agentpwn.com",
       "slug": "agentpwn-mcp-exploitation-route-live-oracle",
       "status": "shipped",
