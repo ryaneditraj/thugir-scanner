@@ -14945,6 +14945,21 @@
       "source": "discovery:agentpwn.com",
       "slug": "agentpwn-context-manipulation-semantic-oracle",
       "shipped_at": "2026-07-28T15:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-route-header-oracle",
+      "shipped_at": "2026-07-28T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-xff-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T16:25:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-jwt-chatbot-benchmark-recall-aliases",
+      "shipped_at": "2026-07-28T16:25:00.000Z"
     }
   ]
 }
