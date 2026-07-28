@@ -1607,7 +1607,6 @@ const DEEP_RULES = new Set<string>([
   "nodegoatTutorialA10RouteLiveOracle",
   "nodegoatLearnOpenRedirectLiveOracle",
   "nodegoatLearnOpenRedirectRouteLiveOracle",
-  "nodegoatLoginNosqlRouteLiveOracle",
   "nodegoatBenefitsNosqlRouteLiveOracle",
   "vulnforgeAcademyLevelSqliRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlRouteLiveOracle",

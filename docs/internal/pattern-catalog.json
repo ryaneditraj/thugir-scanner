@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T06:18:15.826Z",
-  "total": 953,
-  "uniqueSlugs": 948,
+  "generatedAt": "2026-07-28T07:18:16.951Z",
+  "total": 955,
+  "uniqueSlugs": 950,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 935,
+    "generic": 937,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 868,
+    "deep": 870,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 68,
-    "Injection": 192,
+    "Injection": 194,
     "Cross-site scripting": 140,
     "general": 20,
     "SSRF": 5,
@@ -717,6 +717,7 @@
     "duck-store-users-route-live-oracle",
     "dvrag-admin-config-live-oracle",
     "dvrag-rag-pipeline-live-oracle",
+    "dvwu-csrf-newsletter-crlf-route-live-oracle",
     "dvwu-notices-lfi-route-live-oracle",
     "dvwu-portal-sqli-route-live-oracle",
     "dvwu-search-xss-route-live-oracle",
@@ -754,6 +755,7 @@
     "idor-sequential-ids",
     "inline-state-secrets",
     "insecure-cookies",
+    "ist-edu-newsletter-crlf-route-live-oracle",
     "ist-edu-notices-lfi-route-live-oracle",
     "ist-edu-portal-sqli-route-live-oracle",
     "ist-edu-search-xss-route-live-oracle",
