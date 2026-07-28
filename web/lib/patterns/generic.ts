@@ -17085,6 +17085,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-jwt-weak-token-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "vAPI JustWeakToken JWT route live oracle",
+    description:
+      "When scanning /jwt/user, POST registers a user then forged admin JWT (alg:none or HS256 re-sign with known weak key) returns flag{jwt_*} — route-specific JustWeakToken oracle.",
+    impactOneline:
+      "Accepting alg:none or weak HS256 secrets lets attackers forge admin JWTs and read protected flags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiJwtRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — pin JWT algorithms and use strong secrets in production.",
+      steps: [
+        "Reject alg:none and enforce an allowlist of signing algorithms (RS256/HS256 only).",
+        "Use strong, rotated signing secrets never embedded in client code.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /jwt/user route accepts forged admin JWTs with a known weak HS256 secret. Show secure JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-serversurfer-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "vAPI ServerSurfer SSRF route live oracle",
+    description:
+      "When scanning /serversurfer, GET ?url=http://example.com/ fetches external URLs server-side and returns base64-encoded response data — route-specific ServerSurfer SSRF oracle.",
+    impactOneline:
+      "Unvalidated server-side URL fetchers let attackers probe internal services and exfiltrate responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiServerSurferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — allowlist outbound fetch destinations in production.",
+      steps: [
+        "Deny RFC1918, link-local, and cloud metadata addresses at the egress layer.",
+        "Use an allowlist of permitted fetch hosts instead of accepting arbitrary URLs.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /serversurfer route fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering and allowlists.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-stickynotes-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "vAPI StickyNotes stored XSS route live oracle",
+    description:
+      "When scanning /stickynotes, GET ?format=html returns stored <script> payloads unescaped in XML notes including flag{xss_*} — route-specific StickyNotes stored XSS oracle.",
+    impactOneline:
+      "Rendering stored user notes as HTML without sanitization enables persistent XSS against other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiStickyNotesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — encode or sanitize stored note content in production.",
+      steps: [
+        "Escape HTML entities before rendering user-supplied note text.",
+        "Use a strict Content-Security-Policy to block inline script execution.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /stickynotes route returns stored script tags unescaped in HTML format. Show stored XSS remediation for note APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-mechanic-report-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
