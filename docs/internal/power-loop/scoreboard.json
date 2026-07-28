@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T20:10:00.000Z",
+  "updated_at": "2026-07-28T21:15:03.070Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3265,
-  "total_findings": 33137,
+  "total_sites_scanned": 3274,
+  "total_findings": 33246,
   "critical_findings": 79,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2224,
-  "discovery_findings": 27384,
-  "improvements_shipped": 1163,
-  "last_run": "2026-07-28T20:10:00.000Z",
+  "discovery_urls_added": 2228,
+  "discovery_findings": 27479,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-28T21:15:03.070Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 451,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,43 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings); no benchmark misses"
+      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot live oracles; no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 48,
-      "focus": "duck-store SQLi sort param, cart negative-quantity, admin users BFLA route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 4,
+      "urls_scanned": 8,
+      "findings": 95,
+      "focus": "vAPI api3/api4/api5 oracles, pwnshop invoice path-traversal route, duck-store vulnerabilities catalog hub, oss-oopssec BFLA walkthrough",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "duck-store.escape.tech/api/v1/products/filter/by-color: 10→16 findings — duck-store-products-filter-sqli-route-live-oracle shipped (sort= SQL error disclosure)",
-      "duck-store.escape.tech/api/v1/cart/add: 10→16 findings — duck-store-cart-negative-quantity-route-live-oracle shipped (quantity:-1 accepted)",
-      "duck-store.escape.tech/api/v1/admin/users: 10→16 findings — duck-store-admin-users-bfla-route-live-oracle shipped (user JWT lists admin roster)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503, no benchmark category misses",
+      "pwnshop.ctfsecurity.com/api/v1/invoices/1/download: 30 findings — pwnshop-download-path-traversal-route-live-oracle + coupon-category-bypass + avatar-svg-xss oracles on route URL",
+      "duck-store.escape.tech/vulnerabilities: 16 findings — full duck-store live-oracle hub (BOLA, SSRF, SQLi, MCP, admin BFLA)",
+      "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack: 6 findings — oopssec-live-stream-bfla-route-live-oracle on walkthrough page",
+      "vapi.apisec.ai/vapi/api3/comment: 12 findings — vapi-api3-comment-route-live-oracle triggered on API3 comment route",
+      "trojan-trap-seven.vercel.app: 5 findings — reflexion-escalated-ssti + dangerous-html-sinks on AI trojan trap demo",
+      "untrusted-python.vercel.app: 4 findings — reflexion-escalated-ssti on Python sandbox escape demo"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "duck-store.escape.tech/api/v1/orders/checkout: 100% discount coupon + shipping-bypass business-logic oracles still absent",
-      "duck-store.escape.tech/api/v1/users/me/profile: mass-assignment PUT oracle still absent",
-      "duck-store.escape.tech/testimonials: stored XSS POST oracle still absent (dangerous-html-sinks only)",
-      "duck-store.escape.tech/api/v1/auth/login: weak-admin-credentials + 2FA-bypass oracles still absent",
-      "duck-store.escape.tech/api/v1/referrals: FastAPI routing conflict — /orders/referrer captured by /orders/{order_id}",
-      "dvga2.tools.escape.tech/graphql: thin 1-finding pass — GraphQL introspection oracle not triggered"
+      "ginandjuice.shop/logger + /blog/post + /catalog/product queued but not drained this hour (deep queue)",
+      "dvaib.com/scenarios: queued but not drained — AI prompt-injection scenario oracles pending",
+      "duck-store.escape.tech/api/v1/testimonials: stored XSS POST oracle still absent (queued ahead of new ginandjuice URLs)",
+      "pentest-ground.com:81: queued but not drained this hour"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "duck-store.escape.tech/api/v1/products/filter/by-color": 16,
-    "duck-store.escape.tech/api/v1/cart/add": 16,
-    "duck-store.escape.tech/api/v1/admin/users": 16,
-    "duck-store.escape.tech/testimonials": 14,
-    "duck-store.escape.tech/api/v1/orders/checkout": 13,
-    "duck-store.escape.tech/api/v1/uploads/import-from-url": 12,
-    "duck-store.escape.tech/mcp/tools/list_coupons": 13
+    "pwnshop.ctfsecurity.com/api/v1/invoices/1/download": 30,
+    "duck-store.escape.tech/vulnerabilities": 16,
+    "http://vapi.apisec.ai/vapi/api3/comment": 12,
+    "http://vapi.apisec.ai/vapi/api5/users": 11,
+    "http://vapi.apisec.ai/vapi/api4/login": 11,
+    "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack": 6,
+    "trojan-trap-seven.vercel.app": 5,
+    "untrusted-python.vercel.app": 4
   }
 }
