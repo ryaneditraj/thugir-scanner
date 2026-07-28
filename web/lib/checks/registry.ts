@@ -6773,10 +6773,20 @@ function isVulnforgeAcademyHost(ctx: RuleContext): boolean {
   return /vulnforge-academy\.vercel\.app/i.test(ctx.origin);
 }
 
+function vulnforgeAcademyLevelFromUrl(url: string): number | null {
+  const m = url.match(/level(\d+)\.php/i);
+  return m ? Number(m[1]) : null;
+}
+
+const VULNFORGE_XSS_PROBE = "thugirVulnforgeXssProbe";
+const VULNFORGE_DOM_XSS_ATTR = '" onload="thugirVulnforgeDomProbe"';
+
 const vulnforgeAcademyLevelSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum !== null && levelNum >= 4) return NEGATIVE;
   const sqlHit = await sqlErrorDisclosure(ctx);
   if (!sqlHit.fired) return NEGATIVE;
   const hitUrl = String(sqlHit.evidence?.url ?? "");
@@ -6790,6 +6800,66 @@ const vulnforgeAcademyLevelSqliRouteLiveOracle: Rule = async (ctx) => {
       note: "VulnForge Academy level route scan — /api/portal (or level) search parameter returns SQL syntax error disclosure"
     }
   };
+};
+
+const vulnforgeAcademyLevelXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 4 || levelNum > 6) return NEGATIVE;
+  const domLevel = levelNum === 6;
+  const paramSets = domLevel
+    ? [
+        { param: "name", payload: VULNFORGE_DOM_XSS_ATTR },
+        { param: "search", payload: VULNFORGE_DOM_XSS_ATTR },
+        { param: "q", payload: VULNFORGE_DOM_XSS_ATTR }
+      ]
+    : [
+        { param: "name", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` },
+        { param: "search", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` },
+        { param: "comment", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` },
+        { param: "message", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` }
+      ];
+  for (const { param, payload } of paramSets) {
+    const probeUrl = new URL(pageUrl, ctx.origin);
+    probeUrl.searchParams.set(param, payload);
+    const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (domLevel) {
+      if (
+        /onload\s*=\s*["']thugirVulnforgeDomProbe/i.test(doc.body) &&
+        /document\.write|location\.search/i.test(doc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            scannedUrl: pageUrl,
+            url: probeUrl.toString(),
+            level: levelNum,
+            snippet: doc.body.slice(0, 240).trim(),
+            note: `VulnForge Academy level ${levelNum} route scan — ${param} query injects into document.write/location.search DOM XSS sink`
+          }
+        };
+      }
+      continue;
+    }
+    if (new RegExp(VULNFORGE_XSS_PROBE, "i").test(doc.body)) {
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          scannedUrl: pageUrl,
+          url: probeUrl.toString(),
+          level: levelNum,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnForge Academy level ${levelNum} route scan — ${param} reflects raw XSS probe unescaped in HTML`
+        }
+      };
+    }
+  }
+  return NEGATIVE;
 };
 
 const vulnbankUploadProfilePictureUrlRouteLiveOracle: Rule = async (ctx) => {
@@ -37322,12 +37392,79 @@ function isCrapi2Host(ctx: RuleContext): boolean {
   return /crapi2\.apisec\.ai/i.test(ctx.origin);
 }
 
+function isCrapi1Host(ctx: RuleContext): boolean {
+  return /crapi\.apisec\.ai/i.test(ctx.origin) && !/crapi2\.apisec\.ai/i.test(ctx.origin);
+}
+
 function isCrapiLabHost(ctx: RuleContext): boolean {
   return /crapi2?\.apisec\.ai/i.test(ctx.origin);
 }
 
+function isCrapiShopOrdersRoute(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /\/shop\/orders\b/i.test(pageUrl);
+}
+
+function jwtSubjectEmail(jwt: string): string | null {
+  try {
+    const seg = jwt.split(".")[1];
+    if (!seg) return null;
+    const payload = JSON.parse(Buffer.from(seg, "base64url").toString("utf8")) as { sub?: string };
+    return typeof payload.sub === "string" ? payload.sub : null;
+  } catch {
+    return null;
+  }
+}
+
+function parseCrapiShopOrderResponse(body: string): { id: number; ownerEmail?: string } | null {
+  try {
+    const data = JSON.parse(body) as {
+      id?: number;
+      user?: { email?: string };
+      order?: { id?: number; user?: { email?: string } };
+    };
+    const order = data.order ?? data;
+    if (!order?.id) return null;
+    return { id: order.id, ownerEmail: order.user?.email };
+  } catch {
+    return null;
+  }
+}
+
+async function probeCrapiShopOrdersIdBola(
+  ctx: RuleContext,
+  orderId: string,
+  jwt: string,
+  callerEmail = "test@test.com"
+): Promise<RuleResult | null> {
+  const orderUrl = new URL(`/workshop/api/shop/orders/${orderId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(orderUrl, {
+    maxBytes: 16384,
+    timeoutMs: 20000,
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const parsed = parseCrapiShopOrderResponse(doc.body);
+  if (!parsed?.ownerEmail) return null;
+  if (new RegExp(`^${callerEmail.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i").test(parsed.ownerEmail)) {
+    return null;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      orderUrl,
+      orderId: parsed.id,
+      ownerEmail: parsed.ownerEmail,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `crAPI GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated ${callerEmail} — BOLA oracle (API1)`
+    }
+  };
+}
+
 const crapiMechanicReportBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiShopOrdersRoute(ctx)) return NEGATIVE;
   const reportUrl = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
   reportUrl.searchParams.set("report_id", "1");
   const doc = await ctx.probe.get(reportUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
@@ -37423,6 +37560,7 @@ async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
 
 const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiShopOrdersRoute(ctx)) return NEGATIVE;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
   const authHeaders = { Authorization: `Bearer ${jwt}` };
@@ -38987,37 +39125,39 @@ const crapi2ShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
   const orderId = orderMatch[1];
   const jwt = await tryApiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
-  const orderUrl = new URL(`/workshop/api/shop/orders/${orderId}`, ctx.origin).toString();
-  const doc = await ctx.probe.get(orderUrl, {
-    maxBytes: 16384,
-    timeoutMs: 20000,
-    headers: { Authorization: `Bearer ${jwt}` }
-  });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  try {
-    const data = JSON.parse(doc.body) as {
-      id?: number;
-      user?: { email?: string };
-      items?: unknown[];
-    };
-    if (!data.id) return NEGATIVE;
-    const ownerEmail = data.user?.email;
-    if (!ownerEmail || /^test@test\.com$/i.test(ownerEmail)) return NEGATIVE;
-    return {
-      fired: true,
-      confidence: 0.93,
-      evidence: {
-        scannedUrl: pageUrl,
-        orderUrl,
-        orderId: data.id,
-        ownerEmail,
-        snippet: doc.body.slice(0, 200).trim(),
-        note: `crAPI v2 GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated test@test.com — BOLA oracle (API1)`
-      }
-    };
-  } catch {
-    return NEGATIVE;
-  }
+  const result = await probeCrapiShopOrdersIdBola(ctx, orderId, jwt);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `crAPI v2 GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated test@test.com — BOLA route oracle (API1)`
+    }
+  };
+};
+
+const crapiShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderMatch = pageUrl.match(/\/shop\/orders\/(\d+)/i);
+  if (!orderMatch || /\/all\b/i.test(pageUrl)) return NEGATIVE;
+  const orderId = orderMatch[1];
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const callerEmail = jwtSubjectEmail(jwt) ?? "";
+  const result = await probeCrapiShopOrdersIdBola(ctx, orderId, jwt, callerEmail || "scanner.local");
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `crAPI v1 GET /workshop/api/shop/orders/${orderId} returns another user's order — shop orders route BOLA oracle (API1)`
+    }
+  };
 };
 
 function isFinbotCtfHost(ctx: RuleContext): boolean {
@@ -41165,6 +41305,7 @@ export const RULES: Record<string, Rule> = {
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
   crapi2ShopOrdersIdBolaRouteLiveOracle,
+  crapiShopOrdersIdBolaRouteLiveOracle,
   finbotCtfChallengesRouteLiveOracle,
   finbotCtfSidecarRouteLiveOracle,
   finbotVendorSidecarRouteLiveOracle,
@@ -41287,6 +41428,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatLearnOpenRedirectRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
+  vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,
   clientSideGandalfEvidence,

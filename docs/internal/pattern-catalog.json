@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T13:12:20.753Z",
-  "total": 967,
-  "uniqueSlugs": 962,
+  "generatedAt": "2026-07-28T14:10:55.629Z",
+  "total": 969,
+  "uniqueSlugs": 964,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 949,
+    "generic": 951,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 882,
+    "deep": 884,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 239,
+    "Broken access control": 240,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -28,7 +28,7 @@
     "Security misconfiguration": 76,
     "Broken authentication": 68,
     "Injection": 198,
-    "Cross-site scripting": 140,
+    "Cross-site scripting": 141,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 35,
@@ -692,6 +692,7 @@
     "cors-reflect-origin",
     "crapi-mechanic-report-bola-live-oracle",
     "crapi-mechanic-report-route-live-oracle",
+    "crapi-shop-orders-id-bola-route-live-oracle",
     "crapi-vehicle-bola-live-oracle",
     "crapi-vehicle-route-live-oracle",
     "crapi2-auth-login-route-live-oracle",
@@ -969,6 +970,7 @@
     "vulnbank-v2-forgot-password-enumeration-live-oracle",
     "vulnbank-virtual-cards-bola-live-oracle",
     "vulnforge-academy-level-sqli-route-live-oracle",
+    "vulnforge-academy-level-xss-route-live-oracle",
     "vulnlab-admin-secrets-live-oracle",
     "vulnlab-auth-login-enumeration-live-oracle",
     "vulnlab-auth-session-live-oracle",
