@@ -286,19 +286,18 @@ async function main() {
     let result = await scanOne(entry, kind, scanOptions);
     saveResults(result);
 
-    if (kind === "benchmark" && entry.id) {
+    if (kind === "benchmark" && entry.id && result.status === "error") {
       const bench = loadJson<BenchmarksFile>(resolve(LOOP, "benchmarks.json"), { targets: [] });
       const target = bench.targets.find((t) => t.id === entry.id);
-
-      if (
-        result.status === "error" &&
-        target?.fallback_url &&
-        target.fallback_url !== entry.url
-      ) {
-        console.log(`benchmark error ${entry.url} — fallback ${target.fallback_url}`);
-        const fallback = await scanOne({ ...entry, url: target.fallback_url }, kind, scanOptions);
+      const triedUrls = new Set<string>([entry.url, result.url]);
+      for (const fallbackUrl of benchmarkFallbackUrls(target, entry.url)) {
+        if (triedUrls.has(fallbackUrl)) continue;
+        triedUrls.add(fallbackUrl);
+        console.log(`benchmark error ${result.url} — fallback ${fallbackUrl}`);
+        const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind, scanOptions);
         saveResults(fallback);
         result = fallback;
+        if (result.status === "ok") break;
       }
     }
 
