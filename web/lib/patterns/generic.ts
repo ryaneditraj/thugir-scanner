@@ -15603,6 +15603,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-blog-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnSite /blog route stored XSS oracle",
+    description:
+      "When scanning /blog, the TechCorp corporate blog exposes a comment form that renders user content via dangerouslySetInnerHTML — route-specific stored XSS oracle (hidden_xss_comments lab).",
+    impactOneline:
+      "Stored XSS in corporate blog comments lets attackers execute scripts in other users' browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeBlogStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before rendering — VulnSite is intentional training software.",
+      steps: [
+        "Never use dangerouslySetInnerHTML with unsanitized user content.",
+        "Use a strict HTML sanitizer or render comments as plain text.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog route scan confirms stored XSS via dangerouslySetInnerHTML comment rendering. Show XSS-safe comment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-invoices-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite /invoices route SQL injection oracle",
+    description:
+      "When scanning /invoices, the corporate invoice search builds SELECT * FROM invoices WHERE client_name LIKE queries via client-side string concatenation — route-specific SQLi oracle (hidden_sqli_search lab).",
+    impactOneline:
+      "Client-side SQL concatenation in invoice search exposes injection patterns and trains attackers on data-extraction techniques.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeInvoicesSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries server-side and never build SQL in client bundles — VulnSite is intentional training software.",
+      steps: [
+        "Move all SQL to server-side prepared statements.",
+        "Remove SQL string concatenation from client JavaScript.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /invoices route scan confirms client-side SQL concatenation in invoice search. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-testimonials-route-live-oracle",
     platform: "generic",
     category: "Injection",

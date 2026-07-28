@@ -1503,6 +1503,8 @@ const DEEP_RULES = new Set<string>([
   "vulnExposeSqliBlindRouteLiveOracle",
   "vulnExposeXssCspBypassRouteLiveOracle",
   "vulnExposeNetworkToolsRouteLiveOracle",
+  "vulnExposeBlogStoredXssRouteLiveOracle",
+  "vulnExposeInvoicesSqliRouteLiveOracle",
   "brokencrystalsTestimonialsRouteLiveOracle",
   "brokencrystalsUsersSearchRouteLiveOracle",
   "vulnbankAiAnonymousChatLiveOracle",
