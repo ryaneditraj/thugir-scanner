@@ -1262,6 +1262,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideOopssecStoreEvidence",
   "clientSideOopssecRaceConditionEvidence",
   "clientSideOopssecXffSqliEvidence",
+  "oopssecXffSqliRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",

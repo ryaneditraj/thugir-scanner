@@ -8348,6 +8348,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "oopssec-xff-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store X-Forwarded-For SQLi route live oracle",
+    description:
+      "When scanning /posts/x-forwarded-for-sql-injection, the OopsSec Store walkthrough documents SQL injection via unsanitized X-Forwarded-For values in the IP-tracking query.",
+    impactOneline:
+      "Route scans on the XFF SQLi walkthrough need live confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecXffSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Never concatenate HTTP header values into SQL; use parameterized queries and validate IP addresses server-side.",
+      steps: [
+        "Use parameterized queries for all IP-tracking and audit-log inserts.",
+        "Validate X-Forwarded-For against a trusted proxy allow-list before logging.",
+        "Host OopsSec SQLi walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tracking endpoint concatenates X-Forwarded-For into SQL. Show parameterized query fixes for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-voidsec-shopping-cart-evidence",
     platform: "generic",
     category: "Broken access control",

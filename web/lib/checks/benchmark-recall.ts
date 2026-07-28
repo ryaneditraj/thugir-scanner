@@ -11,6 +11,8 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "security-question-disclosure": ["sensitive_data"],
   "juice-shop-forgotten-backup-disclosure": ["sensitive_data"],
   "juice-shop-leaked-api-key": ["sensitive_data"],
+  "juice-shop-jwt-alg-none-live-oracle": ["auth_bypass"],
+  "juice-shop-chatbot-api-live-oracle": ["auth_bypass"],
   "dangerous-html-sinks": ["xss"],
   "dom-eval-xss": ["xss"],
   "idor-sequential-ids": ["idor"],

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-route-header-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: agentpwnAttackRouteLiveOracle now merges x-agentpwn-test-id + x-ai-instructions response headers and PI-005 AI Safety Board Compliance Standard hiddenDan markers; uses ctx.probe refetch with header corpus; www.agentpwn.com/attacks/prompt-injection/5 findings 3→7 with agentpwn-attack-route-live-oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-xff-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /posts/x-forwarded-for-sql-injection fires oopssec-xff-sqli-route-live-oracle with scannedUrl + X-Forwarded-For SQLi walkthrough markers; koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/ findings 6→7; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-jwt-chatbot-benchmark-recall-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: benchmark-recall.ts maps juice-shop-jwt-alg-none-live-oracle + juice-shop-chatbot-api-live-oracle to auth_bypass category tracking; juice-shop.herokuapp.com primary 503 → staging fallback 14 findings 6/6 recall"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-36-advanced-c-markers",
       "status": "shipped",
