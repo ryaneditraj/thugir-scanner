@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T12:06:00.000Z",
+  "updated_at": "2026-07-28T12:13:21.121Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3184,
-  "total_findings": 32434,
+  "total_sites_scanned": 3200,
+  "total_findings": 32538,
   "critical_findings": 78,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2184,
-  "discovery_findings": 26930,
-  "improvements_shipped": 1161,
-  "last_run": "2026-07-28T12:06:00.000Z",
+  "discovery_urls_added": 2189,
+  "discovery_findings": 26982,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-28T12:13:21.121Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
@@ -48,32 +48,38 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (13 findings)"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (13 findings); engine fixes shipped for vulnweb route oracles"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 6,
-      "focus": "vulnweb /sqli /xss /idor route path oracle fixes — oracles matched /search /comments /profile but Netlify SPA uses /sqli /xss /idor"
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 52,
+      "focus": "OWASP FinBot vendor/admin + juice-shop.demo basket IDOR + agentpwn jailbreak/4 + capability-abuse/3 + vulnweb xss/idor with new route oracles"
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (13 findings) — primary Heroku 503, staging fallback",
-      "vulnweb.netlify.app/sqli: 1→2 findings — vulnweb-search-sqli-route-live-oracle path fix /sqli",
-      "vulnweb.netlify.app/xss: 1→2 findings — vulnweb-comments-xss-route-live-oracle path fix /xss",
-      "vulnweb.netlify.app/idor: 1→2 findings — vulnweb-profile-idor-route-live-oracle path fix /idor"
+      "juice-shop.demo.escape.tech/rest/basket/1: 17 findings — full juice-shop oracle set incl jwt-alg-none + chatbot-route oracles",
+      "owasp-finbot-ctf.org/vendor + /admin: 8 findings each — client-side-finbot-demo-namespace-evidence + vibe-openapi-docs-exposed",
+      "vulnweb.netlify.app/xss + /idor: 1→2 findings — vulnweb-xss-route-live-oracle + vulnweb-idor-route-live-oracle shipped (engine fix)",
+      "www.agentpwn.com/attacks/jailbreak/4: 7 findings — agentpwn-attack-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark — no Resend key in current feeds/bundles",
-      "primary juice-shop.herokuapp.com Heroku dyno 503/degraded — staging fallback required",
-      "seclab.vercel.app/api/xss-vulnerable: Angular stub deploy — POST returns 405, Next.js API routes not deployed"
+      "secret-resend slug still absent on juice-shop benchmark",
+      "primary juice-shop.herokuapp.com Heroku dyno 503 — requires staging fallback for full recall",
+      "owasp-finbot-ctf.org/vendor + /admin: no live prompt-injection policy-bypass oracle (client-side evidence only)",
+      "www.agentpwn.com/attacks/capability-abuse/3: thin pass (3 findings) without agentpwn-attack-route-live-oracle"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 13,
-    "vulnweb.netlify.app/sqli": 2,
+    "juice-shop.demo.escape.tech/rest/basket/1": 17,
+    "owasp-finbot-ctf.org/vendor": 8,
+    "owasp-finbot-ctf.org/admin": 8,
+    "www.agentpwn.com/attacks/jailbreak/4": 7,
     "vulnweb.netlify.app/xss": 2,
-    "vulnweb.netlify.app/idor": 2
+    "vulnweb.netlify.app/idor": 2,
+    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level5.php": 5
   }
 }
