@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T20:03:04.034Z",
-  "total": 988,
-  "uniqueSlugs": 983,
+  "generatedAt": "2026-07-28T21:21:37.400Z",
+  "total": 992,
+  "uniqueSlugs": 987,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 970,
+    "generic": 974,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 903,
+    "deep": 907,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 250,
+    "Broken access control": 252,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -34,7 +34,7 @@
     "Server-side request forgery": 37,
     "Sensitive data exposure": 24,
     "AI security": 44,
-    "Business logic": 6,
+    "Business logic": 8,
     "Open redirect": 1,
     "Authentication bypass": 2,
     "Path traversal": 2,
@@ -720,6 +720,8 @@
     "duck-store-admin-users-bfla-route-live-oracle",
     "duck-store-cart-negative-quantity-live-oracle",
     "duck-store-cart-negative-quantity-route-live-oracle",
+    "duck-store-checkout-private-coupon-live-oracle",
+    "duck-store-checkout-private-coupon-route-live-oracle",
     "duck-store-coupons-disclosure-live-oracle",
     "duck-store-coupons-route-live-oracle",
     "duck-store-mcp-coupons-disclosure-live-oracle",
@@ -728,6 +730,8 @@
     "duck-store-orders-route-live-oracle",
     "duck-store-products-filter-sqli-live-oracle",
     "duck-store-products-filter-sqli-route-live-oracle",
+    "duck-store-profile-mass-assignment-live-oracle",
+    "duck-store-profile-mass-assignment-route-live-oracle",
     "duck-store-ssrf-fetch-url-live-oracle",
     "duck-store-ssrf-fetch-url-route-live-oracle",
     "duck-store-testimonials-bola-live-oracle",

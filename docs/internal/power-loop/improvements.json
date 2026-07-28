@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-checkout-private-coupon-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login POST /api/v1/cart/add then POST /api/v1/orders/checkout coupon_code=INTERNAL100 (is_public:false via MCP) returns order id with total_price=5.99 shipping-only; duck-store.escape.tech/api/v1/orders/checkout findings 14→18; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-profile-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /api/v1/users/me/profile role:admin then GET /api/v1/admin/users lists admin@duck-store.escape; duck-store.escape.tech/api/v1/users/me/profile findings 12→17; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopCompleteOtpSession retry + longer PwnMail poll restores POST /profile/upload-avatar SVG onload oracle; pwnshop.ctfsecurity.com/profile/upload-avatar findings 18→25 with pwnshop-avatar-svg-xss-live-oracle + route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-products-filter-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/filter/by-color?color=Yellow&sort=name;SELECT%201 returns Query error with SELECT * FROM products WHERE color LIKE ORDER BY name;SELECT 1; duck-store.escape.tech/api/v1/products/filter/by-color findings 10→16; benchmark juice-shop-staging 14 findings 6/6 maintained"
@@ -14593,6 +14611,21 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-checkout-private-coupon-route-live-oracle",
+      "shipped_at": "2026-07-28T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-profile-mass-assignment-route-live-oracle",
+      "shipped_at": "2026-07-28T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-upload-route-live-oracle",
+      "shipped_at": "2026-07-28T21:25:00.000Z"
+    },
     {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-products-filter-sqli-route-live-oracle",
