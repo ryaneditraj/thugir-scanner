@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T04:06:00.000Z",
+  "updated_at": "2026-07-28T05:30:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/login",
+      "source": "OWASP NodeGoat — NoSQL injection login oracle POST /login (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1",
+      "source": "apisec-inc/urban-VAmPI — user enumeration + excessive data exposure GET /users/v1 (Railway OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/books/v1/1",
+      "source": "erev0s/VAmPI — BOLA oracle GET /books/v1/{id} without owner auth (Railway public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/xss",
+      "source": "zahidoverflow/damn-vulnerable-web-university — reflected XSS lab module (dvwu.vercel.app deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/idor",
+      "source": "zahidoverflow/damn-vulnerable-web-university — IDOR lab module with predictable object IDs (dvwu.vercel.app)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vaultapp-omega.vercel.app/api/users/1",
       "source": "MRMcyber/vaultapp — unauthenticated IDOR users API GET /api/users/:id (Vercel OSS deploy)",
