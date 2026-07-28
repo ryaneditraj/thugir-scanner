@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-stored-xss-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/comments?postId=1 returns comments[].content with raw <script>alert(\"Stored XSS\")</script> unescaped in JSON + echoed SELECT query; vuln-expose.vercel.app/xss/comments findings 13→14+ with API oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /xss/comments STORED XSS LABORATORY + dangerouslySetInnerHTML markers + /api/comments stored script payloads; vuln-expose.vercel.app/xss/comments route scan gains route-specific stored XSS oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cmdi bundle contains 127.0.0.1; whoami payload grid + uid=33(www-data) command-injection simulation; vuln-expose.vercel.app/cmdi route scan gains JS-bundle CMDi live probe; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-0-1-intro-git-markers",
       "status": "shipped",
@@ -14615,6 +14633,21 @@
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-invoices-sqli-route-live-oracle",
       "shipped_at": "2026-07-28T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-stored-xss-api-live-oracle",
+      "shipped_at": "2026-07-28T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-route-live-oracle",
+      "shipped_at": "2026-07-28T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "shipped_at": "2026-07-28T02:15:00.000Z"
     }
   ]
 }

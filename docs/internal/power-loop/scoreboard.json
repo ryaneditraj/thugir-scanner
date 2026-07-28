@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T02:27:00.000Z",
+  "updated_at": "2026-07-28T02:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 3090,
-  "total_findings": 31692,
+  "total_findings": 31695,
   "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2149,
-  "discovery_findings": 26484,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-28T02:27:00.000Z",
+  "discovery_findings": 26487,
+  "improvements_shipped": 1167,
+  "last_run": "2026-07-28T02:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -48,42 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings) with juice-shop-jwt-alg-none-live-oracle + chatbot oracles + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 78,
-      "focus": "vAPI Arena jwt/user + serversurfer + stickynotes + auth-security dashboard/login + queue drain ssrf gopher/parser + vuln-expose network-tools",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "vuln-expose xss/comments stored XSS API + route oracles; cmdi/network-tools JS-bundle CMDi probes",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503, staging fallback ok",
-      "ssrf.vulnlab.dev/gopher: 12 findings — ssrf-vulnlab-gopher-route-live-oracle + cross-lab SSRF oracle set",
-      "ssrf.vulnlab.dev/parser: 11 findings — ssrf-vulnlab-parser-route-live-oracle + URL-parser disagreement oracle",
-      "vuln-expose.vercel.app/network-tools: 16 findings — vuln-expose-network-tools-route-live-oracle + SSRF ping oracle",
-      "vapi.apisec.ai/vapi/jwt/user: 11 findings — shared vAPI cross-API hub without JustWeakToken JWT-none route oracle",
-      "vapi.apisec.ai/vapi/serversurfer: 11 findings — shared hub without ServerSurfer SSRF route oracle",
-      "vapi.apisec.ai/vapi/stickynotes: 11 findings — shared hub without StickyNotes stored-XSS route oracle",
-      "auth-security-project.onrender.com/login: 3 findings — post-login-sql-bypass + client-side-auth-security-project-evidence"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "vuln-expose.vercel.app/xss/comments: 13→14+ — vuln-expose-xss-comments-stored-xss-api-live-oracle + route oracle (GET /api/comments raw <script> payloads)",
+      "vuln-expose.vercel.app/cmdi: enhanced vuln-expose-cmdi-route-live-oracle with 127.0.0.1; whoami JS-bundle CMDi probe",
+      "vuln-expose.vercel.app/network-tools: enhanced network-tools route oracle with hidden_cmdi_ping bundle evidence",
+      "ssrf.vulnlab.dev/gopher: 12 findings — ssrf-vulnlab-gopher-route-live-oracle",
+      "vapi.apisec.ai/vapi/jwt/user: 11 findings — shared vAPI hub without JWT-none route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vapi.apisec.ai Arena routes (jwt/user, serversurfer, stickynotes): shared 11-finding cross-API hub without route-specific JWT-none, SSRF serversurfer, or stored-XSS stickynotes oracles",
-      "auth-security-project.onrender.com/dashboard: post-login-sql-bypass fires but reflected-XSS ?message= dashboard oracle still absent",
-      "auth-security-project.onrender.com/login: SQLi bypass detected via POST login probe but no route-specific reflected-XSS oracle on dashboard"
+      "vapi.apisec.ai Arena routes: shared cross-API hub without route-specific JWT-none, SSRF, or stored-XSS oracles",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: avatar-upload route oracle still absent without OTP session",
+      "vulnerable-web-site.vercel.app/ssrf: auth-gated SSRF lab route oracle still absent",
+      "vulnweb.netlify.app/*: site returns Netlify 404 — lab oracles blocked until redeploy"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "ssrf.vulnlab.dev/gopher": 12,
+    "vuln-expose.vercel.app/xss/comments": 14,
     "vuln-expose.vercel.app/network-tools": 16,
+    "ssrf.vulnlab.dev/gopher": 12,
     "vapi.apisec.ai/vapi/jwt/user": 11,
-    "vapi.apisec.ai/vapi/serversurfer": 11,
-    "vapi.apisec.ai/vapi/stickynotes": 11,
-    "ssrf.vulnlab.dev/parser": 11,
-    "auth-security-project.onrender.com/login": 3
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }
