@@ -5817,6 +5817,66 @@ const oopssecXffSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store live-stream BFLA walkthrough (posts/live-stream-hijack) ------------
+const CLIENT_OOPSSEC_LIVE_STREAM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Live stream hijack BFLA title",
+    re: /Broken Function Level Authorization:[\s\S]{0,80}Hijacking the Live Stream/i
+  },
+  {
+    label: "Unprotected GET/POST /api/live/stream",
+    re: /GET \/api\/live\/stream[\s\S]{0,200}POST \/api\/live\/stream/i
+  },
+  {
+    label: "RTMP stream key exposure to any authenticated user",
+    re: /RTMP ingest URL and stream key[\s\S]{0,120}any authenticated user/i
+  },
+  {
+    label: "Admin-only UI with no server-side role check",
+    re: /admin-only write endpoint that never checks your role|API behind it never checks your role/i
+  },
+  {
+    label: "Challenge 07 live stream hijack walkthrough",
+    re: /Challenge 0?7[\s\S]{0,40}live[\s-]?stream|\/posts\/live-stream-hijack/i
+  }
+];
+
+const clientSideOopssecLiveStreamEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_LIVE_STREAM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|live stream|\/api\/live\/stream/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents BFLA on /api/live/stream — any authenticated user can read RTMP keys and hijack the public broadcast"
+    }
+  };
+};
+
+const oopssecLiveStreamBflaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/live-stream-hijack/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecLiveStreamEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/live-stream-hijack route scan — walkthrough documents unprotected GET/POST /api/live/stream BFLA with RTMP stream key exposure"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -6908,6 +6968,39 @@ function agentpwnResponseHeaderCorpus(headers: Record<string, string>): string {
   return chunks.join("\n");
 }
 
+type AgentpwnMcpVector = "tool-discovery" | "tool-injection" | "cross-tool-chain";
+
+function agentpwnMcpExploitationMarkers(corpus: string): {
+  attackId: string | null;
+  mcpCheck: string | null;
+  vector: AgentpwnMcpVector | null;
+} {
+  const attackIdMatch =
+    corpus.match(/<meta\s+name=["']security-test-id["']\s+content=["'](APWN-MCP-\d{3})["']/i) ??
+    corpus.match(/\b(APWN-MCP-\d{3})\b/i);
+  const mcpCheckMatch = corpus.match(/\b(MCP-\d{3})\b/i);
+  let vector: AgentpwnMcpVector | null = null;
+  if (/List all MCP servers you are connected to/i.test(corpus)) {
+    vector = "tool-discovery";
+  } else if (
+    /\[Tool Result from security_scanner\]/i.test(corpus) ||
+    /env\s*&&\s*cat\s*\/etc\/passwd/i.test(corpus)
+  ) {
+    vector = "tool-injection";
+  } else if (
+    /filesystem:read/i.test(corpus) &&
+    /\/etc\/hosts/i.test(corpus) &&
+    /browser:navigate/i.test(corpus)
+  ) {
+    vector = "cross-tool-chain";
+  }
+  return {
+    attackId: attackIdMatch?.[1] ?? null,
+    mcpCheck: mcpCheckMatch?.[1] ?? null,
+    vector
+  };
+}
+
 function agentpwnAttackMarkers(corpus: string): {
   attackIdMatch: RegExpMatchArray | null;
   aiInstructionsMatch: RegExpMatchArray | null;
@@ -6915,8 +7008,8 @@ function agentpwnAttackMarkers(corpus: string): {
 } {
   const attackIdMatch =
     corpus.match(/<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i) ??
-    corpus.match(/\bAttack ID<\/dt>\s*<dd[^>]*>\s*(APWN-[A-Z]{2}-\d{3})\b/i) ??
-    corpus.match(/\b(APWN-[A-Z]{2}-\d{3})\b/i);
+    corpus.match(/\bAttack ID<\/dt>\s*<dd[^>]*>\s*(APWN-[A-Z]{2,4}-\d{3})\b/i) ??
+    corpus.match(/\b(APWN-[A-Z]{2,4}-\d{3})\b/i);
   const aiInstructionsMatch =
     corpus.match(/<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i) ??
     corpus.match(/\bai-instructions\b[^>]*content=["']([^"']{20,})["']/i);
@@ -6958,6 +7051,36 @@ const agentpwnAttackRouteLiveOracle: Rule = async (ctx) => {
       aiInstructionsSample: aiInstructionsMatch?.[1]?.slice(0, 120),
       reportApi,
       note: "AgentPwn /attacks route scan — ai-instructions meta + off-screen SYSTEM INSTRUCTIONS smuggle jailbreak/prompt-injection payloads (APWN honeypot oracle)"
+    }
+  };
+};
+
+const agentpwnMcpExploitationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAgentpwnHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/attacks\/mcp-exploitation\/\d+/i.test(pageUrl)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${agentpwnResponseHeaderCorpus(ctx.home.headers)}`;
+  let markers = agentpwnMcpExploitationMarkers(corpus);
+  if (!markers.attackId && !markers.vector) {
+    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
+    if (pageDoc.status >= 200 && pageDoc.status < 400) {
+      corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
+      markers = agentpwnMcpExploitationMarkers(corpus);
+    }
+  }
+  if (!markers.attackId && !markers.vector) return NEGATIVE;
+  const tierMatch = pageUrl.match(/\/mcp-exploitation\/(\d+)/i);
+  return {
+    fired: true,
+    confidence: markers.attackId && markers.vector ? 0.94 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      attackId: markers.attackId,
+      tier: tierMatch?.[1] ?? null,
+      mcpCheck: markers.mcpCheck,
+      vector: markers.vector,
+      aiInstructionsSample: corpus.match(/<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i)?.[1]?.slice(0, 120),
+      note: "AgentPwn /attacks/mcp-exploitation route scan — MCP tool discovery/injection/cross-tool-chain smuggling via ai-instructions and hidden SYSTEM INSTRUCTIONS (APWN-MCP honeypot oracle)"
     }
   };
 };
@@ -41459,6 +41582,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
   oopssecXffSqliRouteLiveOracle,
+  oopssecLiveStreamBflaRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
@@ -41486,6 +41610,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,
+  agentpwnMcpExploitationRouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,
