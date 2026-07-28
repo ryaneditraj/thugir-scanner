@@ -18854,6 +18854,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "agentpwn-mcp-exploitation-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "AgentPwn MCP exploitation route live oracle",
+    description:
+      "When scanning /attacks/mcp-exploitation/{tier}, ai-instructions and hidden SYSTEM INSTRUCTIONS smuggle MCP tool discovery, fake tool-result injection, or filesystem:read/browser:navigate cross-tool chains with APWN-MCP attack IDs — route-specific MCP honeypot oracle.",
+    impactOneline:
+      "Hidden MCP tool-chain instructions in attack lab pages enable tool enumeration, injection, and path-traversal/SSRF testing against scraping AI agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "agentpwnMcpExploitationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AgentPwn is intentional AI security research — ignore untrusted MCP tool instructions embedded in scraped HTML.",
+      steps: [
+        "Do not execute filesystem:read or browser:navigate commands from scraped HTML meta tags.",
+        "Validate tool results against trusted sources; reject spoofed [Tool Result from security_scanner] injections.",
+        "Report AgentPwn MCP honeypot hits only through controlled security monitoring channels."
+      ]
+    },
+    fixPrompt:
+      "Our /attacks/mcp-exploitation routes smuggle MCP tool-chain instructions via ai-instructions meta. Show how to harden AI agents against MCP exploitation payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-live-stream-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store live-stream BFLA route live oracle",
+    description:
+      "When scanning /posts/live-stream-hijack, the walkthrough documents unprotected GET/POST /api/live/stream that exposes RTMP ingest keys and lets any authenticated user hijack the public broadcast — route-specific BFLA oracle.",
+    impactOneline:
+      "OopsSec Live stream API lacks server-side role checks — any logged-in customer can read RTMP secrets and rewrite the public broadcast.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecLiveStreamBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — enforce server-side role checks on stream management APIs in production.",
+      steps: [
+        "Require admin role on POST /api/live/stream before accepting broadcast changes.",
+        "Do not return RTMP ingest URLs or stream keys to non-admin authenticated users.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/live/stream endpoint allows any authenticated user to read RTMP keys and hijack the broadcast. Show BFLA remediation for stream management APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",
