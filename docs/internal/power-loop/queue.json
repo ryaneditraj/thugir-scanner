@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T11:34:25.138Z",
+  "updated_at": "2026-07-28T12:10:11.515Z",
   "discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "OWASP FinBot CTF — vendor portal with agentic AI prompt-injection surface (GenAI-Security-Project/finbot-ctf)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/admin",
+      "source": "OWASP FinBot CTF — admin portal policy-bypass / tool-poisoning oracle (owasp-finbot-ctf.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/basket/1",
+      "source": "Escape.tech Juice Shop demo — BOLA basket IDOR oracle GET /rest/basket/1",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/jailbreak/4",
+      "source": "opena2a/agentpwn — APWN-JB-004 jailbreak attack payload page (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/capability-abuse/3",
+      "source": "opena2a/agentpwn — APWN-CA-003 capability-abuse attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.agentpwn.com/attacks/data-exfiltration/2",
       "source": "opena2a/agentpwn — APWN-DE-002 data-exfiltration attack demo (Show HN DVAA browse target)",
@@ -10956,5 +10981,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 5
+  "discovery_urls_added": 10
 }
