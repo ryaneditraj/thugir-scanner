@@ -39194,6 +39194,143 @@ const dvwuNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+function isAllSeeingEyeHost(ctx: RuleContext): boolean {
+  return /all-seeing-eye/i.test(ctx.origin);
+}
+
+async function probeAllSeeingEyeReadXxe(ctx: RuleContext): Promise<RuleResult | null> {
+  const readUrl = new URL("/api/read", ctx.origin);
+  readUrl.searchParams.set("path", "/etc/passwd");
+  const doc = await ctx.probe.get(readUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (
+    !/<!DOCTYPE\s+p\s*\[[\s\S]*?<!ENTITY\s+data\s+SYSTEM\s+["']\/etc\/passwd["']/i.test(doc.body)
+  ) {
+    return null;
+  }
+  if (!/All-Seeing|&data;|\/etc\/passwd/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: readUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "GET /api/read?path= resolves external XML entity against /etc/passwd — All-Seeing Eye XXE arbitrary file read oracle"
+    }
+  };
+}
+
+async function probeAllSeeingEyeHelloXxe(ctx: RuleContext): Promise<RuleResult | null> {
+  const helloUrl = new URL("/api/hello", ctx.origin);
+  helloUrl.searchParams.set("path", "/etc/passwd");
+  const doc = await ctx.probe.get(helloUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/<xsl:copy-of\s+select=["']document\(['"]read\?path=/i.test(doc.body)) return null;
+  if (!/%2Fetc%2Fpasswd|\/etc\/passwd/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: helloUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "GET /api/hello?path= returns XSLT that chains document('read?path=') for arbitrary file read — All-Seeing Eye Chrome <116 file disclosure oracle"
+    }
+  };
+}
+
+const allSeeingEyeReadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAllSeeingEyeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await probeAllSeeingEyeReadXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const allSeeingEyeHelloRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAllSeeingEyeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await probeAllSeeingEyeHelloXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const REDIRECT_SSRF_BYPASS_PAYLOAD = "//https:///google.com/%2e%2e";
+
+async function probeRedirectWhitelistBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  const bypassUrl = new URL("/api/redirect", ctx.origin);
+  bypassUrl.searchParams.set("url", REDIRECT_SSRF_BYPASS_PAYLOAD);
+  const bypassDoc = await ctx.probe.get(bypassUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = bypassDoc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(bypassDoc.status)) return null;
+  if (!/^\/\/https:\/\/\/|https:\/\/https/i.test(location)) return null;
+  const blockedUrl = new URL("/api/redirect", ctx.origin);
+  blockedUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const blockedDoc = await ctx.probe.get(blockedUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (blockedDoc.status !== 403) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      bypassUrl: bypassUrl.toString(),
+      location,
+      blockedUrl: blockedUrl.toString(),
+      blockedStatus: blockedDoc.status,
+      snippet: bypassDoc.body.slice(0, 200).trim(),
+      note: "GET /api/redirect?url= accepts malformed //https:/// bypass while blocking AWS metadata — open redirect whitelist bypass SSRF oracle"
+    }
+  };
+}
+
+const istEduSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/ssrf|redirect)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeRedirectWhitelistBypass(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /labs/ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
+    }
+  };
+};
+
+const dvwuSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/ssrf|redirect)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeRedirectWhitelistBypass(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
+    }
+  };
+};
+
 const vulnExposeXssPlaygroundRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnExposeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -40794,6 +40931,10 @@ export const RULES: Record<string, Rule> = {
   dvwuSearchXssRouteLiveOracle,
   dvwuNoticesLfiRouteLiveOracle,
   dvwuCsrfNewsletterCrlfRouteLiveOracle,
+  allSeeingEyeReadRouteLiveOracle,
+  allSeeingEyeHelloRouteLiveOracle,
+  istEduSsrfRedirectRouteLiveOracle,
+  dvwuSsrfRedirectRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
   clientSideArchonTrainingEvidence,
