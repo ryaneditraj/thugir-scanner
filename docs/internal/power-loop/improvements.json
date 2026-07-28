@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended istEduPortalSqliRouteLiveOracle to match /labs/sqli; POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful; ist-edu-bd.vercel.app/labs/sqli 8→10 findings; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-notices-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended istEduNoticesLfiRouteLiveOracle to match /labs/sqli|idor|xss|csrf|ssrf; GET /api/notices?file=../../../etc/passwd returns passwd markers; ist-edu-bd.vercel.app/labs/sqli+idor 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-dashboard-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle localStorage student_id + Grade Upload + student records on /labs/idor; ist-edu-bd.vercel.app/labs/idor 8→10 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-dashboard-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: same SPA IDOR lab markers on dvwu.vercel.app/labs/idor; 8→10 findings with dvwu-dashboard-idor-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnweb.netlify.app",
       "slug": "vulnweb-comments-xss-route-live-oracle",
       "status": "shipped",

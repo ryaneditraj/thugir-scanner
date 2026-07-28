@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T09:15:00.000Z",
+  "updated_at": "2026-07-28T10:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3165,
-  "total_findings": 32265,
+  "total_sites_scanned": 3168,
+  "total_findings": 32285,
   "critical_findings": 78,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2174,
-  "discovery_findings": 26795,
-  "improvements_shipped": 1162,
-  "last_run": "2026-07-28T09:15:00.000Z",
+  "discovery_findings": 26815,
+  "improvements_shipped": 1166,
+  "last_run": "2026-07-28T10:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 17,
@@ -48,37 +48,35 @@
           ]
         }
       },
-      "note": "Primary Heroku healthy 6/6 (17 findings); staging fallback available; secret-resend slug still absent"
+      "note": "Primary Heroku healthy 6/6 (17 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 6,
-      "focus": "vulnweb Netlify SPA route oracles (comments XSS, search SQLi, profile IDOR)",
-      "improvements_shipped_this_run": 3
+      "findings": 30,
+      "focus": "IST Edu / DVWU labs route oracle expansion (SQLi portal, notices LFI, dashboard IDOR)",
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark category misses",
-      "vulnweb.netlify.app/comments: 1→2 findings — vulnweb-comments-xss-route-live-oracle fires SPA bundle XSS markers",
-      "vulnweb.netlify.app/search: thin pass→2 findings — vulnweb-search-sqli-route-live-oracle fires SQLi catalog markers",
-      "vulnweb.netlify.app/profile/1: thin pass→2 findings — vulnweb-profile-idor-route-live-oracle fires Password (Exposed!) IDOR markers"
+      "ist-edu-bd.vercel.app/labs/sqli: 8→10 — ist-edu-portal-sqli-route-live-oracle + ist-edu-notices-lfi-route-live-oracle on /labs/sqli",
+      "ist-edu-bd.vercel.app/labs/idor: 8→10 — ist-edu-dashboard-idor-route-live-oracle + notices LFI route oracle",
+      "dvwu.vercel.app/labs/idor: 8→10 — dvwu-dashboard-idor-route-live-oracle + dvwu-notices-lfi-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "all-seeing-eye-six.vercel.app: Vercel Security Checkpoint intermittently blocks /api/hello and /api/read probes from cloud agent IPs",
-      "seclab.vercel.app/api/xss-vulnerable: Angular stub deploy — Next.js API routes return HTTP 405 (rejected)",
-      "vulnweb.netlify.app/csrf: no /csrf SPA route — CSRF module catalog-only (rejected)"
+      "vaultapp-omega.vercel.app: player/player123 login returns 401 — live BOLA oracle on /api/users/* not shippable without working demo auth",
+      "all-seeing-eye-six.vercel.app: Vercel Security Checkpoint may block /api/hello and /api/read from some cloud IPs"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+    "ist-edu-bd.vercel.app/labs/sqli": 10,
+    "ist-edu-bd.vercel.app/labs/idor": 10,
+    "dvwu.vercel.app/labs/idor": 10,
     "vulnweb.netlify.app/comments": 2,
-    "vulnweb.netlify.app/search": 2,
-    "vulnweb.netlify.app/profile/1": 2,
-    "ssrf.vulnlab.dev/gopher": 12,
-    "ssrf.vulnlab.dev/parser": 11,
-    "vapi.apisec.ai/vapi/api8/user/secret": 12
+    "ssrf.vulnlab.dev/gopher": 12
   }
 }
