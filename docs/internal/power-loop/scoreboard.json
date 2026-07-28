@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T01:13:48.347Z",
+  "updated_at": "2026-07-28T02:27:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3080,
-  "total_findings": 31508,
+  "total_sites_scanned": 3090,
+  "total_findings": 31692,
   "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2144,
-  "discovery_findings": 26406,
-  "improvements_shipped": 1163,
-  "last_run": "2026-07-28T01:13:48.347Z",
+  "discovery_urls_added": 2149,
+  "discovery_findings": 26484,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-28T02:27:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "02",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 17,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 463,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,42 @@
           ]
         }
       },
-      "note": "Primary healthy 6/6 (17 findings); jwt-alg-none-accepted + chatbot oracles + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings) with juice-shop-jwt-alg-none-live-oracle + chatbot oracles + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 99,
-      "focus": "vuln-expose sqli/login+search + xss/playground+comments + wrongsecrets challenge-20 + queue drain blog/invoices/ssrf-scheme",
+      "findings": 78,
+      "focus": "vAPI Arena jwt/user + serversurfer + stickynotes + auth-security dashboard/login + queue drain ssrf gopher/parser + vuln-expose network-tools",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
-      "vuln-expose.vercel.app/sqli/login: 14 findings — vuln-expose-auth-bypass-api-live-oracle + vibe-hardcoded-demo-credentials on route scan",
-      "vuln-expose.vercel.app/sqli/search: 14 findings — shared VulnSite hub with SQLi API oracles",
-      "vuln-expose.vercel.app/xss/playground: 14 findings — client-side-vuln-expose-lab-module-evidence + shared API oracles",
-      "vuln-expose.vercel.app/xss/comments: 13 findings — shared hub without stored-XSS /api/comments route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-20: 10 findings — wrongsecrets-challenge-live-oracle via C++ binary/wrongsecrets-cplus markers",
-      "vuln-expose.vercel.app/blog: 13 findings — shared VulnSite hub without blog-stored-XSS route oracle",
-      "ssrf.vulnlab.dev/scheme: 8 findings — cross-lab SSRF oracles without file:// scheme-abuse route oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503, staging fallback ok",
+      "ssrf.vulnlab.dev/gopher: 12 findings — ssrf-vulnlab-gopher-route-live-oracle + cross-lab SSRF oracle set",
+      "ssrf.vulnlab.dev/parser: 11 findings — ssrf-vulnlab-parser-route-live-oracle + URL-parser disagreement oracle",
+      "vuln-expose.vercel.app/network-tools: 16 findings — vuln-expose-network-tools-route-live-oracle + SSRF ping oracle",
+      "vapi.apisec.ai/vapi/jwt/user: 11 findings — shared vAPI cross-API hub without JustWeakToken JWT-none route oracle",
+      "vapi.apisec.ai/vapi/serversurfer: 11 findings — shared hub without ServerSurfer SSRF route oracle",
+      "vapi.apisec.ai/vapi/stickynotes: 11 findings — shared hub without StickyNotes stored-XSS route oracle",
+      "auth-security-project.onrender.com/login: 3 findings — post-login-sql-bypass + client-side-auth-security-project-evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vuln-expose.vercel.app/xss/playground|comments: shared 13-14 finding hub without route-specific stored-XSS playground or /api/comments POST oracle",
-      "vuln-expose.vercel.app/sqli/search: union-extraction route oracle absent beyond shared /api/search probe",
-      "vuln-expose.vercel.app/blog|invoices: shared 13-finding hub without route-specific blog-XSS or invoice-SQLi oracles"
+      "vapi.apisec.ai Arena routes (jwt/user, serversurfer, stickynotes): shared 11-finding cross-API hub without route-specific JWT-none, SSRF serversurfer, or stored-XSS stickynotes oracles",
+      "auth-security-project.onrender.com/dashboard: post-login-sql-bypass fires but reflected-XSS ?message= dashboard oracle still absent",
+      "auth-security-project.onrender.com/login: SQLi bypass detected via POST login probe but no route-specific reflected-XSS oracle on dashboard"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 17,
-    "vuln-expose.vercel.app/sqli/login": 14,
-    "vuln-expose.vercel.app/sqli/search": 14,
-    "vuln-expose.vercel.app/xss/playground": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-20": 10,
-    "vuln-expose.vercel.app/blog": 13,
-    "vuln-expose.vercel.app/invoices": 13,
-    "ssrf.vulnlab.dev/scheme": 8
+    "juice-shop-staging.herokuapp.com": 14,
+    "ssrf.vulnlab.dev/gopher": 12,
+    "vuln-expose.vercel.app/network-tools": 16,
+    "vapi.apisec.ai/vapi/jwt/user": 11,
+    "vapi.apisec.ai/vapi/serversurfer": 11,
+    "vapi.apisec.ai/vapi/stickynotes": 11,
+    "ssrf.vulnlab.dev/parser": 11,
+    "auth-security-project.onrender.com/login": 3
   }
 }
