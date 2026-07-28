@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T10:05:00.000Z",
+  "updated_at": "2026-07-28T11:34:25.138Z",
   "discovery_urls": [
+    {
+      "url": "https://www.agentpwn.com/attacks/data-exfiltration/2",
+      "source": "opena2a/agentpwn — APWN-DE-002 data-exfiltration attack demo (Show HN DVAA browse target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/jailbreak/3",
+      "source": "opena2a/agentpwn — APWN-JB-003 jailbreak attack payload page (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/context-manipulation/2",
+      "source": "opena2a/agentpwn — APWN-CM-002 context-manipulation attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/workshop/api/merchant/contact_mechanic",
+      "source": "OWASP crAPI v1 — BFLA POST /workshop/api/merchant/contact_mechanic (APIsec hosted crapi.apisec.ai)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/community/api/v2/community/posts/recent",
+      "source": "OWASP crAPI v1 — community posts BOLA oracle GET /community/api/v2/community/posts/recent (APIsec hosted)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://crapi.apisec.ai/identity/api/v2/user/vehicle/1",
       "source": "OWASP crAPI v1 — API1 BOLA GET /identity/api/v2/user/vehicle/{id} without owner auth (APIsec hosted crapi.apisec.ai)",
