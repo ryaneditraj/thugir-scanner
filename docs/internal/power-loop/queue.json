@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T03:05:00.000Z",
+  "updated_at": "2026-07-28T04:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp — unauthenticated IDOR users API GET /api/users/:id (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — IDOR documents API GET /api/documents/:id oracle (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/api8/user/secret",
+      "source": "roottusk/vAPI — API8 security misconfiguration secret endpoint GET /vapi/api8/user/secret (APIsec hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/register",
+      "source": "OWASP NodeGoat — NoSQL injection registration oracle POST /register (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/sqli",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi lab module with live injection oracle (dvwu.vercel.app deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://seclab.vercel.app/api/sqli-vulnerable",
       "source": "DaniSam-STU/security-lab — raw string-concat SQLi API route (GitHub README Vercel deploy)",
