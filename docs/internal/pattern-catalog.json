@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T03:05:29.406Z",
-  "total": 945,
-  "uniqueSlugs": 940,
+  "generatedAt": "2026-07-28T04:06:22.778Z",
+  "total": 948,
+  "uniqueSlugs": 943,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 927,
+    "generic": 930,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 860,
+    "deep": 863,
     "continuous": 0
   },
   "byCategory": {
@@ -26,9 +26,9 @@
     "Information exposure": 1,
     "Information disclosure": 69,
     "Security misconfiguration": 76,
-    "Broken authentication": 67,
-    "Injection": 188,
-    "Cross-site scripting": 137,
+    "Broken authentication": 68,
+    "Injection": 189,
+    "Cross-site scripting": 138,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 33,
@@ -715,6 +715,7 @@
     "duck-store-users-route-live-oracle",
     "dvrag-admin-config-live-oracle",
     "dvrag-rag-pipeline-live-oracle",
+    "dvwu-portal-sqli-route-live-oracle",
     "exposed-api-config",
     "exposed-config-backup",
     "exposed-env-file",
@@ -902,6 +903,7 @@
     "vapi-jwt-weak-token-route-live-oracle",
     "vapi-serversurfer-ssrf-route-live-oracle",
     "vapi-stickynotes-stored-xss-route-live-oracle",
+    "vaultapp-lab-guide-route-live-oracle",
     "verbose-error-disclosure",
     "vibe-algolia-admin-in-client",
     "vibe-auth0-secret-in-client",
@@ -933,6 +935,7 @@
     "vuln-expose-xss-comments-route-live-oracle",
     "vuln-expose-xss-comments-stored-xss-api-live-oracle",
     "vuln-expose-xss-csp-bypass-route-live-oracle",
+    "vuln-expose-xss-playground-route-live-oracle",
     "vulnbank-ai-anonymous-chat-live-oracle",
     "vulnbank-bill-payments-negative-amount-live-oracle",
     "vulnbank-bopla-register-live-oracle",
