@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T15:12:01.980Z",
-  "total": 969,
-  "uniqueSlugs": 964,
+  "generatedAt": "2026-07-28T16:16:41.140Z",
+  "total": 970,
+  "uniqueSlugs": 965,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 951,
+    "generic": 952,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 884,
+    "deep": 885,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 68,
-    "Injection": 198,
+    "Injection": 199,
     "Cross-site scripting": 141,
     "general": 20,
     "SSRF": 5,
@@ -792,6 +792,7 @@
     "nodegoat-tutorial-a9-route-live-oracle",
     "notices-file-lfi-probe",
     "oauth-oidc-metadata-exposed",
+    "oopssec-xff-sqli-route-live-oracle",
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
     "pentest-forge-linked-lab-probe",

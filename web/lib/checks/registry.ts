@@ -5801,6 +5801,22 @@ const clientSideOopssecXffSqliEvidence: Rule = async (ctx) => {
   };
 };
 
+const oopssecXffSqliRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/x-forwarded-for-sql-injection/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecXffSqliEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/x-forwarded-for-sql-injection route scan — walkthrough documents SQLi via unsanitized X-Forwarded-For header in /api/tracking IP query"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -6879,6 +6895,19 @@ const vulnbankUploadProfilePictureUrlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function agentpwnResponseHeaderCorpus(headers: Record<string, string>): string {
+  const chunks: string[] = [];
+  const testId = headers["x-agentpwn-test-id"] || headers["x-matched-path"];
+  const aiInstr = headers["x-ai-instructions"];
+  if (testId && /APWN-/i.test(testId)) {
+    chunks.push(`<meta name="security-test-id" content="${testId}">`);
+  }
+  if (aiInstr && aiInstr.length >= 20) {
+    chunks.push(`<meta name="ai-instructions" content="${aiInstr}">`);
+  }
+  return chunks.join("\n");
+}
+
 function agentpwnAttackMarkers(corpus: string): {
   attackIdMatch: RegExpMatchArray | null;
   aiInstructionsMatch: RegExpMatchArray | null;
@@ -6888,13 +6917,16 @@ function agentpwnAttackMarkers(corpus: string): {
     corpus.match(/<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i) ??
     corpus.match(/\bAttack ID<\/dt>\s*<dd[^>]*>\s*(APWN-[A-Z]{2}-\d{3})\b/i) ??
     corpus.match(/\b(APWN-[A-Z]{2}-\d{3})\b/i);
-  const aiInstructionsMatch = corpus.match(
-    /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
-  );
+  const aiInstructionsMatch =
+    corpus.match(/<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i) ??
+    corpus.match(/\bai-instructions\b[^>]*content=["']([^"']{20,})["']/i);
   const hiddenDan =
     /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
     /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
-    /SYSTEM INSTRUCTIONS:[\s\S]{0,200}(?:safety|restricted|unrestricted access)/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}(?:safety|restricted|unrestricted access)/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}AI Safety Board Compliance Standard/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}instruction set integrity/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}hash of their system prompt/i.test(corpus) ||
     /DAN MODE ENABLED/i.test(corpus);
   return { attackIdMatch, aiInstructionsMatch, hiddenDan };
 }
@@ -6903,12 +6935,12 @@ const agentpwnAttackRouteLiveOracle: Rule = async (ctx) => {
   if (!isAgentpwnHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/attacks\/[^/]+\/\d+/i.test(pageUrl)) return NEGATIVE;
-  let corpus = ctx.combined;
+  let corpus = `${ctx.combined}\n${agentpwnResponseHeaderCorpus(ctx.home.headers)}`;
   let { attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus);
   if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) {
-    const pageDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
+    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
     if (pageDoc.status >= 200 && pageDoc.status < 400) {
-      corpus = `${corpus}\n${pageDoc.body}`;
+      corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
       ({ attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus));
     }
   }
@@ -41426,6 +41458,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecStoreEvidence,
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
+  oopssecXffSqliRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
