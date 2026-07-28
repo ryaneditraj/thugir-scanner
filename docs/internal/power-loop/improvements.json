@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:all-seeing-eye-six.vercel.app",
+      "slug": "all-seeing-eye-read-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/read?path=/etc/passwd returns DOCTYPE with <!ENTITY data SYSTEM \"/etc/passwd\">; all-seeing-eye-six.vercel.app 5→7 findings; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:all-seeing-eye-six.vercel.app",
+      "slug": "all-seeing-eye-hello-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/hello?path=/etc/passwd returns XSLT document('read?path=%2Fetc%2Fpasswd'); all-seeing-eye-six.vercel.app 5→7 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-ssrf-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=//https:///google.com/%2e%2e returns 302 Location https://https/// while metadata URL returns 403; ist-edu-bd.vercel.app/labs/ssrf 8→9 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-ssrf-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=//https:///google.com/%2e%2e returns 302 Location //https:///google.com/%2e%2e while metadata URL returns 403; dvwu.vercel.app/labs/ssrf 9→10 findings; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-csrf-newsletter-crlf-route-live-oracle",
       "status": "shipped",
