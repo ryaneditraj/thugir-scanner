@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/login username:admin password:admin returns access_token JWT with role:admin and requires_totp:false; duck-store.escape.tech/api/v1/auth/login findings 12→16 with weak-credentials live + route oracles; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle 404 handler uses a.get('redirect') for <a href> without validation; duck-store.escape.tech/nonexistent?redirect=https://evil-open-redirect-probe.example findings 19 with open-redirect live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-referral-code-abuse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register referral_code:admin grants account_credit:5.0 vs baseline 0.0; duck-store.escape.tech/api/v1/auth/register findings 16 with referral-abuse live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-testimonials-stored-xss-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/testimonials/ with <img src=x onerror=thugirStoredXss> returns unsanitized content echoed on GET /api/v1/testimonials/; duck-store.escape.tech/api/v1/testimonials findings 16→17 with stored-xss + route oracles; benchmark juice-shop-staging 14 findings 6/6 maintained"

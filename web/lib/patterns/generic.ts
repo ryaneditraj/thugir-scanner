@@ -23866,6 +23866,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-auth-login-weak-credentials-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Duck Store weak admin credentials live oracle",
+    description:
+      "POST /api/v1/auth/login accepts default admin/admin credentials and returns an admin JWT without MFA — the Escape Duck Store weak-credential training oracle.",
+    impactOneline:
+      "Default admin credentials grant full admin API access on the Duck Store lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAuthLoginWeakCredentialsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default credentials; enforce MFA on admin accounts.",
+      steps: [
+        "Remove hard-coded admin passwords from lab deployments.",
+        "Require TOTP for privileged logins.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store /api/v1/auth/login accepts admin/admin. Show credential hardening and MFA enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-auth-login-weak-credentials-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Duck Store /api/v1/auth/login weak credentials route live oracle",
+    description:
+      "When scanning /api/v1/auth/login, POST admin/admin returns admin JWT without MFA — route-specific weak-credential oracle.",
+    impactOneline:
+      "Route-specific scans should confirm login endpoints reject default admin credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAuthLoginWeakCredentialsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default credentials on the login route; enforce MFA for admins.",
+      steps: [
+        "Block known-default username/password pairs at login.",
+        "Require TOTP before issuing admin tokens.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/auth/login route accepts admin/admin. Show route-specific credential hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Duck Store 404 open-redirect live oracle",
+    description:
+      "The Duck Store SPA 404 page reads redirect from URLSearchParams and renders <a href={redirect}> without validation — the Escape Duck Store open-redirect training oracle.",
+    impactOneline:
+      "Unvalidated redirect parameters on 404 pages enable phishing via trusted duck-store.escape.tech links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist redirect targets to same-origin relative paths only.",
+      steps: [
+        "Reject external URLs in redirect query parameters.",
+        "Use relative paths for Return to Home links.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store 404 page uses an unvalidated redirect query param in href. Show open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Duck Store open-redirect route live oracle",
+    description:
+      "When scanning routes with redirect= query params, the 404 handler links to external URLs without validation — route-specific open-redirect oracle.",
+    impactOneline:
+      "Route-specific scans should confirm redirect parameters cannot target external hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets on 404 and error routes.",
+      steps: [
+        "Allowlist same-origin paths for redirect parameters.",
+        "Strip external hosts from Return to Home links.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store redirect route accepts external URLs. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-referral-code-abuse-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Duck Store referral code abuse live oracle",
+    description:
+      "POST /api/v1/auth/register with referral_code=admin grants $5 account_credit without validating referral ownership — the Escape Duck Store referral-abuse training oracle.",
+    impactOneline:
+      "Predictable referral codes let attackers farm signup credits on every new account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReferralCodeAbuseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Issue per-user referral tokens; validate referrer exists before granting credit.",
+      steps: [
+        "Reject guessable referral codes like usernames.",
+        "Credit referrers only after verified signup milestones.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/auth/register accepts referral_code=admin for $5 credit. Show referral validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-referral-code-abuse-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Duck Store /api/v1/auth/register referral abuse route live oracle",
+    description:
+      "When scanning /api/v1/auth/register, referral_code=admin grants signup credit without ownership validation — route-specific referral-abuse oracle.",
+    impactOneline:
+      "Route-specific scans should confirm register endpoints cannot be abused for free credit.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReferralCodeAbuseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate referral codes on the register route before granting credit.",
+      steps: [
+        "Use opaque per-user referral tokens.",
+        "Reject public usernames as referral codes.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/auth/register route grants credit for referral_code=admin. Show route-specific referral validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvga-route-live-oracle",
     platform: "generic",
     category: "Information disclosure",
