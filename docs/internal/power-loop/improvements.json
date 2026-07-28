@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-fetch-url-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/uploads/fetch-url?url=https://httpbin.org/get returns status_code:200 with httpbin response preview and python-httpx User-Agent; duck-store.escape.tech/api/v1/uploads/import-from-url findings 10→12 with duck-store-ssrf-fetch-url-live-oracle + duck-store-ssrf-fetch-url-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp/tools/list_coupons (Accept: application/json, text/event-stream) returns VIP50/EMPLOYEE75/INTERNAL100 with is_public:false in SSE JSON-RPC payload; duck-store.escape.tech/mcp/tools/list_coupons findings 10→13 with duck-store-mcp-coupons-disclosure-live-oracle + duck-store-mcp-coupons-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isVapiHost extended to vapi.tools.escape.tech + vapiRouteLiveOracle confirms OWASP API Top 10 lab and API1 BOLA returns flag{api1_*}; vapi.tools.escape.tech/ findings 4→13 with vapi-route-live-oracle + vapi-api1-bola-live-oracle + vapi-api10-logging-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-orders-bola-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/orders/1 returns user_id, line items, total_price, status without auth; duck-store.escape.tech/api/v1/orders/1 findings 8→11 with duck-store-orders-bola-live-oracle + duck-store-orders-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
@@ -15011,6 +15029,31 @@
       "source": "discovery:www.agentpwn.com",
       "slug": "agentpwn-attack-id-category-regex-broadening",
       "shipped_at": "2026-07-28T17:21:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-fetch-url-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-fetch-url-route-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-route-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-route-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
     }
   ]
 }

@@ -17268,6 +17268,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI live instance route oracle",
+    description:
+      "When scanning any route on vapi.tools.escape.tech, home re-fetch confirms the OWASP API Top 10 training lab and API1 BOLA returns another user's record with flag — route-specific vAPI live oracle.",
+    impactOneline:
+      "Public vAPI instances expose broken API authorization patterns attackers can replay against production REST APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — never deploy similar broken-auth patterns to production.",
+      steps: [
+        "Run vAPI only on isolated lab infrastructure with no production data.",
+        "Enforce object-level authorization on every API route in production.",
+        "Remove vAPI Postman collection references from public marketing pages."
+      ]
+    },
+    fixPrompt:
+      "We host a vAPI-style OWASP API Top 10 exercise lab on vapi.tools.escape.tech. Show how to isolate it and fix BOLA on production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-mechanic-report-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -23420,6 +23446,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our coupons route exposes private promotion codes without auth. Show route-specific business-logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-ssrf-fetch-url-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Duck Store fetch-url SSRF live oracle",
+    description:
+      "GET /api/v1/uploads/fetch-url?url= fetches attacker-controlled URLs server-side and returns status_code, content_type, and response preview — the Escape Duck Store SSRF training oracle.",
+    impactOneline:
+      "Server-side URL fetchers enable SSRF to internal services, cloud metadata, and port scanning.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreSsrfFetchUrlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations and block internal IP ranges.",
+      steps: [
+        "Resolve and validate URLs before fetching; deny link-local and metadata IPs.",
+        "Restrict fetch-url to trusted preview domains only.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store /api/v1/uploads/fetch-url endpoint fetches arbitrary URLs server-side. Show SSRF remediation for URL preview features.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-ssrf-fetch-url-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Duck Store uploads SSRF route live oracle",
+    description:
+      "When scanning /api/v1/uploads/fetch-url or /import-from-url, unauthenticated probes confirm server-side URL fetching with response preview — route-specific SSRF oracle.",
+    impactOneline:
+      "Route-specific scans should surface SSRF in image-import and link-preview upload handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreSsrfFetchUrlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF on upload URL preview endpoints.",
+      steps: [
+        "Validate final fetch destinations against an allowlist.",
+        "Deny private and metadata IP ranges before outbound requests.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our uploads route fetches arbitrary URLs for previews. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-coupons-disclosure-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP coupon disclosure live oracle",
+    description:
+      "POST /mcp/tools/list_coupons returns non-public coupon codes (VIP50, EMPLOYEE75, INTERNAL100 with is_public:false) without authentication — the Escape Duck Store MCP tool disclosure oracle.",
+    impactOneline:
+      "Unauthenticated MCP tool calls can leak private promotion codes and business-logic secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpCouponsDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on MCP tool endpoints and filter private data from tool responses.",
+      steps: [
+        "Gate MCP tools behind session or API-key authentication.",
+        "Strip is_public:false coupons from list_coupons responses for anonymous callers.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP list_coupons tool exposes private coupon codes without auth. Show MCP access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-coupons-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP coupons route live oracle",
+    description:
+      "When scanning /mcp/tools/list_coupons, unauthenticated MCP tool/call probes return private promotion codes — route-specific MCP disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should surface excessive data exposure on MCP coupon tools.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpCouponsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict MCP coupon tools to authenticated admin clients.",
+      steps: [
+        "Require auth on /mcp/tools/list_coupons.",
+        "Filter private coupons from MCP tool responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /mcp/tools/list_coupons route leaks private codes without auth. Show route-specific MCP remediation.",
     version: 1,
     enabled: true
   },
