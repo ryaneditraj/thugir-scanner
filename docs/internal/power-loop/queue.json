@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T22:05:00.000Z",
+  "updated_at": "2026-07-28T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/products",
+      "source": "Escape Duck Store — negative product price business-logic oracle POST/PUT /api/v1/admin/products (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — broken access control oracle PUT /api/v1/testimonials/{id} (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp",
+      "source": "Escape Duck Store — MCP unauthenticated access oracle /mcp/* (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
+      "source": "Escape Duck Store — 2FA bypass oracle POST /api/v1/auth/login/totp (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api1/user/1",
+      "source": "roottusk/vAPI — API1 BOLA oracle GET /vapi/api1/user/{id} (Escape hosted vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
       "source": "Escape Duck Store — 100% discount coupon + shipping-bypass business-logic oracle POST /api/v1/orders/checkout (vulnerabilities catalog)",
