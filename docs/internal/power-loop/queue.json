@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T05:30:00.000Z",
+  "updated_at": "2026-07-28T06:05:49.405Z",
   "discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/csrf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — CSRF lab module with missing token oracle (dvwu.vercel.app deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/ssrf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SSRF lab module with server-side fetch oracle (dvwu.vercel.app deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/sqli",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi /labs route on alternate Vercel deploy (ist-edu-bd.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/idor",
+      "source": "zahidoverflow/damn-vulnerable-web-university — IDOR /labs route on alternate Vercel deploy (ist-edu-bd.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/csrf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — CSRF /labs route on alternate Vercel deploy (ist-edu-bd.vercel.app)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/login",
       "source": "OWASP NodeGoat — NoSQL injection login oracle POST /login (public Heroku benchmark)",
