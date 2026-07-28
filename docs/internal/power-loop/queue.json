@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T00:05:00.000Z",
+  "updated_at": "2026-07-28T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://vapi.apisec.ai/vapi/jwt/user",
+      "source": "roottusk/vAPI Arena — JustWeakToken JWT alg=none bypass oracle GET /vapi/jwt/user (APIsec hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/serversurfer",
+      "source": "roottusk/vAPI Arena — ServerSurfer SSRF/LFI oracle GET /vapi/serversurfer?url= (APIsec hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi/stickynotes",
+      "source": "roottusk/vAPI Arena — StickyNotes stored XSS oracle GET /vapi/stickynotes?format=html (APIsec hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://auth-security-project.onrender.com/dashboard",
+      "source": "darkroot192-sudo/auth-security-project — reflected XSS via ?message= dashboard oracle (Render OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://auth-security-project.onrender.com/login",
+      "source": "darkroot192-sudo/auth-security-project — SQLi authentication-bypass login oracle (Render OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vuln-expose.vercel.app/sqli/login",
       "source": "JuaniVeltri/vuln-expose — SQLi authentication-bypass lab /api/auth/login (GitHub README Vercel deploy)",
