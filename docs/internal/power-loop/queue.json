@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T08:14:51.258Z",
+  "updated_at": "2026-07-28T10:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://crapi.apisec.ai/identity/api/v2/user/vehicle/1",
+      "source": "OWASP crAPI v1 — API1 BOLA GET /identity/api/v2/user/vehicle/{id} without owner auth (APIsec hosted crapi.apisec.ai)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/jailbreak/2",
+      "source": "opena2a/agentpwn — APWN-JB-002 jailbreak attack payload page (DVAA browse wild-testing target)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/capability-abuse/2",
+      "source": "opena2a/agentpwn — APWN-CA-002 capability-abuse attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/supply-chain/2",
+      "source": "opena2a/agentpwn — APWN-SS-002 supply-chain injection attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/context-manipulation/1",
+      "source": "opena2a/agentpwn — APWN-CM-001 context-manipulation attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://seclab.vercel.app/api/xss-vulnerable",
       "source": "DaniSam-STU/security-lab — POST /api/xss-vulnerable reflected XSS oracle (seclab.vercel.app Vercel deploy)",
