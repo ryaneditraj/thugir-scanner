@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T02:05:00.000Z",
+  "updated_at": "2026-07-28T03:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://seclab.vercel.app/api/sqli-vulnerable",
+      "source": "DaniSam-STU/security-lab — raw string-concat SQLi API route (GitHub README Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/users-vulnerable/1",
+      "source": "DaniSam-STU/security-lab — unauthenticated IDOR users API route (GitHub README Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/csrf-vulnerable",
+      "source": "DaniSam-STU/security-lab — CSRF money-transfer API without token check (GitHub README Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/lab-guide",
+      "source": "MRMcyber/vaultapp — 10 IDOR challenge lab guide with API oracle hints (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/api/portal",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi auth-bypass /api/portal oracle (dvwu.vercel.app deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://vapi.apisec.ai/vapi/jwt/user",
       "source": "roottusk/vAPI Arena — JustWeakToken JWT alg=none bypass oracle GET /vapi/jwt/user (APIsec hosted)",
