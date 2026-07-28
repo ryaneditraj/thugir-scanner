@@ -23421,5 +23421,83 @@ export const genericPatterns: Pattern[] = [
       "Our /lab-guide route scan discloses OWASP API challenge catalog and demo credentials. Show how to gate training labs behind auth.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "vulnweb-comments-xss-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnWeb /comments XSS route live oracle",
+    description:
+      "When scanning /comments, the VulnWeb Netlify SPA bundle documents unsanitized comment XSS with script-injection placeholders — the Shoaib Shaikh VulnWeb comments lab oracle.",
+    impactOneline:
+      "Unsanitized comment rendering lets attackers inject scripts that execute in other users' browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnwebCommentsXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnWeb is intentional training — encode output and enforce CSP on comment sections.",
+      steps: [
+        "HTML-encode user-supplied comment bodies before rendering.",
+        "Use a strict Content-Security-Policy without unsafe-inline.",
+        "Run VulnWeb only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /comments route exposes unsanitized XSS in the comment section. Show output encoding and CSP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnweb-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnWeb /search SQLi route live oracle",
+    description:
+      "When scanning /search, the VulnWeb Netlify SPA bundle documents SQL injection via unsanitized search input with admin' OR '1'='1 bypass — the VulnWeb search lab oracle.",
+    impactOneline:
+      "SQL injection in search lets attackers bypass authentication and extract database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnwebSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnWeb is intentional training — use parameterized queries for all search inputs.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate and sanitize search input server-side.",
+        "Run VulnWeb only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /search route is vulnerable to SQL injection with admin' OR '1'='1. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnweb-profile-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnWeb /profile IDOR route live oracle",
+    description:
+      "When scanning /profile, the VulnWeb Netlify SPA bundle exposes user passwords via IDOR profile views without authorization — the VulnWeb profile lab oracle.",
+    impactOneline:
+      "IDOR on profile routes lets attackers view other users' sensitive data including plaintext passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnwebProfileIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnWeb is intentional training — enforce authorization on every profile lookup.",
+      steps: [
+        "Verify the authenticated user owns the requested profile ID.",
+        "Never expose passwords in profile API responses.",
+        "Run VulnWeb only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route exposes passwords via IDOR. Show authorization checks and password handling remediation.",
+    version: 1,
+    enabled: true
   }
 ];

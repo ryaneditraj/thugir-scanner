@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T08:06:25.722Z",
-  "total": 959,
-  "uniqueSlugs": 954,
+  "generatedAt": "2026-07-28T09:08:27.406Z",
+  "total": 962,
+  "uniqueSlugs": 957,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 941,
+    "generic": 944,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 874,
+    "deep": 877,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 235,
+    "Broken access control": 236,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 68,
-    "Injection": 196,
+    "Injection": 198,
     "Cross-site scripting": 140,
     "general": 20,
     "SSRF": 5,
@@ -989,6 +989,9 @@
     "vulnlab-validate-sqli-live-oracle",
     "vulnlab-validate-xss-live-oracle",
     "vulnshop-debug-api-live-oracle",
+    "vulnweb-comments-xss-route-live-oracle",
+    "vulnweb-profile-idor-route-live-oracle",
+    "vulnweb-search-sqli-route-live-oracle",
     "weak-api-default-credentials",
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
