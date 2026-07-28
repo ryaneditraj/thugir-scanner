@@ -32577,6 +32577,56 @@ const duckStoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const canary = `thugirStoredXss${Date.now().toString(36)}`;
+  const payload = `<img src=x onerror=${canary}>`;
+  const postUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ content: payload, rating: 5 }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!postDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(postDoc.body)) return NEGATIVE;
+  const listUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  if (!listDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(listDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      postUrl,
+      listUrl,
+      canary,
+      snippet: listDoc.body.match(new RegExp(`.{0,60}${canary}.{0,60}`))?.[0]?.slice(0, 160),
+      note: "Duck Store POST /api/v1/testimonials/ stores unsanitized HTML in content and returns it via GET /api/v1/testimonials/ — stored XSS oracle"
+    }
+  };
+};
+
+const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/testimonials route scan — POST stores unsanitized HTML testimonial content served back without encoding"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -32698,6 +32748,89 @@ const ginAndJuiceCatalogRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /catalog route scan — searchTerm reflected into client-side searchText variable (SQLi/XSS training oracle)"
+    }
+  };
+};
+
+const ginAndJuiceBlogPostOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const probeUrl = new URL("/blog/post", ctx.origin);
+  probeUrl.searchParams.set("postId", "3");
+  probeUrl.searchParams.set("back", `https://${probeHost}/`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasBackHandler =
+    /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(doc.body) &&
+    /location\s*=\s*new URLSearchParams/i.test(doc.body);
+  if (!hasBackHandler) return NEGATIVE;
+  if (!doc.body.includes(probeHost) && !/get\(\s*["']back["']\s*\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl.toString(),
+      probeHost,
+      snippet: doc.body.match(/location\s*=\s*new URLSearchParams[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop /blog/post?back= assigns location from URLSearchParams back query param without validation — DOM open-redirect oracle"
+    }
+  };
+};
+
+const ginAndJuiceBlogPostRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogPostOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog/post route scan — back query param drives client-side location assignment without allowlist"
+    }
+  };
+};
+
+const ginAndJuiceCatalogCategorySqliLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/catalog", ctx.origin);
+  baselineUrl.searchParams.set("category", "1");
+  const baselineDoc = await ctx.probe.get(baselineUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 300) return NEGATIVE;
+  const sqliUrl = new URL("/catalog", ctx.origin);
+  sqliUrl.searchParams.set("category", "1'");
+  const sqliDoc = await ctx.probe.get(sqliUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (sqliDoc.status < 500 || sqliDoc.status >= 600) return NEGATIVE;
+  if (!/Internal Server Error|error/i.test(sqliDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      baselineUrl: baselineUrl.toString(),
+      sqliUrl: sqliUrl.toString(),
+      baselineStatus: baselineDoc.status,
+      sqliStatus: sqliDoc.status,
+      note: "Gin & Juice Shop GET /catalog?category=1' returns HTTP 500 vs category=1 baseline 200 — SQL injection error oracle"
+    }
+  };
+};
+
+const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogCategorySqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — malformed category filter triggers HTTP 500 SQL error vs valid category baseline"
     }
   };
 };
@@ -42164,9 +42297,15 @@ export const RULES: Record<string, Rule> = {
   duckStoreCheckoutPrivateCouponRouteLiveOracle,
   duckStoreProfileMassAssignmentLiveOracle,
   duckStoreProfileMassAssignmentRouteLiveOracle,
+  duckStoreTestimonialsStoredXssLiveOracle,
+  duckStoreTestimonialsStoredXssRouteLiveOracle,
   dvgaRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
+  ginAndJuiceBlogPostOpenRedirectLiveOracle,
+  ginAndJuiceBlogPostRouteLiveOracle,
+  ginAndJuiceCatalogCategorySqliLiveOracle,
+  ginAndJuiceCatalogCategorySqliRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,

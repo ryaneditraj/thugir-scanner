@@ -23814,6 +23814,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-testimonials-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store testimonials stored XSS live oracle",
+    description:
+      "POST /api/v1/testimonials/ stores unsanitized HTML (e.g. <img onerror>) in content and serves it back via GET /api/v1/testimonials/ without encoding — the Escape Duck Store stored XSS training oracle.",
+    impactOneline:
+      "Stored XSS in testimonial content lets attackers persist script execution for any user viewing testimonials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode user-supplied HTML in testimonial content before storage and rendering.",
+      steps: [
+        "Strip HTML tags from testimonial content on input.",
+        "Encode output when rendering testimonials in HTML contexts.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/v1/testimonials/ stores raw HTML with onerror handlers. Show stored XSS remediation for testimonial APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store testimonials stored XSS route live oracle",
+    description:
+      "When scanning /api/v1/testimonials, POST stores unsanitized HTML testimonial content served back without encoding — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm testimonial APIs do not persist executable HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize testimonial content on /api/v1/testimonials route handlers.",
+      steps: [
+        "Reject HTML tags in testimonial POST bodies.",
+        "Encode testimonial content in list responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/testimonials route stores raw HTML XSS payloads. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvga-route-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -23888,6 +23940,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog route reflects searchTerm into searchText. Show route-specific encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-post-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop blog post DOM open-redirect live oracle",
+    description:
+      "GET /blog/post?back= uses URLSearchParams(location.search).get('back') in an onclick handler to assign location without validation — the PortSwigger Gin & Juice DOM open-redirect training oracle.",
+    impactOneline:
+      "DOM-based open redirects let attackers phish users via trusted ginandjuice.shop blog post links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPostOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate back URLs against an allowlist before client-side navigation.",
+      steps: [
+        "Reject external hosts in back query parameters.",
+        "Use relative paths only for in-app navigation.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/post?back= assigns location from URLSearchParams without validation. Show DOM open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-post-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /blog/post route open-redirect live oracle",
+    description:
+      "When scanning /blog/post, the back query parameter drives client-side location assignment without allowlist — route-specific DOM open-redirect oracle.",
+    impactOneline:
+      "Route-specific scans should confirm blog post back-navigation cannot redirect to external hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPostRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate back URLs on /blog/post route handlers and client scripts.",
+      steps: [
+        "Allowlist same-origin paths for back navigation.",
+        "Remove raw location assignment from query parameters.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/post route uses an unvalidated back param for navigation. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-category-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop catalog category SQLi live oracle",
+    description:
+      "GET /catalog?category=1' returns HTTP 500 Internal Server Error vs category=1 baseline 200 — the PortSwigger Gin & Juice catalog SQL injection training oracle.",
+    impactOneline:
+      "SQL injection in category filters can expose or modify catalog database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogCategorySqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for catalog category filters.",
+      steps: [
+        "Bind category IDs as integers or prepared statement parameters.",
+        "Return generic errors without leaking SQL syntax details.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog?category=1' triggers HTTP 500. Show SQL injection remediation for catalog category filters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-category-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /catalog route category SQLi live oracle",
+    description:
+      "When scanning /catalog, malformed category=1' triggers HTTP 500 vs valid category baseline — route-specific SQL injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm catalog category parameters are safely parameterized.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogCategorySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize category filters on /catalog route handlers.",
+      steps: [
+        "Validate category IDs as integers before querying.",
+        "Use ORM/prepared statements for catalog filters.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog route SQL-errors on category=1'. Show route-specific SQLi remediation.",
     version: 1,
     enabled: true
   },
