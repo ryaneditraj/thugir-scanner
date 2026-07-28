@@ -1,520 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-27T20:02:44.824Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-27T20:02:44.824Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
-    },
-    {
-      "run_id": "2026-07-27T19:09:36.397Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-14",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 566,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:09:36.397Z"
-    },
-    {
-      "run_id": "2026-07-27T19:09:05.983Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-13",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 566,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:09:05.983Z"
-    },
-    {
-      "run_id": "2026-07-27T19:08:35.208Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-12",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 566,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:08:35.208Z"
-    },
-    {
-      "run_id": "2026-07-27T19:08:32.025Z",
-      "url": "https://ist-edu-bd.vercel.app/api/portal",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 525,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:08:32.025Z"
-    },
-    {
-      "run_id": "2026-07-27T19:08:26.725Z",
-      "url": "https://ist-edu-bd.vercel.app/api/notices?file=etc/passwd",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 525,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:08:26.725Z"
-    },
-    {
-      "run_id": "2026-07-27T19:07:02.306Z",
-      "url": "https://vulnerable-web-site.vercel.app/ssrf",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-vulnerable-web-site-evidence",
-          "title": "Vulnerable Web Site CSRF/XSS/SSRF lab disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 506,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:07:02.306Z"
-    },
-    {
-      "run_id": "2026-07-27T19:05:34.123Z",
-      "url": "https://vulnerable-web-site.vercel.app/signup",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-vulnerable-web-site-evidence",
-          "title": "Vulnerable Web Site CSRF/XSS/SSRF lab disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 507,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:05:34.123Z"
-    },
-    {
-      "run_id": "2026-07-27T19:05:29.206Z",
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-oopssec-store-evidence",
-          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-oopssec-xff-sqli-evidence",
-          "title": "OopsSec Store X-Forwarded-For SQLi walkthrough disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 477,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:05:29.206Z"
-    },
-    {
       "run_id": "2026-07-27T18:09:49.917Z",
       "url": "https://vuln-expose.vercel.app/idor/profile",
       "auth": "oss_deploy",
@@ -17196,9 +16682,738 @@
       "probes_run": 538,
       "status": "ok",
       "scanned_at": "2026-07-28T05:32:33.279Z"
+    },
+    {
+      "run_id": "2026-07-28T06:03:40.104Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 463,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:03:40.104Z"
+    },
+    {
+      "run_id": "2026-07-28T06:05:56.117Z",
+      "url": "https://dvwu.vercel.app/labs/csrf",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ist-edu-vuln-portal-evidence",
+          "title": "IST Edu intentionally vulnerable university portal disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "notices-file-lfi-probe",
+          "title": "Local file inclusion via file query parameter",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:05:56.117Z"
+    },
+    {
+      "run_id": "2026-07-28T06:06:00.739Z",
+      "url": "https://dvwu.vercel.app/labs/ssrf",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ist-edu-vuln-portal-evidence",
+          "title": "IST Edu intentionally vulnerable university portal disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "notices-file-lfi-probe",
+          "title": "Local file inclusion via file query parameter",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:06:00.739Z"
+    },
+    {
+      "run_id": "2026-07-28T06:06:04.856Z",
+      "url": "https://ist-edu-bd.vercel.app/labs/sqli",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ist-edu-vuln-portal-evidence",
+          "title": "IST Edu intentionally vulnerable university portal disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "notices-file-lfi-probe",
+          "title": "Local file inclusion via file query parameter",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:06:04.856Z"
+    },
+    {
+      "run_id": "2026-07-28T06:06:09.256Z",
+      "url": "https://ist-edu-bd.vercel.app/labs/idor",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ist-edu-vuln-portal-evidence",
+          "title": "IST Edu intentionally vulnerable university portal disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "notices-file-lfi-probe",
+          "title": "Local file inclusion via file query parameter",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:06:09.256Z"
+    },
+    {
+      "run_id": "2026-07-28T06:06:13.332Z",
+      "url": "https://ist-edu-bd.vercel.app/labs/csrf",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ist-edu-vuln-portal-evidence",
+          "title": "IST Edu intentionally vulnerable university portal disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "notices-file-lfi-probe",
+          "title": "Local file inclusion via file query parameter",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:06:13.332Z"
+    },
+    {
+      "run_id": "2026-07-28T06:06:17.577Z",
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-vaultapp-lab-evidence",
+          "title": "VaultApp finance security training lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 504,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:06:17.577Z"
+    },
+    {
+      "run_id": "2026-07-28T06:06:24.842Z",
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-vaultapp-lab-evidence",
+          "title": "VaultApp finance security training lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 504,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:06:24.842Z"
+    },
+    {
+      "run_id": "2026-07-28T06:06:30.792Z",
+      "url": "http://vapi.apisec.ai/vapi/api8/user/secret",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 12,
+      "findings": [
+        {
+          "slug": "vapi-api1-bola-live-oracle",
+          "title": "vAPI API1 BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api2-broken-auth-live-oracle",
+          "title": "vAPI API2 broken authentication live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vapi-api3-comment-bola-live-oracle",
+          "title": "vAPI API3 comment BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api4-otp-broken-auth-live-oracle",
+          "title": "vAPI API4 OTP broken authentication live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vapi-api4-user-exposure-live-oracle",
+          "title": "vAPI API4 user exposure live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api5-bfla-live-oracle",
+          "title": "vAPI API5 BFLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api6-mass-assignment-live-oracle",
+          "title": "vAPI API6 mass assignment live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api8-sqli-login-live-oracle",
+          "title": "vAPI API8 SQL injection login live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "vapi-api8-secret-route-live-oracle",
+          "title": "vAPI API8 secret route live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "vapi-api10-logging-live-oracle",
+          "title": "vAPI API10 insufficient logging live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 574,
+      "status": "ok",
+      "scanned_at": "2026-07-28T06:06:30.792Z"
     }
   ],
   "teacher_delta_runs": [
+    {
+      "run_id": "2026-07-28T06:09:20.503Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 17 findings, 6/6 recall on primary heroku (pages=6 probes=463; gap=[])",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 06 UTC run: primary juice-shop.herokuapp.com 6/6 (17 findings); sql-error-disclosure restored vs 05 UTC thin pass; jwt-alg-none + chatbot oracles + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (dvwu labs/csrf+ssrf, ist-edu-bd labs/sqli+idor+csrf) + drained vaultapp api/users/1 + api/documents/1 + vAPI api8/user/secret → 64 discovery findings across 8 URLs; vAPI api8/user/secret 12 incl vapi-api8-secret-route-live-oracle; dvwu/ist-edu-bd /labs routes 8 each shared hub (sql-error-disclosure + notices-file-lfi-probe) without route-specific CSRF/SSRF oracles; vaultapp API routes 6 incl reflexion-escalated-ssti without IDOR live oracle on 401 endpoints.",
+      "scanned_at": "2026-07-28T06:09:20.504Z"
+    },
     {
       "run_id": "2026-07-28T05:32:38.554Z",
       "scan_kind": "teacher_delta",
@@ -18157,28 +18372,6 @@
       "teacher_delta": [],
       "notes": "No teacher tools available. 06 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 URLs (top10-showcase LLM, xss/url, xss/discover, cve/text4shell, ai/mcp/tools) + drained cve/jira, hack-this-site owasp/cms → 374 findings across 8 URLs; top10-showcase has client-side-prompt-injection-evidence; hub fingerprint dominates burpbountylab routes (~56-57/route); route-specific XSS-URL, Text4Shell CVE, MCP-tools, Jira CVE oracles still absent.",
       "scanned_at": "2026-07-25T06:07:24.554Z"
-    },
-    {
-      "run_id": "2026-07-25T05:23:00.000Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 10 findings, 6/6 recall after Heroku cold-start retry (pass1: 8 findings gap=sqli pages=6 probes=295; pass2: 10 findings; gap=[])",
-      "teacher_delta": [],
-      "notes": "No teacher tools available. 05 UTC run: pass1 cold-start missed sqli before 12s wake retry; retry restored full 6/6 with sql-error-disclosure + security-question-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (cve/forti, cve/weblogic, actuator/mappings, graphql/query, ai/status) + drained rce/echo, rce/expect, ssrf/img → 430 findings across 8 URLs; rce/echo+expect+ssrf/img route-specific oracles present; actuator/mappings has spring-boot-actuator-exposed; FortiOS/WebLogic/GraphQL-query route-specific oracles still absent; hub fingerprint dominates (~53-54/route).",
-      "scanned_at": "2026-07-25T05:23:00.000Z"
-    },
-    {
-      "run_id": "2026-07-25T04:06:00.000Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 10 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes=295; gap=[])",
-      "teacher_delta": [],
-      "notes": "No teacher tools available. 04 UTC run: stable 6/6 first-pass recall with deep crawl; security-question-disclosure + juice-shop-forgotten-backup-disclosure + juice-shop-leaked-api-key + vibe-unauthenticated-api-routes present; secret-resend slug still absent. Discovery: +5 BurpBountyLab routes (wp/wp-login, actuator/health, cve/grafana, drupal/autocomplete, passive/api/v1/data) → 408 findings across 8 URLs; drupal/autocomplete has burpbounty-drupal-user-disclosure-live-oracle; actuator/health has spring-boot-actuator-exposed; hub fingerprint dominates (~51/route); WordPress-login, Grafana CVE, API-path passive route-specific oracles still absent.",
-      "scanned_at": "2026-07-25T04:06:00.000Z"
     }
   ]
 }
