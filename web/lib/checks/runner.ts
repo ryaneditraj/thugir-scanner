@@ -8534,6 +8534,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/owasp-finbot-ctf\.org/i.test(origin) && p.slug.startsWith("finbot-")) return -2;
       if (/vulnweb\.netlify\.app/i.test(origin) && p.slug.startsWith("vulnweb-")) return -2;
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
+      if (/dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io/i.test(origin) && p.slug.startsWith("dvga-"))
+        return -2;
       if (p.platform === "generic") return 0;
       return detection.platform && p.platform === detection.platform ? 1 : 2;
     };

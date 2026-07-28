@@ -32181,19 +32181,45 @@ const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 function isDvgaLiveHost(ctx: RuleContext): boolean {
-  try {
-    const host = new URL(ctx.origin).hostname.toLowerCase();
-    return /(?:^|\.)dvga\.tools\.escape\.tech$|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(host);
-  } catch {
-    return /dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(ctx.origin);
+  const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
+  return urls.some((raw) => {
+    try {
+      const host = new URL(raw).hostname.toLowerCase();
+      return (
+        /^(?:www\.)?dvga\.tools\.escape\.tech$/i.test(host) ||
+        /xplat-demo\.threatx\.io/i.test(host) ||
+        /pentest-ground\.com/i.test(host)
+      );
+    } catch {
+      return /dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(raw);
+    }
+  });
+}
+
+function dvgaCanonicalOrigin(ctx: RuleContext): string {
+  const urls = [ctx.scanUrl || "", ctx.home.finalUrl || "", ctx.origin];
+  for (const raw of urls) {
+    try {
+      const u = new URL(raw);
+      const host = u.hostname.toLowerCase();
+      if (/^(?:www\.)?dvga\.tools\.escape\.tech$/i.test(host)) return "https://dvga.tools.escape.tech";
+      if (/xplat-demo\.threatx\.io|pentest-ground\.com/i.test(host)) {
+        u.protocol = "https:";
+        return u.origin;
+      }
+    } catch {
+      /* ignore */
+    }
   }
+  return ctx.origin.replace(/^http:\/\//i, "https://").replace(/^(https:\/\/)www\./i, "$1");
 }
 
 const dvgaRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const homeUrl = new URL("/", ctx.origin).toString();
-  const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const base = dvgaCanonicalOrigin(ctx);
+  const homeUrl = new URL("/", base).toString();
+  const homeDoc = await fetchDoc(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
   const corpus = `${ctx.combined}\n${homeDoc.body}`;
   const markers: { label: string; sample: string }[] = [];
   if (/Damn Vulnerable GraphQL Application/i.test(corpus)) {
@@ -32205,8 +32231,8 @@ const dvgaRouteLiveOracle: Rule = async (ctx) => {
   if (/dolevf\/Damn-Vulnerable-GraphQL-Application/i.test(corpus)) {
     markers.push({ label: "DVGA GitHub repo link", sample: "dolevf/Damn-Vulnerable-GraphQL-Application" });
   }
-  const gqlUrl = new URL("/graphql", ctx.origin).toString();
-  const gqlDoc = await ctx.probe.get(gqlUrl, {
+  const gqlUrl = new URL("/graphql", base).toString();
+  const gqlDoc = await fetchDoc(gqlUrl, {
     method: "POST",
     body: JSON.stringify({ query: "{ __schema { queryType { name } } }" }),
     headers: { "Content-Type": "application/json" },
