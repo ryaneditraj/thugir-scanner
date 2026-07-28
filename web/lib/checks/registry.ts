@@ -6813,16 +6813,33 @@ const agentpwnAttackRouteLiveOracle: Rule = async (ctx) => {
   if (!isAgentpwnHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/attacks\/[^/]+\/\d+/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
-  const attackIdMatch = corpus.match(
+  let corpus = ctx.combined;
+  let attackIdMatch = corpus.match(
     /<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i
   );
-  const aiInstructionsMatch = corpus.match(
+  let aiInstructionsMatch = corpus.match(
     /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
   );
-  const hiddenDan =
+  let hiddenDan =
     /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
     /DAN MODE ENABLED/i.test(corpus);
+  if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) {
+    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+    if (pageDoc.status >= 200 && pageDoc.status < 400) {
+      corpus = `${corpus}\n${pageDoc.body}`;
+      attackIdMatch = corpus.match(
+        /<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i
+      );
+      aiInstructionsMatch = corpus.match(
+        /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
+      );
+      hiddenDan =
+        /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
+        /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
+        /DAN MODE ENABLED/i.test(corpus);
+    }
+  }
   const reportApi = /agentpwn\.com\/api\/report/i.test(corpus);
   if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) return NEGATIVE;
   const attackId = attackIdMatch?.[1];
@@ -24506,6 +24523,27 @@ const vulnwebProfileIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnwebCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csrf(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/id:"csrf"/i.test(bundle) || !/Cross-Site Request Forgery/i.test(bundle)) return NEGATIVE;
+  if (!/execute unwanted actions on applications where they're authenticated/i.test(bundle)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: bundle.match(/id:"csrf"[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /csrf route scan — SPA bundle documents Cross-Site Request Forgery lab forcing authenticated users to execute unwanted actions"
+    }
+  };
+};
+
 // --- Credentials or secrets left in HTML comments (Mutillidae-style misconfig) -------
 const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   const re =
@@ -40770,6 +40808,7 @@ export const RULES: Record<string, Rule> = {
   vulnwebCommentsXssRouteLiveOracle,
   vulnwebSearchSqliRouteLiveOracle,
   vulnwebProfileIdorRouteLiveOracle,
+  vulnwebCsrfRouteLiveOracle,
   clientSideHackingLabEvidence,
   clientSideHacksecEvidence,
   clientSideSolydTrainingEvidence,
