@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T18:08:17.463Z",
+  "updated_at": "2026-07-28T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2214,
   "discovery_findings": 27231,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-28T18:08:17.463Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-28T18:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -60,9 +60,9 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
-      "duck-store.escape.tech/api/v1/orders/1: route-specific orders BOLA oracle shipped",
-      "duck-store.escape.tech/api/v1/orders/coupons: private coupon disclosure oracle shipped",
-      "dvga.tools.escape.tech/vulnerabilities: DVGA route oracle shipped (GraphQL introspection + home re-fetch)"
+      "duck-store.escape.tech/api/v1/orders/1: 8→11 findings — duck-store-orders-bola-route-live-oracle shipped",
+      "duck-store.escape.tech/api/v1/orders/coupons: 8→12 findings — duck-store-coupons-disclosure-route-live-oracle shipped",
+      "dvga.tools.escape.tech/vulnerabilities: 1→2 findings — dvga-route-live-oracle shipped (canonical origin + GraphQL introspection)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
