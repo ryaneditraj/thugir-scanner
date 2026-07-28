@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T21:05:20.961Z",
+  "updated_at": "2026-07-28T22:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
@@ -11194,7 +11194,33 @@
       "url": "https://dvaib.com/scenarios",
       "source": "Damn Vulnerable AI Bank — prompt-injection scenario hub (dvaib.com public demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/search/2?term=test",
+      "source": "PortSwigger Gin & Juice Shop — reflected XSS oracle GET /catalog/search/2 term param (Burp Scanner sample report)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product-search-results/1?term=test",
+      "source": "PortSwigger Gin & Juice Shop — reflected XSS oracle GET /catalog/product-search-results/1 term param (Burp Scanner sample report)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/register",
+      "source": "Escape Duck Store — referral-code abuse oracle POST /api/v1/auth/register (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://evil-open-redirect-probe.example",
+      "source": "Escape Duck Store — open redirect oracle GET /nonexistent?redirect=URL (duck-store vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product/stock?productId=1",
+      "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog/product/stock productId param (Burp Scanner sample report)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 19
+  "discovery_urls_added": 24,
+  "updated_at": "2026-07-28T22:05:00.000Z"
 }
