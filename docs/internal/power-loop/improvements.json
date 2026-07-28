@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/testimonials/ with <img src=x onerror=thugirStoredXss> returns unsanitized content echoed on GET /api/v1/testimonials/; duck-store.escape.tech/api/v1/testimonials findings 16→17 with stored-xss + route oracles; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/post?postId=3&back=https://evil-open-redirect-probe.example/ exposes onclick location = URLSearchParams(location.search).get('back'); ginandjuice.shop/blog/post findings 9→11 with blog-post open-redirect + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=1' returns HTTP 500 vs category=1 baseline 200 Internal Server Error; ginandjuice.shop/catalog findings 9→11 with catalog-category-sqli + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-checkout-private-coupon-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: register+login POST /api/v1/cart/add then POST /api/v1/orders/checkout coupon_code=INTERNAL100 (is_public:false via MCP) returns order id with total_price=5.99 shipping-only; duck-store.escape.tech/api/v1/orders/checkout findings 14→18; benchmark juice-shop-staging 14 findings 6/6 maintained"
@@ -15120,6 +15138,36 @@
       "source": "discovery:vapi.tools.escape.tech",
       "slug": "vapi-route-live-oracle",
       "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-stored-xss-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-stored-xss-route-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-open-redirect-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-route-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
     }
   ]
 }
