@@ -39004,11 +39004,15 @@ const VAULTAPP_LAB_GUIDE_MARKERS: { label: string; re: RegExp }[] = [
   },
   {
     label: "API security challenge catalog",
-    re: /API[0-9]:|Broken Object Level Authorization|Broken Authentication|Broken Function Level Authorization/i
+    re: /API[0-9]:|Broken Object Level Authorization|Broken Authentication|Broken Function Level Authorization|OWASP API Security Top 10/i
   },
   {
     label: "Demo credentials disclosed",
     re: /Test credentials:\s*player\s*\/\s*player123|player\s*\/\s*player123/i
+  },
+  {
+    label: "VaultApp login bundle",
+    re: /VaultApp[\s\S]{0,40}Sign in to your account|localStorage\.setItem\(["']vault_token/i
   }
 ];
 
@@ -39018,10 +39022,11 @@ const vaultappLabGuideRouteLiveOracle: Rule = async (ctx) => {
   if (!/\/lab-guide(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const guideUrl = new URL("/lab-guide", ctx.origin).toString();
   const doc = await ctx.probe.get(guideUrl, { maxBytes: 65536, timeoutMs: 60000 });
+  const corpus = `${doc.body}\n${ctx.combined}`;
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of VAULTAPP_LAB_GUIDE_MARKERS) {
-    const m = doc.body.match(re);
+    const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;

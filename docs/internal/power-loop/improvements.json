@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-portal-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal with admin' OR '1'='1 returns Authentication Bypass Successful + SQL Injection Detected + Vulnerable Query SELECT * FROM users; dvwu.vercel.app/api/portal findings 4→5; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-playground-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /xss/playground route scan fires ENTORNO DE EXPLOTACIÓN XSS + dangerouslySetInnerHTML sink markers in page/JS chunks; vuln-expose.vercel.app/xss/playground findings 14→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-lab-guide-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-guide route scan confirms Security Training Lab + VaultApp + player/player123 demo credentials in combined corpus; vaultapp-omega.vercel.app/lab-guide findings 8→9; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-jwt-weak-token-route-live-oracle",
       "status": "shipped",
