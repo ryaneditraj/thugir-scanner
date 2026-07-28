@@ -13367,6 +13367,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-scheme-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+    description:
+      "GET /scheme/?url=file:///etc/passwd reads local files via unrestricted file:// scheme — the ssrf.vulnlab.dev URL-scheme SSRF training oracle.",
+    impactOneline:
+      "Accepting file:// and other non-HTTP schemes in SSRF sinks enables local file read and internal service pivoting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabSchemeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict outbound fetch to http/https only — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Allow only http and https URL schemes in server-side fetch handlers.",
+        "Deny file://, gopher://, and other protocol handlers at the application layer.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /scheme endpoint accepts file:// URLs and returns /etc/passwd contents. Show SSRF remediation with scheme allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-scheme-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /scheme route SSRF live oracle",
+    description:
+      "When scanning /scheme, GET /scheme/?url=file:///etc/passwd reads local files via unrestricted file:// scheme — route-specific URL-scheme SSRF oracle.",
+    impactOneline:
+      "Accepting file:// in SSRF sinks on route scans enables local file read without crawling the full lab index.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabSchemeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict outbound fetch to http/https only — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Allow only http and https URL schemes in server-side fetch handlers.",
+        "Deny file://, gopher://, and other protocol handlers at the application layer.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /scheme route accepts file:// URLs and returns /etc/passwd contents. Show SSRF remediation with scheme allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-gopher-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+    description:
+      "GET /gopher/?url=gopher://127.0.0.1:6479/_PING reaches a local TCP service via gopher:// and returns a VULNLAB flag — the ssrf.vulnlab.dev non-HTTP SSRF training oracle.",
+    impactOneline:
+      "gopher:// SSRF can pivot to Redis, SMTP, and other plaintext TCP services behind the firewall.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabGopherLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block gopher:// and other non-HTTP schemes — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Allow only http and https URL schemes in outbound fetch handlers.",
+        "Deny gopher://, dict://, and other libcurl protocol handlers.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /gopher endpoint accepts gopher:// URLs and reaches internal TCP services. Show SSRF remediation with scheme allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-gopher-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /gopher route SSRF live oracle",
+    description:
+      "When scanning /gopher, GET /gopher/?url=gopher://127.0.0.1:6479/_PING reaches a local TCP service via gopher:// — route-specific non-HTTP SSRF oracle.",
+    impactOneline:
+      "gopher:// SSRF on route scans can pivot to internal TCP services without crawling the full lab index.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabGopherRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block gopher:// and other non-HTTP schemes — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Allow only http and https URL schemes in outbound fetch handlers.",
+        "Deny gopher://, dict://, and other libcurl protocol handlers.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /gopher route accepts gopher:// URLs and reaches internal TCP services. Show SSRF remediation with scheme allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-parser-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+    description:
+      "GET /parser/?url=http://images.vulnlab.dev@169.254.169.254/latest/meta-data/ bypasses a naive host allowlist via userinfo and returns AWS IMDS metadata — the ssrf.vulnlab.dev URL-parser disagreement SSRF oracle.",
+    impactOneline:
+      "When validators and HTTP clients disagree on URL parsing, allowlists can be bypassed to reach cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabParserLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse URLs with the same library used for fetching — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Validate the resolved hostname after full URL parsing, not via regex on the raw string.",
+        "Reject userinfo tricks where validator host differs from fetch host.",
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers."
+      ]
+    },
+    fixPrompt:
+      "Our /parser endpoint allowlist is bypassed via userinfo host confusion. Show SSRF remediation with canonical URL parsing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-parser-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /parser route SSRF live oracle",
+    description:
+      "When scanning /parser, GET /parser/?url=http://images.vulnlab.dev@169.254.169.254/latest/meta-data/ bypasses host allowlist via userinfo and returns AWS metadata — route-specific URL-parser disagreement SSRF oracle.",
+    impactOneline:
+      "URL-parser disagreement on route scans bypasses naive allowlists to reach cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabParserRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse URLs with the same library used for fetching — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Validate the resolved hostname after full URL parsing, not via regex on the raw string.",
+        "Reject userinfo tricks where validator host differs from fetch host.",
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers."
+      ]
+    },
+    fixPrompt:
+      "Our /parser route allowlist is bypassed via userinfo host confusion. Show SSRF remediation with canonical URL parsing.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
