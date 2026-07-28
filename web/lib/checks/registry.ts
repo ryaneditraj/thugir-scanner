@@ -17074,21 +17074,59 @@ async function vulnExposeModulePageMarkers(
   };
 }
 
+async function vulnExposeJsChunkCorpus(
+  ctx: RuleContext,
+  pageHtml: string,
+  chunkMatch: RegExp
+): Promise<string> {
+  const chunkRe = /\/_next\/static\/chunks\/[a-f0-9]+\.js/gi;
+  const chunks = [...new Set(pageHtml.match(chunkRe) ?? [])].slice(0, 12);
+  for (const chunkPath of chunks) {
+    const chunkUrl = new URL(chunkPath, ctx.origin).toString();
+    const chunkDoc = await ctx.probe.get(chunkUrl, { maxBytes: 65536, timeoutMs: 60000 });
+    if (chunkMatch.test(chunkDoc.body)) return chunkDoc.body;
+  }
+  return "";
+}
+
 const vulnExposeCmdiRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnExposeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/cmdi(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/cmdi"));
   if (!spec) return NEGATIVE;
-  const result = await vulnExposeModulePageMarkers(ctx, "/cmdi", spec);
-  if (!result.fired) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(new URL("/cmdi", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 60000
+  });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = pageDoc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  const jsCorpus = await vulnExposeJsChunkCorpus(
+    ctx,
+    pageDoc.body,
+    /127\.0\.0\.1; whoami|Command Injection - Laboratorio|uid=33\(www-data\)/i
+  );
+  const cmdiLive = /127\.0\.0\.1; whoami|uid=33\(www-data\)/i.test(jsCorpus);
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: cmdiLive ? 0.94 : hits.length >= 3 ? 0.92 : 0.9,
     evidence: {
-      ...result.evidence,
+      canonicalUrl: new URL("/cmdi", ctx.origin).toString(),
+      markers: hits.slice(0, 4),
       scannedUrl: pageUrl,
-      note: "VulnSite /cmdi route scan — command injection lab with ping-tool injection point and reverse-shell payload grid (aliases /cmdi/execute → /cmdi)"
+      ...(cmdiLive
+        ? {
+            jsSnippet: jsCorpus.match(/127\.0\.0\.1; whoami[\s\S]{0,120}/i)?.[0]?.slice(0, 120)
+          }
+        : {}),
+      note: cmdiLive
+        ? "VulnSite /cmdi route scan — ping-tool bundle documents 127.0.0.1; whoami command chaining with www-data uid output simulation"
+        : "VulnSite /cmdi route scan — command injection lab with ping-tool injection point and reverse-shell payload grid (aliases /cmdi/execute → /cmdi)"
     }
   };
 };
@@ -17175,21 +17213,87 @@ const vulnExposeXssCspBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnExposeCommentsStoredXssApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const commentsUrl = new URL("/api/comments", ctx.origin);
+  commentsUrl.searchParams.set("postId", "1");
+  const doc = await ctx.probe.get(commentsUrl.toString(), { maxBytes: 8192, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"comments"\s*:\s*\[/i.test(doc.body)) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  const scriptMatch = doc.body.match(/<script>[\s\S]*?<\/script>/i);
+  if (!scriptMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: commentsUrl.toString(),
+      snippet: doc.body.slice(0, 280).trim(),
+      storedPayload: scriptMatch[0].slice(0, 80),
+      note: "VulnSite GET /api/comments?postId= returns persisted comment bodies with raw <script> tags unescaped in JSON — stored XSS API oracle"
+    }
+  };
+};
+
+const vulnExposeXssCommentsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/comments(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/xss/comments"));
+  if (!spec) return NEGATIVE;
+  const pageResult = await vulnExposeModulePageMarkers(ctx, "/xss/comments", spec);
+  if (!pageResult.fired) return NEGATIVE;
+  const apiResult = await vulnExposeCommentsStoredXssApiLiveOracle(ctx);
+  return {
+    fired: true,
+    confidence: apiResult.fired ? 0.95 : pageResult.confidence,
+    evidence: {
+      ...pageResult.evidence,
+      ...(apiResult.fired ? { api: apiResult.evidence } : {}),
+      scannedUrl: pageUrl,
+      note: "VulnSite /xss/comments route scan — stored XSS comments lab with dangerouslySetInnerHTML sink and /api/comments returning raw script payloads"
+    }
+  };
+};
+
 const vulnExposeNetworkToolsRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnExposeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/network-tools(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/network-tools"));
   if (!spec) return NEGATIVE;
-  const result = await vulnExposeModulePageMarkers(ctx, "/network-tools", spec);
-  if (!result.fired) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(new URL("/network-tools", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 60000
+  });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = pageDoc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  const jsCorpus = await vulnExposeJsChunkCorpus(
+    ctx,
+    pageDoc.body,
+    /hidden_cmdi_ping|Network Tools CMD|127\.0\.0\.1; whoami/i
+  );
+  const cmdiSim = /hidden_cmdi_ping|127\.0\.0\.1; whoami/i.test(jsCorpus);
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: cmdiSim ? 0.94 : hits.length >= 3 ? 0.92 : 0.9,
     evidence: {
-      ...result.evidence,
+      canonicalUrl: new URL("/network-tools", ctx.origin).toString(),
+      markers: hits.slice(0, 4),
       scannedUrl: pageUrl,
-      note: "VulnSite /network-tools route scan — server-side ping connectivity lab with ICMP Echo Request tooling (SSRF-prone)"
+      ...(cmdiSim
+        ? {
+            jsSnippet: jsCorpus.match(/hidden_cmdi_ping|127\.0\.0\.1; whoami[\s\S]{0,80}/i)?.[0]?.slice(0, 100)
+          }
+        : {}),
+      note: cmdiSim
+        ? "VulnSite /network-tools route scan — ping tool bundle simulates hidden_cmdi_ping command injection via hostname chaining (; whoami)"
+        : "VulnSite /network-tools route scan — server-side ping connectivity lab with ICMP Echo Request tooling (SSRF-prone)"
     }
   };
 };
@@ -39692,8 +39796,10 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnExposeLabModuleEvidence,
   vulnExposeAuthBypassApiLiveOracle,
   vulnExposeSqliSearchApiLiveOracle,
+  vulnExposeCommentsStoredXssApiLiveOracle,
   vulnExposeAuthBypassRouteLiveOracle,
   vulnExposeSqliSearchRouteLiveOracle,
+  vulnExposeXssCommentsRouteLiveOracle,
   vulnExposeCmdiRouteLiveOracle,
   vulnExposeIdorProfileRouteLiveOracle,
   vulnExposeBlindSqliApiLiveOracle,

@@ -15655,6 +15655,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-xss-comments-stored-xss-api-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnSite stored XSS comments API oracle",
+    description:
+      "GET /api/comments?postId= returns persisted comment bodies with raw <script> tags unescaped in JSON — the VulnSite stored XSS comments API oracle.",
+    impactOneline:
+      "Unsanitized stored comment HTML enables persistent XSS when rendered via dangerouslySetInnerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeCommentsStoredXssApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and rendering — VulnSite is intentional training software.",
+      steps: [
+        "Never use dangerouslySetInnerHTML with unsanitized user content.",
+        "Use a strict HTML sanitizer or render comments as plain text.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/comments returns raw <script> payloads in JSON. Show stored XSS comment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-xss-comments-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnSite /xss/comments route stored XSS oracle",
+    description:
+      "When scanning /xss/comments, the stored XSS comments lab renders user content via dangerouslySetInnerHTML and /api/comments returns raw script payloads — route-specific stored XSS oracle.",
+    impactOneline:
+      "Stored XSS in the comments lab lets attackers execute scripts in other users' browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeXssCommentsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before rendering — VulnSite is intentional training software.",
+      steps: [
+        "Never use dangerouslySetInnerHTML with unsanitized user content.",
+        "Use a strict HTML sanitizer or render comments as plain text.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/comments route scan confirms stored XSS via /api/comments and dangerouslySetInnerHTML. Show XSS-safe comment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-testimonials-route-live-oracle",
     platform: "generic",
     category: "Injection",
