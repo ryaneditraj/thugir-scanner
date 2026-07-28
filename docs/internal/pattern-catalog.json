@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T04:06:22.778Z",
-  "total": 948,
-  "uniqueSlugs": 943,
+  "generatedAt": "2026-07-28T05:06:54.421Z",
+  "total": 951,
+  "uniqueSlugs": 946,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 930,
+    "generic": 933,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 863,
+    "deep": 866,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 69,
     "Security misconfiguration": 76,
     "Broken authentication": 68,
-    "Injection": 189,
-    "Cross-site scripting": 138,
+    "Injection": 191,
+    "Cross-site scripting": 139,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 33,
@@ -43,6 +43,8 @@
   },
   "slugs": [
     "agentpwn-attack-route-live-oracle",
+    "auth-security-project-dashboard-xss-route-live-oracle",
+    "auth-security-project-login-sqli-route-live-oracle",
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "brokencrystals-adminpermission-route-live-oracle",
@@ -899,6 +901,7 @@
     "vapi-api6-mass-assignment-live-oracle",
     "vapi-api6-route-live-oracle",
     "vapi-api7-cors-misconfig-live-oracle",
+    "vapi-api8-secret-route-live-oracle",
     "vapi-api8-sqli-login-live-oracle",
     "vapi-jwt-weak-token-route-live-oracle",
     "vapi-serversurfer-ssrf-route-live-oracle",
