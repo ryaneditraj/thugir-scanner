@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:auth-security-project.onrender.com",
+      "slug": "auth-security-project-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=admin' OR '1'='1 returns 302 /dashboard + session cookie; auth-security-project.onrender.com/login findings 3→4; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:auth-security-project.onrender.com",
+      "slug": "auth-security-project-dashboard-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dashboard?message=<script>thugirXSScanary</script> reflects unescaped script after SQLi login session; auth-security-project.onrender.com/dashboard findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-secret-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /vapi/api8/user/secret chains SQLi login bypass to flag{api8_*} via Authorization-Token; vapi.apisec.ai/vapi/api8/user/secret findings 11→12; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-portal-sqli-route-live-oracle",
       "status": "shipped",

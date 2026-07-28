@@ -1433,6 +1433,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "auth-security-project-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "auth-security-project login SQLi route live oracle",
+    description:
+      "When scanning /login, POST username=admin' OR '1'='1 bypasses authentication with redirect to /dashboard and session cookie — route-specific SQL injection login oracle.",
+    impactOneline:
+      "Unsanitized login queries let attackers authenticate without valid credentials on training auth demos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "authSecurityProjectLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "auth-security-project is intentional training — use parameterized queries and isolate lab deployments.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic auth failures without revealing SQLi bypass hints.",
+        "Run auth-security-project only on ephemeral lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login route accepts admin' OR '1'='1 SQL injection. Show parameterized query remediation for the auth-security-project login form.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "auth-security-project-dashboard-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "auth-security-project dashboard XSS route live oracle",
+    description:
+      "When scanning /dashboard, GET ?message= reflects unescaped <script> payloads after SQLi login session — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Reflected message parameters without encoding enable session-riding XSS on authenticated dashboard pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "authSecurityProjectDashboardXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "auth-security-project is intentional training — encode output and enforce CSP on dashboard pages.",
+      steps: [
+        "HTML-encode all user-supplied message parameters before rendering.",
+        "Use a strict Content-Security-Policy blocking inline script execution.",
+        "Run auth-security-project only on ephemeral lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /dashboard?message= reflects raw script tags. Show reflected XSS remediation for the auth-security-project dashboard.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-os-command-injection-lab-evidence",
     platform: "generic",
     category: "Injection",
@@ -16977,6 +17029,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api8/user/login is vulnerable to SQL injection authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api8-secret-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "vAPI API8 secret route live oracle",
+    description:
+      "When scanning /api8/user/secret, SQLi login bypass via POST /api8/user/login returns Authorization-Token that dumps admin flag{api8_*} from /api8/user/secret — route-specific API8 injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm SQLi auth bypass chains through to protected secret endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi8SecretRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — use parameterized queries for every login path in production.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic auth failures without SQL syntax errors.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api8/user/secret route is reachable after SQLi login bypass. Show parameterized query remediation for API8.",
     version: 1,
     enabled: true
   },
