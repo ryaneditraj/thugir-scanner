@@ -23057,5 +23057,83 @@ export const genericPatterns: Pattern[] = [
       "Our /catalog route reflects searchTerm into searchText. Show route-specific encoding remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "dvwu-portal-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU portal SQLi auth bypass route live oracle",
+    description:
+      "POST /api/portal with admin' OR '1'='1 bypasses authentication when scanning dvwu.vercel.app — Damn Vulnerable Web University SQL injection login oracle.",
+    impactOneline:
+      "String-concatenated SQL in login queries lets attackers bypass authentication without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuPortalSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic login failure messages without SQL error details.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /api/portal route accepts SQL injection in the username field for authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-xss-playground-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnSite /xss/playground route XSS live oracle",
+    description:
+      "When scanning /xss/playground, the interactive XSS lab exposes dangerouslySetInnerHTML sinks and reflected/stored/DOM payload panels — route-specific XSS playground oracle.",
+    impactOneline:
+      "Unsanitized XSS playground sinks let attackers execute scripts in victim browsers during training exercises.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeXssPlaygroundRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before rendering — VulnSite is intentional training software.",
+      steps: [
+        "Never use dangerouslySetInnerHTML with unsanitized user content.",
+        "Use context-appropriate output encoding for reflected payloads.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/playground route scan confirms dangerouslySetInnerHTML XSS sinks. Show route-specific output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-lab-guide-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "VaultApp /lab-guide route live oracle",
+    description:
+      "When scanning /lab-guide, VaultApp Omega discloses OWASP API Security Top 10 challenge catalog and demo credentials (player/player123) — route-specific finance security training oracle.",
+    impactOneline:
+      "Public lab guides with demo credentials expose authentication bypass practice surfaces for unauthenticated attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappLabGuideRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp training labs must not expose demo credentials on public guide pages.",
+      steps: [
+        "Remove hardcoded demo credentials from public lab-guide pages.",
+        "Gate training labs behind authentication.",
+        "Run VaultApp only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /lab-guide route scan discloses OWASP API challenge catalog and demo credentials. Show how to gate training labs behind auth.",
+    version: 1,
+    enabled: true
   }
 ];

@@ -38927,6 +38927,117 @@ const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isDvwuHost(ctx: RuleContext): boolean {
+  return /dvwu\.vercel\.app/i.test(ctx.origin);
+}
+
+const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/portal/i.test(pageUrl)) return NEGATIVE;
+  const portalUrl = new URL("/api/portal", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Authentication Bypass Successful|SQL Injection Detected/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      portalUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "DVWU POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login route oracle"
+    }
+  };
+};
+
+const vulnExposeXssPlaygroundRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/playground(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/xss/playground"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/xss/playground", spec);
+  if (!result.fired) return NEGATIVE;
+  const jsCorpus = await vulnExposeJsChunkCorpus(
+    ctx,
+    (await ctx.probe.get(new URL("/xss/playground", ctx.origin).toString(), { maxBytes: 65536 }))
+      .body,
+    /dangerouslySetInnerHTML|Vulnerable \(dangerouslySetInnerHTML\)/i
+  );
+  return {
+    fired: true,
+    confidence: jsCorpus ? 0.94 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      ...(jsCorpus
+        ? {
+            jsSnippet: jsCorpus
+              .match(/dangerouslySetInnerHTML[\s\S]{0,80}/i)?.[0]
+              ?.slice(0, 100)
+          }
+        : {}),
+      note: "VulnSite /xss/playground route scan — interactive XSS lab with dangerouslySetInnerHTML sink and reflected/stored/DOM payload panels"
+    }
+  };
+};
+
+function isVaultappHost(ctx: RuleContext): boolean {
+  return /vaultapp-omega\.vercel\.app/i.test(ctx.origin);
+}
+
+const VAULTAPP_LAB_GUIDE_MARKERS: { label: string; re: RegExp }[] = [
+  {
+    label: "VaultApp lab guide title",
+    re: /Lab Guide|Security Training Lab|OWASP API Security/i
+  },
+  {
+    label: "VaultApp finance training portal",
+    re: /Secure Personal Finance Portal|VaultApp/i
+  },
+  {
+    label: "API security challenge catalog",
+    re: /API[0-9]:|Broken Object Level Authorization|Broken Authentication|Broken Function Level Authorization/i
+  },
+  {
+    label: "Demo credentials disclosed",
+    re: /Test credentials:\s*player\s*\/\s*player123|player\s*\/\s*player123/i
+  }
+];
+
+const vaultappLabGuideRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-guide(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const guideUrl = new URL("/lab-guide", ctx.origin).toString();
+  const doc = await ctx.probe.get(guideUrl, { maxBytes: 65536, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of VAULTAPP_LAB_GUIDE_MARKERS) {
+    const m = doc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      guideUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: "VaultApp /lab-guide route scan — finance security training lab guide with OWASP API Top 10 challenge catalog and disclosed demo credentials"
+    }
+  };
+};
+
 // --- Archon engineering knowledge platform — cybersecurity training path --------------
 const CLIENT_ARCHON_TRAINING_RES: { label: string; re: RegExp }[] = [
   {
@@ -40433,6 +40544,9 @@ export const RULES: Record<string, Rule> = {
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
+  dvwuPortalSqliRouteLiveOracle,
+  vulnExposeXssPlaygroundRouteLiveOracle,
+  vaultappLabGuideRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
