@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T23:16:44.019Z",
-  "total": 932,
-  "uniqueSlugs": 927,
+  "generatedAt": "2026-07-28T00:04:32.812Z",
+  "total": 938,
+  "uniqueSlugs": 933,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 914,
+    "generic": 920,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 847,
+    "deep": 853,
     "continuous": 0
   },
   "byCategory": {
@@ -31,7 +31,7 @@
     "Cross-site scripting": 133,
     "general": 20,
     "SSRF": 5,
-    "Server-side request forgery": 26,
+    "Server-side request forgery": 32,
     "Sensitive data exposure": 24,
     "AI security": 41,
     "Business logic": 4,
@@ -859,10 +859,16 @@
     "ssrf-vulnlab-basic-route-live-oracle",
     "ssrf-vulnlab-blocklist-bypass-live-oracle",
     "ssrf-vulnlab-blocklist-route-live-oracle",
+    "ssrf-vulnlab-gopher-live-oracle",
+    "ssrf-vulnlab-gopher-route-live-oracle",
     "ssrf-vulnlab-metadata-aws-live-oracle",
     "ssrf-vulnlab-metadata-aws-route-live-oracle",
+    "ssrf-vulnlab-parser-live-oracle",
+    "ssrf-vulnlab-parser-route-live-oracle",
     "ssrf-vulnlab-redirect-live-oracle",
     "ssrf-vulnlab-redirect-route-live-oracle",
+    "ssrf-vulnlab-scheme-live-oracle",
+    "ssrf-vulnlab-scheme-route-live-oracle",
     "ssti-template-injection",
     "stack-cors-wildcard-api",
     "stack-database-url-in-bundle",
