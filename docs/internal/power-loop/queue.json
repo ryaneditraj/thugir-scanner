@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T15:00:00.000Z",
+  "updated_at": "2026-07-28T16:06:28.470Z",
   "discovery_urls": [
+    {
+      "url": "https://www.agentpwn.com/attacks/mcp-exploitation/1",
+      "source": "opena2a/agentpwn — APWN-MCP-001 MCP path-traversal/SSRF tool-abuse attack demo (HackMyAgent 16-category suite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/mcp-exploitation/2",
+      "source": "opena2a/agentpwn — APWN-MCP-002 MCP exploitation attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.agentpwn.com/attacks/mcp-exploitation/3",
+      "source": "opena2a/agentpwn — APWN-MCP-003 MCP exploitation attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/#/chatbot",
+      "source": "Escape.tech Juice Shop demo — LLM chatbot prompt-injection surface (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/moderate/level1.php",
+      "source": "webspoilt/vulnforge-academy — moderate level1 XSS/SQLi challenge (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://www.agentpwn.com/attacks/prompt-injection/4",
       "source": "opena2a/agentpwn — APWN-PI-004 indirect prompt-injection payload page (DVAA browse target)",
