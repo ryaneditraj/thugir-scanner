@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-mcp-exploitation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /attacks/mcp-exploitation/{tier} ai-instructions smuggle MCP tool discovery (APWN-MCP-001), fake [Tool Result from security_scanner] injection (APWN-MCP-002), filesystem:read/etc/hosts + browser:navigate cross-tool chain (APWN-MCP-003); agentpwnMcpExploitationRouteLiveOracle + broadened APWN-[A-Z]{2,4}-\\d{3} ID regex; www.agentpwn.com/attacks/mcp-exploitation/1 findings 7→8 with agentpwn-mcp-exploitation-route-live-oracle; benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-live-stream-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/live-stream-hijack documents unprotected GET/POST /api/live/stream with RTMP stream key exposure and admin-only UI without server-side role check; koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/ findings 5→6 with oopssec-live-stream-bfla-route-live-oracle; benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-id-category-regex-broadening",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: agentpwnAttackMarkers APWN ID regex broadened from {2} to {2,4} letter categories so APWN-MCP-001/APWN-CM-003 match attackId capture; improves attack-route oracle on mcp-exploitation and context-manipulation tiers; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
       "slug": "agentpwn-attack-route-header-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: agentpwnAttackRouteLiveOracle now merges x-agentpwn-test-id + x-ai-instructions response headers and PI-005 AI Safety Board Compliance Standard hiddenDan markers; uses ctx.probe refetch with header corpus; www.agentpwn.com/attacks/prompt-injection/5 findings 3→7 with agentpwn-attack-route-live-oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
@@ -14960,6 +14978,21 @@
       "source": "benchmark:juice-shop",
       "slug": "juice-shop-jwt-chatbot-benchmark-recall-aliases",
       "shipped_at": "2026-07-28T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-mcp-exploitation-route-live-oracle",
+      "shipped_at": "2026-07-28T17:21:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-live-stream-bfla-route-live-oracle",
+      "shipped_at": "2026-07-28T17:21:00.000Z"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-id-category-regex-broadening",
+      "shipped_at": "2026-07-28T17:21:00.000Z"
     }
   ]
 }
