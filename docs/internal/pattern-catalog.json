@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T02:37:03.316Z",
-  "total": 942,
-  "uniqueSlugs": 937,
+  "generatedAt": "2026-07-28T03:05:29.406Z",
+  "total": 945,
+  "uniqueSlugs": 940,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 924,
+    "generic": 927,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 857,
+    "deep": 860,
     "continuous": 0
   },
   "byCategory": {
@@ -26,12 +26,12 @@
     "Information exposure": 1,
     "Information disclosure": 69,
     "Security misconfiguration": 76,
-    "Broken authentication": 66,
+    "Broken authentication": 67,
     "Injection": 188,
-    "Cross-site scripting": 136,
+    "Cross-site scripting": 137,
     "general": 20,
     "SSRF": 5,
-    "Server-side request forgery": 32,
+    "Server-side request forgery": 33,
     "Sensitive data exposure": 24,
     "AI security": 41,
     "Business logic": 4,
@@ -899,6 +899,9 @@
     "vapi-api6-route-live-oracle",
     "vapi-api7-cors-misconfig-live-oracle",
     "vapi-api8-sqli-login-live-oracle",
+    "vapi-jwt-weak-token-route-live-oracle",
+    "vapi-serversurfer-ssrf-route-live-oracle",
+    "vapi-stickynotes-stored-xss-route-live-oracle",
     "verbose-error-disclosure",
     "vibe-algolia-admin-in-client",
     "vibe-auth0-secret-in-client",

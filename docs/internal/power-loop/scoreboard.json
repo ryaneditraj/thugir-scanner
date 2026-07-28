@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T03:15:00.000Z",
+  "updated_at": "2026-07-28T03:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 3099,
-  "total_findings": 31764,
-  "critical_findings": 72,
+  "total_findings": 31767,
+  "critical_findings": 73,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2154,
-  "discovery_findings": 26542,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-28T03:15:00.000Z",
+  "discovery_findings": 26545,
+  "improvements_shipped": 1170,
+  "last_run": "2026-07-28T03:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -54,33 +54,36 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 55,
-      "focus": "seclab API routes (sqli/users/csrf-vulnerable) + vaultapp lab-guide + dvwu portal + vAPI Arena jwt/serversurfer/stickynotes drain",
-      "improvements_shipped_this_run": 0
+      "findings": 58,
+      "focus": "vAPI Arena JWT/SSRF/XSS route oracles shipped; seclab API routes + vaultapp lab-guide + dvwu portal drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/jwt/user: 11→12 findings — full vAPI cross-API oracle cluster still without JWT-none route oracle",
-      "vaultapp-omega.vercel.app/lab-guide: 8 findings — client-side-vaultapp-lab-evidence + reflexion-escalated-ssti; IDOR API live oracles absent",
-      "dvwu.vercel.app/api/portal: 4 findings — sql-error-disclosure; POST auth-bypass live oracle absent vs ist-edu-bd sibling",
-      "seclab.vercel.app/api/sqli-vulnerable: 3-finding misconfig hub without route-specific SQLi live oracle"
+      "vapi.apisec.ai/vapi/jwt/user: 11→13 — vapi-jwt-weak-token-route-live-oracle (HS256 re-sign role=admin returns flag{jwt_*})",
+      "vapi.apisec.ai/vapi/serversurfer: 11→12 — vapi-serversurfer-ssrf-route-live-oracle (example.com fetch, 127.0.0.1 blocked)",
+      "vapi.apisec.ai/vapi/stickynotes: 11→12 — vapi-stickynotes-stored-xss-route-live-oracle (format=html stored <script> + flag{xss_*})",
+      "vaultapp-omega.vercel.app/lab-guide: 8 findings — client-side-vaultapp-lab-evidence; IDOR API live oracles absent",
+      "dvwu.vercel.app/api/portal: 4 findings — sql-error-disclosure; POST auth-bypass live oracle absent",
+      "seclab.vercel.app/api/sqli-vulnerable: 3-finding hub without route-specific SQLi live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "seclab.vercel.app/api/*-vulnerable routes: 3-finding hub without route-specific SQLi/IDOR/CSRF live oracles",
       "vaultapp-omega.vercel.app/lab-guide: IDOR challenge guide present but /api/users/* live oracles absent (401 without session)",
-      "vapi.apisec.ai Arena jwt/user: shared cross-API hub without route-specific JWT alg=none oracle",
-      "auth-security-project.onrender.com: Render deploy unreachable (connection error) — dashboard/login oracles blocked"
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: avatar-upload route oracle still absent without OTP session",
+      "vulnerable-web-site.vercel.app/ssrf: auth-gated SSRF lab route oracle still absent",
+      "auth-security-project.onrender.com: Render deploy unreachable — dashboard/login oracles blocked"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "vapi.apisec.ai/vapi/jwt/user": 12,
+    "vapi.apisec.ai/vapi/jwt/user": 13,
+    "vapi.apisec.ai/vapi/serversurfer": 12,
+    "vapi.apisec.ai/vapi/stickynotes": 12,
     "vaultapp-omega.vercel.app/lab-guide": 8,
-    "vapi.apisec.ai/vapi/serversurfer": 11,
-    "vapi.apisec.ai/vapi/stickynotes": 11,
-    "dvwu.vercel.app/api/portal": 4,
-    "seclab.vercel.app/api/sqli-vulnerable": 3
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vuln-expose.vercel.app/xss/comments": 14
   }
 }
