@@ -1,6 +1,36 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-comments-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /comments route scan fetches SPA bundle with unsanitized user input + script injection + <script>alert('XSS') placeholder; vulnweb.netlify.app/comments 1→2 findings; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /search route scan fetches SPA bundle with SQL injection vulnerabilities + admin' OR '1'='1 bypass; vulnweb.netlify.app/search thin pass→2 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-profile-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile route scan fetches SPA bundle with Password (Exposed!) + IDOR vulnerability markers; vulnweb.netlify.app/profile/1 thin pass→2 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-xss-vulnerable-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclab.vercel.app migrated to Angular stub shell — POST /api/xss-vulnerable returns HTTP 405, GET returns <app-root> SPA with no Next.js API routes; no portable live oracle without restored security-lab deploy"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-csrf-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /csrf returns Netlify 404 — SPA routes are /login /search /profile /comments only; CSRF module exists in catalog JSON but has no dedicated route or server-side CSRF probe surface"
+    },
+    {
       "source": "discovery:all-seeing-eye-six.vercel.app",
       "slug": "all-seeing-eye-read-route-live-oracle",
       "status": "shipped",

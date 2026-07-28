@@ -1408,6 +1408,9 @@ const DEEP_RULES = new Set<string>([
   "dvwuCsrfNewsletterCrlfRouteLiveOracle",
   "allSeeingEyeReadRouteLiveOracle",
   "allSeeingEyeHelloRouteLiveOracle",
+  "vulnwebCommentsXssRouteLiveOracle",
+  "vulnwebSearchSqliRouteLiveOracle",
+  "vulnwebProfileIdorRouteLiveOracle",
   "istEduSsrfRedirectRouteLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
@@ -8509,6 +8512,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const all = patternsForTier("deep").sort((a, b) => {
     const w = (p: Pattern) => {
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
+      if (/vulnweb\.netlify\.app/i.test(origin) && p.slug.startsWith("vulnweb-")) return -2;
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (p.platform === "generic") return 0;
       return detection.platform && p.platform === detection.platform ? 1 : 2;

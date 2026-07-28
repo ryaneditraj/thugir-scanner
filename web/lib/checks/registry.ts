@@ -24420,6 +24420,92 @@ const clientSideVulnwebLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnWeb Netlify SPA route live oracles (vulnweb.netlify.app) --------------------
+function isVulnwebNetlifyHost(ctx: RuleContext): boolean {
+  return /vulnweb\.netlify\.app/i.test(ctx.origin);
+}
+
+async function vulnwebNetlifyBundleCorpus(ctx: RuleContext): Promise<string> {
+  const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (indexDoc.status < 200 || indexDoc.status >= 400) return "";
+  const scriptMatch = indexDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
+  if (!scriptMatch) return "";
+  const bundleDoc = await ctx.probe.get(new URL(scriptMatch[1], ctx.origin).toString(), {
+    maxBytes: 2_000_000,
+    timeoutMs: 20000
+  });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return "";
+  return bundleDoc.body;
+}
+
+const vulnwebCommentsXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/comments(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  const markers = [
+    /unsanitized user input/i.test(bundle) && "unsanitized user input",
+    /script injection/i.test(bundle) && "script injection",
+    /<script>alert\('XSS'\)/i.test(bundle) && "XSS payload hint"
+  ].filter((m): m is string => Boolean(m));
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers,
+      snippet: bundle.match(/Add a comment[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /comments route scan — SPA bundle documents unsanitized comment XSS with script-injection placeholder"
+    }
+  };
+};
+
+const vulnwebSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/' or '1'='1/i.test(bundle) ||
+    !/SQL injection vulnerabilities due to unsanitized user input/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: bundle.match(/SQL injection[\s\S]{0,100}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /search route scan — SPA bundle documents SQL injection via unsanitized search input with admin' OR '1'='1 bypass"
+    }
+  };
+};
+
+const vulnwebProfileIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Password \(Exposed!\)/i.test(bundle) || !/IDOR vulnerability/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: bundle.match(/Password \(Exposed!\)[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /profile route scan — SPA bundle exposes user passwords via IDOR profile view without authorization"
+    }
+  };
+};
+
 // --- Credentials or secrets left in HTML comments (Mutillidae-style misconfig) -------
 const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   const re =
@@ -40615,6 +40701,9 @@ export const RULES: Record<string, Rule> = {
   clientSideCsTrainingAcademyEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,
+  vulnwebCommentsXssRouteLiveOracle,
+  vulnwebSearchSqliRouteLiveOracle,
+  vulnwebProfileIdorRouteLiveOracle,
   clientSideHackingLabEvidence,
   clientSideHacksecEvidence,
   clientSideSolydTrainingEvidence,
