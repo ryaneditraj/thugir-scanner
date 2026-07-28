@@ -23710,6 +23710,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-checkout-private-coupon-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Duck Store private coupon checkout live oracle",
+    description:
+      "POST /api/v1/orders/checkout accepts coupon_code INTERNAL100 (is_public:false, disclosed only via MCP list_coupons) and completes the order at shipping-only total_price — private coupon checkout oracle.",
+    impactOneline:
+      "Hidden staff coupons applied at checkout enable discount abuse without authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCheckoutPrivateCouponLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate coupon visibility and eligibility at checkout — Duck Store is intentional lab software.",
+      steps: [
+        "Reject is_public:false coupons for regular user checkout.",
+        "Re-validate coupon eligibility server-side at order settlement.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our checkout accepts INTERNAL100 private coupons from MCP disclosure. Show coupon authorization at checkout.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-checkout-private-coupon-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Duck Store checkout private coupon route live oracle",
+    description:
+      "When scanning /api/v1/orders/checkout, POST with coupon_code INTERNAL100 completes at shipping-only total — route-specific private coupon checkout oracle.",
+    impactOneline:
+      "Route scans on checkout should confirm hidden coupon codes bypass staff-only restrictions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCheckoutPrivateCouponRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate private coupons behind staff roles at checkout settlement.",
+      steps: [
+        "Reject is_public:false coupons for user JWTs.",
+        "Audit checkout coupon validation logic.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/orders/checkout route accepts INTERNAL100 without staff auth. Show route-specific coupon remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-profile-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store profile role mass-assignment live oracle",
+    description:
+      "PUT /api/v1/users/me/profile accepts role:admin in the JSON body and subsequent GET /api/v1/admin/users returns the full admin roster — profile mass-assignment privilege escalation oracle.",
+    impactOneline:
+      "Writable role fields on profile updates let any user self-elevate to admin and access privileged APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProfileMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never accept role changes from user-controlled profile PUT bodies — Duck Store is intentional lab software.",
+      steps: [
+        "Strip role and privilege fields from user-editable profile schemas.",
+        "Enforce admin role assignment only via privileged admin endpoints.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PUT /api/v1/users/me/profile accepts role:admin from users. Show mass-assignment remediation for profile APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-profile-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store profile mass-assignment route live oracle",
+    description:
+      "When scanning /api/v1/users/me/profile, PUT role:admin self-elevates and unlocks GET /api/v1/admin/users — route-specific mass-assignment oracle.",
+    impactOneline:
+      "Route scans on profile endpoints should confirm privilege fields are not user-writable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProfileMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role mass-assignment on /users/me/profile route handlers.",
+      steps: [
+        "Use allowlists for writable profile fields.",
+        "Return 403 when clients attempt role changes.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/users/me/profile route accepts role:admin. Show route-specific mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvga-route-live-oracle",
     platform: "generic",
     category: "Information disclosure",
