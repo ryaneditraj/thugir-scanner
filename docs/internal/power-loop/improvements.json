@@ -1,7 +1,23 @@
 {
   "candidates": [
     {
-      "source": "discovery:auth-security-project.onrender.com",
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=<script>thugirXssProbe</script> reflects raw script unescaped; dvwu.vercel.app/labs/xss findings 8→10 with dvwu-search-xss-route-live-oracle + dvwu-notices-lfi-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-notices-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/notices?file=../../../etc/passwd returns root:x:0:0 passwd lines; dvwu.vercel.app/labs/sqli findings 8→10 and /labs/idor 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-portal-sqli-labs-route-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended dvwuPortalSqliRouteLiveOracle to match /labs/sqli route scans; dvwu.vercel.app/labs/sqli findings 8→10 with dvwu-portal-sqli-route-live-oracle firing; benchmark 6/6 maintained"
+    },
       "slug": "auth-security-project-login-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=admin' OR '1'='1 returns 302 /dashboard + session cookie; auth-security-project.onrender.com/login findings 3→4; benchmark juice-shop-staging 14 findings 6/6 maintained"

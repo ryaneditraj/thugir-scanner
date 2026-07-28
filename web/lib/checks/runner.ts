@@ -1402,6 +1402,8 @@ const DEEP_RULES = new Set<string>([
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
   "dvwuPortalSqliRouteLiveOracle",
+  "dvwuSearchXssRouteLiveOracle",
+  "dvwuNoticesLfiRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
   "vaultappLabGuideRouteLiveOracle",
   "wrongsecretsChallengeLiveOracle",

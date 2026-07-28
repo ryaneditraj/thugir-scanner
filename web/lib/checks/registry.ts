@@ -39058,7 +39058,7 @@ function isDvwuHost(ctx: RuleContext): boolean {
 const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/portal/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl)) return NEGATIVE;
   const portalUrl = new URL("/api/portal", ctx.origin).toString();
   const doc = await ctx.probe.get(portalUrl, {
     method: "POST",
@@ -39079,6 +39079,60 @@ const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
       note: "DVWU POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login route oracle"
     }
   };
+};
+
+const dvwuSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/xss|xss|search)\/?$/i.test(pathname)) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", IST_EDU_XSS_PROBE);
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script>thugirXssProbe<\/script>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "DVWU GET /api/search?q= reflects raw <script> payload unescaped in HTML — reflected XSS route oracle"
+    }
+  };
+};
+
+const dvwuNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss))\b/i.test(pageUrl)) return NEGATIVE;
+  for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
+    const url = new URL("/api/notices", ctx.origin);
+    url.searchParams.set("file", payload);
+    const doc = await ctx.probe.get(url.toString(), { maxBytes: 4096 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const marker = NOTICES_FILE_LFI_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) continue;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: url.toString(),
+        marker: match?.[0]?.slice(0, 80) || "passwd contents",
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "DVWU GET /api/notices?file= accepts path traversal and returns /etc/passwd — LFI route oracle"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const vulnExposeXssPlaygroundRouteLiveOracle: Rule = async (ctx) => {
@@ -40677,6 +40731,8 @@ export const RULES: Record<string, Rule> = {
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
   dvwuPortalSqliRouteLiveOracle,
+  dvwuSearchXssRouteLiveOracle,
+  dvwuNoticesLfiRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
   clientSideArchonTrainingEvidence,
