@@ -23241,6 +23241,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ist-edu-newsletter-crlf-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu newsletter CRLF injection route live oracle",
+    description:
+      "POST /api/newsletter with CRLF in the email field triggers HTTP response splitting when scanning /newsletter — IST Edu header injection training oracle.",
+    impactOneline:
+      "CRLF injection in newsletter subscriptions lets attackers inject forged email headers or poison HTTP responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduNewsletterCrlfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — strip CR/LF from values placed in HTTP headers.",
+      steps: [
+        "Reject newline characters in email subscription inputs.",
+        "Never reflect user input into Set-Cookie or custom response headers.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/newsletter route accepts CRLF in the email field causing HTTP response splitting. Show header injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-csrf-newsletter-crlf-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU CSRF newsletter CRLF route live oracle",
+    description:
+      "When scanning /labs/csrf or /newsletter, POST /api/newsletter with CRLF in email confirms HTTP response splitting — Damn Vulnerable Web University CSRF/header injection route oracle.",
+    impactOneline:
+      "Unsanitized newsletter email input enables CRLF injection that can forge headers or split HTTP responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuCsrfNewsletterCrlfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — validate newsletter input and block CRLF sequences.",
+      steps: [
+        "Strip CR and LF characters from email subscription fields.",
+        "Use framework APIs that sanitize header values by default.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/csrf route documents POST /api/newsletter CRLF injection. Show HTTP response splitting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-login-nosql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NodeGoat login NoSQL bypass route live oracle",
+    description:
+      "POST /login with MongoDB $gt operator objects bypasses authentication when scanning nodegoat-websec.herokuapp.com/login — NoSQL injection login bypass route oracle.",
+    impactOneline:
+      "NoSQL operator injection in login forms lets attackers bypass authentication without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatLoginNosqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional training software — never pass raw user objects to MongoDB find queries.",
+      steps: [
+        "Cast login fields to strings before database queries.",
+        "Reject JSON objects in username/password form fields.",
+        "Run NodeGoat only on isolated OWASP training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat /login route accepts MongoDB $gt operator injection for auth bypass. Show NoSQL-safe login remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vaultapp-lab-guide-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

