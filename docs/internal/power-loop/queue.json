@@ -22,7 +22,7 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://duck-store.escape.tech/api/v1/coupons",
+      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
       "source": "Escape Duck Store — coupon system business-logic oracle (Escape.tech Duck Store lab)",
       "auth": "public_demo"
     },

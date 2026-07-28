@@ -23320,6 +23320,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-orders-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store orders BOLA live oracle",
+    description:
+      "GET /api/v1/orders/{id} returns full order detail with user_id, line items, pricing, and shipping metadata without authentication — the Escape Duck Store order BOLA training oracle.",
+    impactOneline:
+      "Unauthenticated order detail disclosure enables customer PII harvesting and cross-account order tampering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreOrdersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and owner checks on order detail endpoints.",
+      steps: [
+        "Return orders only for the authenticated user from /orders/me.",
+        "Enforce object-level authorization on /orders/{id} before returning line items.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store API exposes GET /api/v1/orders/{id} without auth. Show BOLA remediation for order routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-orders-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/orders route BOLA live oracle",
+    description:
+      "When scanning /api/v1/orders routes, unauthenticated probes return another user's order detail with line items — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-specific scans should surface broken object-level authorization on order APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreOrdersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on order detail routes.",
+      steps: [
+        "Gate /api/v1/orders/{id} behind session auth.",
+        "Verify order.user_id matches the authenticated principal.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/orders route leaks order details without auth. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-coupons-disclosure-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store private coupon disclosure live oracle",
+    description:
+      "GET /api/v1/orders/coupons returns non-public coupon codes (is_public:false) such as VIP50 and INTERNAL100 without authentication — the Escape Duck Store coupon business-logic oracle.",
+    impactOneline:
+      "Leaked private coupon codes enable unauthorized discounts and referral fraud on e-commerce APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCouponsDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hide non-public coupon codes from unauthenticated list endpoints.",
+      steps: [
+        "Filter is_public:false coupons from anonymous responses.",
+        "Require admin roles to enumerate internal promotion codes.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/orders/coupons endpoint leaks private coupon codes without auth. Show business-logic access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-coupons-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store coupons route live oracle",
+    description:
+      "When scanning /api/v1/orders/coupons or /api/v1/coupons, unauthenticated probes list private coupon codes — route-specific business-logic oracle.",
+    impactOneline:
+      "Route-specific scans should surface excessive data exposure on coupon management APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCouponsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict coupon enumeration to authenticated admin clients.",
+      steps: [
+        "Remove private codes from public coupon list responses.",
+        "Validate coupon visibility per role on route handlers.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our coupons route exposes private promotion codes without auth. Show route-specific business-logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "DVGA live instance route oracle",
+    description:
+      "When scanning any route on dvga.tools.escape.tech, home re-fetch confirms Damn Vulnerable GraphQL Application training UI and POST /graphql returns enabled introspection — route-specific DVGA live oracle.",
+    impactOneline:
+      "Public DVGA instances expose GraphQL introspection and documented injection/SSRF mutations for security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production; auth-gate DVGA training deployments.",
+      steps: [
+        "Turn off schema introspection on public GraphQL endpoints.",
+        "Run DVGA only on isolated lab infrastructure.",
+        "Block unauthenticated access to importPaste and audit mutations."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA deployment exposes GraphQL introspection on route scans. Show how to auth-gate and disable introspection on lab hosts.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-catalog-search-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
