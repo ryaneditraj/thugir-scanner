@@ -23551,5 +23551,31 @@ export const genericPatterns: Pattern[] = [
       "Our /profile route exposes passwords via IDOR. Show authorization checks and password handling remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "vulnweb-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnWeb /csrf CSRF route live oracle",
+    description:
+      "When scanning /csrf, the VulnWeb Netlify SPA bundle documents a Cross-Site Request Forgery lab forcing authenticated users to execute unwanted actions — the VulnWeb CSRF lab oracle.",
+    impactOneline:
+      "Missing CSRF protections let attackers trick authenticated users into performing state-changing actions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnwebCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnWeb is intentional training — use anti-CSRF tokens on all state-changing requests.",
+      steps: [
+        "Issue and validate CSRF tokens on every state-changing form and API call.",
+        "Use SameSite cookies and verify Origin/Referer headers.",
+        "Run VulnWeb only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /csrf route documents missing CSRF token validation. Show anti-CSRF token and SameSite cookie remediation.",
+    version: 1,
+    enabled: true
   }
 ];

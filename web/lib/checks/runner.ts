@@ -669,10 +669,13 @@ function scanSecret(pattern: Pattern, combined: string): PatternFinding | null {
   // Webpack emits `re__WEBPACK_IMPORTED_MODULE_N__` identifiers that false-positive Resend keys.
   const matches =
     pattern.slug === "secret-resend"
-      ? raw.filter(
-          (m) =>
-            !/WEBPACK|__WEBPACK|MODULE/i.test(m) && (m.match(/_/g) || []).length <= 1
-        )
+      ? raw.filter((m) => {
+          if (/WEBPACK|__WEBPACK|MODULE/i.test(m)) return false;
+          // Canonical Resend keys use exactly two underscores: re_<8>_<24>
+          if (/^re_[1-9A-HJ-NP-Za-km-z]{8}_[1-9A-HJ-NP-Za-km-z]{24}$/.test(m)) return true;
+          // Reject snake_case identifiers like re_get_double_tap_distance
+          return (m.match(/_/g) || []).length <= 1;
+        })
       : pattern.slug === "secret-openai"
         ? raw.filter(
             (m) =>
@@ -1413,6 +1416,7 @@ const DEEP_RULES = new Set<string>([
   "vulnwebCommentsXssRouteLiveOracle",
   "vulnwebSearchSqliRouteLiveOracle",
   "vulnwebProfileIdorRouteLiveOracle",
+  "vulnwebCsrfRouteLiveOracle",
   "istEduSsrfRedirectRouteLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
