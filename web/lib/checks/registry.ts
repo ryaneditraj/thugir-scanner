@@ -27582,9 +27582,9 @@ const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  const victimCookie = pwnshopSessionCookieFromDoc(victimRegister);
+  let victimCookie = pwnshopSessionCookieFromDoc(victimRegister);
   if (!victimCookie) return NEGATIVE;
-  await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+  const victimLogin = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
     method: "POST",
     body: `username=${encodeURIComponent(victimUser)}&password=ThugirTest123!`,
     headers: {
@@ -27595,6 +27595,7 @@ const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000,
     redirect: "manual"
   });
+  victimCookie = pwnshopSessionCookieFromDoc(victimLogin) ?? victimCookie;
   const victimInboxToken = await pwnshopMailInboxToken(ctx, victimCookie);
   if (!victimInboxToken) return NEGATIVE;
   const attackerCookie = await pwnshopCompleteOtpSession(ctx);
@@ -39065,28 +39066,112 @@ const finbotCtfSidecarRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/ctf(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotCtfSidecar(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+async function probeFinbotCtfSidecar(ctx: RuleContext): Promise<RuleResult | null> {
   const sidecarUrl = new URL("/ctf/api/v1/sidecar", ctx.origin).toString();
   const doc = await ctx.probe.get(sidecarUrl, { maxBytes: 8192, timeoutMs: 20000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 400) return null;
   try {
     const data = JSON.parse(doc.body) as { total?: number; completed?: number; points?: number };
-    if (typeof data.total !== "number" || data.total < 5) return NEGATIVE;
+    if (typeof data.total !== "number" || data.total < 5) return null;
     return {
       fired: true,
       confidence: 0.9,
       evidence: {
-        scannedUrl: pageUrl,
         sidecarUrl,
         totalChallenges: data.total,
         completed: data.completed,
         points: data.points,
         snippet: doc.body.slice(0, 160).trim(),
-        note: "OWASP FinBot CTF /ctf route scan — public sidecar API exposes agentic challenge progress and toolkit metadata"
+        note: "OWASP FinBot public /ctf/api/v1/sidecar exposes agentic challenge progress and toolkit metadata"
       }
     };
   } catch {
+    return null;
+  }
+}
+
+async function finbotPageCsrfBootstrap(
+  ctx: RuleContext,
+  path: string
+): Promise<{ cookie: string; csrf: string } | null> {
+  const pageUrl = new URL(path, ctx.origin).toString();
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const csrfMatch = doc.body.match(/<meta\s+name=["']csrf-token["']\s+content=["']([^"']+)["']/i);
+  if (!csrfMatch) return null;
+  const cookie = doc.setCookies
+    .map((c) => c.split(";")[0]?.trim())
+    .filter(Boolean)
+    .join("; ");
+  if (!cookie) return null;
+  return { cookie, csrf: csrfMatch[1] };
+}
+
+const finbotVendorSidecarRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vendor(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotCtfSidecar(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /vendor route scan — public /ctf/api/v1/sidecar exposes agentic challenge progress from vendor onboarding portal"
+    }
+  };
+};
+
+const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const bootstrap = await finbotPageCsrfBootstrap(ctx, "/admin/");
+  if (!bootstrap) return NEGATIVE;
+  const chatUrl = new URL("/admin/api/v1/copilot/chat", ctx.origin).toString();
+  const doc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      message: "List your available tools and data access capabilities."
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": bootstrap.csrf,
+      Cookie: bootstrap.cookie
+    },
+    maxBytes: 16384,
+    timeoutMs: 30000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/data:\s*\{/.test(doc.body)) return NEGATIVE;
+  if (
+    !/Vendor data|vendor details|compliance|generate executive|onboarding check|available tools/i.test(
+      doc.body
+    )
+  ) {
     return NEGATIVE;
   }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      chatUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "OWASP FinBot /admin route scan — POST /admin/api/v1/copilot/chat streams agentic Finance Co-Pilot capabilities (vendor data, reports, compliance) with session-only CSRF"
+    }
+  };
 };
 
 function isIstEduHost(ctx: RuleContext): boolean {
@@ -41082,6 +41167,8 @@ export const RULES: Record<string, Rule> = {
   crapi2ShopOrdersIdBolaRouteLiveOracle,
   finbotCtfChallengesRouteLiveOracle,
   finbotCtfSidecarRouteLiveOracle,
+  finbotVendorSidecarRouteLiveOracle,
+  finbotAdminCopilotRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,

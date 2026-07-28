@@ -1401,6 +1401,8 @@ const DEEP_RULES = new Set<string>([
   "crapiVehicleRouteLiveOracle",
   "finbotCtfChallengesRouteLiveOracle",
   "finbotCtfSidecarRouteLiveOracle",
+  "finbotVendorSidecarRouteLiveOracle",
+  "finbotAdminCopilotRouteLiveOracle",
   "istEduSearchXssRouteLiveOracle",
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
@@ -8519,6 +8521,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const w = (p: Pattern) => {
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
       if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
+      if (/owasp-finbot-ctf\.org/i.test(origin) && p.slug.startsWith("finbot-")) return -2;
       if (/vulnweb\.netlify\.app/i.test(origin) && p.slug.startsWith("vulnweb-")) return -2;
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (p.platform === "generic") return 0;

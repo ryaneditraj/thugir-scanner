@@ -17449,6 +17449,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-vendor-sidecar-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot vendor portal sidecar route live oracle",
+    description:
+      "When scanning /vendor, GET /ctf/api/v1/sidecar returns public challenge progress and toolkit metadata — route-specific FinBot vendor portal oracle.",
+    impactOneline:
+      "Unauthenticated CTF sidecar APIs leak agentic challenge counts from the FinBot vendor onboarding portal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotVendorSidecarRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict sidecar APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/sidecar.",
+        "Avoid exposing toolkit dead-drop and exfil metadata without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /vendor portal scan reaches /ctf/api/v1/sidecar without auth. Show how to gate agentic CTF progress APIs behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-admin-copilot-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot admin copilot route live oracle",
+    description:
+      "When scanning /admin, POST /admin/api/v1/copilot/chat streams Finance Co-Pilot agentic capabilities (vendor data, reports, compliance) with session-only CSRF — route-specific FinBot admin oracle.",
+    impactOneline:
+      "Unauthenticated agentic copilot chat APIs expose financial data access and report-generation tools on FinBot admin portals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotAdminCopilotRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot admin copilot is intentional agentic AI training — require strong authentication before exposing copilot chat APIs.",
+      steps: [
+        "Require authenticated admin sessions before /admin/api/v1/copilot/chat.",
+        "Scope copilot tool access to least-privilege financial data.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /admin/api/v1/copilot/chat route streams agentic financial copilot capabilities. Show how to protect admin copilot APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ist-edu-search-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
