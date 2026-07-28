@@ -32087,6 +32087,153 @@ const duckStoreTestimonialsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const duckStoreOrdersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderIdMatch = pageUrl.match(/\/api\/v1\/orders\/(\d+)/i);
+  const orderPath = orderIdMatch ? `/api/v1/orders/${orderIdMatch[1]}` : "/api/v1/orders/1";
+  const orderUrl = new URL(orderPath, ctx.origin).toString();
+  const doc = await ctx.probe.get(orderUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let order: { id?: number; user_id?: string; items?: unknown[]; status?: string };
+  try {
+    order = JSON.parse(doc.body) as typeof order;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!order.id || !order.user_id || !Array.isArray(order.items) || order.items.length < 1) return NEGATIVE;
+  if (!/"total_price"\s*:/.test(doc.body) || !/"status"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: order.items.length >= 2 ? 0.93 : 0.91,
+    evidence: {
+      orderUrl,
+      orderId: order.id,
+      userId: order.user_id,
+      status: order.status,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/orders/{id} returns full order detail with user_id, line items, and pricing without authentication — BOLA oracle"
+    }
+  };
+};
+
+const duckStoreOrdersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/orders(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreOrdersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/orders route scan — unauthenticated order detail disclosure (BOLA)"
+    }
+  };
+};
+
+const duckStoreCouponsDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/v1/orders/coupons", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let rows: Array<{ code?: string; discount_percent?: number; is_public?: boolean; is_active?: boolean }>;
+  try {
+    rows = JSON.parse(doc.body) as typeof rows;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+  const privateCoupons = rows.filter((r) => r.is_public === false && r.code);
+  if (privateCoupons.length < 1) return NEGATIVE;
+  const highValue = privateCoupons.find((r) => (r.discount_percent ?? 0) >= 50);
+  return {
+    fired: true,
+    confidence: highValue ? 0.93 : 0.91,
+    evidence: {
+      url,
+      couponCount: rows.length,
+      privateCodes: privateCoupons.slice(0, 4).map((r) => r.code),
+      samplePrivate: privateCoupons[0]?.code,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/orders/coupons lists non-public coupon codes (is_public:false) without authentication — business-logic disclosure oracle"
+    }
+  };
+};
+
+const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/(?:orders\/)?coupons/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreCouponsDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store coupons route scan — private coupon codes exposed via unauthenticated /api/v1/orders/coupons"
+    }
+  };
+};
+
+function isDvgaLiveHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    return /(?:^|\.)dvga\.tools\.escape\.tech$|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(host);
+  } catch {
+    return /dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(ctx.origin);
+  }
+}
+
+const dvgaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${homeDoc.body}`;
+  const markers: { label: string; sample: string }[] = [];
+  if (/Damn Vulnerable GraphQL Application/i.test(corpus)) {
+    markers.push({ label: "DVGA application title", sample: "Damn Vulnerable GraphQL Application" });
+  }
+  if (/dvgql_logo\.png|\/import_paste/i.test(corpus)) {
+    markers.push({ label: "DVGA sidebar import_paste route", sample: "/import_paste" });
+  }
+  if (/dolevf\/Damn-Vulnerable-GraphQL-Application/i.test(corpus)) {
+    markers.push({ label: "DVGA GitHub repo link", sample: "dolevf/Damn-Vulnerable-GraphQL-Application" });
+  }
+  const gqlUrl = new URL("/graphql", ctx.origin).toString();
+  const gqlDoc = await ctx.probe.get(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ __schema { queryType { name } } }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const introspection =
+    gqlDoc.status >= 200 &&
+    gqlDoc.status < 300 &&
+    /"__schema"\s*:/.test(gqlDoc.body) &&
+    /"queryType"/.test(gqlDoc.body);
+  if (markers.length < 1 && !introspection) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: introspection && markers.length >= 2 ? 0.93 : introspection ? 0.91 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      homeUrl,
+      graphqlUrl: gqlUrl,
+      introspection,
+      markers: markers.slice(0, 3),
+      snippet: gqlDoc.body.slice(0, 120).trim(),
+      note: "DVGA live host route scan — GraphQL introspection enabled and Damn Vulnerable GraphQL Application training sidebar confirmed via home re-fetch"
+    }
+  };
+};
+
 // --- Gin & Juice Shop catalog route oracles (ginandjuice.shop) ----------------------
 function isGinAndJuiceHost(ctx: RuleContext): boolean {
   return /ginandjuice\.shop/i.test(ctx.origin);
@@ -41520,6 +41667,11 @@ export const RULES: Record<string, Rule> = {
   duckStoreUsersRouteLiveOracle,
   duckStoreTestimonialsBolaLiveOracle,
   duckStoreTestimonialsRouteLiveOracle,
+  duckStoreOrdersBolaLiveOracle,
+  duckStoreOrdersRouteLiveOracle,
+  duckStoreCouponsDisclosureLiveOracle,
+  duckStoreCouponsRouteLiveOracle,
+  dvgaRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
