@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-vendor-sidecar-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/sidecar returns {\"total\":19,...} when scanning /vendor/; owasp-finbot-ctf.org/vendor findings 8→9 with route-specific sidecar oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-admin-copilot-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /admin/api/v1/copilot/chat SSE streams compliance/reports/tools capabilities with session CSRF from /admin/; owasp-finbot-ctf.org/admin findings 8→9 with route-specific copilot oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-inbox-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: victim login cookie now captured after POST /login redirect:manual before GET /mail/<token>; pwnshop.ctfsecurity.com/mail/1 findings 20→22 with pwnshop-mail-inbox-idor + pwnshop-mail-idor-route oracles; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnweb.netlify.app",
       "slug": "vulnweb-search-sqli-route-live-oracle",
       "status": "shipped",

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T12:04:07.601Z",
-  "total": 965,
-  "uniqueSlugs": 960,
+  "generatedAt": "2026-07-28T13:12:20.753Z",
+  "total": 967,
+  "uniqueSlugs": 962,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 947,
+    "generic": 949,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 880,
+    "deep": 882,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "SSRF": 5,
     "Server-side request forgery": 35,
     "Sensitive data exposure": 24,
-    "AI security": 41,
+    "AI security": 43,
     "Business logic": 4,
     "Open redirect": 1,
     "Authentication bypass": 2,
@@ -743,8 +743,10 @@
     "fauxbank-profile-sensitive-data-live-oracle",
     "fauxbank-stored-xss-support-probe",
     "fauxbank-transfer-route-live-oracle",
+    "finbot-admin-copilot-route-live-oracle",
     "finbot-ctf-challenges-route-live-oracle",
     "finbot-ctf-sidecar-route-live-oracle",
+    "finbot-vendor-sidecar-route-live-oracle",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
     "ginandjuice-catalog-route-live-oracle",
