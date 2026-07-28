@@ -32627,6 +32627,190 @@ const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function duckStoreSpaBundleBody(ctx: RuleContext): Promise<string> {
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const jsPath = homeDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i)?.[1];
+  if (!jsPath) return ctx.combined;
+  const jsDoc = await ctx.probe.get(new URL(jsPath, ctx.origin).toString(), {
+    maxBytes: 600000,
+    timeoutMs: 20000
+  });
+  return `${ctx.combined}\n${jsDoc.body}`;
+}
+
+const duckStoreAuthLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return NEGATIVE;
+  let token: string | undefined;
+  try {
+    const data = JSON.parse(loginDoc.body) as { access_token?: string; requires_totp?: boolean };
+    token = data.access_token;
+    if (data.requires_totp) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!token) return NEGATIVE;
+  let role = "";
+  try {
+    const payload = JSON.parse(
+      atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+    ) as { role?: string; username?: string };
+    role = payload.role ?? "";
+    if (payload.username !== "admin" || role !== "admin") return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      loginUrl,
+      role,
+      snippet: loginDoc.body.slice(0, 160).trim(),
+      note: "Duck Store POST /api/v1/auth/login accepts default admin/admin credentials and returns admin JWT without MFA — weak credential oracle"
+    }
+  };
+};
+
+const duckStoreAuthLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAuthLoginWeakCredentialsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/auth/login route scan — default admin/admin credentials return admin JWT without MFA"
+    }
+  };
+};
+
+const duckStoreOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const bundle = await duckStoreSpaBundleBody(ctx);
+  const hasRedirectParam =
+    /(?:URLSearchParams|\.get)\(\s*["']redirect["']\s*\)/i.test(bundle) &&
+    /href:\s*\w+/.test(bundle) &&
+    /404 Error: User attempted to access non-existent route/i.test(bundle);
+  if (!hasRedirectParam) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const probeUrl = new URL("/nonexistent", ctx.origin);
+  probeUrl.searchParams.set("redirect", `https://${probeHost}/`);
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      probeHost,
+      snippet: bundle.match(/a\.get\(["']redirect["']\)[\s\S]{0,120}/)?.[0]?.slice(0, 160),
+      note: "Duck Store 404 page assigns href from unvalidated redirect query param — DOM open-redirect oracle"
+    }
+  };
+};
+
+const duckStoreOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/redirect=/i.test(pageUrl) && !/\/nonexistent/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store open-redirect route scan — 404 handler links href to unvalidated redirect query parameter"
+    }
+  };
+};
+
+const duckStoreReferralCodeAbuseLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const username = `thugir_ref_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username: `${username}_base`,
+      email: `${username}_base@example.com`,
+      password: "ThugirTest123!"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  let baselineCredit = 0;
+  try {
+    baselineCredit = (JSON.parse(baselineDoc.body) as { account_credit?: number }).account_credit ?? 0;
+  } catch {
+    return NEGATIVE;
+  }
+  const abuseDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username: `${username}_ref`,
+      email: `${username}_ref@example.com`,
+      password: "ThugirTest123!",
+      referral_code: "admin"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (abuseDoc.status < 200 || abuseDoc.status >= 400) return NEGATIVE;
+  let abuseCredit = 0;
+  try {
+    abuseCredit = (JSON.parse(abuseDoc.body) as { account_credit?: number }).account_credit ?? 0;
+  } catch {
+    return NEGATIVE;
+  }
+  if (abuseCredit < 5 || abuseCredit <= baselineCredit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      registerUrl,
+      referral_code: "admin",
+      baselineCredit,
+      abuseCredit,
+      snippet: abuseDoc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/auth/register with referral_code=admin grants $5 account_credit without validating referral ownership — referral abuse oracle"
+    }
+  };
+};
+
+const duckStoreReferralCodeAbuseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/register/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreReferralCodeAbuseLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/auth/register route scan — referral_code=admin grants signup credit without ownership validation"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -42299,6 +42483,12 @@ export const RULES: Record<string, Rule> = {
   duckStoreProfileMassAssignmentRouteLiveOracle,
   duckStoreTestimonialsStoredXssLiveOracle,
   duckStoreTestimonialsStoredXssRouteLiveOracle,
+  duckStoreAuthLoginWeakCredentialsLiveOracle,
+  duckStoreAuthLoginWeakCredentialsRouteLiveOracle,
+  duckStoreOpenRedirectLiveOracle,
+  duckStoreOpenRedirectRouteLiveOracle,
+  duckStoreReferralCodeAbuseLiveOracle,
+  duckStoreReferralCodeAbuseRouteLiveOracle,
   dvgaRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
