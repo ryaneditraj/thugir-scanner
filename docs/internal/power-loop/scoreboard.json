@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T03:25:00.000Z",
+  "updated_at": "2026-07-28T04:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3099,
-  "total_findings": 31767,
+  "total_sites_scanned": 3108,
+  "total_findings": 31835,
   "critical_findings": 73,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2154,
-  "discovery_findings": 26545,
-  "improvements_shipped": 1170,
-  "last_run": "2026-07-28T03:25:00.000Z",
+  "discovery_urls_added": 2159,
+  "discovery_findings": 26596,
+  "improvements_shipped": 1378,
+  "last_run": "2026-07-28T04:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "oracle_findings": 17,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 455,
+      "probes_run": 458,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); secret-resend slug still absent"
+      "note": "Primary+staging Heroku 503; escape.tech fallback 6/6 (17 findings); secret-resend slug still absent; shipped fallback_urls-on-error fix"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 58,
-      "focus": "vAPI Arena JWT/SSRF/XSS route oracles shipped; seclab API routes + vaultapp lab-guide + dvwu portal drain",
-      "improvements_shipped_this_run": 3
+      "findings": 51,
+      "focus": "vaultapp IDOR API routes + vAPI API8 secret + nodegoat register + dvwu SQLi lab drain",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/jwt/user: 11→13 — vapi-jwt-weak-token-route-live-oracle (HS256 re-sign role=admin returns flag{jwt_*})",
-      "vapi.apisec.ai/vapi/serversurfer: 11→12 — vapi-serversurfer-ssrf-route-live-oracle (example.com fetch, 127.0.0.1 blocked)",
-      "vapi.apisec.ai/vapi/stickynotes: 11→12 — vapi-stickynotes-stored-xss-route-live-oracle (format=html stored <script> + flag{xss_*})",
-      "vaultapp-omega.vercel.app/lab-guide: 8 findings — client-side-vaultapp-lab-evidence; IDOR API live oracles absent",
-      "dvwu.vercel.app/api/portal: 4 findings — sql-error-disclosure; POST auth-bypass live oracle absent",
-      "seclab.vercel.app/api/sqli-vulnerable: 3-finding hub without route-specific SQLi live oracle"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (17 findings) — no benchmark misses after escape.tech fallback",
+      "auth-security-project.onrender.com/dashboard: Render now reachable — post-login-sql-bypass + client-side-auth-security-project-evidence (3 findings)",
+      "dvwu.vercel.app/labs/sqli: 8 findings — sql-error-disclosure + client-side-sql-evidence on DVWU SQLi lab module",
+      "ssrf.vulnlab.dev/gopher: 12 findings — gopher-route + cross-lab SSRF oracle cluster",
+      "vaultapp-omega.vercel.app/api/users/1: 6 findings — client-side-vaultapp-lab-evidence; IDOR live oracle absent (401 without session)",
+      "vapi.apisec.ai/vapi/api8/user/secret: 11-finding cross-API hub without API8-secret route-specific oracle",
+      "nodegoat-websec.herokuapp.com/register: thin 2-finding hub — NoSQL registration oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "seclab.vercel.app/api/*-vulnerable routes: 3-finding hub without route-specific SQLi/IDOR/CSRF live oracles",
-      "vaultapp-omega.vercel.app/lab-guide: IDOR challenge guide present but /api/users/* live oracles absent (401 without session)",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: avatar-upload route oracle still absent without OTP session",
-      "vulnerable-web-site.vercel.app/ssrf: auth-gated SSRF lab route oracle still absent",
-      "auth-security-project.onrender.com: Render deploy unreachable — dashboard/login oracles blocked"
+      "vaultapp-omega.vercel.app/api/users/* and /api/documents/*: 6-finding hub without IDOR live oracle (401 without JWT session)",
+      "vapi.apisec.ai/vapi/api8/user/secret: cross-API hub fingerprint without API8 secret-exposure route oracle",
+      "nodegoat-websec.herokuapp.com/register: NoSQL operator injection oracle absent (2 findings only)",
+      "seclab.vercel.app/api/*-vulnerable routes: still queued — route-specific SQLi/IDOR/CSRF live oracles pending drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 14,
-    "vapi.apisec.ai/vapi/jwt/user": 13,
-    "vapi.apisec.ai/vapi/serversurfer": 12,
-    "vapi.apisec.ai/vapi/stickynotes": 12,
-    "vaultapp-omega.vercel.app/lab-guide": 8,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vuln-expose.vercel.app/xss/comments": 14
+    "juice-shop.demo.escape.tech": 17,
+    "ssrf.vulnlab.dev/gopher": 12,
+    "vapi.apisec.ai/vapi/api8/user/secret": 11,
+    "dvwu.vercel.app/labs/sqli": 8,
+    "vaultapp-omega.vercel.app/api/users/1": 6,
+    "vaultapp-omega.vercel.app/api/documents/1": 6,
+    "auth-security-project.onrender.com/dashboard": 3,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
