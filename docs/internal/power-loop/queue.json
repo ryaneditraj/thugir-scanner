@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-27T23:05:38.382Z",
+  "updated_at": "2026-07-28T00:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/login",
+      "source": "JuaniVeltri/vuln-expose — SQLi authentication-bypass lab /api/auth/login (GitHub README Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/search",
+      "source": "JuaniVeltri/vuln-expose — SQLi data-extraction lab /api/search union-based (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/playground",
+      "source": "JuaniVeltri/vuln-expose — stored/reflected/DOM XSS playground lab (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/comments",
+      "source": "JuaniVeltri/vuln-expose — stored XSS comments lab /api/comments (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
+      "source": "OWASP WrongSecrets — challenge-20 C++ binary secrets oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vuln-expose.vercel.app/blog",
       "source": "JuaniVeltri/vuln-expose — corporate blog with hidden stored XSS in comments (Vercel OSS README)",
