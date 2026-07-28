@@ -18,6 +18,8 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extended dvwuPortalSqliRouteLiveOracle to match /labs/sqli route scans; dvwu.vercel.app/labs/sqli findings 8→10 with dvwu-portal-sqli-route-live-oracle firing; benchmark 6/6 maintained"
     },
+    {
+      "source": "discovery:auth-security-project.onrender.com",
       "slug": "auth-security-project-login-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=admin' OR '1'='1 returns 302 /dashboard + session cookie; auth-security-project.onrender.com/login findings 3→4; benchmark juice-shop-staging 14 findings 6/6 maintained"

@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T06:05:49.405Z",
+  "updated_at": "2026-07-28T07:06:04.720Z",
   "discovery_urls": [
+    {
+      "url": "https://all-seeing-eye-six.vercel.app/",
+      "source": "idootop/all-seeing-eye — Chrome <116 arbitrary file read demo /api/hello?path= (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/ssrf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SSRF /labs route on alternate Vercel deploy (ist-edu-bd.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/xss",
+      "source": "zahidoverflow/damn-vulnerable-web-university — reflected XSS /labs route on alternate Vercel deploy (ist-edu-bd.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/api/search",
+      "source": "zahidoverflow/damn-vulnerable-web-university — search API reflected XSS oracle GET /api/search?q= (dvwu.vercel.app deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/api/notices",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI oracle GET /api/notices?file= (dvwu.vercel.app deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvwu.vercel.app/labs/csrf",
       "source": "zahidoverflow/damn-vulnerable-web-university — CSRF lab module with missing token oracle (dvwu.vercel.app deploy)",
