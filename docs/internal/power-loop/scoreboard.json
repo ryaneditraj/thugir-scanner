@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T22:10:30.000Z",
+  "updated_at": "2026-07-28T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2233,
   "discovery_findings": 27619,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-28T22:10:30.000Z",
+  "improvements_shipped": 1161,
+  "last_run": "2026-07-28T22:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -48,41 +48,44 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (14 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (14 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 60,
-      "focus": "duck-store testimonials API hub + first ginandjuice catalog scan + vulnforge easy levels + agentpwn jailbreak/supply-chain",
-      "improvements_shipped_this_run": 0
+      "focus": "duck-store testimonials stored XSS + ginandjuice blog/post open redirect + catalog category SQLi",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503, no benchmark category misses",
-      "ginandjuice.shop/catalog?searchTerm=test: 8 findings — first ginandjuice scan with sql-error-disclosure + reflected-xss-query-param + ginandjuice-catalog-search-xss-live-oracle",
-      "duck-store.escape.tech/api/v1/testimonials: 16 findings — full duck-store live-oracle hub (checkout/mass-assignment/SQLi/SSRF/MCP) but no stored-XSS POST oracle slug",
-      "vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php: 5 findings — vulnforge-academy-level-sqli-route-live-oracle + reflexion-escalated-ssti",
-      "agentpwn.com/attacks/jailbreak/1: 7 findings — agentpwn-attack-route-live-oracle + hidden-prompt-injection",
-      "agentpwn.com/attacks/supply-chain/1: 7 findings — agentpwn-attack-route-live-oracle on supply-chain category"
+      "duck-store.escape.tech/api/v1/testimonials: 16→17 — duck-store-testimonials-stored-xss-live-oracle + route (POST <img onerror> stored unescaped)",
+      "ginandjuice.shop/blog/post?postId=3: 9→11 — ginandjuice-blog-post-open-redirect-live-oracle + route (back param DOM navigation)",
+      "ginandjuice.shop/catalog: 9→11 — ginandjuice-catalog-category-sqli-live-oracle + route (category=1' → HTTP 500)",
+      "ginandjuice.shop/catalog?searchTerm=test: 8 findings — ginandjuice-catalog-search-xss-live-oracle + sql-error-disclosure",
+      "vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php: 5 findings — vulnforge-academy-level-sqli-route-live-oracle",
+      "agentpwn.com/attacks/jailbreak/1: 7 findings — agentpwn-attack-route-live-oracle",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (requires funded Vulnbank card; payment declined on probe cards)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "duck-store.escape.tech/api/v1/testimonials: stored XSS POST oracle still absent (16-finding API hub without duck-store-testimonials-stored-xss slug)",
-      "ginandjuice.shop/logger + /blog/post + /catalog/search/2 queued but not drained this hour",
-      "duck-store.escape.tech/api/v1/auth/register + open-redirect + ginandjuice stock/search routes queued at queue tail pending drain",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated)"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP session works; vulnbank card payment declined)",
+      "ginandjuice.shop/logger: route returns 404 missing-content page — no vulnerability oracle",
+      "duck-store.escape.tech/api/v1/auth/register + open-redirect routes queued at queue tail pending drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
+    "duck-store.escape.tech/api/v1/testimonials": 17,
+    "ginandjuice.shop/blog/post?postId=3": 11,
+    "ginandjuice.shop/catalog": 11,
     "ginandjuice.shop/catalog?searchTerm=test": 8,
-    "duck-store.escape.tech/api/v1/testimonials": 16,
+    "duck-store.escape.tech/api/v1/orders/checkout": 18,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 25,
     "vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php": 5,
     "agentpwn.com/attacks/jailbreak/1": 7,
-    "agentpwn.com/attacks/supply-chain/1": 7,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 25,
-    "duck-store.escape.tech/api/v1/orders/checkout": 18
+    "ssrf.vulnlab.dev/basic": 12
   }
 }
