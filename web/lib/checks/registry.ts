@@ -32180,6 +32180,105 @@ const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const duckStoreSsrfFetchUrlLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const probeTarget = "https://httpbin.org/get";
+  const url = new URL(`/api/v1/uploads/fetch-url?url=${encodeURIComponent(probeTarget)}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { url?: string; status_code?: number; preview?: string; content_type?: string };
+  try {
+    parsed = JSON.parse(doc.body) as typeof parsed;
+  } catch {
+    return NEGATIVE;
+  }
+  if (parsed.status_code !== 200 || !parsed.preview) return NEGATIVE;
+  if (!/httpbin\.org/i.test(`${parsed.url || ""}\n${parsed.preview}`)) return NEGATIVE;
+  if (!/"origin"\s*:/.test(parsed.preview) || !/"url"\s*:/.test(parsed.preview)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /python-httpx/i.test(parsed.preview) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      probeTarget,
+      statusCode: parsed.status_code,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/uploads/fetch-url fetches attacker-controlled URLs server-side and returns response preview — SSRF oracle"
+    }
+  };
+};
+
+const duckStoreSsrfFetchUrlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/uploads\/(?:fetch-url|import-from-url)/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreSsrfFetchUrlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store uploads route scan — unauthenticated /api/v1/uploads/fetch-url SSRF fetches external URLs and returns body preview"
+    }
+  };
+};
+
+const duckStoreMcpCouponsDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/mcp/tools/list_coupons", ctx.origin).toString();
+  const payload = JSON.stringify({
+    jsonrpc: "2.0",
+    id: 1,
+    method: "tools/call",
+    params: { name: "list_coupons", arguments: {} }
+  });
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream"
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sseBody = doc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
+  const corpus = `${doc.body}\n${sseBody}`;
+  if (!/VIP50|EMPLOYEE75|INTERNAL100/i.test(corpus)) return NEGATIVE;
+  if (!/is_public\\?"\s*:\s*false|is_public"\s*:\s*false/i.test(corpus)) return NEGATIVE;
+  const privateMatch = corpus.match(/"code"\\?"\s*:\s*\\?"(VIP50|EMPLOYEE75|INTERNAL100)\\?"/i);
+  return {
+    fired: true,
+    confidence: privateMatch ? 0.93 : 0.91,
+    evidence: {
+      url,
+      privateCode: privateMatch?.[1],
+      snippet: corpus.slice(0, 200).trim(),
+      note: "Duck Store MCP POST /mcp/tools/list_coupons returns non-public coupon codes (VIP50, EMPLOYEE75, INTERNAL100) without authentication — MCP tool disclosure oracle"
+    }
+  };
+};
+
+const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mcp\/tools\/list_coupons/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreMcpCouponsDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store MCP route scan — list_coupons tool exposes private promotion codes without auth"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -38764,7 +38863,7 @@ const clientSideVapiEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/vAPI|vapi\.apisec\.ai|roottusk\/vapi/i.test(ctx.combined)) return NEGATIVE;
+  if (!/vAPI|vapi\.apisec\.ai|vapi\.tools\.escape\.tech|roottusk\/vapi/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
@@ -38776,8 +38875,63 @@ const clientSideVapiEvidence: Rule = async (ctx) => {
 };
 
 function isVapiHost(ctx: RuleContext): boolean {
-  return /vapi\.apisec\.ai/i.test(ctx.origin);
+  const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
+  return urls.some((raw) => {
+    try {
+      const host = new URL(raw).hostname.toLowerCase();
+      return /^(?:www\.)?vapi\.tools\.escape\.tech$/i.test(host) || /vapi\.apisec\.ai$/i.test(host);
+    } catch {
+      return /vapi\.tools\.escape\.tech|vapi\.apisec\.ai/i.test(raw);
+    }
+  });
 }
+
+function vapiCanonicalOrigin(ctx: RuleContext): string {
+  const urls = [ctx.scanUrl || "", ctx.home.finalUrl || "", ctx.origin];
+  for (const raw of urls) {
+    try {
+      const u = new URL(raw);
+      const host = u.hostname.toLowerCase();
+      if (/^(?:www\.)?vapi\.tools\.escape\.tech$/i.test(host)) return "https://vapi.tools.escape.tech";
+      if (/vapi\.apisec\.ai$/i.test(host)) {
+        u.protocol = "https:";
+        return u.origin;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  return ctx.origin.replace(/^http:\/\//i, "https://");
+}
+
+const vapiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const base = vapiCanonicalOrigin(ctx);
+  const homeUrl = new URL("/", base).toString();
+  const homeDoc = await fetchDoc(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${homeDoc.body}`;
+  const markers: { label: string; sample: string }[] = [];
+  if (/\bvAPI\b/i.test(corpus)) markers.push({ label: "vAPI application title", sample: "vAPI" });
+  if (/roottusk\/vapi|OWASP API Top 10/i.test(corpus)) {
+    markers.push({ label: "vAPI OWASP API Top 10 lab", sample: "roottusk/vapi" });
+  }
+  const bolaCtx = { ...ctx, origin: base };
+  const bola = await vapiApi1BolaLiveOracle(bolaCtx);
+  if (markers.length < 1 && !bola.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: bola.fired && markers.length >= 2 ? 0.94 : bola.fired ? 0.92 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      homeUrl,
+      markers: markers.slice(0, 3),
+      bolaEvidence: bola.fired ? bola.evidence : undefined,
+      snippet: bola.fired ? String(bola.evidence?.snippet || "").slice(0, 120) : homeDoc.body.slice(0, 120).trim(),
+      note: "vAPI live host route scan — OWASP API Top 10 training lab confirmed and API1 BOLA returns another user's record with flag"
+    }
+  };
+};
 
 const vapiApi1BolaLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
@@ -41689,6 +41843,7 @@ export const RULES: Record<string, Rule> = {
   vapiServerSurferRouteLiveOracle,
   vapiStickyNotesStoredXssLiveOracle,
   vapiStickyNotesRouteLiveOracle,
+  vapiRouteLiveOracle,
   duckStoreUsersBolaLiveOracle,
   duckStoreUsersRouteLiveOracle,
   duckStoreTestimonialsBolaLiveOracle,
@@ -41697,6 +41852,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreOrdersRouteLiveOracle,
   duckStoreCouponsDisclosureLiveOracle,
   duckStoreCouponsRouteLiveOracle,
+  duckStoreSsrfFetchUrlLiveOracle,
+  duckStoreSsrfFetchUrlRouteLiveOracle,
+  duckStoreMcpCouponsDisclosureLiveOracle,
+  duckStoreMcpCouponsRouteLiveOracle,
   dvgaRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
