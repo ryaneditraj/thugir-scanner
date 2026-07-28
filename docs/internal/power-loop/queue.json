@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T18:05:11.000Z",
+  "updated_at": "2026-07-28T19:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/fetch-url",
+      "source": "Escape Duck Store — SSRF link-preview oracle GET /api/v1/uploads/fetch-url (duck-store vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
+      "source": "Escape Duck Store — SQL injection oracle GET /api/v1/products/filter/by-color (Duck Store challenge writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store — negative-quantity business-logic oracle POST /api/v1/cart/add (duck-store vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape Duck Store — broken access control oracle GET /api/v1/admin/users (Escape Duck Store lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/graphql",
+      "source": "Escape DVGA2 — GraphQL introspection/injection oracle (dvga2.tools.escape.tech sibling instance)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
       "source": "Escape Duck Store \u2014 SSRF image-import oracle POST /api/v1/uploads/import-from-url (duck-store vulnerabilities catalog)",
