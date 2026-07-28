@@ -39087,7 +39087,7 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
 const istEduNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/notices/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf))\b/i.test(pageUrl)) return NEGATIVE;
   for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
     const url = new URL("/api/notices", ctx.origin);
     url.searchParams.set("file", payload);
@@ -39170,10 +39170,26 @@ const dvwuCsrfNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function istEduVulnPortalBundleCorpus(ctx: RuleContext): Promise<string> {
+  const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (indexDoc.status < 200 || indexDoc.status >= 400) return "";
+  const scriptMatch = indexDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
+  if (!scriptMatch) return "";
+  const bundleDoc = await ctx.probe.get(new URL(scriptMatch[1], ctx.origin).toString(), {
+    maxBytes: 2_000_000,
+    timeoutMs: 20000
+  });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return "";
+  return bundleDoc.body;
+}
+
 const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/portal/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl)) return NEGATIVE;
   const portalUrl = new URL("/api/portal", ctx.origin).toString();
   const doc = await ctx.probe.get(portalUrl, {
     method: "POST",
@@ -39323,6 +39339,56 @@ async function probeAllSeeingEyeHelloXxe(ctx: RuleContext): Promise<RuleResult |
     }
   };
 }
+
+const istEduDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/idor|dashboard)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/localStorage\.setItem\(["']student["']/i.test(bundle) ||
+    !/Grade Upload/i.test(bundle) ||
+    !/student records/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["localStorage student_id", "Grade Upload", "student records"],
+      snippet: bundle.match(/Grade Upload[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "IST Edu /labs/idor or /dashboard route scan — SPA stores student session in localStorage and exposes grade-upload IDOR lab without server-side object authorization"
+    }
+  };
+};
+
+const dvwuDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/idor|dashboard)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/localStorage\.setItem\(["']student["']/i.test(bundle) ||
+    !/Grade Upload/i.test(bundle) ||
+    !/student records/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["localStorage student_id", "Grade Upload", "student records"],
+      snippet: bundle.match(/student records[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /labs/idor or /dashboard route scan — SPA stores student session in localStorage and exposes grade-upload IDOR lab without server-side object authorization"
+    }
+  };
+};
 
 const allSeeingEyeReadRouteLiveOracle: Rule = async (ctx) => {
   if (!isAllSeeingEyeHost(ctx)) return NEGATIVE;
@@ -41015,6 +41081,8 @@ export const RULES: Record<string, Rule> = {
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
+  istEduDashboardIdorRouteLiveOracle,
+  dvwuDashboardIdorRouteLiveOracle,
   istEduNewsletterCrlfRouteLiveOracle,
   dvwuPortalSqliRouteLiveOracle,
   dvwuSearchXssRouteLiveOracle,

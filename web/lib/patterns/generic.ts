@@ -17481,7 +17481,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu notices LFI route live oracle",
     description:
-      "GET /api/notices?file= accepts path traversal and returns /etc/passwd when scanning the notices route — IST Edu local file inclusion training oracle.",
+      "GET /api/notices?file= accepts path traversal and returns /etc/passwd when scanning /api/notices or /labs/* routes — IST Edu local file inclusion training oracle.",
     impactOneline:
       "Unsanitized file parameters on notices endpoints let attackers read arbitrary server files.",
     detectorKind: "rule_ref",
@@ -17507,7 +17507,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu portal SQLi auth bypass route live oracle",
     description:
-      "POST /api/portal with admin' OR '1'='1 bypasses authentication when scanning the portal route — IST Edu SQL injection login oracle.",
+      "POST /api/portal with admin' OR '1'='1 bypasses authentication when scanning /api/portal or /labs/sqli — IST Edu SQL injection login oracle.",
     impactOneline:
       "String-concatenated SQL in login queries lets attackers bypass authentication without valid credentials.",
     detectorKind: "rule_ref",
@@ -17523,6 +17523,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/portal route accepts SQL injection in the username field for authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-dashboard-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "IST Edu dashboard IDOR route live oracle",
+    description:
+      "Scanning /labs/idor or /dashboard on ist-edu-bd.vercel.app loads an SPA that stores student_id in localStorage and exposes grade-upload / student-record panels without server-side object authorization — the IST Edu client-side IDOR training oracle.",
+    impactOneline:
+      "Predictable student identifiers in client-side session state let attackers view or modify other users' grades without authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduDashboardIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — enforce server-side authorization on every grade and student-record access.",
+      steps: [
+        "Bind student records to authenticated session IDs on the server, not client localStorage.",
+        "Reject cross-user object access even when student_id is supplied in requests.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our student dashboard trusts client-side student_id for grade access. Show server-side object authorization remediation for IDOR.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-dashboard-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "DVWU dashboard IDOR route live oracle",
+    description:
+      "Scanning /labs/idor or /dashboard on dvwu.vercel.app loads an SPA that stores student_id in localStorage and exposes grade-upload / student-record panels without server-side object authorization — the DVWU client-side IDOR training oracle.",
+    impactOneline:
+      "Predictable student identifiers in client-side session state let attackers view or modify other users' grades without authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuDashboardIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — enforce server-side authorization on every grade and student-record access.",
+      steps: [
+        "Bind student records to authenticated session IDs on the server, not client localStorage.",
+        "Reject cross-user object access even when student_id is supplied in requests.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVWU student dashboard trusts client-side student_id for grade access. Show server-side object authorization remediation for IDOR.",
     version: 1,
     enabled: true
   },
