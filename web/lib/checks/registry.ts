@@ -6709,24 +6709,6 @@ async function nodegoatBenefitsNosqlLiveProbe(ctx: RuleContext): Promise<RuleRes
   };
 }
 
-const nodegoatLoginNosqlRouteLiveOracle: Rule = async (ctx) => {
-  if (!isNodegoatHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
-  const cookie = await nodegoatNosqlLoginCookie(ctx);
-  if (!cookie) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.94,
-    evidence: {
-      scannedUrl: pageUrl,
-      loginUrl: new URL("/login", ctx.origin).toString(),
-      sessionCookiePrefix: cookie.slice(0, 28),
-      note: "NodeGoat POST /login with MongoDB $gt operator injection bypasses authentication and returns session cookie — NoSQL login bypass route oracle"
-    }
-  };
-};
-
 const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -40879,7 +40861,6 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA10RouteLiveOracle,
   nodegoatLearnOpenRedirectLiveOracle,
   nodegoatLearnOpenRedirectRouteLiveOracle,
-  nodegoatLoginNosqlRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,

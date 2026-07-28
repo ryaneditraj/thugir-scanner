@@ -2,6 +2,30 @@
   "candidates": [
     {
       "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-csrf-newsletter-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter email=test%0d%0aBcc:... returns CRLF Injection Detected + HTTP Response Splitting; dvwu.vercel.app/labs/csrf route scan gains route-specific CSRF/header oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-notices-lfi-csrf-ssrf-route-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended dvwuNoticesLfiRouteLiveOracle to match /labs/csrf and /labs/ssrf; dvwu.vercel.app/labs/csrf 8→10 and /labs/ssrf 8→9 with dvwu-notices-lfi-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-login-nosql-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with $gt/$ne operator payloads returns 200 Invalid username/password on live nodegoat-websec — no auth bypass; login route oracle not shippable without working live probe"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-newsletter-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter CRLF payload returns CRLF Injection Detected on newsletter route; ist-edu-bd.vercel.app/newsletter route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-search-xss-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=<script>thugirXssProbe</script> reflects raw script unescaped; dvwu.vercel.app/labs/xss findings 8→10 with dvwu-search-xss-route-live-oracle + dvwu-notices-lfi-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
