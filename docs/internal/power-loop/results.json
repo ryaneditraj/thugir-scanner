@@ -1,1008 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-27T20:40:49.351Z",
-      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a5",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "server-side-eval-evidence",
-          "title": "Server handler passes request body to eval()",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-nosql-evidence",
-          "title": "Client bundle documents NoSQL injection via MongoDB operators",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-nodegoat-evidence",
-          "title": "OWASP NodeGoat intentionally insecure Node.js lab disclosed",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "Injection"
-        },
-        {
-          "slug": "nodegoat-tutorial-a5-route-live-oracle",
-          "title": "NodeGoat A5 misconfiguration tutorial live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 559,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:40:49.351Z"
-    },
-    {
-      "run_id": "2026-07-27T20:40:14.614Z",
-      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a4",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "server-side-eval-evidence",
-          "title": "Server handler passes request body to eval()",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-nosql-evidence",
-          "title": "Client bundle documents NoSQL injection via MongoDB operators",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-nodegoat-evidence",
-          "title": "OWASP NodeGoat intentionally insecure Node.js lab disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "nodegoat-tutorial-a4-route-live-oracle",
-          "title": "NodeGoat A4 IDOR tutorial live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 559,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:40:14.614Z"
-    },
-    {
-      "run_id": "2026-07-27T20:39:56.887Z",
-      "url": "https://www.agentpwn.com/attacks/prompt-injection/2",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "hidden-prompt-injection",
-          "title": "Hidden prompt-injection instructions in page HTML",
-          "severity": "medium",
-          "confidence": 0.81,
-          "category": "AI security"
-        },
-        {
-          "slug": "agentpwn-attack-route-live-oracle",
-          "title": "AgentPwn attack route live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:39:56.887Z"
-    },
-    {
-      "run_id": "2026-07-27T20:39:38.771Z",
-      "url": "https://www.agentpwn.com/attacks/data-exfiltration/1",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "hidden-prompt-injection",
-          "title": "Hidden prompt-injection instructions in page HTML",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "AI security"
-        },
-        {
-          "slug": "agentpwn-attack-route-live-oracle",
-          "title": "AgentPwn attack route live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:39:38.771Z"
-    },
-    {
-      "run_id": "2026-07-27T20:28:35.083Z",
-      "url": "https://vuln-expose.vercel.app/idor/dashboard",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 14,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vuln-expose-evidence",
-          "title": "VulnSite pentest training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vuln-expose-lab-module-evidence",
-          "title": "VulnSite hands-on lab module with inline exploit payloads",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vuln-expose-auth-bypass-api-live-oracle",
-          "title": "VulnSite SQLi authentication-bypass API oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Authentication bypass"
-        },
-        {
-          "slug": "vuln-expose-sqli-search-api-live-oracle",
-          "title": "VulnSite SQL injection search API oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "vuln-expose-idor-profile-route-live-oracle",
-          "title": "VulnSite /idor/profile route IDOR oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 454,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:28:35.083Z"
-    },
-    {
-      "run_id": "2026-07-27T20:17:31.776Z",
-      "url": "https://vuln-expose.vercel.app/xss/csp-bypass",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 12,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vuln-expose-evidence",
-          "title": "VulnSite pentest training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "vuln-expose-auth-bypass-api-live-oracle",
-          "title": "VulnSite SQLi authentication-bypass API oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Authentication bypass"
-        },
-        {
-          "slug": "vuln-expose-sqli-search-api-live-oracle",
-          "title": "VulnSite SQL injection search API oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 453,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:17:31.776Z"
-    },
-    {
-      "run_id": "2026-07-27T20:05:55.832Z",
-      "url": "https://vuln-expose.vercel.app/sqli/blind",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 13,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-sql-evidence",
-          "title": "Client bundle builds SQL via string concatenation",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vuln-expose-evidence",
-          "title": "VulnSite pentest training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-vuln-expose-lab-module-evidence",
-          "title": "VulnSite hands-on lab module with inline exploit payloads",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vuln-expose-auth-bypass-api-live-oracle",
-          "title": "VulnSite SQLi authentication-bypass API oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Authentication bypass"
-        },
-        {
-          "slug": "vuln-expose-sqli-search-api-live-oracle",
-          "title": "VulnSite SQL injection search API oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 450,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:05:55.832Z"
-    },
-    {
-      "run_id": "2026-07-27T20:03:05.269Z",
-      "url": "https://juice-shop-staging.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 14,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 455,
-      "status": "ok",
-      "scanned_at": "2026-07-27T20:03:05.269Z"
-    },
-    {
-      "run_id": "2026-07-27T20:02:44.824Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-27T20:02:44.824Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
-    },
-    {
-      "run_id": "2026-07-27T19:09:36.397Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-14",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 566,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:09:36.397Z"
-    },
-    {
-      "run_id": "2026-07-27T19:09:05.983Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-13",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 566,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:09:05.983Z"
-    },
-    {
-      "run_id": "2026-07-27T19:08:35.208Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-12",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 566,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:08:35.208Z"
-    },
-    {
-      "run_id": "2026-07-27T19:08:32.025Z",
-      "url": "https://ist-edu-bd.vercel.app/api/portal",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 525,
-      "status": "ok",
-      "scanned_at": "2026-07-27T19:08:32.025Z"
-    },
-    {
       "run_id": "2026-07-27T19:08:26.725Z",
       "url": "https://ist-edu-bd.vercel.app/api/notices?file=etc/passwd",
       "auth": "public_demo",
@@ -17362,11 +16360,711 @@
       "probes_run": 574,
       "status": "ok",
       "scanned_at": "2026-07-28T03:12:26.445Z"
+    },
+    {
+      "run_id": "2026-07-28T04:02:00.089Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-28T04:02:00.089Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-07-28T04:02:20.545Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-28T04:02:20.545Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-07-28T04:03:14.843Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-28T04:03:14.843Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-07-28T04:03:35.367Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-28T04:03:35.367Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-07-28T04:03:55.781Z",
+      "url": "https://juice-shop.demo.escape.tech",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 458,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:03:55.781Z"
+    },
+    {
+      "run_id": "2026-07-28T04:06:25.095Z",
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-vaultapp-lab-evidence",
+          "title": "VaultApp finance security training lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 504,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:06:25.095Z"
+    },
+    {
+      "run_id": "2026-07-28T04:06:31.360Z",
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-vaultapp-lab-evidence",
+          "title": "VaultApp finance security training lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 504,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:06:31.360Z"
+    },
+    {
+      "run_id": "2026-07-28T04:06:37.524Z",
+      "url": "http://vapi.apisec.ai/vapi/api8/user/secret",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 11,
+      "findings": [
+        {
+          "slug": "vapi-api1-bola-live-oracle",
+          "title": "vAPI API1 BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api2-broken-auth-live-oracle",
+          "title": "vAPI API2 broken authentication live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vapi-api3-comment-bola-live-oracle",
+          "title": "vAPI API3 comment BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api4-otp-broken-auth-live-oracle",
+          "title": "vAPI API4 OTP broken authentication live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vapi-api4-user-exposure-live-oracle",
+          "title": "vAPI API4 user exposure live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api5-bfla-live-oracle",
+          "title": "vAPI API5 BFLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api6-mass-assignment-live-oracle",
+          "title": "vAPI API6 mass assignment live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vapi-api8-sqli-login-live-oracle",
+          "title": "vAPI API8 SQL injection login live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "vapi-api10-logging-live-oracle",
+          "title": "vAPI API10 insufficient logging live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 574,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:06:37.524Z"
+    },
+    {
+      "run_id": "2026-07-28T04:08:52.659Z",
+      "url": "https://nodegoat-websec.herokuapp.com/register",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 545,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:08:52.659Z"
+    },
+    {
+      "run_id": "2026-07-28T04:09:25.382Z",
+      "url": "https://dvwu.vercel.app/labs/sqli",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ist-edu-vuln-portal-evidence",
+          "title": "IST Edu intentionally vulnerable university portal disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "notices-file-lfi-probe",
+          "title": "Local file inclusion via file query parameter",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:09:25.382Z"
+    },
+    {
+      "run_id": "2026-07-28T04:09:30.139Z",
+      "url": "https://auth-security-project.onrender.com/dashboard",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "post-login-sql-bypass",
+          "title": "SQL injection bypasses POST login authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-auth-security-project-evidence",
+          "title": "auth-security-project OWASP auth demo disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 4,
+      "probes_run": 539,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:09:30.139Z"
+    },
+    {
+      "run_id": "2026-07-28T04:10:25.590Z",
+      "url": "https://auth-security-project.onrender.com/login",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "post-login-sql-bypass",
+          "title": "SQL injection bypasses POST login authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-auth-security-project-evidence",
+          "title": "auth-security-project OWASP auth demo disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 4,
+      "probes_run": 539,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:10:25.590Z"
+    },
+    {
+      "run_id": "2026-07-28T04:10:56.937Z",
+      "url": "https://ssrf.vulnlab.dev/gopher",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 12,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /gopher route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "unprotected-webhook-endpoint",
+          "title": "Payment webhook endpoint without signature verification",
+          "severity": "high",
+          "confidence": 0.5,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 4,
+      "probes_run": 179,
+      "status": "ok",
+      "scanned_at": "2026-07-28T04:10:56.937Z"
     }
   ],
   "teacher_delta_runs": [
     {
-      "run_id": "2026-07-28T03:15:00.000Z",
+      "run_id": "2026-07-28T04:12:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "error primary+staging 503; escape.tech fallback ok — 17 findings, 6/6 recall (pages=6 probes=458; gap=[])",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 04 UTC run: primary+staging Heroku 503; juice-shop.demo.escape.tech fallback 6/6 (17 findings) with jwt-alg-none-accepted + chatbot oracles + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent. Shipped power-scan fix to chain fallback_urls on benchmark error. Discovery: +5 URLs (vaultapp /api/users/1 + /api/documents/1, vAPI api8/user/secret, nodegoat /register, dvwu /labs/sqli) + drained auth-security dashboard/login + ssrf.vulnlab gopher → 51 discovery findings across 8 URLs; vaultapp API routes 6-finding hub without IDOR live oracle (401); vapi api8/secret 11-finding cross-API hub without API8-secret route oracle; nodegoat /register thin 2-finding hub without NoSQL registration oracle; dvwu /labs/sqli 8 incl sql-error-disclosure; auth-security-project Render now reachable with post-login-sql-bypass.",
+      "scanned_at": "2026-07-28T04:12:00.000Z"
+    },
       "scan_kind": "teacher_delta",
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
