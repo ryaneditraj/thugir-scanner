@@ -23293,6 +23293,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "all-seeing-eye-read-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "All-Seeing Eye /api/read XXE file-read route live oracle",
+    description:
+      "GET /api/read?path= resolves external XML entities against arbitrary filesystem paths — the All-Seeing Eye Chrome <116 arbitrary file read demo oracle.",
+    impactOneline:
+      "XXE entity expansion on /api/read lets attackers read sensitive server files such as /etc/passwd.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "allSeeingEyeReadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers and block DOCTYPE declarations on user-controlled input.",
+      steps: [
+        "Set noent/nonet flags on libxml/xml parsers processing user paths.",
+        "Reject DOCTYPE and external SYSTEM entities in XML responses.",
+        "Run intentionally vulnerable demos only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/read?path= endpoint resolves external XML entities to read /etc/passwd. Show XXE hardening for file-read APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "all-seeing-eye-hello-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "All-Seeing Eye /api/hello XSLT file-read route live oracle",
+    description:
+      "GET /api/hello?path= returns XSLT that chains document('read?path=') for arbitrary file disclosure — the All-Seeing Eye Chrome arbitrary file read chain oracle.",
+    impactOneline:
+      "XSLT document() expansion on /api/hello enables chained file read in vulnerable Chrome versions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "allSeeingEyeHelloRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose XSLT transforms that call document() on attacker-controlled paths.",
+      steps: [
+        "Remove XSLT document() calls against user-supplied path parameters.",
+        "Disable external entity and document() resolution in XSLT processors.",
+        "Run intentionally vulnerable demos only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hello?path= route returns XSLT with document('read?path=') for file read. Show XSLT hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-ssrf-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "IST Edu redirect whitelist bypass SSRF route live oracle",
+    description:
+      "GET /api/redirect?url= accepts //https:/// malformed bypass payloads with HTTP 302 while blocking AWS metadata — IST Edu SSRF/open redirect training oracle on /labs/ssrf.",
+    impactOneline:
+      "Broken redirect allow-lists let attackers chain open redirects toward internal or attacker-controlled targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduSsrfRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — validate redirect targets with strict URL parsing, not substring allow-lists.",
+      steps: [
+        "Parse redirect URLs with a strict URL library and compare hostnames exactly.",
+        "Reject protocol-relative and malformed scheme bypass payloads.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/redirect route accepts //https:/// bypass while blocking metadata URLs. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-ssrf-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "DVWU redirect whitelist bypass SSRF route live oracle",
+    description:
+      "GET /api/redirect?url= accepts //https:/// malformed bypass payloads with HTTP 302 while blocking AWS metadata — DVWU SSRF/open redirect training oracle on /labs/ssrf.",
+    impactOneline:
+      "Broken redirect allow-lists let attackers chain open redirects toward internal or attacker-controlled targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuSsrfRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — validate redirect targets with strict URL parsing, not substring allow-lists.",
+      steps: [
+        "Parse redirect URLs with a strict URL library and compare hostnames exactly.",
+        "Reject protocol-relative and malformed scheme bypass payloads.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/ssrf route documents /api/redirect whitelist bypass. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vaultapp-lab-guide-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
