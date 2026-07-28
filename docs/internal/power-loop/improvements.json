@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: parse nested order.user.email from GET /workshop/api/shop/orders/1 (muqeed+6@apisec.ai != test@test.com); crapi2.apisec.ai/workshop/api/shop/orders/1 findings 4→5 with crapi2-shop-orders-id-bola-route-live-oracle; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-shop-orders-id-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: gate crapi-mechanic-report-bola + crapi-vehicle-bola off /shop/orders routes; add route-specific shop-orders BOLA probe via signup JWT; crapi.apisec.ai/workshop/api/shop/orders/1 findings 5→3 (misfires removed; v1 BOLA patched 403); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: gate SQLi route oracle to levels 1-3; add level4-6 XSS/DOM probe oracle; vulnforge level6.php findings 5→4 (SQLi misfire removed; PHP backend 403 blocks live XSS probe); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-vendor-sidecar-route-live-oracle",
       "status": "shipped",

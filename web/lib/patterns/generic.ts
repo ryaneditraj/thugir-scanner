@@ -17397,6 +17397,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-shop-orders-id-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI v1 shop orders/{id} BOLA route live oracle",
+    description:
+      "When scanning /workshop/api/shop/orders/{id} on crAPI v1, GET returns another user's order for an authenticated regular user — route-specific BOLA oracle.",
+    impactOneline:
+      "Predictable order IDs on crAPI v1 let authenticated users read other customers' purchase history without authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiShopOrdersIdBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — bind order reads to the authenticated principal in production.",
+      steps: [
+        "Verify order.user_id matches the JWT subject before returning order details.",
+        "Return 404 for orders the caller does not own instead of leaking existence.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI v1 /workshop/api/shop/orders/{id} route scan confirms BOLA. Show object-level authorization remediation for shop orders.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-ctf-challenges-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -18745,6 +18771,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level routes leak SQL syntax errors on search parameters. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnForge Academy level XSS route live oracle",
+    description:
+      "When scanning /backend/includes/levels/*/level4-6.php, query parameters reflect unescaped XSS probes or inject into document.write DOM sinks — route-specific VulnForge Academy XSS training oracle.",
+    impactOneline:
+      "Unsanitized level route parameters on VulnForge Academy levels 4–6 enable reflected, stored, and DOM XSS practice surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — encode output and avoid unsafe DOM sinks in production apps.",
+      steps: [
+        "HTML-encode user input before rendering in level challenge pages.",
+        "Avoid document.write with location.search data; use safe DOM APIs.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy XSS level routes reflect raw probes or use document.write sinks. Show output encoding and DOM XSS remediation.",
     version: 1,
     enabled: true
   },
