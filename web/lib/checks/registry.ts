@@ -32279,6 +32279,165 @@ const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function duckStoreRegisterAndLoginToken(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_ds_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, email, password: "ThugirTest123!" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 400) return null;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: "ThugirTest123!" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return null;
+  try {
+    const data = JSON.parse(loginDoc.body) as { access_token?: string };
+    return data.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const duckStoreProductsFilterSqliLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/api/v1/products/filter/by-color?color=Yellow&sort=name", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(baselineUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  let baseline: unknown[];
+  try {
+    baseline = JSON.parse(baselineDoc.body) as unknown[];
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(baseline) || baseline.length < 1) return NEGATIVE;
+  const sqliUrl = new URL("/api/v1/products/filter/by-color", ctx.origin);
+  sqliUrl.searchParams.set("color", "Yellow");
+  sqliUrl.searchParams.set("sort", "name;SELECT 1");
+  const sqliDoc = await ctx.probe.get(sqliUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (!/Query error|sqlalchemy|asyncpg|SELECT \* FROM products/i.test(sqliDoc.body)) return NEGATIVE;
+  if (!/ORDER BY name;SELECT 1/i.test(sqliDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      baselineUrl,
+      sqliUrl: sqliUrl.toString(),
+      snippet: sqliDoc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/products/filter/by-color passes sort into raw SQL ORDER BY — error-based SQLi oracle"
+    }
+  };
+};
+
+const duckStoreProductsFilterSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/products\/filter\/by-color/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreProductsFilterSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/products/filter/by-color route scan — sort parameter SQL injection with query error disclosure"
+    }
+  };
+};
+
+const duckStoreCartNegativeQuantityLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const addUrl = new URL("/api/v1/cart/add", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(addUrl, {
+    method: "POST",
+    body: JSON.stringify({ product_id: 1, quantity: -1 }),
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (addDoc.status < 200 || addDoc.status >= 400) return NEGATIVE;
+  if (!/"quantity"\s*:\s*-1/.test(addDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      addUrl,
+      snippet: addDoc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/cart/add accepts negative quantity:-1 after registration — business-logic oracle"
+    }
+  };
+};
+
+const duckStoreCartNegativeQuantityRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/cart\/add/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreCartNegativeQuantityLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/cart/add route scan — negative quantity accepted without server-side validation"
+    }
+  };
+};
+
+const duckStoreAdminUsersBflaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"email"\s*:\s*"admin@duck-store\.escape"/i.test(doc.body)) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      adminUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/admin/users returns full user roster including admin@duck-store.escape for a regular user JWT — BFLA oracle"
+    }
+  };
+};
+
+const duckStoreAdminUsersBflaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/users/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAdminUsersBflaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/admin/users route scan — unprivileged JWT can list all users including admin accounts"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -41856,6 +42015,12 @@ export const RULES: Record<string, Rule> = {
   duckStoreSsrfFetchUrlRouteLiveOracle,
   duckStoreMcpCouponsDisclosureLiveOracle,
   duckStoreMcpCouponsRouteLiveOracle,
+  duckStoreProductsFilterSqliLiveOracle,
+  duckStoreProductsFilterSqliRouteLiveOracle,
+  duckStoreCartNegativeQuantityLiveOracle,
+  duckStoreCartNegativeQuantityRouteLiveOracle,
+  duckStoreAdminUsersBflaLiveOracle,
+  duckStoreAdminUsersBflaRouteLiveOracle,
   dvgaRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,

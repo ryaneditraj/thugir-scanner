@@ -23554,6 +23554,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-products-filter-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Duck Store products filter SQLi live oracle",
+    description:
+      "GET /api/v1/products/filter/by-color passes the sort query parameter into raw SQL ORDER BY — error-based SQLi with query disclosure.",
+    impactOneline:
+      "Unsanitized ORDER BY clauses let attackers extract database structure and pivot to data exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsFilterSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist allowed sort columns — Duck Store is intentional lab software.",
+      steps: [
+        "Never concatenate user input into SQL ORDER BY clauses.",
+        "Use parameterized queries with an allowlist of sort fields.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/filter/by-color sort parameter is vulnerable to SQL injection. Show ORDER BY allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-products-filter-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Duck Store products filter SQLi route live oracle",
+    description:
+      "When scanning /api/v1/products/filter/by-color, sort= triggers SQL error disclosure with full query text — route-specific SQLi oracle.",
+    impactOneline:
+      "Route-specific scans should confirm SQL injection on product filter endpoints beyond generic API fingerprints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsFilterSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist allowed sort columns on product filter routes.",
+      steps: [
+        "Block unsanitized sort parameters on /api/v1/products/filter/by-color.",
+        "Return generic errors without echoing SQL statements.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/filter/by-color route echoes SQL errors on sort injection. Show route-specific SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-cart-negative-quantity-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Duck Store cart negative-quantity live oracle",
+    description:
+      "POST /api/v1/cart/add accepts quantity:-1 after registration — negative cart quantity business-logic oracle.",
+    impactOneline:
+      "Missing quantity validation enables cart total manipulation and checkout abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCartNegativeQuantityLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-positive quantities at cart add — Duck Store is intentional lab software.",
+      steps: [
+        "Validate quantity >= 1 on POST /api/v1/cart/add.",
+        "Recompute cart totals server-side at checkout.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/v1/cart/add accepts negative quantities. Show server-side quantity validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-cart-negative-quantity-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Duck Store cart negative-quantity route live oracle",
+    description:
+      "When scanning /api/v1/cart/add, authenticated POST with quantity:-1 is accepted — route-specific business-logic oracle.",
+    impactOneline:
+      "Route-specific scans should confirm missing quantity guards on cart mutation endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCartNegativeQuantityRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-positive quantities on cart add routes.",
+      steps: [
+        "Validate quantity >= 1 on /api/v1/cart/add.",
+        "Return 400 for negative or zero quantities.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/cart/add route accepts negative quantities. Show route-specific cart validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-admin-users-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store admin users BFLA live oracle",
+    description:
+      "GET /api/v1/admin/users returns the full user roster including admin@duck-store.escape for a regular user JWT — broken function-level authorization oracle.",
+    impactOneline:
+      "Admin-only endpoints reachable with user tokens expose privileged account data and enable further escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminUsersBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role on /api/v1/admin/* routes — Duck Store is intentional lab software.",
+      steps: [
+        "Require role:admin on all /api/v1/admin endpoints.",
+        "Return 403 for non-admin JWTs before querying user data.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/admin/users returns all users for regular JWTs. Show BFLA remediation with role checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-admin-users-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store admin users BFLA route live oracle",
+    description:
+      "When scanning /api/v1/admin/users, a freshly registered user JWT lists admin accounts — route-specific BFLA oracle.",
+    impactOneline:
+      "Route-specific scans should confirm broken function-level authorization on admin user listing endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminUsersBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role on /api/v1/admin/users route scans.",
+      steps: [
+        "Gate /api/v1/admin/users behind admin role middleware.",
+        "Audit all /api/v1/admin/* handlers for missing authorization.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/admin/users route is reachable with user JWTs. Show route-specific BFLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvga-route-live-oracle",
     platform: "generic",
     category: "Information disclosure",
