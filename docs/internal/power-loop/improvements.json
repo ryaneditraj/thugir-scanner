@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-36-advanced-c-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-36 documents wrongsecrets-advanced-c + GDB/Radare2 reverse-engineering walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-36 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-38-git-notes-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-38 documents Git notes metadata (refs/notes/*, git notes show) walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-38 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-context-manipulation-semantic-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: context-manipulation/3 APWN-CM-003 semantic-confusion meta + off-screen SYSTEM INSTRUCTIONS redefining safety/restricted; agentpwnAttackRouteLiveOracle uses fetchDoc re-fetch + body APWN-ID fallback + semantic-confusion hiddenDan markers; www.agentpwn.com/attacks/context-manipulation/3 thin-pass recovery to 7 findings with agentpwn-attack-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:crapi2.apisec.ai",
       "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
       "status": "shipped",
@@ -14894,6 +14912,21 @@
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-cmdi-route-live-oracle",
       "shipped_at": "2026-07-28T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-36-advanced-c-markers",
+      "shipped_at": "2026-07-28T15:25:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-38-git-notes-markers",
+      "shipped_at": "2026-07-28T15:25:00.000Z"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-context-manipulation-semantic-oracle",
+      "shipped_at": "2026-07-28T15:25:00.000Z"
     }
   ]
 }
