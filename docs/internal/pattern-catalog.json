@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-28T16:16:41.140Z",
-  "total": 970,
-  "uniqueSlugs": 965,
+  "generatedAt": "2026-07-28T17:07:27.492Z",
+  "total": 972,
+  "uniqueSlugs": 967,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 952,
+    "generic": 954,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 885,
+    "deep": 887,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 240,
+    "Broken access control": 241,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -33,7 +33,7 @@
     "SSRF": 5,
     "Server-side request forgery": 35,
     "Sensitive data exposure": 24,
-    "AI security": 43,
+    "AI security": 44,
     "Business logic": 4,
     "Open redirect": 1,
     "Authentication bypass": 2,
@@ -43,6 +43,7 @@
   },
   "slugs": [
     "agentpwn-attack-route-live-oracle",
+    "agentpwn-mcp-exploitation-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",
     "all-seeing-eye-read-route-live-oracle",
     "auth-security-project-dashboard-xss-route-live-oracle",
@@ -792,6 +793,7 @@
     "nodegoat-tutorial-a9-route-live-oracle",
     "notices-file-lfi-probe",
     "oauth-oidc-metadata-exposed",
+    "oopssec-live-stream-bfla-route-live-oracle",
     "oopssec-xff-sqli-route-live-oracle",
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
