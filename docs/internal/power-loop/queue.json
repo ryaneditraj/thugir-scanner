@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T16:06:28.470Z",
+  "updated_at": "2026-07-28T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/1",
+      "source": "Escape Duck Store — BOLA order IDOR oracle GET /api/v1/orders/1 (Escape.tech blog 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/referrals",
+      "source": "Escape Duck Store — referral fraud / business-logic oracle (Escape.tech Duck Store lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/vulnerabilities",
+      "source": "Escape.tech DVGA — vulnerability index oracle (dolevf/DVGA GraphQL lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://nodegoat.herokuapp.com/register",
+      "source": "OWASP NodeGoat — open registration / NoSQL injection oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/coupons",
+      "source": "Escape Duck Store — coupon system business-logic oracle (Escape.tech Duck Store lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.agentpwn.com/attacks/mcp-exploitation/1",
       "source": "opena2a/agentpwn — APWN-MCP-001 MCP path-traversal/SSRF tool-abuse attack demo (HackMyAgent 16-category suite)",
@@ -11081,5 +11106,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 10
+  "discovery_urls_added": 15
 }
