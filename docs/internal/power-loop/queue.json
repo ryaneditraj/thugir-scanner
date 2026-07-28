@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T12:10:11.515Z",
+  "updated_at": "2026-07-28T13:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/basket/2",
+      "source": "Escape.tech Juice Shop demo — BOLA basket IDOR oracle GET /rest/basket/2 (juice-shop.demo.escape.tech)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/user/whoami",
+      "source": "Escape.tech Juice Shop demo — unauthenticated session oracle GET /rest/user/whoami (juice-shop.demo.escape.tech)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/memories",
+      "source": "Escape.tech Juice Shop demo — unauthenticated REST /rest/memories IDOR oracle (juice-shop.demo.escape.tech)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "http://crapi.apisec.ai/identity/api/v2/user/vehicle/2",
+      "source": "OWASP crAPI v1 — API1 BOLA GET /identity/api/v2/user/vehicle/2 without owner auth (APIsec hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/workshop/api/shop/orders/1",
+      "source": "OWASP crAPI v1 — BOLA GET /workshop/api/shop/orders/{id} without owner auth (APIsec hosted crapi.apisec.ai)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/vendor",
       "source": "OWASP FinBot CTF — vendor portal with agentic AI prompt-injection surface (GenAI-Security-Project/finbot-ctf)",
