@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-filter-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/filter/by-color?color=Yellow&sort=name;SELECT%201 returns Query error with SELECT * FROM products WHERE color LIKE ORDER BY name;SELECT 1; duck-store.escape.tech/api/v1/products/filter/by-color findings 10→16; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-cart-negative-quantity-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login then POST /api/v1/cart/add product_id:1 quantity:-1 returns quantity:-1 in cart JSON; duck-store.escape.tech/api/v1/cart/add findings 10→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-users-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login user JWT GET /api/v1/admin/users returns admin@duck-store.escape role:admin in roster; duck-store.escape.tech/api/v1/admin/users findings 10→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-ssrf-fetch-url-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/uploads/fetch-url?url=https://httpbin.org/get returns status_code:200 with httpbin response preview and python-httpx User-Agent; duck-store.escape.tech/api/v1/uploads/import-from-url findings 10→12 with duck-store-ssrf-fetch-url-live-oracle + duck-store-ssrf-fetch-url-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
@@ -14575,6 +14593,21 @@
     }
   ],
   "shipped_log": [
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-filter-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-cart-negative-quantity-route-live-oracle",
+      "shipped_at": "2026-07-28T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-users-bfla-route-live-oracle",
+      "shipped_at": "2026-07-28T20:10:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-54-gitignore-markers",

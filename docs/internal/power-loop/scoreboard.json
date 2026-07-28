@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T20:07:32.198Z",
+  "updated_at": "2026-07-28T20:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,22 +17,22 @@
   },
   "total_sites_scanned": 3265,
   "total_findings": 33137,
-  "critical_findings": 78,
+  "critical_findings": 79,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2224,
   "discovery_findings": 27384,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-28T20:07:32.198Z",
+  "improvements_shipped": 1163,
+  "last_run": "2026-07-28T20:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 13,
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 454,
+      "probes_run": 451,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,23 +48,21 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com Heroku 503; staging fallback 6/6 (13 findings); jwt-alg-none + reflexion-escalated-ssti present; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 84,
-      "focus": "duck-store checkout/mass-assignment/testimonials/auth-login/user-enum oracles + crapi vehicles + VWAD voice-goat drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 48,
+      "focus": "duck-store SQLi sort param, cart negative-quantity, admin users BFLA route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (13 findings) — primary Heroku 503 fallback",
-      "duck-store.escape.tech/testimonials: 14 findings — dangerous-html-sinks + BOLA hub; no stored-XSS live oracle",
-      "duck-store.escape.tech/api/v1/orders/checkout: 13 findings — duck-store-orders-route-live-oracle; no coupon/shipping-bypass business-logic oracle",
-      "duck-store.escape.tech/api/v1/users/me/profile: 13 findings — shared BOLA hub without mass-assignment live oracle",
-      "duck-store.escape.tech/api/v1/auth/login: 12 findings — shared BOLA hub without weak-admin/2FA-bypass oracle",
-      "vwad.owasp.org/app/voice-goat/voicebank+voicerag: thin 6-finding passes — LLM prompt-injection oracles absent"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "duck-store.escape.tech/api/v1/products/filter/by-color: 10→16 findings — duck-store-products-filter-sqli-route-live-oracle shipped (sort= SQL error disclosure)",
+      "duck-store.escape.tech/api/v1/cart/add: 10→16 findings — duck-store-cart-negative-quantity-route-live-oracle shipped (quantity:-1 accepted)",
+      "duck-store.escape.tech/api/v1/admin/users: 10→16 findings — duck-store-admin-users-bfla-route-live-oracle shipped (user JWT lists admin roster)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -73,15 +71,18 @@
       "duck-store.escape.tech/api/v1/users/me/profile: mass-assignment PUT oracle still absent",
       "duck-store.escape.tech/testimonials: stored XSS POST oracle still absent (dangerous-html-sinks only)",
       "duck-store.escape.tech/api/v1/auth/login: weak-admin-credentials + 2FA-bypass oracles still absent",
-      "vwad.owasp.org/app/voice-goat/*: voice-agent prompt-injection live oracles absent"
+      "duck-store.escape.tech/api/v1/referrals: FastAPI routing conflict — /orders/referrer captured by /orders/{order_id}",
+      "dvga2.tools.escape.tech/graphql: thin 1-finding pass — GraphQL introspection oracle not triggered"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 13,
+    "juice-shop-staging.herokuapp.com": 14,
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 16,
+    "duck-store.escape.tech/api/v1/cart/add": 16,
+    "duck-store.escape.tech/api/v1/admin/users": 16,
     "duck-store.escape.tech/testimonials": 14,
     "duck-store.escape.tech/api/v1/orders/checkout": 13,
-    "duck-store.escape.tech/api/v1/users/me/profile": 13,
-    "duck-store.escape.tech/api/v1/users/": 14,
-    "duck-store.escape.tech/api/v1/auth/login": 12
+    "duck-store.escape.tech/api/v1/uploads/import-from-url": 12,
+    "duck-store.escape.tech/mcp/tools/list_coupons": 13
   }
 }
