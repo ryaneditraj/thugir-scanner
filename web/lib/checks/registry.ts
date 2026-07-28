@@ -32281,7 +32281,7 @@ const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
 
 async function duckStoreRegisterAndLoginToken(ctx: RuleContext): Promise<string | null> {
   const username = `thugir_ds_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const email = `${username}@probe.local`;
+  const email = `${username}@example.com`;
   const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
   const registerDoc = await ctx.probe.get(registerUrl, {
     method: "POST",
