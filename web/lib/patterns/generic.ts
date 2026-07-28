@@ -23163,6 +23163,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVWU search reflected XSS route live oracle",
+    description:
+      "GET /api/search?q= reflects raw <script> payloads unescaped when scanning dvwu.vercel.app /labs/xss — Damn Vulnerable Web University reflected XSS route oracle.",
+    impactOneline:
+      "Unescaped search output in HTML enables reflected XSS against users who visit crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — encode all dynamic HTML output in production.",
+      steps: [
+        "HTML-encode user input before rendering in search results.",
+        "Use a strict Content-Security-Policy to mitigate inline script execution.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /api/search route reflects raw script tags in HTML. Show output encoding remediation for reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-notices-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU notices LFI route live oracle",
+    description:
+      "GET /api/notices?file= accepts path traversal and returns /etc/passwd when scanning dvwu.vercel.app lab routes — local file inclusion training oracle.",
+    impactOneline:
+      "Unsanitized file parameters on notices endpoints let attackers read arbitrary server files.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuNoticesLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — validate file paths and block directory traversal in production.",
+      steps: [
+        "Allowlist permitted notice filenames instead of accepting arbitrary paths.",
+        "Reject ../ sequences and encoded traversal payloads.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /api/notices?file= route accepts path traversal to /etc/passwd. Show input validation remediation for file inclusion.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-xss-playground-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
