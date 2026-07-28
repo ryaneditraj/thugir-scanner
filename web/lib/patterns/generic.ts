@@ -23479,9 +23479,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Injection",
     severityDefault: "high",
-    title: "VulnWeb /comments XSS route live oracle",
+    title: "VulnWeb /xss XSS route live oracle",
     description:
-      "When scanning /comments, the VulnWeb Netlify SPA bundle documents unsanitized comment XSS with script-injection placeholders — the Shoaib Shaikh VulnWeb comments lab oracle.",
+      "When scanning /xss, the VulnWeb Netlify SPA bundle documents unsanitized comment XSS with script-injection placeholders — the Shoaib Shaikh VulnWeb XSS lab oracle.",
     impactOneline:
       "Unsanitized comment rendering lets attackers inject scripts that execute in other users' browsers.",
     detectorKind: "rule_ref",
@@ -23505,9 +23505,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Injection",
     severityDefault: "critical",
-    title: "VulnWeb /search SQLi route live oracle",
+    title: "VulnWeb /sqli SQLi route live oracle",
     description:
-      "When scanning /search, the VulnWeb Netlify SPA bundle documents SQL injection via unsanitized search input with admin' OR '1'='1 bypass — the VulnWeb search lab oracle.",
+      "When scanning /sqli, the VulnWeb Netlify SPA bundle documents SQL injection via unsanitized search input with admin' OR '1'='1 bypass — the VulnWeb SQLi lab oracle.",
     impactOneline:
       "SQL injection in search lets attackers bypass authentication and extract database contents.",
     detectorKind: "rule_ref",
@@ -23531,9 +23531,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Broken access control",
     severityDefault: "high",
-    title: "VulnWeb /profile IDOR route live oracle",
+    title: "VulnWeb /idor IDOR route live oracle",
     description:
-      "When scanning /profile, the VulnWeb Netlify SPA bundle exposes user passwords via IDOR profile views without authorization — the VulnWeb profile lab oracle.",
+      "When scanning /idor, the VulnWeb Netlify SPA bundle exposes user passwords via IDOR profile views without authorization — the VulnWeb IDOR lab oracle.",
     impactOneline:
       "IDOR on profile routes lets attackers view other users' sensitive data including plaintext passwords.",
     detectorKind: "rule_ref",

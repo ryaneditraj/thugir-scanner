@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /sqli route scan fetches SPA bundle with id:\"sqli\" + admin' OR '1'='1 + SQL injection vulnerabilities due to unsanitized user input; vulnweb.netlify.app/sqli 1→2 findings; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-comments-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /xss route scan fetches SPA bundle with unsanitized user input + script injection + alert('XSS'); vulnweb.netlify.app/xss 1→2 findings; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-profile-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /idor route scan fetches SPA bundle with Password (Exposed!) + IDOR vulnerability; vulnweb.netlify.app/idor 1→2 findings; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
       "slug": "vulnweb-csrf-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /csrf route scan fetches SPA bundle with id:\"csrf\" + Cross-Site Request Forgery + execute unwanted actions on authenticated users; vulnweb.netlify.app/csrf 1→2 findings; benchmark juice-shop-staging 14 findings 6/6 maintained"
