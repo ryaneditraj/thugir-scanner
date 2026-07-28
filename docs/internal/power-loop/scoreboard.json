@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T08:10:00.000Z",
+  "updated_at": "2026-07-28T08:17:07.827Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3151,
-  "total_findings": 32170,
+  "total_sites_scanned": 3156,
+  "total_findings": 32205,
   "critical_findings": 78,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2169,
-  "discovery_findings": 26761,
+  "discovery_urls_added": 2174,
+  "discovery_findings": 26795,
   "improvements_shipped": 1159,
-  "last_run": "2026-07-28T08:10:00.000Z",
+  "last_run": "2026-07-28T08:17:07.827Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 15,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 463,
+      "probes_run": 373,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); no benchmark category misses; secret-resend slug still absent"
+      "note": "Primary Heroku healthy 6/6 (15 findings); sql-error-disclosure + jwt-alg-none + chatbot oracles + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 26,
-      "focus": "all-seeing-eye XXE file-read + ist-edu/dvwu SSRF redirect whitelist bypass oracles",
-      "improvements_shipped_this_run": 4
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 51,
+      "focus": "all-seeing-eye /api/hello file-read + auth-security login SQLi + seclab XSS API + DVWU CSRF/newsletter + agentpwn context-window + ssrf.vulnlab gopher/parser drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
-      "all-seeing-eye-six.vercel.app: 5→7 findings — all-seeing-eye-read + all-seeing-eye-hello route live oracles shipped",
-      "ist-edu-bd.vercel.app/labs/ssrf: 8→9 findings — ist-edu-ssrf-redirect-route-live-oracle shipped",
-      "dvwu.vercel.app/labs/ssrf: 9→10 findings — dvwu-ssrf-redirect-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (15 findings) — no benchmark category misses",
+      "auth-security-project.onrender.com/login: 4 findings — auth-security-project-login-sqli-route-live-oracle fires POST admin' OR '1'='1 bypass",
+      "agentpwn.com/attacks/context-window/2: 7 findings — agentpwn-attack-route-live-oracle + hidden-prompt-injection",
+      "ist-edu-bd.vercel.app/newsletter: 9 findings — ist-edu-newsletter-crlf-route-live-oracle confirmed",
+      "ssrf.vulnlab.dev/gopher: 12 findings — ssrf-vulnlab-gopher-route-live-oracle + full SSRF oracle cluster",
+      "ssrf.vulnlab.dev/parser: 11 findings — ssrf-vulnlab-parser-route-live-oracle fires URL-parser disagreement oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "nodegoat-websec.herokuapp.com/register: /register route 404 — NoSQL signup oracle not shippable",
-      "vaultapp-omega.vercel.app/api/users/*: IDOR oracle still absent (401 without session)"
+      "all-seeing-eye-six.vercel.app/api/hello: Chrome arbitrary file-read live oracle absent (reflexion-escalated-ssti only, 4 findings)",
+      "seclab.vercel.app/api/xss-vulnerable: POST reflected-XSS route oracle absent (3-finding hub)",
+      "vulnweb.netlify.app/csrf: CSRF lab oracle absent (1-finding thin pass)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 14,
-    "all-seeing-eye-six.vercel.app": 7,
-    "dvwu.vercel.app/labs/ssrf": 10,
-    "ist-edu-bd.vercel.app/labs/ssrf": 9,
-    "dvwu.vercel.app/labs/csrf": 10,
+    "juice-shop.herokuapp.com": 15,
+    "ssrf.vulnlab.dev/gopher": 12,
+    "ssrf.vulnlab.dev/parser": 11,
     "ist-edu-bd.vercel.app/newsletter": 9,
-    "vapi.apisec.ai/vapi/api8/user/secret": 12,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 33
+    "agentpwn.com/attacks/context-window/2": 7,
+    "auth-security-project.onrender.com/login": 4,
+    "all-seeing-eye-six.vercel.app/api/hello": 4,
+    "seclab.vercel.app/api/xss-vulnerable": 3
   }
 }

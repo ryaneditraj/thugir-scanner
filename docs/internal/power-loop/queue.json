@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-28T07:06:04.720Z",
+  "updated_at": "2026-07-28T08:14:51.258Z",
   "discovery_urls": [
+    {
+      "url": "https://seclab.vercel.app/api/xss-vulnerable",
+      "source": "DaniSam-STU/security-lab — POST /api/xss-vulnerable reflected XSS oracle (seclab.vercel.app Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnweb.netlify.app/csrf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — CSRF lab module on Netlify deploy (vulnweb.netlify.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/newsletter",
+      "source": "zahidoverflow/damn-vulnerable-web-university — newsletter CSRF/CRLF lab route (ist-edu-bd.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://agentpwn.com/attacks/context-window/2",
+      "source": "opena2a/agentpwn — APWN-CW-002 context-window injection attack demo (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://all-seeing-eye-six.vercel.app/api/hello",
+      "source": "idootop/all-seeing-eye — Chrome <116 arbitrary file read oracle GET /api/hello?path= (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://all-seeing-eye-six.vercel.app/",
       "source": "idootop/all-seeing-eye — Chrome <116 arbitrary file read demo /api/hello?path= (Vercel OSS deploy)",
