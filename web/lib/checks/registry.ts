@@ -31527,6 +31527,82 @@ const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetRedirectorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirector(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const redirectorUrl = new URL("/redirector", ctx.origin).toString();
+  const doc = await ctx.probe.get(redirectorUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasHeading = /<h3>\s*Redirection\s*<\/h3>/i.test(doc.body);
+  const hasRedirectLink = /id=['"]redirect['"][^>]*href=['"]redirect['"]/i.test(doc.body);
+  const mentionsStatusCodes = /status codes page/i.test(doc.body);
+  if (!hasHeading || !hasRedirectLink || !mentionsStatusCodes) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      redirectorUrl,
+      markers: ["h3 Redirection", "a#redirect", "status codes page"],
+      note: "the-internet /redirector route scan — link-based redirect training lab with #redirect anchor to /redirect — Elemental Selenium redirection oracle"
+    }
+  };
+};
+
+const theInternetStatusCodesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/status_codes(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const hubUrl = new URL("/status_codes", ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Status Codes\s*<\/h3>/i.test(hubDoc.body)) return NEGATIVE;
+  const codes = [200, 301, 404, 500].filter((code) =>
+    new RegExp(`>\\s*${code}\\s*<|/status_codes/${code}`, "i").test(hubDoc.body)
+  );
+  if (codes.length < 3) return NEGATIVE;
+  const okUrl = new URL("/status_codes/200", ctx.origin).toString();
+  const okDoc = await ctx.probe.get(okUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (okDoc.status !== 200 || !/\b200\b/.test(okDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      okUrl,
+      codesListed: codes,
+      okStatus: okDoc.status,
+      note: "the-internet /status_codes route scan — hub enumerates HTTP status codes and /status_codes/200 returns 200 — Elemental Selenium status-code training oracle"
+    }
+  };
+};
+
+const theInternetBrokenImagesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/broken_images(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const brokenUrl = new URL("/broken_images", ctx.origin).toString();
+  const doc = await ctx.probe.get(brokenUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Broken Images\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const brokenSrcs = [...doc.body.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)]
+    .map((m) => m[1])
+    .filter((src) => /^(?:asdf|hjkl)\.jpg$/i.test(src));
+  if (brokenSrcs.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      brokenUrl,
+      brokenSrcs,
+      note: "the-internet /broken_images route scan — relative img src asdf.jpg and hjkl.jpg 404 without path validation — Elemental Selenium broken-image training oracle"
+    }
+  };
+};
+
 const pentestGroundDvwaWeakIdRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -44059,6 +44135,9 @@ export const RULES: Record<string, Rule> = {
   theInternetFileUploadRouteLiveOracle,
   theInternetShadowdomRouteLiveOracle,
   theInternetRedirectRouteLiveOracle,
+  theInternetRedirectorRouteLiveOracle,
+  theInternetStatusCodesRouteLiveOracle,
+  theInternetBrokenImagesRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,

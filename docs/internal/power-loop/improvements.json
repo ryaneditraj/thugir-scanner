@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-redirector-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /redirector exposes a#redirect href=redirect and Redirection h3 linking to status codes page; the-internet.herokuapp.com/redirector findings 2→3 (+the-internet-redirector-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-status-codes-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /status_codes hub lists 200/301/404/500 and GET /status_codes/200 returns HTTP 200; the-internet.herokuapp.com/status_codes findings 2→3 (+the-internet-status-codes-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-broken-images-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /broken_images img src=asdf.jpg and hjkl.jpg relative paths 404; the-internet.herokuapp.com/broken_images findings 2→3 (+the-internet-broken-images-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-file-lfi-route-live-oracle",
       "status": "shipped",
