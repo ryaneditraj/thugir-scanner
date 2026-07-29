@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T02:05:00.000Z",
+  "updated_at": "2026-07-29T03:03:15.505Z",
   "discovery_urls": [
+    {
+      "url": "https://ssrf.vulnlab.dev/blind",
+      "source": "sampsonc/vulnlab.dev — blind SSRF OOB callback lab (README ssrf.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "source": "sampsonc/vulnlab.dev — semi-blind SSRF POST webhook leaks status/headers (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-gcp",
+      "source": "sampsonc/vulnlab.dev — GCP metadata SSRF with Metadata-Flavor header injection (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-azure",
+      "source": "sampsonc/vulnlab.dev — Azure metadata SSRF with Metadata:true header injection (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/identity/api/auth/signup",
+      "source": "OWASP crAPI v1 — broken signup/mass-assignment oracle POST /identity/api/auth/signup (APIsec hosted)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://crapi.apisec.ai/identity/api/auth/verify",
       "source": "OWASP crAPI v1 — JWT none-algorithm oracle POST /identity/api/auth/verify (APIsec hosted crapi.apisec.ai)",
