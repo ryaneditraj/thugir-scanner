@@ -23482,6 +23482,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-dvwa-xss-r-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA reflected XSS route live oracle",
+    description:
+      "When scanning /vulnerabilities/xss_r/, GET ?name= reflects attacker input in Hello <name> without encoding — Pentest-Ground DVWA reflected XSS route oracle.",
+    impactOneline:
+      "Reflected XSS on DVWA name parameter lets attackers inject scripts via crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaXssRRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — encode all reflected output.",
+      steps: [
+        "HTML-encode reflected user input before rendering in templates.",
+        "Use a context-aware output encoder (not only htmlspecialchars).",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/xss_r/ route reflects ?name= in Hello output. Show reflected XSS defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-dvwa-fi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pentest-Ground DVWA file inclusion route live oracle",
+    description:
+      "When scanning /vulnerabilities/fi/, GET ?page= with directory traversal includes /etc/passwd — Pentest-Ground DVWA local file inclusion route oracle.",
+    impactOneline:
+      "Local file inclusion on DVWA page parameter exposes server files like /etc/passwd.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaFiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — never pass user input to include().",
+      steps: [
+        "Allow-list include targets instead of concatenating user paths.",
+        "Disable remote and local file inclusion in production PHP configs.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/fi/ route includes /etc/passwd via ?page= traversal. Show LFI prevention.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "the-internet-login-auth-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -23504,6 +23556,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our the-internet /login route discloses demo credentials and POST /authenticate redirects valid logins to /secure. Show production auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-dynamic-loading-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet dynamic loading route live oracle",
+    description:
+      "When scanning /dynamic_loading, the hub links to AJAX delayed-render examples with #start button and Hello World! reveal — Elemental Selenium dynamic content training route oracle.",
+    impactOneline:
+      "Dynamic content loading labs document AJAX timing patterns that break naive scrapers and require explicit waits in automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDynamicLoadingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use explicit waits for dynamic DOM updates in automation.",
+      steps: [
+        "Wait for expected elements before asserting page state in E2E tests.",
+        "Avoid fixed sleep() delays; use condition-based waits.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /dynamic_loading route documents AJAX delayed-render patterns. Show robust explicit-wait strategies for dynamic DOM.",
     version: 1,
     enabled: true
   },
