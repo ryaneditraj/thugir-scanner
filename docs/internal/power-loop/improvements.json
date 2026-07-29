@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-xss-d-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/xss_d/ page reads default= from document.location.href into document.write without encoding; pentest-ground.com:4280/vulnerabilities/xss_d findings 7→8 (+pentest-ground-dvwa-xss-d-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-basic-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /basic_auth returns HTTP 401 without credentials; admin:admin Basic auth returns Congratulations! You must have the proper credentials; the-internet.herokuapp.com/basic_auth findings 2→3 (+the-internet-basic-auth-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /upload multipart file returns File Uploaded! without type validation; the-internet.herokuapp.com/upload findings 2→3 (+the-internet-file-upload-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-dvwa-xss-r-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/xss_r/?name=thugirXssRcanary returns <pre>Hello thugirXssRcanary</pre>; pentest-ground.com:4280/vulnerabilities/xss_r findings 7→8 (+pentest-ground-dvwa-xss-r-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"

@@ -23586,6 +23586,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-dvwa-xss-d-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA DOM XSS route live oracle",
+    description:
+      "When scanning /vulnerabilities/xss_d/, the page reads default= from document.location.href into document.write without encoding — Pentest-Ground DVWA DOM-based XSS route oracle.",
+    impactOneline:
+      "DOM-based XSS on DVWA default= parameter lets attackers inject scripts via crafted URLs without server-side reflection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaXssDRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — never pass URL parameters to document.write.",
+      steps: [
+        "Avoid document.write and other dangerous DOM sinks for user-controlled data.",
+        "Use textContent or safe DOM APIs instead of innerHTML/document.write.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/xss_d/ route passes default= URL param to document.write. Show DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-basic-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "the-internet basic authentication route live oracle",
+    description:
+      "When scanning /basic_auth, HTTP 401 without credentials and admin:admin Basic auth returns Congratulations — Elemental Selenium basic authentication training route oracle.",
+    impactOneline:
+      "Weak default credentials on basic auth endpoints let attackers bypass authentication with known username/password pairs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetBasicAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use strong unique credentials for HTTP Basic auth.",
+      steps: [
+        "Never use default credentials like admin:admin in production.",
+        "Rotate basic auth passwords and prefer token-based auth where possible.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /basic_auth route accepts admin:admin Basic credentials. Show production HTTP Basic auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "the-internet file upload route live oracle",
+    description:
+      "When scanning /upload, POST multipart file returns File Uploaded! without type validation — Elemental Selenium file upload training route oracle.",
+    impactOneline:
+      "Unrestricted file upload lets attackers store arbitrary files on the server without content-type validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — validate file types and restrict upload destinations.",
+      steps: [
+        "Allow-list permitted MIME types and verify magic bytes server-side.",
+        "Store uploads outside the web root or serve via a non-executable handler.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /upload route accepts arbitrary file uploads. Show secure file upload validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",

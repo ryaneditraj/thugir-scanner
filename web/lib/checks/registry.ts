@@ -31229,6 +31229,105 @@ const theInternetDynamicLoadingRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetBasicAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/basic_auth(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const basicUrl = new URL("/basic_auth", ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(basicUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (unauthDoc.status !== 401) return NEGATIVE;
+  const basicHeader = {
+    Authorization: `Basic ${Buffer.from("admin:admin").toString("base64")}`
+  };
+  const authDoc = await ctx.probe.get(basicUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: basicHeader
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Congratulations!/i.test(authDoc.body) || !/proper credentials/i.test(authDoc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      basicUrl,
+      unauthStatus: unauthDoc.status,
+      authStatus: authDoc.status,
+      snippet: authDoc.body.match(/Congratulations![^<]{0,80}/i)?.[0] || authDoc.body.slice(0, 200).trim(),
+      note: "the-internet /basic_auth route scan — HTTP 401 without credentials; admin:admin Basic auth returns Congratulations — Elemental Selenium basic authentication oracle"
+    }
+  };
+};
+
+const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/upload(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const uploadUrl = new URL("/upload", ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(uploadUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/file-uploader|drag-drop-upload/i.test(hubDoc.body)) return NEGATIVE;
+  const probeName = `thugir-upload-${Date.now().toString(36)}.txt`;
+  const boundary = `----ThugirInternetUpload${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="file"; filename="${probeName}"`,
+    "Content-Type: text/plain",
+    "",
+    "thugir-upload-probe",
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/File Uploaded!/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      uploadUrl,
+      probeName,
+      snippet: doc.body.match(/File Uploaded![^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "the-internet /upload route scan — POST multipart file returns File Uploaded! without type validation — Elemental Selenium file upload oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaXssDRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/xss_d\/?/i.test(pageUrl)) return NEGATIVE;
+  const xssUrl = new URL("/vulnerabilities/xss_d/", ctx.origin).toString();
+  const doc = await ctx.probe.get(xssUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasDefaultParam = /document\.location\.href\.indexOf\(["']default=["']\)/i.test(doc.body);
+  const hasUnsafeWrite =
+    /document\.write\(["']<option value=['"]'\s*\+\s*lang/i.test(doc.body) ||
+    /document\.write\("<option value='" \+ lang/i.test(doc.body);
+  if (!hasDefaultParam || !hasUnsafeWrite) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      xssUrl,
+      markers: ["default= URL param", "document.write(lang)"],
+      snippet: doc.body.match(/document\.location\.href\.indexOf[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "Pentest-Ground DVWA /vulnerabilities/xss_d/ reads default= from document.location.href into document.write without encoding — DOM-based XSS route oracle"
+    }
+  };
+};
+
 const pentestGroundRestflawEvalCodeInjectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -43495,9 +43594,12 @@ export const RULES: Record<string, Rule> = {
   pentestGroundDvwaCsrfRouteLiveOracle,
   pentestGroundDvwaXssRRouteLiveOracle,
   pentestGroundDvwaFiRouteLiveOracle,
+  pentestGroundDvwaXssDRouteLiveOracle,
   theInternetLoginAuthLiveOracle,
   theInternetLoginAuthRouteLiveOracle,
   theInternetDynamicLoadingRouteLiveOracle,
+  theInternetBasicAuthRouteLiveOracle,
+  theInternetFileUploadRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
