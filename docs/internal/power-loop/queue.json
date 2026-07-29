@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T22:05:21.524Z",
+  "updated_at": "2026-07-29T23:04:33.498Z",
   "discovery_urls": [
     {
       "url": "https://the-internet.herokuapp.com/basic_auth",
@@ -11798,6 +11798,31 @@
     {
       "url": "https://the-internet.herokuapp.com/checkboxes",
       "source": "the-internet.herokuapp.com — checkbox state manipulation training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/subdirectories",
+      "source": "saucelabs/the-internet — subdirectory navigation / path oracle training route (GitHub README deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/notification_message",
+      "source": "saucelabs/the-internet — flash notification message DOM training route (correct path; fixes notification_messages typo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/abtest",
+      "source": "saucelabs/the-internet — A/B testing variant DOM training route (GitHub README deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/track-order",
+      "source": "OWASP Juice Shop demo — track-order REST oracle (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/ftp",
+      "source": "OWASP Juice Shop demo — FTP forgotten-backup disclosure oracle (official demo.owasp-juice.shop)",
       "auth": "public_demo"
     }
   ]
