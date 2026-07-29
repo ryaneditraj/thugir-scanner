@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T17:05:00.000Z",
+  "updated_at": "2026-07-29T18:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/infinite_scroll",
+      "source": "the-internet.herokuapp.com — infinite scroll / DOM scraping training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/jqueryui/menu",
+      "source": "the-internet.herokuapp.com — JQuery UI menu / XSS sink training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/nested_frames",
+      "source": "the-internet.herokuapp.com — nested frames / clickjacking training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/large",
+      "source": "the-internet.herokuapp.com — large & deep DOM / performance training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/tinymce",
+      "source": "the-internet.herokuapp.com — WYSIWYG editor / stored XSS training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/ab_testing",
       "source": "the-internet.herokuapp.com — A/B cookie manipulation / client-side state training route (Heroku public demo)",
