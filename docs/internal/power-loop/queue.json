@@ -67,8 +67,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://the-internet.herokuapp.com/secure_file_download",
-      "source": "tourdedave/the-internet — path traversal / arbitrary file read oracle (Elemental Selenium Heroku demo)",
+      "url": "https://the-internet.herokuapp.com/download_secure",
+      "source": "tourdedave/the-internet — secure file download with Basic auth oracle (Elemental Selenium Heroku demo)",
       "auth": "public_demo"
     },
     {

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T12:10:00.000Z",
+  "updated_at": "2026-07-29T13:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2742,
-  "total_findings": 26689,
+  "total_sites_scanned": 2746,
+  "total_findings": 26709,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1976,
-  "discovery_findings": 22802,
+  "discovery_findings": 22808,
   "improvements_shipped": 1158,
-  "last_run": "2026-07-29T12:10:00.000Z",
+  "last_run": "2026-07-29T13:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 14,
@@ -54,33 +54,32 @@
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 115,
-      "focus": "the-internet file_upload path alias + brokencrystals dom-csrf-flow + nestedJson route oracles",
+      "findings": 9,
+      "focus": "the-internet download_secure + dropdown + javascript_alerts route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503 fallback",
-      "the-internet.herokuapp.com/file_upload: 2→3 findings — file upload oracle now accepts /file_upload discovery URL",
-      "brokencrystals.com/api/auth/dom-csrf-flow: 56→60 findings — dom-csrf Fingerprint token oracle shipped",
-      "brokencrystals.com/api/nestedJson: 49→52 findings — nestedJson depth=10000 stack overflow DoS oracle shipped"
+      "the-internet.herokuapp.com/secure_file_download: 2→3 findings — download-secure oracle accepts /secure_file_download alias; admin:admin Basic auth serves Secure File Downloader",
+      "the-internet.herokuapp.com/dropdown: 2→3 findings — dropdown select#dropdown route oracle shipped",
+      "the-internet.herokuapp.com/javascript_alerts: 2→3 findings — jsAlert/jsConfirm/jsPrompt onclick route oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pentest-ground xss_s: stored XSS guestbook POST oracle absent (DVWA guestbook table missing on live deploy)",
-      "euri-sec-csp: CSP bypass / per-demo XSS route oracles absent",
-      "zerohealth ssrf/xss challenges: route-specific SSRF/XSS live oracles absent",
-      "seclab.vercel.app/api/sqli: route-specific SQLi injection oracle absent"
+      "pentest-ground weak_session_ids: DVWA module 404 on live deploy (port 4280)",
+      "seclab.vercel.app/api/sqli: route-specific SQLi injection oracle absent",
+      "zerohealth ssrf/xss challenges: route-specific SSRF/XSS live oracles absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
+    "the-internet.herokuapp.com/secure_file_download": 3,
+    "the-internet.herokuapp.com/dropdown": 3,
+    "the-internet.herokuapp.com/javascript_alerts": 3,
     "brokencrystals.com/api/auth/dom-csrf-flow": 60,
     "brokencrystals.com/api/nestedJson": 52,
     "the-internet.herokuapp.com/file_upload": 3,
-    "pentest-ground.com:4280/vulnerabilities/sqli_blind": 7,
-    "zerohealth.aliyu.dev/challenges/ssrf": 5,
-    "seclab.vercel.app/api/sqli": 4,
-    "euri-sec-csp-5d4beab5074d.herokuapp.com": 3
+    "seclab.vercel.app/api/sqli": 4
   }
 }

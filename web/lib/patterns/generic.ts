@@ -23768,6 +23768,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-download-secure-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "the-internet secure file download route live oracle",
+    description:
+      "When scanning /download_secure or /secure_file_download, HTTP 401 without credentials and admin:admin Basic auth lists Secure File Downloader with downloadable files — Elemental Selenium secure download training route oracle.",
+    impactOneline:
+      "Weak default credentials on protected download endpoints let attackers read files intended for authenticated users only.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDownloadSecureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use strong unique credentials for protected downloads.",
+      steps: [
+        "Never use default credentials like admin:admin in production.",
+        "Validate and canonicalize file paths to block directory traversal.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /download_secure route accepts admin:admin Basic auth and serves arbitrary files. Show secure download hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-dropdown-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet dropdown route live oracle",
+    description:
+      "When scanning /dropdown, select#dropdown exposes multiple option values for UI interaction training — Elemental Selenium dropdown training route oracle.",
+    impactOneline:
+      "Dropdown labs document select-element automation patterns that require explicit option selection in E2E tests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDropdownRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use robust select-element handling in automation.",
+      steps: [
+        "Select options by value or visible text rather than index when possible.",
+        "Wait for dropdown options to be present before interacting.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /dropdown route documents select#dropdown interaction patterns. Show robust dropdown automation strategies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-javascript-alerts-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "info",
+    title: "the-internet JavaScript alerts route live oracle",
+    description:
+      "When scanning /javascript_alerts, onclick handlers invoke jsAlert/jsConfirm/jsPrompt native dialogs — Elemental Selenium JavaScript alert training route oracle.",
+    impactOneline:
+      "JavaScript alert dialogs block naive automation and document dialog-handling patterns for security testing workflows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetJavascriptAlertsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — handle native dialogs explicitly in browser automation.",
+      steps: [
+        "Register alert/confirm/prompt handlers before triggering onclick actions.",
+        "Avoid dismissing unexpected dialogs silently in security scans.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /javascript_alerts route triggers native alert/confirm/prompt dialogs. Show dialog-handling patterns for automation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
