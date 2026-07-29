@@ -17528,6 +17528,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-signup-open-registration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "crAPI signup open registration live oracle",
+    description:
+      "POST /identity/api/auth/signup registers a new user without prior authentication or CAPTCHA — the crAPI broken authentication signup oracle.",
+    impactOneline:
+      "Unauthenticated signup endpoints let attackers mass-register accounts and abuse downstream identity workflows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiSignupOpenRegistrationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — gate signup behind invite codes or admin approval in production.",
+      steps: [
+        "Require email or phone verification before activating accounts.",
+        "Rate-limit signup and add CAPTCHA on public registration forms.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/auth/signup endpoint accepts unauthenticated registrations. Show signup hardening for crAPI-style APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-signup-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "crAPI signup route live oracle",
+    description:
+      "When scanning /identity/api/auth/signup, POST registers a new user without authentication — route-specific crAPI open registration oracle.",
+    impactOneline:
+      "Route scans on signup endpoints should confirm unauthenticated account creation is blocked or rate-limited.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiSignupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — gate signup behind invite codes or admin approval in production.",
+      steps: [
+        "Require email or phone verification before activating accounts.",
+        "Rate-limit signup and add CAPTCHA on public registration forms.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/auth/signup route scan confirms unauthenticated registration. Show route-specific signup hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-shop-orders-bfla-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -23170,6 +23222,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-dvwa-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA SQL injection route live oracle",
+    description:
+      "When scanning /vulnerabilities/sqli/, POST id=1' OR '1'='1 returns multiple user rows — Pentest-Ground hosted DVWA SQL injection route oracle.",
+    impactOneline:
+      "Unsanitized SQL concatenation on DVWA id parameters lets attackers dump every user record with a tautology payload.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — use parameterized queries instead of string concatenation.",
+      steps: [
+        "Bind user input with prepared statements or ORM parameterization.",
+        "Reject unexpected characters in numeric ID fields.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/sqli/ route concatenates id into SQL. Show injection remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -24782,7 +24860,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu newsletter CRLF injection route live oracle",
     description:
-      "POST /api/newsletter with CRLF in the email field triggers HTTP response splitting when scanning /newsletter — IST Edu header injection training oracle.",
+      "When scanning /labs/csrf or /newsletter, POST /api/newsletter with CRLF in the email field triggers HTTP response splitting — IST Edu header injection training oracle.",
     impactOneline:
       "CRLF injection in newsletter subscriptions lets attackers inject forged email headers or poison HTTP responses.",
     detectorKind: "rule_ref",

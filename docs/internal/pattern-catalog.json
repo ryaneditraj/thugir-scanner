@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T05:15:43.532Z",
-  "total": 1026,
-  "uniqueSlugs": 1021,
+  "generatedAt": "2026-07-29T06:12:27.519Z",
+  "total": 1029,
+  "uniqueSlugs": 1024,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1008,
+    "generic": 1011,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 941,
+    "deep": 944,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 72,
     "Security misconfiguration": 79,
-    "Broken authentication": 73,
-    "Injection": 205,
+    "Broken authentication": 75,
+    "Injection": 206,
     "Cross-site scripting": 144,
     "general": 20,
     "SSRF": 5,
@@ -694,6 +694,8 @@
     "crapi-mechanic-report-bola-live-oracle",
     "crapi-mechanic-report-route-live-oracle",
     "crapi-shop-orders-id-bola-route-live-oracle",
+    "crapi-signup-open-registration-live-oracle",
+    "crapi-signup-route-live-oracle",
     "crapi-vehicle-bola-live-oracle",
     "crapi-vehicle-route-live-oracle",
     "crapi2-auth-login-route-live-oracle",
@@ -841,6 +843,7 @@
     "pentest-forge-linked-lab-probe",
     "pentest-ground-dvwa-csp-bypass-route-live-oracle",
     "pentest-ground-dvwa-exec-cmdi-route-live-oracle",
+    "pentest-ground-dvwa-sqli-route-live-oracle",
     "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     "permissive-cors",
     "php-strcmp-array-bypass",
