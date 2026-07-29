@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T01:05:33.653Z",
+  "updated_at": "2026-07-29T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://crapi.apisec.ai/identity/api/auth/verify",
+      "source": "OWASP crAPI v1 — JWT none-algorithm oracle POST /identity/api/auth/verify (APIsec hosted crapi.apisec.ai)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/identity/api/auth/v3/check-otp",
+      "source": "OWASP crAPI v1 — OTP brute-force oracle POST /identity/api/auth/v3/check-otp (APIsec hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges",
+      "source": "aligorithm/zero-health — healthcare OWASP Top 10 + AI/LLM challenge hub (public demo zerohealth.aliyu.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/docs",
+      "source": "aligorithm/zero-health — unauthenticated API documentation oracle (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/",
+      "source": "Escape DVGA2 — GraphQL introspection/injection oracle root (dvga2.tools.escape.tech sibling instance)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.tools.escape.tech/vapi/api5/user",
       "source": "roottusk/vAPI — API5 broken function level authorization oracle POST/GET /vapi/api5/user (Escape hosted vapi.tools.escape.tech)",
