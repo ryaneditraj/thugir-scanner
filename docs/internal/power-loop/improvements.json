@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-latest-limit-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/products/latest returns 3 products; GET /api/products/latest?limit=100 returns 11; brokencrystals.com/api/products/latest?limit=100 findings 54→55 (+brokencrystals-products-latest-limit-bypass-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-challenging-dom-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenging_dom exposes UUID button ids, canvas#canvas, and Iuvaret table rows; the-internet.herokuapp.com/challenging_dom findings 2→3 (+the-internet-challenging-dom-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-frames-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /frames links to /nested_frames frameset (frame_top/frame_bottom) and /iframe; the-internet.herokuapp.com/frames findings 2→3 (+the-internet-frames-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-hovers-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /hovers CSS .figure:hover .figcaption reveals name: userN and /users/N profile links; the-internet.herokuapp.com/hovers findings 2→3 (+the-internet-hovers-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-redirector-route-live-oracle",
       "status": "shipped",
