@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T07:05:20.799Z",
+  "updated_at": "2026-07-29T08:04:13.596Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/",
+      "source": "tourdedave/the-internet — Elemental Selenium training sandbox (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/login",
+      "source": "tourdedave/the-internet — form auth + error disclosure oracle (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/csrf/",
+      "source": "Pentest-Ground DVWA — CSRF token-missing lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/upload/",
+      "source": "Pentest-Ground DVWA — unrestricted file upload lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/brute/",
+      "source": "Pentest-Ground DVWA — brute-force / captcha bypass lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://security.askquala.com/door",
       "source": "Johnnydtech/door-demo — DOOR framework intentionally vulnerable Next.js+Supabase workshop (security.askquala.com/door)",
