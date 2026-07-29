@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-user-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /users/v1/login name1/pass1 then GET /users/v1/name2 returns {\"username\":\"name2\",\"email\":\"mail2@mail.com\"} without object-level auth; urban-vampi-production.up.railway.app/users/v1 findings 7→9 (+vampi-user-bola-live-oracle); benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-user-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /users/v1/{username} fires vampiUserBolaRouteLiveOracle when JWT for user A reads user B profile; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-books-excessive-data-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /books/v1 with name1 JWT returns Books owned by name2 and admin — cross-user list leakage; urban-vampi-production.up.railway.app/users/v1 findings 7→9 (+vampi-books-excessive-data-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-books-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /books/v1/1 gains vampi-books-route-live-oracle; urban-vampi-production.up.railway.app/books/v1/1 findings 6→9; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:dvga2.tools.escape.tech",
       "slug": "dvga2-host-canonical-origin-fix",
       "status": "shipped",
