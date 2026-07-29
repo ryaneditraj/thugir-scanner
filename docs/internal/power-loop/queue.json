@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T10:05:00.000Z",
+  "updated_at": "2026-07-29T11:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnbank.org/register",
+      "source": "Commando-X/vuln-bank — mass-assignment registration oracle on public Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/dom-csrf-flow",
+      "source": "NeuraLegion/brokencrystals — DOM CSRF flow oracle GET /api/auth/dom-csrf-flow (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/nestedJson",
+      "source": "NeuraLegion/brokencrystals — nested JSON injection oracle POST /api/nestedJson (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://demo.testfire.net/login.jsp",
+      "source": "IBM Altoro Mutual — classic intentionally vulnerable banking demo login (testfire.net public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://euri-sec-csp-5d4beab5074d.herokuapp.com/",
+      "source": "EURI Security — CSP misconfiguration demo with XSS sink labs (Heroku public deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pentest-ground.com:4280/vulnerabilities/xss_d/",
       "source": "Pentest-Ground DVWA — DOM-based XSS lab module (pentest-ground.com README)",
