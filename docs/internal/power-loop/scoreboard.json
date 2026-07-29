@@ -15,6 +15,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 2740,
   "total_findings": 26654,
   "critical_findings": 55,
@@ -23,6 +24,16 @@
   "discovery_urls_added": 1961,
   "discovery_findings": 22605,
   "improvements_shipped": 1155,
+=======
+  "total_sites_scanned": 2734,
+  "total_findings": 26628,
+  "critical_findings": 55,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22577,
+  "improvements_shipped": 1164,
+>>>>>>> 8cf10216 (docs(power-loop): log 3 discovery oracle improvements [2026-07-29 UTC])
   "last_run": "2026-07-29T09:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
@@ -48,10 +59,11 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings). jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend slug still absent."
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 31,
@@ -65,19 +77,40 @@
       "the-internet.herokuapp.com/dynamic_loading + /javascript_alerts + /forgot_password: thin 2-finding passes (headers/cookies only)",
       "the-internet.herokuapp.com + /login: thin 2-finding passes (missing headers + insecure cookies)",
       "pentest-ground.com:4280/vulnerabilities/csrf/: 7-finding generic hub; route-specific CSRF oracle absent"
+=======
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 19,
+      "focus": "pentest-ground DVWA upload/CSRF + the-internet form auth route oracles",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503, staging fallback healthy",
+      "pentest-ground.com:4280/vulnerabilities/upload: 7→8 findings — pentest-ground-dvwa-upload-route-live-oracle shipped (PHP file upload to hackable/uploads)",
+      "pentest-ground.com:4280/vulnerabilities/csrf: 7→8 findings — pentest-ground-dvwa-csrf-route-live-oracle shipped (password change without CSRF token)",
+      "the-internet.herokuapp.com/login: 2→3 findings — the-internet-login-auth-route-live-oracle shipped (POST /authenticate 303 /secure vs /login)"
+>>>>>>> 8cf10216 (docs(power-loop): log 3 discovery oracle improvements [2026-07-29 UTC])
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+<<<<<<< HEAD
       "primary juice-shop.herokuapp.com Heroku dyno 503 at 09:00 UTC — staging fallback required",
       "the-internet.herokuapp.com/*: route-specific XSS/auth/email-enumeration oracles absent on dynamic_loading, javascript_alerts, forgot_password",
       "pentest-ground fi: LFI route-specific live oracle absent despite ?page=include.php entry point",
       "pentest-ground csrf/upload/brute still queued behind 8-url limit",
       "security.askquala.com/door + hack-this-site graphql + graphqlbook still queued behind 8-url limit"
+=======
+      "primary juice-shop.herokuapp.com Heroku dyno 503 — staging fallback required",
+      "pentest-ground.com:4280/vulnerabilities/brute: DB table dvwa.users missing — brute-force module broken server-side",
+      "security.askquala.com/door: DOOR framework route-specific Supabase/Next.js oracles absent",
+      "vaultapp-omega.vercel.app/api/users/1: IDOR oracle blocked — demo credentials invalid on live deploy"
+>>>>>>> 8cf10216 (docs(power-loop): log 3 discovery oracle improvements [2026-07-29 UTC])
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
+<<<<<<< HEAD
     "pentest-ground.com:4280/vulnerabilities/xss_r": 7,
     "pentest-ground.com:4280/vulnerabilities/fi": 7,
     "pentest-ground.com:4280/vulnerabilities/csrf": 7,
@@ -86,5 +119,14 @@
     "the-internet.herokuapp.com/forgot_password": 2,
     "the-internet.herokuapp.com": 2,
     "the-internet.herokuapp.com/login": 2
+=======
+    "pentest-ground.com:4280/vulnerabilities/upload": 8,
+    "pentest-ground.com:4280/vulnerabilities/csrf": 8,
+    "the-internet.herokuapp.com/login": 3,
+    "hack-this-site-eta.vercel.app/api-labs/graphql.html": 47,
+    "api.graphqlbook.org": 8,
+    "security.askquala.com/door": 7,
+    "pentest-ground.com:4280/vulnerabilities/brute": 7
+>>>>>>> 8cf10216 (docs(power-loop): log 3 discovery oracle improvements [2026-07-29 UTC])
   }
 }

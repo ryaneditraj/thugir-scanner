@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/upload/ multipart uploaded=thugir-probe.php returns <pre>../../hackable/uploads/... succesfully uploaded!</pre>; pentest-ground.com:4280/vulnerabilities/upload findings 7→8 (+pentest-ground-dvwa-upload-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/csrf/ password change form has password_new/password_conf with no user_token/csrf hidden field; POST password_new/password_conf returns HTTP 200; pentest-ground.com:4280/vulnerabilities/csrf findings 7→8 (+pentest-ground-dvwa-csrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-login-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /authenticate tomsmith/SuperSecretPassword! → 303 Location /secure; wrong password → 303 /login; /login page discloses demo credentials; the-internet.herokuapp.com/login findings 2→3 (+the-internet-login-auth-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:agentpwn.com",
       "slug": "agentpwn-capability-abuse-route-reliability",
       "status": "shipped",
@@ -15369,6 +15387,21 @@
       "source": "discovery:vapi.tools.escape.tech",
       "slug": "vapi-api4-otp-route-live-oracle",
       "shipped_at": "2026-07-29T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-upload-route-live-oracle",
+      "shipped_at": "2026-07-29T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-csrf-route-live-oracle",
+      "shipped_at": "2026-07-29T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-login-auth-route-live-oracle",
+      "shipped_at": "2026-07-29T09:10:00.000Z"
     }
   ]
 }
