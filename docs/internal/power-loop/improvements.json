@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-canonical-origin-probe-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reachTarget resolves vapi.tools.escape.tech to http://www.vapi.tools.escape.tech (404 on /vapi/*); all vAPI live oracles now build URLs via vapiCanonicalOrigin(ctx) → https://vapi.tools.escape.tech; vapi.tools.escape.tech/vapi/api2/user/login findings 2→12 (+vapi-api2-broken-auth + route); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api3-comment-single-row-oracle-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/api3/comment returns single-row JSON with deviceid flag{api3_0bad677bfc504c75ff72}; rows.length<2 guard rejected escape.tech sparse dataset; now fires on flagged single row; vapi.tools.escape.tech/vapi/api3/comment findings 2→13 (+vapi-api3-comment-bola + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api4-otp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /vapi/api4/login fires vapiApi4OtpRouteLiveOracle — POST /api4/otp/verify accepts static OTP 1872; vapi.tools.escape.tech/vapi/api4/login findings 2→12 (+vapi-api4-otp-route + broken-auth); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-admin-products-negative-price-live-oracle",
       "status": "shipped",
@@ -15204,6 +15222,21 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-category-sqli-route-live-oracle",
       "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-canonical-origin-probe-fix",
+      "shipped_at": "2026-07-29T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api3-comment-single-row-oracle-fix",
+      "shipped_at": "2026-07-29T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api4-otp-route-live-oracle",
+      "shipped_at": "2026-07-29T01:20:00.000Z"
     }
   ]
 }

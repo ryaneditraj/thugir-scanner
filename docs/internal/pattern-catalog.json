@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T00:15:59.638Z",
-  "total": 1010,
-  "uniqueSlugs": 1005,
+  "generatedAt": "2026-07-29T01:19:36.214Z",
+  "total": 1011,
+  "uniqueSlugs": 1006,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 992,
+    "generic": 993,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 925,
+    "deep": 926,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 70,
     "Security misconfiguration": 76,
-    "Broken authentication": 72,
+    "Broken authentication": 73,
     "Injection": 203,
     "Cross-site scripting": 143,
     "general": 20,
@@ -949,6 +949,7 @@
     "vapi-api3-comment-bola-live-oracle",
     "vapi-api3-comment-route-live-oracle",
     "vapi-api4-otp-broken-auth-live-oracle",
+    "vapi-api4-otp-route-live-oracle",
     "vapi-api4-user-exposure-live-oracle",
     "vapi-api5-bfla-live-oracle",
     "vapi-api6-mass-assignment-live-oracle",
