@@ -31435,6 +31435,32 @@ const theInternetForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirect(?:\/|$|\?)/i.test(pageUrl) || /\/redirector/i.test(pageUrl)) return NEGATIVE;
+  const redirectUrl = new URL("/redirect", ctx.origin).toString();
+  const doc = await ctx.probe.get(redirectUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = doc.headers["location"] || doc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!/status_codes/i.test(location)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      redirectUrl,
+      status: doc.status,
+      location: location.slice(0, 120),
+      note: "the-internet /redirect route scan — GET returns HTTP 302 Location to /status_codes — Elemental Selenium HTTP redirection training oracle (fixed destination, not open redirect)"
+    }
+  };
+};
+
 const theInternetShadowdomRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -40262,6 +40288,41 @@ const crapi2AuthLoginRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsFileLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file(?:\?|$)/i.test(pageUrl)) return NEGATIVE;
+  if (/\/api\/file\/(?:raw|aws|azure|google|digital_ocean)/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsFileLfiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/file route scan — GET ?path=package.json returns application package.json — local file inclusion oracle distinct from /api/file/raw"
+    }
+  };
+};
+
+const brokencrystalsTestimonialsCountSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/testimonials\/count/i.test(pageUrl)) return NEGATIVE;
+  const result = await sqliQueryParamInjection(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/testimonials/count route scan — query param executes attacker-controlled SQL — information_schema table count oracle"
+    }
+  };
+};
+
 const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -43997,6 +44058,7 @@ export const RULES: Record<string, Rule> = {
   theInternetForgotPasswordRouteLiveOracle,
   theInternetFileUploadRouteLiveOracle,
   theInternetShadowdomRouteLiveOracle,
+  theInternetRedirectRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
@@ -44189,6 +44251,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMassAssignmentPutLiveOracle,
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
+  brokencrystalsFileLfiRouteLiveOracle,
+  brokencrystalsTestimonialsCountSqliRouteLiveOracle,
   crapiMechanicReportBolaLiveOracle,
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
