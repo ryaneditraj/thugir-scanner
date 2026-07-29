@@ -13368,6 +13368,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-metadata-gcp-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+    description:
+      "GET /metadata-gcp/?url=http://169.254.169.254/computeMetadata/v1/ returns GCP metadata tree (instance/, project/) — the ssrf.vulnlab.dev GCP cloud metadata SSRF oracle.",
+    impactOneline:
+      "SSRF to GCP metadata can expose service account tokens and compromise cloud workloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabMetadataGcpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to 169.254.169.254/computeMetadata and require Metadata-Flavor headers — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Disable legacy metadata endpoints or restrict with firewall rules.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /metadata-gcp endpoint fetches GCP computeMetadata via a user-controlled url parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-metadata-gcp-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev metadata-gcp route SSRF live oracle",
+    description:
+      "When scanning /metadata-gcp, GET /metadata-gcp/?url=http://169.254.169.254/computeMetadata/v1/ returns GCP metadata tree — route-specific cloud metadata SSRF oracle.",
+    impactOneline:
+      "SSRF to GCP metadata can expose service account tokens and compromise cloud workloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabMetadataGcpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to 169.254.169.254/computeMetadata — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Disable legacy metadata endpoints or restrict with firewall rules.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /metadata-gcp route fetches GCP computeMetadata via user-controlled url. Show how to block cloud metadata SSRF on route scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-vulnlab-blocklist-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -24544,6 +24596,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our the-internet /tables route uses jQuery tablesorter on #table1 and #table2. Show resilient data-table locator patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-shifting-content-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet shifting content route live oracle",
+    description:
+      "When scanning /shifting_content, menu/image/list examples shift pixels on each load with mode=random and pixel_shift query params — Elemental Selenium shifting content training route oracle.",
+    impactOneline:
+      "Elements that shift position between page loads break fixed-coordinate automation and naive element locators.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetShiftingContentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use relative locators and retry logic for shifting elements.",
+      steps: [
+        "Locate elements by stable attributes or text rather than fixed coordinates.",
+        "Retry interactions when elements shift after page load or scroll.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /shifting_content route shifts menu pixels randomly on each load. Show resilient locator patterns for unstable DOM positions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-windows-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet windows route live oracle",
+    description:
+      "When scanning /windows, a target=_blank link opens /windows/new in a separate browser window — Elemental Selenium window-handle training route oracle.",
+    impactOneline:
+      "Links that open new windows require explicit window-handle switching in browser automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetWindowsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — switch to new window handles after target=_blank navigation.",
+      steps: [
+        "Capture the current window handle before clicking target=_blank links.",
+        "Switch WebDriver context to the new handle after the child window opens.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /windows route opens /windows/new in a new tab via target=_blank. Show window-handle switching patterns.",
     version: 1,
     enabled: true
   },
