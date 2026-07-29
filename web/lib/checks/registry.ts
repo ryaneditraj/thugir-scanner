@@ -31265,7 +31265,7 @@ const theInternetBasicAuthRouteLiveOracle: Rule = async (ctx) => {
 const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/upload(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:file[-_]?)?upload(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const uploadUrl = new URL("/upload", ctx.origin).toString();
   const hubDoc = await ctx.probe.get(uploadUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
@@ -40202,6 +40202,94 @@ const brokencrystalsJwtRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsDomCsrfFlowLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/auth/dom-csrf-flow", ctx.origin).toString();
+  const noFp = await ctx.probe.get(url, { maxBytes: 512, timeoutMs: 15000 });
+  if (noFp.status !== 400 || !/fingerprint/i.test(noFp.body)) return NEGATIVE;
+  const canary = `thugir-fp-${Date.now().toString(36)}`;
+  const withFp = await ctx.probe.get(url, {
+    headers: { Fingerprint: canary },
+    maxBytes: 128,
+    timeoutMs: 15000
+  });
+  if (withFp.status < 200 || withFp.status >= 300) return NEGATIVE;
+  const token = withFp.body.trim();
+  if (!/^[a-f0-9]{32}$/i.test(token)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      fingerprint: canary,
+      token,
+      unauthStatus: noFp.status,
+      snippet: token,
+      note: "Broken Crystals GET /api/auth/dom-csrf-flow issues a DOM CSRF token when Fingerprint header is present — no session auth required"
+    }
+  };
+};
+
+const brokencrystalsDomCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/dom-csrf-flow/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsDomCsrfFlowLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/dom-csrf-flow route scan — Fingerprint header returns 32-char DOM CSRF token without authentication"
+    }
+  };
+};
+
+const brokencrystalsNestedJsonDoSLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const shallowUrl = new URL("/api/nestedJson", ctx.origin);
+  shallowUrl.searchParams.set("depth", "3");
+  const shallow = await ctx.probe.get(shallowUrl.toString(), { maxBytes: 256, timeoutMs: 15000 });
+  if (shallow.status < 200 || shallow.status >= 300) return NEGATIVE;
+  if (!/"Leaf"/i.test(shallow.body)) return NEGATIVE;
+  const deepUrl = new URL("/api/nestedJson", ctx.origin);
+  deepUrl.searchParams.set("depth", "10000");
+  const deep = await ctx.probe.get(deepUrl.toString(), { maxBytes: 512, timeoutMs: 15000 });
+  if (deep.status < 500) return NEGATIVE;
+  if (!/maximum call stack|stack size exceeded/i.test(deep.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      shallowUrl: shallowUrl.toString(),
+      deepUrl: deepUrl.toString(),
+      shallowStatus: shallow.status,
+      deepStatus: deep.status,
+      snippet: deep.body.slice(0, 120).trim(),
+      note: "Broken Crystals GET /api/nestedJson?depth=10000 triggers Maximum call stack size exceeded — unbounded recursive nesting DoS oracle"
+    }
+  };
+};
+
+const brokencrystalsNestedJsonRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/nestedJson/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsNestedJsonDoSLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/nestedJson route scan — depth=10000 causes stack overflow 500 — unbounded nesting DoS oracle"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -43772,6 +43860,10 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMcpRouteLiveOracle,
   brokencrystalsJwtAlgNoneLiveOracle,
   brokencrystalsJwtRouteLiveOracle,
+  brokencrystalsDomCsrfFlowLiveOracle,
+  brokencrystalsDomCsrfRouteLiveOracle,
+  brokencrystalsNestedJsonDoSLiveOracle,
+  brokencrystalsNestedJsonRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,
   brokencrystalsSecretsRouteLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
