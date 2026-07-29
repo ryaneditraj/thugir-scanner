@@ -24418,6 +24418,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-key-presses-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "info",
+    title: "the-internet key presses route live oracle",
+    description:
+      "When scanning /key_presses, a jQuery keydown handler writes pressed keys to #result innerHTML — Elemental Selenium keyboard interaction training route oracle.",
+    impactOneline:
+      "Keyboard event handlers that write to innerHTML can leak input and enable DOM XSS if key data is not sanitized.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetKeyPressesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — avoid writing keyboard events to unsanitized innerHTML sinks.",
+      steps: [
+        "Use textContent instead of innerHTML for keyboard feedback displays.",
+        "Test keyboard interactions in E2E automation with send_keys() and ActionChains.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /key_presses route writes keydown events to #result innerHTML. Show safe keyboard event handling patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-large-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet large deep DOM route live oracle",
+    description:
+      "When scanning /large, a 50-tier nested sibling DOM tree (#siblings, tier-50) stresses locator strategies — Elemental Selenium large/deep DOM training route oracle.",
+    impactOneline:
+      "Deeply nested DOM trees degrade scanner performance and break naive CSS/XPath locators used in security automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetLargeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — prefer shallow component trees and resilient locators in production.",
+      steps: [
+        "Use data-testid or role-based selectors instead of deep CSS paths.",
+        "Limit DOM nesting depth in component frameworks to keep scanners performant.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /large route nests sibling divs 50 levels deep. Show resilient locator strategies for deep DOM trees.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-add-remove-elements-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet add/remove elements route live oracle",
+    description:
+      "When scanning /add_remove_elements, jQuery addElement()/deleteElement() dynamically appends .added-manually Delete buttons — Elemental Selenium dynamic element training route oracle.",
+    impactOneline:
+      "Dynamically injected DOM nodes break stale element references and evade static crawlers that snapshot initial HTML only.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetAddRemoveElementsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use explicit waits for dynamically added elements in E2E tests.",
+      steps: [
+        "Wait for new elements with WebDriverWait expected_conditions rather than fixed sleeps.",
+        "Re-query the DOM after AJAX or click handlers inject new nodes.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /add_remove_elements route dynamically adds Delete buttons via jQuery. Show robust dynamic-element wait patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
