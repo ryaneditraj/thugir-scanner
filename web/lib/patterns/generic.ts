@@ -15552,6 +15552,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-products-latest-limit-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals products latest limit bypass live oracle",
+    description:
+      "When scanning /api/products/latest, the default response caps at 3 products but ?limit=100 returns the full catalog — business constraint bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals latest-products endpoint ignores intended pagination limits via the limit query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsLatestLimitBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side pagination limits — Broken Crystals is intentional lab software.",
+      steps: [
+        "Cap limit parameters server-side regardless of client input.",
+        "Require authentication for bulk catalog exports.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/latest route scan confirms business constraint bypass via ?limit=. Show pagination limit enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-auth-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -24154,6 +24180,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our the-internet /broken_images route serves img tags with missing relative paths. Show secure static asset handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-challenging-dom-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "info",
+    title: "the-internet challenging DOM route live oracle",
+    description:
+      "When scanning /challenging_dom, the page exposes UUID button locators, an unlabeled table, and a canvas element — Elemental Selenium challenging DOM training route oracle.",
+    impactOneline:
+      "Dynamic DOM locators without stable selectors complicate automation and can hide sensitive UI state from naive scrapers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetChallengingDomRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use stable data-testid attributes in production apps.",
+      steps: [
+        "Prefer semantic data-testid or aria attributes over dynamic UUIDs for automation.",
+        "Label table columns and rows for accessibility and testability.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /challenging_dom route uses UUID button ids and canvas rendering. Show robust DOM locator strategies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-frames-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet frames route live oracle",
+    description:
+      "When scanning /frames, the hub links to /nested_frames (frameset with frame_top/frame_bottom) and /iframe — Elemental Selenium frame-switching training route oracle.",
+    impactOneline:
+      "Nested frames complicate clickjacking defenses and can obscure UI context from security scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetFramesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — avoid nested frames in production and set frame-ancestors CSP.",
+      steps: [
+        "Prefer single-page layouts over nested framesets.",
+        "Set Content-Security-Policy frame-ancestors to prevent clickjacking.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /frames route exposes nested frameset and iframe labs. Show frame-busting and CSP frame-ancestors patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-hovers-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "info",
+    title: "the-internet hovers route live oracle",
+    description:
+      "When scanning /hovers, CSS :hover reveals hidden figcaption profiles with user names and /users/N links — Elemental Selenium hover interaction training route oracle.",
+    impactOneline:
+      "Hover-revealed content can hide sensitive UI from static scanners while remaining visible to authenticated users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetHoversRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — do not rely on CSS-only hiding for access control.",
+      steps: [
+        "Enforce authorization server-side instead of CSS visibility toggles.",
+        "Test hover and focus states in E2E automation.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /hovers route hides user profiles behind CSS :hover. Show accessible hover-state testing patterns.",
     version: 1,
     enabled: true
   },
