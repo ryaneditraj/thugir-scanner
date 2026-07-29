@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T13:08:16.452Z",
+  "updated_at": "2026-07-29T14:06:22.302Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2751,
-  "total_findings": 26738,
+  "total_sites_scanned": 2760,
+  "total_findings": 26783,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1981,
-  "discovery_findings": 22837,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-29T13:08:16.452Z",
+  "discovery_urls_added": 1986,
+  "discovery_findings": 22865,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-29T14:06:22.302Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 17,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 455,
+      "probes_run": 463,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,52 +48,43 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend still absent"
+      "note": "Primary healthy 6/6 (17 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 35,
-      "focus": "vulnforge moderate level2/3 + damn-vulnerable-bank login + pentest-ground captcha + the-internet dynamic_content queue drain",
-      "improvements_shipped_this_run": 3
+      "findings": 28,
+      "focus": "the-internet redirect/abuse/shadowdom + pentest-ground auth_bypass/javascript + fi queue drain",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503 fallback",
-      "vulnforge-academy moderate level2/level3: 5-finding hubs with vulnforge-academy-level-sqli-route-live-oracle + sql-error-disclosure",
-      "pentest-ground captcha: 8-finding hub (reflected-xss + phpinfo) but captcha-bypass oracle absent",
-      "pentest-ground xss_r: 8-finding hub with pentest-ground-dvwa-xss-r-route-live-oracle",
-      "rewanthtammana.com/damn-vulnerable-bank/login: thin 3-finding pass — client-side Android lab evidence only, no SQLi auth-bypass oracle",
-      "the-internet dynamic_content/javascript_alerts/forgot_password: thin 2-finding passes — route-specific XSS/auth oracles absent",
-      "the-internet.herokuapp.com/secure_file_download: 2→3 findings — download-secure oracle accepts /secure_file_download alias; admin:admin Basic auth serves Secure File Downloader",
-      "the-internet.herokuapp.com/dropdown: 2→3 findings — dropdown select#dropdown route oracle shipped",
-      "the-internet.herokuapp.com/javascript_alerts: 2→3 findings — jsAlert/jsConfirm/jsPrompt onclick route oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — primary healthy, no fallback needed",
+      "pentest-ground fi: 8-finding hub with pentest-ground-dvwa-fi-route-live-oracle (LFI include.php oracle)",
+      "pentest-ground javascript: 7-finding hub (reflected-xss + phpinfo) but DOM XSS ?name= oracle absent",
+      "the-internet.herokuapp.com/login: 3 findings — the-internet-login-auth-route-live-oracle shipped (form#login POST)",
+      "the-internet redirect/abuse/shadowdom: thin 2-finding passes — open-redirect/clickjacking/Shadow DOM oracles absent",
+      "pentest-ground auth_bypass: thin 2-finding pass — DVWA auth-bypass oracle absent (module 404 or no live oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "rewanthtammana.com/damn-vulnerable-bank/login: SQLi auth-bypass login oracle absent (marketing site, not live web bank)",
-      "pentest-ground captcha: captcha-bypass / weak-session oracle absent despite reflected-xss + phpinfo",
-      "the-internet.herokuapp.com/dynamic_content: reflected XSS ?content= oracle absent (thin 2-finding hub)",
-      "vulnforge moderate level2/3: SSTI cross-path probes fire; route-specific blind-SQLi differentiation absent",
-      "pentest-ground weak_session_ids: DVWA module 404 on live deploy (port 4280)",
-      "seclab.vercel.app/api/sqli: route-specific SQLi injection oracle absent"
+      "the-internet.herokuapp.com/redirect: open-redirect ?url= oracle absent (thin 2-finding hub)",
+      "the-internet.herokuapp.com/abuse: clickjacking/X-Frame-Options abuse oracle absent",
+      "the-internet.herokuapp.com/shadowdom: Shadow DOM XSS innerHTML oracle absent",
+      "pentest-ground auth_bypass: auth-bypass login oracle absent despite tech-stack-disclosure",
+      "pentest-ground javascript: DOM XSS ?name= innerHTML oracle absent despite reflected-xss cross-path"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 14,
-    "the-internet.herokuapp.com/secure_file_download": 3,
-    "the-internet.herokuapp.com/dropdown": 3,
-    "the-internet.herokuapp.com/javascript_alerts": 2,
-    "brokencrystals.com/api/auth/dom-csrf-flow": 60,
-    "brokencrystals.com/api/nestedJson": 52,
-    "the-internet.herokuapp.com/file_upload": 3,
-    "seclab.vercel.app/api/sqli": 4,
-    "pentest-ground.com:4280/vulnerabilities/captcha": 8,
-    "pentest-ground.com:4280/vulnerabilities/xss_r": 8,
-    "vulnforge-academy.vercel.app/backend/includes/levels/moderate/level2.php": 5,
-    "vulnforge-academy.vercel.app/backend/includes/levels/moderate/level3.php": 5,
-    "rewanthtammana.com/damn-vulnerable-bank/login": 3,
-    "the-internet.herokuapp.com/dynamic_content": 2
+    "juice-shop.herokuapp.com": 17,
+    "pentest-ground.com:4280/vulnerabilities/fi": 8,
+    "pentest-ground.com:4280/vulnerabilities/javascript": 7,
+    "the-internet.herokuapp.com/login": 3,
+    "the-internet.herokuapp.com/redirect": 2,
+    "the-internet.herokuapp.com/abuse": 2,
+    "the-internet.herokuapp.com/shadowdom": 2,
+    "pentest-ground.com:4280/vulnerabilities/auth_bypass": 2,
+    "the-internet.herokuapp.com": 2
   }
 }
