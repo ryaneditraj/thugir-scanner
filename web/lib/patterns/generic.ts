@@ -15500,6 +15500,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-file-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file route LFI live oracle",
+    description:
+      "When scanning /api/file?path=, GET with path=package.json returns the application package.json from the server filesystem — route-specific local file inclusion confirmation distinct from /api/file/raw.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /api/file reads arbitrary server files via the path query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block arbitrary file reads via path parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled path parameters from file-serving endpoints.",
+        "Use strict allowlists for readable files and chroot file access.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file route scan confirms local file inclusion via ?path=. Show LFI/path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-testimonials-count-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals testimonials count SQLi route live oracle",
+    description:
+      "When scanning /api/testimonials/count, the query parameter is interpolated into SQL — information_schema table count probe returns a numeric row count.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals testimonials count endpoint executes attacker-controlled SQL in the query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsCountSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all SQL — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate user input into SQL strings.",
+        "Use ORM parameterized queries or prepared statements.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/testimonials/count route scan confirms SQL injection via the query parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-auth-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -23998,6 +24050,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our the-internet /shadowdom route documents custom elements with open shadow roots. Show robust shadow DOM automation strategies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet HTTP redirect route live oracle",
+    description:
+      "When scanning /redirect, GET returns HTTP 302 Location to /status_codes — Elemental Selenium HTTP redirection training route oracle (fixed destination, not open redirect).",
+    impactOneline:
+      "HTTP redirect behavior labs document how status codes and Location headers interact with browser navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — understand redirect status codes when writing E2E tests.",
+      steps: [
+        "Follow redirects explicitly in automation when testing redirect behavior.",
+        "Validate redirect destinations against an allowlist in production apps.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /redirect route returns HTTP 302 to /status_codes. Show secure redirect handling patterns.",
     version: 1,
     enabled: true
   },
