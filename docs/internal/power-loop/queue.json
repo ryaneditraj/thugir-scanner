@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T00:05:20.386Z",
+  "updated_at": "2026-07-29T01:05:33.653Z",
   "discovery_urls": [
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api5/user",
+      "source": "roottusk/vAPI — API5 broken function level authorization oracle POST/GET /vapi/api5/user (Escape hosted vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api5/users",
+      "source": "roottusk/vAPI — API5 hidden admin users endpoint oracle GET /vapi/api5/users (Escape hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api6/user",
+      "source": "roottusk/vAPI — API6 mass assignment oracle POST /vapi/api6/user with credit field (Escape hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api7/user/key",
+      "source": "roottusk/vAPI — API7 CORS misconfiguration oracle GET /vapi/api7/user/key with Origin reflection (Escape hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api9/v1/user/login",
+      "source": "roottusk/vAPI — API9 improper inventory management oracle POST /vapi/api9/v1/user/login (Escape hosted)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.tools.escape.tech/vapi/api2/user/login",
       "source": "roottusk/vAPI — API2 broken authentication oracle POST /vapi/api2/user/login (Escape hosted vapi.tools.escape.tech)",
@@ -11271,5 +11296,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 24
+  "discovery_urls_added": 29
 }
