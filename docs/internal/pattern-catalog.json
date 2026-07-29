@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T21:06:52.971Z",
-  "total": 1077,
-  "uniqueSlugs": 1072,
+  "generatedAt": "2026-07-29T22:03:41.779Z",
+  "total": 1079,
+  "uniqueSlugs": 1074,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1059,
+    "generic": 1061,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 992,
+    "deep": 994,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 76,
-    "Security misconfiguration": 90,
+    "Security misconfiguration": 92,
     "Broken authentication": 86,
     "Injection": 208,
     "Cross-site scripting": 151,
@@ -977,6 +977,7 @@
     "the-internet-dynamic-controls-route-live-oracle",
     "the-internet-dynamic-loading-route-live-oracle",
     "the-internet-file-upload-route-live-oracle",
+    "the-internet-floating-menu-route-live-oracle",
     "the-internet-forgot-password-route-live-oracle",
     "the-internet-frames-route-live-oracle",
     "the-internet-hovers-route-live-oracle",
@@ -991,6 +992,7 @@
     "the-internet-redirector-route-live-oracle",
     "the-internet-shadowdom-route-live-oracle",
     "the-internet-status-codes-route-live-oracle",
+    "the-internet-tables-route-live-oracle",
     "the-internet-tinymce-route-live-oracle",
     "thugir-dir-discovery",
     "thugir-jwt-weak-claims",

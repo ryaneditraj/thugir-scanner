@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-download-secure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /download_secure HTTP 401 unauth; admin:admin Basic auth lists Secure File Downloader with download_secure/* links; oracle now fetches first listed file (Test.txt) instead of missing sample.txt; the-internet.herokuapp.com/download_secure findings 2→3 (+the-internet-download-secure-route-live-oracle); benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-floating-menu-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /floating_menu h3 Floating Menu with #menu stickyfloat.js and $(#menu).stickyfloat({duration:1}); the-internet.herokuapp.com/floating_menu findings 2→3 (+the-internet-floating-menu-route-live-oracle); benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-tables-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /tables h3 Data Tables with jquery.tablesorter.min.js on #table1/#table2 and sortable column headers; the-internet.herokuapp.com/tables findings 2→3 (+the-internet-tables-route-live-oracle); benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-key-presses-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /key_presses h3 Key Presses with #target input, $(document).keydown handler, and #result innerHTML sink; the-internet.herokuapp.com/key_presses findings 2→3 (+the-internet-key-presses-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"

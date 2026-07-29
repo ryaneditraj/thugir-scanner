@@ -979,6 +979,8 @@ const DEEP_RULES = new Set<string>([
   "theInternetKeyPressesRouteLiveOracle",
   "theInternetLargeRouteLiveOracle",
   "theInternetAddRemoveElementsRouteLiveOracle",
+  "theInternetFloatingMenuRouteLiveOracle",
+  "theInternetTablesRouteLiveOracle",
   "pentestGroundDvwaWeakIdRouteLiveOracle",
   "pentestGroundRestflawEvalCodeInjectionRouteLiveOracle",
   "clientSideJudgementDayArenaEvidence",
