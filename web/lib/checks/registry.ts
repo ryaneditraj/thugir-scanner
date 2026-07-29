@@ -24848,6 +24848,145 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- VAmPI (OWASP vulnerable API) live oracles ---------------------------------
+function isVampiHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (host.includes("vampi")) return true;
+  } catch {
+    /* ignore */
+  }
+  return /VAmPI the Vulnerable API|VAmPI is a vulnerable on purpose API/i.test(ctx.combined);
+}
+
+async function tryVampiLabJwt(
+  ctx: RuleContext
+): Promise<{ token: string; username: string } | null> {
+  const loginUrl = new URL("/users/v1/login", ctx.origin).toString();
+  for (const creds of [
+    { username: "name1", password: "pass1" },
+    { username: "name2", password: "pass2" }
+  ]) {
+    const r = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: JSON.stringify(creds),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    try {
+      const data = JSON.parse(r.body) as { auth_token?: string; status?: string };
+      if (data.auth_token && data.status === "success") {
+        return { token: data.auth_token, username: creds.username };
+      }
+    } catch {
+      /* try next credential */
+    }
+  }
+  return null;
+}
+
+const vampiUserBolaLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const auth = await tryVampiLabJwt(ctx);
+  if (!auth) return NEGATIVE;
+  const victim = auth.username === "name1" ? "name2" : "name1";
+  const profileUrl = new URL(`/users/v1/${victim}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(profileUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${auth.token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { username?: string; email?: string };
+    if (data.username !== victim || !data.email) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        profileUrl,
+        caller: auth.username,
+        victim,
+        email: data.email,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `VAmPI GET /users/v1/${victim} returns another user's profile for authenticated ${auth.username} — BOLA oracle (API1)`
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const vampiUserBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/users\/v1\/[^/]+/i.test(pageUrl)) return NEGATIVE;
+  const result = await vampiUserBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /users/v1/{username} route scan — JWT for user A reads user B profile without object-level authorization — BOLA oracle (API1)"
+    }
+  };
+};
+
+const vampiBooksExcessiveDataLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const auth = await tryVampiLabJwt(ctx);
+  if (!auth) return NEGATIVE;
+  const booksUrl = new URL("/books/v1", ctx.origin).toString();
+  const doc = await ctx.probe.get(booksUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${auth.token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { Books?: Array<{ book_title?: string; user?: string }> };
+    const books = data.Books;
+    if (!Array.isArray(books) || books.length < 2) return NEGATIVE;
+    const foreign = books.filter((b) => b.user && b.user !== auth.username);
+    if (foreign.length === 0) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        booksUrl,
+        caller: auth.username,
+        foreignOwners: [...new Set(foreign.map((b) => b.user!))].slice(0, 3),
+        sampleTitles: foreign.slice(0, 3).map((b) => b.book_title),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `VAmPI GET /books/v1 returns books owned by other users (${foreign[0]?.user}) for authenticated ${auth.username} — excessive data exposure / BOLA oracle (API3)`
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const vampiBooksRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/books\/v1/i.test(pageUrl)) return NEGATIVE;
+  const result = await vampiBooksExcessiveDataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /books/v1 route scan — authenticated list returns other users' book records — excessive data exposure oracle (API3)"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -43012,6 +43151,10 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSherpaWorkshopEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure,
+  vampiUserBolaLiveOracle,
+  vampiUserBolaRouteLiveOracle,
+  vampiBooksExcessiveDataLiveOracle,
+  vampiBooksRouteLiveOracle,
   http403BypassProbe,
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,

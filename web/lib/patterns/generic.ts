@@ -24982,5 +24982,109 @@ export const genericPatterns: Pattern[] = [
       "Our /csrf route documents missing CSRF token validation. Show anti-CSRF token and SameSite cookie remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "vampi-user-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VAmPI user profile BOLA live oracle",
+    description:
+      "POST /users/v1/login as name1 then GET /users/v1/name2 returns another user's email without object-level authorization — the VAmPI BOLA oracle (API1).",
+    impactOneline:
+      "Broken object-level authorization lets any authenticated user read other users' profile data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiUserBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — enforce object-level authorization on user profile routes in production.",
+      steps: [
+        "Verify the JWT subject matches the requested username before returning profile data.",
+        "Return 403 when authenticated users request profiles they do not own.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /users/v1/{username} returns other users' emails for any valid JWT. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-user-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VAmPI user profile route BOLA live oracle",
+    description:
+      "When scanning /users/v1/{username}, JWT for user A reads user B profile — route-specific VAmPI BOLA oracle (API1).",
+    impactOneline:
+      "Route scans on user profile endpoints should confirm object-level authorization failures.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiUserBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — enforce object-level authorization on user profile routes in production.",
+      steps: [
+        "Verify the JWT subject matches the requested username before returning profile data.",
+        "Return 403 when authenticated users request profiles they do not own.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /users/v1/{username} route scan confirms BOLA — JWT for one user reads another's profile. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-books-excessive-data-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VAmPI books excessive data exposure live oracle",
+    description:
+      "GET /books/v1 with a regular user's JWT returns book records owned by other users (name2, admin) — the VAmPI excessive data exposure oracle (API3).",
+    impactOneline:
+      "List endpoints leak other users' private records without object-level filtering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiBooksExcessiveDataLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — filter list endpoints to the authenticated owner's records in production.",
+      steps: [
+        "Scope GET /books/v1 to books owned by the JWT subject only.",
+        "Never return cross-user book metadata in list responses.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /books/v1 returns other users' book titles and owners. Show owner-scoped list filtering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-books-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VAmPI books route excessive data live oracle",
+    description:
+      "When scanning /books/v1, authenticated list returns other users' book records — route-specific VAmPI excessive data oracle (API3).",
+    impactOneline:
+      "Route scans on book list endpoints should confirm cross-user data leakage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiBooksRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — filter list endpoints to the authenticated owner's records in production.",
+      steps: [
+        "Scope GET /books/v1 to books owned by the JWT subject only.",
+        "Never return cross-user book metadata in list responses.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /books/v1 route scan confirms excessive data exposure — list returns other users' books. Show owner-scoped filtering.",
+    version: 1,
+    enabled: true
   }
 ];
