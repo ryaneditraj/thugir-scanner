@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T12:04:01.530Z",
+  "updated_at": "2026-07-29T13:04:46.929Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/moderate/level2.php",
+      "source": "webspoilt/vulnforge-academy — Level 2 moderate SQLi/XSS challenge (Vercel OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/moderate/level3.php",
+      "source": "webspoilt/vulnforge-academy — Level 3 moderate blind SQLi challenge (Vercel OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rewanthtammana.com/damn-vulnerable-bank/login",
+      "source": "rewanthtammana/Damn-Vulnerable-Bank — SQLi auth-bypass login oracle (public Heroku-style demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/captcha/",
+      "source": "Pentest-Ground DVWA — captcha bypass / weak session lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/dynamic_content",
+      "source": "the-internet.herokuapp.com — dynamic content reflected XSS training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pentest-ground.com:4280/vulnerabilities/sqli_blind/",
       "source": "Pentest-Ground DVWA — blind SQLi lab module (pentest-ground.com README)",
@@ -67,8 +92,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://the-internet.herokuapp.com/download_secure",
-      "source": "tourdedave/the-internet — secure file download with Basic auth oracle (Elemental Selenium Heroku demo)",
+      "url": "https://the-internet.herokuapp.com/secure_file_download",
+      "source": "tourdedave/the-internet — path traversal / arbitrary file read oracle (Elemental Selenium Heroku demo)",
       "auth": "public_demo"
     },
     {
