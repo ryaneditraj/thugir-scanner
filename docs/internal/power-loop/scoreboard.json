@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T12:02:50.135Z",
+  "updated_at": "2026-07-29T12:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2734,
-  "total_findings": 26659,
+  "total_sites_scanned": 2742,
+  "total_findings": 26689,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 22772,
+  "discovery_urls_added": 1976,
+  "discovery_findings": 22802,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-29T12:02:50.135Z",
+  "last_run": "2026-07-29T12:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 17,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 463,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,44 @@
           ]
         }
       },
-      "note": "Primary healthy 6/6 (17 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend slug still absent"
+      "note": "Primary unreachable (503); staging fallback 6/6 (14 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 131,
-      "focus": "vulnbank register + brokencrystals dom-csrf/nestedJson + testfire login + CSP demo + pentest-ground xss_d/xss_s queue drain",
+      "findings": 30,
+      "focus": "pentest-ground sqli_blind + zerohealth ssrf/xss + seclab SQLi API + the-internet dropdown queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — primary healthy, no staging fallback needed",
-      "vulnbank.org/register: 21 findings — BOLA register + merchant + virtual-cards + GraphQL introspection live oracles",
-      "brokencrystals.com/api/auth/dom-csrf-flow: 56-finding cross-path hub (JWT/SSTI/SSRF/LFI oracles)",
-      "brokencrystals.com/api/nestedJson: 29 findings with ssti-template-injection oracle",
-      "demo.testfire.net/login.jsp: 8 findings — reflected-xss-query-param + unauthenticated-admin-endpoint",
-      "euri-sec-csp-5d4beab5074d.herokuapp.com: thin 3-finding CSP demo pass",
-      "pentest-ground xss_d: reflected-xss-query-param present; DOM ?default= innerHTML oracle still absent",
-      "pentest-ground xss_s: 5-finding hub without stored XSS guestbook oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary unreachable, staging fallback",
+      "pentest-ground sqli_blind: 7 findings — reflected-xss-query-param + phpinfo-exposed + client-side-pentest-ground-hub-evidence",
+      "zerohealth.aliyu.dev/challenges/ssrf: 5 findings — client-side-zero-health-evidence + reflexion-escalated-ssti (no route-specific SSRF live oracle)",
+      "zerohealth.aliyu.dev/challenges/xss: 5 findings — client-side-zero-health-evidence + reflexion-escalated-ssti (no route-specific XSS live oracle)",
+      "seclab.vercel.app/api/sqli: 4 findings — client-side-seclab-playground-evidence; route-specific SQLi oracle absent",
+      "the-internet.herokuapp.com/dropdown: thin 2-finding pass — reflected XSS dropdown oracle absent",
+      "the-internet.herokuapp.com/dynamic_loading: 3 findings — the-internet-dynamic-loading-route-live-oracle present"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals dom-csrf-flow: route-specific DOM CSRF oracle absent (56-finding cross-path hub)",
-      "brokencrystals nestedJson: route-specific nested JSON injection oracle absent (SSTI fires from cross-path probes)",
-      "pentest-ground xss_d: DOM-based XSS via ?default= innerHTML oracle absent",
-      "pentest-ground xss_s: stored XSS guestbook POST oracle absent",
-      "the-internet file_upload: route-specific unrestricted upload oracle absent (2-finding thin pass)",
-      "euri-sec-csp: CSP bypass / per-demo XSS route oracles absent"
+      "zerohealth ssrf/xss challenges: route-specific SSRF/XSS live oracles absent (SSTI fires from cross-path probes)",
+      "seclab.vercel.app/api/sqli: route-specific SQLi injection oracle absent (4-finding hub)",
+      "the-internet dropdown: reflected XSS via select option oracle absent (2-finding thin pass)",
+      "pentest-ground sqli_blind: blind SQLi time-based oracle absent (reflected-xss + phpinfo fire instead)",
+      "pentest-ground weak_session_ids: session fixation oracle still absent (2-finding thin pass)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 17,
-    "brokencrystals.com/api/auth/dom-csrf-flow": 56,
-    "brokencrystals.com/api/nestedJson": 29,
-    "vulnbank.org/register": 21,
-    "demo.testfire.net/login.jsp": 8,
-    "pentest-ground.com:4280/vulnerabilities/xss_d": 7,
-    "pentest-ground.com:4280/vulnerabilities/xss_s": 5,
-    "euri-sec-csp-5d4beab5074d.herokuapp.com": 3,
-    "the-internet.herokuapp.com/file_upload": 2
+    "juice-shop-staging.herokuapp.com": 14,
+    "pentest-ground.com:4280/vulnerabilities/sqli_blind": 7,
+    "zerohealth.aliyu.dev/challenges/ssrf": 5,
+    "zerohealth.aliyu.dev/challenges/xss": 5,
+    "seclab.vercel.app/api/sqli": 4,
+    "the-internet.herokuapp.com/dynamic_loading": 3,
+    "the-internet.herokuapp.com/dropdown": 2,
+    "the-internet.herokuapp.com/secure_file_download": 2,
+    "pentest-ground.com:4280/vulnerabilities/weak_session_ids": 2
   }
 }
