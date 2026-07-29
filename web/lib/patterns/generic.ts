@@ -23852,7 +23852,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "the-internet secure file download route live oracle",
     description:
-      "When scanning /download_secure or /secure_file_download, HTTP 401 without credentials and admin:admin Basic auth lists Secure File Downloader with downloadable files — Elemental Selenium secure download training route oracle.",
+      "When scanning /download_secure or /secure_file_download, HTTP 401 without credentials and admin:admin Basic auth lists Secure File Downloader with downloadable files and serves a listed file — Elemental Selenium secure download training route oracle.",
     impactOneline:
       "Weak default credentials on protected download endpoints let attackers read files intended for authenticated users only.",
     detectorKind: "rule_ref",
@@ -24492,6 +24492,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our the-internet /add_remove_elements route dynamically adds Delete buttons via jQuery. Show robust dynamic-element wait patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-floating-menu-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet floating menu route live oracle",
+    description:
+      "When scanning /floating_menu, stickyfloat.js pins #menu navigation on scroll — Elemental Selenium floating menu interaction training route oracle.",
+    impactOneline:
+      "Sticky navigation menus change DOM position on scroll and break naive element locators in security automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetFloatingMenuRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use scroll-aware waits for sticky navigation in E2E tests.",
+      steps: [
+        "Scroll elements into view before interacting with sticky menus.",
+        "Use explicit waits after scroll events that reposition navigation.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /floating_menu route uses stickyfloat.js on #menu. Show scroll-aware locator patterns for sticky navigation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-tables-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet data tables route live oracle",
+    description:
+      "When scanning /tables, jQuery tablesorter enables sortable #table1/#table2 with column header indicators — Elemental Selenium data table interaction training route oracle.",
+    impactOneline:
+      "Sortable data tables reorder rows dynamically and break row-index-based automation assumptions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetTablesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — locate table rows by cell content rather than row index.",
+      steps: [
+        "Query table cells by header name or unique cell text instead of nth-row selectors.",
+        "Re-query rows after sort operations that reorder the DOM.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /tables route uses jQuery tablesorter on #table1 and #table2. Show resilient data-table locator patterns.",
     version: 1,
     enabled: true
   },

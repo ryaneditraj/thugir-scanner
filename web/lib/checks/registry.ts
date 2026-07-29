@@ -31289,8 +31289,9 @@ const theInternetDownloadSecureRouteLiveOracle: Rule = async (ctx) => {
   });
   if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
   if (!/Secure File Downloader/i.test(authDoc.body)) return NEGATIVE;
-  if (!/download_secure\/[^"'\s>]+/i.test(authDoc.body)) return NEGATIVE;
-  const sampleUrl = new URL("/download_secure/sample.txt", ctx.origin).toString();
+  const fileMatch = authDoc.body.match(/href=["'](download_secure\/[^"']+)["']/i);
+  if (!fileMatch) return NEGATIVE;
+  const sampleUrl = new URL(`/${fileMatch[1]}`, ctx.origin).toString();
   const sampleDoc = await ctx.probe.get(sampleUrl, {
     maxBytes: 2048,
     timeoutMs: 15000,
@@ -31901,6 +31902,60 @@ const theInternetAddRemoveElementsRouteLiveOracle: Rule = async (ctx) => {
       elementsUrl,
       markers: ["addElement() button", "deleteElement() .added-manually", "#elements container"],
       note: "the-internet /add_remove_elements route scan — jQuery appends/removes Delete buttons dynamically — Elemental Selenium add/remove elements training oracle"
+    }
+  };
+};
+
+const theInternetFloatingMenuRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/floating_menu(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const menuUrl = new URL("/floating_menu", ctx.origin).toString();
+  const doc = await ctx.probe.get(menuUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Floating Menu\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasStickyfloat =
+    /stickyfloat\.js/i.test(doc.body) && /\$\(['"]#menu['"]\)\.stickyfloat/i.test(doc.body);
+  const hasMenuNav =
+    /id=['"]menu['"]/i.test(doc.body) &&
+    /<ul>/i.test(doc.body) &&
+    (doc.body.match(/<li>/gi) || []).length >= 3;
+  if (!hasStickyfloat || !hasMenuNav) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      menuUrl,
+      markers: ["#menu stickyfloat", "stickyfloat.js", "multi-item nav list"],
+      note: "the-internet /floating_menu route scan — stickyfloat.js pins #menu nav on scroll — Elemental Selenium floating menu interaction training oracle"
+    }
+  };
+};
+
+const theInternetTablesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tables(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const tablesUrl = new URL("/tables", ctx.origin).toString();
+  const doc = await ctx.probe.get(tablesUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Data Tables\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasTablesorter =
+    /jquery\.tablesorter\.min\.js/i.test(doc.body) &&
+    /\$\(['"]#table1['"]\)\.tablesorter/i.test(doc.body);
+  const tableCount = (doc.body.match(/<table[^>]+id=['"]table\d+['"]/gi) || []).length;
+  const hasSortableHeaders = /tablesorter-header(?:Asc|Desc)/i.test(doc.body);
+  if (!hasTablesorter || tableCount < 2 || !hasSortableHeaders) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      tablesUrl,
+      tableCount,
+      markers: ["#table1 tablesorter", "jquery.tablesorter.min.js", "sortable column headers"],
+      note: "the-internet /tables route scan — jQuery tablesorter on #table1/#table2 with sortable headers — Elemental Selenium data table interaction training oracle"
     }
   };
 };
@@ -44528,6 +44583,8 @@ export const RULES: Record<string, Rule> = {
   theInternetKeyPressesRouteLiveOracle,
   theInternetLargeRouteLiveOracle,
   theInternetAddRemoveElementsRouteLiveOracle,
+  theInternetFloatingMenuRouteLiveOracle,
+  theInternetTablesRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
