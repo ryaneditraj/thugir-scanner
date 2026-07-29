@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-javascript-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/javascript/ exposes form low_js with md5(rot13(phrase)) client-side token; pentest-ground.com:4280/vulnerabilities/javascript findings 7→8 (+pentest-ground-dvwa-javascript-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/open_redirect/source/low.php?redirect=https://evil-open-redirect-probe.example returns HTTP 302 Location: https://evil-open-redirect-probe.example; pentest-ground.com:4280/vulnerabilities/open_redirect findings 7→8 (+pentest-ground-dvwa-open-redirect-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-shadowdom-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /shadowdom defines customElements my-paragraph with attachShadow({mode:'open'}) and slot=my-text template; the-internet.herokuapp.com/shadowdom findings 2→3 (+the-internet-shadowdom-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-dynamic-content-route-live-oracle",
       "status": "shipped",
