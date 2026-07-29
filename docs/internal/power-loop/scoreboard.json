@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-29T18:05:54.620Z",
+=======
+  "updated_at": "2026-07-29T18:10:00.000Z",
+>>>>>>> e62f98de (engine: brokencrystals limit bypass + the-internet DOM/frames/hovers oracles)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 2802,
   "total_findings": 27023,
   "critical_findings": 56,
@@ -24,6 +29,17 @@
   "discovery_findings": 23037,
   "improvements_shipped": 1155,
   "last_run": "2026-07-29T18:05:54.620Z",
+=======
+  "total_sites_scanned": 2793,
+  "total_findings": 26994,
+  "critical_findings": 56,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2001,
+  "discovery_findings": 23025,
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-29T18:10:00.000Z",
+>>>>>>> e62f98de (engine: brokencrystals limit bypass + the-internet DOM/frames/hovers oracles)
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -52,6 +68,7 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 18,
@@ -64,20 +81,41 @@
       "the-internet.herokuapp.com/status_codes: 3 findings — the-internet-status-codes-route-live-oracle fires",
       "the-internet.herokuapp.com/broken_images: 3 findings — the-internet-broken-images-route-live-oracle fires",
       "the-internet.herokuapp.com/dynamic_controls: thin 2-finding pass — disabled-input manipulation oracle absent"
+=======
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 15,
+      "focus": "brokencrystals products/latest limit bypass + the-internet challenging_dom/frames/hovers route oracles",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
+      "brokencrystals.com/api/products/latest?limit=100: 54→55 findings — brokencrystals-products-latest-limit-bypass-live-oracle shipped (default 3 vs limit=100 returns 11)",
+      "the-internet.herokuapp.com/challenging_dom: 2→3 findings — challenging DOM UUID/canvas/table oracle shipped",
+      "the-internet.herokuapp.com/frames: 2→3 findings — nested frameset + iframe hub oracle shipped",
+      "the-internet.herokuapp.com/hovers: 2→3 findings — CSS :hover figcaption profile oracle shipped"
+>>>>>>> e62f98de (engine: brokencrystals limit bypass + the-internet DOM/frames/hovers oracles)
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+<<<<<<< HEAD
       "the-internet infinite_scroll: infinite-scroll DOM scraping oracle absent",
       "the-internet jqueryui/menu: JQuery UI menu XSS sink oracle absent",
       "the-internet nested_frames: nested-frame clickjacking oracle absent",
       "the-internet large: deep-DOM traversal / performance oracle absent",
       "the-internet tinymce: WYSIWYG stored-XSS oracle absent",
       "the-internet add_remove_elements/notification_messages/entry_ad/context_menu: queued but not drained this run (48h skip on earlier queue head)"
+=======
+      "the-internet key_presses: keyboard-event DOM injection oracle absent",
+      "the-internet ab_testing URL 404 — correct route is /abtest (No A/B Test page)",
+      "the-internet notification_message/entry_ad: flash-message and clickjacking oracles absent"
+>>>>>>> e62f98de (engine: brokencrystals limit bypass + the-internet DOM/frames/hovers oracles)
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+<<<<<<< HEAD
     "brokencrystals.com/api/products/latest?limit=100": 54,
     "the-internet.herokuapp.com/status_codes": 3,
     "the-internet.herokuapp.com/broken_images": 3,
@@ -87,5 +125,15 @@
     "the-internet.herokuapp.com/large": 2,
     "the-internet.herokuapp.com/tinymce": 2,
     "the-internet.herokuapp.com/dynamic_controls": 2
+=======
+    "brokencrystals.com/api/products/latest?limit=100": 55,
+    "brokencrystals.com/api/file?path=/etc/hosts": 55,
+    "the-internet.herokuapp.com/challenging_dom": 3,
+    "the-internet.herokuapp.com/frames": 3,
+    "the-internet.herokuapp.com/hovers": 3,
+    "the-internet.herokuapp.com/redirector": 3,
+    "the-internet.herokuapp.com/upload": 3,
+    "the-internet.herokuapp.com/key_presses": 2
+>>>>>>> e62f98de (engine: brokencrystals limit bypass + the-internet DOM/frames/hovers oracles)
   }
 }

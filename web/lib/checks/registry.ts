@@ -31603,6 +31603,89 @@ const theInternetBrokenImagesRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetChallengingDomRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenging_dom(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const domUrl = new URL("/challenging_dom", ctx.origin).toString();
+  const doc = await ctx.probe.get(domUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Challenging DOM\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasUuidButtons = /<a\s+id=['"][0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}['"][^>]*class=['"]button/i.test(
+    doc.body
+  );
+  const hasCanvas = /<canvas[^>]+id=['"]canvas['"]/i.test(doc.body);
+  const hasTableRows = /<td>\s*Iuvaret\d+\s*<\/td>/i.test(doc.body);
+  if (!hasUuidButtons || !hasCanvas || !hasTableRows) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      domUrl,
+      markers: ["UUID button ids", "canvas#canvas", "Iuvaret table rows"],
+      note: "the-internet /challenging_dom route scan — dynamic UUID locators, canvas element, and unlabeled table rows — Elemental Selenium challenging DOM training oracle"
+    }
+  };
+};
+
+const theInternetFramesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/frames(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const framesUrl = new URL("/frames", ctx.origin).toString();
+  const doc = await ctx.probe.get(framesUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Frames\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasNestedFrames = /href=['"]\/nested_frames['"]/i.test(doc.body);
+  const hasIframe = /href=['"]\/iframe['"]/i.test(doc.body);
+  if (!hasNestedFrames || !hasIframe) return NEGATIVE;
+  const nestedUrl = new URL("/nested_frames", ctx.origin).toString();
+  const nestedDoc = await ctx.probe.get(nestedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const hasFrameset =
+    nestedDoc.status >= 200 &&
+    nestedDoc.status < 400 &&
+    /<frameset/i.test(nestedDoc.body) &&
+    /frame[^>]+src=['"]\/frame_(?:top|bottom)['"]/i.test(nestedDoc.body);
+  if (!hasFrameset) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      framesUrl,
+      nestedUrl,
+      markers: ["nested_frames link", "iframe link", "frameset frame_top/frame_bottom"],
+      note: "the-internet /frames route scan — hub links to nested frameset and iframe labs — Elemental Selenium frame-switching training oracle"
+    }
+  };
+};
+
+const theInternetHoversRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/hovers(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const hoversUrl = new URL("/hovers", ctx.origin).toString();
+  const doc = await ctx.probe.get(hoversUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Hovers\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasHoverCss = /\.figure:hover\s+\.figcaption/i.test(doc.body);
+  const hasUserProfiles = /name:\s*user\d+/i.test(doc.body) && /href=['"]\/users\/\d+['"]/i.test(doc.body);
+  const avatarCount = (doc.body.match(/avatar-blank\.jpg/gi) || []).length;
+  if (!hasHoverCss || !hasUserProfiles || avatarCount < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      hoversUrl,
+      avatarCount,
+      markers: [".figure:hover .figcaption", "name: userN", "/users/N profile links"],
+      note: "the-internet /hovers route scan — CSS :hover reveals hidden figcaption user profiles — Elemental Selenium hover interaction training oracle"
+    }
+  };
+};
+
 const pentestGroundDvwaWeakIdRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -40399,6 +40482,44 @@ const brokencrystalsTestimonialsCountSqliRouteLiveOracle: Rule = async (ctx) => 
   };
 };
 
+const brokencrystalsProductsLatestLimitBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/products\/latest/i.test(pageUrl)) return NEGATIVE;
+  const defaultUrl = new URL("/api/products/latest", ctx.origin).toString();
+  const bypassUrl = new URL("/api/products/latest?limit=100", ctx.origin).toString();
+  const [defaultDoc, bypassDoc] = await Promise.all([
+    ctx.probe.get(defaultUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    ctx.probe.get(bypassUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  if (defaultDoc.status < 200 || defaultDoc.status >= 400) return NEGATIVE;
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  let defaultCount = 0;
+  let bypassCount = 0;
+  try {
+    const defaultItems = JSON.parse(defaultDoc.body);
+    const bypassItems = JSON.parse(bypassDoc.body);
+    if (!Array.isArray(defaultItems) || !Array.isArray(bypassItems)) return NEGATIVE;
+    defaultCount = defaultItems.length;
+    bypassCount = bypassItems.length;
+  } catch {
+    return NEGATIVE;
+  }
+  if (defaultCount < 1 || bypassCount <= defaultCount || bypassCount < 5) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      defaultUrl,
+      bypassUrl,
+      defaultCount,
+      bypassCount,
+      note: "Broken Crystals /api/products/latest route scan — default returns 3 products but ?limit=100 returns full catalog — business constraint bypass oracle"
+    }
+  };
+};
+
 const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -44138,6 +44259,9 @@ export const RULES: Record<string, Rule> = {
   theInternetRedirectorRouteLiveOracle,
   theInternetStatusCodesRouteLiveOracle,
   theInternetBrokenImagesRouteLiveOracle,
+  theInternetChallengingDomRouteLiveOracle,
+  theInternetFramesRouteLiveOracle,
+  theInternetHoversRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
@@ -44332,6 +44456,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileAwsRouteLiveOracle,
   brokencrystalsFileLfiRouteLiveOracle,
   brokencrystalsTestimonialsCountSqliRouteLiveOracle,
+  brokencrystalsProductsLatestLimitBypassRouteLiveOracle,
   crapiMechanicReportBolaLiveOracle,
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
