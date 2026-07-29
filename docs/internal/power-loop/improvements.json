@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga2-host-canonical-origin-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDvgaLiveHost/dvgaCanonicalOrigin/extractDvgaLiveSeeds now include dvga2.tools.escape.tech; dvga2.tools.escape.tech/graphql findings 1→6 with dvga-route-live-oracle firing; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-audit-log-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { audits { gqlquery } } returns unauthenticated operation logs with mutation/query text; dvga2.tools.escape.tech/graphql gains dvga-graphql-audit-log-live-oracle + route variant; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-batching-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql JSON array [{ pastes }, { pastes }] returns two data.pastes objects; dvga2.tools.escape.tech/graphql gains dvga-graphql-batching-live-oracle + route variant; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.tools.escape.tech",
       "slug": "vapi-api5-route-live-oracle",
       "status": "shipped",
