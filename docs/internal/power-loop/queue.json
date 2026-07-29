@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T09:05:00.000Z",
+  "updated_at": "2026-07-29T10:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/xss_d/",
+      "source": "Pentest-Ground DVWA — DOM-based XSS lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/xss_s/",
+      "source": "Pentest-Ground DVWA — stored XSS guestbook lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/file_upload",
+      "source": "tourdedave/the-internet — unrestricted file upload oracle (Elemental Selenium Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/secure_file_download",
+      "source": "tourdedave/the-internet — path traversal / arbitrary file read oracle (Elemental Selenium Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/weak_session_ids/",
+      "source": "Pentest-Ground DVWA — weak session ID / session fixation lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/dynamic_loading",
       "source": "tourdedave/the-internet — AJAX dynamic content loading oracle (Elemental Selenium Heroku demo)",
