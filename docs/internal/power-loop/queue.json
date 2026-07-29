@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T18:05:00.000Z",
+  "updated_at": "2026-07-29T19:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://the-internet.herokuapp.com/infinite_scroll",
@@ -11699,7 +11699,32 @@
       "url": "https://webgoat.github.io/WebGoat/login",
       "source": "WebGoat/WebGoat — guided OWASP lesson login surface (GitHub Pages demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/drag_and_drop",
+      "source": "the-internet.herokuapp.com — drag-and-drop DOM manipulation training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/slow",
+      "source": "the-internet.herokuapp.com — slow third-party resource / timing training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/jqueryui/draggable",
+      "source": "the-internet.herokuapp.com — JQuery UI draggable widget training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/typeracer",
+      "source": "the-internet.herokuapp.com — keyboard input / typeracer challenge route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/checkboxes",
+      "source": "the-internet.herokuapp.com — checkbox state manipulation training route (Heroku public demo)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 34
+  "discovery_urls_added": 39
 }
