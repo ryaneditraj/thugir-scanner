@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-key-presses-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /key_presses h3 Key Presses with #target input, $(document).keydown handler, and #result innerHTML sink; the-internet.herokuapp.com/key_presses findings 2→3 (+the-internet-key-presses-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-large-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /large h3 Large & Deep DOM with #siblings tier-50 nested sibling-50.1 divs (50 levels deep); the-internet.herokuapp.com/large findings 2→3 (+the-internet-large-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-add-remove-elements-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /add_remove_elements/ h3 Add/Remove Elements with addElement()/deleteElement() jQuery .added-manually Delete buttons in #elements; the-internet.herokuapp.com/add_remove_elements findings 2→3 (+the-internet-add-remove-elements-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-dynamic-controls-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /dynamic_controls h4 Dynamic Controls with #checkbox-example/#input-example and swapCheckbox/swapInput AJAX toggles; the-internet.herokuapp.com/dynamic_controls findings 2→3 (+the-internet-dynamic-controls-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"

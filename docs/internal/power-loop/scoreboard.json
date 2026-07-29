@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T21:05:30.000Z",
+  "updated_at": "2026-07-29T21:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2829,
-  "total_findings": 27199,
+  "total_sites_scanned": 2832,
+  "total_findings": 27208,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2021,
-  "discovery_findings": 23173,
-  "improvements_shipped": 1167,
-  "last_run": "2026-07-29T21:05:30.000Z",
+  "discovery_findings": 23182,
+  "improvements_shipped": 1170,
+  "last_run": "2026-07-29T21:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_status": "503 — Heroku dyno unavailable",
-      "oracle_findings": 12,
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 451,
+      "probes_run": 454,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,53 +49,42 @@
           ]
         }
       },
-      "note": "Staging fallback 6/6 (12 findings); jwt-alg-none-accepted absent; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (14 findings on staging fallback); primary heroku 503"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 23,
-      "focus": "the-internet floating_menu/download_secure/shifting_content/windows/tables + wrongsecrets/ssrf.vulnlab queue drain"
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 9,
+      "focus": "the-internet key_presses + large + add_remove_elements route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (12 findings) — staging fallback after primary 503",
-      "the-internet.herokuapp.com/*: 5 new routes thin 2-finding misconfig passes (missing-headers + insecure-cookies)",
-      "the-internet.herokuapp.com/download_secure: auth-gated secure download lab — no auth-bypass oracle",
-      "wrongsecrets.herokuapp.com/challenge/2: 8 findings with client-side-wrongsecrets-challenge-evidence",
-      "ssrf.vulnlab.dev/basic: 3 findings — unprotected-webhook-endpoint but no route-specific SSRF live oracle",
-      "ssrf.vulnlab.dev/metadata-aws: 2-finding thin hub without route-specific SSRF oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "the-internet.herokuapp.com/key_presses: 2→3 findings — the-internet-key-presses-route-live-oracle shipped",
+      "the-internet.herokuapp.com/large: 2→3 findings — the-internet-large-route-live-oracle shipped",
+      "the-internet.herokuapp.com/add_remove_elements: 2→3 findings — the-internet-add-remove-elements-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "jwt-alg-none-accepted intermittent on juice-shop staging (present in prior runs, absent this pass)",
+      "the-internet.herokuapp.com/entry_ad: entry-ad modal oracle still absent (2 findings)",
+      "the-internet.herokuapp.com/notification_messages: 404 — correct route is /notification_message (redirects to notification_message_rendered)",
       "the-internet.herokuapp.com/download_secure: secure file download auth-bypass oracle absent",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent (basic 3-finding hub; metadata-aws thinner at 2)"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles present but blind route still 2-finding hub",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "the-internet.herokuapp.com/dynamic_controls": 3,
-    "the-internet.herokuapp.com/context_menu": 3,
-    "the-internet.herokuapp.com/nested_frames": 3,
-    "hack-this-site-eta.vercel.app/api-labs/graphql.html": 47,
-    "api.graphqlbook.org": 8,
+    "the-internet.herokuapp.com/key_presses": 3,
+    "the-internet.herokuapp.com/large": 3,
+    "the-internet.herokuapp.com/add_remove_elements": 3,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "juice-shop.herokuapp.com": 14,
     "pwnshop.ctfsecurity.com/apply-coupon": 23,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18,
+    "brokencrystals.com/api/products/latest?limit=100": 55,
     "wrongsecrets.herokuapp.com/challenge/2": 8,
-    "ssrf.vulnlab.dev/basic": 3,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52,
-    "vulnbank.org/api/v2/forgot-password": 19,
-    "pentest-fauxbank.vercel.app/admin": 13,
-    "the-internet.herokuapp.com/floating_menu": 2,
-    "the-internet.herokuapp.com/download_secure": 2,
-    "the-internet.herokuapp.com/shifting_content": 2,
-    "the-internet.herokuapp.com/windows": 2,
-    "the-internet.herokuapp.com/tables": 2,
-    "ssrf.vulnlab.dev/metadata-aws": 2
+    "ssrf.vulnlab.dev/basic": 3
   }
 }
