@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T06:05:37.219Z",
+  "updated_at": "2026-07-29T07:05:20.799Z",
   "discovery_urls": [
+    {
+      "url": "https://security.askquala.com/door",
+      "source": "Johnnydtech/door-demo — DOOR framework intentionally vulnerable Next.js+Supabase workshop (security.askquala.com/door)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api-labs/graphql.html",
+      "source": "dkyazzentwatwa/hack-this-site — GraphQL introspection/injection API lab (GitHub api-labs/graphql.html)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://api.graphqlbook.org/",
+      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL API (OWASP API Top 10)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-graphql-demo.railway.app/",
+      "source": "Damn Vulnerable GraphQL Application — public Railway deploy for GraphQL security training",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/prompt-injection",
+      "source": "OWASP GenAI Security Lab — LLM01 prompt injection interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pentest-ground.com:4280/vulnerabilities/sqli/",
       "source": "Pentest-Ground DVWA — SQLi lab module (pentest-ground.com README)",
@@ -2772,11 +2797,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://hack-this-site-eta.vercel.app/api-labs/graphql.html",
-      "source": "dkyazzentwatwa/hack-this-site — GraphQL introspection/injection API lab (GitHub api-labs/graphql.html)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://hack-this-site-eta.vercel.app/api-labs/soap.html",
       "source": "dkyazzentwatwa/hack-this-site — SOAP/XML API security testing lab (GitHub api-labs/soap.html)",
       "auth": "oss_deploy"
@@ -4139,11 +4159,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://api.graphqlbook.org/",
-      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL API (OWASP API Top 10)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://pentesterlab.com/",
       "source": "PentesterLab — Web for Pentester hosted exercises and training platform (web search)",
       "auth": "public_demo"
@@ -4821,11 +4836,6 @@
       "url": "https://owaspbased-lessons.vercel.app/",
       "source": "OWASP GenAI Security Lab — interactive LLM Top 10 lessons with vulnerability demos (web search)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnerable-graphql-demo.railway.app/",
-      "source": "Damn Vulnerable GraphQL Application — public Railway demo instance (VWAD)",
-      "auth": "oss_deploy"
     },
     {
       "url": "http://hackazon.webscantest.com/",
@@ -11388,11 +11398,6 @@
     {
       "url": "https://zerohealth.aliyu.dev/api/chatbot/chat",
       "source": "aligorithm/zero-health — AI prompt-injection oracle POST /api/chatbot/chat (public demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://owaspbased-lessons.vercel.app/challenges/prompt-injection",
-      "source": "OWASP GenAI Security Lab — prompt injection interactive lesson (Vercel deploy)",
       "auth": "public_demo"
     },
     {
