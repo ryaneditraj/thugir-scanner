@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T13:04:46.929Z",
+  "updated_at": "2026-07-29T14:03:20.230Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/redirect",
+      "source": "the-internet.herokuapp.com — open redirect training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/abuse",
+      "source": "the-internet.herokuapp.com — clickjacking/phishing abuse-case demo (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/auth_bypass/",
+      "source": "Pentest-Ground DVWA — auth bypass lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/javascript/",
+      "source": "Pentest-Ground DVWA — JavaScript/DOM XSS lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/shadowdom",
+      "source": "the-internet.herokuapp.com — Shadow DOM XSS training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/moderate/level2.php",
       "source": "webspoilt/vulnforge-academy — Level 2 moderate SQLi/XSS challenge (Vercel OSS deploy)",
