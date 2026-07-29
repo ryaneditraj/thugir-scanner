@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dynamic-content-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dynamic_content avatar set differs from ?with_content=static frozen layout; the-internet.herokuapp.com/dynamic_content findings 2→3 (+the-internet-dynamic-content-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-forgot-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /forgot_password exposes form#forgot_password with input#email and Retrieve password submit; the-internet.herokuapp.com/forgot_password findings 2→3 (+the-internet-forgot-password-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-weak-id-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/weak_id/ issues sequential dvwaSession cookies (1→2) with session cookie chaining; accepts /weak_session_ids alias via pentestGroundDvwaProbeOrigin https fix; pentest-ground.com:4280/vulnerabilities/weak_session_ids findings 2→3 (+pentest-ground-dvwa-weak-id-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-javascript-alerts-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /javascript_alerts exposes onclick jsAlert/jsConfirm/jsPrompt handlers; the-internet.herokuapp.com/javascript_alerts findings 2→3 (+the-internet-javascript-alerts-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
@@ -15456,6 +15474,21 @@
       "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-login-auth-route-live-oracle",
       "shipped_at": "2026-07-29T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dynamic-content-route-live-oracle",
+      "shipped_at": "2026-07-29T14:25:00.000Z"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-forgot-password-route-live-oracle",
+      "shipped_at": "2026-07-29T14:25:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-weak-id-route-live-oracle",
+      "shipped_at": "2026-07-29T14:25:00.000Z"
     }
   ]
 }

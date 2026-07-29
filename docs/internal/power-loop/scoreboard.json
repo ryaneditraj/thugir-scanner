@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T14:06:22.302Z",
+  "updated_at": "2026-07-29T14:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
   "discovery_findings": 22865,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-29T14:06:22.302Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-29T14:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
@@ -48,43 +48,41 @@
           ]
         }
       },
-      "note": "Primary healthy 6/6 (17 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend still absent"
+      "note": "Stable 6/6 first-pass recall (17 findings on primary heroku); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 28,
-      "focus": "the-internet redirect/abuse/shadowdom + pentest-ground auth_bypass/javascript + fi queue drain",
-      "improvements_shipped_this_run": 2
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 9,
+      "focus": "the-internet dynamic_content + forgot_password + pentest-ground weak_session_ids alias",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — primary healthy, no fallback needed",
-      "pentest-ground fi: 8-finding hub with pentest-ground-dvwa-fi-route-live-oracle (LFI include.php oracle)",
-      "pentest-ground javascript: 7-finding hub (reflected-xss + phpinfo) but DOM XSS ?name= oracle absent",
-      "the-internet.herokuapp.com/login: 3 findings — the-internet-login-auth-route-live-oracle shipped (form#login POST)",
-      "the-internet redirect/abuse/shadowdom: thin 2-finding passes — open-redirect/clickjacking/Shadow DOM oracles absent",
-      "pentest-ground auth_bypass: thin 2-finding pass — DVWA auth-bypass oracle absent (module 404 or no live oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
+      "the-internet.herokuapp.com/dynamic_content: 2→3 findings — dynamic vs ?with_content=static avatar oracle shipped",
+      "the-internet.herokuapp.com/forgot_password: 2→3 findings — forgot-password form route oracle shipped",
+      "pentest-ground.com:4280/vulnerabilities/weak_session_ids: 2→3 findings — weak-id oracle probes canonical /weak_id/ with https origin + cookie-chained dvwaSession 1→2"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "pentest-ground captcha: captcha-bypass oracle still absent",
       "the-internet.herokuapp.com/redirect: open-redirect ?url= oracle absent (thin 2-finding hub)",
-      "the-internet.herokuapp.com/abuse: clickjacking/X-Frame-Options abuse oracle absent",
-      "the-internet.herokuapp.com/shadowdom: Shadow DOM XSS innerHTML oracle absent",
       "pentest-ground auth_bypass: auth-bypass login oracle absent despite tech-stack-disclosure",
-      "pentest-ground javascript: DOM XSS ?name= innerHTML oracle absent despite reflected-xss cross-path"
+      "seclab.vercel.app/api/sqli: route-specific SQLi injection oracle absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+    "the-internet.herokuapp.com/dynamic_content": 3,
+    "the-internet.herokuapp.com/forgot_password": 3,
+    "pentest-ground.com:4280/vulnerabilities/weak_session_ids": 3,
     "pentest-ground.com:4280/vulnerabilities/fi": 8,
     "pentest-ground.com:4280/vulnerabilities/javascript": 7,
     "the-internet.herokuapp.com/login": 3,
-    "the-internet.herokuapp.com/redirect": 2,
-    "the-internet.herokuapp.com/abuse": 2,
-    "the-internet.herokuapp.com/shadowdom": 2,
-    "pentest-ground.com:4280/vulnerabilities/auth_bypass": 2,
-    "the-internet.herokuapp.com": 2
+    "the-internet.herokuapp.com/secure_file_download": 3,
+    "the-internet.herokuapp.com/dropdown": 3,
+    "the-internet.herokuapp.com/javascript_alerts": 3
   }
 }
