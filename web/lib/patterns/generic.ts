@@ -24340,6 +24340,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-dynamic-controls-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet dynamic controls route live oracle",
+    description:
+      "When scanning /dynamic_controls, checkbox and input forms toggle enabled/disabled state via delayed AJAX swapCheckbox/swapInput handlers — Elemental Selenium dynamic controls training route oracle.",
+    impactOneline:
+      "Dynamic UI state changes via AJAX can break naive automation unless explicit waits target the toggled controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDynamicControlsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use explicit waits for AJAX-driven control state changes.",
+      steps: [
+        "Wait for element enabled/disabled state before interacting in E2E tests.",
+        "Avoid fixed sleep() delays; use condition-based waits on control attributes.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /dynamic_controls route toggles checkbox/input via delayed AJAX. Show robust dynamic-control wait strategies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-context-menu-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "info",
+    title: "the-internet context menu route live oracle",
+    description:
+      "When scanning /context_menu, #hot-spot oncontextmenu triggers displayMessage() JavaScript alert for a custom 'the-internet' right-click menu — Elemental Selenium context-menu training route oracle.",
+    impactOneline:
+      "Custom context menus can execute JavaScript on user interaction, enabling social-engineering and UI-redress attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetContextMenuRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — avoid executing script from custom context-menu handlers in production.",
+      steps: [
+        "Use native browser menus or sandboxed actions instead of alert()-based context menus.",
+        "Test right-click interactions in E2E automation with ActionChains or equivalent.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /context_menu route fires window.alert on right-click. Show safe context-menu interaction patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-nested-frames-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet nested frames route live oracle",
+    description:
+      "When scanning /nested_frames, a frameset loads frame_top (3-column frame_left/middle/right) and frame_bottom leaf — Elemental Selenium nested-frame switching training route oracle.",
+    impactOneline:
+      "Nested framesets complicate clickjacking defenses and break shallow crawlers that do not traverse frame hierarchies.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetNestedFramesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — prefer iframe over nested framesets and set frame-ancestors CSP.",
+      steps: [
+        "Use switch_to.frame() in Selenium to traverse nested frame hierarchies.",
+        "Avoid deep frameset nesting in production UIs; use component frameworks instead.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /nested_frames route uses nested framesets with frame_top/frame_bottom. Show frame traversal and CSP frame-ancestors patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",

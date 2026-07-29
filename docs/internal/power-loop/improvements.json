@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dynamic-controls-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /dynamic_controls h4 Dynamic Controls with #checkbox-example/#input-example and swapCheckbox/swapInput AJAX toggles; the-internet.herokuapp.com/dynamic_controls findings 2→3 (+the-internet-dynamic-controls-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-context-menu-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /context_menu #hot-spot oncontextmenu=displayMessage() fires window.alert for the-internet right-click menu; the-internet.herokuapp.com/context_menu findings 2→3 (+the-internet-context-menu-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-nested-frames-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /nested_frames frameset frame_top/frame_bottom; frame_top loads frame_left/middle/right; frame_bottom returns BOTTOM; the-internet.herokuapp.com/nested_frames findings 2→3 (+the-internet-nested-frames-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-infinite-scroll-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /infinite_scroll jScroll plugin + /infinite_scroll/1→/2 pagination with long DOM chunks; the-internet.herokuapp.com/infinite_scroll findings 2→3 (+the-internet-infinite-scroll-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
