@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T06:12:27.519Z",
-  "total": 1029,
-  "uniqueSlugs": 1024,
+  "generatedAt": "2026-07-29T07:06:08.294Z",
+  "total": 1032,
+  "uniqueSlugs": 1027,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1011,
+    "generic": 1014,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 944,
+    "deep": 947,
     "continuous": 0
   },
   "byCategory": {
@@ -31,9 +31,9 @@
     "Cross-site scripting": 144,
     "general": 20,
     "SSRF": 5,
-    "Server-side request forgery": 37,
+    "Server-side request forgery": 39,
     "Sensitive data exposure": 26,
-    "AI security": 44,
+    "AI security": 45,
     "Business logic": 12,
     "Open redirect": 5,
     "Authentication bypass": 2,
@@ -43,6 +43,7 @@
   },
   "slugs": [
     "agentpwn-attack-route-live-oracle",
+    "agentpwn-context-window-route-live-oracle",
     "agentpwn-mcp-exploitation-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",
     "all-seeing-eye-read-route-live-oracle",
@@ -923,6 +924,8 @@
     "ssrf-vulnlab-allowlist-route-live-oracle",
     "ssrf-vulnlab-basic-live-oracle",
     "ssrf-vulnlab-basic-route-live-oracle",
+    "ssrf-vulnlab-blind-live-oracle",
+    "ssrf-vulnlab-blind-route-live-oracle",
     "ssrf-vulnlab-blocklist-bypass-live-oracle",
     "ssrf-vulnlab-blocklist-route-live-oracle",
     "ssrf-vulnlab-gopher-live-oracle",
