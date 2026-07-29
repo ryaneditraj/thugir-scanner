@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T02:09:00.490Z",
-  "total": 1015,
-  "uniqueSlugs": 1010,
+  "generatedAt": "2026-07-29T03:07:27.168Z",
+  "total": 1019,
+  "uniqueSlugs": 1014,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,22 +9,22 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 997,
+    "generic": 1001,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 930,
+    "deep": 934,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 255,
+    "Broken access control": 257,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 70,
+    "Information disclosure": 72,
     "Security misconfiguration": 79,
     "Broken authentication": 73,
     "Injection": 203,
@@ -751,6 +751,10 @@
     "duck-store-testimonials-stored-xss-route-live-oracle",
     "duck-store-users-bola-live-oracle",
     "duck-store-users-route-live-oracle",
+    "dvga-graphql-audit-log-live-oracle",
+    "dvga-graphql-audit-route-live-oracle",
+    "dvga-graphql-batching-live-oracle",
+    "dvga-graphql-batching-route-live-oracle",
     "dvga-route-live-oracle",
     "dvrag-admin-config-live-oracle",
     "dvrag-rag-pipeline-live-oracle",
