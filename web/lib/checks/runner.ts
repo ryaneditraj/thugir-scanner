@@ -1432,6 +1432,10 @@ const DEEP_RULES = new Set<string>([
   "duckStoreAuthTotpBypassLiveOracle",
   "duckStoreAuthTotpBypassRouteLiveOracle",
   "dvgaRouteLiveOracle",
+  "dvgaGraphqlAuditLogLiveOracle",
+  "dvgaGraphqlAuditRouteLiveOracle",
+  "dvgaGraphqlBatchingLiveOracle",
+  "dvgaGraphqlBatchingRouteLiveOracle",
   "ginAndJuiceCatalogSearchXssLiveOracle",
   "ginAndJuiceCatalogRouteLiveOracle",
   "ginAndJuiceBlogPostOpenRedirectLiveOracle",
@@ -6399,7 +6403,7 @@ function extractDvgaLiveSeeds(html: string, pageUrl: string): string[] {
     /* ignore */
   }
   const isLiveHost =
-    /xplat-demo\.threatx\.io|dvga\.tools\.escape\.tech|pentest-ground\.com/i.test(host);
+    /xplat-demo\.threatx\.io|dvga2?\.tools\.escape\.tech|pentest-ground\.com/i.test(host);
   const isLiveApp =
     /Damn Vulnerable GraphQL Application/i.test(html) &&
     /dvgql_logo\.png|id="sidebar-wrapper"[\s\S]{0,500}\/import_paste/i.test(html);

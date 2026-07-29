@@ -24314,7 +24314,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "DVGA live instance route oracle",
     description:
-      "When scanning any route on dvga.tools.escape.tech, home re-fetch confirms Damn Vulnerable GraphQL Application training UI and POST /graphql returns enabled introspection — route-specific DVGA live oracle.",
+      "When scanning any route on dvga.tools.escape.tech or dvga2.tools.escape.tech, home re-fetch confirms Damn Vulnerable GraphQL Application training UI and POST /graphql returns enabled introspection — route-specific DVGA live oracle.",
     impactOneline:
       "Public DVGA instances expose GraphQL introspection and documented injection/SSRF mutations for security training.",
     detectorKind: "rule_ref",
@@ -24330,6 +24330,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA deployment exposes GraphQL introspection on route scans. Show how to auth-gate and disable introspection on lab hosts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-audit-log-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "DVGA GraphQL audit log disclosure live oracle",
+    description:
+      "POST /graphql { audits { gqlquery } } on DVGA returns unauthenticated GraphQL operation audit logs including prior mutations and queries.",
+    impactOneline:
+      "Public audit logs leak attacker queries, credentials in mutations, and sensitive operation history.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlAuditLogLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate audit queries; disable public GraphQL logging in production.",
+      steps: [
+        "Require authentication before exposing audit or logging queries.",
+        "Redact secrets from stored GraphQL operation logs.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql endpoint returns unauthenticated audit logs via the audits query. Show how to auth-gate audit access and redact sensitive GraphQL history.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-audit-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "DVGA /graphql audit route live oracle",
+    description:
+      "When scanning /graphql or /audit on DVGA hosts, unauthenticated audits query returns stored GraphQL operation logs — route-specific information disclosure oracle.",
+    impactOneline:
+      "Route scans on DVGA GraphQL endpoints confirm public audit log exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlAuditRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate audit queries on GraphQL lab routes.",
+      steps: [
+        "Require authentication before exposing audit queries.",
+        "Disable audit logging on internet-facing GraphQL endpoints.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql route scan confirms public audit log disclosure. Show route-specific auth-gating for GraphQL audit queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-batching-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "DVGA GraphQL batching live oracle",
+    description:
+      "POST /graphql with a JSON array of queries returns multiple independent data objects — DVGA GraphQL batching / rate-limit bypass oracle.",
+    impactOneline:
+      "Batch queries let attackers multiply brute-force or enumeration attempts per HTTP request.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlBatchingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JSON array batch bodies or enforce per-operation rate limits.",
+      steps: [
+        "Disable GraphQL batching on public endpoints.",
+        "Apply rate limits per operation, not just per HTTP request.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql endpoint accepts JSON array batch queries. Show how to disable batching and apply per-operation rate limits.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-batching-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "DVGA /graphql batching route live oracle",
+    description:
+      "When scanning /graphql on DVGA hosts, JSON array batching returns multiple query results — route-specific batching oracle.",
+    impactOneline:
+      "Route scans confirm GraphQL batching is enabled on the endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlBatchingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL batching on public /graphql routes.",
+      steps: [
+        "Reject JSON array bodies at the GraphQL gateway.",
+        "Enforce per-operation rate limits.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql route scan confirms JSON array batching. Show route-specific batching disablement.",
     version: 1,
     enabled: true
   },

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T03:07:00.000Z",
+  "updated_at": "2026-07-29T03:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3332,
-  "total_findings": 33761,
+  "total_sites_scanned": 3333,
+  "total_findings": 33767,
   "critical_findings": 82,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2253,
   "discovery_findings": 27873,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-29T03:07:00.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-29T03:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -48,45 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (17 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (17 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 67,
-      "focus": "ssrf.vulnlab blind/webhook/metadata-gcp/metadata-azure + crAPI signup + queue drain (nodegoat, urban-vampi)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 6,
+      "focus": "DVGA2 graphql route oracles — host canonical origin fix + audit log + batching",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
-      "ssrf.vulnlab.dev/blind: 11 findings — cross-path SSRF oracles fire; route-specific blind OOB oracle absent",
-      "ssrf.vulnlab.dev/webhook: 10 findings — cross-path SSRF oracles fire; route-specific semi-blind POST webhook oracle absent",
-      "ssrf.vulnlab.dev/metadata-gcp: 11 findings — metadata-aws-route oracle fires; GCP Metadata-Flavor route oracle absent",
-      "ssrf.vulnlab.dev/metadata-azure: 11 findings — cross-path SSRF oracles fire; Azure Metadata:true route oracle absent",
-      "crapi.apisec.ai/identity/api/auth/signup: 5 findings — BOLA cross-path oracles only; signup mass-assignment oracle absent",
-      "nodegoat-websec.herokuapp.com/login: 6 findings — server-side-eval + client-side-nosql evidence",
-      "urban-vampi-production.up.railway.app/users/v1: 7 findings — openapi-debug-password-exposure + IDOR"
+      "dvga2.tools.escape.tech/graphql: 1→6 findings — dvga2-host-canonical-origin-fix + dvga-graphql-audit-log + dvga-graphql-batching oracles shipped",
+      "ssrf.vulnlab.dev/blind + webhook + metadata-gcp/azure: cross-path SSRF oracles fire; route-specific cloud/blind oracles still absent",
+      "crapi.apisec.ai/identity/api/auth/signup: BOLA cross-path oracles only; signup mass-assignment oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ssrf.vulnlab.dev/blind: route-specific blind OOB SSRF oracle absent (cross-path oracles fire)",
-      "ssrf.vulnlab.dev/webhook: route-specific semi-blind POST webhook SSRF oracle absent",
-      "ssrf.vulnlab.dev/metadata-gcp + metadata-azure: cloud-specific metadata header oracles absent",
-      "crapi.apisec.ai/identity/api/auth/signup: signup mass-assignment/broken-registration oracle absent",
-      "nodegoat-websec.herokuapp.com/login: route-specific NoSQL login-bypass live oracle absent"
+      "ssrf.vulnlab.dev/blind + webhook + metadata-gcp/azure: route-specific cloud/blind SSRF oracles absent",
+      "crapi.apisec.ai/identity/api/auth/v3/check-otp: OTP oracle absent without OTP generation flow",
+      "zerohealth.aliyu.dev: landing page only — no live API deployment for challenge oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+    "dvga2.tools.escape.tech/graphql": 6,
+    "dvga2.tools.escape.tech": 7,
     "ssrf.vulnlab.dev/blind": 11,
     "ssrf.vulnlab.dev/metadata-gcp": 11,
-    "ssrf.vulnlab.dev/metadata-azure": 11,
-    "ssrf.vulnlab.dev/webhook": 10,
-    "urban-vampi-production.up.railway.app/users/v1": 7,
-    "nodegoat-websec.herokuapp.com/login": 6,
-    "urban-vampi-production.up.railway.app/books/v1/1": 6,
-    "crapi.apisec.ai/identity/api/auth/signup": 5
+    "vapi.tools.escape.tech/vapi/api5/user": 13,
+    "vapi.tools.escape.tech/vapi/api7/user/key": 13,
+    "vapi.tools.escape.tech/vapi/api9/v1/user/login": 13
   }
 }
