@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T16:04:00.000Z",
+  "updated_at": "2026-07-29T16:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2781,
-  "total_findings": 26886,
+  "total_sites_scanned": 2784,
+  "total_findings": 26902,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1996,
-  "discovery_findings": 22934,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-29T16:04:00.000Z",
+  "discovery_findings": 22950,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-29T16:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
@@ -53,40 +53,39 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 17,
-      "focus": "the-internet redirector/upload/challenging_dom/dynamic_controls/status_codes (new) + broken_images/add_remove_elements/context_menu (queue drain)",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 20,
+      "focus": "brokencrystals /api/file LFI + testimonials count SQLi + the-internet /redirect HTTP 302 demo; queue drain on the-internet hubs",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
+      "brokencrystals.com/api/file?path=/etc/hosts: route-specific LFI oracle shipped — GET ?path=package.json confirms /api/file local file inclusion",
+      "brokencrystals.com/api/testimonials/count?query=test: route-specific SQLi oracle shipped — information_schema table count probe returns 216",
+      "the-internet.herokuapp.com/redirect: 2→3 findings — HTTP 302 to /status_codes redirect training oracle shipped",
       "the-internet.herokuapp.com/upload: 3 findings — the-internet-file-upload-route-live-oracle fires (route-specific upload oracle)",
-      "the-internet.herokuapp.com/redirector: 2 findings — thin misconfig pass; open-redirect link oracle absent",
-      "the-internet.herokuapp.com/challenging_dom: 2 findings — thin misconfig pass; DOM manipulation oracle absent",
-      "the-internet.herokuapp.com/dynamic_controls: 2 findings — thin misconfig pass; disabled-input bypass oracle absent",
-      "the-internet.herokuapp.com/status_codes: 2 findings — thin misconfig pass; status-code enumeration oracle absent",
-      "the-internet.herokuapp.com/broken_images/add_remove_elements/context_menu: thin 2-finding misconfig passes"
+      "the-internet.herokuapp.com/redirector/challenging_dom/dynamic_controls/status_codes: thin 2-finding misconfig passes — route oracles still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "pentest-ground auth_bypass module 404 on current DVWA instance",
       "the-internet redirector: open-redirect link demo oracle absent (302 to status_codes only on /redirect)",
       "the-internet challenging_dom/dynamic_controls/status_codes: route-specific oracles absent (thin 2-finding hubs)",
-      "the-internet broken_images: broken-image path traversal oracle absent",
-      "the-internet add_remove_elements/context_menu: DOM XSS / context-menu injection oracles absent",
-      "the-internet notification_messages/entry_ad: still queued — flash-message XSS and clickjacking oracles untested this run"
+      "the-internet broken_images/add_remove_elements/context_menu: DOM manipulation oracles absent",
+      "the-internet notification_messages/entry_ad: flash-message XSS and clickjacking oracles absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+    "brokencrystals.com/api/file?path=/etc/hosts": 55,
+    "brokencrystals.com/api/testimonials/count?query=test": 37,
+    "the-internet.herokuapp.com/redirect": 3,
     "the-internet.herokuapp.com/upload": 3,
     "the-internet.herokuapp.com/redirector": 2,
     "the-internet.herokuapp.com/challenging_dom": 2,
     "the-internet.herokuapp.com/dynamic_controls": 2,
     "the-internet.herokuapp.com/status_codes": 2,
-    "the-internet.herokuapp.com/broken_images": 2,
-    "the-internet.herokuapp.com/add_remove_elements": 2,
-    "the-internet.herokuapp.com/context_menu": 2,
     "pentest-ground.com:4280/vulnerabilities/javascript": 8,
     "pentest-ground.com:4280/vulnerabilities/open_redirect": 8,
     "the-internet.herokuapp.com/shadowdom": 3
