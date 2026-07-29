@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T20:02:48.915Z",
+  "updated_at": "2026-07-29T20:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2812,
-  "total_findings": 27089,
+  "total_sites_scanned": 2820,
+  "total_findings": 27155,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 23075,
+  "discovery_urls_added": 2016,
+  "discovery_findings": 23141,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-29T20:02:48.915Z",
+  "last_run": "2026-07-29T20:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 14,
@@ -49,39 +49,42 @@
           ]
         }
       },
-      "note": "6/6 recall on staging fallback (14 findings); primary Heroku 503"
+      "note": "6/6 recall on staging fallback (14 findings); primary Heroku 503; jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 9,
-      "focus": "the-internet infinite_scroll/jqueryui/menu/tinymce route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 66,
+      "focus": "the-internet geolocation/horizontal_slider/inputs/javascript_error/disappearing_elements + GraphQL lab queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — staging fallback after primary 503",
-      "the-internet.herokuapp.com/infinite_scroll: 2→3 findings — jScroll pagination oracle shipped",
-      "the-internet.herokuapp.com/jqueryui/menu: 2→3 findings — JQuery UI nested menu oracle shipped",
-      "the-internet.herokuapp.com/tinymce: 2→3 findings — TinyMCE WYSIWYG editor oracle shipped"
+      "hack-this-site-eta.vercel.app/api-labs/graphql.html: 47 findings — VulnLab GraphQL/SQLi/XSS/IDOR validate oracles + platform lab hubs",
+      "api.graphqlbook.org/: 8 findings — graphql-introspection-enabled + permissive-cors",
+      "vulnerable-graphql-demo.railway.app/: 1 finding — thin misconfig pass (missing-security-headers only)",
+      "the-internet.herokuapp.com/geolocation|horizontal_slider|inputs|javascript_error|disappearing_elements: thin 2-finding misconfig passes — route-specific oracles absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "primary juice-shop Heroku dyno intermittently 503 — rely on staging fallback",
-      "the-internet nested_frames: nested-frame clickjacking oracle absent on direct route scan",
-      "the-internet large: deep-DOM tier-40 traversal oracle absent",
-      "the-internet add_remove_elements/context_menu/notification_messages/entry_ad: route-specific oracles absent"
+      "the-internet geolocation/horizontal_slider/inputs/javascript_error/disappearing_elements: route-specific oracles absent (thin 2-finding passes)",
+      "vulnerable-graphql-demo.railway.app: GraphQL introspection/BOLA oracles absent on thin 1-finding pass",
+      "queue tail drag_and_drop/slow/jqueryui/draggable/typeracer/checkboxes still unscanned — drain next run"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "the-internet.herokuapp.com/infinite_scroll": 3,
-    "the-internet.herokuapp.com/jqueryui/menu": 3,
-    "the-internet.herokuapp.com/tinymce": 3,
-    "pentest-ground.com:4280/vulnerabilities/csrf/": 8,
-    "pentest-ground.com:4280/vulnerabilities/upload/": 8,
+    "hack-this-site-eta.vercel.app/api-labs/graphql.html": 47,
+    "api.graphqlbook.org": 8,
+    "the-internet.herokuapp.com/geolocation": 2,
+    "the-internet.herokuapp.com/horizontal_slider": 2,
+    "the-internet.herokuapp.com/inputs": 2,
+    "the-internet.herokuapp.com/javascript_error": 2,
+    "the-internet.herokuapp.com/disappearing_elements": 2,
     "brokencrystals.com/api/products/latest?limit=100": 55,
-    "the-internet.herokuapp.com/challenging_dom": 3
+    "pentest-ground.com:4280/vulnerabilities/csrf/": 8
   }
 }
