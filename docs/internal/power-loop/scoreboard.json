@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T07:15:00.000Z",
+  "updated_at": "2026-07-29T08:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3374,
-  "total_findings": 34222,
-  "critical_findings": 85,
+  "total_sites_scanned": 2731,
+  "total_findings": 26609,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2268,
-  "discovery_findings": 28183,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-29T07:15:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22574,
+  "improvements_shipped": 1161,
+  "last_run": "2026-07-29T08:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 17,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 463,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (17 findings); no benchmark misses; teacher_delta skipped"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings). jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend slug still absent."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 35,
-      "focus": "vapi.apisec.ai HTTP origin regression + ssrf.vulnlab.dev blind SSRF + AgentPwn context-window attention-dilution",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 87,
+      "focus": "the-internet Heroku + pentest-ground csrf/upload/brute NEW; drained askquala/door + hack-this-site graphql + graphqlbook",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/jwt/user: 2→14 findings — vapi-apisec-http-canonical-origin-fix restores JWT weak-token oracle (HTTPS reset on apisec.ai)",
-      "ssrf.vulnlab.dev/blind: 11→13 findings — ssrf-vulnlab-blind-route-live-oracle shipped for blind SSRF lab",
-      "agentpwn.com/attacks/context-window/2: 7→8 findings — agentpwn-context-window-route-live-oracle shipped (APWN-CW-002 attention dilution)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503, staging fallback healthy",
+      "hack-this-site-eta.vercel.app/api-labs/graphql.html: 47-finding cross-path GraphQL hub",
+      "api.graphqlbook.org: 8 findings — graphql-introspection + prompt-injection evidence",
+      "security.askquala.com/door: 7 findings client-side evidence; DOOR route-specific oracles not yet live-probed",
+      "the-internet.herokuapp.com + /login: thin 2-finding passes (missing headers + insecure cookies only)",
+      "pentest-ground csrf/upload/brute: 7-finding generic hubs each; route-specific CSRF/upload/brute live oracles absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true: BFLA DELETE route oracle still absent (403 without auth)",
-      "seclab.vercel.app/api/* routes serve Angular stub shell — Next.js API lab oracles not portable"
+      "primary juice-shop.herokuapp.com Heroku dyno 503 at 08:00 UTC — staging fallback required",
+      "the-internet.herokuapp.com: no reflected-XSS or auth-bypass live oracles despite known training scenarios",
+      "pentest-ground csrf/upload/brute: route-specific DVWA module oracles absent (generic 7-finding hubs)",
+      "security.askquala.com/door: DOOR framework route-specific Supabase/Next.js oracles absent",
+      "owaspbased-lessons prompt-injection + vulnerable-graphql-demo still queued behind 8-url limit"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 17,
-    "vapi.apisec.ai/vapi/jwt/user": 14,
-    "ssrf.vulnlab.dev/blind": 13,
-    "agentpwn.com/attacks/context-window/2": 8,
+    "juice-shop-staging.herokuapp.com": 14,
     "hack-this-site-eta.vercel.app/api-labs/graphql.html": 47,
-    "ist-edu-bd.vercel.app/labs/csrf": 10,
-    "pentest-ground.com:4280/vulnerabilities/sqli": 8,
-    "crapi.apisec.ai/identity/api/auth/signup": 5
+    "api.graphqlbook.org": 8,
+    "security.askquala.com/door": 7,
+    "pentest-ground.com:4280/vulnerabilities/csrf": 7,
+    "pentest-ground.com:4280/vulnerabilities/upload": 7,
+    "pentest-ground.com:4280/vulnerabilities/brute": 7,
+    "the-internet.herokuapp.com": 2,
+    "the-internet.herokuapp.com/login": 2
   }
 }
