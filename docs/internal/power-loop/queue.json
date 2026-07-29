@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T03:03:15.505Z",
+  "updated_at": "2026-07-29T04:12:47.737Z",
   "discovery_urls": [
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/sqli/",
+      "source": "Pentest-Ground DVWA — SQLi lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/exec/",
+      "source": "Pentest-Ground DVWA — command injection ping/exec lab (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/csp/",
+      "source": "Pentest-Ground DVWA — CSP bypass XSS lab (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true",
+      "source": "NeuraLegion/brokencrystals — BFLA photo-delete oracle DELETE with isAdmin=true (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:9000/api/users",
+      "source": "Pentest-Ground RestFlaw — REST API SQLi/code-injection oracle (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ssrf.vulnlab.dev/blind",
       "source": "sampsonc/vulnlab.dev — blind SSRF OOB callback lab (README ssrf.vulnlab.dev)",
