@@ -17034,6 +17034,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api5-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API5 route BFLA live oracle",
+    description:
+      "When scanning /api5/user or /api5/users, GET /api5/users with a regular-user Authorization-Token returns every user record including admin flags — route-specific BFLA oracle.",
+    impactOneline:
+      "Hidden admin list endpoints reachable with low-privilege tokens expose every account when API5 routes are scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi5RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — enforce function-level authorization on every admin route in production.",
+      steps: [
+        "Deny list/export endpoints to non-admin principals.",
+        "Hide admin routes from API discovery and enforce role checks server-side.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api5 route scan confirms BFLA on /api5/users. Show function-level authorization remediation for hidden admin routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api6-mass-assignment-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -17160,6 +17186,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api7/user/key reflects arbitrary Origin with credentials and returns auth keys. Show CORS hardening for authenticated API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api7-cors-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "vAPI API7 route CORS misconfiguration live oracle",
+    description:
+      "When scanning /api7/user/key, GET reflects arbitrary Origin with Access-Control-Allow-Credentials: true and returns authkey — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Permissive CORS with credentials on /api7/user/key lets any third-party site read sensitive API keys from authenticated sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi7CorsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — restrict CORS origins and never combine reflected origins with credentials in production.",
+      steps: [
+        "Allowlist trusted origins instead of reflecting arbitrary Origin headers.",
+        "Never set Access-Control-Allow-Credentials: true with reflected origins.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api7/user/key route scan confirms CORS misconfiguration with credentials. Show CORS hardening for authenticated API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api9-improper-inventory-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "vAPI API9 improper inventory live oracle",
+    description:
+      "POST /api9/v1/user/login accepts deprecated v1 login without v2 rate limiting and returns flag{api9_*} — the vAPI improper inventory management oracle.",
+    impactOneline:
+      "Deprecated API versions without rate limiting let attackers brute-force PINs on legacy login endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi9ImproperInventoryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — retire deprecated API versions and enforce consistent security controls in production.",
+      steps: [
+        "Disable or remove deprecated /v1 endpoints when /v2 ships.",
+        "Apply rate limiting and authentication controls consistently across all API versions.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api9/v1/user/login endpoint lacks v2 rate limiting and returns flags. Show API inventory management and version retirement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api9-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "vAPI API9 route improper inventory live oracle",
+    description:
+      "When scanning /api9/v1/user/login, deprecated v1 login lacks v2 rate limiting and returns flag{api9_*} with known PIN — route-specific improper inventory oracle.",
+    impactOneline:
+      "Legacy API versions remain reachable without rate limiting when API9 routes are scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi9RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — retire deprecated API versions and enforce consistent security controls in production.",
+      steps: [
+        "Disable or remove deprecated /v1 endpoints when /v2 ships.",
+        "Apply rate limiting consistently across all API versions.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api9 route scan confirms deprecated v1 login without rate limiting. Show API version retirement and inventory management.",
     version: 1,
     enabled: true
   },
