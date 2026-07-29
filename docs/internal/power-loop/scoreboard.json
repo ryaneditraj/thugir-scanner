@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T07:07:15.297Z",
+  "updated_at": "2026-07-29T07:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3371,
-  "total_findings": 34187,
+  "total_sites_scanned": 3374,
+  "total_findings": 34222,
   "critical_findings": 85,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2268,
-  "discovery_findings": 28148,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-29T07:07:15.297Z",
+  "discovery_findings": 28183,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-29T07:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -48,42 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (17 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend still absent"
+      "note": "Stable 6/6 first-pass recall (17 findings); no benchmark misses; teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 81,
-      "focus": "DOOR workshop demo + GraphQL labs (hack-this-site, graphqlbook, railway DVGA) + GenAI prompt-injection lesson + crAPI BOLA drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 35,
+      "focus": "vapi.apisec.ai HTTP origin regression + ssrf.vulnlab.dev blind SSRF + AgentPwn context-window attention-dilution",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/api-labs/graphql.html: 47 findings — graphql-introspection-enabled + cross-path hub",
-      "api.graphqlbook.org: 8 findings — graphql-introspection-enabled + client-side-prompt-injection-evidence",
-      "security.askquala.com/door: 7 findings — DOOR workshop client-side-api-security-lab-evidence",
-      "crapi.apisec.ai/identity/api/v2/user/vehicle/1: 6 findings — crapi-vehicle-bola-live-oracle fires",
-      "ist-edu-bd.vercel.app/newsletter: 9 findings — sql-error-disclosure + notices-file-lfi-probe",
-      "vulnweb.netlify.app/csrf: 2 findings — vulnweb-csrf-route-live-oracle fires"
+      "vapi.apisec.ai/vapi/jwt/user: 2→14 findings — vapi-apisec-http-canonical-origin-fix restores JWT weak-token oracle (HTTPS reset on apisec.ai)",
+      "ssrf.vulnlab.dev/blind: 11→13 findings — ssrf-vulnlab-blind-route-live-oracle shipped for blind SSRF lab",
+      "agentpwn.com/attacks/context-window/2: 7→8 findings — agentpwn-context-window-route-live-oracle shipped (APWN-CW-002 attention dilution)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnerable-graphql-demo.railway.app: thin 1-finding pass — GraphQL introspection/injection route oracle absent",
-      "owaspbased-lessons.vercel.app/challenges/prompt-injection: thin 1-finding pass — LLM01 prompt-injection lesson oracle absent",
-      "security.askquala.com/door: client-side evidence only — DOOR framework route-specific oracles (IDOR/ownership) not yet live-probed"
+      "brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true: BFLA DELETE route oracle still absent (403 without auth)",
+      "seclab.vercel.app/api/* routes serve Angular stub shell — Next.js API lab oracles not portable"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+    "vapi.apisec.ai/vapi/jwt/user": 14,
+    "ssrf.vulnlab.dev/blind": 13,
+    "agentpwn.com/attacks/context-window/2": 8,
     "hack-this-site-eta.vercel.app/api-labs/graphql.html": 47,
-    "ist-edu-bd.vercel.app/newsletter": 9,
-    "api.graphqlbook.org": 8,
-    "security.askquala.com/door": 7,
-    "crapi.apisec.ai/identity/api/v2/user/vehicle/1": 6,
-    "vulnweb.netlify.app/csrf": 2,
-    "vulnerable-graphql-demo.railway.app": 1,
-    "owaspbased-lessons.vercel.app/challenges/prompt-injection": 1
+    "ist-edu-bd.vercel.app/labs/csrf": 10,
+    "pentest-ground.com:4280/vulnerabilities/sqli": 8,
+    "crapi.apisec.ai/identity/api/auth/signup": 5
   }
 }

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-apisec-http-canonical-origin-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiCanonicalOrigin forced https://vapi.apisec.ai but lab serves HTTP only (HTTPS connection reset); now keeps http:// for apisec.ai host; POST register + HS256 admin re-sign returns flag{jwt_*}; vapi.apisec.ai/vapi/jwt/user findings 2→14 (+vapi-jwt-weak-token-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-blind-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blind/?url=http://example.com/ returns (blind: response discarded) with Blind SSRF title; ssrf.vulnlab.dev/blind findings 11→13 (+ssrf-vulnlab-blind-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-context-window-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /attacks/context-window/2 has APWN-CW-002 + ai-instructions meta with Section 14 Administrative Override buried in ML content; agentpwn.com/attacks/context-window/2 findings 7→8 (+agentpwn-context-window-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-newsletter-crlf-route-live-oracle",
       "status": "shipped",
