@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T05:10:58.950Z",
+  "updated_at": "2026-07-29T06:05:37.219Z",
   "discovery_urls": [
     {
       "url": "https://pentest-ground.com:4280/vulnerabilities/sqli/",
@@ -11393,6 +11393,31 @@
     {
       "url": "https://owaspbased-lessons.vercel.app/challenges/prompt-injection",
       "source": "OWASP GenAI Security Lab — prompt injection interactive lesson (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf-demo.onrender.com",
+      "source": "OWASP-ASI/finbot-ctf-demo — Agentic AI FinBot CTF live Render deploy (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/ui",
+      "source": "apisec-inc/urban-VAmPI — Swagger UI + OWASP API Top 10 oracle (Railway OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app",
+      "source": "pentest-fauxbank — intentionally vulnerable banking demo (Vercel OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app",
+      "source": "webspoilt/vulnforge-academy — 20-level OWASP CTF academy (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://webgoat.github.io/WebGoat/login",
+      "source": "WebGoat/WebGoat — guided OWASP lesson login surface (GitHub Pages demo)",
       "auth": "public_demo"
     }
   ],
