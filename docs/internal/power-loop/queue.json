@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T14:03:20.230Z",
+  "updated_at": "2026-07-29T15:03:21.718Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/broken_images",
+      "source": "the-internet.herokuapp.com — broken image path traversal / info disclosure training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/add_remove_elements",
+      "source": "the-internet.herokuapp.com — DOM manipulation / XSS sink training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/context_menu",
+      "source": "the-internet.herokuapp.com — context menu / UI injection training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/notification_messages",
+      "source": "the-internet.herokuapp.com — flash message / XSS training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/entry_ad",
+      "source": "the-internet.herokuapp.com — ad iframe / clickjacking training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/redirect",
       "source": "the-internet.herokuapp.com — open redirect training route (Heroku public demo)",
