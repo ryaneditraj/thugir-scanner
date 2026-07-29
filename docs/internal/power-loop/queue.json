@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T15:03:21.718Z",
+  "updated_at": "2026-07-29T16:02:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/redirector",
+      "source": "the-internet.herokuapp.com — open redirect link demo training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/upload",
+      "source": "the-internet.herokuapp.com — file upload / path traversal training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/challenging_dom",
+      "source": "the-internet.herokuapp.com — challenging DOM / dynamic ID training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/dynamic_controls",
+      "source": "the-internet.herokuapp.com — dynamic form controls / disabled input training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/status_codes",
+      "source": "the-internet.herokuapp.com — HTTP status code enumeration training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/broken_images",
       "source": "the-internet.herokuapp.com — broken image path traversal / info disclosure training route (Heroku public demo)",
