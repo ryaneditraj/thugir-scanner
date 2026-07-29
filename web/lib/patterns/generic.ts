@@ -14980,6 +14980,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-dom-csrf-flow-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Broken Crystals DOM CSRF token oracle",
+    description:
+      "GET /api/auth/dom-csrf-flow returns HTTP 400 without Fingerprint header but issues a 32-char DOM CSRF token when Fingerprint is present — no session authentication required.",
+    impactOneline:
+      "DOM CSRF tokens derived only from client fingerprint headers let attackers harvest victim tokens via cross-origin requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsDomCsrfFlowLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind CSRF tokens to authenticated sessions, not client fingerprints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Issue CSRF tokens only after server-side session authentication.",
+        "Validate tokens server-side on state-changing requests.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/dom-csrf-flow endpoint issues DOM CSRF tokens from Fingerprint headers without session auth. Show secure CSRF token design.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-dom-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Broken Crystals /api/auth/dom-csrf-flow route live oracle",
+    description:
+      "When scanning /api/auth/dom-csrf-flow, Fingerprint header returns a 32-char DOM CSRF token without authentication — route-specific DOM CSRF confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals issues fingerprint-bound DOM CSRF tokens without session validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsDomCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind CSRF tokens to authenticated sessions, not client fingerprints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Issue CSRF tokens only after server-side session authentication.",
+        "Validate tokens server-side on state-changing requests.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/dom-csrf-flow route scan confirms fingerprint-bound DOM CSRF tokens. Show secure CSRF token design.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-nested-json-dos-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "medium",
+    title: "Broken Crystals nested JSON stack overflow oracle",
+    description:
+      "GET /api/nestedJson?depth=10000 returns HTTP 500 Maximum call stack size exceeded — unbounded recursive nesting DoS oracle on Broken Crystals.",
+    impactOneline:
+      "Unbounded depth parameters on nested JSON generators enable stack-overflow denial of service.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsNestedJsonDoSLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cap recursion depth and validate depth query parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Enforce a maximum depth limit (e.g. depth <= 20) on nested JSON generators.",
+        "Return HTTP 400 for out-of-range depth values instead of unbounded recursion.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/nestedJson endpoint crashes with stack overflow at depth=10000. Show safe depth limiting for recursive JSON builders.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-nested-json-route-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "medium",
+    title: "Broken Crystals /api/nestedJson route live oracle",
+    description:
+      "When scanning /api/nestedJson, depth=10000 triggers HTTP 500 Maximum call stack size exceeded — route-specific unbounded nesting DoS confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals nested JSON endpoint lacks depth limits.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsNestedJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cap recursion depth and validate depth query parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Enforce a maximum depth limit (e.g. depth <= 20) on nested JSON generators.",
+        "Return HTTP 400 for out-of-range depth values instead of unbounded recursion.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/nestedJson route scan confirms stack overflow at depth=10000. Show safe depth limiting for recursive JSON builders.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-secrets-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -23644,7 +23748,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "the-internet file upload route live oracle",
     description:
-      "When scanning /upload, POST multipart file returns File Uploaded! without type validation — Elemental Selenium file upload training route oracle.",
+      "When scanning /upload or /file_upload, POST multipart file returns File Uploaded! without type validation — Elemental Selenium file upload training route oracle.",
     impactOneline:
       "Unrestricted file upload lets attackers store arbitrary files on the server without content-type validation.",
     detectorKind: "rule_ref",
