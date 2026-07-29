@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T08:04:13.596Z",
+  "updated_at": "2026-07-29T09:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/dynamic_loading",
+      "source": "tourdedave/the-internet — AJAX dynamic content loading oracle (Elemental Selenium Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/javascript_alerts",
+      "source": "tourdedave/the-internet — JavaScript alert/XSS sink oracle (Elemental Selenium Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/forgot_password",
+      "source": "tourdedave/the-internet — password reset / email enumeration oracle (Elemental Selenium Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/xss_r/",
+      "source": "Pentest-Ground DVWA — reflected XSS lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/fi/?page=include.php",
+      "source": "Pentest-Ground DVWA — file inclusion (LFI) lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/",
       "source": "tourdedave/the-internet — Elemental Selenium training sandbox (Heroku public demo)",
