@@ -23846,6 +23846,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-dynamic-content-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "info",
+    title: "the-internet dynamic content route live oracle",
+    description:
+      "When scanning /dynamic_content, avatar images and lorem text change between page refreshes while ?with_content=static freezes the layout — Elemental Selenium dynamic content training route oracle.",
+    impactOneline:
+      "Unstable DOM content breaks naive element locators and documents wait/retry patterns for security automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDynamicContentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — wait for stable elements instead of indexing volatile content.",
+      steps: [
+        "Locate elements by stable attributes rather than dynamic text or image order.",
+        "Use explicit waits for content that changes between refreshes.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /dynamic_content route serves different avatars on each refresh. Show robust dynamic-content automation strategies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "info",
+    title: "the-internet forgot-password route live oracle",
+    description:
+      "When scanning /forgot_password, a POST email recovery form (form#forgot_password, input#email) is exposed without CAPTCHA or rate limiting — Elemental Selenium forgot-password training route oracle.",
+    impactOneline:
+      "Unprotected password-reset forms enable account enumeration and abuse in real apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — protect password-reset flows with rate limits and generic responses.",
+      steps: [
+        "Return identical messages for valid and invalid reset requests.",
+        "Add CAPTCHA or proof-of-work after repeated attempts.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /forgot_password route exposes an email recovery form without abuse controls. Show secure password-reset UX patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-dvwa-weak-id-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA weak session ID route live oracle",
+    description:
+      "When scanning /vulnerabilities/weak_id/ (or /weak_session_ids alias), POST Generate issues sequential dvwaSession cookies — Pentest-Ground DVWA weak session ID route oracle.",
+    impactOneline:
+      "Predictable session identifiers let attackers hijack authenticated sessions on DVWA.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaWeakIdRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — generate cryptographically random session IDs.",
+      steps: [
+        "Use CSPRNG session tokens with sufficient entropy.",
+        "Rotate session IDs on privilege changes and logout.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/weak_id/ route issues sequential dvwaSession cookies. Show secure session ID generation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",

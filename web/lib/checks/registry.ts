@@ -30915,7 +30915,13 @@ const clientSidePentestGroundHubEvidence: Rule = async (ctx) => {
 };
 
 function isPentestGroundDvwaHost(ctx: RuleContext): boolean {
-  return /pentest-ground\.com:4280/i.test(ctx.origin);
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /pentest-ground\.com:4280/i.test(corpus);
+}
+
+function pentestGroundDvwaProbeOrigin(ctx: RuleContext): string {
+  if (isPentestGroundDvwaHost(ctx)) return "https://pentest-ground.com:4280";
+  return ctx.origin;
 }
 
 function isPentestGroundRestflawHost(ctx: RuleContext): boolean {
@@ -30931,7 +30937,7 @@ const pentestGroundDvwaExecCmdiRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/exec\/?/i.test(pageUrl)) return NEGATIVE;
-  const execUrl = new URL("/vulnerabilities/exec/", ctx.origin).toString();
+  const execUrl = new URL("/vulnerabilities/exec/", pentestGroundDvwaProbeOrigin(ctx)).toString();
   const doc = await ctx.probe.get(execUrl, {
     method: "POST",
     body: "ip=127.0.0.1;id&Submit=Submit",
@@ -30957,7 +30963,7 @@ const pentestGroundDvwaCspBypassRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/csp\/?/i.test(pageUrl)) return NEGATIVE;
-  const cspUrl = new URL("/vulnerabilities/csp/", ctx.origin).toString();
+  const cspUrl = new URL("/vulnerabilities/csp/", pentestGroundDvwaProbeOrigin(ctx)).toString();
   const doc = await ctx.probe.get(cspUrl, {
     method: "POST",
     body: "include=data:text/javascript,alert(1)",
@@ -30983,7 +30989,7 @@ const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/sqli\/?/i.test(pageUrl)) return NEGATIVE;
-  const sqliUrl = new URL("/vulnerabilities/sqli/", ctx.origin).toString();
+  const sqliUrl = new URL("/vulnerabilities/sqli/", pentestGroundDvwaProbeOrigin(ctx)).toString();
   const doc = await ctx.probe.get(sqliUrl, {
     method: "POST",
     body: "id=1' OR '1'='1&Submit=Submit",
@@ -31012,7 +31018,7 @@ const pentestGroundDvwaUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/upload\/?/i.test(pageUrl)) return NEGATIVE;
-  const uploadUrl = new URL("/vulnerabilities/upload/", ctx.origin).toString();
+  const uploadUrl = new URL("/vulnerabilities/upload/", pentestGroundDvwaProbeOrigin(ctx)).toString();
   const probeName = `thugir-upload-${Date.now().toString(36)}.php`;
   const boundary = `----ThugirDvwaUpload${Date.now().toString(36)}`;
   const body = [
@@ -31061,7 +31067,7 @@ const pentestGroundDvwaXssRRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/xss_r\/?/i.test(pageUrl)) return NEGATIVE;
   const canary = `thugirXssR${Date.now().toString(36)}`;
-  const xssUrl = new URL("/vulnerabilities/xss_r/", ctx.origin);
+  const xssUrl = new URL("/vulnerabilities/xss_r/", pentestGroundDvwaProbeOrigin(ctx));
   xssUrl.searchParams.set("name", canary);
   const doc = await ctx.probe.get(xssUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -31084,7 +31090,7 @@ const pentestGroundDvwaFiRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/fi\/?/i.test(pageUrl)) return NEGATIVE;
-  const fiUrl = new URL("/vulnerabilities/fi/", ctx.origin);
+  const fiUrl = new URL("/vulnerabilities/fi/", pentestGroundDvwaProbeOrigin(ctx));
   fiUrl.searchParams.set("page", "../../../../../../../etc/passwd");
   const doc = await ctx.probe.get(fiUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -31105,7 +31111,7 @@ const pentestGroundDvwaCsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/csrf\/?/i.test(pageUrl)) return NEGATIVE;
-  const csrfUrl = new URL("/vulnerabilities/csrf/", ctx.origin).toString();
+  const csrfUrl = new URL("/vulnerabilities/csrf/", pentestGroundDvwaProbeOrigin(ctx)).toString();
   const formDoc = await ctx.probe.get(csrfUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (formDoc.status < 200 || formDoc.status >= 400) return NEGATIVE;
   if (!/name=["']password_new["']/i.test(formDoc.body)) return NEGATIVE;
@@ -31357,6 +31363,78 @@ const theInternetJavascriptAlertsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function extractTheInternetAvatarPaths(html: string): string[] {
+  return [...html.matchAll(/\/img\/avatars\/([^'">\s]+)/gi)].map((m) => m[1]);
+}
+
+function extractDvwaSessionValue(cookies: string[]): number | null {
+  for (const raw of cookies) {
+    const m = /(?:^|;\s*)dvwaSession=(\d+)/i.exec(raw);
+    if (m) return parseInt(m[1], 10);
+  }
+  return null;
+}
+
+function cookieHeaderFromSetCookies(cookies: string[]): string {
+  return cookies
+    .map((c) => c.split(";")[0].trim())
+    .filter(Boolean)
+    .join("; ");
+}
+
+const theInternetDynamicContentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dynamic_content(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const dynamicUrl = new URL("/dynamic_content", ctx.origin).toString();
+  const staticUrl = new URL("/dynamic_content", ctx.origin);
+  staticUrl.searchParams.set("with_content", "static");
+  const dynamicDoc = await ctx.probe.get(dynamicUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (dynamicDoc.status < 200 || dynamicDoc.status >= 400) return NEGATIVE;
+  if (!/with_content=static/i.test(dynamicDoc.body)) return NEGATIVE;
+  const staticDoc = await ctx.probe.get(staticUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (staticDoc.status < 200 || staticDoc.status >= 400) return NEGATIVE;
+  const dynamicAvatars = extractTheInternetAvatarPaths(dynamicDoc.body);
+  const staticAvatars = extractTheInternetAvatarPaths(staticDoc.body);
+  if (dynamicAvatars.length < 2 || staticAvatars.length < 2) return NEGATIVE;
+  if (dynamicAvatars.join("|") === staticAvatars.join("|")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      dynamicUrl,
+      staticUrl: staticUrl.toString(),
+      dynamicAvatars: dynamicAvatars.slice(0, 3),
+      staticAvatars: staticAvatars.slice(0, 3),
+      note: "the-internet /dynamic_content route scan — avatar images differ from ?with_content=static frozen layout — Elemental Selenium dynamic content oracle"
+    }
+  };
+};
+
+const theInternetForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/forgot_password(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const formUrl = new URL("/forgot_password", ctx.origin).toString();
+  const doc = await ctx.probe.get(formUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasForm = /<form[^>]+(?:name|id)=["']forgot_password["']/i.test(doc.body);
+  const hasEmail = /<input[^>]+name=["']email["']/i.test(doc.body);
+  const hasSubmit = /Retrieve password/i.test(doc.body);
+  if (!hasForm || !hasEmail || !hasSubmit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      formUrl,
+      markers: ["form#forgot_password", "input#email", "Retrieve password"],
+      note: "the-internet /forgot_password route scan — email recovery form without rate limiting or CAPTCHA — Elemental Selenium forgot-password training oracle"
+    }
+  };
+};
+
 const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -31398,11 +31476,54 @@ const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pentestGroundDvwaWeakIdRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/weak(?:_id|_session_ids)\/?/i.test(pageUrl)) return NEGATIVE;
+  const weakUrl = new URL("/vulnerabilities/weak_id/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const hubDoc = await ctx.probe.get(weakUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/Weak Session IDs/i.test(hubDoc.body) || !/dvwaSession/i.test(hubDoc.body)) return NEGATIVE;
+  const doc1 = await ctx.probe.get(weakUrl, {
+    method: "POST",
+    body: "",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const sess1 = extractDvwaSessionValue(doc1.setCookies);
+  if (sess1 === null) return NEGATIVE;
+  const cookieJar = cookieHeaderFromSetCookies(doc1.setCookies);
+  const doc2 = await ctx.probe.get(weakUrl, {
+    method: "POST",
+    body: "",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookieJar
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const sess2 = extractDvwaSessionValue(doc2.setCookies);
+  if (sess2 === null || sess2 <= sess1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      weakUrl,
+      firstSession: sess1,
+      secondSession: sess2,
+      note: "Pentest-Ground DVWA POST /vulnerabilities/weak_id/ issues sequential dvwaSession cookies (1, 2, …) — weak session ID route oracle; accepts /weak_session_ids discovery alias"
+    }
+  };
+};
+
 const pentestGroundDvwaXssDRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/vulnerabilities\/xss_d\/?/i.test(pageUrl)) return NEGATIVE;
-  const xssUrl = new URL("/vulnerabilities/xss_d/", ctx.origin).toString();
+  const xssUrl = new URL("/vulnerabilities/xss_d/", pentestGroundDvwaProbeOrigin(ctx)).toString();
   const doc = await ctx.probe.get(xssUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const hasDefaultParam = /document\.location\.href\.indexOf\(["']default=["']\)/i.test(doc.body);
@@ -43785,7 +43906,10 @@ export const RULES: Record<string, Rule> = {
   theInternetDownloadSecureRouteLiveOracle,
   theInternetDropdownRouteLiveOracle,
   theInternetJavascriptAlertsRouteLiveOracle,
+  theInternetDynamicContentRouteLiveOracle,
+  theInternetForgotPasswordRouteLiveOracle,
   theInternetFileUploadRouteLiveOracle,
+  pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
