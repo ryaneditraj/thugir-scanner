@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T11:05:00.000Z",
+  "updated_at": "2026-07-29T12:04:01.530Z",
   "discovery_urls": [
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/sqli_blind/",
+      "source": "Pentest-Ground DVWA — blind SQLi lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/ssrf",
+      "source": "zerohealth.aliyu.dev — public SSRF challenge lab (OSS security training platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/xss",
+      "source": "zerohealth.aliyu.dev — public XSS challenge lab (OSS security training platform)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/dropdown",
+      "source": "the-internet.herokuapp.com — dropdown reflected XSS training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/sqli",
+      "source": "DaniSam-STU/security-lab — SQLi API route on seclab.vercel.app Vercel deploy",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnbank.org/register",
       "source": "Commando-X/vuln-bank — mass-assignment registration oracle on public Heroku demo (README)",
