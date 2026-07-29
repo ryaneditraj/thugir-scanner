@@ -31686,6 +31686,91 @@ const theInternetHoversRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetInfiniteScrollRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/infinite_scroll(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const scrollUrl = new URL("/infinite_scroll", ctx.origin).toString();
+  const doc = await ctx.probe.get(scrollUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Infinite Scroll\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasJscroll =
+    /jquery\.jscroll\.min\.js/i.test(doc.body) && /\$\(['"]\.scroll['"]\)\.jscroll\(\)/i.test(doc.body);
+  const hasNextLink = /href=['"]\/infinite_scroll\/1['"]/i.test(doc.body);
+  if (!hasJscroll || !hasNextLink) return NEGATIVE;
+  const page1Url = new URL("/infinite_scroll/1", ctx.origin).toString();
+  const page1Doc = await ctx.probe.get(page1Url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (page1Doc.status < 200 || page1Doc.status >= 400) return NEGATIVE;
+  const hasPage2Link = /href=['"]\/infinite_scroll\/2['"]/i.test(page1Doc.body);
+  const hasLongContent = page1Doc.body.replace(/<[^>]+>/g, "").trim().length > 500;
+  if (!hasPage2Link || !hasLongContent) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      scrollUrl,
+      page1Url,
+      markers: ["jscroll plugin", "/infinite_scroll/1 next link", "/infinite_scroll/2 pagination"],
+      note: "the-internet /infinite_scroll route scan — jScroll infinite pagination loads long DOM chunks via next-page links — Elemental Selenium infinite-scroll training oracle"
+    }
+  };
+};
+
+const theInternetJqueryuiMenuRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jqueryui\/menu(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const menuUrl = new URL("/jqueryui/menu", ctx.origin).toString();
+  const doc = await ctx.probe.get(menuUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasMenuHeading = /<h3>\s*JQueryUI\s*-\s*Menu\s*<\/h3>/i.test(doc.body);
+  const hasMenuWidget =
+    /<ul[^>]+id=['"]menu['"]/i.test(doc.body) &&
+    /ui-state-disabled/i.test(doc.body) &&
+    /Should not see this/i.test(doc.body);
+  const hasMenuInit = /\$\(\s*["']#menu["']\s*\)\.menu\(\)/i.test(doc.body);
+  const hasDownloadLinks =
+    /\/download\/jqueryui\/menu\/menu\.pdf/i.test(doc.body) &&
+    /\/download\/jqueryui\/menu\/menu\.csv/i.test(doc.body);
+  if (!hasMenuHeading || !hasMenuWidget || !hasMenuInit || !hasDownloadLinks) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      menuUrl,
+      markers: ["#menu widget", "ui-state-disabled hidden item", "menu.pdf/menu.csv downloads"],
+      note: "the-internet /jqueryui/menu route scan — JQuery UI nested menu with CSS-hidden disabled items and download submenu — Elemental Selenium menu interaction training oracle"
+    }
+  };
+};
+
+const theInternetTinymceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tinymce(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const tinymceUrl = new URL("/tinymce", ctx.origin).toString();
+  const doc = await ctx.probe.get(tinymceUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*An iFrame containing the TinyMCE WYSIWYG Editor\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasTinyScript = /cdn\.tiny\.cloud\/[^"']+\/tinymce/i.test(doc.body);
+  const hasTinyInit =
+    /tinymce\.init\s*\(/i.test(doc.body) && /selector\s*:\s*['"]textarea['"]/i.test(doc.body);
+  const hasTextarea = /<textarea[^>]*>Your content goes here\./i.test(doc.body);
+  if (!hasTinyScript || !hasTinyInit || !hasTextarea) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      tinymceUrl,
+      markers: ["cdn.tiny.cloud tinymce.min.js", "tinymce.init selector:textarea", "WYSIWYG textarea"],
+      note: "the-internet /tinymce route scan — TinyMCE WYSIWYG editor iframe bound to textarea — Elemental Selenium rich-text editor training oracle"
+    }
+  };
+};
+
 const pentestGroundDvwaWeakIdRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -44262,6 +44347,9 @@ export const RULES: Record<string, Rule> = {
   theInternetChallengingDomRouteLiveOracle,
   theInternetFramesRouteLiveOracle,
   theInternetHoversRouteLiveOracle,
+  theInternetInfiniteScrollRouteLiveOracle,
+  theInternetJqueryuiMenuRouteLiveOracle,
+  theInternetTinymceRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
