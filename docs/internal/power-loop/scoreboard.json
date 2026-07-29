@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T05:10:58.950Z",
+  "updated_at": "2026-07-29T05:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,24 +17,24 @@
   },
   "total_sites_scanned": 3351,
   "total_findings": 33974,
-  "critical_findings": 82,
+  "critical_findings": 85,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2263,
   "discovery_findings": 28050,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-29T05:10:58.950Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-29T05:16:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_status": "error (503 Heroku dyno unavailable)",
-      "oracle_findings": 14,
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 455,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,47 +50,39 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); reflexion-escalated-ssti present; secret-resend still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (13 findings); secret-resend still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 67,
-      "focus": "zerohealth API oracles queued + dvwu/ist-edu-bd lab routes + all-seeing-eye file-read demo",
-      "new_urls": [
-        "https://zerohealth.aliyu.dev/api/lab-results/1",
-        "https://zerohealth.aliyu.dev/api/patients",
-        "https://zerohealth.aliyu.dev/api/login",
-        "https://zerohealth.aliyu.dev/api/chatbot/chat",
-        "https://owaspbased-lessons.vercel.app/challenges/prompt-injection"
-      ],
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 19,
+      "focus": "pentest-ground DVWA exec/csp + RestFlaw eval route oracles shipped",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) after primary Heroku 503; SSTI slug present this pass",
-      "all-seeing-eye-six.vercel.app/: 7 findings — arbitrary file read /api/hello?path= oracle",
-      "ist-edu-bd.vercel.app/labs/ssrf|xss|idor|csrf: 9-10 findings each — route oracles + notices LFI fire",
-      "dvwu.vercel.app/labs/xss: 10 findings — dvwu-search-xss + notices-lfi route oracles fire",
-      "dvwu.vercel.app/api/search|notices: 5-6 findings — API route evidence; thinner than lab pages"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (13 findings) — no benchmark misses",
+      "pentest-ground.com:4280/vulnerabilities/exec: 7→8 findings — pentest-ground-dvwa-exec-cmdi-route-live-oracle shipped",
+      "pentest-ground.com:4280/vulnerabilities/csp: 7→8 findings — pentest-ground-dvwa-csp-bypass-route-live-oracle shipped",
+      "pentest-ground.com:9000/api/users: 2→3 findings — pentest-ground-restflaw-eval-code-injection-route-live-oracle shipped (HTTPS canonical probe origin)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "juice-shop.herokuapp.com primary oracle degraded (503) — relies on staging fallback",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zerohealth API oracles queued but not yet scanned (next queue drain)",
-      "dvwu.vercel.app/api/* thinner passes vs /labs/* route-specific oracles"
+      "pentest-ground.com:4280/vulnerabilities/sqli: DVWA DB broken on hosted instance — SQLi route oracle not portable",
+      "brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true: BFLA DELETE route oracle still absent (500 on probe)",
+      "ssrf.vulnlab.dev/blind + webhook + metadata-gcp/azure: queued route oracles not yet shipped"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 14,
+    "juice-shop-staging.herokuapp.com": 13,
+    "pentest-ground.com:4280/vulnerabilities/exec": 8,
+    "pentest-ground.com:4280/vulnerabilities/csp": 8,
+    "pentest-ground.com:9000/api/users": 3,
     "all-seeing-eye-six.vercel.app": 7,
-    "ist-edu-bd.vercel.app/labs/ssrf": 10,
-    "ist-edu-bd.vercel.app/labs/xss": 10,
-    "ist-edu-bd.vercel.app/labs/idor": 10,
-    "ist-edu-bd.vercel.app/labs/csrf": 9,
-    "dvwu.vercel.app/labs/xss": 10,
-    "dvwu.vercel.app/api/search": 6,
-    "dvwu.vercel.app/api/notices": 5
+    "brokencrystals.com/api/users/one/regular_user/photo": 57,
+    "dvwu.vercel.app/labs/csrf": 10,
+    "ist-edu-bd.vercel.app/labs/sqli": 10
   }
 }
