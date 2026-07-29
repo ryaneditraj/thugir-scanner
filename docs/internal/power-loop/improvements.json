@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-shifting-content-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /shifting_content h3 Shifting Content with menu/image/list sub-examples; /shifting_content/menu has .shift CSS and mode=random + pixel_shift query params; the-internet.herokuapp.com/shifting_content findings 2→3 (+the-internet-shifting-content-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-windows-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /windows h3 Opening a new window with target=_blank href=/windows/new; /windows/new returns h3 New Window; the-internet.herokuapp.com/windows findings 2→3 (+the-internet-windows-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /metadata-gcp/?url=http://169.254.169.254/computeMetadata/v1/ returns instance/ and project/ metadata tree; ssrf.vulnlab.dev/metadata-gcp findings 11→15 (+ssrf-vulnlab-metadata-gcp-live-oracle + route variant); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-download-secure-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /download_secure HTTP 401 unauth; admin:admin Basic auth lists Secure File Downloader with download_secure/* links; oracle now fetches first listed file (Test.txt) instead of missing sample.txt; the-internet.herokuapp.com/download_secure findings 2→3 (+the-internet-download-secure-route-live-oracle); benchmark juice-shop 15 findings 6/6 maintained"

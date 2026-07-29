@@ -1,281 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-28T21:13:19.489Z",
-      "url": "https://pwnshop.ctfsecurity.com/api/v1/invoices/1/download",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 30,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-prototype-pollution-evidence",
-          "title": "Client bundle documents prototype pollution via __proto__ merge",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-evidence",
-          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-ssti-oracle",
-          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-pwnshop-path-traversal-oracle",
-          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-debug-info-live-oracle",
-          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "pwnshop-events-audit-live-oracle",
-          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
-          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
-          "title": "Pwnshop forgot-password form enables email enumeration",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-track-idor-live-oracle",
-          "title": "Pwnshop order tracking IDOR live oracle (PWN-002)",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-product-search-sqli-live-oracle",
-          "title": "Pwnshop product search SQL injection live oracle (PWN-010)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "pwnshop-admin-login-sqli-live-oracle",
-          "title": "Pwnshop admin login SQL injection live oracle (PWN-009)",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "pwnshop-chat-prompt-injection-live-oracle",
-          "title": "Pwnshop chatbot prompt injection live oracle (PWN-031)",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "AI security"
-        },
-        {
-          "slug": "pwnshop-mass-assignment-admin-live-oracle",
-          "title": "Pwnshop self-assigned admin role live oracle (PWN-021)",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-open-redirect-register-live-oracle",
-          "title": "Pwnshop registration open redirect live oracle (PWN-017)",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
-          "title": "Pwnshop OTP verification lacks rate limiting (PWN-015)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-mail-inbox-idor-live-oracle",
-          "title": "Pwnshop PwnMail inbox IDOR live oracle (PWN-004)",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-avatar-svg-xss-live-oracle",
-          "title": "Pwnshop stored XSS via SVG avatar upload (PWN-012)",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "pwnshop-apply-coupon-live-oracle",
-          "title": "Pwnshop authenticated coupon application live oracle (PWN-016)",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Business logic"
-        },
-        {
-          "slug": "pwnshop-coupon-category-bypass-live-oracle",
-          "title": "Pwnshop coupon category restriction bypass live oracle (PWN-016)",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Business logic"
-        },
-        {
-          "slug": "pwnshop-seller-preview-ssti-live-oracle",
-          "title": "Pwnshop seller preview SSTI live oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Injection"
-        },
-        {
-          "slug": "pwnshop-download-path-traversal-route-live-oracle",
-          "title": "Pwnshop download path traversal route live oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 632,
-      "status": "ok",
-      "scanned_at": "2026-07-28T21:13:19.489Z"
-    },
-    {
-      "run_id": "2026-07-28T21:14:13.382Z",
-      "url": "https://trojan-trap-seven.vercel.app/",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 472,
-      "status": "ok",
-      "scanned_at": "2026-07-28T21:14:13.382Z"
-    },
-    {
       "run_id": "2026-07-28T21:14:18.026Z",
       "url": "https://untrusted-python.vercel.app/",
       "auth": "public_demo",
@@ -13229,7 +12954,7 @@
       "scanned_at": "2026-07-29T22:10:30.000Z"
     },
     {
-      "run_id": "2026-07-29T23:02:59.150Z",
+      "run_id": "2026-07-29T23:04:28.865Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -13361,10 +13086,10 @@
       "pages_crawled": 6,
       "probes_run": 463,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:02:59.150Z"
+      "scanned_at": "2026-07-29T23:04:28.865Z"
     },
     {
-      "run_id": "2026-07-29T23:04:36.414Z",
+      "run_id": "2026-07-29T23:05:24.524Z",
       "url": "https://the-internet.herokuapp.com/floating_menu",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -13397,10 +13122,10 @@
       "pages_crawled": 1,
       "probes_run": 561,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:04:36.414Z"
+      "scanned_at": "2026-07-29T23:05:24.524Z"
     },
     {
-      "run_id": "2026-07-29T23:04:47.243Z",
+      "run_id": "2026-07-29T23:05:35.193Z",
       "url": "https://the-internet.herokuapp.com/download_secure",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -13433,15 +13158,15 @@
       "pages_crawled": 1,
       "probes_run": 544,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:04:47.243Z"
+      "scanned_at": "2026-07-29T23:05:35.193Z"
     },
     {
-      "run_id": "2026-07-29T23:04:58.992Z",
+      "run_id": "2026-07-29T23:05:44.353Z",
       "url": "https://the-internet.herokuapp.com/shifting_content",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 2,
+      "finding_count": 3,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -13455,22 +13180,29 @@
           "title": "Cookies set without the Secure flag",
           "severity": "medium",
           "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "the-internet-shifting-content-route-live-oracle",
+          "title": "the-internet shifting content route live oracle",
+          "severity": "info",
+          "confidence": 0.9,
           "category": "Security misconfiguration"
         }
       ],
       "ai_findings_added": 0,
       "pages_crawled": 4,
-      "probes_run": 561,
+      "probes_run": 563,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:04:58.992Z"
+      "scanned_at": "2026-07-29T23:05:44.353Z"
     },
     {
-      "run_id": "2026-07-29T23:05:09.079Z",
+      "run_id": "2026-07-29T23:05:54.247Z",
       "url": "https://the-internet.herokuapp.com/windows",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 2,
+      "finding_count": 3,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -13485,16 +13217,23 @@
           "severity": "medium",
           "confidence": 0.85,
           "category": "Security misconfiguration"
+        },
+        {
+          "slug": "the-internet-windows-route-live-oracle",
+          "title": "the-internet windows route live oracle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Security misconfiguration"
         }
       ],
       "ai_findings_added": 0,
       "pages_crawled": 2,
-      "probes_run": 559,
+      "probes_run": 561,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:05:09.079Z"
+      "scanned_at": "2026-07-29T23:05:54.247Z"
     },
     {
-      "run_id": "2026-07-29T23:05:20.033Z",
+      "run_id": "2026-07-29T23:06:04.428Z",
       "url": "https://the-internet.herokuapp.com/tables",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -13527,10 +13266,10 @@
       "pages_crawled": 1,
       "probes_run": 561,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:05:20.033Z"
+      "scanned_at": "2026-07-29T23:06:04.428Z"
     },
     {
-      "run_id": "2026-07-29T23:05:30.832Z",
+      "run_id": "2026-07-29T23:06:15.127Z",
       "url": "https://the-internet.herokuapp.com/javascript_error",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -13556,10 +13295,10 @@
       "pages_crawled": 1,
       "probes_run": 541,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:05:30.832Z"
+      "scanned_at": "2026-07-29T23:06:15.127Z"
     },
     {
-      "run_id": "2026-07-29T23:05:39.808Z",
+      "run_id": "2026-07-29T23:06:24.266Z",
       "url": "https://the-internet.herokuapp.com/disappearing_elements",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -13582,13 +13321,13 @@
         }
       ],
       "ai_findings_added": 0,
-      "pages_crawled": 5,
-      "probes_run": 562,
+      "pages_crawled": 6,
+      "probes_run": 563,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:05:39.808Z"
+      "scanned_at": "2026-07-29T23:06:24.266Z"
     },
     {
-      "run_id": "2026-07-29T23:05:50.059Z",
+      "run_id": "2026-07-29T23:06:34.356Z",
       "url": "https://hack-this-site-eta.vercel.app/api-labs/graphql.html",
       "auth": "public_demo",
       "scan_kind": "discovery",
@@ -13929,7 +13668,100 @@
       "pages_crawled": 6,
       "probes_run": 522,
       "status": "ok",
-      "scanned_at": "2026-07-29T23:05:50.059Z"
+      "scanned_at": "2026-07-29T23:06:34.356Z"
+    },
+    {
+      "run_id": "2026-07-29T23:06:42.605Z",
+      "url": "https://api.graphqlbook.org/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.84,
+          "category": "AI security"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 475,
+      "status": "ok",
+      "scanned_at": "2026-07-29T23:06:42.605Z"
+    },
+    {
+      "run_id": "2026-07-29T23:07:06.043Z",
+      "url": "https://vulnerable-graphql-demo.railway.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 1,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 540,
+      "status": "ok",
+      "scanned_at": "2026-07-29T23:07:06.043Z"
     }
   ],
   "teacher_delta_runs": [
@@ -14010,32 +13842,6 @@
       },
       "notes": "No teacher tools available. 22 UTC engine run: primary juice-shop.herokuapp.com 6/6 (15 findings); shipped download_secure oracle fix + floating_menu/tables route oracles; the-internet download_secure/floating_menu/tables 2→3 findings each.",
       "scanned_at": "2026-07-29T22:10:30.000Z"
-    },
-    {
-      "run_id": "2026-07-29T23:06:11.818Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 17 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
-      "teacher_delta": [],
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      },
-      "notes": "No teacher tools available. 23 UTC run: primary juice-shop.herokuapp.com 6/6 (17 findings, +2 vs prior); reflexion-escalated-ssti + jwt-alg-none + chatbot oracles; secret-resend slug still absent. Discovery: +5 queue URLs (subdirectories, notification_message, abtest, demo juice-shop track-order/ftp); drained 8 pending URLs → 64 discovery findings (the-internet floating_menu/download_secure/tables 3 each; hack-this-site graphql lab 47 with vulnlab + graphql oracles).",
-      "scanned_at": "2026-07-29T23:06:11.818Z"
     }
   ]
 }
