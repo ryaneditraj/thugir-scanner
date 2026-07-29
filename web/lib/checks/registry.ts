@@ -33087,12 +33087,12 @@ function isDvgaLiveHost(ctx: RuleContext): boolean {
     try {
       const host = new URL(raw).hostname.toLowerCase();
       return (
-        /^(?:www\.)?dvga\.tools\.escape\.tech$/i.test(host) ||
+        /^(?:www\.)?dvga2?\.tools\.escape\.tech$/i.test(host) ||
         /xplat-demo\.threatx\.io/i.test(host) ||
         /pentest-ground\.com/i.test(host)
       );
     } catch {
-      return /dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(raw);
+      return /dvga2?\.tools\.escape\.tech|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(raw);
     }
   });
 }
@@ -33104,6 +33104,7 @@ function dvgaCanonicalOrigin(ctx: RuleContext): string {
       const u = new URL(raw);
       const host = u.hostname.toLowerCase();
       if (/^(?:www\.)?dvga\.tools\.escape\.tech$/i.test(host)) return "https://dvga.tools.escape.tech";
+      if (/^(?:www\.)?dvga2\.tools\.escape\.tech$/i.test(host)) return "https://dvga2.tools.escape.tech";
       if (/xplat-demo\.threatx\.io|pentest-ground\.com/i.test(host)) {
         u.protocol = "https:";
         return u.origin;
@@ -33157,6 +33158,98 @@ const dvgaRouteLiveOracle: Rule = async (ctx) => {
       markers: markers.slice(0, 3),
       snippet: gqlDoc.body.slice(0, 120).trim(),
       note: "DVGA live host route scan — GraphQL introspection enabled and Damn Vulnerable GraphQL Application training sidebar confirmed via home re-fetch"
+    }
+  };
+};
+
+const dvgaGraphqlAuditLogLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ audits { id gqloperation gqlquery } }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"audits"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  if (!/"gqlquery"\s*:\s*"/.test(doc.body)) return NEGATIVE;
+  if (!/mutation|query\s*\{/i.test(doc.body)) return NEGATIVE;
+  const sampleMatch = doc.body.match(/"gqlquery"\s*:\s*"([^"]{12,120})"/);
+  return {
+    fired: true,
+    confidence: sampleMatch ? 0.93 : 0.9,
+    evidence: {
+      url: gqlUrl,
+      snippet: sampleMatch ? sampleMatch[0].slice(0, 160) : doc.body.slice(0, 160).trim(),
+      note: "DVGA POST /graphql { audits { gqlquery } } returns unauthenticated GraphQL operation audit logs — information disclosure oracle"
+    }
+  };
+};
+
+const dvgaGraphqlAuditRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:graphql|audit)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaGraphqlAuditLogLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /graphql or /audit route scan — unauthenticated audits query returns stored GraphQL operation logs"
+    }
+  };
+};
+
+const dvgaGraphqlBatchingLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const batchBody = JSON.stringify([
+    { query: "{ pastes(public: true) { id } }" },
+    { query: "{ pastes(public: true) { id } }" }
+  ]);
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: batchBody,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!doc.body.trimStart().startsWith("[")) return NEGATIVE;
+  const batchHits = [...doc.body.matchAll(/"data"\s*:\s*\{\s*"pastes"/g)];
+  if (batchHits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: gqlUrl,
+      batchResponses: batchHits.length,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "DVGA POST /graphql accepts JSON array batch queries and returns multiple data objects — GraphQL batching / rate-limit bypass oracle"
+    }
+  };
+};
+
+const dvgaGraphqlBatchingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaGraphqlBatchingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /graphql route scan — JSON array batching returns multiple independent query results without auth"
     }
   };
 };
@@ -42884,6 +42977,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreAuthTotpBypassLiveOracle,
   duckStoreAuthTotpBypassRouteLiveOracle,
   dvgaRouteLiveOracle,
+  dvgaGraphqlAuditLogLiveOracle,
+  dvgaGraphqlAuditRouteLiveOracle,
+  dvgaGraphqlBatchingLiveOracle,
+  dvgaGraphqlBatchingRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
   ginAndJuiceBlogPostOpenRedirectLiveOracle,
