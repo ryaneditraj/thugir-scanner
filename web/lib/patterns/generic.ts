@@ -24262,6 +24262,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-infinite-scroll-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "info",
+    title: "the-internet infinite scroll route live oracle",
+    description:
+      "When scanning /infinite_scroll, jScroll loads paginated /infinite_scroll/N chunks with next-page links and long DOM content — Elemental Selenium infinite-scroll training route oracle.",
+    impactOneline:
+      "Infinite-scroll pagination can hide content from shallow crawlers while exposing large attack surfaces to deep DOM scraping.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetInfiniteScrollRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — paginate with stable cursors and rate limits in production apps.",
+      steps: [
+        "Expose paginated content via explicit API endpoints with auth checks.",
+        "Rate-limit scroll-triggered fetches to prevent scraping abuse.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /infinite_scroll route uses jScroll pagination. Show secure infinite-scroll API design patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-jqueryui-menu-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "info",
+    title: "the-internet JQuery UI menu route live oracle",
+    description:
+      "When scanning /jqueryui/menu, nested #menu widget hides disabled items via JQuery UI CSS and exposes download submenu links — Elemental Selenium menu interaction training route oracle.",
+    impactOneline:
+      "JQuery UI menus can hide actionable DOM nodes from static HTML while remaining reachable via synthetic events.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetJqueryuiMenuRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — do not rely on CSS-only hiding for sensitive menu actions.",
+      steps: [
+        "Enforce authorization server-side for every menu action.",
+        "Test nested menu widgets with hover and keyboard automation.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /jqueryui/menu route uses nested JQuery UI menus with hidden disabled items. Show secure menu widget testing patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-tinymce-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "info",
+    title: "the-internet TinyMCE WYSIWYG route live oracle",
+    description:
+      "When scanning /tinymce, TinyMCE loads from cdn.tiny.cloud and binds tinymce.init to a textarea WYSIWYG editor — Elemental Selenium rich-text editor training route oracle.",
+    impactOneline:
+      "WYSIWYG editors can introduce stored XSS when rich HTML is accepted without server-side sanitization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetTinymceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — sanitize rich HTML server-side before storage.",
+      steps: [
+        "Use an allowlist HTML sanitizer on submitted editor content.",
+        "Serve user-authored HTML from a separate origin without script execution.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /tinymce route embeds TinyMCE on a textarea. Show WYSIWYG sanitization and CSP patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
