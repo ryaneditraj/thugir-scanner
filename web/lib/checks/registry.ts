@@ -31960,6 +31960,69 @@ const theInternetTablesRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetShiftingContentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shifting_content(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const hubUrl = new URL("/shifting_content", ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Shifting Content\s*<\/h3>/i.test(hubDoc.body)) return NEGATIVE;
+  const hasExamples =
+    /\/shifting_content\/menu/i.test(hubDoc.body) &&
+    /\/shifting_content\/image/i.test(hubDoc.body) &&
+    /\/shifting_content\/list/i.test(hubDoc.body);
+  if (!hasExamples) return NEGATIVE;
+  const menuUrl = new URL("/shifting_content/menu", ctx.origin).toString();
+  const menuDoc = await ctx.probe.get(menuUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (menuDoc.status < 200 || menuDoc.status >= 400) return NEGATIVE;
+  const hasShiftMenu =
+    /<h3>\s*Shifting Content:\s*Menu Element\s*<\/h3>/i.test(menuDoc.body) &&
+    /\.shift\b/i.test(menuDoc.body) &&
+    /mode=random/i.test(menuDoc.body) &&
+    /pixel_shift=/i.test(menuDoc.body);
+  if (!hasShiftMenu) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      menuUrl,
+      markers: ["shifting_content hub links", ".shift menu CSS", "mode=random pixel_shift params"],
+      note: "the-internet /shifting_content route scan — menu/image/list examples with random pixel-shift navigation — Elemental Selenium shifting content training oracle"
+    }
+  };
+};
+
+const theInternetWindowsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/windows(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const windowsUrl = new URL("/windows", ctx.origin).toString();
+  const doc = await ctx.probe.get(windowsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Opening a new window\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasNewWindowLink =
+    /href=['"]\/windows\/new['"]/i.test(doc.body) && /target=['"]_blank['"]/i.test(doc.body);
+  if (!hasNewWindowLink) return NEGATIVE;
+  const newUrl = new URL("/windows/new", ctx.origin).toString();
+  const newDoc = await ctx.probe.get(newUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (newDoc.status < 200 || newDoc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*New Window\s*<\/h3>/i.test(newDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      windowsUrl,
+      newUrl,
+      markers: ["target=_blank /windows/new", "New Window child page"],
+      note: "the-internet /windows route scan — target=_blank link opens /windows/new child page — Elemental Selenium window-handle training oracle"
+    }
+  };
+};
+
 const theInternetNestedFramesRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -35749,6 +35812,41 @@ const ssrfVulnlabMetadataAwsRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/metadata(?:-aws)?\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ssrfVulnlabMetadataAwsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabMetadataGcpLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/metadata-gcp/", origin);
+  probeUrl.searchParams.set("url", "http://169.254.169.254/computeMetadata/v1/");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk = /^instance\//m.test(body) && /^project\//m.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /metadata-gcp/?url=http://169.254.169.254/computeMetadata/v1/ returns GCP metadata tree (instance/, project/) — cloud metadata SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabMetadataGcpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/metadata-gcp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabMetadataGcpLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -44585,6 +44683,8 @@ export const RULES: Record<string, Rule> = {
   theInternetAddRemoveElementsRouteLiveOracle,
   theInternetFloatingMenuRouteLiveOracle,
   theInternetTablesRouteLiveOracle,
+  theInternetShiftingContentRouteLiveOracle,
+  theInternetWindowsRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
@@ -44670,10 +44770,12 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA10SsrfEvidence,
   ssrfVulnlabBasicLiveOracle,
   ssrfVulnlabMetadataAwsLiveOracle,
+  ssrfVulnlabMetadataGcpLiveOracle,
   ssrfVulnlabBlocklistBypassLiveOracle,
   ssrfVulnlabRedirectLiveOracle,
   ssrfVulnlabBasicRouteLiveOracle,
   ssrfVulnlabMetadataAwsRouteLiveOracle,
+  ssrfVulnlabMetadataGcpRouteLiveOracle,
   ssrfVulnlabBlocklistRouteLiveOracle,
   ssrfVulnlabRedirectRouteLiveOracle,
   ssrfVulnlabAllowlistBypassLiveOracle,
