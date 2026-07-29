@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T22:10:00.000Z",
+  "updated_at": "2026-07-29T22:10:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2723,
-  "total_findings": 26523,
-  "critical_findings": 55,
+  "total_sites_scanned": 2842,
+  "total_findings": 27253,
+  "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22487,
-  "improvements_shipped": 1164,
-  "last_run": "2026-07-29T22:10:00.000Z",
+  "discovery_urls_added": 2026,
+  "discovery_findings": 23198,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-29T22:10:30.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -48,29 +48,32 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (15 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (15 findings on primary); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 0,
       "findings": 0,
-      "focus": "the-internet download_secure + floating_menu + tables route oracle fixes",
+      "focus": "the-internet download_secure oracle fix + floating_menu/tables route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (15 findings) — no benchmark misses",
       "the-internet.herokuapp.com/download_secure: 2→3 findings — download-secure oracle fixed (dynamic file from listing; sample.txt was 404)",
       "the-internet.herokuapp.com/floating_menu: 2→3 findings — floating-menu route oracle shipped (stickyfloat.js on #menu)",
-      "the-internet.herokuapp.com/tables: 2→3 findings — tables route oracle shipped (jquery.tablesorter on #table1/#table2)"
+      "the-internet.herokuapp.com/tables: 2→3 findings — tables route oracle shipped (jquery.tablesorter on #table1/#table2)",
+      "the-internet.herokuapp.com/basic_auth: 3 findings — basic-auth route oracle fires (admin:admin 401→200)",
+      "the-internet.herokuapp.com/digest_auth: 1-finding thin pass — digest-auth route oracle absent",
+      "the-internet.herokuapp.com/download: 2-finding pass — file-download path-traversal oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ssrf.vulnlab.dev/*: oracles exist but prior discovery runs showed thin passes — re-validate on next queue drain",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle requires OTP session",
-      "the-internet.herokuapp.com/shifting_content + windows: thin 2-finding passes without route-specific oracles"
+      "the-internet.herokuapp.com/digest_auth: digest-authentication route live oracle absent",
+      "the-internet.herokuapp.com/download: file-download path-traversal oracle absent",
+      "the-internet.herokuapp.com/shifting_content + windows: thin 2-finding passes without route-specific oracles",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle requires authenticated OTP session"
     ]
   },
   "discovery_highlights": {
@@ -78,6 +81,7 @@
     "the-internet.herokuapp.com/download_secure": 3,
     "the-internet.herokuapp.com/floating_menu": 3,
     "the-internet.herokuapp.com/tables": 3,
+    "the-internet.herokuapp.com/basic_auth": 3,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
     "brokencrystals.com/userlogin?logobgcolor=red": 52
