@@ -24080,6 +24080,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-redirector-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet link redirector route live oracle",
+    description:
+      "When scanning /redirector, the page exposes a #redirect anchor linking to /redirect for link-based redirection training — Elemental Selenium redirection route oracle.",
+    impactOneline:
+      "Link-based redirect labs document how browsers follow anchors versus raw HTTP redirect status codes in automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetRedirectorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — distinguish link navigation from HTTP redirects in E2E tests.",
+      steps: [
+        "Click redirect links explicitly when testing navigation flows.",
+        "Validate redirect destinations against an allowlist in production apps.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /redirector route uses a link anchor to trigger redirection. Show secure redirect handling patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-status-codes-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet HTTP status codes route live oracle",
+    description:
+      "When scanning /status_codes, the hub lists 200/301/404/500 links and /status_codes/200 returns HTTP 200 — Elemental Selenium status-code training route oracle.",
+    impactOneline:
+      "Status-code enumeration labs document how applications surface HTTP response semantics to users and automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetStatusCodesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — assert on status codes explicitly in automation.",
+      steps: [
+        "Handle non-2xx responses explicitly in API clients and E2E tests.",
+        "Avoid leaking internal error pages with stack traces to users.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /status_codes route enumerates HTTP status responses. Show robust status-code handling in clients.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-broken-images-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "info",
+    title: "the-internet broken images route live oracle",
+    description:
+      "When scanning /broken_images, img tags reference relative asdf.jpg and hjkl.jpg paths that 404 — Elemental Selenium broken-image training route oracle.",
+    impactOneline:
+      "Broken image paths can leak directory layout and reveal missing asset validation in production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetBrokenImagesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — validate image assets exist before rendering.",
+      steps: [
+        "Serve images from versioned CDN paths with existence checks.",
+        "Avoid user-controlled relative paths in img src attributes.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /broken_images route serves img tags with missing relative paths. Show secure static asset handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",

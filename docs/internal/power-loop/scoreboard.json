@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-07-29T17:08:00.000Z",
+=======
+  "updated_at": "2026-07-29T17:10:00.000Z",
+>>>>>>> 47851c3e (engine: the-internet redirector, status_codes, broken_images route oracles)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 2793,
   "total_findings": 26988,
   "critical_findings": 56,
@@ -24,6 +29,17 @@
   "discovery_findings": 23019,
   "improvements_shipped": 1155,
   "last_run": "2026-07-29T17:08:00.000Z",
+=======
+  "total_sites_scanned": 2785,
+  "total_findings": 26922,
+  "critical_findings": 56,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1996,
+  "discovery_findings": 22953,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-29T17:10:00.000Z",
+>>>>>>> 47851c3e (engine: the-internet redirector, status_codes, broken_images route oracles)
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
@@ -52,6 +68,7 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 69,
@@ -64,20 +81,41 @@
       "the-internet.herokuapp.com/upload: 3 findings — the-internet-file-upload-route-live-oracle fires",
       "the-internet.herokuapp.com/ab_testing/frames/hovers/key_presses: thin 2-finding misconfig passes — route-specific oracles absent",
       "the-internet.herokuapp.com/redirector/challenging_dom: thin 2-finding passes — open-redirect and DOM oracles still absent"
+=======
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 9,
+      "focus": "the-internet redirector + status_codes + broken_images route oracles",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
+      "the-internet.herokuapp.com/redirector: 2→3 findings — link-based redirect training oracle shipped",
+      "the-internet.herokuapp.com/status_codes: 2→3 findings — HTTP status-code enumeration oracle shipped",
+      "the-internet.herokuapp.com/broken_images: 2→3 findings — broken relative image path oracle shipped"
+>>>>>>> 47851c3e (engine: the-internet redirector, status_codes, broken_images route oracles)
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+<<<<<<< HEAD
       "brokencrystals.com/api/products/latest: business constraint bypass via ?limit= oracle absent (54-finding hub from cross-path probes only)",
       "the-internet ab_testing: A/B cookie manipulation oracle absent",
       "the-internet frames: nested-frame clickjacking oracle absent",
       "the-internet hovers: tooltip XSS sink oracle absent",
       "the-internet key_presses: keyboard-event DOM injection oracle absent",
       "the-internet notification_messages/entry_ad: queued but not drained this run — flash-message XSS and clickjacking oracles pending"
+=======
+      "pentest-ground auth_bypass module 404 on current DVWA instance",
+      "the-internet challenging_dom/dynamic_controls/context_menu: DOM manipulation oracles absent",
+      "the-internet notification_message/entry_ad: flash-message and clickjacking oracles absent",
+      "the-internet add_remove_elements/notification_messages/abuse: routes 404 or thin hubs"
+>>>>>>> 47851c3e (engine: the-internet redirector, status_codes, broken_images route oracles)
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+<<<<<<< HEAD
     "brokencrystals.com/api/products/latest?limit=100": 54,
     "brokencrystals.com/api/file?path=/etc/hosts": 55,
     "brokencrystals.com/api/testimonials/count?query=test": 37,
@@ -89,5 +127,17 @@
     "the-internet.herokuapp.com/key_presses": 2,
     "the-internet.herokuapp.com/redirector": 2,
     "the-internet.herokuapp.com/challenging_dom": 2
+=======
+    "the-internet.herokuapp.com/redirector": 3,
+    "the-internet.herokuapp.com/status_codes": 3,
+    "the-internet.herokuapp.com/broken_images": 3,
+    "the-internet.herokuapp.com/redirect": 3,
+    "the-internet.herokuapp.com/upload": 3,
+    "the-internet.herokuapp.com/shadowdom": 3,
+    "the-internet.herokuapp.com/challenging_dom": 2,
+    "the-internet.herokuapp.com/dynamic_controls": 2,
+    "brokencrystals.com/api/file?path=/etc/hosts": 55,
+    "pentest-ground.com:4280/vulnerabilities/javascript": 8
+>>>>>>> 47851c3e (engine: the-internet redirector, status_codes, broken_images route oracles)
   }
 }
