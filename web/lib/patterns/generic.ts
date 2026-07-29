@@ -23924,6 +23924,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-dvwa-javascript-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pentest-Ground DVWA JavaScript attacks route live oracle",
+    description:
+      "When scanning /vulnerabilities/javascript/, the page validates phrase via client-side md5(rot13(phrase)) token generation — Pentest-Ground DVWA JavaScript attacks route oracle.",
+    impactOneline:
+      "Client-side-only validation on DVWA phrase input lets attackers bypass checks by forging the token field.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaJavascriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — never rely on client-side validation for security decisions.",
+      steps: [
+        "Validate all security-sensitive input server-side.",
+        "Treat client-side tokens as hints only, not authorization.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/javascript/ route validates phrase with client-side md5(rot13(phrase)). Show server-side validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-dvwa-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pentest-Ground DVWA open redirect route live oracle",
+    description:
+      "When scanning /vulnerabilities/open_redirect/, GET source/low.php?redirect= returns HTTP 302 Location to attacker-controlled URLs — Pentest-Ground DVWA open redirect route oracle.",
+    impactOneline:
+      "Unvalidated redirect parameters on DVWA let attackers phish users via trusted lab domains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — allow-list redirect destinations.",
+      steps: [
+        "Validate redirect targets against same-origin or trusted host allowlists.",
+        "Reject absolute URLs to external domains in redirect parameters.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/open_redirect/ route reflects redirect= into a 302 Location header. Show open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-shadowdom-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet shadow DOM route live oracle",
+    description:
+      "When scanning /shadowdom, customElements.define('my-paragraph') attaches an open shadow root with slotted template content — Elemental Selenium shadow DOM training route oracle.",
+    impactOneline:
+      "Shadow DOM encapsulation labs document how slotted content and open mode affect automation and XSS boundaries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetShadowdomRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — understand shadow DOM boundaries when writing E2E selectors.",
+      steps: [
+        "Use shadow-piercing selectors or JavaScript execution for shadow-root content in tests.",
+        "Prefer closed shadow roots in production components when encapsulation matters.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /shadowdom route documents custom elements with open shadow roots. Show robust shadow DOM automation strategies.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
