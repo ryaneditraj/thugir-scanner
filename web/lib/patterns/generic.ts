@@ -17632,6 +17632,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-otp-bruteforce-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "crAPI OTP brute-force live oracle",
+    description:
+      "Legacy POST /identity/api/auth/v2/check-otp accepts 12+ rapid invalid OTP guesses without HTTP 503 lockout while v3/check-otp rate-limits after ~10 attempts — broken authentication via deprecated API version.",
+    impactOneline:
+      "Unprotected legacy OTP endpoints let attackers brute-force 4-digit password-reset codes and take over accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiOtpBruteforceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — disable legacy OTP endpoints and enforce consistent rate limiting.",
+      steps: [
+        "Remove or disable deprecated /v2/check-otp after migrating clients to v3.",
+        "Rate-limit OTP validation after 5–10 failed attempts per email.",
+        "Use longer OTP codes and exponential backoff on failures."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI v2/check-otp endpoint lacks OTP brute-force protections that v3 enforces. Show rate-limiting and legacy API deprecation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-check-otp-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "crAPI check-otp route live oracle",
+    description:
+      "When scanning /identity/api/auth/v3/check-otp, legacy v2/check-otp accepts unlimited OTP guesses while v3 rate-limits — route-specific crAPI OTP brute-force oracle.",
+    impactOneline:
+      "Route scans on OTP verification endpoints should confirm rate limiting blocks brute-force of 4-digit codes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiCheckOtpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — disable legacy OTP endpoints and enforce consistent rate limiting.",
+      steps: [
+        "Remove or disable deprecated /v2/check-otp after migrating clients to v3.",
+        "Rate-limit OTP validation after 5–10 failed attempts per email.",
+        "Use longer OTP codes and exponential backoff on failures."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/auth/v3/check-otp route scan confirms legacy v2 OTP brute-force bypass. Show API version deprecation and rate-limit remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-shop-orders-bfla-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -19006,6 +19058,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /benefits route scan documents NoSQL injection on allocations threshold filters. Show MongoDB input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-signup-open-registration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "NodeGoat signup open registration live oracle",
+    description:
+      "POST /signup registers users without authentication — MongoDB WriteError E11000 duplicate _id or redirect confirms the open registration path on NodeGoat training hosts.",
+    impactOneline:
+      "Unauthenticated signup endpoints let attackers mass-register accounts on intentionally vulnerable training apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatSignupOpenRegistrationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — require admin approval or email verification for production signups.",
+      steps: [
+        "Gate registration behind invite codes or admin approval.",
+        "Use unpredictable MongoDB _id generation instead of sequential counters.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat /signup endpoint accepts unauthenticated registrations. Show signup hardening for Node.js training apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-signup-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "NodeGoat signup route live oracle",
+    description:
+      "When scanning /register or /signup, POST /signup processes unauthenticated account creation — route-specific NodeGoat open registration oracle.",
+    impactOneline:
+      "Route scans on registration pages should confirm signup is gated or rate-limited.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatSignupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — require admin approval or email verification for production signups.",
+      steps: [
+        "Gate registration behind invite codes or admin approval.",
+        "Use unpredictable MongoDB _id generation instead of sequential counters.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /register route scan confirms NodeGoat open signup. Show route-specific registration hardening.",
     version: 1,
     enabled: true
   },
