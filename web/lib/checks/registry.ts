@@ -30880,6 +30880,35 @@ const pentestGroundDvwaCspBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/sqli\/?/i.test(pageUrl)) return NEGATIVE;
+  const sqliUrl = new URL("/vulnerabilities/sqli/", ctx.origin).toString();
+  const doc = await ctx.probe.get(sqliUrl, {
+    method: "POST",
+    body: "id=1' OR '1'='1&Submit=Submit",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/1' OR '1'='1/i.test(doc.body)) return NEGATIVE;
+  const userRows = (doc.body.match(/First name:/gi) || []).length;
+  if (userRows < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      sqliUrl,
+      userRows,
+      snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — SQL injection route oracle"
+    }
+  };
+};
+
 const pentestGroundRestflawEvalCodeInjectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -39061,6 +39090,11 @@ function isCrapiShopOrdersRoute(ctx: RuleContext): boolean {
   return /\/shop\/orders\b/i.test(pageUrl);
 }
 
+function isCrapiAuthRoute(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /\/identity\/api\/auth\//i.test(pageUrl);
+}
+
 function jwtSubjectEmail(jwt: string): string | null {
   try {
     const seg = jwt.split(".")[1];
@@ -39120,7 +39154,7 @@ async function probeCrapiShopOrdersIdBola(
 
 const crapiMechanicReportBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
-  if (isCrapiShopOrdersRoute(ctx)) return NEGATIVE;
+  if (isCrapiShopOrdersRoute(ctx) || isCrapiAuthRoute(ctx)) return NEGATIVE;
   const reportUrl = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
   reportUrl.searchParams.set("report_id", "1");
   const doc = await ctx.probe.get(reportUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
@@ -39216,7 +39250,7 @@ async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
 
 const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
-  if (isCrapiShopOrdersRoute(ctx)) return NEGATIVE;
+  if (isCrapiShopOrdersRoute(ctx) || isCrapiAuthRoute(ctx)) return NEGATIVE;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
   const authHeaders = { Authorization: `Bearer ${jwt}` };
@@ -39294,6 +39328,53 @@ const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "crAPI /identity/api/v2/vehicle/vehicles route scan — community vehicleid leak + cross-user location read confirms BOLA (API1)"
+    }
+  };
+};
+
+const crapiSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
+  const uniq = Date.now();
+  const doc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      email: `thugir_signup_${uniq}@test.example`,
+      password: "ThugirProbe123!",
+      name: "thugir_probe",
+      number: String(uniq),
+      mechanic_code: "TRUGIR"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/registered successfully|User registered/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      signupUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "crAPI POST /identity/api/auth/signup creates accounts without prior authentication or CAPTCHA — broken authentication / open registration oracle"
+    }
+  };
+};
+
+const crapiSignupRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/auth\/signup/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiSignupOpenRegistrationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /identity/api/auth/signup route scan — unauthenticated POST registers a new user without CAPTCHA — open registration oracle"
     }
   };
 };
@@ -41230,13 +41311,17 @@ const istEduNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/newsletter\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:labs\/csrf|newsletter)\b/i.test(pathname)) return NEGATIVE;
   const result = await probeNewsletterCrlfInjection(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
     fired: true,
     confidence: result.confidence,
-    evidence: { ...result.evidence, scannedUrl: pageUrl }
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /labs/csrf or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
+    }
   };
 };
 
@@ -42940,6 +43025,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePentestGroundHubEvidence,
   pentestGroundDvwaExecCmdiRouteLiveOracle,
   pentestGroundDvwaCspBypassRouteLiveOracle,
+  pentestGroundDvwaSqliRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
@@ -43129,6 +43215,8 @@ export const RULES: Record<string, Rule> = {
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
   crapiVehicleRouteLiveOracle,
+  crapiSignupOpenRegistrationLiveOracle,
+  crapiSignupRouteLiveOracle,
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
   crapi2ShopOrdersIdBolaRouteLiveOracle,
