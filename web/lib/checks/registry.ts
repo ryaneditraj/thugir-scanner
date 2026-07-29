@@ -31435,6 +31435,31 @@ const theInternetForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetShadowdomRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shadowdom(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const shadowUrl = new URL("/shadowdom", ctx.origin).toString();
+  const doc = await ctx.probe.get(shadowUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasCustomElement = /customElements\.define\s*\(\s*['"]my-paragraph['"]/i.test(doc.body);
+  const hasShadowRoot = /attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}\s*\)/i.test(doc.body);
+  const hasTemplateSlot =
+    /<template[^>]*id=["']my-paragraph["']/i.test(doc.body) && /slot=["']my-text["']/i.test(doc.body);
+  if (!hasCustomElement || !hasShadowRoot || !hasTemplateSlot) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      shadowUrl,
+      markers: ["customElements.define", "attachShadow({mode:'open'})", "slot=my-text"],
+      snippet: doc.body.match(/customElements\.define[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "the-internet /shadowdom route scan — custom element with open shadow root and slotted template content — Elemental Selenium shadow DOM training oracle"
+    }
+  };
+};
+
 const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -31515,6 +31540,66 @@ const pentestGroundDvwaWeakIdRouteLiveOracle: Rule = async (ctx) => {
       firstSession: sess1,
       secondSession: sess2,
       note: "Pentest-Ground DVWA POST /vulnerabilities/weak_id/ issues sequential dvwaSession cookies (1, 2, …) — weak session ID route oracle; accepts /weak_session_ids discovery alias"
+    }
+  };
+};
+
+const pentestGroundDvwaJavascriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/javascript\/?/i.test(pageUrl)) return NEGATIVE;
+  const jsUrl = new URL("/vulnerabilities/javascript/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(jsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasSuccessPrompt = /Submit the word ["']success["'] to win/i.test(doc.body);
+  const hasPhraseForm =
+    /<form[^>]*name=["']low_js["']/i.test(doc.body) &&
+    /name=["']phrase["']/i.test(doc.body) &&
+    /name=["']token["']/i.test(doc.body);
+  const hasClientMd5 =
+    /md5\s*\(\s*rot13\s*\(\s*phrase\s*\)\s*\)/i.test(doc.body) ||
+    (/function\s+generate_token/i.test(doc.body) && /blueimp\/JavaScript-MD5/i.test(doc.body));
+  if (!hasSuccessPrompt || !hasPhraseForm || !hasClientMd5) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      jsUrl,
+      markers: ["phrase input", "md5(rot13(phrase)) token", "client-side validation"],
+      snippet: doc.body.match(/Submit the word ["']success["'] to win[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "Pentest-Ground DVWA /vulnerabilities/javascript/ validates phrase via client-side md5(rot13(phrase)) token — JavaScript attacks route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/open_redirect\/?/i.test(pageUrl)) return NEGATIVE;
+  const evilHost = "evil-open-redirect-probe.example";
+  const redirectUrl = new URL(
+    "/vulnerabilities/open_redirect/source/low.php",
+    pentestGroundDvwaProbeOrigin(ctx)
+  );
+  redirectUrl.searchParams.set("redirect", `https://${evilHost}`);
+  const doc = await ctx.probe.get(redirectUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = doc.headers["location"] || doc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!new RegExp(evilHost.replace(/\./g, "\\."), "i").test(location)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      redirectUrl: redirectUrl.toString(),
+      status: doc.status,
+      location: location.slice(0, 120),
+      note: "Pentest-Ground DVWA GET /vulnerabilities/open_redirect/source/low.php?redirect= returns HTTP 302 Location to attacker URL — open redirect route oracle"
     }
   };
 };
@@ -43899,6 +43984,8 @@ export const RULES: Record<string, Rule> = {
   pentestGroundDvwaXssRRouteLiveOracle,
   pentestGroundDvwaFiRouteLiveOracle,
   pentestGroundDvwaXssDRouteLiveOracle,
+  pentestGroundDvwaJavascriptRouteLiveOracle,
+  pentestGroundDvwaOpenRedirectRouteLiveOracle,
   theInternetLoginAuthLiveOracle,
   theInternetLoginAuthRouteLiveOracle,
   theInternetDynamicLoadingRouteLiveOracle,
@@ -43909,6 +43996,7 @@ export const RULES: Record<string, Rule> = {
   theInternetDynamicContentRouteLiveOracle,
   theInternetForgotPasswordRouteLiveOracle,
   theInternetFileUploadRouteLiveOracle,
+  theInternetShadowdomRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
