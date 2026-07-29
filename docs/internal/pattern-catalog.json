@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T11:07:16.259Z",
-  "total": 1045,
-  "uniqueSlugs": 1040,
+  "generatedAt": "2026-07-29T12:04:31.988Z",
+  "total": 1049,
+  "uniqueSlugs": 1044,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1027,
+    "generic": 1031,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 960,
+    "deep": 964,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 72,
     "Security misconfiguration": 80,
-    "Broken authentication": 81,
+    "Broken authentication": 83,
     "Injection": 207,
     "Cross-site scripting": 146,
     "general": 20,
@@ -36,6 +36,7 @@
     "AI security": 45,
     "Business logic": 12,
     "Open redirect": 5,
+    "Denial of service": 2,
     "Authentication bypass": 2,
     "Path traversal": 2,
     "XSS": 1,
@@ -55,6 +56,8 @@
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
     "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+    "brokencrystals-dom-csrf-flow-live-oracle",
+    "brokencrystals-dom-csrf-route-live-oracle",
     "brokencrystals-file-aws-route-live-oracle",
     "brokencrystals-file-lfi-live-oracle",
     "brokencrystals-file-raw-lfi-live-oracle",
@@ -70,6 +73,8 @@
     "brokencrystals-mass-assignment-put-live-oracle",
     "brokencrystals-mcp-route-live-oracle",
     "brokencrystals-mcp-tools-live-oracle",
+    "brokencrystals-nested-json-dos-live-oracle",
+    "brokencrystals-nested-json-route-live-oracle",
     "brokencrystals-partner-login-xpath-live-oracle",
     "brokencrystals-safe-files-rfi-live-oracle",
     "brokencrystals-secrets-live-oracle",
