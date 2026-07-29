@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T00:04:14.885Z",
+  "updated_at": "2026-07-29T00:19:29.597Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3297,
-  "total_findings": 33506,
+  "total_sites_scanned": 3305,
+  "total_findings": 33558,
   "critical_findings": 82,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2238,
   "discovery_findings": 27715,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-29T00:04:14.885Z",
+  "last_run": "2026-07-29T00:19:29.597Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 17,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 13,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 478,
+      "probes_run": 454,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,47 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (17 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com errored (Heroku cold start); staging fallback 6/6 (13 findings). jwt-alg-none-accepted + chatbot oracles absent vs healthy primary; secret-resend still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 130,
-      "focus": "duck-store admin/products + testimonials PUT + mcp + 2FA totp + vapi api1 BOLA + auth/login/register/open-redirect oracle validation + ai-security-platform drain",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 52,
+      "focus": "Escape-hosted vAPI API2/API3/API4/API8/API10 oracles + ai-security phishing + wrongsecrets challenge-44/45 queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark category misses",
-      "duck-store.escape.tech/api/v1/auth/login: 12→16 — duck-store-auth-login-weak-credentials-live-oracle (admin/admin JWT)",
-      "duck-store.escape.tech/api/v1/auth/register: 16 — duck-store-referral-code-abuse-live-oracle (referral_code=admin → $5 credit)",
-      "duck-store.escape.tech/nonexistent?redirect=: 19 — duck-store-open-redirect-live-oracle (404 href from redirect param)",
-      "duck-store.escape.tech/api/v1/admin/products: 16 findings — checkout/mass-assignment/stored-XSS oracles fire but no negative-product-price oracle",
-      "duck-store.escape.tech/mcp: 15 findings — MCP coupon disclosure oracle present",
-      "duck-store.escape.tech/api/v1/auth/login/totp: 13-finding hub without route-specific 2FA-bypass oracle",
-      "vapi.tools.escape.tech/vapi/api1/user/1: 2 findings — vapi-route-live-oracle now fires",
-      "ginandjuice.shop/catalog/search/2 + product-search-results: routes return 404 — no live oracle shippable"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (13 findings) after primary Heroku error — no category misses",
+      "vapi.tools.escape.tech/vapi/api8/user/secret: 11 findings — vapi-api1-bola + vapi-api2-broken-auth + vapi-api4-otp-broken-auth live oracles fire",
+      "vapi.tools.escape.tech/vapi/api10/user/flag: 9 findings — multi-API vapi live oracles fire on flag endpoint",
+      "vapi.tools.escape.tech/vapi/api2/user/login + api4/login: 2 findings — vapi-route-live-oracle only",
+      "vapi.tools.escape.tech/vapi/api3/comment: 2 findings — headers/tech-stack only; API3 excessive-data-exposure oracle absent",
+      "wrongsecrets.herokuapp.com/challenge/challenge-44 + challenge-45: 10 findings each with client-side-wrongsecrets-challenge-evidence",
+      "ai-security-platform-iota.vercel.app/challenges/phishing: 6 findings with client-side-ai-security-platform-evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "juice-shop.herokuapp.com primary intermittently 503 — staging fallback required for stable benchmark",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "duck-store admin/products: negative-product-price business-logic oracle still absent",
-      "duck-store auth/login/totp: 2FA-bypass oracle still absent",
-      "duck-store testimonials/1: testimonials-BOLA PUT oracle still absent",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent",
-      "ginandjuice.shop/catalog/product/stock: endpoint returns 405 Method Not Allowed on GET probe"
+      "vapi.tools.escape.tech/vapi/api3/comment: API3 excessive-data-exposure oracle still absent (2-finding thin pass)",
+      "vapi.tools.escape.tech/vapi/api2/user/login + api4/login: route-specific broken-auth oracles absent (generic vapi-route-live-oracle only)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 17,
-    "duck-store.escape.tech/nonexistent?redirect=https://evil-open-redirect-probe.example": 19,
-    "duck-store.escape.tech/api/v1/admin/products": 16,
-    "duck-store.escape.tech/api/v1/auth/login": 16,
-    "duck-store.escape.tech/api/v1/auth/register": 16,
-    "duck-store.escape.tech/mcp": 15,
-    "duck-store.escape.tech/api/v1/auth/login/totp": 13,
-    "duck-store.escape.tech/api/v1/testimonials/1": 13,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 25,
-    "vapi.tools.escape.tech/vapi/api1/user/1": 2
+    "juice-shop-staging.herokuapp.com": 13,
+    "vapi.tools.escape.tech/vapi/api8/user/secret": 11,
+    "vapi.tools.escape.tech/vapi/api10/user/flag": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-44": 10,
+    "wrongsecrets.herokuapp.com/challenge/challenge-45": 10,
+    "ai-security-platform-iota.vercel.app/challenges/phishing": 6,
+    "vapi.tools.escape.tech/vapi/api2/user/login": 2,
+    "vapi.tools.escape.tech/vapi/api3/comment": 2,
+    "vapi.tools.escape.tech/vapi/api4/login": 2
   }
 }
