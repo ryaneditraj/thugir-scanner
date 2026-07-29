@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T09:10:00.000Z",
+  "updated_at": "2026-07-29T10:07:14.063Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2743,
-  "total_findings": 26657,
+  "total_sites_scanned": 2752,
+  "total_findings": 26695,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22608,
-  "improvements_shipped": 1164,
-  "last_run": "2026-07-29T09:10:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22632,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-29T10:07:14.063Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 14,
@@ -48,43 +48,45 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings)"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings); jwt-alg-none + chatbot + reflexion-escalated-ssti present; secret-resend still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 19,
-      "focus": "pentest-ground DVWA upload/CSRF + the-internet form auth route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 24,
+      "focus": "pentest-ground DVWA xss_d/xss_s/weak_session_ids + the-internet file_upload/secure_file_download queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary Heroku 503, staging fallback healthy",
-      "pentest-ground.com:4280/vulnerabilities/upload: 7→8 findings — pentest-ground-dvwa-upload-route-live-oracle shipped (PHP file upload to hackable/uploads)",
-      "pentest-ground.com:4280/vulnerabilities/csrf: 7→8 findings — pentest-ground-dvwa-csrf-route-live-oracle shipped (password change without CSRF token)",
-      "the-internet.herokuapp.com/login: 2→3 findings — the-internet-login-auth-route-live-oracle shipped (POST /authenticate 303 /secure vs /login)"
+      "pentest-ground.com:4280/vulnerabilities/xss_d: 7 findings — reflected-xss-query-param live oracle present; DOM XSS fragment oracle absent",
+      "pentest-ground.com:4280/vulnerabilities/xss_s: 5 findings — stored XSS guestbook oracle absent",
+      "pentest-ground.com:4280/vulnerabilities/weak_session_ids: 2 findings — weak session ID / fixation oracle absent",
+      "the-internet.herokuapp.com/file_upload: 2 findings — unrestricted upload route oracle absent",
+      "the-internet.herokuapp.com/secure_file_download: 2 findings — path traversal / arbitrary file read oracle absent",
+      "the-internet.herokuapp.com/dynamic_loading|javascript_alerts|forgot_password: thin 2-finding passes (headers/cookies only)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "primary juice-shop.herokuapp.com Heroku dyno 503 — staging fallback required",
-      "pentest-ground.com:4280/vulnerabilities/brute: DB table dvwa.users missing — brute-force module broken server-side",
-      "pentest-ground.com:4280/vulnerabilities/fi: LFI route-specific live oracle absent despite ?page=include.php entry point",
-      "the-internet.herokuapp.com/*: route-specific oracles absent on dynamic_loading, javascript_alerts, forgot_password",
-      "security.askquala.com/door: DOOR framework route-specific Supabase/Next.js oracles absent",
-      "vaultapp-omega.vercel.app/api/users/1: IDOR oracle blocked — demo credentials invalid on live deploy"
+      "pentest-ground xss_d: DOM-based XSS via ?default= innerHTML oracle absent (reflected-xss-query-param fires on wrong vector)",
+      "pentest-ground xss_s: stored XSS guestbook POST oracle absent",
+      "pentest-ground weak_session_ids: session fixation / predictable PHPSESSID oracle absent",
+      "the-internet file_upload: unrestricted upload route oracle absent",
+      "the-internet secure_file_download: path traversal download oracle absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
-    "pentest-ground.com:4280/vulnerabilities/upload": 8,
-    "pentest-ground.com:4280/vulnerabilities/csrf": 8,
-    "the-internet.herokuapp.com/login": 3,
-    "pentest-ground.com:4280/vulnerabilities/xss_r": 7,
-    "pentest-ground.com:4280/vulnerabilities/fi": 7,
-    "pentest-ground.com:4280/vulnerabilities/brute": 7,
-    "hack-this-site-eta.vercel.app/api-labs/graphql.html": 47,
-    "api.graphqlbook.org": 8,
-    "security.askquala.com/door": 7
+    "pentest-ground.com:4280/vulnerabilities/xss_d": 7,
+    "pentest-ground.com:4280/vulnerabilities/xss_s": 5,
+    "pentest-ground.com:4280/vulnerabilities/weak_session_ids": 2,
+    "the-internet.herokuapp.com/file_upload": 2,
+    "the-internet.herokuapp.com/secure_file_download": 2,
+    "the-internet.herokuapp.com/dynamic_loading": 2,
+    "the-internet.herokuapp.com/javascript_alerts": 2,
+    "the-internet.herokuapp.com/forgot_password": 2
   }
 }
