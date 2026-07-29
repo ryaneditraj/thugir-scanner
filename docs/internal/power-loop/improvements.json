@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api5-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api5/user + GET /vapi/api5/users with regular-user Authorization-Token returns admin flag{api5_*} in address field; vapi.tools.escape.tech/vapi/api5/user findings 2→13 with vapi-api5-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api7-cors-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/api7/user/key with Origin https://evil-cors-probe.example returns Access-Control-Allow-Origin reflection + credentials + flag{api7_*}; vapi.tools.escape.tech/vapi/api7/user/key findings 1→13 with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api9-improper-inventory-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api9/v1/user/login richardbranson+pin 1655 returns accbalance flag{api9_*} while v2 has x-ratelimit-limit; vapi.tools.escape.tech/vapi/api9/v1/user/login findings 2→13 with vapi-api9-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
       "slug": "vapi-canonical-origin-probe-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: reachTarget resolves vapi.tools.escape.tech to http://www.vapi.tools.escape.tech (404 on /vapi/*); all vAPI live oracles now build URLs via vapiCanonicalOrigin(ctx) → https://vapi.tools.escape.tech; vapi.tools.escape.tech/vapi/api2/user/login findings 2→12 (+vapi-api2-broken-auth + route); benchmark juice-shop-staging 14 findings 6/6 maintained"
