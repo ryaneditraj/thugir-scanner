@@ -23430,6 +23430,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-dvwa-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA file upload route live oracle",
+    description:
+      "When scanning /vulnerabilities/upload/, POST multipart uploaded= accepts PHP files and returns ../../hackable/uploads/... succesfully uploaded — Pentest-Ground DVWA unrestricted file upload route oracle.",
+    impactOneline:
+      "Unrestricted file upload on DVWA lets attackers plant web shells under hackable/uploads without type validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — validate file types and store uploads outside the web root.",
+      steps: [
+        "Allow-list image MIME types and verify magic bytes server-side.",
+        "Store uploads outside the web root or serve via a non-executable handler.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/upload/ route accepts arbitrary PHP uploads. Show secure file upload validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-dvwa-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA CSRF route live oracle",
+    description:
+      "When scanning /vulnerabilities/csrf/, the admin password change form lacks anti-CSRF tokens and POST password_new/password_conf succeeds — Pentest-Ground DVWA CSRF route oracle.",
+    impactOneline:
+      "Missing CSRF tokens on DVWA password change lets attackers forge cross-site requests that hijack admin sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — require CSRF tokens on state-changing forms.",
+      steps: [
+        "Issue per-session CSRF tokens on every state-changing form.",
+        "Validate the token server-side before applying password or profile changes.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/csrf/ route changes admin passwords without CSRF tokens. Show token-based CSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-login-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "the-internet form authentication route live oracle",
+    description:
+      "When scanning /login, POST /authenticate with disclosed tomsmith/SuperSecretPassword! redirects to /secure while invalid passwords redirect to /login — Elemental Selenium training form-auth route oracle.",
+    impactOneline:
+      "Public demo credentials on the-internet login page enable unauthenticated access to the secure area for training scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetLoginAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — never ship hardcoded demo credentials in production.",
+      steps: [
+        "Remove hardcoded credentials from login page copy in production apps.",
+        "Use per-user passwords and rate-limit authentication attempts.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /login route discloses demo credentials and POST /authenticate redirects valid logins to /secure. Show production auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
