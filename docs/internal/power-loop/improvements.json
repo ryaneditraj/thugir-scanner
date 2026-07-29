@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-javascript-alerts-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /javascript_alerts exposes onclick jsAlert/jsConfirm/jsPrompt handlers; the-internet.herokuapp.com/javascript_alerts findings 2→3 (+the-internet-javascript-alerts-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dropdown-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /dropdown has select#dropdown with multiple option values; the-internet.herokuapp.com/dropdown findings 2→3 (+the-internet-dropdown-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-download-secure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /download_secure returns HTTP 401; admin:admin Basic auth lists Secure File Downloader and serves sample.txt; accepts /secure_file_download alias; the-internet.herokuapp.com/secure_file_download findings 2→3 (+the-internet-download-secure-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-nested-json-route-live-oracle",
       "status": "shipped",

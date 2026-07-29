@@ -31262,6 +31262,101 @@ const theInternetBasicAuthRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isTheInternetDownloadSecureRoute(pageUrl: string): boolean {
+  return /\/(?:download_secure|secure_file_download)(?:\/|$|\?)/i.test(pageUrl);
+}
+
+const theInternetDownloadSecureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!isTheInternetDownloadSecureRoute(pageUrl)) return NEGATIVE;
+  const secureUrl = new URL("/download_secure", ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(secureUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (unauthDoc.status !== 401) return NEGATIVE;
+  const basicHeader = {
+    Authorization: `Basic ${Buffer.from("admin:admin").toString("base64")}`
+  };
+  const authDoc = await ctx.probe.get(secureUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: basicHeader
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Secure File Downloader/i.test(authDoc.body)) return NEGATIVE;
+  if (!/download_secure\/[^"'\s>]+/i.test(authDoc.body)) return NEGATIVE;
+  const sampleUrl = new URL("/download_secure/sample.txt", ctx.origin).toString();
+  const sampleDoc = await ctx.probe.get(sampleUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: basicHeader
+  });
+  if (sampleDoc.status < 200 || sampleDoc.status >= 400) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      secureUrl,
+      unauthStatus: unauthDoc.status,
+      authStatus: authDoc.status,
+      sampleUrl,
+      sampleSnippet: sampleDoc.body.slice(0, 120).trim(),
+      note: "the-internet /download_secure route scan — HTTP 401 without credentials; admin:admin Basic auth lists Secure File Downloader and serves sample.txt — Elemental Selenium secure download oracle"
+    }
+  };
+};
+
+const theInternetDropdownRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dropdown(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const dropdownUrl = new URL("/dropdown", ctx.origin).toString();
+  const doc = await ctx.probe.get(dropdownUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasSelect = /<select[^>]+id=['"]dropdown['"]/i.test(doc.body);
+  const optionCount = (doc.body.match(/<option\b/gi) || []).length;
+  if (!hasSelect || optionCount < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      dropdownUrl,
+      optionCount,
+      markers: ["select#dropdown", "option values"],
+      note: "the-internet /dropdown route scan — select#dropdown with multiple option values — Elemental Selenium dropdown interaction training oracle"
+    }
+  };
+};
+
+const theInternetJavascriptAlertsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/javascript_alerts(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const alertsUrl = new URL("/javascript_alerts", ctx.origin).toString();
+  const doc = await ctx.probe.get(alertsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasJsAlert = /function\s+jsAlert\s*\(\)/i.test(doc.body);
+  const hasConfirm = /function\s+jsConfirm\s*\(\)/i.test(doc.body);
+  const hasPrompt = /function\s+jsPrompt\s*\(\)/i.test(doc.body);
+  const hasButtons =
+    /onclick=["']jsAlert\(\)["']/i.test(doc.body) &&
+    /onclick=["']jsConfirm\(\)["']/i.test(doc.body) &&
+    /onclick=["']jsPrompt\(\)["']/i.test(doc.body);
+  if (!hasJsAlert || !hasConfirm || !hasPrompt || !hasButtons) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      alertsUrl,
+      markers: ["jsAlert()", "jsConfirm()", "jsPrompt()"],
+      snippet: doc.body.match(/JavaScript Alerts[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "the-internet /javascript_alerts route scan — onclick handlers invoke jsAlert/jsConfirm/jsPrompt dialogs — Elemental Selenium JavaScript alert training oracle"
+    }
+  };
+};
+
 const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -43687,6 +43782,9 @@ export const RULES: Record<string, Rule> = {
   theInternetLoginAuthRouteLiveOracle,
   theInternetDynamicLoadingRouteLiveOracle,
   theInternetBasicAuthRouteLiveOracle,
+  theInternetDownloadSecureRouteLiveOracle,
+  theInternetDropdownRouteLiveOracle,
+  theInternetJavascriptAlertsRouteLiveOracle,
   theInternetFileUploadRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
