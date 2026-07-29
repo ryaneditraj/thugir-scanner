@@ -1,6 +1,1440 @@
 {
   "candidates": [
     {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dynamic-controls-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /dynamic_controls h4 Dynamic Controls with #checkbox-example/#input-example and swapCheckbox/swapInput AJAX toggles; the-internet.herokuapp.com/dynamic_controls findings 2→3 (+the-internet-dynamic-controls-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-context-menu-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /context_menu #hot-spot oncontextmenu=displayMessage() fires window.alert for the-internet right-click menu; the-internet.herokuapp.com/context_menu findings 2→3 (+the-internet-context-menu-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-nested-frames-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /nested_frames frameset frame_top/frame_bottom; frame_top loads frame_left/middle/right; frame_bottom returns BOTTOM; the-internet.herokuapp.com/nested_frames findings 2→3 (+the-internet-nested-frames-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-infinite-scroll-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /infinite_scroll jScroll plugin + /infinite_scroll/1→/2 pagination with long DOM chunks; the-internet.herokuapp.com/infinite_scroll findings 2→3 (+the-internet-infinite-scroll-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-jqueryui-menu-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /jqueryui/menu #menu widget with ui-state-disabled hidden item and menu.pdf/menu.csv downloads; the-internet.herokuapp.com/jqueryui/menu findings 2→3 (+the-internet-jqueryui-menu-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-tinymce-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /tinymce cdn.tiny.cloud tinymce.init selector:textarea WYSIWYG editor; the-internet.herokuapp.com/tinymce findings 2→3 (+the-internet-tinymce-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-latest-limit-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/products/latest returns 3 products; GET /api/products/latest?limit=100 returns 11; brokencrystals.com/api/products/latest?limit=100 findings 54→55 (+brokencrystals-products-latest-limit-bypass-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-challenging-dom-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenging_dom exposes UUID button ids, canvas#canvas, and Iuvaret table rows; the-internet.herokuapp.com/challenging_dom findings 2→3 (+the-internet-challenging-dom-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-frames-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /frames links to /nested_frames frameset (frame_top/frame_bottom) and /iframe; the-internet.herokuapp.com/frames findings 2→3 (+the-internet-frames-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-hovers-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /hovers CSS .figure:hover .figcaption reveals name: userN and /users/N profile links; the-internet.herokuapp.com/hovers findings 2→3 (+the-internet-hovers-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-redirector-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /redirector exposes a#redirect href=redirect and Redirection h3 linking to status codes page; the-internet.herokuapp.com/redirector findings 2→3 (+the-internet-redirector-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-status-codes-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /status_codes hub lists 200/301/404/500 and GET /status_codes/200 returns HTTP 200; the-internet.herokuapp.com/status_codes findings 2→3 (+the-internet-status-codes-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-broken-images-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /broken_images img src=asdf.jpg and hjkl.jpg relative paths 404; the-internet.herokuapp.com/broken_images findings 2→3 (+the-internet-broken-images-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file?path=package.json returns broken-crystals package.json; brokencrystals.com/api/file?path=/etc/hosts findings gain +brokencrystals-file-lfi-route-live-oracle on route scan; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-count-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/testimonials/count?query=select count(table_name) from information_schema.tables returns 216; brokencrystals.com/api/testimonials/count?query=test findings gain +brokencrystals-testimonials-count-sqli-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect returns HTTP 302 Location https://the-internet.herokuapp.com/status_codes; the-internet.herokuapp.com/redirect findings 2→3 (+the-internet-redirect-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-javascript-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/javascript/ exposes form low_js with md5(rot13(phrase)) client-side token; pentest-ground.com:4280/vulnerabilities/javascript findings 7→8 (+pentest-ground-dvwa-javascript-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/open_redirect/source/low.php?redirect=https://evil-open-redirect-probe.example returns HTTP 302 Location: https://evil-open-redirect-probe.example; pentest-ground.com:4280/vulnerabilities/open_redirect findings 7→8 (+pentest-ground-dvwa-open-redirect-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-shadowdom-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /shadowdom defines customElements my-paragraph with attachShadow({mode:'open'}) and slot=my-text template; the-internet.herokuapp.com/shadowdom findings 2→3 (+the-internet-shadowdom-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dynamic-content-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dynamic_content avatar set differs from ?with_content=static frozen layout; the-internet.herokuapp.com/dynamic_content findings 2→3 (+the-internet-dynamic-content-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-forgot-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /forgot_password exposes form#forgot_password with input#email and Retrieve password submit; the-internet.herokuapp.com/forgot_password findings 2→3 (+the-internet-forgot-password-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-weak-id-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/weak_id/ issues sequential dvwaSession cookies (1→2) with session cookie chaining; accepts /weak_session_ids alias via pentestGroundDvwaProbeOrigin https fix; pentest-ground.com:4280/vulnerabilities/weak_session_ids findings 2→3 (+pentest-ground-dvwa-weak-id-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-javascript-alerts-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /javascript_alerts exposes onclick jsAlert/jsConfirm/jsPrompt handlers; the-internet.herokuapp.com/javascript_alerts findings 2→3 (+the-internet-javascript-alerts-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dropdown-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /dropdown has select#dropdown with multiple option values; the-internet.herokuapp.com/dropdown findings 2→3 (+the-internet-dropdown-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-download-secure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /download_secure returns HTTP 401; admin:admin Basic auth lists Secure File Downloader and serves sample.txt; accepts /secure_file_download alias; the-internet.herokuapp.com/secure_file_download findings 2→3 (+the-internet-download-secure-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-nested-json-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/nestedJson?depth=10000 returns HTTP 500 {\"error\":\"Maximum call stack size exceeded\"}; brokencrystals.com/api/nestedJson findings 49→52 (+brokencrystals-nested-json-dos-live-oracle +brokencrystals-nested-json-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-dom-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/dom-csrf-flow returns 400 without Fingerprint header; Fingerprint: thugir-probe returns 32-char hex token; brokencrystals.com/api/auth/dom-csrf-flow findings 56→60 (+brokencrystals-dom-csrf-flow-live-oracle +brokencrystals-dom-csrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /upload multipart file returns File Uploaded! without type validation; fixed pageUrl gate to accept /file_upload discovery URL; the-internet.herokuapp.com/file_upload findings 2→3 (+the-internet-file-upload-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-xss-r-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/xss_r/?name=thugirXssRcanary returns <pre>Hello thugirXssRcanary</pre>; pentest-ground.com:4280/vulnerabilities/xss_r findings 7→8 (+pentest-ground-dvwa-xss-r-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-fi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/fi/?page=../../../../../../../etc/passwd returns root:x:0:0:root:/root:/bin/bash; pentest-ground.com:4280/vulnerabilities/fi findings 7→8 (+pentest-ground-dvwa-fi-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dynamic-loading-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /dynamic_loading hub links /dynamic_loading/1 with #start + ajax-loader.gif + Hello World! delayed-render markers; the-internet.herokuapp.com/dynamic_loading findings 2→3 (+the-internet-dynamic-loading-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/upload/ multipart uploaded=thugir-probe.php returns <pre>../../hackable/uploads/... succesfully uploaded!</pre>; pentest-ground.com:4280/vulnerabilities/upload findings 7→8 (+pentest-ground-dvwa-upload-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/csrf/ password change form has password_new/password_conf with no user_token/csrf hidden field; POST password_new/password_conf returns HTTP 200; pentest-ground.com:4280/vulnerabilities/csrf findings 7→8 (+pentest-ground-dvwa-csrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-login-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /authenticate tomsmith/SuperSecretPassword! → 303 Location /secure; wrong password → 303 /login; /login page discloses demo credentials; the-internet.herokuapp.com/login findings 2→3 (+the-internet-login-auth-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-capability-abuse-route-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: agentpwnAttackRouteLiveOracle now always re-fetches /attacks/* route page and matches tool-chain SYSTEM INSTRUCTIONS (web search/browser/file write tools); www.agentpwn.com/attacks/capability-abuse/3 findings 3→4 (+agentpwn-attack-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-signup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /signup returns connect.sid session + /login markers (or MongoDB E11000 duplicate _id on saturated Heroku); nodegoat-websec.herokuapp.com/register findings 2→4 (+nodegoat-signup-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-check-otp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST forget-password + 12 rapid v2/check-otp guesses return Invalid OTP without HTTP 503 while v3/check-otp rate-limits after ~10; crapi.apisec.ai/identity/api/auth/v3/check-otp findings 4→6 (+crapi-check-otp-route-live-oracle + crapi-otp-bruteforce-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-apisec-http-canonical-origin-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiCanonicalOrigin forced https://vapi.apisec.ai but lab serves HTTP only (HTTPS connection reset); now keeps http:// for apisec.ai host; POST register + HS256 admin re-sign returns flag{jwt_*}; vapi.apisec.ai/vapi/jwt/user findings 2→14 (+vapi-jwt-weak-token-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-blind-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blind/?url=http://example.com/ returns (blind: response discarded) with Blind SSRF title; ssrf.vulnlab.dev/blind findings 11→13 (+ssrf-vulnlab-blind-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-context-window-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /attacks/context-window/2 has APWN-CW-002 + ai-instructions meta with Section 14 Administrative Override buried in ML content; agentpwn.com/attacks/context-window/2 findings 7→8 (+agentpwn-context-window-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-newsletter-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://ist-edu-bd.vercel.app/api/newsletter email=test%0d%0aBcc:thugir-crlf-probe@evil.example returns CRLF Injection Detected; ist-edu-bd.vercel.app/labs/csrf findings 9→10 (+ist-edu-newsletter-crlf-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-ground.com:4280/vulnerabilities/sqli/ id=1' OR '1'='1 returns multiple First name rows; pentest-ground.com:4280/vulnerabilities/sqli findings 7→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-signup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /identity/api/auth/signup with unique email/number returns User registered successfully; crapi.apisec.ai/identity/api/auth/signup gains crapi-signup-route-live-oracle + crapi-signup-open-registration-live-oracle (generic BOLA gated off auth routes); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-exec-cmdi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-ground.com:4280/vulnerabilities/exec/ ip=127.0.0.1;id returns uid=33(www-data); pentest-ground.com:4280/vulnerabilities/exec findings 7→8; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-csp-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-ground.com:4280/vulnerabilities/csp/ include=data:text/javascript,alert(1) reflects <script src='data:text/javascript,alert(1)'>; pentest-ground.com:4280/vulnerabilities/csp findings 7→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://pentest-ground.com:9000/eval?s=__import__('os').popen('id').read() with X-Auth-Token: THISISATOKEN returns uid=0(root); pentest-ground.com:9000/api/users findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-user-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /users/v1/login name1/pass1 then GET /users/v1/name2 returns {\"username\":\"name2\",\"email\":\"mail2@mail.com\"} without object-level auth; urban-vampi-production.up.railway.app/users/v1 findings 7→9 (+vampi-user-bola-live-oracle); benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-user-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /users/v1/{username} fires vampiUserBolaRouteLiveOracle when JWT for user A reads user B profile; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-books-excessive-data-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /books/v1 with name1 JWT returns Books owned by name2 and admin — cross-user list leakage; urban-vampi-production.up.railway.app/users/v1 findings 7→9 (+vampi-books-excessive-data-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-books-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /books/v1/1 gains vampi-books-route-live-oracle; urban-vampi-production.up.railway.app/books/v1/1 findings 6→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga2-host-canonical-origin-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDvgaLiveHost/dvgaCanonicalOrigin/extractDvgaLiveSeeds now include dvga2.tools.escape.tech; dvga2.tools.escape.tech/graphql findings 1→6 with dvga-route-live-oracle firing; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-audit-log-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { audits { gqlquery } } returns unauthenticated operation logs with mutation/query text; dvga2.tools.escape.tech/graphql gains dvga-graphql-audit-log-live-oracle + route variant; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-batching-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql JSON array [{ pastes }, { pastes }] returns two data.pastes objects; dvga2.tools.escape.tech/graphql gains dvga-graphql-batching-live-oracle + route variant; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api5-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api5/user + GET /vapi/api5/users with regular-user Authorization-Token returns admin flag{api5_*} in address field; vapi.tools.escape.tech/vapi/api5/user findings 2→13 with vapi-api5-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api7-cors-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/api7/user/key with Origin https://evil-cors-probe.example returns Access-Control-Allow-Origin reflection + credentials + flag{api7_*}; vapi.tools.escape.tech/vapi/api7/user/key findings 1→13 with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api9-improper-inventory-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api9/v1/user/login richardbranson+pin 1655 returns accbalance flag{api9_*} while v2 has x-ratelimit-limit; vapi.tools.escape.tech/vapi/api9/v1/user/login findings 2→13 with vapi-api9-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-canonical-origin-probe-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reachTarget resolves vapi.tools.escape.tech to http://www.vapi.tools.escape.tech (404 on /vapi/*); all vAPI live oracles now build URLs via vapiCanonicalOrigin(ctx) → https://vapi.tools.escape.tech; vapi.tools.escape.tech/vapi/api2/user/login findings 2→12 (+vapi-api2-broken-auth + route); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api3-comment-single-row-oracle-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/api3/comment returns single-row JSON with deviceid flag{api3_0bad677bfc504c75ff72}; rows.length<2 guard rejected escape.tech sparse dataset; now fires on flagged single row; vapi.tools.escape.tech/vapi/api3/comment findings 2→13 (+vapi-api3-comment-bola + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api4-otp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /vapi/api4/login fires vapiApi4OtpRouteLiveOracle — POST /api4/otp/verify accepts static OTP 1872; vapi.tools.escape.tech/vapi/api4/login findings 2→12 (+vapi-api4-otp-route + broken-auth); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-products-negative-price-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/admin/products price:-99.99 returns persisted negative price JSON; duck-store.escape.tech/api/v1/admin/products findings 18→20 with negative-price live + route oracles; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-put-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: user B PUT /api/v1/testimonials/{id} overwrites user A content without ownership check; duck-store.escape.tech/api/v1/testimonials/1 findings 18→20 with put-bola live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-auth-totp-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login with TOTP-enabled user returns requires_totp:true temp_token; Bearer temp_token accesses GET /api/v1/admin/users without POST /auth/login/totp; duck-store.escape.tech/api/v1/auth/login/totp findings 19→22 with totp-bypass live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/login username:admin password:admin returns access_token JWT with role:admin and requires_totp:false; duck-store.escape.tech/api/v1/auth/login findings 12→16 with weak-credentials live + route oracles; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle 404 handler uses a.get('redirect') for <a href> without validation; duck-store.escape.tech/nonexistent?redirect=https://evil-open-redirect-probe.example findings 19 with open-redirect live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-referral-code-abuse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register referral_code:admin grants account_credit:5.0 vs baseline 0.0; duck-store.escape.tech/api/v1/auth/register findings 16 with referral-abuse live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/testimonials/ with <img src=x onerror=thugirStoredXss> returns unsanitized content echoed on GET /api/v1/testimonials/; duck-store.escape.tech/api/v1/testimonials findings 16→17 with stored-xss + route oracles; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/post?postId=3&back=https://evil-open-redirect-probe.example/ exposes onclick location = URLSearchParams(location.search).get('back'); ginandjuice.shop/blog/post findings 9→11 with blog-post open-redirect + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=1' returns HTTP 500 vs category=1 baseline 200 Internal Server Error; ginandjuice.shop/catalog findings 9→11 with catalog-category-sqli + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-checkout-private-coupon-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login POST /api/v1/cart/add then POST /api/v1/orders/checkout coupon_code=INTERNAL100 (is_public:false via MCP) returns order id with total_price=5.99 shipping-only; duck-store.escape.tech/api/v1/orders/checkout findings 14→18; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-profile-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /api/v1/users/me/profile role:admin then GET /api/v1/admin/users lists admin@duck-store.escape; duck-store.escape.tech/api/v1/users/me/profile findings 12→17; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopCompleteOtpSession retry + longer PwnMail poll restores POST /profile/upload-avatar SVG onload oracle; pwnshop.ctfsecurity.com/profile/upload-avatar findings 18→25 with pwnshop-avatar-svg-xss-live-oracle + route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-filter-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/filter/by-color?color=Yellow&sort=name;SELECT%201 returns Query error with SELECT * FROM products WHERE color LIKE ORDER BY name;SELECT 1; duck-store.escape.tech/api/v1/products/filter/by-color findings 10→16; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-cart-negative-quantity-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login then POST /api/v1/cart/add product_id:1 quantity:-1 returns quantity:-1 in cart JSON; duck-store.escape.tech/api/v1/cart/add findings 10→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-users-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login user JWT GET /api/v1/admin/users returns admin@duck-store.escape role:admin in roster; duck-store.escape.tech/api/v1/admin/users findings 10→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-fetch-url-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/uploads/fetch-url?url=https://httpbin.org/get returns status_code:200 with httpbin response preview and python-httpx User-Agent; duck-store.escape.tech/api/v1/uploads/import-from-url findings 10→12 with duck-store-ssrf-fetch-url-live-oracle + duck-store-ssrf-fetch-url-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp/tools/list_coupons (Accept: application/json, text/event-stream) returns VIP50/EMPLOYEE75/INTERNAL100 with is_public:false in SSE JSON-RPC payload; duck-store.escape.tech/mcp/tools/list_coupons findings 10→13 with duck-store-mcp-coupons-disclosure-live-oracle + duck-store-mcp-coupons-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isVapiHost extended to vapi.tools.escape.tech + vapiRouteLiveOracle confirms OWASP API Top 10 lab and API1 BOLA returns flag{api1_*}; vapi.tools.escape.tech/ findings 4→13 with vapi-route-live-oracle + vapi-api1-bola-live-oracle + vapi-api10-logging-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-orders-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/orders/1 returns user_id, line items, total_price, status without auth; duck-store.escape.tech/api/v1/orders/1 findings 8→11 with duck-store-orders-bola-live-oracle + duck-store-orders-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-coupons-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/orders/coupons lists is_public:false codes (VIP50, EMPLOYEE75, INTERNAL100) without auth; duck-store.escape.tech/api/v1/orders/coupons findings 8→12 with duck-store-coupons-disclosure-live-oracle + duck-store-coupons-route-live-oracle; queue URL corrected from /api/v1/coupons; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga.tools.escape.tech",
+      "slug": "dvga-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities 404 thin pass — dvgaRouteLiveOracle re-fetches https://dvga.tools.escape.tech/ (canonical origin; crawl had poisoned http://www.dvga.tools.escape.tech) + POST /graphql __schema introspection; dvga.tools.escape.tech/vulnerabilities findings 1→2 with dvga-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-mcp-exploitation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /attacks/mcp-exploitation/{tier} ai-instructions smuggle MCP tool discovery (APWN-MCP-001), fake [Tool Result from security_scanner] injection (APWN-MCP-002), filesystem:read/etc/hosts + browser:navigate cross-tool chain (APWN-MCP-003); agentpwnMcpExploitationRouteLiveOracle + broadened APWN-[A-Z]{2,4}-\\d{3} ID regex; www.agentpwn.com/attacks/mcp-exploitation/1 findings 7→8 with agentpwn-mcp-exploitation-route-live-oracle; benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-live-stream-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/live-stream-hijack documents unprotected GET/POST /api/live/stream with RTMP stream key exposure and admin-only UI without server-side role check; koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/ findings 5→6 with oopssec-live-stream-bfla-route-live-oracle; benchmark juice-shop 15 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-id-category-regex-broadening",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: agentpwnAttackMarkers APWN ID regex broadened from {2} to {2,4} letter categories so APWN-MCP-001/APWN-CM-003 match attackId capture; improves attack-route oracle on mcp-exploitation and context-manipulation tiers; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-route-header-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: agentpwnAttackRouteLiveOracle now merges x-agentpwn-test-id + x-ai-instructions response headers and PI-005 AI Safety Board Compliance Standard hiddenDan markers; uses ctx.probe refetch with header corpus; www.agentpwn.com/attacks/prompt-injection/5 findings 3→7 with agentpwn-attack-route-live-oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-xff-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /posts/x-forwarded-for-sql-injection fires oopssec-xff-sqli-route-live-oracle with scannedUrl + X-Forwarded-For SQLi walkthrough markers; koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/ findings 6→7; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-jwt-chatbot-benchmark-recall-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: benchmark-recall.ts maps juice-shop-jwt-alg-none-live-oracle + juice-shop-chatbot-api-live-oracle to auth_bypass category tracking; juice-shop.herokuapp.com primary 503 → staging fallback 14 findings 6/6 recall"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-36-advanced-c-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-36 documents wrongsecrets-advanced-c + GDB/Radare2 reverse-engineering walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-36 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-38-git-notes-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-38 documents Git notes metadata (refs/notes/*, git notes show) walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-38 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-context-manipulation-semantic-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: context-manipulation/3 APWN-CM-003 semantic-confusion meta + off-screen SYSTEM INSTRUCTIONS redefining safety/restricted; agentpwnAttackRouteLiveOracle uses fetchDoc re-fetch + body APWN-ID fallback + semantic-confusion hiddenDan markers; www.agentpwn.com/attacks/context-manipulation/3 thin-pass recovery to 7 findings with agentpwn-attack-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: parse nested order.user.email from GET /workshop/api/shop/orders/1 (muqeed+6@apisec.ai != test@test.com); crapi2.apisec.ai/workshop/api/shop/orders/1 findings 4→5 with crapi2-shop-orders-id-bola-route-live-oracle; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-shop-orders-id-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: gate crapi-mechanic-report-bola + crapi-vehicle-bola off /shop/orders routes; add route-specific shop-orders BOLA probe via signup JWT; crapi.apisec.ai/workshop/api/shop/orders/1 findings 5→3 (misfires removed; v1 BOLA patched 403); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: gate SQLi route oracle to levels 1-3; add level4-6 XSS/DOM probe oracle; vulnforge level6.php findings 5→4 (SQLi misfire removed; PHP backend 403 blocks live XSS probe); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-vendor-sidecar-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/sidecar returns {\"total\":19,...} when scanning /vendor/; owasp-finbot-ctf.org/vendor findings 8→9 with route-specific sidecar oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-admin-copilot-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /admin/api/v1/copilot/chat SSE streams compliance/reports/tools capabilities with session CSRF from /admin/; owasp-finbot-ctf.org/admin findings 8→9 with route-specific copilot oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-inbox-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: victim login cookie now captured after POST /login redirect:manual before GET /mail/<token>; pwnshop.ctfsecurity.com/mail/1 findings 20→22 with pwnshop-mail-inbox-idor + pwnshop-mail-idor-route oracles; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /sqli route scan fetches SPA bundle with id:\"sqli\" + admin' OR '1'='1 + SQL injection vulnerabilities due to unsanitized user input; vulnweb.netlify.app/sqli 1→2 findings; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-comments-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /xss route scan fetches SPA bundle with unsanitized user input + script injection + alert('XSS'); vulnweb.netlify.app/xss 1→2 findings; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-profile-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /idor route scan fetches SPA bundle with Password (Exposed!) + IDOR vulnerability; vulnweb.netlify.app/idor 1→2 findings; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /csrf route scan fetches SPA bundle with id:\"csrf\" + Cross-Site Request Forgery + execute unwanted actions on authenticated users; vulnweb.netlify.app/csrf 1→2 findings; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-attack-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: context-manipulation/1 thin pass when combined lacked meta tags — agentpwnAttackRouteLiveOracle now re-fetches pageUrl and matches SYSTEM INSTRUCTIONS: Previous conversation summary; www.agentpwn.com/attacks/context-manipulation/1 3→7 findings with agentpwn-attack-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "secret-resend-canonical-format-fix",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: scanSecret secret-resend filter rejected all canonical re_<8>_<24> keys (2 underscores) due to <=1 underscore guard added for Chart.js re_get_* FPs; now accepts /^re_[1-9A-HJ-NP-Za-km-z]{8}_[1-9A-HJ-NP-Za-km-z]{24}$/; benchmark juice-shop-staging 14 findings 6/6 maintained (Resend key not in current social feeds — filter unblocked for future keys)"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended istEduPortalSqliRouteLiveOracle to match /labs/sqli; POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful; ist-edu-bd.vercel.app/labs/sqli 8→10 findings; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-notices-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended istEduNoticesLfiRouteLiveOracle to match /labs/sqli|idor|xss|csrf|ssrf; GET /api/notices?file=../../../etc/passwd returns passwd markers; ist-edu-bd.vercel.app/labs/sqli+idor 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-dashboard-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle localStorage student_id + Grade Upload + student records on /labs/idor; ist-edu-bd.vercel.app/labs/idor 8→10 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-dashboard-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: same SPA IDOR lab markers on dvwu.vercel.app/labs/idor; 8→10 findings with dvwu-dashboard-idor-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-comments-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /comments route scan fetches SPA bundle with unsanitized user input + script injection + <script>alert('XSS') placeholder; vulnweb.netlify.app/comments 1→2 findings; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /search route scan fetches SPA bundle with SQL injection vulnerabilities + admin' OR '1'='1 bypass; vulnweb.netlify.app/search thin pass→2 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-profile-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile route scan fetches SPA bundle with Password (Exposed!) + IDOR vulnerability markers; vulnweb.netlify.app/profile/1 thin pass→2 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-xss-vulnerable-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclab.vercel.app migrated to Angular stub shell — POST /api/xss-vulnerable returns HTTP 405, GET returns <app-root> SPA with no Next.js API routes; no portable live oracle without restored security-lab deploy"
+    },
+    {
+      "source": "discovery:vulnweb.netlify.app",
+      "slug": "vulnweb-csrf-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /csrf returns Netlify 404 — SPA routes are /login /search /profile /comments only; CSRF module exists in catalog JSON but has no dedicated route or server-side CSRF probe surface"
+    },
+    {
+      "source": "discovery:all-seeing-eye-six.vercel.app",
+      "slug": "all-seeing-eye-read-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/read?path=/etc/passwd returns DOCTYPE with <!ENTITY data SYSTEM \"/etc/passwd\">; all-seeing-eye-six.vercel.app 5→7 findings; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:all-seeing-eye-six.vercel.app",
+      "slug": "all-seeing-eye-hello-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/hello?path=/etc/passwd returns XSLT document('read?path=%2Fetc%2Fpasswd'); all-seeing-eye-six.vercel.app 5→7 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-ssrf-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=//https:///google.com/%2e%2e returns 302 Location https://https/// while metadata URL returns 403; ist-edu-bd.vercel.app/labs/ssrf 8→9 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-ssrf-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=//https:///google.com/%2e%2e returns 302 Location //https:///google.com/%2e%2e while metadata URL returns 403; dvwu.vercel.app/labs/ssrf 9→10 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-csrf-newsletter-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter email=test%0d%0aBcc:... returns CRLF Injection Detected + HTTP Response Splitting; dvwu.vercel.app/labs/csrf route scan gains route-specific CSRF/header oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-notices-lfi-csrf-ssrf-route-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended dvwuNoticesLfiRouteLiveOracle to match /labs/csrf and /labs/ssrf; dvwu.vercel.app/labs/csrf 8→10 and /labs/ssrf 8→9 with dvwu-notices-lfi-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-login-nosql-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with $gt/$ne operator payloads returns 200 Invalid username/password on live nodegoat-websec — no auth bypass; login route oracle not shippable without working live probe"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-newsletter-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter CRLF payload returns CRLF Injection Detected on newsletter route; ist-edu-bd.vercel.app/newsletter route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=<script>thugirXssProbe</script> reflects raw script unescaped; dvwu.vercel.app/labs/xss findings 8→10 with dvwu-search-xss-route-live-oracle + dvwu-notices-lfi-route-live-oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-notices-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/notices?file=../../../etc/passwd returns root:x:0:0 passwd lines; dvwu.vercel.app/labs/sqli findings 8→10 and /labs/idor 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-portal-sqli-labs-route-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended dvwuPortalSqliRouteLiveOracle to match /labs/sqli route scans; dvwu.vercel.app/labs/sqli findings 8→10 with dvwu-portal-sqli-route-live-oracle firing; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:auth-security-project.onrender.com",
+      "slug": "auth-security-project-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login username=admin' OR '1'='1 returns 302 /dashboard + session cookie; auth-security-project.onrender.com/login findings 3→4; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:auth-security-project.onrender.com",
+      "slug": "auth-security-project-dashboard-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dashboard?message=<script>thugirXSScanary</script> reflects unescaped script after SQLi login session; auth-security-project.onrender.com/dashboard findings 3→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-secret-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /vapi/api8/user/secret chains SQLi login bypass to flag{api8_*} via Authorization-Token; vapi.apisec.ai/vapi/api8/user/secret findings 11→12; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-portal-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal with admin' OR '1'='1 returns Authentication Bypass Successful + SQL Injection Detected + Vulnerable Query SELECT * FROM users; dvwu.vercel.app/api/portal findings 4→5; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-playground-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /xss/playground route scan fires ENTORNO DE EXPLOTACIÓN XSS + dangerouslySetInnerHTML sink markers in page/JS chunks; vuln-expose.vercel.app/xss/playground findings 14→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-lab-guide-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-guide route scan confirms Security Training Lab + VaultApp + player/player123 demo credentials in combined corpus; vaultapp-omega.vercel.app/lab-guide findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-jwt-weak-token-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/jwt/user registers user then HS256 re-sign with known key YouNeverGonnaGetThisOne role=admin returns flag{jwt_*}; vapi.apisec.ai/vapi/jwt/user findings 11→13; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-serversurfer-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/serversurfer?url=http://example.com/ returns success:true with base64 Example Domain HTML while 127.0.0.1 blocked; vapi.apisec.ai/vapi/serversurfer findings 11→12; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-stickynotes-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/stickynotes?format=html returns <script>alert(1)</script> in note XML and flag{xss_*}; vapi.apisec.ai/vapi/stickynotes findings 11→12; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-stored-xss-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/comments?postId=1 returns comments[].content with raw <script>alert(\"Stored XSS\")</script> unescaped in JSON + echoed SELECT query; vuln-expose.vercel.app/xss/comments findings 13→14+ with API oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /xss/comments STORED XSS LABORATORY + dangerouslySetInnerHTML markers + /api/comments stored script payloads; vuln-expose.vercel.app/xss/comments route scan gains route-specific stored XSS oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cmdi bundle contains 127.0.0.1; whoami payload grid + uid=33(www-data) command-injection simulation; vuln-expose.vercel.app/cmdi route scan gains JS-bundle CMDi live probe; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-0-1-intro-git-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-0 Intro walkthrough (Welcome to OWASP WrongSecrets + Every challenge is about finding a secret + wrongsecrets-desktop docker run) and challenge-1 Git walkthrough (Trufflehog/Git-secrets + secret called password) markers added to wrongsecretsChallengeLiveOracle; challenge-0/1 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-network-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /network-tools Herramienta de Ping + ICMP Echo Request + Ejecutar Ping panels; vuln-expose.vercel.app/network-tools findings 15→16 with vuln-expose-network-tools-route-live-oracle; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-learn-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /tutorial/a10 documents /learn?url= res.redirect(req.query.url) open redirect; nodegoat-websec.herokuapp.com/learn findings 6→7 with nodegoat-learn-open-redirect-route-live-oracle (A10 marker fallback on session-gated public Heroku); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-coupon-category-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PHONE20 valid:false only valid for phones at /apply-coupon on fashion cart but POST /checkout coupon_code=PHONE20 proceeds with Insufficient wallet balance; pwnshop.ctfsecurity.com/apply-coupon findings 23→31 with pwnshop-coupon-category-bypass-route-live-oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)) returns LDAP directory entries; brokencrystals.com/api/users/ldap findings 54→56 with brokencrystals-ldap-route-live-oracle + scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-marketplace-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /marketplace route scan fires brokencrystals-marketplace-route-live-oracle with scannedUrl + prototypePollutionDomXss/__proto__ markers in /assets/index-*.js bundle; brokencrystals.com/marketplace findings 45→48; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-blind-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /sqli/blind LABORATORIO DE BLIND SQL INJECTION + boolean/time-based panels + GET /api/users?id=1 AND (SELECT SUBSTRING(password,1,1)...) echoes raw SQL; vuln-expose.vercel.app/sqli/blind findings 13→16; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-csp-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /xss/csp-bypass LABORATORIO DE CSP BYPASS + CSP Policy Simulator + JSONP/Angular/DOM/WebSocket bypass methods; vuln-expose.vercel.app/xss/csp-bypass findings 12→14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-blind-sqli-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users?id=1 AND (SELECT SUBSTRING(password,1,1) FROM users WHERE id=1)='a' returns query field with SUBSTRING(password,…) echoed; vuln-expose.vercel.app/sqli/blind route scan fires API oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-vehicle-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: signup JWT + GET /community/api/v2/community/posts/recent leaks vehicleid UUID; GET /identity/api/v2/vehicle/{uuid}/location returns latitude/longitude/fullName for another user; crapi.apisec.ai/identity/api/v2/vehicle/vehicles findings 3→6; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-notices-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/notices?file=../../../etc/passwd returns root:x:0:0:root on route scan; ist-edu-bd.vercel.app/api/notices findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal username=admin' OR '1'='1 returns Authentication Bypass Successful HTML; ist-edu-bd.vercel.app/api/portal findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-mechanic-report-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /workshop/api/mechanic/mechanic_report?report_id=1 returns adam007@example.com vehicle PII; report_id=2 returns pogba006@example.com — sequential BOLA; crapi.apisec.ai/.../mechanic_report findings 3→5; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api10-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/api10/user/flag returns {\"message\":\"Hey! I didn't log and monitor...\",\"flag\":\"flag{api10_...}\"} without auth; vapi.apisec.ai/vapi/api10/user/flag findings 10→12; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "jwt-alg-none-accepted",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: jwtAlgNoneProbe now probes /rest/user/authentication-details on Juice Shop hosts; alg:none JWT returns {\"role\":\"admin\"}; juice-shop.herokuapp.com now fires jwt-alg-none-accepted + juice-shop-jwt-alg-none-live-oracle (17 findings, 6/6 recall)"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-attack-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /attacks/jailbreak/1 exposes meta name=ai-instructions DAN jailbreak + security-test-id APWN-JB-001 + off-screen SYSTEM INSTRUCTIONS with /api/report callback; agentpwn.com/attacks/jailbreak/1 findings 6→7; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level3.php route scan delegates to sqlErrorDisclosure confirming GET /api/portal?q= returns SQL syntax error; vulnforge-academy.vercel.app/.../level3.php findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-upload-profile-picture-url-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile/upload route scan POST /upload_profile_picture_url with image_url=https://www.google.com/favicon.ico returns debug_info.fetched_url SSRF proof; vulnbank.org/profile/upload findings 8→21; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api1/user fires vapi-api1-route-live-oracle with scannedUrl + GET /api1/user/1 returns flag{api1_d0cd9be2324cc237235b}; vapi.apisec.ai/vapi/api1/user findings 9→11; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api2-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api2/user/login fires vapi-api2-route-live-oracle with scannedUrl + POST login savanna48@ortiz.com + GET /api2/user/details dumps all users with flag{api2_*}; vapi.apisec.ai/vapi/api2/user/login findings 9→11; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-comment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api3/comment fires vapi-api3-comment-route-live-oracle with scannedUrl + GET returns commenttext/deviceid JSON including flag{api3_*}; vapi.apisec.ai/vapi/api3/comment findings 10→11; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "extract-api-path-protocol-relative-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractApiPaths returned protocol-relative '//' from Angular bundles; jwtAlgNoneProbe new URL('//', origin) threw Invalid URL and aborted ginandjuice.shop/catalog?searchTerm=test discovery scans; filter // paths + try/catch in jwtAlgNoneProbe; scan now completes with 9 findings; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/users/ lists admin username + GET /api/v1/users/550e8400-e29b-41d4-a716-446655440000 returns admin@duck-store.escape role:admin without auth; duck-store.escape.tech/api/v1/users/ findings 6→10 with users-bola + users-route oracles; testimonials 6→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-search-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?searchTerm=thugirXSScanary reflects into var searchText = \"canary\" script assignment; ginandjuice.shop/catalog?searchTerm=test findings error→9 with catalog-search-xss + catalog-route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api1-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api1/user register + GET /api1/user/1 with Authorization-Token returns Michaels flag{api1_d0cd9be2324cc237235b}; vapi.apisec.ai/vapi/api1/user findings 5→10; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api2-broken-auth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api2/user/login savanna48@ortiz.com cred + GET /api2/user/details returns all users with flag{api2_6bf2beda61e2a1ab2d0a} in address; vapi route scans gain API2 oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api6-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api6/user fires vapi-api6-route-live-oracle with scannedUrl + credit:10000 flag; vapi.apisec.ai/vapi/api6/user findings 5→11; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-54-gitignore-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-54 .gitignore Secret Challenge + AES-256-CBC key-in-.gitignore walkthrough markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-54 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-55-ssh-bastion-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-55 .ssh Bastion + committed SSH keypair walkthrough markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-55 findings 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-62-mcp-google-sa-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-62 MCP Server Privilege Escalation via Google Service Account markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-62 findings 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-vault-metadata-subkey-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-44 Vault Metadata Challenge + challenge-45 Vault subkey challenge markers added to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-44|45 findings 8→10 with wrongsecrets-challenge-live-oracle; benchmark juice-shop.herokuapp.com 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-transfer-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-fauxbank.vercel.app/api/transfer with session cookie returns ok:true without CSRF token; pentest-fauxbank.vercel.app/api/transfer findings 12→9 with fauxbank-transfer-route-live-oracle (route-specific scannedUrl); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-accounts-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/accounts/2001 returns Bob Roberts balance while authenticated as alice; pentest-fauxbank.vercel.app/api/accounts/1 findings 4→8 with fauxbank-accounts-route-live-oracle; ensureFauxbankSession uses fetchDoc checkpoint retries; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-alg-none-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://brokencrystals.com/api/auth/jwt/rsa/signature/validate with alg:none JWT returns {\"secret\":\"this is our secret\"} while unauthenticated/bad token get 403/401; brokencrystals.com/api/auth/jwt findings 55→57; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/auth/jwt fires brokencrystals-jwt-route-live-oracle with scannedUrl + alg:none secret response; brokencrystals.com/api/auth/jwt findings 55→57; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-50-dotnet-ilspy-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-50 documents .NET8 self-contained binary + ILSpy walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-50 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/challenges returns 19 challenges incl recon-onboarding system_prompt_leak + AML.T0043 Prompt Injection labels; owasp-finbot-ctf.org/portals findings 8→9 and /ctf 8→10; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-sidecar-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/sidecar returns total:19 challenge progress JSON on /ctf route scan; owasp-finbot-ctf.org/ctf findings 8→10; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JWT via test@test.com + GET /workshop/api/shop/orders/{id} returns order with user.email != test@test.com on route scan — BOLA API1 oracle; crapi2 host intermittently resets TLS from cloud agent (4-finding hub during validation) but mirrors shipped crapi2-shop-orders-bfla-route-live-oracle auth path; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-tools-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/mcp initialize returns mcpSessionId; tools/list exposes public get_count (SQL) + admin spawn_process/get_config; tools/call get_count returns Query result: 5; brokencrystals.com/api/mcp findings 54→56; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper fires when scanning /api/mcp with scannedUrl evidence; brokencrystals.com/api/mcp findings 54→56 with route-specific MCP oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: expanded markers for AI project specification (challenge-56) and binary parts 5-7 Swift/Java (challenge-64/65/66); challenge-56/64/65/66 findings 8→10 with wrongsecrets-challenge-live-oracle + route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /allowlist/?url=http://169.254.169.254/latest/meta-data/?vulnlab.dev returns ami-id/hostname/iam/ metadata while bare metadata URL rejected; ssrf.vulnlab.dev/allowlist findings 7→9 with allowlist-bypass + route oracles; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper attaches scannedUrl on /allowlist scans; ssrf.vulnlab.dev/allowlist fires route oracle with metadataMarkers evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-jwt-alg-none-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/user/authentication-details accepts alg:none JWT returning admin role while rejecting no-auth and malformed tokens; juice-shop.herokuapp.com benchmark findings 13→17 with reliable dedicated oracle; recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /rest/chat returns SSE data stream (deltaContent or LLM error + [DONE]) without authentication — chatbot prompt-injection surface; demo.owasp-juice.shop /rest/chat confirmed; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper fires on #/chatbot scans with scannedUrl evidence; replaces hub-only fingerprint on demo.owasp-juice.shop/#/chatbot; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-43 documents Documentation/social-media secret sharing + challenge-52 Secrets focus + challenge-41 password shucking + challenge-42 Spring Boot Actuator audit — added markers to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-43 findings 8→9; challenge-52 8→9; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper attaches scannedUrl when scanning /challenge/challenge-N; wrongsecrets.herokuapp.com/challenge/challenge-43 fires route oracle with challengeId evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-path-traversal-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: switched from ctx.probe.get to fetchDoc with Vercel-checkpoint retry; GET /api/include?page=../../etc/passwd returns root:x:0:0: — direct rule invocation confirmed; vulnlab-validate-path-traversal-route-live-oracle added; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: attacker OTP session reads victim inbox GET /mail/<token> — OTP mail body 'Your Pwnshop Login Code' + victim username; pwnshop.ctfsecurity.com/mail/1 findings 20→29 with inbox+route oracles; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-sensitive-data-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/profile returns {\"ssnFake\":\"FAKE-111-22-3333\",\"fullName\":\"Alice Liddell\",...} without redaction; pentest-fauxbank.vercel.app/profile findings 11→16 with sensitive-data+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile route scan fires fauxbank-profile-sensitive-data-live-oracle with scannedUrl evidence; pentest-fauxbank.vercel.app/profile findings 11→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-preview-ssti-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /seller/preview?template=<%= 7*7 %> returns 49 after OTP+seller registration — ejs.render() SSTI (PWN-040); pwnshop.ctfsecurity.com/seller/preview findings 13→28 with live+route oracles; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-path-traversal-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /download?file=../../package.json returns pwnshop-app package.json after OTP+seller session — path.join traversal (PWN-038); pwnshop.ctfsecurity.com/download findings 11→33 with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: scanning /loans POST /api/loans creates pending loan visible in GET /api/loans; pentest-fauxbank.vercel.app/loans findings 11→14 with route oracle; benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-aws-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reachTarget picked http://www.ssrf.vulnlab.dev on /metadata-aws 404 — ssrfVulnlabProbeOrigin now forces https://ssrf.vulnlab.dev; GET /metadata/?url=http://169.254.169.254/latest/meta-data/ returns ami-id/iam/instance-id; ssrf.vulnlab.dev/metadata-aws findings 2→7 with route oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: canonical https://ssrf.vulnlab.dev origin + ssrfVulnlabFetchDoc 503 retry; GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=<metadata> returns ami-id tree; ssrf.vulnlab.dev/redirect findings 3→8 with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-26 documents Web3 smart-contract secrets + answer-textbox UI — added Web3/smart-contract markers to wrongsecretsChallengeLiveOracle; wrongsecrets.herokuapp.com/challenge/challenge-26 findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-benefits-nosql-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /benefits returns RetireEasy login gate + combined corpus has MongoDB $gt password bypass payload; nodegoat-websec.herokuapp.com/benefits findings 6→7 with route-specific NoSQL oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-track-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: scanning /track probes GET /track/1 → Order #1 Tracking + shippingAddress const without auth; pwnshop.ctfsecurity.com/track findings 26→27 with route-specific track-IDOR oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/secrets returns Slack xoxb- + Facebook EAAC + Google OAuth client + PayPal access_token when scanning /secrets; brokencrystals.com/secrets findings 55→56 with route-specific secrets exposure oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a9-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a9 returns A9-Using Components with Known Vulnerabilities + insecure Marked library XSS scenario + npm audit dependency topics; nodegoat-websec.herokuapp.com/tutorial/a9 findings 6→7 with route-specific insecure-components oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a10-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a10 returns A10-Unvalidated Redirects and Forwards + /learn?url= res.redirect(req.query.url) walkthrough + redirect validation mitigation topics; nodegoat-websec.herokuapp.com/tutorial/a10 findings 6→7 with route-specific open-redirect oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-21 documents Hiding in binaries part 3: the Go binary + wrongsecrets-golang executables; wrongsecrets.herokuapp.com/challenge/challenge-21 findings 8→9 with extended Go binary markers in wrongsecrets-challenge-live-oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-path-traversal-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/include?page=../../etc/passwd returns root:x:0:0 passwd lines when scanning /api/validate/path-traversal; hack-this-site-eta.vercel.app/api/validate/path-traversal findings 44→45 with route-specific path-traversal live oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a8-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a8 returns A8-Cross-Site Request Forgery (CSRF) + forged HTTP request walkthrough + profile form CSRF exploit topics; nodegoat-websec.herokuapp.com/tutorial/a8 findings 6→7 with route-specific CSRF oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-18 documents Cryptography + MD5/SHA1/rockyou.txt; challenge-19 documents C binary (wrongsecrets-c + Ghidra); challenge-20 documents C++ binary (wrongsecrets-cplus); challenge-18/19/20 findings 8→9 with extended wrongsecrets-challenge-live-oracle markers; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a5-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a5 returns A5-Security Misconfiguration + stack-level misconfiguration walkthrough + privileged runtime/header-leak topics; nodegoat-websec.herokuapp.com/tutorial/a5 findings 6→7 with route-specific misconfiguration oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a6-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a6 returns A6-Sensitive Data Exposure + encryption at rest/in transit + weak-crypto database theft topics; nodegoat-websec.herokuapp.com/tutorial/a6 findings 6→7 with route-specific sensitive-data oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a7-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a7 returns A7-Missing Function Level Access Control + server-side authorization checks + benefits module bypass topics; nodegoat-websec.herokuapp.com/tutorial/a7 findings 6→7 with route-specific access-control oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-10 canonical page documents AWS Secrets Manager + CSI-Driver K8s mount walkthrough; challenge-11 documents IAM privilege escalation + AWS SSM Parameter Store; challenge-10/11 findings 8→9 with wrongsecrets-challenge-live-oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a1 returns A1 Injection + Server Side JS Injection + NoSQL/eval topics; nodegoat-websec.herokuapp.com/tutorial/a1 findings 6→7 with route-specific injection oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a4-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a4 returns A4 Insecure Direct Object References + direct object reference walkthrough + unauthorized access topics; nodegoat-websec.herokuapp.com/tutorial/a4 findings 6→7 with route-specific IDOR oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a2-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a2 returns A2-Broken Authentication and Session Management + Session Fixation + brute force/password reset topics; nodegoat-websec.herokuapp.com/tutorial/a2 findings 6→7 with route-specific oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a3-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/a3 returns A3-Cross-Site Scripting (XSS) + Reflected/Stored/DOM XSS walkthrough + output encoding guidance; nodegoat-websec.herokuapp.com/tutorial/a3 findings 6→7 with route-specific oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cmdi SSR HTML shows LABORATORIO DE COMMAND INJECTION + Hostname or IP Address (Command Injection Point) + reverse-shell payload grid; vuln-expose.vercel.app/cmdi/execute findings 12→13 with route-specific CMDi oracle; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-idor-profile-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /idor/dashboard SSR HTML shows IDOR & Privilege Escalation Lab + User Profile Access (IDOR) + Quick IDOR Tests; vuln-expose.vercel.app/idor/profile findings 12→13 with route-specific IDOR oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/testimonials/count?query=select count(table_name)... returns information_schema table count; brokencrystals.com/api/testimonials/count findings 56→57 with route-specific SQLi oracle + scannedUrl; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api7-cors-misconfig-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api7/user create + login session then GET /api7/user/key with Origin:https://evil-cors-probe.example returns Access-Control-Allow-Origin reflected + Allow-Credentials:true + flag{api7_*}; vapi.apisec.ai/vapi/api7/user/login findings 8→9; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JWT via test@test.com + GET /workshop/api/shop/orders/all returns orders[] bulk history on route scan; crapi2.apisec.ai/workshop/api/shop/orders/all findings 4→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=<script>thugirXssProbe</script> reflects raw script in HTML on /xss route scan; ist-edu-bd.vercel.app/xss findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-auth-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login admin' OR '1'='1 returns success:true role:admin on route scan with scannedUrl; vuln-expose.vercel.app/api/auth/login findings 7 with route-specific auth-bypass oracle; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=test echoes raw SELECT query + vulnerabilities.union_select on route scan; vuln-expose.vercel.app/api/search findings 7 with route-specific SQLi oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/search/ returns cardNumber+phoneNumber for multiple users on route scan with scannedUrl; brokencrystals.com/api/users/search/ findings 57 with route-specific exposure oracle; benchmark juice-shop 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api5-bfla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api5/user creates user then GET /vapi/api5/users with base64(username:password) Authorization-Token returns admin flag{api5_*} in address field; vapi.apisec.ai/vapi/api5/user findings 2→8; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api6-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api6/user with credit:10000 then GET /vapi/api6/user/me returns credit 10000 + flag{api6_*}; vapi.apisec.ai/vapi/api6/user findings 5→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-sqli-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api8/user/login {\"username\":\"' OR '1'='1\",\"password\":\"' OR '1'='1\"} returns success:true + authkey; GET /vapi/api8/user/secret returns flag{api8_*}; vapi.apisec.ai/vapi/api8/user/login findings 2→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-coupon-category-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PHONE20 returns valid:false only valid for phones at /apply-coupon on fashion cart but POST /checkout coupon_code=PHONE20 proceeds with Insufficient wallet balance (discount applied) not category rejection; pwnshop.ctfsecurity.com/apply-coupon findings 23→30; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-route-live-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scans on /basic /blocklist /metadata-aws /redirect fire ssrf-vulnlab-*-route-live-oracle with scannedUrl evidence; ssrf.vulnlab.dev/basic findings 3→8; ssrf.vulnlab.dev/blocklist findings 2→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-mail-polling-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: poll PwnMail inbox via fetchDoc maxBytes=65536 with 1.2s retries — OTP at byte offset ~8600 was truncated at 4096; pwnshop.ctfsecurity.com/profile/upload-avatar findings 27→30 with pwnshop-avatar-svg-xss + avatar-upload-route oracles; apply-coupon route oracle restored; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-comment-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://vapi.apisec.ai/vapi/api3/comment returns 14+ comment rows without auth including flag{api3_*} in deviceid; vapi.apisec.ai/vapi/api3/user findings 3→5; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-otp-broken-auth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api4/otp/verify {\"otp\":\"1872\"} returns success:true + API key; vapi.apisec.ai/vapi/api4/otp/verify findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-user-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OTP-leaked Authorization-Token on GET /api4/user returns [{\"lastname\":\"flag{api4_ce696239323ea5b2d015}\"}]; vapi.apisec.ai findings 3→5 with all three vapi-* oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/challenge-8 documents Logging focus with docker logs + kubectl logs walkthrough and data-cy=answer-textbox; wrongsecrets.herokuapp.com/challenge/challenge-8 findings 8→9 with wrongsecrets-challenge-live-oracle; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-aws-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns ami-id/instance-id/local-ipv4 on route scan; brokencrystals.com/api/file/aws findings 55→56; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-auth-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /identity/api/auth/login email=test@test.com password=Test123! returns JWT token on route scan; crapi2.apisec.ai/identity/api/auth/login findings 4→5; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-inbox-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: victim register+login → GET /mail/<token>; attacker completes OTP via own /mail redirect then GET /mail/<victim_token> returns victim OTP mail (PWN-004); pwnshop.ctfsecurity.com/apply-coupon findings 23→28; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-svg-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /profile/upload-avatar SVG onload=alert(1) → {\"ok\":true,\"url\":\"/uploads/avatar_*.svg\"} served with onload intact (PWN-012); pwnshop.ctfsecurity.com/profile/upload-avatar findings 18→27; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-apply-coupon-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OTP session via /mail redirect + POST /apply-coupon code=HALFOFF returns {\"valid\":true,\"discount_percent\":50}; pwnshop.ctfsecurity.com/apply-coupon findings 23→28; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=http://169.254.169.254/latest/meta-data/ returns ami-id/iam/instance-id in <pre class=\"body\">; ssrf.vulnlab.dev/redirect findings 2→7; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/3 resolves to /challenge/challenge-3 with Docker ENV based password walkthrough + data-cy=answer-textbox; wrongsecrets.herokuapp.com/challenge/3 findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-adminpermission-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + login JWT + GET /api/users/one/{email}/adminpermission returns isAdmin:true on route scan; brokencrystals.com/api/users/one/regular_user/adminpermission findings 45→56; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://ssrf.vulnlab.dev/basic/?url=https://ssrf.vulnlab.dev/ returns Intentionally vulnerable SSRF labs in <pre class=\"body\">; ssrf.vulnlab.dev/basic findings 3→6; benchmark juice-shop-staging 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://ssrf.vulnlab.dev/metadata/?url=http://169.254.169.254/latest/meta-data/ returns ami-id/iam/instance-id metadata tree; ssrf.vulnlab.dev/metadata findings 2→3+; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blocklist/?url=http://127.0.0.1/ rejected banned substring; GET /blocklist/?url=http://2852039166/latest/meta-data/ bypasses deny-list and returns ami-id; ssrf.vulnlab.dev/blocklist findings 2→4; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
       "status": "shipped",
@@ -7775,6 +9209,36 @@
       "slug": "fauxbank-loans-request-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-fauxbank.vercel.app/api/loans creates pending loan visible in GET /api/loans; pentest-fauxbank.vercel.app/loans gains fauxbank-loans-request-live-oracle slug; benchmark juice-shop 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-scheme-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /scheme/?url=file:///etc/passwd returns root:x:0:0 /etc/passwd lines; ssrf.vulnlab.dev/scheme findings 8→12 with ssrf-vulnlab-scheme-live-oracle + scheme-route-live-oracle; benchmark juice-shop-staging 13 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-gopher-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /gopher/?url=gopher://127.0.0.1:6479/_PING returns +VULNLAB{ssrf-gopher-pivot-to-redis-like-service}; ssrf.vulnlab.dev/gopher findings 7→11 with gopher-live-oracle + gopher-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-parser-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /parser/?url=http://images.vulnlab.dev@169.254.169.254/latest/meta-data/ bypasses allowlist via userinfo and returns ami-id/iam/instance-id metadata; ssrf.vulnlab.dev/parser findings 7→11 with parser-live-oracle + parser-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-blog-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog returns TechCorp Blog + dangerouslySetInnerHTML comment sink markers; vuln-expose.vercel.app/blog findings 13→14 with route-specific stored-XSS oracle; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-invoices-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /invoices JS bundle builds SELECT * FROM invoices WHERE client_name LIKE via string concat (hidden_sqli_search); vuln-expose.vercel.app/invoices findings 13→14 with route-specific SQLi oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -13556,6 +15020,81 @@
   ],
   "shipped_log": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-checkout-private-coupon-route-live-oracle",
+      "shipped_at": "2026-07-28T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-profile-mass-assignment-route-live-oracle",
+      "shipped_at": "2026-07-28T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-upload-route-live-oracle",
+      "shipped_at": "2026-07-28T21:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-filter-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-cart-negative-quantity-route-live-oracle",
+      "shipped_at": "2026-07-28T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-users-bfla-route-live-oracle",
+      "shipped_at": "2026-07-28T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-54-gitignore-markers",
+      "shipped_at": "2026-07-27T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-55-ssh-bastion-markers",
+      "shipped_at": "2026-07-27T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-62-mcp-google-sa-markers",
+      "shipped_at": "2026-07-27T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "shipped_at": "2026-07-27T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-route-live-oracle",
+      "shipped_at": "2026-07-27T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-path-traversal-live-oracle",
+      "shipped_at": "2026-07-27T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "shipped_at": "2026-07-26T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-aws-route-live-oracle",
+      "shipped_at": "2026-07-26T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-auth-login-route-live-oracle",
+      "shipped_at": "2026-07-26T15:10:00.000Z"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
       "shipped_at": "2026-07-26T11:10:00.000Z"
@@ -13654,6 +15193,416 @@
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-admin-panel-live-oracle",
       "shipped_at": "2026-07-26T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-live-oracle",
+      "shipped_at": "2026-07-26T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+      "shipped_at": "2026-07-26T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+      "shipped_at": "2026-07-26T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-comment-bola-live-oracle",
+      "shipped_at": "2026-07-26T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-otp-broken-auth-live-oracle",
+      "shipped_at": "2026-07-26T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-user-exposure-live-oracle",
+      "shipped_at": "2026-07-26T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "shipped_at": "2026-07-26T21:00:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-idor-profile-route-live-oracle",
+      "shipped_at": "2026-07-26T21:00:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-route-live-oracle",
+      "shipped_at": "2026-07-26T21:00:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-preview-ssti-live-oracle",
+      "shipped_at": "2026-07-27T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-path-traversal-route-live-oracle",
+      "shipped_at": "2026-07-27T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-route-live-oracle",
+      "shipped_at": "2026-07-27T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-idor-route-live-oracle",
+      "shipped_at": "2026-07-27T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-sensitive-data-live-oracle",
+      "shipped_at": "2026-07-27T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-route-live-oracle",
+      "shipped_at": "2026-07-27T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-allowlist-route-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-jwt-alg-none-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-api-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-route-live-oracle",
+      "shipped_at": "2026-07-27T09:15:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-route-live-oracle",
+      "shipped_at": "2026-07-27T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-sidecar-route-live-oracle",
+      "shipped_at": "2026-07-27T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-orders-id-bola-route-live-oracle",
+      "shipped_at": "2026-07-27T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-alg-none-live-oracle",
+      "shipped_at": "2026-07-27T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-route-live-oracle",
+      "shipped_at": "2026-07-27T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-50-dotnet-ilspy-markers",
+      "shipped_at": "2026-07-27T12:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "extract-api-path-protocol-relative-fix",
+      "shipped_at": "2026-07-27T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-bola-live-oracle",
+      "shipped_at": "2026-07-27T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-search-xss-live-oracle",
+      "shipped_at": "2026-07-27T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-attack-route-live-oracle",
+      "shipped_at": "2026-07-27T18:00:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-sqli-route-live-oracle",
+      "shipped_at": "2026-07-27T18:00:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-upload-profile-picture-url-route-live-oracle",
+      "shipped_at": "2026-07-27T18:00:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-mechanic-report-route-live-oracle",
+      "shipped_at": "2026-07-27T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api10-route-live-oracle",
+      "shipped_at": "2026-07-27T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "jwt-alg-none-accepted",
+      "shipped_at": "2026-07-27T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-vehicle-bola-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-vehicle-route-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-notices-lfi-route-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-sqli-route-live-oracle",
+      "shipped_at": "2026-07-27T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-coupon-category-bypass-route-live-oracle",
+      "shipped_at": "2026-07-27T22:00:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-route-live-oracle",
+      "shipped_at": "2026-07-27T22:00:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-marketplace-route-live-oracle",
+      "shipped_at": "2026-07-27T22:00:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-0-1-intro-git-markers",
+      "shipped_at": "2026-07-27T23:30:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-network-tools-route-live-oracle",
+      "shipped_at": "2026-07-27T23:30:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-learn-open-redirect-route-live-oracle",
+      "shipped_at": "2026-07-27T23:30:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-scheme-route-live-oracle",
+      "shipped_at": "2026-07-28T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-gopher-route-live-oracle",
+      "shipped_at": "2026-07-28T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-parser-route-live-oracle",
+      "shipped_at": "2026-07-28T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-blog-stored-xss-route-live-oracle",
+      "shipped_at": "2026-07-28T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-invoices-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-stored-xss-api-live-oracle",
+      "shipped_at": "2026-07-28T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-comments-route-live-oracle",
+      "shipped_at": "2026-07-28T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-cmdi-route-live-oracle",
+      "shipped_at": "2026-07-28T02:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-36-advanced-c-markers",
+      "shipped_at": "2026-07-28T15:25:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-38-git-notes-markers",
+      "shipped_at": "2026-07-28T15:25:00.000Z"
+    },
+    {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-context-manipulation-semantic-oracle",
+      "shipped_at": "2026-07-28T15:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-route-header-oracle",
+      "shipped_at": "2026-07-28T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-xff-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T16:25:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-jwt-chatbot-benchmark-recall-aliases",
+      "shipped_at": "2026-07-28T16:25:00.000Z"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-mcp-exploitation-route-live-oracle",
+      "shipped_at": "2026-07-28T17:21:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-live-stream-bfla-route-live-oracle",
+      "shipped_at": "2026-07-28T17:21:00.000Z"
+    },
+    {
+      "source": "discovery:www.agentpwn.com",
+      "slug": "agentpwn-attack-id-category-regex-broadening",
+      "shipped_at": "2026-07-28T17:21:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-fetch-url-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-fetch-url-route-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-route-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-route-live-oracle",
+      "shipped_at": "2026-07-28T19:25:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-stored-xss-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-stored-xss-route-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-open-redirect-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-route-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-route-live-oracle",
+      "shipped_at": "2026-07-28T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-canonical-origin-probe-fix",
+      "shipped_at": "2026-07-29T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api3-comment-single-row-oracle-fix",
+      "shipped_at": "2026-07-29T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api4-otp-route-live-oracle",
+      "shipped_at": "2026-07-29T01:20:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-upload-route-live-oracle",
+      "shipped_at": "2026-07-29T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-csrf-route-live-oracle",
+      "shipped_at": "2026-07-29T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-login-auth-route-live-oracle",
+      "shipped_at": "2026-07-29T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-dynamic-content-route-live-oracle",
+      "shipped_at": "2026-07-29T14:25:00.000Z"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-forgot-password-route-live-oracle",
+      "shipped_at": "2026-07-29T14:25:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-weak-id-route-live-oracle",
+      "shipped_at": "2026-07-29T14:25:00.000Z"
     }
   ]
 }
