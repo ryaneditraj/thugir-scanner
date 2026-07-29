@@ -16982,6 +16982,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api4-otp-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "vAPI API4 route OTP broken authentication live oracle",
+    description:
+      "When scanning /api4/login or other API4 routes, POST /api4/otp/verify accepts the static OTP 1872 and returns a long-lived API key — route-specific broken authentication oracle.",
+    impactOneline:
+      "Predictable OTP values let attackers mint API keys when the API4 login route is scanned directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi4OtpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — use cryptographically random OTPs with rate limiting in production.",
+      steps: [
+        "Generate OTPs with a CSPRNG and short TTL.",
+        "Rate-limit /otp/verify and lock accounts after repeated failures.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api4 route scan confirms static OTP acceptance on /otp/verify. Show OTP hardening and rate limiting.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api5-bfla-live-oracle",
     platform: "generic",
     category: "Broken access control",
