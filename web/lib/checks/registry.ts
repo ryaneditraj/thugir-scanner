@@ -7086,6 +7086,49 @@ const agentpwnMcpExploitationRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function agentpwnContextWindowMarkers(corpus: string): {
+  attackId?: string;
+  contextWindow?: boolean;
+  aiInstructions?: string;
+} {
+  const attackId = corpus.match(/APWN-CW-\d{3}/i)?.[0];
+  const contextWindow =
+    /context[- ]window|Attention Dilution|instruction displacement/i.test(corpus) ||
+    /category=context-window/i.test(corpus);
+  const aiInstructions = corpus.match(
+    /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
+  )?.[1];
+  return { attackId, contextWindow, aiInstructions };
+}
+
+const agentpwnContextWindowRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAgentpwnHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/attacks\/context-window\/\d+/i.test(pageUrl)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${agentpwnResponseHeaderCorpus(ctx.home.headers)}`;
+  let markers = agentpwnContextWindowMarkers(corpus);
+  if (!markers.attackId || !markers.aiInstructions) {
+    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
+    if (pageDoc.status >= 200 && pageDoc.status < 400) {
+      corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
+      markers = agentpwnContextWindowMarkers(corpus);
+    }
+  }
+  if (!markers.attackId || !markers.aiInstructions) return NEGATIVE;
+  const tierMatch = pageUrl.match(/\/context-window\/(\d+)/i);
+  return {
+    fired: true,
+    confidence: markers.contextWindow ? 0.94 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      attackId: markers.attackId,
+      tier: tierMatch?.[1] ?? null,
+      aiInstructionsSample: markers.aiInstructions.slice(0, 120),
+      note: "AgentPwn /attacks/context-window route scan — ai-instructions meta buries malicious Section 14 Administrative Override inside benign ML content (APWN-CW attention-dilution honeypot oracle)"
+    }
+  };
+};
+
 const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -34739,6 +34782,42 @@ const ssrfVulnlabParserRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ssrfVulnlabBlindLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/blind/", origin);
+  probeUrl.searchParams.set("url", "http://example.com/");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body) || doc.body;
+  const blindOk =
+    /\(blind:\s*response discarded\)/i.test(body) &&
+    (/Blind SSRF/i.test(doc.body) || /\/blind\b/i.test(doc.body));
+  if (!blindOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /blind/?url= fetches attacker-controlled URLs but discards the response body — blind SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabBlindRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blind\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabBlindLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -40182,7 +40261,8 @@ function vapiCanonicalOrigin(ctx: RuleContext): string {
       const host = u.hostname.toLowerCase();
       if (/^(?:www\.)?vapi\.tools\.escape\.tech$/i.test(host)) return "https://vapi.tools.escape.tech";
       if (/vapi\.apisec\.ai$/i.test(host)) {
-        u.protocol = "https:";
+        // vapi.apisec.ai serves the PHP lab over HTTP only — HTTPS resets the connection.
+        u.protocol = "http:";
         return u.origin;
       }
     } catch {
@@ -43124,6 +43204,8 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabGopherRouteLiveOracle,
   ssrfVulnlabParserLiveOracle,
   ssrfVulnlabParserRouteLiveOracle,
+  ssrfVulnlabBlindLiveOracle,
+  ssrfVulnlabBlindRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,
@@ -43400,6 +43482,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,
   agentpwnMcpExploitationRouteLiveOracle,
+  agentpwnContextWindowRouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,

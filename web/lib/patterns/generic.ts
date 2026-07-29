@@ -13602,6 +13602,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-blind-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "ssrf.vulnlab.dev blind SSRF live oracle",
+    description:
+      "GET /blind/?url= fetches attacker-controlled URLs server-side but discards the response body — the ssrf.vulnlab.dev blind SSRF training oracle.",
+    impactOneline:
+      "Blind SSRF still enables port scanning, internal service interaction, and out-of-band data exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabBlindLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny RFC1918, link-local, and cloud metadata addresses at the egress layer.",
+        "Use an allowlist of permitted fetch hosts instead of accepting arbitrary URLs.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blind route fetches arbitrary URLs but hides the response. Show SSRF remediation with egress filtering and blind-SSRF detection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-blind-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "ssrf.vulnlab.dev /blind route SSRF live oracle",
+    description:
+      "When scanning /blind, GET /blind/?url= fetches attacker-controlled URLs but returns (blind: response discarded) — route-specific blind SSRF oracle.",
+    impactOneline:
+      "Blind SSRF on route scans still confirms server-side fetch of attacker URLs without returning the body.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabBlindRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny RFC1918, link-local, and cloud metadata addresses at the egress layer.",
+        "Use an allowlist of permitted fetch hosts instead of accepting arbitrary URLs.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blind route fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -19084,6 +19136,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /attacks/mcp-exploitation routes smuggle MCP tool-chain instructions via ai-instructions meta. Show how to harden AI agents against MCP exploitation payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "agentpwn-context-window-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "AgentPwn context-window route live oracle",
+    description:
+      "When scanning /attacks/context-window/{tier}, ai-instructions meta buries malicious Section 14 Administrative Override inside benign ML content with APWN-CW attack IDs — route-specific attention-dilution honeypot oracle.",
+    impactOneline:
+      "Context-window attacks hide malicious instructions inside long benign content to evade agent safety filters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "agentpwnContextWindowRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AgentPwn is intentional AI security research — sanitize HTML and ignore untrusted ai-instructions meta in production agents.",
+      steps: [
+        "Do not execute instructions embedded in scraped HTML meta tags or hidden divs.",
+        "Summarize or chunk long contexts and re-apply safety checks on each segment.",
+        "Report AgentPwn honeypot hits only through controlled security monitoring channels."
+      ]
+    },
+    fixPrompt:
+      "Our /attacks/context-window routes smuggle Administrative Override instructions inside benign ML content via ai-instructions meta. Show how to harden AI agents against attention-dilution attacks.",
     version: 1,
     enabled: true
   },
