@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T03:07:27.168Z",
-  "total": 1019,
-  "uniqueSlugs": 1014,
+  "generatedAt": "2026-07-29T04:03:24.285Z",
+  "total": 1023,
+  "uniqueSlugs": 1018,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1001,
+    "generic": 1005,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 934,
+    "deep": 938,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 257,
+    "Broken access control": 259,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -32,7 +32,7 @@
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 37,
-    "Sensitive data exposure": 24,
+    "Sensitive data exposure": 26,
     "AI security": 44,
     "Business logic": 12,
     "Open redirect": 5,
@@ -944,6 +944,10 @@
     "unprotected-webhook-endpoint",
     "v0-openapi-routes-exposed",
     "v0-server-action-no-authz",
+    "vampi-books-excessive-data-live-oracle",
+    "vampi-books-route-live-oracle",
+    "vampi-user-bola-live-oracle",
+    "vampi-user-bola-route-live-oracle",
     "vapi-api1-bola-live-oracle",
     "vapi-api1-route-live-oracle",
     "vapi-api10-logging-live-oracle",
