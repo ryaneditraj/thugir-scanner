@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T04:12:47.737Z",
+  "updated_at": "2026-07-29T05:10:58.950Z",
   "discovery_urls": [
     {
       "url": "https://pentest-ground.com:4280/vulnerabilities/sqli/",
@@ -11369,7 +11369,32 @@
       "url": "https://ginandjuice.shop/catalog/product/stock?productId=1",
       "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog/product/stock productId param (Burp Scanner sample report)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/lab-results/1",
+      "source": "aligorithm/zero-health — BOLA/IDOR oracle GET /api/lab-results/:id (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/patients",
+      "source": "aligorithm/zero-health — unauthenticated patient PII exposure oracle GET /api/patients (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/login",
+      "source": "aligorithm/zero-health — SQLi auth-bypass oracle POST /api/login (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/chatbot/chat",
+      "source": "aligorithm/zero-health — AI prompt-injection oracle POST /api/chatbot/chat (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/prompt-injection",
+      "source": "OWASP GenAI Security Lab — prompt injection interactive lesson (Vercel deploy)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 29
+  "discovery_urls_added": 34
 }
