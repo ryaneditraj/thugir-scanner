@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T16:02:00.000Z",
+  "updated_at": "2026-07-29T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/ab_testing",
+      "source": "the-internet.herokuapp.com — A/B cookie manipulation / client-side state training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/frames",
+      "source": "the-internet.herokuapp.com — nested frames / clickjacking training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/hovers",
+      "source": "the-internet.herokuapp.com — tooltip / hover XSS sink training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/key_presses",
+      "source": "the-internet.herokuapp.com — keyboard event / DOM injection training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest?limit=100",
+      "source": "NeuraLegion/brokencrystals — business constraint bypass oracle GET /api/products/latest?limit= (README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/redirector",
       "source": "the-internet.herokuapp.com — open redirect link demo training route (Heroku public demo)",
