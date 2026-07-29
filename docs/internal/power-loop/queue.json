@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-26T11:06:00.000Z",
+  "updated_at": "2026-07-29T21:03:44.537Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/floating_menu",
+      "source": "saucelabs/the-internet — Floating Menu practice page (GitHub README deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/download_secure",
+      "source": "saucelabs/the-internet — Secure File Download auth-gated resource lab (GitHub README deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/shifting_content",
+      "source": "saucelabs/the-internet — Shifting Content DOM mutation lab (GitHub README deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/windows",
+      "source": "saucelabs/the-internet — Multiple Windows popup/tab oracle (GitHub README deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/tables",
+      "source": "saucelabs/the-internet — Sortable Data Tables DOM lab (GitHub README deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/2",
       "source": "OWASP WrongSecrets — Challenge 2 secrets-in-config oracle on official Heroku demo (README)",
