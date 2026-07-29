@@ -24022,6 +24022,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-admin-products-negative-price-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Duck Store admin negative product price live oracle",
+    description:
+      "POST /api/v1/admin/products accepts price:-99.99 without server-side validation — negative product price business-logic oracle.",
+    impactOneline:
+      "Missing price validation on admin product creation enables checkout total manipulation and revenue loss.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminProductsNegativePriceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-positive prices on admin product endpoints — Duck Store is intentional lab software.",
+      steps: [
+        "Validate price > 0 on POST /api/v1/admin/products and PUT /api/v1/admin/products/{id}.",
+        "Recompute order totals from catalog prices at checkout.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/v1/admin/products accepts negative prices. Show server-side price validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-admin-products-negative-price-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Duck Store admin products negative price route live oracle",
+    description:
+      "When scanning /api/v1/admin/products, POST with price:-99.99 is accepted — route-specific negative price oracle.",
+    impactOneline:
+      "Route-specific scans should confirm admin product endpoints reject negative or zero prices.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminProductsNegativePriceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate product price bounds on /api/v1/admin/products route handlers.",
+      steps: [
+        "Return 400 for price <= 0 on product create/update.",
+        "Audit checkout to use server-side catalog prices.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/admin/products route accepts negative prices. Show route-specific price validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-put-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store testimonials PUT BOLA live oracle",
+    description:
+      "PUT /api/v1/testimonials/{id} lets user B overwrite user A's testimonial without ownership check — BOLA oracle.",
+    impactOneline:
+      "Missing object-level authorization on testimonial updates lets attackers deface or hijack other users' content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsPutBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce testimonial ownership on PUT /api/v1/testimonials/{id} — Duck Store is intentional lab software.",
+      steps: [
+        "Verify JWT user_id matches testimonial.user_id before allowing updates.",
+        "Return 403 when a user attempts to modify another user's testimonial.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PUT /api/v1/testimonials/{id} allows cross-user edits. Show BOLA remediation with ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-put-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store testimonials PUT BOLA route live oracle",
+    description:
+      "When scanning /api/v1/testimonials/{id}, PUT by a different user overwrites another account's testimonial — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-specific scans should confirm testimonial update endpoints enforce object ownership.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsPutBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block cross-user testimonial updates on /api/v1/testimonials/{id} route handlers.",
+      steps: [
+        "Compare authenticated user_id to testimonial owner before PUT.",
+        "Return 403 for unauthorized testimonial modifications.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/testimonials/{id} route allows cross-user PUT. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-auth-totp-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Duck Store 2FA temp-token bypass live oracle",
+    description:
+      "Login temp_token from requires_totp:true flow is accepted as a full Bearer JWT on protected routes without completing POST /api/v1/auth/login/totp — 2FA bypass oracle.",
+    impactOneline:
+      "Pre-2FA temporary tokens with full API access defeat multi-factor authentication and enable account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAuthTotpBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict temp_token scope until TOTP verification completes — Duck Store is intentional lab software.",
+      steps: [
+        "Issue temp_token JWTs with a limited scope claim that blocks privileged routes.",
+        "Reject temp_token on /api/v1/admin/* and other sensitive endpoints until TOTP is verified.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our login temp_token works as a full JWT before TOTP verification. Show 2FA bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-auth-totp-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Duck Store 2FA temp-token bypass route live oracle",
+    description:
+      "When scanning /api/v1/auth/login, temp_token from 2FA-pending login grants full API access without TOTP — route-specific 2FA bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm pre-2FA tokens cannot access protected admin endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAuthTotpBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope-limit temp_token on /api/v1/auth/login route until TOTP exchange succeeds.",
+      steps: [
+        "Add a pending_2fa scope to temp_token JWTs.",
+        "Middleware should block admin routes for pending_2fa tokens.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/auth/login route issues temp_tokens with full API access. Show route-specific 2FA scope remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvga-route-live-oracle",
     platform: "generic",
     category: "Information disclosure",
