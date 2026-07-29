@@ -31826,6 +31826,85 @@ const theInternetContextMenuRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetKeyPressesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/key_presses(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const keyUrl = new URL("/key_presses", ctx.origin).toString();
+  const doc = await ctx.probe.get(keyUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Key Presses\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasTargetInput = /id=['"]target['"]/i.test(doc.body) && /<input[^>]+type=['"]text['"]/i.test(doc.body);
+  const hasKeydownHandler =
+    /\$\(document\)\.keydown\s*\(/i.test(doc.body) &&
+    /getElementById\s*\(\s*['"]result['"]\s*\)/i.test(doc.body);
+  const hasResultSink = /id=['"]result['"]/i.test(doc.body);
+  if (!hasTargetInput || !hasKeydownHandler || !hasResultSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      keyUrl,
+      markers: ["#target input", "$(document).keydown", "#result innerHTML sink"],
+      note: "the-internet /key_presses route scan — jQuery keydown handler writes pressed keys to #result innerHTML — Elemental Selenium key-press training oracle"
+    }
+  };
+};
+
+const theInternetLargeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/large(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const largeUrl = new URL("/large", ctx.origin).toString();
+  const doc = await ctx.probe.get(largeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Large\s*&\s*Deep\s*DOM\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasDeepTier =
+    /id=['"]sibling-50\.1['"]/i.test(doc.body) &&
+    /tier-50/i.test(doc.body) &&
+    /id=['"]siblings['"]/i.test(doc.body);
+  const mentionsDepth = /nested\s+50\s+levels/i.test(doc.body);
+  if (!hasDeepTier || !mentionsDepth) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      largeUrl,
+      markers: ["#siblings tier-50", "sibling-50.1 nested DOM", "50 levels deep"],
+      note: "the-internet /large route scan — 50-tier nested sibling DOM tree stresses locator strategies — Elemental Selenium large/deep DOM training oracle"
+    }
+  };
+};
+
+const theInternetAddRemoveElementsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/add_remove_elements(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const elementsUrl = new URL("/add_remove_elements/", ctx.origin).toString();
+  const doc = await ctx.probe.get(elementsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Add\/Remove Elements\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasAddButton = /onclick=['"]addElement\(\)['"]/i.test(doc.body);
+  const hasDynamicDelete =
+    /function\s+addElement\s*\(/i.test(doc.body) &&
+    /function\s+deleteElement\s*\(/i.test(doc.body) &&
+    /added-manually/i.test(doc.body);
+  const hasElementsContainer = /id=['"]elements['"]/i.test(doc.body);
+  if (!hasAddButton || !hasDynamicDelete || !hasElementsContainer) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      elementsUrl,
+      markers: ["addElement() button", "deleteElement() .added-manually", "#elements container"],
+      note: "the-internet /add_remove_elements route scan — jQuery appends/removes Delete buttons dynamically — Elemental Selenium add/remove elements training oracle"
+    }
+  };
+};
+
 const theInternetNestedFramesRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -44446,6 +44525,9 @@ export const RULES: Record<string, Rule> = {
   theInternetDynamicControlsRouteLiveOracle,
   theInternetContextMenuRouteLiveOracle,
   theInternetNestedFramesRouteLiveOracle,
+  theInternetKeyPressesRouteLiveOracle,
+  theInternetLargeRouteLiveOracle,
+  theInternetAddRemoveElementsRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
