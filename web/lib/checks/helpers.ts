@@ -449,6 +449,8 @@ export function looksPublicBucketListing(body: string, provider: CloudStoragePro
   return false;
 }
 
+import { createHmac } from "node:crypto";
+
 function b64urlJson(obj: Record<string, unknown>): string {
   const json = JSON.stringify(obj);
   const b64 =
@@ -463,6 +465,20 @@ export function buildAlgNoneJwt(payload: Record<string, unknown>): string {
   const header = b64urlJson({ alg: "none", typ: "JWT" });
   const body = b64urlJson(payload);
   return `${header}.${body}.`;
+}
+
+/** Build an HS256-signed JWT for lab auth-bypass probes (known weak secrets only). */
+export function buildHs256Jwt(payload: Record<string, unknown>, secret: string): string {
+  const header = b64urlJson({ alg: "HS256", typ: "JWT" });
+  const body = b64urlJson(payload);
+  const data = `${header}.${body}`;
+  const sig = createHmac("sha256", secret)
+    .update(data)
+    .digest("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+  return `${data}.${sig}`;
 }
 
 export function looksAuthChallenge(doc: { status: number; body: string }): boolean {

