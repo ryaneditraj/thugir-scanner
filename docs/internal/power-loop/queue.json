@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T19:05:00.000Z",
+  "updated_at": "2026-07-29T20:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://the-internet.herokuapp.com/geolocation",
+      "source": "the-internet.herokuapp.com — geolocation API / browser permission training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/horizontal_slider",
+      "source": "the-internet.herokuapp.com — horizontal slider / range input training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/inputs",
+      "source": "the-internet.herokuapp.com — number input / form control training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/javascript_error",
+      "source": "the-internet.herokuapp.com — onload JavaScript error / injection resistance training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/disappearing_elements",
+      "source": "the-internet.herokuapp.com — disappearing elements / flaky DOM training route (Heroku public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/infinite_scroll",
       "source": "the-internet.herokuapp.com — infinite scroll / DOM scraping training route (Heroku public demo)",
