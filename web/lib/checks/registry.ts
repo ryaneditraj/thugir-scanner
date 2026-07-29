@@ -31771,6 +31771,99 @@ const theInternetTinymceRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetDynamicControlsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dynamic_controls(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const controlsUrl = new URL("/dynamic_controls", ctx.origin).toString();
+  const doc = await ctx.probe.get(controlsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h4>\s*Dynamic Controls\s*<\/h4>/i.test(doc.body)) return NEGATIVE;
+  const hasCheckboxExample =
+    /id=['"]checkbox-example['"]/i.test(doc.body) &&
+    /id=['"]checkbox['"]/i.test(doc.body) &&
+    /swapCheckbox/i.test(doc.body);
+  const hasInputExample =
+    /id=['"]input-example['"]/i.test(doc.body) &&
+    /swapInput/i.test(doc.body) &&
+    /pauseThenToggleControls/i.test(doc.body);
+  if (!hasCheckboxExample || !hasInputExample) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      controlsUrl,
+      markers: ["#checkbox-example", "#input-example", "swapCheckbox/swapInput AJAX toggles"],
+      note: "the-internet /dynamic_controls route scan — checkbox and input forms toggle enabled/disabled state via delayed AJAX — Elemental Selenium dynamic controls training oracle"
+    }
+  };
+};
+
+const theInternetContextMenuRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/context_menu(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const menuUrl = new URL("/context_menu", ctx.origin).toString();
+  const doc = await ctx.probe.get(menuUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Context Menu\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasHotSpot =
+    /id=['"]hot-spot['"]/i.test(doc.body) &&
+    /oncontextmenu=['"]displayMessage\(\)['"]/i.test(doc.body);
+  const hasAlertHandler = /function\s+displayMessage\s*\(\)\s*\{[^}]*window\.alert/i.test(doc.body);
+  const mentionsRightClick = /right-click/i.test(doc.body) && /the-internet/i.test(doc.body);
+  if (!hasHotSpot || !hasAlertHandler || !mentionsRightClick) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      menuUrl,
+      markers: ["#hot-spot oncontextmenu", "displayMessage alert", "right-click the-internet menu"],
+      note: "the-internet /context_menu route scan — custom right-click context menu triggers JavaScript alert — Elemental Selenium context-menu training oracle"
+    }
+  };
+};
+
+const theInternetNestedFramesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/nested_frames(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const nestedUrl = new URL("/nested_frames", ctx.origin).toString();
+  const doc = await ctx.probe.get(nestedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasFrameset =
+    /<frameset/i.test(doc.body) &&
+    /frame[^>]+src=['"]\/frame_top['"]/i.test(doc.body) &&
+    /frame[^>]+src=['"]\/frame_bottom['"]/i.test(doc.body);
+  if (!hasFrameset) return NEGATIVE;
+  const topUrl = new URL("/frame_top", ctx.origin).toString();
+  const topDoc = await ctx.probe.get(topUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const hasInnerFrameset =
+    topDoc.status >= 200 &&
+    topDoc.status < 400 &&
+    /<frameset/i.test(topDoc.body) &&
+    /frame[^>]+src=['"]\/frame_(?:left|middle|right)['"]/i.test(topDoc.body);
+  const bottomUrl = new URL("/frame_bottom", ctx.origin).toString();
+  const bottomDoc = await ctx.probe.get(bottomUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  const hasBottomContent =
+    bottomDoc.status >= 200 && bottomDoc.status < 400 && /\bBOTTOM\b/i.test(bottomDoc.body);
+  if (!hasInnerFrameset || !hasBottomContent) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      nestedUrl,
+      topUrl,
+      bottomUrl,
+      markers: ["frameset frame_top/frame_bottom", "frame_left/middle/right", "BOTTOM leaf frame"],
+      note: "the-internet /nested_frames route scan — nested frameset with frame_top 3-column split and frame_bottom leaf — Elemental Selenium nested-frame training oracle"
+    }
+  };
+};
+
 const pentestGroundDvwaWeakIdRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -44350,6 +44443,9 @@ export const RULES: Record<string, Rule> = {
   theInternetInfiniteScrollRouteLiveOracle,
   theInternetJqueryuiMenuRouteLiveOracle,
   theInternetTinymceRouteLiveOracle,
+  theInternetDynamicControlsRouteLiveOracle,
+  theInternetContextMenuRouteLiveOracle,
+  theInternetNestedFramesRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
