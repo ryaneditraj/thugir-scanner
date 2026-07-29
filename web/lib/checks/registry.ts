@@ -40068,6 +40068,23 @@ const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vapiApi5RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api5\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi5BflaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api5 route scan — GET /api5/users with regular-user Authorization-Token returns every user record including admin flag — BFLA oracle (API5)"
+    }
+  };
+};
+
 const vapiApi1RouteLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -40484,6 +40501,84 @@ const vapiApi7CorsMisconfigLiveOracle: Rule = async (ctx) => {
       flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
       snippet: keyDoc.body.slice(0, 200).trim(),
       note: "vAPI GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials and returns authkey — CORS misconfiguration oracle (API7)"
+    }
+  };
+};
+
+const vapiApi7CorsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api7\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi7CorsMisconfigLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api7 route scan — GET /api7/user/key reflects arbitrary Origin with Access-Control-Allow-Credentials and returns authkey — CORS misconfiguration oracle (API7)"
+    }
+  };
+};
+
+const VAPI_API9_KNOWN_USER = "richardbranson";
+const VAPI_API9_KNOWN_PIN = "1655";
+
+function vapiProbeHasRateLimitHeader(headers: Record<string, string>): boolean {
+  return Object.keys(headers).some((k) => /ratelimit/i.test(k));
+}
+
+const vapiApi9ImproperInventoryLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const base = vapiCanonicalOrigin(ctx);
+  const v2Url = new URL("/vapi/api9/v2/user/login", base).toString();
+  const v2Doc = await ctx.probe.get(v2Url, {
+    method: "POST",
+    body: JSON.stringify({ username: VAPI_API9_KNOWN_USER, pin: "0000" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  const v2RateLimited = vapiProbeHasRateLimitHeader(v2Doc.headers);
+  const v1Url = new URL("/vapi/api9/v1/user/login", base).toString();
+  const v1Doc = await ctx.probe.get(v1Url, {
+    method: "POST",
+    body: JSON.stringify({ username: VAPI_API9_KNOWN_USER, pin: VAPI_API9_KNOWN_PIN }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (v1Doc.status < 200 || v1Doc.status >= 400) return NEGATIVE;
+  const flagMatch = v1Doc.body.match(/flag\{api9_[^"]+/i);
+  if (!flagMatch && !/"accbalance"\s*:\s*"flag\{/i.test(v1Doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: flagMatch && v2RateLimited ? 0.94 : flagMatch ? 0.92 : 0.9,
+    evidence: {
+      v1Url,
+      v2Url,
+      v2HasRateLimit: v2RateLimited,
+      flagSnippet: flagMatch ? flagMatch[0].slice(0, 80) : undefined,
+      snippet: v1Doc.body.slice(0, 200).trim(),
+      note: "vAPI POST /api9/v1/user/login accepts deprecated v1 login without rate limiting and returns flag — improper inventory management oracle (API9)"
+    }
+  };
+};
+
+const vapiApi9RouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api9\//i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi9ImproperInventoryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api9 route scan — deprecated /v1/user/login lacks v2 rate limiting and returns flag{api9_*} with known PIN — improper inventory management oracle (API9)"
     }
   };
 };
@@ -42734,11 +42829,15 @@ export const RULES: Record<string, Rule> = {
   vapiApi4OtpRouteLiveOracle,
   vapiApi4UserExposureLiveOracle,
   vapiApi5BflaLiveOracle,
+  vapiApi5RouteLiveOracle,
   vapiApi6MassAssignmentLiveOracle,
   vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
   vapiApi8SecretRouteLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
+  vapiApi7CorsRouteLiveOracle,
+  vapiApi9ImproperInventoryLiveOracle,
+  vapiApi9RouteLiveOracle,
   vapiApi10LoggingLiveOracle,
   vapiApi10RouteLiveOracle,
   vapiJwtWeakTokenLiveOracle,
