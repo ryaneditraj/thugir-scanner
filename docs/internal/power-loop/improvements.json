@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-products-negative-price-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/admin/products price:-99.99 returns persisted negative price JSON; duck-store.escape.tech/api/v1/admin/products findings 18→20 with negative-price live + route oracles; benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-put-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: user B PUT /api/v1/testimonials/{id} overwrites user A content without ownership check; duck-store.escape.tech/api/v1/testimonials/1 findings 18→20 with put-bola live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-auth-totp-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login with TOTP-enabled user returns requires_totp:true temp_token; Bearer temp_token accesses GET /api/v1/admin/users without POST /auth/login/totp; duck-store.escape.tech/api/v1/auth/login/totp findings 19→22 with totp-bypass live + route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-auth-login-weak-credentials-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/login username:admin password:admin returns access_token JWT with role:admin and requires_totp:false; duck-store.escape.tech/api/v1/auth/login findings 12→16 with weak-credentials live + route oracles; benchmark juice-shop 17 findings 6/6 maintained"

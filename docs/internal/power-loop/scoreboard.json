@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T23:10:00.000Z",
+  "updated_at": "2026-07-29T00:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3296,
-  "total_findings": 33493,
-  "critical_findings": 82,
+  "total_sites_scanned": 2730,
+  "total_findings": 26550,
+  "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2238,
-  "discovery_findings": 27715,
-  "improvements_shipped": 1161,
-  "last_run": "2026-07-28T23:10:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22529,
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-29T00:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 17,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 478,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,47 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (17 findings); secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (14 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 130,
-      "focus": "duck-store admin/products + testimonials PUT + mcp + 2FA totp + vapi api1 BOLA + auth/login/register/open-redirect oracle validation + ai-security-platform drain",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 62,
+      "focus": "duck-store admin/products negative-price + testimonials PUT BOLA + auth/login/totp 2FA bypass from 23 UTC learning gaps",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark category misses",
-      "duck-store.escape.tech/api/v1/auth/login: 12→16 — duck-store-auth-login-weak-credentials-live-oracle (admin/admin JWT)",
-      "duck-store.escape.tech/api/v1/auth/register: 16 — duck-store-referral-code-abuse-live-oracle (referral_code=admin → $5 credit)",
-      "duck-store.escape.tech/nonexistent?redirect=: 19 — duck-store-open-redirect-live-oracle (404 href from redirect param)",
-      "duck-store.escape.tech/api/v1/admin/products: 16 findings — checkout/mass-assignment/stored-XSS oracles fire but no negative-product-price oracle",
-      "duck-store.escape.tech/mcp: 15 findings — MCP coupon disclosure oracle present",
-      "duck-store.escape.tech/api/v1/auth/login/totp: 13-finding hub without route-specific 2FA-bypass oracle",
-      "vapi.tools.escape.tech/vapi/api1/user/1: 2 findings — vapi-route-live-oracle now fires",
-      "ginandjuice.shop/catalog/search/2 + product-search-results: routes return 404 — no live oracle shippable"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "duck-store.escape.tech/api/v1/admin/products: 18→20 findings — duck-store-admin-products-negative-price-live-oracle shipped (POST price:-99.99 accepted)",
+      "duck-store.escape.tech/api/v1/testimonials/1: 18→20 findings — duck-store-testimonials-put-bola-live-oracle shipped (cross-user PUT overwrites testimonial)",
+      "duck-store.escape.tech/api/v1/auth/login/totp: 19→22 findings — duck-store-auth-totp-bypass-live-oracle shipped (temp_token grants admin API access without TOTP)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "duck-store admin/products: negative-product-price business-logic oracle still absent",
-      "duck-store auth/login/totp: 2FA-bypass oracle still absent",
-      "duck-store testimonials/1: testimonials-BOLA PUT oracle still absent",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent",
-      "ginandjuice.shop/catalog/product/stock: endpoint returns 405 Method Not Allowed on GET probe"
+      "duck-store login/totp: 2FA-bypass oracle now shipped — probe-cache nonce fix for post-TOTP relogin",
+      "ai-security-platform-iota.vercel.app/challenges/*: thin 6-7 finding passes with client-side evidence only"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 17,
-    "duck-store.escape.tech/nonexistent?redirect=https://evil-open-redirect-probe.example": 19,
-    "duck-store.escape.tech/api/v1/admin/products": 16,
-    "duck-store.escape.tech/api/v1/auth/login": 16,
-    "duck-store.escape.tech/api/v1/auth/register": 16,
-    "duck-store.escape.tech/mcp": 15,
-    "duck-store.escape.tech/api/v1/auth/login/totp": 13,
-    "duck-store.escape.tech/api/v1/testimonials/1": 13,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 25,
-    "vapi.tools.escape.tech/vapi/api1/user/1": 2
+    "juice-shop-staging.herokuapp.com": 14,
+    "duck-store.escape.tech/api/v1/auth/login/totp": 22,
+    "duck-store.escape.tech/api/v1/admin/products": 20,
+    "duck-store.escape.tech/api/v1/testimonials/1": 20,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18
   }
 }
