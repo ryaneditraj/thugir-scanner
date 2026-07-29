@@ -23117,6 +23117,84 @@ export const genericPatterns: Pattern[] = [
     version: 1,
     enabled: true
   },
+  {
+    slug: "pentest-ground-dvwa-exec-cmdi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pentest-Ground DVWA command injection route live oracle",
+    description:
+      "When scanning /vulnerabilities/exec/, POST ip=127.0.0.1;id executes shell id and returns uid= output — Pentest-Ground hosted DVWA command injection route oracle.",
+    impactOneline:
+      "Unsanitized ping/exec input on DVWA enables OS command execution via shell metacharacters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaExecCmdiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — never pass user input to shell commands.",
+      steps: [
+        "Use parameterized APIs instead of shelling out to ping.",
+        "Block shell metacharacters (; | & $ `) in IP address fields.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/exec/ route shells out to ping with unsanitized ip input. Show command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-dvwa-csp-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA CSP bypass route live oracle",
+    description:
+      "When scanning /vulnerabilities/csp/, POST include=data:text/javascript,alert(1) reflects a script tag with data: URI — Pentest-Ground DVWA CSP bypass route oracle.",
+    impactOneline:
+      "Weak script-src CSP on DVWA allows data: URI script inclusion, enabling XSS despite a policy header.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaCspBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — block data: and inline script sources in CSP.",
+      steps: [
+        "Set script-src to trusted origins only; disallow data: and unsafe-inline.",
+        "Validate external script URLs against an allowlist before reflection.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/csp/ route reflects data:text/javascript script tags. Show CSP hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pentest-Ground RestFlaw eval code injection route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000, GET /eval?s= with X-Auth-Token: THISISATOKEN evaluates attacker Python and returns uid= — RestFlaw OpenAPI code injection route oracle.",
+    impactOneline:
+      "Server-side eval of query strings with a static auth token enables remote code execution on the RestFlaw API lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawEvalCodeInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RestFlaw is intentional security training — never eval user-controlled strings.",
+      steps: [
+        "Remove eval/exec endpoints from production APIs.",
+        "Rotate static X-Auth-Token values and require per-user authentication.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw /eval endpoint evaluates query strings with a static token. Show safe alternatives to dynamic code evaluation.",
+    version: 1,
+    enabled: true
+  },
 {
     slug: "exposed-infra-artifacts",
     platform: "generic",
