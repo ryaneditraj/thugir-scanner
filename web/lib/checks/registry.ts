@@ -31008,6 +31008,154 @@ const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pentestGroundDvwaUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/upload\/?/i.test(pageUrl)) return NEGATIVE;
+  const uploadUrl = new URL("/vulnerabilities/upload/", ctx.origin).toString();
+  const probeName = `thugir-upload-${Date.now().toString(36)}.php`;
+  const boundary = `----ThugirDvwaUpload${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="MAX_FILE_SIZE"',
+    "",
+    "100000",
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="uploaded"; filename="${probeName}"`,
+    "Content-Type: image/jpeg",
+    "",
+    "<?php echo 'thugir-upload-probe'; ?>",
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="Upload"',
+    "",
+    "Upload",
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/succes+fully uploaded/i.test(doc.body) || !/hackable\/uploads/i.test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      uploadUrl,
+      probeName,
+      snippet: doc.body.match(/<pre>[^<]+<\/pre>/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA POST /vulnerabilities/upload/ accepts arbitrary PHP file upload — unrestricted file upload route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/csrf\/?/i.test(pageUrl)) return NEGATIVE;
+  const csrfUrl = new URL("/vulnerabilities/csrf/", ctx.origin).toString();
+  const formDoc = await ctx.probe.get(csrfUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (formDoc.status < 200 || formDoc.status >= 400) return NEGATIVE;
+  if (!/name=["']password_new["']/i.test(formDoc.body)) return NEGATIVE;
+  if (!/name=["']password_conf["']/i.test(formDoc.body)) return NEGATIVE;
+  if (/name=["'](?:user_token|csrf_token|token)["']/i.test(formDoc.body)) return NEGATIVE;
+  const postDoc = await ctx.probe.get(csrfUrl, {
+    method: "POST",
+    body: "password_new=thugir-csrf-probe&password_conf=thugir-csrf-probe&Change=Change",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (/password.{0,20}did not match/i.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      csrfUrl,
+      snippet: "password change form without anti-CSRF token accepts cross-site POST",
+      note: "Pentest-Ground DVWA POST /vulnerabilities/csrf/ accepts password_new/password_conf without CSRF token — CSRF route oracle"
+    }
+  };
+};
+
+function isTheInternetHost(ctx: RuleContext): boolean {
+  return /the-internet\.herokuapp\.com/i.test(ctx.origin);
+}
+
+const theInternetLoginAuthLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const authUrl = new URL("/authenticate", ctx.origin).toString();
+  const goodBody = new URLSearchParams({
+    username: "tomsmith",
+    password: "SuperSecretPassword!"
+  }).toString();
+  const goodDoc = await ctx.probe.get(authUrl, {
+    method: "POST",
+    body: goodBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const goodLoc = goodDoc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(goodDoc.status)) return NEGATIVE;
+  if (!/\/secure(?:\/|$|\?)/i.test(goodLoc)) return NEGATIVE;
+  const badBody = new URLSearchParams({
+    username: "tomsmith",
+    password: "thugir-wrong-probe"
+  }).toString();
+  const badDoc = await ctx.probe.get(authUrl, {
+    method: "POST",
+    body: badBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const badLoc = badDoc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(badDoc.status)) return NEGATIVE;
+  if (!/\/login(?:\/|$|\?)/i.test(badLoc)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      authUrl,
+      goodRedirect: goodLoc.slice(0, 120),
+      badRedirect: badLoc.slice(0, 120),
+      note: "the-internet.herokuapp.com POST /authenticate redirects valid tomsmith credentials to /secure and rejects invalid passwords to /login — form authentication oracle"
+    }
+  };
+};
+
+const theInternetLoginAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await theInternetLoginAuthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  const disclosesCreds =
+    /tomsmith/i.test(ctx.combined) && /SuperSecretPassword!/i.test(ctx.combined);
+  return {
+    fired: true,
+    confidence: disclosesCreds ? 0.94 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      disclosesDemoCredentials: disclosesCreds,
+      note: "the-internet /login route scan — form authentication redirects valid demo credentials to /secure; login page discloses tomsmith/SuperSecretPassword! test credentials"
+    }
+  };
+};
+
 const pentestGroundRestflawEvalCodeInjectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -43270,6 +43418,10 @@ export const RULES: Record<string, Rule> = {
   pentestGroundDvwaExecCmdiRouteLiveOracle,
   pentestGroundDvwaCspBypassRouteLiveOracle,
   pentestGroundDvwaSqliRouteLiveOracle,
+  pentestGroundDvwaUploadRouteLiveOracle,
+  pentestGroundDvwaCsrfRouteLiveOracle,
+  theInternetLoginAuthLiveOracle,
+  theInternetLoginAuthRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
