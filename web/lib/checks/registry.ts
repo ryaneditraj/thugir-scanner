@@ -31056,6 +31056,51 @@ const pentestGroundDvwaUploadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pentestGroundDvwaXssRRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/xss_r\/?/i.test(pageUrl)) return NEGATIVE;
+  const canary = `thugirXssR${Date.now().toString(36)}`;
+  const xssUrl = new URL("/vulnerabilities/xss_r/", ctx.origin);
+  xssUrl.searchParams.set("name", canary);
+  const doc = await ctx.probe.get(xssUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!new RegExp(`Hello\\s+${escaped}`, "i").test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      xssUrl: xssUrl.toString(),
+      canary,
+      snippet: doc.body.match(new RegExp(`Hello\\s+${escaped}`, "i"))?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA GET /vulnerabilities/xss_r/?name= reflects attacker input in Hello <name> — reflected XSS route oracle"
+    }
+  };
+};
+
+const pentestGroundDvwaFiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/fi\/?/i.test(pageUrl)) return NEGATIVE;
+  const fiUrl = new URL("/vulnerabilities/fi/", ctx.origin);
+  fiUrl.searchParams.set("page", "../../../../../../../etc/passwd");
+  const doc = await ctx.probe.get(fiUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/root:x:0:0:/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      fiUrl: fiUrl.toString(),
+      snippet: doc.body.match(/root:x:0:0:[^\n]*/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "Pentest-Ground DVWA GET /vulnerabilities/fi/?page=../../../../../../../etc/passwd includes /etc/passwd — local file inclusion route oracle"
+    }
+  };
+};
+
 const pentestGroundDvwaCsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -31152,6 +31197,34 @@ const theInternetLoginAuthRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       disclosesDemoCredentials: disclosesCreds,
       note: "the-internet /login route scan — form authentication redirects valid demo credentials to /secure; login page discloses tomsmith/SuperSecretPassword! test credentials"
+    }
+  };
+};
+
+const theInternetDynamicLoadingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dynamic_loading\/?/i.test(pageUrl)) return NEGATIVE;
+  const hubUrl = new URL("/dynamic_loading", ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  if (!/\/dynamic_loading\/[12]/i.test(hubDoc.body)) return NEGATIVE;
+  const ex1Url = new URL("/dynamic_loading/1", ctx.origin).toString();
+  const ex1Doc = await ctx.probe.get(ex1Url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (ex1Doc.status < 200 || ex1Doc.status >= 400) return NEGATIVE;
+  const hasStart = /id=['"]start['"]/i.test(ex1Doc.body);
+  const hasHello = /Hello World!/i.test(ex1Doc.body);
+  const hasLoader = /ajax-loader\.gif/i.test(ex1Doc.body);
+  if (!hasStart || !hasHello || !hasLoader) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      hubUrl,
+      exampleUrl: ex1Url,
+      markers: ["dynamic_loading/1", "Hello World!", "ajax-loader.gif"],
+      note: "the-internet /dynamic_loading route scan — AJAX delayed-render training lab with hidden #start button and Hello World! reveal — Elemental Selenium dynamic content oracle"
     }
   };
 };
@@ -43420,8 +43493,11 @@ export const RULES: Record<string, Rule> = {
   pentestGroundDvwaSqliRouteLiveOracle,
   pentestGroundDvwaUploadRouteLiveOracle,
   pentestGroundDvwaCsrfRouteLiveOracle,
+  pentestGroundDvwaXssRRouteLiveOracle,
+  pentestGroundDvwaFiRouteLiveOracle,
   theInternetLoginAuthLiveOracle,
   theInternetLoginAuthRouteLiveOracle,
+  theInternetDynamicLoadingRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
