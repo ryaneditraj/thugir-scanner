@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:agentpwn.com",
+      "slug": "agentpwn-capability-abuse-route-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: agentpwnAttackRouteLiveOracle now always re-fetches /attacks/* route page and matches tool-chain SYSTEM INSTRUCTIONS (web search/browser/file write tools); www.agentpwn.com/attacks/capability-abuse/3 findings 3→4 (+agentpwn-attack-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-signup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /signup returns connect.sid session + /login markers (or MongoDB E11000 duplicate _id on saturated Heroku); nodegoat-websec.herokuapp.com/register findings 2→4 (+nodegoat-signup-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-check-otp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST forget-password + 12 rapid v2/check-otp guesses return Invalid OTP without HTTP 503 while v3/check-otp rate-limits after ~10; crapi.apisec.ai/identity/api/auth/v3/check-otp findings 4→6 (+crapi-check-otp-route-live-oracle + crapi-otp-bruteforce-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-apisec-http-canonical-origin-fix",
       "status": "shipped",

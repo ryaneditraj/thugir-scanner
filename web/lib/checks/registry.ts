@@ -7018,6 +7018,9 @@ function agentpwnAttackMarkers(corpus: string): {
     /SYSTEM INSTRUCTIONS:\s*You are now DAN/i.test(corpus) ||
     /SYSTEM INSTRUCTIONS:\s*Previous conversation summary/i.test(corpus) ||
     /SYSTEM INSTRUCTIONS:[\s\S]{0,240}(?:safety|restricted|unrestricted access)/i.test(corpus) ||
+    /SYSTEM INSTRUCTIONS:[\s\S]{0,320}(?:web search tool|browser tool|file write tool|admin panel URL)/i.test(
+      corpus
+    ) ||
     /SYSTEM INSTRUCTIONS:[\s\S]{0,240}AI Safety Board Compliance Standard/i.test(corpus) ||
     /SYSTEM INSTRUCTIONS:[\s\S]{0,240}instruction set integrity/i.test(corpus) ||
     /SYSTEM INSTRUCTIONS:[\s\S]{0,240}hash of their system prompt/i.test(corpus) ||
@@ -7030,14 +7033,11 @@ const agentpwnAttackRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/attacks\/[^/]+\/\d+/i.test(pageUrl)) return NEGATIVE;
   let corpus = `${ctx.combined}\n${agentpwnResponseHeaderCorpus(ctx.home.headers)}`;
-  let { attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus);
-  if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) {
-    const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
-    if (pageDoc.status >= 200 && pageDoc.status < 400) {
-      corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
-      ({ attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus));
-    }
+  const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 18000 });
+  if (pageDoc.status >= 200 && pageDoc.status < 400) {
+    corpus = `${corpus}\n${pageDoc.body}\n${agentpwnResponseHeaderCorpus(pageDoc.headers)}`;
   }
+  let { attackIdMatch, aiInstructionsMatch, hiddenDan } = agentpwnAttackMarkers(corpus);
   const reportApi = /agentpwn\.com\/api\/report/i.test(corpus);
   if (!attackIdMatch && !aiInstructionsMatch && !hiddenDan) return NEGATIVE;
   const attackId = attackIdMatch?.[1];
@@ -7229,6 +7229,62 @@ const nodegoatLearnOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
       tutorialUrl,
       markers: markers.slice(0, 3),
       note: "NodeGoat /learn route scan — /tutorial/a10 documents unvalidated /learn?url= open redirect (session-gated on public Heroku; marker oracle via A10 tutorial)"
+    }
+  };
+};
+
+const nodegoatSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const signupUrl = new URL("/signup", ctx.origin).toString();
+  const signupPage = await ctx.probe.get(signupUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (signupPage.status < 200 || signupPage.status >= 400) return NEGATIVE;
+  if (!/userName/i.test(signupPage.body) || !/Enter sign up information/i.test(signupPage.body))
+    return NEGATIVE;
+  const userName = `thugir_ng_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const csrfMatch = signupPage.body.match(/name="_csrf"\s+value="([^"]*)"/i);
+  const csrf = csrfMatch?.[1] ?? "";
+  const regDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: `userName=${encodeURIComponent(userName)}&firstName=Thugir&lastName=Probe&password=ThugirTest123!&verify=ThugirTest123!&email=${encodeURIComponent(`${userName}@probe.local`)}&_csrf=${encodeURIComponent(csrf)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const regOk =
+    [301, 302, 303, 307, 308].includes(regDoc.status) ||
+    /E11000 duplicate key/i.test(regDoc.body) ||
+    /WriteError/i.test(regDoc.body) ||
+    (regDoc.status === 200 &&
+      nodegoatSessionCookieFromDoc(regDoc) !== null &&
+      /\/login/i.test(regDoc.body));
+  if (!regOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /E11000 duplicate key/i.test(regDoc.body) ? 0.91 : 0.93,
+    evidence: {
+      signupUrl,
+      userName,
+      status: regDoc.status,
+      snippet: regDoc.body.slice(0, 200).trim(),
+      note: "NodeGoat POST /signup processes unauthenticated registration (MongoDB WriteError E11000 duplicate _id or redirect) — open registration oracle"
+    }
+  };
+};
+
+const nodegoatSignupRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:register|signup)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatSignupOpenRegistrationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /register or /signup route scan — unauthenticated POST /signup creates accounts without admin approval — open registration oracle"
     }
   };
 };
@@ -39458,6 +39514,114 @@ const crapiSignupRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const crapiOtpBruteforceLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const rand = `${Date.now()}`.slice(-9);
+  const email = `thugir_otp_${rand}@scanner.local`;
+  const password = "Test@123";
+  const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
+  const signupDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      email,
+      password,
+      name: "Thugir",
+      number: rand,
+      mechanic_code: "TRUGIR"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (signupDoc.status < 200 || signupDoc.status >= 400) return NEGATIVE;
+  if (!/registered successfully/i.test(signupDoc.body)) return NEGATIVE;
+  const forgetUrl = new URL("/identity/api/auth/forget-password", ctx.origin).toString();
+  const forgetDoc = await ctx.probe.get(forgetUrl, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (forgetDoc.status < 200 || forgetDoc.status >= 300) return NEGATIVE;
+  if (!/OTP Sent/i.test(forgetDoc.body)) return NEGATIVE;
+
+  const v2Url = new URL("/identity/api/auth/v2/check-otp", ctx.origin).toString();
+  let v2Attempts = 0;
+  let v2Blocked = false;
+  for (let i = 0; i < 12; i++) {
+    const otp = String(i).padStart(4, "0");
+    const doc = await ctx.probe.get(v2Url, {
+      method: "POST",
+      body: JSON.stringify({ email, otp, password: "NewPass123!" }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 1024,
+      timeoutMs: 10000
+    });
+    v2Attempts++;
+    if (doc.status === 503 || /exceeded the number of attempts/i.test(doc.body)) {
+      v2Blocked = true;
+      break;
+    }
+  }
+  if (v2Blocked || v2Attempts < 10) return NEGATIVE;
+
+  const v3Url = new URL("/identity/api/auth/v3/check-otp", ctx.origin).toString();
+  await ctx.probe.get(forgetUrl, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  let v3Blocked = false;
+  for (let i = 0; i < 12; i++) {
+    const otp = String(i).padStart(4, "0");
+    const doc = await ctx.probe.get(v3Url, {
+      method: "POST",
+      body: JSON.stringify({ email, otp, password: "NewPass123!" }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 1024,
+      timeoutMs: 10000
+    });
+    if (doc.status === 503 || /exceeded the number of attempts/i.test(doc.body)) {
+      v3Blocked = true;
+      break;
+    }
+  }
+
+  return {
+    fired: true,
+    confidence: v3Blocked ? 0.94 : 0.91,
+    evidence: {
+      forgetUrl,
+      v2Url,
+      v3Url,
+      v2Attempts,
+      v3RateLimited: v3Blocked,
+      email,
+      note: "crAPI legacy POST /identity/api/auth/v2/check-otp accepts 12+ rapid invalid OTP guesses without HTTP 503 lockout while v3/check-otp rate-limits — broken authentication via deprecated API version oracle"
+    }
+  };
+};
+
+const crapiCheckOtpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/check-otp/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiOtpBruteforceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /identity/api/auth/v3/check-otp route scan — legacy v2/check-otp lacks rate limiting that v3 enforces after ~10 attempts — OTP brute-force oracle (API2)"
+    }
+  };
+};
+
 const crapi2AuthLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapi2Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -43299,6 +43463,8 @@ export const RULES: Record<string, Rule> = {
   crapiVehicleRouteLiveOracle,
   crapiSignupOpenRegistrationLiveOracle,
   crapiSignupRouteLiveOracle,
+  crapiOtpBruteforceLiveOracle,
+  crapiCheckOtpRouteLiveOracle,
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
   crapi2ShopOrdersIdBolaRouteLiveOracle,
@@ -43477,6 +43643,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatLearnOpenRedirectLiveOracle,
   nodegoatLearnOpenRedirectRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
+  nodegoatSignupOpenRegistrationLiveOracle,
+  nodegoatSignupRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,

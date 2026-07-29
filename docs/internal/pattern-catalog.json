@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-29T07:06:08.294Z",
-  "total": 1032,
-  "uniqueSlugs": 1027,
+  "generatedAt": "2026-07-29T08:35:16.620Z",
+  "total": 1036,
+  "uniqueSlugs": 1031,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1014,
+    "generic": 1018,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 947,
+    "deep": 951,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 72,
     "Security misconfiguration": 79,
-    "Broken authentication": 75,
+    "Broken authentication": 79,
     "Injection": 206,
     "Cross-site scripting": 144,
     "general": 20,
@@ -692,8 +692,10 @@
     "command-injection-form-probe",
     "convex-open-query-no-auth",
     "cors-reflect-origin",
+    "crapi-check-otp-route-live-oracle",
     "crapi-mechanic-report-bola-live-oracle",
     "crapi-mechanic-report-route-live-oracle",
+    "crapi-otp-bruteforce-live-oracle",
     "crapi-shop-orders-id-bola-route-live-oracle",
     "crapi-signup-open-registration-live-oracle",
     "crapi-signup-route-live-oracle",
@@ -825,6 +827,8 @@
     "missing-security-headers",
     "nodegoat-benefits-nosql-route-live-oracle",
     "nodegoat-learn-open-redirect-route-live-oracle",
+    "nodegoat-signup-open-registration-live-oracle",
+    "nodegoat-signup-route-live-oracle",
     "nodegoat-tutorial-a1-route-live-oracle",
     "nodegoat-tutorial-a10-route-live-oracle",
     "nodegoat-tutorial-a2-route-live-oracle",
