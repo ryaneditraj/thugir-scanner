@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T04:10:00.000Z",
+  "updated_at": "2026-07-30T04:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2904,
-  "total_findings": 27980,
-  "critical_findings": 60,
+  "total_sites_scanned": 2910,
+  "total_findings": 28066,
+  "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2051,
-  "discovery_findings": 23830,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-30T04:10:00.000Z",
+  "discovery_urls_added": 2056,
+  "discovery_findings": 23900,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-30T04:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 463,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (16 findings); secret-resend slug still absent"
+      "note": "Primary Heroku healthy 6/6 (16 findings); secret-resend slug still absent; security-question-disclosure absent vs prior 17-finding runs"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 9,
-      "focus": "the-internet javascript_error + disappearing_elements + slow route oracles (thin 2-finding misconfig passes)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 79,
+      "focus": "Chimera SSRF webhook + GenAI chat/agent-browse + vulnerable-web-site login + juice-shop.demo Challenges + demo.owasp-juice Feedbacks recovery + vapi api5 queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (16 findings) — no benchmark misses",
-      "the-internet.herokuapp.com/javascript_error: 2→3 findings — the-internet-javascript-error-route-live-oracle shipped (loadError onload propertyThatDoesNotExist.xyz)",
-      "the-internet.herokuapp.com/disappearing_elements: 2→3 findings — the-internet-disappearing-elements-route-live-oracle shipped (flaky nav links)",
-      "the-internet.herokuapp.com/slow: 2→3 findings — the-internet-slow-route-live-oracle shipped ($.get /slow_external 30s)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (16 findings) — no benchmark category misses",
+      "juice-shop.demo.escape.tech/api/Challenges: 18-finding juice-shop category hub with jwt-alg-none + chatbot oracles",
+      "demo.owasp-juice.shop/api/Feedbacks: 15 findings — route recovered from prior 503 error",
+      "chimera.atlascrew.dev/api/v1/*: 5-finding hubs with reflexion-escalated-ssti but no route-specific SSRF/prompt-injection live oracles",
+      "vulnerable-web-site.vercel.app/login: 5-finding hub without auth-bypass live oracle",
+      "vapi.tools.escape.tech/vapi/api5/user|users: 13-finding vAPI BFLA hubs"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zerohealth.aliyu.dev/* API routes return landing page HTML — JWT/BOLA live oracles pending backend deploy",
-      "pwnshop.ctfsecurity.com/api/v1/* blocked by Cloudflare 403 from cloud agent — API route oracles pending",
-      "the-internet.herokuapp.com/broken_links + notification_messages return 404 — route oracles deferred"
+      "security-question-disclosure slug absent on 04 UTC primary run (16 vs 17 findings)",
+      "chimera.atlascrew.dev GenAI/SSRF routes: route-specific CHM-AI-001/002 and CHM-ADMIN-002 live oracles absent",
+      "vulnerable-web-site.vercel.app/login: login/auth-bypass oracle still absent",
+      "zerohealth.aliyu.dev/* and pwnshop.ctfsecurity.com/api/v1/* still blocked by Cloudflare from cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 16,
-    "the-internet.herokuapp.com/javascript_error": 3,
-    "the-internet.herokuapp.com/disappearing_elements": 3,
-    "the-internet.herokuapp.com/slow": 3,
+    "juice-shop.demo.escape.tech/api/Challenges": 18,
+    "demo.owasp-juice.shop/api/Feedbacks": 15,
+    "vapi.tools.escape.tech/vapi/api5/user": 13,
+    "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 5,
+    "vulnerable-web-site.vercel.app/login": 5,
     "duck-store.escape.tech/api/v1/admin/orders": 23,
-    "brokencrystals.com/api/file/raw": 60,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval": 3
+    "vapi.tools.escape.tech/vapi/api3/comment": 14
   }
 }
