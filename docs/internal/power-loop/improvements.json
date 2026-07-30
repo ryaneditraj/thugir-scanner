@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-basic-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /basic/?greeting={{7*7}} → pre.rendered 49 (Jinja2 render_template_string); ssti.vulnlab.dev/basic findings 2→6 (+ssti-vulnlab-basic-live-oracle + route); benchmark juice-shop 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-format-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /format/?template=Hello, {user.name}! → pre.rendered Hello, alice! (str.format); ssti.vulnlab.dev/format findings 3→6 (+ssti-vulnlab-format-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-second-order-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /second-order/save body={{7*7}} then GET /preview?id= → pre.rendered 49 (stored draft SSTI); ssti.vulnlab.dev/second-order findings 3→6 (+ssti-vulnlab-second-order-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:sqli.vulnlab.dev",
       "slug": "sqli-vulnlab-error-live-oracle",
       "status": "shipped",
@@ -16014,6 +16032,36 @@
       "source": "discovery:xss.vulnlab.dev",
       "slug": "xss-vulnlab-reflected-route-live-oracle",
       "shipped_at": "2026-07-30T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-basic-live-oracle",
+      "shipped_at": "2026-07-30T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-basic-route-live-oracle",
+      "shipped_at": "2026-07-30T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-format-live-oracle",
+      "shipped_at": "2026-07-30T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-format-route-live-oracle",
+      "shipped_at": "2026-07-30T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-second-order-live-oracle",
+      "shipped_at": "2026-07-30T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-second-order-route-live-oracle",
+      "shipped_at": "2026-07-30T17:10:00.000Z"
     }
   ]
 }
