@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-memories-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/memories without auth returns UserId 4/13/18/19/21 with nested User.email bjoern@owasp.org + password hash; juice-shop-staging benchmark findings 22→25 (+memories-bola + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-quantitys-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Quantitys without auth returns 56 rows with ProductId+quantity; demo.owasp-juice.shop/api/Quantitys hub 20 findings; juice-shop-staging benchmark 22→25 (+quantitys-exposure + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-hints-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Hints without auth returns 397 challenge hints spanning 116 ChallengeIds; juice-shop-staging benchmark findings 22→25 (+hints-exposure + route); benchmark recall 6/6 maintained"
+    },
+    {
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-cards-bola-live-oracle",
       "status": "shipped",
