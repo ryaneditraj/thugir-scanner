@@ -32249,6 +32249,85 @@ const theInternetEntryAdRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetJavascriptErrorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/javascript_error(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const errorUrl = new URL("/javascript_error", ctx.origin).toString();
+  const doc = await ctx.probe.get(errorUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasLoadErrorFn =
+    /function\s+loadError\s*\(\s*\)/i.test(doc.body) &&
+    /propertyThatDoesNotExist\.xyz/i.test(doc.body);
+  const hasOnloadTrigger =
+    /<body[^>]+onload=['"]loadError\(\)['"]/i.test(doc.body) &&
+    /JavaScript error in the onload event/i.test(doc.body);
+  if (!hasLoadErrorFn || !hasOnloadTrigger) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      errorUrl,
+      markers: ["loadError()", "propertyThatDoesNotExist.xyz", "body onload JavaScript error"],
+      note: "the-internet /javascript_error route scan — onload loadError() dereferences missing property — Elemental Selenium JS-error handling training oracle"
+    }
+  };
+};
+
+const theInternetDisappearingElementsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/disappearing_elements(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const disappearUrl = new URL("/disappearing_elements", ctx.origin).toString();
+  const doc = await ctx.probe.get(disappearUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Disappearing Elements\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasDisappearCopy =
+    /disappearing\/reappearing on each page load/i.test(doc.body) &&
+    /elements on a page change/i.test(doc.body);
+  const hasNavMenu =
+    /href=['"]\/about\/['"]/i.test(doc.body) &&
+    /href=['"]\/contact-us\/['"]/i.test(doc.body) &&
+    /href=['"]\/portfolio\/['"]/i.test(doc.body);
+  if (!hasDisappearCopy || !hasNavMenu) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      disappearUrl,
+      markers: ["h3 Disappearing Elements", "disappearing/reappearing nav", "About/Contact/Portfolio links"],
+      note: "the-internet /disappearing_elements route scan — nav items randomly disappear/reappear on reload — Elemental Selenium flaky-element training oracle"
+    }
+  };
+};
+
+const theInternetSlowRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/slow(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const slowUrl = new URL("/slow", ctx.origin).toString();
+  const doc = await ctx.probe.get(slowUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Slow Resources\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasSlowExternal =
+    /\$\.get\(['"]\/slow_external['"]\)/i.test(doc.body) &&
+    /30 seconds to complete/i.test(doc.body) &&
+    /third-party site resources to load/i.test(doc.body);
+  if (!hasSlowExternal) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      slowUrl,
+      markers: ["$.get('/slow_external')", "30 seconds to complete", "h3 Slow Resources"],
+      note: "the-internet /slow route scan — rogue GET /slow_external blocks page for 30s — Elemental Selenium slow-resource wait training oracle"
+    }
+  };
+};
+
 const theInternetWindowsRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -45211,6 +45290,9 @@ export const RULES: Record<string, Rule> = {
   theInternetHorizontalSliderRouteLiveOracle,
   theInternetInputsRouteLiveOracle,
   theInternetEntryAdRouteLiveOracle,
+  theInternetJavascriptErrorRouteLiveOracle,
+  theInternetDisappearingElementsRouteLiveOracle,
+  theInternetSlowRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,

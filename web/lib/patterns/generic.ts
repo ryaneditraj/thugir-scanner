@@ -24990,6 +24990,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-javascript-error-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet JavaScript error route live oracle",
+    description:
+      "When scanning /javascript_error, body onload loadError() dereferences propertyThatDoesNotExist.xyz — Elemental Selenium JS-error handling training route oracle.",
+    impactOneline:
+      "Onload JavaScript exceptions break naive injection flows and require explicit error-handling in automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetJavascriptErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — handle onload JS errors before continuing E2E flows.",
+      steps: [
+        "Check browser console logs for uncaught exceptions on page load.",
+        "Use explicit waits that tolerate transient JS failures in training apps.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /javascript_error route throws a JavaScript error in onload. Show robust error-handling patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-disappearing-elements-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet disappearing elements route live oracle",
+    description:
+      "When scanning /disappearing_elements, nav links randomly disappear/reappear on each reload — Elemental Selenium flaky-element training route oracle.",
+    impactOneline:
+      "Non-deterministic DOM visibility causes intermittent automation failures without retry logic.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDisappearingElementsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — retry clicks on elements that may be hidden on reload.",
+      steps: [
+        "Use explicit waits with retry/backoff for elements that toggle visibility.",
+        "Avoid brittle XPath tied to elements that randomly disappear.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /disappearing_elements route hides nav items on random reloads. Show flaky-element retry patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-slow-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet slow resources route live oracle",
+    description:
+      "When scanning /slow, $.get('/slow_external') blocks for 30 seconds — Elemental Selenium slow-resource wait training route oracle.",
+    impactOneline:
+      "Long-running third-party requests require extended timeouts in browser automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetSlowRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — increase timeouts for slow external resources.",
+      steps: [
+        "Set page-load and script timeouts above the slowest third-party widget.",
+        "Stub or block slow tracking scripts in test environments.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /slow route triggers a 30-second /slow_external GET. Show timeout configuration patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
