@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-29T23:04:33.498Z",
+  "updated_at": "2026-07-30T00:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/api/debug/token",
+      "source": "aligorithm/zero-health — debug JWT secret disclosure oracle GET /api/debug/token (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/debug/connection",
+      "source": "aligorithm/zero-health — verbose debug connection info oracle GET /api/debug/connection (zerohealth.aliyu.dev)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/prescriptions",
+      "source": "aligorithm/zero-health — BOLA prescriptions API GET /api/prescriptions (zerohealth.aliyu.dev healthcare lab)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/appointments",
+      "source": "aligorithm/zero-health — BOLA appointments API GET /api/appointments (zerohealth.aliyu.dev healthcare lab)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Challenges",
+      "source": "OWASP Juice Shop demo — challenge scoreboard API oracle GET /api/Challenges (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the-internet.herokuapp.com/basic_auth",
       "source": "saucelabs/the-internet — HTTP Basic Authentication training route (GitHub README deploy)",
