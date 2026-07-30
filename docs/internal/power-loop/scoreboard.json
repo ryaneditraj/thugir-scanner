@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T05:12:39.115Z",
+  "updated_at": "2026-07-30T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2919,
-  "total_findings": 28167,
+  "total_sites_scanned": 2921,
+  "total_findings": 28204,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2061,
-  "discovery_findings": 23994,
+  "discovery_findings": 24013,
   "improvements_shipped": 1158,
-  "last_run": "2026-07-30T05:12:39.115Z",
+  "last_run": "2026-07-30T06:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 16,
+      "oracle_findings": 18,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku healthy 6/6 (16 findings); jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti present; secret-resend slug still absent"
+      "note": "Primary Heroku healthy 6/6 (18 findings); jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti present; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 85,
-      "focus": "demo.owasp-juice.shop Users/BasketItems/Products API oracles + juice-shop.herokuapp.com/rest/basket/2 BOLA + VWAD voice-goat VoiceAdmin + crapi.apisec.ai queue drain + zerohealth challenges",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 57,
+      "focus": "the-internet /abtest + demo.owasp-juice.shop Users/BasketItems route oracles shipped",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (16 findings) — no benchmark category misses",
-      "demo.owasp-juice.shop/api/Users/1: 16-finding juice-shop category hub with jwt-alg-none + chatbot oracles",
-      "demo.owasp-juice.shop/api/BasketItems: 16-finding juice-shop hub — route-specific BOLA/HPP live oracle absent",
-      "juice-shop.herokuapp.com/rest/basket/2: 16-finding juice-shop hub — route-specific basket IDOR oracle absent",
-      "demo.owasp-juice.shop/api/Products/1: 15-finding juice-shop hub",
-      "vwad.owasp.org/app/voice-goat/voiceadmin: 6-finding thin pass — VWAD app-not-found + no VoiceAdmin prompt-injection oracle",
-      "crapi.apisec.ai/identity/api/auth/*: 5-6 finding hubs with client-side-crapi-evidence",
-      "zerohealth.aliyu.dev/challenges: 5-finding hub with client-side-zero-health-evidence (reachable from cloud agent)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (18 findings) — no benchmark category misses",
+      "the-internet.herokuapp.com/abtest: 2→3 findings — the-internet-abtest-route-live-oracle shipped",
+      "demo.owasp-juice.shop/api/Users/1: 16→19 findings — juice-shop-users-idor-live-oracle + route variant shipped",
+      "demo.owasp-juice.shop/api/BasketItems: 16→19 findings — juice-shop-basket-items-bola-live-oracle + route variant shipped",
+      "juice-shop.herokuapp.com/rest/basket/2: 16-finding juice-shop hub — route-specific basket IDOR oracle still absent",
+      "vwad.owasp.org/app/voice-goat/voiceadmin: 6-finding thin pass — VoiceAdmin oracle absent",
+      "zerohealth.aliyu.dev/challenges: 5-finding hub without route-specific JWT-secret or BOLA oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/api/Users/1 and /api/BasketItems: route-specific IDOR/BOLA live oracles absent despite 16-finding juice-shop hubs",
       "juice-shop.herokuapp.com/rest/basket/2: basket IDOR route oracle absent without authenticated session",
       "vwad.owasp.org/app/voice-goat/voiceadmin: VoiceAdmin LLM excessive-functionality oracle absent (app 404 on VWAD listing)",
-      "zerohealth.aliyu.dev/challenges: thin 5-finding hub without route-specific JWT-secret or BOLA oracles"
+      "zerohealth.aliyu.dev/challenges: thin 5-finding hub without route-specific JWT-secret or BOLA oracles",
+      "chimera.atlascrew.dev API routes: SSRF webhook + GenAI chat/agent-browse oracles absent (API 405/404 from cloud agent)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 16,
-    "demo.owasp-juice.shop/api/Users/1": 16,
-    "demo.owasp-juice.shop/api/BasketItems": 16,
+    "juice-shop.herokuapp.com": 18,
+    "demo.owasp-juice.shop/api/Users/1": 19,
+    "demo.owasp-juice.shop/api/BasketItems": 19,
+    "the-internet.herokuapp.com/abtest": 3,
     "juice-shop.herokuapp.com/rest/basket/2": 16,
     "demo.owasp-juice.shop/api/Products/1": 15,
     "vwad.owasp.org/app/voice-goat/voiceadmin": 6,
-    "crapi.apisec.ai/identity/api/auth/v3/check-otp": 6,
     "zerohealth.aliyu.dev/challenges": 5
   }
 }
