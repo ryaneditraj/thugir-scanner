@@ -5,7 +5,7 @@
 // (idorProbe, clientOnlyAuth, serverActionAuthz) intentionally do not run on the free path;
 // they exist so the worker / future deep flow can share the same registry keys.
 
-import { createHmac } from "crypto";
+import { createHash, createHmac } from "crypto";
 import {
   thugirJwtClaims,
   thugirJsEndpoints,
@@ -31268,6 +31268,106 @@ const theInternetBasicAuthRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function httpDigestMd5(input: string): string {
+  return createHash("md5").update(input).digest("hex");
+}
+
+function parseDigestChallenge(wwwAuth: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  const re = /(\w+)=(?:"([^"]*)"|([^\s,]+))/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(wwwAuth)) !== null) {
+    out[m[1]!.toLowerCase()] = m[2] ?? m[3] ?? "";
+  }
+  return out;
+}
+
+function buildDigestAuthorization(
+  method: string,
+  uri: string,
+  username: string,
+  password: string,
+  challenge: Record<string, string>
+): string {
+  const realm = challenge.realm ?? "";
+  const nonce = challenge.nonce ?? "";
+  const opaque = challenge.opaque;
+  const qop = challenge.qop?.split(",")[0]?.trim() || "auth";
+  const nc = "00000001";
+  const cnonce = createHash("md5").update(`${Date.now()}:${Math.random()}`).digest("hex").slice(0, 16);
+  const ha1 = httpDigestMd5(`${username}:${realm}:${password}`);
+  const ha2 = httpDigestMd5(`${method}:${uri}`);
+  const response = qop
+    ? httpDigestMd5(`${ha1}:${nonce}:${nc}:${cnonce}:${qop}:${ha2}`)
+    : httpDigestMd5(`${ha1}:${nonce}:${ha2}`);
+  let header = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${response}"`;
+  if (qop) header += `, qop=${qop}, nc=${nc}, cnonce="${cnonce}"`;
+  if (opaque) header += `, opaque="${opaque}"`;
+  return header;
+}
+
+const theInternetDigestAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/digest_auth(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const digestUrl = new URL("/digest_auth", ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(digestUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (unauthDoc.status !== 401) return NEGATIVE;
+  const wwwAuth = unauthDoc.headers["www-authenticate"] || "";
+  if (!/digest/i.test(wwwAuth)) return NEGATIVE;
+  const challenge = parseDigestChallenge(wwwAuth);
+  const authHeader = buildDigestAuthorization("GET", "/digest_auth", "admin", "admin", challenge);
+  const authDoc = await ctx.probe.get(digestUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: authHeader }
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Congratulations!/i.test(authDoc.body) || !/proper credentials/i.test(authDoc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      digestUrl,
+      unauthStatus: unauthDoc.status,
+      authStatus: authDoc.status,
+      snippet: authDoc.body.match(/Congratulations![^<]{0,80}/i)?.[0] || authDoc.body.slice(0, 200).trim(),
+      note: "the-internet /digest_auth route scan — HTTP 401 Digest challenge without credentials; admin:admin Digest auth returns Congratulations — Elemental Selenium digest authentication oracle"
+    }
+  };
+};
+
+const theInternetDownloadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/download(?:\/|$|\?)/i.test(pageUrl) || /\/download_secure/i.test(pageUrl)) return NEGATIVE;
+  const downloadUrl = new URL("/download", ctx.origin).toString();
+  const doc = await ctx.probe.get(downloadUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/File Downloader/i.test(doc.body)) return NEGATIVE;
+  const fileMatch = doc.body.match(/href=["'](download\/[^"']+)["']/i);
+  if (!fileMatch) return NEGATIVE;
+  const sampleUrl = new URL(`/${fileMatch[1]}`, ctx.origin).toString();
+  const sampleDoc = await ctx.probe.get(sampleUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (sampleDoc.status < 200 || sampleDoc.status >= 400) return NEGATIVE;
+  if (!sampleDoc.body.trim()) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      downloadUrl,
+      sampleUrl,
+      fileLinkCount: (doc.body.match(/href=["']download\/[^"']+["']/gi) || []).length,
+      sampleSnippet: sampleDoc.body.slice(0, 120).trim(),
+      note: "the-internet /download route scan — File Downloader lists downloadable files and serves them without authentication — Elemental Selenium file download oracle"
+    }
+  };
+};
+
 function isTheInternetDownloadSecureRoute(pageUrl: string): boolean {
   return /\/(?:download_secure|secure_file_download)(?:\/|$|\?)/i.test(pageUrl);
 }
@@ -35847,6 +35947,42 @@ const ssrfVulnlabMetadataGcpRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/metadata-gcp\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ssrfVulnlabMetadataGcpLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfVulnlabMetadataAzureLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/metadata-azure/", origin);
+  probeUrl.searchParams.set("url", "http://169.254.169.254/metadata/instance");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const metadataOk =
+    /azEnvironment/i.test(body) && /subscriptionId/i.test(body) && /resourceGroupName/i.test(body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 240).trim(),
+      note: "ssrf.vulnlab.dev GET /metadata-azure/?url=http://169.254.169.254/metadata/instance returns Azure IMDS metadata (azEnvironment, subscriptionId, resourceGroupName) — cloud metadata SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabMetadataAzureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/metadata-azure\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabMetadataAzureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -44658,6 +44794,8 @@ export const RULES: Record<string, Rule> = {
   theInternetLoginAuthRouteLiveOracle,
   theInternetDynamicLoadingRouteLiveOracle,
   theInternetBasicAuthRouteLiveOracle,
+  theInternetDigestAuthRouteLiveOracle,
+  theInternetDownloadRouteLiveOracle,
   theInternetDownloadSecureRouteLiveOracle,
   theInternetDropdownRouteLiveOracle,
   theInternetJavascriptAlertsRouteLiveOracle,
@@ -44771,11 +44909,13 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabBasicLiveOracle,
   ssrfVulnlabMetadataAwsLiveOracle,
   ssrfVulnlabMetadataGcpLiveOracle,
+  ssrfVulnlabMetadataAzureLiveOracle,
   ssrfVulnlabBlocklistBypassLiveOracle,
   ssrfVulnlabRedirectLiveOracle,
   ssrfVulnlabBasicRouteLiveOracle,
   ssrfVulnlabMetadataAwsRouteLiveOracle,
   ssrfVulnlabMetadataGcpRouteLiveOracle,
+  ssrfVulnlabMetadataAzureRouteLiveOracle,
   ssrfVulnlabBlocklistRouteLiveOracle,
   ssrfVulnlabRedirectRouteLiveOracle,
   ssrfVulnlabAllowlistBypassLiveOracle,
