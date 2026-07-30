@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-challenges-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Challenges returns status:success with 80+ challenge keys and OWASP categories without auth; juice-shop-staging.herokuapp.com/api/Challenges findings 18→34 (+challenges-disclosure-live-oracle + route); benchmark staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-deliverys-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Deliverys returns One Day Delivery, Fast Delivery, Standard Delivery with prices without auth; juice-shop-staging.herokuapp.com/api/Deliverys/2 findings +deliverys-exposure-live-oracle + route; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-addresss-id-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Addresss/3 with alg:none JWT returns streetAddress 0815 Test Street + mobileNum when /api/Addresss/1 WAF-blocked; staging benchmark 28→31 (+addresss-id-bola-live-oracle); benchmark recall 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-feedbacks-bola-live-oracle",
       "status": "shipped",
@@ -15885,6 +15903,21 @@
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-basket-idor-route-live-oracle",
       "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-challenges-disclosure-live-oracle",
+      "shipped_at": "2026-07-30T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-deliverys-exposure-live-oracle",
+      "shipped_at": "2026-07-30T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-addresss-id-bola-live-oracle",
+      "shipped_at": "2026-07-30T11:30:00.000Z"
     }
   ]
 }
