@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T08:24:41.744Z",
+  "updated_at": "2026-07-30T09:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/api/PrivacyRequests",
+      "source": "OWASP Juice Shop demo — GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/SecurityAnswers",
+      "source": "OWASP Juice Shop demo — password-reset security-answer disclosure oracle GET /api/SecurityAnswers (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Products",
+      "source": "OWASP Juice Shop demo — product catalog unauthenticated API oracle GET /api/Products (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/admin/application-configuration",
+      "source": "OWASP Juice Shop demo — unauthenticated admin config oracle GET /rest/admin/application-configuration (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/products/search?q=test",
+      "source": "OWASP Juice Shop demo — SQLi search oracle GET /rest/products/search?q= (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/api/Wallets",
       "source": "OWASP Juice Shop demo — wallet balance BOLA oracle GET /api/Wallets (official demo.owasp-juice.shop)",
