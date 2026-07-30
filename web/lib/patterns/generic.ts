@@ -25068,6 +25068,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-checkboxes-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet checkboxes route live oracle",
+    description:
+      "When scanning /checkboxes, form#checkboxes uses onclick handlers that block unchecking — Elemental Selenium checkbox interaction training route oracle.",
+    impactOneline:
+      "Custom checkbox onclick guards break naive click automation without explicit state checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetCheckboxesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — assert checkbox state after guarded onclick handlers.",
+      steps: [
+        "Use explicit waits on checkbox checked/unchecked attributes.",
+        "Avoid assuming click toggles state when onclick guards are present.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /checkboxes route blocks unchecking via onclick. Show reliable checkbox interaction patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-drag-and-drop-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet drag and drop route live oracle",
+    description:
+      "When scanning /drag_and_drop, draggable column-a/column-b elements swap innerHTML via dragstart/drop handlers — Elemental Selenium drag-and-drop training route oracle.",
+    impactOneline:
+      "HTML5 drag-and-drop requires synthetic DataTransfer events that differ from simple click automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDragAndDropRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use native drag-and-drop APIs in browser automation.",
+      steps: [
+        "Dispatch dragstart, dragover, and drop events with a DataTransfer payload.",
+        "Verify column innerHTML after drop instead of relying on click coordinates.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /drag_and_drop route swaps column content via HTML5 DnD. Show drag-and-drop automation patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-notification-message-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet notification message route live oracle",
+    description:
+      "When scanning /notification_message, a 303 redirect sets a flash cookie and /notification_message_rendered shows Action unsuccessful/successful banner — Elemental Selenium notification-message training route oracle.",
+    impactOneline:
+      "Ephemeral flash banners require reading redirect cookies or rendered pages before they disappear.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetNotificationMessageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — follow redirects and assert flash banners on the rendered page.",
+      steps: [
+        "Follow 303 redirects when probing notification endpoints.",
+        "Assert flash text in #flash-messages or the rendered notification page.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /notification_message route sets flash cookies via redirect. Show flash-banner assertion patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",

@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-checkboxes-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /checkboxes form#checkboxes with onclick setAttribute/removeAttribute checked guard; the-internet.herokuapp.com/checkboxes findings 2→3 (+the-internet-checkboxes-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-drag-and-drop-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /drag_and_drop column-a/column-b draggable=true with handleDragStart/handleDrop innerHTML swap; the-internet.herokuapp.com/drag_and_drop findings 2→3 (+the-internet-drag-and-drop-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-notification-message-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /notification_message 303 redirect sets flash cookie; /notification_message_rendered h3 Notification Message + Action successful/unsuccessful examples; the-internet.herokuapp.com/notification_message findings 2→3 (+the-internet-notification-message-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-javascript-error-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /javascript_error body onload=loadError() dereferences propertyThatDoesNotExist.xyz; the-internet.herokuapp.com/javascript_error findings 2→3 (+the-internet-javascript-error-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"

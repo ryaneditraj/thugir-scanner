@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T04:05:28.771Z",
-  "total": 1105,
-  "uniqueSlugs": 1100,
+  "generatedAt": "2026-07-30T05:02:21.422Z",
+  "total": 1108,
+  "uniqueSlugs": 1103,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1087,
+    "generic": 1090,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1020,
+    "deep": 1023,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 78,
-    "Security misconfiguration": 103,
+    "Security misconfiguration": 106,
     "Broken authentication": 87,
     "Injection": 210,
     "Cross-site scripting": 153,
@@ -983,11 +983,13 @@
     "the-internet-basic-auth-route-live-oracle",
     "the-internet-broken-images-route-live-oracle",
     "the-internet-challenging-dom-route-live-oracle",
+    "the-internet-checkboxes-route-live-oracle",
     "the-internet-context-menu-route-live-oracle",
     "the-internet-digest-auth-route-live-oracle",
     "the-internet-disappearing-elements-route-live-oracle",
     "the-internet-download-route-live-oracle",
     "the-internet-download-secure-route-live-oracle",
+    "the-internet-drag-and-drop-route-live-oracle",
     "the-internet-dropdown-route-live-oracle",
     "the-internet-dynamic-content-route-live-oracle",
     "the-internet-dynamic-controls-route-live-oracle",
@@ -1010,6 +1012,7 @@
     "the-internet-large-route-live-oracle",
     "the-internet-login-auth-route-live-oracle",
     "the-internet-nested-frames-route-live-oracle",
+    "the-internet-notification-message-route-live-oracle",
     "the-internet-redirect-route-live-oracle",
     "the-internet-redirector-route-live-oracle",
     "the-internet-shadowdom-route-live-oracle",
