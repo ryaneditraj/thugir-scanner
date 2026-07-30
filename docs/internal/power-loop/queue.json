@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T18:04:58.000Z",
+  "updated_at": "2026-07-30T19:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/sqli",
+      "source": "zerohealth.aliyu.dev — SQL injection challenge lab route (public healthcare vuln training app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/idor",
+      "source": "zerohealth.aliyu.dev — IDOR challenge lab route (public healthcare vuln training app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/jwt",
+      "source": "zerohealth.aliyu.dev — JWT security challenge lab route (public healthcare vuln training app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/r/",
+      "source": "sampsonc/vulnlab.dev — self-hosted open redirector for SSRF host-allowlist chaining (ssrf.vulnlab.dev/r/?to=)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/auth",
+      "source": "zerohealth.aliyu.dev — broken authentication challenge lab route (public healthcare vuln training app)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pygoat-web.herokuapp.com/",
       "source": "KevinDNgo/pygoat — Django OWASP Top 10 intentionally vulnerable training app (GitHub Live Demo)",
