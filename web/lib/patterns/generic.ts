@@ -810,6 +810,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-localstorage-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/* returns a page that reads localStorage.getItem('badValue') and passes it to eval() — the Firing Range toxic DOM localStorage XSS training oracle.",
+    impactOneline:
+      "DOM XSS via localStorage lets attackers persist payloads that execute on every page load in the victim browser.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalStorageXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass storage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from localStorage/sessionStorage.",
+        "Treat storage as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our page reads localStorage and passes it to eval(). Show how to remove eval-based DOM XSS sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage routes, the response contains eval(localStorage.getItem('badValue')) — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM XSS sinks that execute storage-backed payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalStorageXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on storage-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage/sessionStorage reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage route uses eval on localStorage values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
@@ -15448,6 +15500,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-file-raw-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/raw route LFI live oracle",
+    description:
+      "When scanning /api/file/raw?path=, GET with path=package.json returns the application package.json from the server filesystem — route-specific local file inclusion confirmation.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /api/file/raw reads arbitrary server files via the path query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileRawLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block arbitrary file reads via path parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled path parameters from file-serving endpoints.",
+        "Use strict allowlists for readable files and chroot file access.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/raw route scan confirms local file inclusion via ?path=. Show LFI/path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-file-lfi-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -26020,6 +26098,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v1/admin/products route accepts negative prices. Show route-specific price validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-admin-orders-exposure-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store admin orders exposure live oracle",
+    description:
+      "GET /api/v1/admin/orders with default admin/admin JWT returns cross-customer order roster with user_id, total_price, and status — admin order exposure oracle.",
+    impactOneline:
+      "Weak admin credentials plus unscoped order listing expose customer PII and order history across all accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminOrdersExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default admin credentials and scope admin order queries — Duck Store is intentional lab software.",
+      steps: [
+        "Disable or rotate default admin/admin credentials.",
+        "Require MFA for admin roles before exposing /api/v1/admin/orders.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/admin/orders lists all customer orders when logged in as default admin. Show admin credential hardening and order scoping remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-admin-orders-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store admin orders exposure route live oracle",
+    description:
+      "When scanning /api/v1/admin/orders, default admin credentials return orders from multiple distinct user_id values — route-specific admin order exposure oracle.",
+    impactOneline:
+      "Route-specific scans should confirm admin order endpoints leak cross-customer order data when protected only by weak credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminOrdersExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden /api/v1/admin/orders route with strong admin auth and audit logging.",
+      steps: [
+        "Enforce MFA and strong passwords on admin accounts.",
+        "Log and alert on bulk order enumeration from admin endpoints.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/admin/orders route exposes all customer orders with default admin login. Show route-specific remediation.",
     version: 1,
     enabled: true
   },

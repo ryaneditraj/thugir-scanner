@@ -34727,6 +34727,60 @@ const duckStoreAdminProductsNegativePriceRouteLiveOracle: Rule = async (ctx) => 
   };
 };
 
+const duckStoreAdminOrdersExposureLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreAdminLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const url = new URL("/api/v1/admin/orders", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let orders: Array<{ id?: number; user_id?: string; total_price?: number; status?: string }>;
+  try {
+    orders = JSON.parse(doc.body) as typeof orders;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(orders) || orders.length < 2) return NEGATIVE;
+  const userIds = new Set(orders.map((o) => o.user_id).filter(Boolean));
+  if (userIds.size < 2) return NEGATIVE;
+  if (!orders.every((o) => o.id && o.user_id && typeof o.total_price === "number" && o.status)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: orders.length >= 3 ? 0.94 : 0.92,
+    evidence: {
+      url,
+      orderCount: orders.length,
+      distinctUsers: userIds.size,
+      sampleOrderIds: orders.slice(0, 3).map((o) => o.id),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/admin/orders with default admin/admin JWT returns cross-customer order roster (user_id, total_price, status) — admin order exposure oracle"
+    }
+  };
+};
+
+const duckStoreAdminOrdersExposureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/orders/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAdminOrdersExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/admin/orders route scan — default admin credentials list all customer orders with PII"
+    }
+  };
+};
+
 const duckStoreTestimonialsPutBolaLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const tokenA = await duckStoreRegisterAndLoginToken(ctx);
@@ -34869,6 +34923,60 @@ const duckStoreAuthTotpBypassRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store /api/v1/auth/login route scan — temp_token from 2FA-pending login works as full access token without TOTP verification"
+    }
+  };
+};
+
+function isFiringRangeHost(ctx: RuleContext): boolean {
+  const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
+  return urls.some((raw) => /public-firing-range\.appspot\.com/i.test(raw));
+}
+
+const firingRangeDomLocalStorageXssLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let probePath = "/dom/toxicdom/localStorage/function/eval";
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\//i.test(parsed.pathname)) probePath = parsed.pathname;
+    } catch {
+      /* ignore */
+    }
+  }
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasToxicDom =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i.test(body) &&
+    /eval\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasToxicDom) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(body) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/toxicdom/localStorage/* serves eval(localStorage.getItem('badValue')) DOM XSS sink — toxic DOM localStorage oracle"
+    }
+  };
+};
+
+const firingRangeDomLocalStorageXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\//i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalStorageXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom route scan — localStorage payload passed to eval() without sanitization"
     }
   };
 };
@@ -41268,6 +41376,23 @@ const brokencrystalsFileLfiRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsFileRawLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file\/raw/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsFileRawLfiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/file/raw route scan — GET ?path=package.json returns application package.json — local file inclusion oracle"
+    }
+  };
+};
+
 const brokencrystalsTestimonialsCountSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -45283,6 +45408,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
   brokencrystalsFileLfiRouteLiveOracle,
+  brokencrystalsFileRawLfiRouteLiveOracle,
   brokencrystalsTestimonialsCountSqliRouteLiveOracle,
   brokencrystalsProductsLatestLimitBypassRouteLiveOracle,
   crapiMechanicReportBolaLiveOracle,
@@ -45368,10 +45494,14 @@ export const RULES: Record<string, Rule> = {
   duckStoreReferralCodeAbuseRouteLiveOracle,
   duckStoreAdminProductsNegativePriceLiveOracle,
   duckStoreAdminProductsNegativePriceRouteLiveOracle,
+  duckStoreAdminOrdersExposureLiveOracle,
+  duckStoreAdminOrdersExposureRouteLiveOracle,
   duckStoreTestimonialsPutBolaLiveOracle,
   duckStoreTestimonialsPutBolaRouteLiveOracle,
   duckStoreAuthTotpBypassLiveOracle,
   duckStoreAuthTotpBypassRouteLiveOracle,
+  firingRangeDomLocalStorageXssLiveOracle,
+  firingRangeDomLocalStorageXssRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
