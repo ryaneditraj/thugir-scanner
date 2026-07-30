@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T09:43:24.594Z",
+  "updated_at": "2026-07-30T09:46:21.197Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2951,
-  "total_findings": 28636,
+  "total_sites_scanned": 2952,
+  "total_findings": 28661,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2086,
   "discovery_findings": 24379,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-30T09:43:24.594Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-07-30T09:46:21.197Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 22,
+      "oracle_findings": 25,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 467,
+      "probes_run": 470,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (22 findings); secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (25 findings with memories/quantitys/hints oracles merged); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -59,7 +59,7 @@
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (22 findings) — full oracle suite on staging fallback",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (25 findings) — memories/quantitys/hints oracles merged from parallel run",
       "juice-shop-staging.herokuapp.com/api/PrivacyRequests: 22 findings — juice-shop hub with jwt-alg-none + BOLA oracles",
       "juice-shop-staging.herokuapp.com/rest/admin/application-configuration: 22 findings — unauthenticated-admin-endpoint confirmed",
       "juice-shop.demo.escape.tech/api/PrivacyRequests: 24 findings — escape oracle with jwt-alg-none-accepted slug",
@@ -75,7 +75,7 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 22,
+    "juice-shop-staging.herokuapp.com": 25,
     "juice-shop.demo.escape.tech/rest/admin/application-configuration": 24,
     "juice-shop.demo.escape.tech/api/PrivacyRequests": 24,
     "juice-shop-staging.herokuapp.com/api/PrivacyRequests": 22,
