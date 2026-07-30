@@ -14431,6 +14431,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sqli-vulnlab-union-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev UNION-based SQLi live oracle",
+    description:
+      "GET /union/?category=widgets' UNION SELECT name, value, 0 FROM secrets-- leaks VULNLAB{sqli-union-based-extraction} in rendered product rows — the sqli.vulnlab.dev in-band UNION SQLi oracle.",
+    impactOneline:
+      "String-concatenated category filters with UNION column alignment enable direct secret extraction in-band.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabUnionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never concatenate user input into SQL — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Validate category inputs against an allowlist instead of embedding raw strings.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /union category filter concatenates user input into SELECT and renders UNION rows. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-vulnlab-union-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev /union route SQLi live oracle",
+    description:
+      "When scanning /union/, GET ?category=widgets' UNION SELECT name, value, 0 FROM secrets-- confirms in-band secret extraction — route-specific UNION SQLi oracle.",
+    impactOneline:
+      "Route-specific UNION SQLi oracle confirms in-band extraction without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabUnionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never concatenate user input into SQL — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Validate category inputs against an allowlist instead of embedding raw strings.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /union route concatenates category input into SELECT and renders UNION rows. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-vulnlab-blind-bool-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev boolean blind SQLi live oracle",
+    description:
+      "GET /blind-bool/?id= returns Widget Pro for true SUBSTRING(secret,1,1)='V' but Not found for 'Z' — the sqli.vulnlab.dev boolean blind SQLi oracle.",
+    impactOneline:
+      "Boolean existence oracles leak secrets character-by-character when SQL predicates gate row visibility.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabBlindBoolLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and avoid leaking row existence via differential responses — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Return uniform not-found responses regardless of injected predicate truth.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blind-bool product lookup leaks existence via SQL-injected predicates. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-vulnlab-blind-bool-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev /blind-bool route SQLi live oracle",
+    description:
+      "When scanning /blind-bool/, differential Widget Pro vs Not found responses confirm boolean blind SQLi — route-specific blind SQLi oracle.",
+    impactOneline:
+      "Route-specific boolean blind SQLi oracle confirms injectable predicates without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabBlindBoolRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and avoid leaking row existence via differential responses — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Return uniform not-found responses regardless of injected predicate truth.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blind-bool route leaks existence via SQL-injected predicates. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-sandboxed-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev sandboxed SSTI live oracle",
+    description:
+      "GET /sandboxed/?greeting={{ dump_diagnostics() }} leaks VULNLAB{ssti-jinja2-sandbox-bypassed-via-helper} from a SandboxedEnvironment global — the ssti.vulnlab.dev sandbox bypass SSTI oracle.",
+    impactOneline:
+      "Over-privileged template globals defeat Jinja2 sandboxes even when classic RCE gadget chains are blocked.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabSandboxedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into SandboxedEnvironment templates and audit registered globals — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Render templates from static files with bound context variables.",
+        "Remove diagnostic helpers from template globals or restrict them to non-sensitive data.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /sandboxed route registers dump_diagnostics in SandboxedEnvironment globals. Show safe templating without privileged helpers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-sandboxed-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev /sandboxed route SSTI live oracle",
+    description:
+      "When scanning /sandboxed/, GET ?greeting={{ dump_diagnostics() }} confirms sandbox bypass via privileged global — route-specific sandboxed SSTI oracle.",
+    impactOneline:
+      "Route-specific sandboxed SSTI oracle confirms helper-global bypass without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabSandboxedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into SandboxedEnvironment templates and audit registered globals — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Render templates from static files with bound context variables.",
+        "Remove diagnostic helpers from template globals or restrict them to non-sensitive data.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /sandboxed route registers dump_diagnostics in SandboxedEnvironment globals. Show safe templating without privileged helpers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
