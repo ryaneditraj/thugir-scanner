@@ -13420,6 +13420,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-metadata-azure-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+    description:
+      "GET /metadata-azure/?url=http://169.254.169.254/metadata/instance returns Azure IMDS metadata (azEnvironment, subscriptionId, resourceGroupName) — the ssrf.vulnlab.dev Azure cloud metadata SSRF oracle.",
+    impactOneline:
+      "SSRF to Azure metadata can expose managed identity tokens and compromise cloud workloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabMetadataAzureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to 169.254.169.254/metadata and require IMDS restrictions — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Disable or restrict Azure Instance Metadata Service with network controls.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /metadata-azure endpoint fetches Azure IMDS via a user-controlled url parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-metadata-azure-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev metadata-azure route SSRF live oracle",
+    description:
+      "When scanning /metadata-azure, GET /metadata-azure/?url=http://169.254.169.254/metadata/instance returns Azure IMDS metadata — route-specific cloud metadata SSRF oracle.",
+    impactOneline:
+      "SSRF to Azure metadata can expose managed identity tokens and compromise cloud workloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabMetadataAzureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to 169.254.169.254/metadata — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Disable or restrict Azure Instance Metadata Service with network controls.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /metadata-azure route fetches Azure IMDS via user-controlled url. Show how to block cloud metadata SSRF on route scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-vulnlab-blocklist-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -23894,6 +23946,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our the-internet /upload route accepts arbitrary file uploads. Show secure file upload validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-digest-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "the-internet digest authentication route live oracle",
+    description:
+      "When scanning /digest_auth, HTTP 401 Digest challenge without credentials and admin:admin Digest auth returns Congratulations — Elemental Selenium digest authentication training route oracle.",
+    impactOneline:
+      "Weak default credentials on digest auth endpoints let attackers bypass authentication with known username/password pairs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDigestAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use strong unique credentials for HTTP Digest auth.",
+      steps: [
+        "Never use default credentials like admin:admin in production.",
+        "Rotate digest auth passwords and prefer token-based auth where possible.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /digest_auth route accepts admin:admin Digest credentials. Show production HTTP Digest auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-download-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "the-internet file download route live oracle",
+    description:
+      "When scanning /download, File Downloader lists downloadable files and serves them without authentication — Elemental Selenium file download training route oracle.",
+    impactOneline:
+      "Unauthenticated file download endpoints can expose sensitive files or enable path traversal when filenames are user-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetDownloadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — require authentication for file downloads and validate paths.",
+      steps: [
+        "Require authentication before serving downloadable files.",
+        "Validate and canonicalize file paths to block directory traversal.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /download route serves files without authentication. Show secure file download hardening.",
     version: 1,
     enabled: true
   },
