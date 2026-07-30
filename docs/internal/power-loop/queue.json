@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T00:05:00.000Z",
+  "updated_at": "2026-07-30T01:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://zerohealth.aliyu.dev/api/debug/token",
@@ -11849,6 +11849,31 @@
       "url": "https://demo.owasp-juice.shop/ftp",
       "source": "OWASP Juice Shop demo — FTP forgotten-backup disclosure oracle (official demo.owasp-juice.shop)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/doctors",
+      "source": "aligorithm/zero-health — BOLA doctors list GET /api/doctors privilege escalation oracle (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/profile",
+      "source": "aligorithm/zero-health — mass-assignment profile update oracle PUT /api/profile (zerohealth.aliyu.dev healthcare lab)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/products",
+      "source": "ctfsec/pwnshop — unauthenticated product catalog JSON API GET /api/v1/products (OSS deploy README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/orders",
+      "source": "ctfsec/pwnshop — order history BOLA oracle GET /api/v1/orders (pwnshop.ctfsecurity.com public lab)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/users/me",
+      "source": "ctfsec/pwnshop — profile IDOR oracle GET /api/v1/users/me (ctfsec/pwnshop public training deploy)",
+      "auth": "oss_deploy"
     }
   ]
 }
