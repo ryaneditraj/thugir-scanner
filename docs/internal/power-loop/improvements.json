@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-javascript-error-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /javascript_error body onload=loadError() dereferences propertyThatDoesNotExist.xyz; the-internet.herokuapp.com/javascript_error findings 2→3 (+the-internet-javascript-error-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-disappearing-elements-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /disappearing_elements h3 Disappearing Elements + About/Contact/Portfolio nav links that disappear/reappear on reload; the-internet.herokuapp.com/disappearing_elements findings 2→3 (+the-internet-disappearing-elements-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-slow-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /slow h3 Slow Resources + $.get('/slow_external') 30-second rogue GET; the-internet.herokuapp.com/slow findings 2→3 (+the-internet-slow-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-admin-orders-exposure-live-oracle",
       "status": "shipped",

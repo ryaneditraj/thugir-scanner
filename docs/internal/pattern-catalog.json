@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T03:04:06.543Z",
-  "total": 1102,
-  "uniqueSlugs": 1097,
+  "generatedAt": "2026-07-30T04:05:28.771Z",
+  "total": 1105,
+  "uniqueSlugs": 1100,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1084,
+    "generic": 1087,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1017,
+    "deep": 1020,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 78,
-    "Security misconfiguration": 100,
+    "Security misconfiguration": 103,
     "Broken authentication": 87,
     "Injection": 210,
     "Cross-site scripting": 153,
@@ -985,6 +985,7 @@
     "the-internet-challenging-dom-route-live-oracle",
     "the-internet-context-menu-route-live-oracle",
     "the-internet-digest-auth-route-live-oracle",
+    "the-internet-disappearing-elements-route-live-oracle",
     "the-internet-download-route-live-oracle",
     "the-internet-download-secure-route-live-oracle",
     "the-internet-dropdown-route-live-oracle",
@@ -1003,6 +1004,7 @@
     "the-internet-infinite-scroll-route-live-oracle",
     "the-internet-inputs-route-live-oracle",
     "the-internet-javascript-alerts-route-live-oracle",
+    "the-internet-javascript-error-route-live-oracle",
     "the-internet-jqueryui-menu-route-live-oracle",
     "the-internet-key-presses-route-live-oracle",
     "the-internet-large-route-live-oracle",
@@ -1012,6 +1014,7 @@
     "the-internet-redirector-route-live-oracle",
     "the-internet-shadowdom-route-live-oracle",
     "the-internet-shifting-content-route-live-oracle",
+    "the-internet-slow-route-live-oracle",
     "the-internet-status-codes-route-live-oracle",
     "the-internet-tables-route-live-oracle",
     "the-internet-tinymce-route-live-oracle",
