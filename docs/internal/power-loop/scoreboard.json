@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T23:10:00.000Z",
+  "updated_at": "2026-07-30T00:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2861,
-  "total_findings": 27409,
-  "critical_findings": 56,
+  "total_sites_scanned": 2864,
+  "total_findings": 27421,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2031,
-  "discovery_findings": 23337,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-29T23:10:00.000Z",
+  "discovery_findings": 23349,
+  "improvements_shipped": 1161,
+  "last_run": "2026-07-30T00:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 17,
@@ -52,35 +52,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 10,
-      "urls_scanned": 10,
-      "findings": 75,
-      "focus": "the-internet shifting_content/windows route oracles + ssrf.vulnlab GCP metadata SSRF",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 21,
+      "focus": "ssrf.vulnlab Azure metadata SSRF + the-internet digest_auth and download route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — no benchmark misses",
-      "the-internet.herokuapp.com/shifting_content: 2→3 findings — the-internet-shifting-content-route-live-oracle shipped",
-      "the-internet.herokuapp.com/windows: 2→3 findings — the-internet-windows-route-live-oracle shipped",
-      "ssrf.vulnlab.dev/metadata-gcp: 11→15 findings — ssrf-vulnlab-metadata-gcp-live-oracle + route variant shipped"
+      "ssrf.vulnlab.dev/metadata-azure: 11→16 findings — ssrf-vulnlab-metadata-azure-live-oracle + route variant shipped",
+      "the-internet.herokuapp.com/digest_auth: 1→2 findings — the-internet-digest-auth-route-live-oracle shipped",
+      "the-internet.herokuapp.com/download: 2→3 findings — the-internet-download-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ssrf.vulnlab.dev/metadata-azure: route-specific Azure metadata SSRF oracle still absent",
-      "the-internet.herokuapp.com/digest_auth + download: route-specific auth/download oracles absent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "the-internet.herokuapp.com/exit_intent + typos: route-specific oracles still absent",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
       "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent when scanning route URL without signup flow"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 17,
+    "ssrf.vulnlab.dev/metadata-azure": 16,
+    "the-internet.herokuapp.com/digest_auth": 2,
+    "the-internet.herokuapp.com/download": 3,
+    "ssrf.vulnlab.dev/metadata-gcp": 15,
     "the-internet.herokuapp.com/shifting_content": 3,
     "the-internet.herokuapp.com/windows": 3,
-    "the-internet.herokuapp.com/download_secure": 3,
-    "the-internet.herokuapp.com/floating_menu": 3,
-    "the-internet.herokuapp.com/tables": 3,
-    "ssrf.vulnlab.dev/metadata-gcp": 15,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
     "hack-this-site-eta.vercel.app/api-labs/graphql.html": 47

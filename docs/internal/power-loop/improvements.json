@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /metadata-azure/?url=http://169.254.169.254/metadata/instance returns azEnvironment AzurePublicCloud, subscriptionId, resourceGroupName vulnlab-rg; ssrf.vulnlab.dev/metadata-azure findings 11→16 (+ssrf-vulnlab-metadata-azure-live-oracle + route variant); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-digest-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /digest_auth HTTP 401 Digest challenge; admin:admin Digest auth returns Congratulations! proper credentials; the-internet.herokuapp.com/digest_auth findings 1→2 (+the-internet-digest-auth-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-download-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /download h3 File Downloader lists download/* links and serves Test.txt without auth; the-internet.herokuapp.com/download findings 2→3 (+the-internet-download-route-live-oracle); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-shifting-content-route-live-oracle",
       "status": "shipped",
