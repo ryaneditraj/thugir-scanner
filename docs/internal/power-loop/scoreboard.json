@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T17:10:00.000Z",
+  "updated_at": "2026-07-30T18:09:01.800Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2776,
-  "total_findings": 27053,
+  "total_sites_scanned": 2785,
+  "total_findings": 27135,
   "critical_findings": 69,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1976,
-  "discovery_findings": 22827,
-  "improvements_shipped": 1164,
-  "last_run": "2026-07-30T17:10:00.000Z",
+  "discovery_urls_added": 1979,
+  "discovery_findings": 22877,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-30T18:09:01.800Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 32,
@@ -52,42 +52,41 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 3,
       "urls_scanned": 8,
-      "findings": 28,
-      "focus": "ssti.vulnlab basic/format/second-order live oracles + sqli/xss vulnlab queue drain",
-      "improvements_shipped_this_run": 3
+      "findings": 50,
+      "focus": "xss.vulnlab csp-bypass/mxss + pygoat/shadow_dom/gin-juice-shop queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "ssti.vulnlab.dev/basic: 2→6 findings — ssti-vulnlab-basic-live-oracle + route shipped (Jinja2 {{7*7}} → 49)",
-      "ssti.vulnlab.dev/format: 3→6 findings — ssti-vulnlab-format-live-oracle + route shipped (str.format Hello, alice!)",
-      "ssti.vulnlab.dev/second-order: 3→6 findings — ssti-vulnlab-second-order-live-oracle + route shipped (stored draft SSTI)",
-      "sqli.vulnlab.dev/union: 3 findings — false-positive sqli-vulnlab-error-live-oracle (UNION lab has no error reflection)",
-      "sqli.vulnlab.dev/blind: 4 findings — same error-oracle FP on boolean-blind route",
-      "xss.vulnlab.dev/stored: 4 findings — dom+reflected oracles but no stored-XSS guestbook oracle"
+      "xss.vulnlab.dev/csp-bypass: 5 findings — dom+reflected oracles + vibe-weak-csp but no CSP-JSONP bypass live oracle",
+      "xss.vulnlab.dev/mxss: 3 findings — dom oracle only; no mutation-XSS innerHTML reparse live oracle",
+      "pygoat-web.herokuapp.com: 1 finding — thin misconfig pass; no Django SQLi/XSS challenge oracles",
+      "the-internet.herokuapp.com/shadow_dom: 2 findings — misconfig only; no shadow-DOM XSS live oracle",
+      "vwad.owasp.org/app/gin-juice-shop/login: 6 findings — reflexion-escalated-ssti likely FP on VWAD 404 shell",
+      "demo.owasp-juice.shop/api/Feedbacks: 31 findings — full Juice Shop BOLA suite recovered when instance woke"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ssti.vulnlab.dev/filtered + /sandboxed: route-specific SSTI live oracles still absent",
-      "sqli.vulnlab.dev/union: need sqli-vulnlab-union-live-oracle (in-band UNION extraction)",
-      "sqli.vulnlab.dev/blind: need sqli-vulnlab-blind-live-oracle (boolean existence oracle)",
-      "sqli.vulnlab.dev/time: need sqli-vulnlab-time-live-oracle (SLEEP() timing oracle)",
-      "sqli.vulnlab.dev/second-order: need sqli-vulnlab-second-order-live-oracle (stored registration → profile view)",
+      "xss.vulnlab.dev/csp-bypass: need xss-vulnlab-csp-jsonp-live-oracle (same-origin /jsonp callback bypass)",
+      "xss.vulnlab.dev/mxss: need xss-vulnlab-mxss-live-oracle (regex sanitizer + innerHTML reparse)",
       "xss.vulnlab.dev/stored: need xss-vulnlab-stored-live-oracle (guestbook Markup()|safe persistence)",
-      "sqli-vulnlab-error-live-oracle fires false-positive on union/blind/time routes without error reflection",
-      "pygoat/vampi/gin-juice-shop/shadow_dom still queued at queue tail"
+      "sqli.vulnlab.dev/union/blind/time: need route-specific SQLi live oracles; error-oracle false-positives",
+      "ssti.vulnlab.dev/filtered/sandboxed: route-specific SSTI live oracles still absent",
+      "pygoat-web.herokuapp.com: need pygoat-sql/xss/auth challenge live oracles",
+      "the-internet shadow_dom: need shadow-dom-xss-live-oracle",
+      "vwad gin-juice-shop: VWAD app 404 — need gin-juice-shop SSTI/JWT live oracle on reachable deploy"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 32,
-    "ssti.vulnlab.dev/basic": 6,
-    "ssti.vulnlab.dev/format": 6,
-    "ssti.vulnlab.dev/second-order": 6,
-    "sqli.vulnlab.dev/blind": 4,
-    "sqli.vulnlab.dev/error": 4,
-    "xss.vulnlab.dev/dom": 5,
-    "xss.vulnlab.dev/reflected": 6
+    "demo.owasp-juice.shop/api/Feedbacks": 31,
+    "xss.vulnlab.dev/csp-bypass": 5,
+    "vwad.owasp.org/app/gin-juice-shop/rest/user/login": 6,
+    "xss.vulnlab.dev/mxss": 3,
+    "the-internet.herokuapp.com/shadow_dom": 2,
+    "pygoat-web.herokuapp.com": 1
   }
 }
