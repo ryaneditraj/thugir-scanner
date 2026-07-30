@@ -25146,6 +25146,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-abtest-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet A/B testing route live oracle",
+    description:
+      "When scanning /abtest, split-testing training copy and a No A/B Test or cookie-driven Control/Variation heading appear — Elemental Selenium A/B test training route oracle.",
+    impactOneline:
+      "Cookie-driven page variants require explicit waits and assertions on the active experiment branch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetAbtestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — assert the active A/B variant before interacting with page elements.",
+      steps: [
+        "Read the h3 heading to determine Control vs Variation before clicking CTAs.",
+        "Clear cookies when you need a deterministic variant in automation.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /abtest route serves split-testing training with cookie-driven variants. Show A/B test assertion patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -25298,6 +25324,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /chatbot route exposes an unauthenticated /rest/chat LLM proxy. Show chatbot auth hardening and prompt-injection defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-users-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop user profile IDOR live oracle",
+    description:
+      "GET /api/Users/:id with an alg:none JWT returns another user's email and role — Juice Shop BOLA/IDOR user profile oracle.",
+    impactOneline:
+      "Forged JWTs can read arbitrary user profiles when object-level authorization is missing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopUsersIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none JWTs and enforce per-user authorization on profile APIs.",
+      steps: [
+        "Validate JWT algorithm and signature server-side.",
+        "Bind /api/Users/:id responses to the authenticated subject.",
+        "Audit Juice Shop REST routes for missing object-level checks."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Users/:id endpoint returns other users' emails when probed with alg:none JWTs. Show object-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-users-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/Users/:id IDOR route live oracle",
+    description:
+      "When scanning /api/Users/:id, alg:none JWT access returns another user's profile email — route-specific Juice Shop IDOR oracle.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user profile reads on Juice Shop user APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopUsersIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none JWTs and enforce per-user authorization on profile APIs.",
+      steps: [
+        "Validate JWT algorithm and signature server-side.",
+        "Bind /api/Users/:id responses to the authenticated subject.",
+        "Audit Juice Shop REST routes for missing object-level checks."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Users/:id route scan exposes cross-user profile reads via alg:none JWT. Show route-level IDOR detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-basket-items-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop basket items BOLA live oracle",
+    description:
+      "GET /api/BasketItems with an alg:none JWT returns line items from multiple BasketId values — Juice Shop basket BOLA oracle.",
+    impactOneline:
+      "Listing another user's basket line items enables cart tampering and purchase fraud.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopBasketItemsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope basket item queries to the authenticated user's basket only.",
+      steps: [
+        "Filter /api/BasketItems by the caller's basket ID.",
+        "Reject unsigned alg:none JWT tokens.",
+        "Add integration tests for cross-basket access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/BasketItems endpoint lists items from multiple baskets with alg:none JWT. Show BOLA fixes for basket APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-basket-items-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/BasketItems BOLA route live oracle",
+    description:
+      "When scanning /api/BasketItems, alg:none JWT access returns basket line items spanning multiple BasketId values — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag cross-basket item exposure on Juice Shop basket APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopBasketItemsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope basket item queries to the authenticated user's basket only.",
+      steps: [
+        "Filter /api/BasketItems by the caller's basket ID.",
+        "Reject unsigned alg:none JWT tokens.",
+        "Add integration tests for cross-basket access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/BasketItems route scan exposes cross-basket line items via alg:none JWT. Show route-level BOLA detection and fixes.",
     version: 1,
     enabled: true
   },
