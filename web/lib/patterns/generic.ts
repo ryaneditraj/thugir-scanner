@@ -25744,6 +25744,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-memories-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop memories BOLA live oracle",
+    description:
+      "GET /rest/memories without auth returns memories spanning multiple users with nested User email/password — Juice Shop photo wall BOLA oracle.",
+    impactOneline:
+      "Unauthenticated photo memories expose other users' emails and password hashes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopMemoriesBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and scope memory reads to the owning user.",
+      steps: [
+        "Strip nested User PII from unauthenticated memory list responses.",
+        "Verify the requester owns each memory before returning it.",
+        "Never include password hashes or deluxeToken in API responses."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/memories returns other users' emails and password hashes without auth. Show BOLA authorization fixes for the photo wall API.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-memories-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /rest/memories BOLA route live oracle",
+    description:
+      "When scanning /rest/memories or /api/Memories, unauthenticated response exposes cross-user PII — route-specific BOLA oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated cross-user memory reads on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopMemoriesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and scope memory reads to the owning user.",
+      steps: [
+        "Strip nested User PII from unauthenticated memory list responses.",
+        "Verify the requester owns each memory before returning it.",
+        "Never include password hashes or deluxeToken in API responses."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/memories route scan exposes cross-user PII via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-quantitys-exposure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop inventory quantities exposed live oracle",
+    description:
+      "GET /api/Quantitys without auth returns full product inventory quantities — Juice Shop stock disclosure oracle.",
+    impactOneline:
+      "Public inventory counts enable competitors and attackers to plan stock manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopQuantitysExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict inventory quantity reads to authenticated admin users.",
+      steps: [
+        "Require admin role for /api/Quantitys list endpoints.",
+        "Return aggregate stock status to shoppers instead of exact counts.",
+        "Audit all Quantity model accessors for missing authorization."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Quantitys exposes exact inventory counts without auth. Show authorization fixes for the Quantity API.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-quantitys-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop /api/Quantitys exposure route live oracle",
+    description:
+      "When scanning /api/Quantitys, unauthenticated response lists product stock quantities — route-specific disclosure oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated inventory disclosure on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopQuantitysExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict inventory quantity reads to authenticated admin users.",
+      steps: [
+        "Require admin role for /api/Quantitys list endpoints.",
+        "Return aggregate stock status to shoppers instead of exact counts.",
+        "Audit all Quantity model accessors for missing authorization."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Quantitys route scan exposes inventory counts without auth. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-hints-exposure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop challenge hints exposed live oracle",
+    description:
+      "GET /api/Hints without auth returns challenge walkthrough hints for all challenges — Juice Shop hint disclosure oracle.",
+    impactOneline:
+      "Exposed challenge hints undermine security training and reveal exploit paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopHintsExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and per-challenge unlock before returning hints.",
+      steps: [
+        "Gate /api/Hints behind authenticated sessions.",
+        "Return hints only for challenges the user has unlocked.",
+        "Never expose full hint catalog in a single unauthenticated response."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Hints returns all challenge walkthrough hints without auth. Show authorization fixes for the Hints API.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-hints-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop /api/Hints exposure route live oracle",
+    description:
+      "When scanning /api/Hints, unauthenticated response lists challenge walkthrough hints — route-specific disclosure oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated challenge hint disclosure on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopHintsExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and per-challenge unlock before returning hints.",
+      steps: [
+        "Gate /api/Hints behind authenticated sessions.",
+        "Return hints only for challenges the user has unlocked.",
+        "Never expose full hint catalog in a single unauthenticated response."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Hints route scan exposes challenge hints without auth. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "thugir-jwt-weak-claims",
     platform: "generic",
     category: "Broken authentication",
