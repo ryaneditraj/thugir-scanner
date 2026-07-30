@@ -1,871 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-28T22:09:02.138Z",
-      "url": "https://agentpwn.com/attacks/supply-chain/1",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "hidden-prompt-injection",
-          "title": "Hidden prompt-injection instructions in page HTML",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "AI security"
-        },
-        {
-          "slug": "agentpwn-attack-route-live-oracle",
-          "title": "AgentPwn attack route live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-07-28T22:09:02.138Z"
-    },
-    {
-      "run_id": "2026-07-28T22:09:22.153Z",
-      "url": "https://agentpwn.com/attacks/capability-abuse/1",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "hidden-prompt-injection",
-          "title": "Hidden prompt-injection instructions in page HTML",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "AI security"
-        },
-        {
-          "slug": "agentpwn-attack-route-live-oracle",
-          "title": "AgentPwn attack route live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-07-28T22:09:22.153Z"
-    },
-    {
-      "run_id": "2026-07-28T22:09:42.003Z",
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-secrets",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ai-security-platform-evidence",
-          "title": "AI Security Platform hands-on challenge catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 569,
-      "status": "ok",
-      "scanned_at": "2026-07-28T22:09:42.003Z"
-    },
-    {
-      "run_id": "2026-07-28T23:03:47.438Z",
-      "url": "https://duck-store.escape.tech/api/v1/admin/products",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 16,
-      "findings": [
-        {
-          "slug": "duck-store-users-bola-live-oracle",
-          "title": "Duck Store user BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-coupons-disclosure-live-oracle",
-          "title": "Duck Store private coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-ssrf-fetch-url-live-oracle",
-          "title": "Duck Store fetch-url SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
-          "title": "Duck Store MCP coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-products-filter-sqli-live-oracle",
-          "title": "Duck Store products filter SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "duck-store-cart-negative-quantity-live-oracle",
-          "title": "Duck Store cart negative-quantity live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-admin-users-bfla-live-oracle",
-          "title": "Duck Store admin users BFLA live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-checkout-private-coupon-live-oracle",
-          "title": "Duck Store private coupon checkout live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-profile-mass-assignment-live-oracle",
-          "title": "Duck Store profile role mass-assignment live oracle",
-          "severity": "critical",
-          "confidence": 0.95,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-testimonials-stored-xss-live-oracle",
-          "title": "Duck Store testimonials stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-07-28T23:03:47.438Z"
-    },
-    {
-      "run_id": "2026-07-28T23:04:26.488Z",
-      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 13,
-      "findings": [
-        {
-          "slug": "duck-store-coupons-disclosure-live-oracle",
-          "title": "Duck Store private coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-ssrf-fetch-url-live-oracle",
-          "title": "Duck Store fetch-url SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
-          "title": "Duck Store MCP coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-products-filter-sqli-live-oracle",
-          "title": "Duck Store products filter SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "duck-store-cart-negative-quantity-live-oracle",
-          "title": "Duck Store cart negative-quantity live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-checkout-private-coupon-live-oracle",
-          "title": "Duck Store private coupon checkout live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-testimonials-stored-xss-live-oracle",
-          "title": "Duck Store testimonials stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 576,
-      "status": "ok",
-      "scanned_at": "2026-07-28T23:04:26.488Z"
-    },
-    {
-      "run_id": "2026-07-28T23:04:50.657Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 17,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-chatbot-route-live-oracle",
-          "title": "Juice Shop chatbot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 463,
-      "status": "ok",
-      "scanned_at": "2026-07-28T23:04:50.657Z"
-    },
-    {
-      "run_id": "2026-07-28T23:05:05.213Z",
-      "url": "https://duck-store.escape.tech/mcp",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 15,
-      "findings": [
-        {
-          "slug": "duck-store-coupons-disclosure-live-oracle",
-          "title": "Duck Store private coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-ssrf-fetch-url-live-oracle",
-          "title": "Duck Store fetch-url SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
-          "title": "Duck Store MCP coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-products-filter-sqli-live-oracle",
-          "title": "Duck Store products filter SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "duck-store-cart-negative-quantity-live-oracle",
-          "title": "Duck Store cart negative-quantity live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-checkout-private-coupon-live-oracle",
-          "title": "Duck Store private coupon checkout live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-testimonials-stored-xss-live-oracle",
-          "title": "Duck Store testimonials stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 4,
-      "probes_run": 602,
-      "status": "ok",
-      "scanned_at": "2026-07-28T23:05:05.213Z"
-    },
-    {
-      "run_id": "2026-07-28T23:05:46.908Z",
-      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 13,
-      "findings": [
-        {
-          "slug": "duck-store-coupons-disclosure-live-oracle",
-          "title": "Duck Store private coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-ssrf-fetch-url-live-oracle",
-          "title": "Duck Store fetch-url SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
-          "title": "Duck Store MCP coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-products-filter-sqli-live-oracle",
-          "title": "Duck Store products filter SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "duck-store-cart-negative-quantity-live-oracle",
-          "title": "Duck Store cart negative-quantity live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-checkout-private-coupon-live-oracle",
-          "title": "Duck Store private coupon checkout live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-testimonials-stored-xss-live-oracle",
-          "title": "Duck Store testimonials stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-07-28T23:05:46.908Z"
-    },
-    {
-      "run_id": "2026-07-28T23:06:25.944Z",
-      "url": "https://vapi.tools.escape.tech/vapi/api1/user/1",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-route-live-oracle",
-          "title": "vAPI live instance route oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 553,
-      "status": "ok",
-      "scanned_at": "2026-07-28T23:06:25.944Z"
-    },
-    {
-      "run_id": "2026-07-28T23:07:02.755Z",
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ai-security-platform-evidence",
-          "title": "AI Security Platform hands-on challenge catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 569,
-      "status": "ok",
-      "scanned_at": "2026-07-28T23:07:02.755Z"
-    },
-    {
       "run_id": "2026-07-28T23:07:33.543Z",
       "url": "https://ai-security-platform-iota.vercel.app/challenges/security-headers",
       "auth": "public_demo",
@@ -13964,6 +13099,1222 @@
       "probes_run": 596,
       "status": "ok",
       "scanned_at": "2026-07-30T00:08:06.736Z"
+    },
+    {
+      "run_id": "2026-07-30T01:01:39.163Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-30T01:01:39.163Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-07-30T01:01:59.664Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 14,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 455,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:01:59.664Z"
+    },
+    {
+      "run_id": "2026-07-30T01:04:27.412Z",
+      "url": "https://duck-store.escape.tech/testimonials",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 26,
+      "findings": [
+        {
+          "slug": "duck-store-testimonials-bola-live-oracle",
+          "title": "Duck Store testimonials BOLA live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-coupons-disclosure-live-oracle",
+          "title": "Duck Store private coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-live-oracle",
+          "title": "Duck Store fetch-url SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+          "title": "Duck Store MCP coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-live-oracle",
+          "title": "Duck Store products filter SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-live-oracle",
+          "title": "Duck Store cart negative-quantity live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-users-bfla-live-oracle",
+          "title": "Duck Store admin users BFLA live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-checkout-private-coupon-live-oracle",
+          "title": "Duck Store private coupon checkout live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-profile-mass-assignment-live-oracle",
+          "title": "Duck Store profile role mass-assignment live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-testimonials-stored-xss-live-oracle",
+          "title": "Duck Store testimonials stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+          "title": "Duck Store weak admin credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-open-redirect-live-oracle",
+          "title": "Duck Store 404 open-redirect live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "duck-store-referral-code-abuse-live-oracle",
+          "title": "Duck Store referral code abuse live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-products-negative-price-live-oracle",
+          "title": "Duck Store admin negative product price live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-put-bola-live-oracle",
+          "title": "Duck Store testimonials PUT BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-auth-totp-bypass-live-oracle",
+          "title": "Duck Store 2FA temp-token bypass live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-idor-evidence",
+          "title": "Client bundle documents IDOR-prone API routes",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 4,
+      "probes_run": 622,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:04:27.412Z"
+    },
+    {
+      "run_id": "2026-07-30T01:05:14.148Z",
+      "url": "https://duck-store.escape.tech/api/v1/auth/login",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 20,
+      "findings": [
+        {
+          "slug": "duck-store-coupons-disclosure-live-oracle",
+          "title": "Duck Store private coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-live-oracle",
+          "title": "Duck Store fetch-url SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+          "title": "Duck Store MCP coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-live-oracle",
+          "title": "Duck Store products filter SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-live-oracle",
+          "title": "Duck Store cart negative-quantity live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-users-bfla-live-oracle",
+          "title": "Duck Store admin users BFLA live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-checkout-private-coupon-live-oracle",
+          "title": "Duck Store private coupon checkout live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-profile-mass-assignment-live-oracle",
+          "title": "Duck Store profile role mass-assignment live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-testimonials-stored-xss-live-oracle",
+          "title": "Duck Store testimonials stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+          "title": "Duck Store weak admin credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-route-live-oracle",
+          "title": "Duck Store /api/v1/auth/login weak credentials route live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-referral-code-abuse-live-oracle",
+          "title": "Duck Store referral code abuse live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-products-negative-price-live-oracle",
+          "title": "Duck Store admin negative product price live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-put-bola-live-oracle",
+          "title": "Duck Store testimonials PUT BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 598,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:05:14.148Z"
+    },
+    {
+      "run_id": "2026-07-30T01:05:57.281Z",
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "duck-store-coupons-disclosure-live-oracle",
+          "title": "Duck Store private coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-live-oracle",
+          "title": "Duck Store fetch-url SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+          "title": "Duck Store MCP coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-live-oracle",
+          "title": "Duck Store products filter SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-live-oracle",
+          "title": "Duck Store cart negative-quantity live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-checkout-private-coupon-live-oracle",
+          "title": "Duck Store private coupon checkout live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-stored-xss-live-oracle",
+          "title": "Duck Store testimonials stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+          "title": "Duck Store weak admin credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-referral-code-abuse-live-oracle",
+          "title": "Duck Store referral code abuse live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-products-negative-price-live-oracle",
+          "title": "Duck Store admin negative product price live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-put-bola-live-oracle",
+          "title": "Duck Store testimonials PUT BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 591,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:05:57.281Z"
+    },
+    {
+      "run_id": "2026-07-30T01:06:38.552Z",
+      "url": "https://duck-store.escape.tech/api/v1/uploads/fetch-url",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "duck-store-coupons-disclosure-live-oracle",
+          "title": "Duck Store private coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-live-oracle",
+          "title": "Duck Store fetch-url SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-route-live-oracle",
+          "title": "Duck Store uploads SSRF route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+          "title": "Duck Store MCP coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-live-oracle",
+          "title": "Duck Store products filter SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-live-oracle",
+          "title": "Duck Store cart negative-quantity live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-checkout-private-coupon-live-oracle",
+          "title": "Duck Store private coupon checkout live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-stored-xss-live-oracle",
+          "title": "Duck Store testimonials stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+          "title": "Duck Store weak admin credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-referral-code-abuse-live-oracle",
+          "title": "Duck Store referral code abuse live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-products-negative-price-live-oracle",
+          "title": "Duck Store admin negative product price live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-put-bola-live-oracle",
+          "title": "Duck Store testimonials PUT BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 591,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:06:38.552Z"
+    },
+    {
+      "run_id": "2026-07-30T01:07:20.068Z",
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "duck-store-coupons-disclosure-live-oracle",
+          "title": "Duck Store private coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-live-oracle",
+          "title": "Duck Store fetch-url SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+          "title": "Duck Store MCP coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-live-oracle",
+          "title": "Duck Store products filter SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-route-live-oracle",
+          "title": "Duck Store products filter SQLi route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-live-oracle",
+          "title": "Duck Store cart negative-quantity live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-checkout-private-coupon-live-oracle",
+          "title": "Duck Store private coupon checkout live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-stored-xss-live-oracle",
+          "title": "Duck Store testimonials stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+          "title": "Duck Store weak admin credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-referral-code-abuse-live-oracle",
+          "title": "Duck Store referral code abuse live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-products-negative-price-live-oracle",
+          "title": "Duck Store admin negative product price live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-put-bola-live-oracle",
+          "title": "Duck Store testimonials PUT BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 591,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:07:20.068Z"
+    },
+    {
+      "run_id": "2026-07-30T01:08:01.147Z",
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "duck-store-coupons-disclosure-live-oracle",
+          "title": "Duck Store private coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-live-oracle",
+          "title": "Duck Store fetch-url SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+          "title": "Duck Store MCP coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-live-oracle",
+          "title": "Duck Store products filter SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-live-oracle",
+          "title": "Duck Store cart negative-quantity live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-route-live-oracle",
+          "title": "Duck Store cart negative-quantity route live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-checkout-private-coupon-live-oracle",
+          "title": "Duck Store private coupon checkout live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-stored-xss-live-oracle",
+          "title": "Duck Store testimonials stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+          "title": "Duck Store weak admin credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-referral-code-abuse-live-oracle",
+          "title": "Duck Store referral code abuse live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-products-negative-price-live-oracle",
+          "title": "Duck Store admin negative product price live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-put-bola-live-oracle",
+          "title": "Duck Store testimonials PUT BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 594,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:08:01.147Z"
+    },
+    {
+      "run_id": "2026-07-30T01:08:43.086Z",
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "duck-store-coupons-disclosure-live-oracle",
+          "title": "Duck Store private coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-ssrf-fetch-url-live-oracle",
+          "title": "Duck Store fetch-url SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
+          "title": "Duck Store MCP coupon disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "duck-store-products-filter-sqli-live-oracle",
+          "title": "Duck Store products filter SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "duck-store-cart-negative-quantity-live-oracle",
+          "title": "Duck Store cart negative-quantity live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-checkout-private-coupon-live-oracle",
+          "title": "Duck Store private coupon checkout live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-stored-xss-live-oracle",
+          "title": "Duck Store testimonials stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
+          "title": "Duck Store weak admin credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "duck-store-referral-code-abuse-live-oracle",
+          "title": "Duck Store referral code abuse live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-admin-products-negative-price-live-oracle",
+          "title": "Duck Store admin negative product price live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "duck-store-testimonials-put-bola-live-oracle",
+          "title": "Duck Store testimonials PUT BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "robots-sensitive-paths",
+          "title": "robots.txt discloses sensitive paths",
+          "severity": "medium",
+          "confidence": 0.8,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 594,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:08:43.086Z"
+    },
+    {
+      "run_id": "2026-07-30T01:09:26.030Z",
+      "url": "https://dvga2.tools.escape.tech/graphql",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dvga-route-live-oracle",
+          "title": "DVGA live instance route oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dvga-graphql-batching-live-oracle",
+          "title": "DVGA GraphQL batching live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "dvga-graphql-batching-route-live-oracle",
+          "title": "DVGA /graphql batching route live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 546,
+      "status": "ok",
+      "scanned_at": "2026-07-30T01:09:26.030Z"
     }
   ],
   "teacher_delta_runs": [
@@ -14070,6 +14421,32 @@
       },
       "notes": "No teacher tools available. 00 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (17 findings) with jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti; secret-resend slug still absent. Discovery: +5 URLs (zerohealth debug/token, debug/connection, prescriptions, appointments + demo.owasp-juice.shop/api/Challenges) + drained owaspbased-lessons prompt-injection + duck-store checkout/profile → 86 discovery findings across 8 URLs; zerohealth routes 5-finding hubs with client-side-zero-health-evidence + reflexion-escalated-ssti but no route-specific JWT-secret or BOLA live oracles; demo.owasp-juice.shop/api/Challenges 18-finding juice-shop hub.",
       "scanned_at": "2026-07-30T00:08:30.000Z"
+    },
+    {
+      "run_id": "2026-07-30T01:09:30.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok — primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 01 UTC run: primary juice-shop.herokuapp.com 503 cold start; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti + thugir-dir-discovery; secret-resend slug still absent. Discovery: +5 queued URLs (zerohealth doctors/profile + pwnshop products/orders/users/me) + drained duck-store hub (testimonials, auth/login, users/, uploads/fetch-url, products/filter, cart/add, admin/users) + dvga2/graphql → 138 discovery findings across 8 URLs; duck-store testimonials 26-finding hub with stored-xss + put-bola oracles; dvga2/graphql thin 4-finding pass without introspection/injection route oracles.",
+      "scanned_at": "2026-07-30T01:09:30.000Z"
     }
   ]
 }

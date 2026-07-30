@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 2874,
-  "total_findings": 27535,
-  "critical_findings": 58,
+  "total_sites_scanned": 2882,
+  "total_findings": 27697,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2036,
-  "discovery_findings": 23444,
-  "improvements_shipped": 1158,
+  "discovery_urls_added": 2041,
+  "discovery_findings": 23582,
+  "improvements_shipped": 1161,
   "last_run": "2026-07-30T01:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 469,
+      "probes_run": 455,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,50 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com unreachable; staging fallback 6/6 (14 findings)"
+      "note": "Primary heroku 503 cold start; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 9,
-      "focus": "the-internet exit_intent + typos + geolocation thin 2-finding hubs",
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 147,
+      "focus": "zerohealth doctors/profile + pwnshop products/orders/users/me queue + duck-store hub drain + dvga2/graphql + the-internet exit_intent/typos/geolocation oracles shipped",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary heroku 503/unreachable",
-      "the-internet.herokuapp.com/exit_intent: 2→3 findings — the-internet-exit-intent-route-live-oracle shipped (ouibounce modal)",
-      "the-internet.herokuapp.com/typos: 2→3 findings — the-internet-typos-route-live-oracle shipped (random typo demo)",
-      "the-internet.herokuapp.com/geolocation: 2→3 findings — the-internet-geolocation-route-live-oracle shipped (navigator.geolocation API)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) — primary heroku 503",
+      "duck-store.escape.tech/testimonials: 26 findings — stored-xss + put-bola route oracles present",
+      "duck-store.escape.tech/api/v1/auth/login: 20 findings — weak admin credentials live oracle",
+      "duck-store.escape.tech/api/v1/uploads/fetch-url: 18 findings — SSRF fetch-url oracle present",
+      "the-internet.herokuapp.com/exit_intent: 2→3 findings — the-internet-exit-intent-route-live-oracle shipped",
+      "the-internet.herokuapp.com/typos: 2→3 findings — the-internet-typos-route-live-oracle shipped",
+      "the-internet.herokuapp.com/geolocation: 2→3 findings — the-internet-geolocation-route-live-oracle shipped",
+      "dvga2.tools.escape.tech/graphql: 4 findings — thin pass; batching oracles only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "juice-shop.herokuapp.com primary oracle still 503 on cold start (staging fallback required)",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "zerohealth.aliyu.dev/api/doctors|profile + pwnshop products/orders/users/me queued but not scanned this run",
       "zerohealth.aliyu.dev/api/debug/*: OSS deploy returns landing page HTML — route-specific JWT/connection debug oracles blocked",
-      "zerohealth.aliyu.dev/api/prescriptions|appointments: BOLA live oracles absent (API backend not reachable on aliyu.dev deploy)"
+      "dvga2.tools.escape.tech/graphql: introspection/injection route-specific live oracles absent (4-finding thin hub)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 14,
+    "duck-store.escape.tech/testimonials": 26,
+    "duck-store.escape.tech/api/v1/auth/login": 20,
+    "duck-store.escape.tech/api/v1/uploads/fetch-url": 18,
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 18,
+    "duck-store.escape.tech/api/v1/cart/add": 18,
+    "duck-store.escape.tech/api/v1/orders/checkout": 24,
+    "duck-store.escape.tech/api/v1/users/me/profile": 23,
     "the-internet.herokuapp.com/exit_intent": 3,
     "the-internet.herokuapp.com/typos": 3,
     "the-internet.herokuapp.com/geolocation": 3,
     "demo.owasp-juice.shop/api/Challenges": 18,
     "ssrf.vulnlab.dev/metadata-azure": 16,
+    "dvga2.tools.escape.tech/graphql": 4,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
