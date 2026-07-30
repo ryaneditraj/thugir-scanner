@@ -1,366 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-30T03:02:04.313Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-30T03:02:04.313Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
-    },
-    {
-      "run_id": "2026-07-30T03:02:24.762Z",
-      "url": "https://juice-shop-staging.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 14,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 455,
-      "status": "ok",
-      "scanned_at": "2026-07-30T03:02:24.762Z"
-    },
-    {
-      "run_id": "2026-07-30T03:04:46.020Z",
-      "url": "https://idor-website.vercel.app/api/users/1",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 490,
-      "status": "ok",
-      "scanned_at": "2026-07-30T03:04:46.020Z"
-    },
-    {
-      "run_id": "2026-07-30T03:04:50.148Z",
-      "url": "https://demo.owasp-juice.shop/api/Feedbacks",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-30T03:04:50.148Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
-    },
-    {
-      "run_id": "2026-07-30T03:05:21.405Z",
-      "url": "https://owaspbased-lessons.vercel.app/challenges/info-disclosure",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 543,
-      "status": "ok",
-      "scanned_at": "2026-07-30T03:05:21.405Z"
-    },
-    {
-      "run_id": "2026-07-30T03:05:34.551Z",
-      "url": "https://owaspbased-lessons.vercel.app/challenges/output-handling",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 1,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 543,
-      "status": "ok",
-      "scanned_at": "2026-07-30T03:05:34.551Z"
-    },
-    {
-      "run_id": "2026-07-30T03:05:47.546Z",
-      "url": "https://the-internet.herokuapp.com/broken_links",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 541,
-      "status": "ok",
-      "scanned_at": "2026-07-30T03:05:47.546Z"
-    },
-    {
-      "run_id": "2026-07-30T03:05:56.246Z",
-      "url": "https://vapi.tools.escape.tech/vapi/api2/user/login",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 13,
-      "findings": [
-        {
-          "slug": "vapi-api1-bola-live-oracle",
-          "title": "vAPI API1 BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api2-broken-auth-live-oracle",
-          "title": "vAPI API2 broken authentication live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vapi-api2-route-live-oracle",
-          "title": "vAPI API2 route broken authentication live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vapi-api3-comment-bola-live-oracle",
-          "title": "vAPI API3 comment BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api4-otp-broken-auth-live-oracle",
-          "title": "vAPI API4 OTP broken authentication live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vapi-api4-user-exposure-live-oracle",
-          "title": "vAPI API4 user exposure live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api5-bfla-live-oracle",
-          "title": "vAPI API5 BFLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api6-mass-assignment-live-oracle",
-          "title": "vAPI API6 mass assignment live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api7-cors-misconfig-live-oracle",
-          "title": "vAPI API7 CORS misconfiguration live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-api9-improper-inventory-live-oracle",
-          "title": "vAPI API9 improper inventory live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-api10-logging-live-oracle",
-          "title": "vAPI API10 insufficient logging live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-route-live-oracle",
-          "title": "vAPI live instance route oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 561,
-      "status": "ok",
-      "scanned_at": "2026-07-30T03:05:56.246Z"
-    },
-    {
       "run_id": "2026-07-30T03:06:40.098Z",
       "url": "https://vapi.tools.escape.tech/vapi/api3/comment",
       "auth": "public_demo",
@@ -18584,6 +18224,287 @@
       "probes_run": 477,
       "status": "ok",
       "scanned_at": "2026-07-30T16:02:27.931Z"
+    },
+    {
+      "run_id": "2026-07-30T16:04:26.423Z",
+      "url": "https://ssti.vulnlab.dev/basic/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 183,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:04:26.423Z"
+    },
+    {
+      "run_id": "2026-07-30T16:04:38.980Z",
+      "url": "https://ssti.vulnlab.dev/format/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 236,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:04:38.980Z"
+    },
+    {
+      "run_id": "2026-07-30T16:05:00.551Z",
+      "url": "https://ssti.vulnlab.dev/filtered/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 157,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:05:00.551Z"
+    },
+    {
+      "run_id": "2026-07-30T16:05:12.558Z",
+      "url": "https://ssti.vulnlab.dev/sandboxed/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 120,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:05:12.558Z"
+    },
+    {
+      "run_id": "2026-07-30T16:05:24.400Z",
+      "url": "https://ssti.vulnlab.dev/second-order/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 253,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:05:24.400Z"
+    },
+    {
+      "run_id": "2026-07-30T16:05:49.178Z",
+      "url": "https://ai-testing-lab.vercel.app/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-owasp-genai-lab-evidence",
+          "title": "OWASP GenAI Security Lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 561,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:05:49.178Z"
+    },
+    {
+      "run_id": "2026-07-30T16:05:54.319Z",
+      "url": "https://vulnlab.dev/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 2,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 148,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:05:54.319Z"
+    },
+    {
+      "run_id": "2026-07-30T16:06:07.627Z",
+      "url": "https://xss.vulnlab.dev/reflected/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "client-side-xss-evidence",
+          "title": "Source or bundle documents reflected XSS via unescaped input",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 159,
+      "status": "ok",
+      "scanned_at": "2026-07-30T16:06:07.627Z"
     }
   ],
   "teacher_delta_runs": [
@@ -19002,6 +18923,32 @@
       },
       "notes": "No teacher tools available. 13 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (32 findings) with jwt-alg-none + chatbot + Cards/Addresss/Feedbacks BOLA + reflexion-escalated-ssti; secret-resend slug still absent. Discovery: +5 GenAI lessons (prompt-leakage, misinformation, supply-chain, data-poisoning, excessive-agency) + drained demo.owasp-juice Deliverys/2 (33 findings recovery) + zerohealth debug/token + debug/connection → 52 discovery findings across 8 URLs; GenAI prompt-leakage/misinformation/supply-chain thin 1-finding misconfig passes; zerohealth debug routes 5-finding hubs without JWT-secret live oracle; pygoat/vampi/gin-juice-shop/shadow_dom still queued.",
       "scanned_at": "2026-07-30T13:07:00.000Z"
+    },
+    {
+      "run_id": "2026-07-30T16:06:21.567Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok — primary 503; staging fallback 31 findings, 6/6 recall (pages_crawled=6 probes=477; gap=[])",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 16 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings) with full BOLA suite + jwt-alg-none + chatbot + reflexion-escalated-ssti; secret-resend slug still absent. Discovery: +5 ssti.vulnlab.dev labs (basic/format/filtered/sandboxed/second-order) + drained ai-testing-lab + vulnlab.dev index + xss.vulnlab reflected → 23 discovery findings across 8 URLs; ssti.vulnlab routes thin 2-3 finding passes without route-specific SSTI live oracles; ai-testing-lab 6 findings with prompt-injection-evidence + postmessage-dom-xss-evidence; xss.vulnlab reflected 3 findings with client-side-xss-evidence; sqli.vulnlab/error + xss.vulnlab/dom still queued.",
+      "scanned_at": "2026-07-30T16:06:21.567Z"
     }
   ]
 }

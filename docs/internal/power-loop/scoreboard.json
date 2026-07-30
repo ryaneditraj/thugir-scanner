@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T15:30:00.000Z",
+  "updated_at": "2026-07-30T16:06:21.567Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2758,
-  "total_findings": 26925,
+  "total_sites_scanned": 2767,
+  "total_findings": 26979,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 22761,
-  "improvements_shipped": 1160,
-  "last_run": "2026-07-30T15:30:00.000Z",
+  "discovery_urls_added": 1971,
+  "discovery_findings": 22784,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-30T16:06:21.567Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 477,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,38 @@
           ]
         }
       },
-      "note": "Primary healthy 6/6 (33 findings) — no benchmark misses; teacher_delta skipped"
+      "note": "Primary 503; staging fallback 6/6 (31 findings) — no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 87,
-      "focus": "pwnshop avatar URL SSRF + order IDOR + Vulnbank wallet top-up live oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 23,
+      "focus": "ssti.vulnlab.dev SSTI lab suite + ai-testing-lab + vulnlab index + xss.vulnlab reflected queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/profile: 35 findings — pwnshop-avatar-url-ssrf + wallet-topup-vulnbank live oracles shipped",
-      "pwnshop.ctfsecurity.com/order/1: 19→33 findings — pwnshop-order-idor-live-oracle + route shipped (Kingsway Road shipping IDOR PWN-001)",
-      "pwnshop.ctfsecurity.com/wallet: wallet-topup-route oracle when OTP session completes (Vulnbank Payment declined confirms integration)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — primary Heroku dyno 503",
+      "ai-testing-lab.vercel.app: 6 findings with client-side-prompt-injection-evidence + postmessage-dom-xss-evidence",
+      "xss.vulnlab.dev/reflected: 3 findings with client-side-xss-evidence",
+      "ssti.vulnlab.dev/basic: 2-finding thin pass (misconfig only, no SSTI live oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zerohealth.aliyu.dev/api/*: backend API returns SPA landing page from cloud agent",
-      "llm-sec.dev/labs/*: Vercel Security Checkpoint intermittently blocks lab route scans",
-      "pwnshop VULNBANK_LAB_VULN=0 on public instance — credited_amount override (PWN-042) not exploitable without lab vuln mode",
-      "sqli.vulnlab.dev/error: route-specific error-based SQLi live oracle absent",
-      "xss.vulnlab.dev/dom: DOM-only XSS sink absent from findings"
+      "ssti.vulnlab.dev/*: route-specific SSTI live oracles absent (basic/format/filtered/sandboxed/second-order all 2-3 finding thin passes)",
+      "sqli.vulnlab.dev/error: still queued — route-specific error-based SQLi live oracle absent",
+      "xss.vulnlab.dev/dom: still queued — DOM-only XSS sink absent from findings",
+      "pygoat/vampi/gin-juice-shop/shadow_dom still queued at queue tail"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
-    "pwnshop.ctfsecurity.com/profile": 35,
-    "pwnshop.ctfsecurity.com/order/1": 33,
-    "pwnshop.ctfsecurity.com/wallet": 28,
-    "ginandjuice.shop/catalog/product/stock": 14,
-    "demo.owasp-juice.shop/api/Deliverys/2": 33
+    "juice-shop-staging.herokuapp.com": 31,
+    "ai-testing-lab.vercel.app": 6,
+    "xss.vulnlab.dev/reflected": 3,
+    "ssti.vulnlab.dev/second-order": 3,
+    "ssti.vulnlab.dev/format": 3,
+    "ssti.vulnlab.dev/basic": 2,
+    "vulnlab.dev": 2
   }
 }
