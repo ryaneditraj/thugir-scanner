@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T20:12:00.000Z",
+  "updated_at": "2026-07-30T20:23:09.848Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2797,
-  "total_findings": 27230,
+  "total_sites_scanned": 2803,
+  "total_findings": 27392,
   "critical_findings": 77,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1987,
-  "discovery_findings": 22940,
+  "discovery_urls_added": 1989,
+  "discovery_findings": 23073,
   "improvements_shipped": 1161,
-  "last_run": "2026-07-30T20:12:00.000Z",
+  "last_run": "2026-07-30T20:23:09.848Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 32,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 29,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 485,
+      "probes_run": 479,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,48 @@
           ]
         }
       },
-      "note": "Stable 6/6 (32 findings); no benchmark misses"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 21,
-      "focus": "sqli.vulnlab blind-time SLEEP oracle + xss.vulnlab mxss innerHTML round-trip + csp-bypass JSONP callback",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 154,
+      "focus": "ssrf.vulnlab.dev/metadata AWS IMDS + escape.tech Recycles/Deliverys/login + pwnshop prototype-pollution search-filters + queue drain (mxss, gin-juice-shop, demo Feedbacks)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "sqli.vulnlab.dev/blind-time: 6 findings — sqli-vulnlab-blind-time-live-oracle shipped (SLEEP(3) timing differential)",
-      "xss.vulnlab.dev/mxss: 5→8 findings — xss-vulnlab-mxss-live-oracle + route (innerHTML round-trip after regex sanitizer)",
-      "xss.vulnlab.dev/csp-bypass/: 6→8 findings — xss-vulnlab-csp-bypass-jsonp-live-oracle + route (same-origin JSONP under script-src self)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — primary Heroku 503",
+      "ssrf.vulnlab.dev/metadata: 15 findings — full SSRF live-oracle suite hub",
+      "juice-shop.demo.escape.tech/api/Recycles|Deliverys: 34-finding juice-shop hubs with full BOLA suite",
+      "pwnshop.ctfsecurity.com/api/settings/search-filters: 21-finding hub with prototype-pollution + admin-sqli + chat-prompt-injection oracles",
+      "demo.owasp-juice.shop/api/Feedbacks: 33-finding recovery with feedbacks-bola-route-live-oracle",
+      "sqli.vulnlab.dev/blind-time: 6 findings — sqli-vulnlab-blind-time-live-oracle shipped (parallel engine run)",
+      "xss.vulnlab.dev/mxss: 5→8 findings — xss-vulnlab-mxss-live-oracle shipped (parallel engine run)",
+      "xss.vulnlab.dev/csp-bypass/: 6→8 findings — xss-vulnlab-csp-bypass-jsonp-live-oracle shipped (parallel engine run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "juice-shop.demo.escape.tech/rest/user/login: 6-finding thin pass without route-specific SQLi login-bypass oracle",
+      "vwad gin-juice-shop login: reflexion-escalated-ssti likely FP on VWAD 404 shell",
+      "pwnshop search-filters: client-side prototype-pollution evidence but no live __proto__ merge oracle on PUT endpoint",
       "zerohealth.aliyu.dev/challenges/*: route-specific SQLi/IDOR/JWT/auth live oracles absent",
-      "the-internet.herokuapp.com/shadow_dom: Heroku 404 — shadow-dom XSS oracle still absent",
-      "pygoat-web.herokuapp.com: Heroku dyno offline/404 — need alternate pygoat deploy"
+      "pygoat-web.herokuapp.com: Heroku dyno offline/404 — need alternate pygoat deploy",
+      "the-internet.herokuapp.com/shadow_dom: shadow-dom XSS oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 32,
+    "juice-shop.demo.escape.tech/api/Recycles": 34,
+    "juice-shop.demo.escape.tech/api/Deliverys": 34,
+    "demo.owasp-juice.shop/api/Feedbacks": 33,
+    "pwnshop.ctfsecurity.com/api/settings/search-filters": 21,
+    "ssrf.vulnlab.dev/metadata": 15,
     "ssrf.vulnlab.dev/r/": 13,
-    "ssti.vulnlab.dev/sandboxed": 8,
+    "juice-shop-staging.herokuapp.com": 29,
     "xss.vulnlab.dev/mxss/": 8,
     "xss.vulnlab.dev/csp-bypass/": 8,
     "sqli.vulnlab.dev/blind-time/": 6,
-    "sqli.vulnlab.dev/union": 6,
-    "sqli.vulnlab.dev/blind-bool": 6,
-    "zerohealth.aliyu.dev/challenges/sqli": 5,
-    "zerohealth.aliyu.dev/challenges/idor": 5,
-    "zerohealth.aliyu.dev/challenges/jwt": 5,
-    "zerohealth.aliyu.dev/challenges/auth": 5
+    "vwad.owasp.org/app/gin-juice-shop/rest/user/login": 6
   }
 }

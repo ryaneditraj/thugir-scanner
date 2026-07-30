@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T19:05:00.000Z",
+  "updated_at": "2026-07-30T20:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata",
+      "source": "sampsonc/vulnlab.dev — AWS mock IMDSv1 SSRF lab at /metadata (ssrf.vulnlab.dev README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Recycles",
+      "source": "Escape.tech Juice Shop demo — recycle requests BOLA oracle GET /api/Recycles (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Deliverys",
+      "source": "Escape.tech Juice Shop demo — delivery methods exposure oracle GET /api/Deliverys (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/user/login",
+      "source": "Escape.tech Juice Shop demo — SQLi/auth-bypass login oracle POST /rest/user/login (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/settings/search-filters",
+      "source": "ctfsec/pwnshop — prototype pollution via lodash _.merge() PUT /api/settings/search-filters (PWN-041)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://zerohealth.aliyu.dev/challenges/sqli",
       "source": "zerohealth.aliyu.dev — SQL injection challenge lab route (public healthcare vuln training app)",
