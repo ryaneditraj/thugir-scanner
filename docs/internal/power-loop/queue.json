@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T02:05:00.000Z",
+  "updated_at": "2026-07-30T03:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://idor-website.vercel.app/api/users/1",
+      "source": "idor-website — IDOR API oracle GET/PUT/DELETE /api/users/{userId} no auth check (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Feedbacks",
+      "source": "OWASP Juice Shop demo — unauthenticated feedback API oracle GET /api/Feedbacks (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/info-disclosure",
+      "source": "OWASP GenAI Security Lab — LLM02 sensitive information disclosure interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/output-handling",
+      "source": "OWASP GenAI Security Lab — LLM05 improper output handling interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the-internet.herokuapp.com/broken_links",
+      "source": "saucelabs/the-internet — Broken Links DOM training route (GitHub README deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://zerohealth.aliyu.dev/api/debug/token",
       "source": "aligorithm/zero-health — debug JWT secret disclosure oracle GET /api/debug/token (zerohealth.aliyu.dev OSS deploy)",
