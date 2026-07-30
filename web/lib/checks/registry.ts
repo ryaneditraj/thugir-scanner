@@ -32210,7 +32210,7 @@ const theInternetInputsRouteLiveOracle: Rule = async (ctx) => {
   const doc = await ctx.probe.get(inputsUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/<h3>\s*Inputs\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
-  const hasNumberInput = /<input[^>]+type=['"]number['"]/i.test(doc.body);
+  const hasNumberInput = /<input[^>]+type\s*=\s*['"]?number['"]?/i.test(doc.body);
   if (!hasNumberInput) return NEGATIVE;
   return {
     fired: true,
