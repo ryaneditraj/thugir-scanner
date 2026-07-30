@@ -32382,6 +32382,33 @@ const theInternetDragAndDropRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetAbtestRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/abtest(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const abtestUrl = new URL("/abtest", ctx.origin).toString();
+  const doc = await ctx.probe.get(abtestUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasAbHeading =
+    /<h3>\s*(?:No A\/B Test|A\/B Test (?:Control|Variation))\s*<\/h3>/i.test(doc.body);
+  const hasSplitCopy =
+    /split testing/i.test(doc.body) &&
+    /simultaneously test and learn from different versions of a page/i.test(doc.body);
+  if (!hasAbHeading || !hasSplitCopy) return NEGATIVE;
+  const headingMatch = doc.body.match(/<h3>\s*([^<]+)\s*<\/h3>/i);
+  return {
+    fired: true,
+    confidence: /A\/B Test (?:Control|Variation)/i.test(doc.body) ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      abtestUrl,
+      heading: headingMatch?.[1]?.trim() || "No A/B Test",
+      markers: ["split testing", "A/B Test heading", "user action click-through copy"],
+      note: "the-internet /abtest route scan — split-testing training page with No A/B Test or cookie-driven Control/Variation heading — Elemental Selenium A/B test oracle"
+    }
+  };
+};
+
 const theInternetNotificationMessageRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -36835,6 +36862,104 @@ const juiceShopChatbotRouteLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: result.confidence,
     evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+function juiceShopAlgNoneAuthHeader(): Record<string, string> {
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    Authorization: `Bearer ${buildAlgNoneJwt({
+      sub: "thugir-probe-user",
+      role: "admin",
+      iat: now,
+      exp: now + 3600
+    })}`
+  };
+}
+
+const juiceShopUsersIdorLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const authHeader = juiceShopAlgNoneAuthHeader();
+  for (const id of [2, 3, 4, 5]) {
+    const url = new URL(`/api/Users/${id}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 4096, headers: authHeader });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"email"\s*:\s*"/.test(doc.body)) continue;
+    const emailMatch = doc.body.match(/"email"\s*:\s*"([^"]+)"/);
+    if (!emailMatch) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url,
+        userId: id,
+        email: emailMatch[1],
+        snippet: doc.body.slice(0, 180).trim(),
+        note: "Juice Shop GET /api/Users/:id with alg:none JWT returns another user's email — IDOR/BOLA user profile oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const juiceShopUsersIdorRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Users\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopUsersIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Users/:id route scan — alg:none JWT reads another user's profile email — route-specific IDOR oracle"
+    }
+  };
+};
+
+const juiceShopBasketItemsBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/BasketItems", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 16384,
+    headers: juiceShopAlgNoneAuthHeader()
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const basketIds = [...doc.body.matchAll(/"BasketId"\s*:\s*(\d+)/g)].map((m) => m[1]);
+  const uniqueBaskets = new Set(basketIds);
+  if (uniqueBaskets.size < 2 || basketIds.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: uniqueBaskets.size >= 3 ? 0.93 : 0.91,
+    evidence: {
+      url,
+      basketIds: [...uniqueBaskets].slice(0, 6),
+      itemCount: basketIds.length,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/BasketItems with alg:none JWT returns line items spanning multiple BasketId values — BOLA oracle"
+    }
+  };
+};
+
+const juiceShopBasketItemsBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/BasketItems\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopBasketItemsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/BasketItems route scan — alg:none JWT lists basket items from multiple baskets — route-specific BOLA oracle"
+    }
   };
 };
 
@@ -45380,6 +45505,7 @@ export const RULES: Record<string, Rule> = {
   theInternetCheckboxesRouteLiveOracle,
   theInternetDragAndDropRouteLiveOracle,
   theInternetNotificationMessageRouteLiveOracle,
+  theInternetAbtestRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
@@ -45488,6 +45614,10 @@ export const RULES: Record<string, Rule> = {
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,
+  juiceShopUsersIdorLiveOracle,
+  juiceShopUsersIdorRouteLiveOracle,
+  juiceShopBasketItemsBolaLiveOracle,
+  juiceShopBasketItemsBolaRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
