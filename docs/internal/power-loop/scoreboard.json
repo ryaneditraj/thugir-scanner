@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T11:30:00.000Z",
+  "updated_at": "2026-07-30T12:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2968,
-  "total_findings": 29018,
-  "critical_findings": 62,
+  "total_sites_scanned": 2725,
+  "total_findings": 26523,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2096,
-  "discovery_findings": 24434,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-30T11:30:00.000Z",
+  "discovery_urls_added": 1951,
+  "discovery_findings": 22505,
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-30T12:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 31,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,36 +48,39 @@
           ]
         }
       },
-      "note": "Staging 6/6 (31 findings, +3 from challenges/deliverys/addresss-id oracles); secret-resend slug still absent"
+      "note": "Primary heroku healthy 6/6 (32 findings, up from 28); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 215,
-      "focus": "vulnbank register BOPLA + brokencrystals dom-csrf/nestedJson/photo + testfire login + pentest-ground RestFlaw eval injection",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 75,
+      "focus": "brokencrystals photo BFLA + testfire login SQLi + euri-sec CSP dynamic script oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark 6/6 (31 findings) — challenges-disclosure + deliverys-exposure + addresss-id-bola oracles shipped",
-      "juice-shop-staging.herokuapp.com/api/Challenges: 18→34 findings with route-specific challenge scoreboard oracle",
-      "juice-shop-staging.herokuapp.com/api/Deliverys/2: +deliverys-exposure route oracle",
-      "vulnbank.org/register: 21 findings — vulnbank-bopla-register-live-oracle + AI chat + merchant oracles",
-      "brokencrystals.com/api/nestedJson: 61 findings — nestedJson route live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true: 59→60 findings — brokencrystals-photo-bfla-live-oracle shipped (DELETE ?isAdmin=true bypasses auth for non-admin JWT)",
+      "demo.testfire.net/login.jsp: 8→10 findings — testfire-login-sqli-live-oracle shipped (POST /doLogin admin' OR '1'='1 → /bank/main.jsp)",
+      "euri-sec-csp-5d4beab5074d.herokuapp.com/ecommerce: 3→5 findings — euri-sec-csp-dynamic-script-live-oracle shipped (GTM document.createElement without nonce)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark",
-      "escape Cards: empty data[] on /api/Cards — cards-bola oracle cannot fire",
-      "demo.owasp-juice.shop intermittently 503",
-      "zerohealth/pwnshop API routes blocked by Cloudflare from cloud agent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 31,
-    "juice-shop-staging.herokuapp.com/api/Challenges": 34,
-    "brokencrystals.com/api/nestedJson": 61,
-    "vulnbank.org/register": 21,
-    "juice-shop-staging.herokuapp.com/api/Deliverys/2": 32
+    "juice-shop.herokuapp.com": 32,
+    "brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true": 60,
+    "demo.testfire.net/login.jsp": 10,
+    "euri-sec-csp-5d4beab5074d.herokuapp.com/ecommerce": 5,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 25,
+    "wrongsecrets.herokuapp.com/challenge/2": 8,
+    "ssrf.vulnlab.dev/basic": 8
   }
 }

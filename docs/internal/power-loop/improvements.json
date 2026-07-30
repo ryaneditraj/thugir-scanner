@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-photo-bfla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: non-admin JWT DELETE /api/users/one/1/photo?isAdmin=true returns HTTP 200 while DELETE without isAdmin returns 500; brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true findings 59→60 (+brokencrystals-photo-bfla-live-oracle + route); benchmark juice-shop 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "testfire-login-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /doLogin uid=admin' OR '1'='1 redirects 302 to /bank/main.jsp with AltoroAccounts cookie vs bad creds redirect to login.jsp; demo.testfire.net/login.jsp findings 8→10 (+testfire-login-sqli-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:euri-sec-csp-5d4beab5074d.herokuapp.com",
+      "slug": "euri-sec-csp-dynamic-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /csp/ecommerce-content/ contains document.createElement('script') loading googletagmanager.com without nonce; euri-sec-csp /ecommerce findings 3→5 (+euri-sec-csp-dynamic-script-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-challenges-disclosure-live-oracle",
       "status": "shipped",
