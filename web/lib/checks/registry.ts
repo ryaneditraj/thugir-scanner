@@ -37373,6 +37373,138 @@ const juiceShopHintsExposureRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const juiceShopChallengesDisclosureLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Challenges", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 65536 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const keys = [...doc.body.matchAll(/"key"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+  const categories = [...doc.body.matchAll(/"category"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+  if (keys.length < 5 || categories.length < 5) return NEGATIVE;
+  const uniqueKeys = new Set(keys);
+  const uniqueCategories = new Set(categories);
+  return {
+    fired: true,
+    confidence: uniqueKeys.size >= 10 ? 0.92 : 0.9,
+    evidence: {
+      url,
+      challengeCount: keys.length,
+      sampleKeys: keys.slice(0, 5),
+      categories: [...uniqueCategories].slice(0, 5),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Challenges without auth returns full challenge scoreboard with keys and categories — information disclosure oracle"
+    }
+  };
+};
+
+const juiceShopChallengesDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Challenges\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopChallengesDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Challenges route scan — unauthenticated challenge scoreboard exposed — route-specific disclosure oracle"
+    }
+  };
+};
+
+const juiceShopDeliverysExposureLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Deliverys", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const names = [...doc.body.matchAll(/"name"\s*:\s*"([^"]{4,})"/g)].map((m) => m[1]);
+  const prices = [...doc.body.matchAll(/"price"\s*:\s*([\d.]+)/g)].map((m) => m[1]);
+  if (names.length < 2 || prices.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: names.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      url,
+      deliveryMethods: names.slice(0, 4),
+      prices: prices.slice(0, 4),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Deliverys without auth returns full delivery-method catalog with pricing — information disclosure oracle"
+    }
+  };
+};
+
+const juiceShopDeliverysExposureRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Deliverys(?:\/\d+)?\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopDeliverysExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Deliverys route scan — unauthenticated delivery-method catalog exposed — route-specific disclosure oracle"
+    }
+  };
+};
+
+const juiceShopAddresssIdBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const routeId = pageUrl.match(/\/api\/Addresss\/(\d+)/i)?.[1];
+  const ids = routeId ? [routeId, "2", "3", "4"] : ["2", "3", "4", "5"];
+  const authHeader = juiceShopDataIdAuthHeader();
+  for (const id of [...new Set(ids)]) {
+    const url = new URL(`/api/Addresss/${id}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 4096, headers: authHeader });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (/Malicious activity detected/i.test(doc.body)) continue;
+    if (!/"status"\s*:\s*"success"/.test(doc.body)) continue;
+    const streetMatch = doc.body.match(/"streetAddress"\s*:\s*"([^"]{4,})"/);
+    const mobileMatch = doc.body.match(/"mobileNum"\s*:\s*(\d{6,})/);
+    if (!streetMatch || !mobileMatch) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        addressId: id,
+        streetAddress: streetMatch[1],
+        mobileNum: mobileMatch[1],
+        snippet: doc.body.slice(0, 180).trim(),
+        note: "Juice Shop GET /api/Addresss/:id with alg:none JWT returns shipping PII — per-record BOLA oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const juiceShopAddresssIdBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Addresss\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopAddresssIdBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Addresss/:id route scan — alg:none JWT reads shipping PII by ID — route-specific BOLA oracle"
+    }
+  };
+};
+
 const juiceShopFeedbacksBolaLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -46211,6 +46343,12 @@ export const RULES: Record<string, Rule> = {
   juiceShopQuantitysExposureRouteLiveOracle,
   juiceShopHintsExposureLiveOracle,
   juiceShopHintsExposureRouteLiveOracle,
+  juiceShopChallengesDisclosureLiveOracle,
+  juiceShopChallengesDisclosureRouteLiveOracle,
+  juiceShopDeliverysExposureLiveOracle,
+  juiceShopDeliverysExposureRouteLiveOracle,
+  juiceShopAddresssIdBolaLiveOracle,
+  juiceShopAddresssIdBolaRouteLiveOracle,
   juiceShopFeedbacksBolaLiveOracle,
   juiceShopFeedbacksBolaRouteLiveOracle,
   juiceShopSecurityAnswersDisclosureLiveOracle,

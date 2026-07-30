@@ -25900,6 +25900,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-challenges-disclosure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop challenge scoreboard exposed live oracle",
+    description:
+      "GET /api/Challenges without auth returns the full challenge scoreboard with keys, categories, and descriptions — Juice Shop challenge disclosure oracle.",
+    impactOneline:
+      "Public challenge metadata helps attackers map the full vulnerability surface before exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopChallengesDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict challenge metadata to authenticated players who have unlocked each challenge.",
+      steps: [
+        "Require authentication for /api/Challenges list endpoints.",
+        "Return only challenge names the user has discovered or solved.",
+        "Avoid exposing internal challenge keys and mitigation URLs in bulk."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Challenges exposes the full challenge scoreboard without auth. Show authorization fixes for the Challenges API.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-challenges-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop /api/Challenges disclosure route live oracle",
+    description:
+      "When scanning /api/Challenges, unauthenticated response lists the full challenge scoreboard — route-specific disclosure oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated challenge scoreboard disclosure on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopChallengesDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict challenge metadata to authenticated players who have unlocked each challenge.",
+      steps: [
+        "Require authentication for /api/Challenges list endpoints.",
+        "Return only challenge names the user has discovered or solved.",
+        "Avoid exposing internal challenge keys and mitigation URLs in bulk."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Challenges route scan exposes the challenge scoreboard without auth. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-deliverys-exposure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "Juice Shop delivery methods exposed live oracle",
+    description:
+      "GET /api/Deliverys without auth returns the full delivery-method catalog with names and prices — Juice Shop delivery disclosure oracle.",
+    impactOneline:
+      "Unauthenticated delivery catalogs can leak pricing strategy and internal shipping tiers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopDeliverysExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope delivery-method pricing to checkout flows that require authentication.",
+      steps: [
+        "Return delivery options only during authenticated checkout.",
+        "Avoid exposing internal shipping tier pricing in public API responses.",
+        "Audit Delivery model accessors for missing authorization."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Deliverys exposes delivery methods and pricing without auth. Show authorization fixes for the Deliverys API.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-deliverys-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "Juice Shop /api/Deliverys exposure route live oracle",
+    description:
+      "When scanning /api/Deliverys or /api/Deliverys/:id, unauthenticated catalog lists delivery methods with pricing — route-specific disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated delivery-method disclosure on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopDeliverysExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope delivery-method pricing to checkout flows that require authentication.",
+      steps: [
+        "Return delivery options only during authenticated checkout.",
+        "Avoid exposing internal shipping tier pricing in public API responses.",
+        "Audit Delivery model accessors for missing authorization."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Deliverys route scan exposes delivery methods without auth. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-addresss-id-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop address-by-ID BOLA live oracle",
+    description:
+      "GET /api/Addresss/:id with alg:none JWT returns shipping addresses with streetAddress and mobileNum — Juice Shop per-record PII BOLA oracle.",
+    impactOneline:
+      "Broken object-level authorization on address IDs exposes customer shipping and contact PII.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopAddresssIdBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope address-by-ID reads to the authenticated address owner only.",
+      steps: [
+        "Verify the JWT subject owns the requested address ID before returning PII.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Add integration tests that prove cross-user address ID reads fail."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Addresss/:id returns shipping PII with alg:none JWT. Show BOLA authorization fixes for address-by-ID APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-addresss-id-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/Addresss/:id BOLA route live oracle",
+    description:
+      "When scanning /api/Addresss/:id, alg:none JWT returns shipping PII for the requested record — route-specific BOLA oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user address reads on Juice Shop ID endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopAddresssIdBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope address-by-ID reads to the authenticated address owner only.",
+      steps: [
+        "Verify the JWT subject owns the requested address ID before returning PII.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Add integration tests that prove cross-user address ID reads fail."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Addresss/:id route scan exposes shipping PII via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-feedbacks-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
