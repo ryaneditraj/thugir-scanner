@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T15:06:00.000Z",
+  "updated_at": "2026-07-30T16:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ssti.vulnlab.dev/basic/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 render_template_string SSTI lab with /meta/ detection hints (ssti.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/format/",
+      "source": "sampsonc/vulnlab.dev — Python str.format() attribute-walk SSTI lab (ssti.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/filtered/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 SSTI substring blocklist bypass lab (ssti.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/sandboxed/",
+      "source": "sampsonc/vulnlab.dev — SandboxedEnvironment SSTI with over-privileged helper bypass (ssti.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/second-order/",
+      "source": "sampsonc/vulnlab.dev — second-order stored-draft SSTI lab (ssti.vulnlab.dev)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-testing-lab.vercel.app/",
       "source": "gonzaloMorenoc/ai-testing-lab — OWASP LLM Top 10 red-team pytest suite + 42 attack prompts (Vercel OSS deploy, web search)",
