@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T21:07:00.000Z",
+  "updated_at": "2026-07-30T21:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2812,
+  "total_sites_scanned": 2813,
   "total_findings": 27483,
-  "critical_findings": 77,
+  "critical_findings": 79,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1994,
   "discovery_findings": 23135,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-30T21:07:00.000Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-30T21:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 29,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,50 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (33 findings); +juice-shop-login-sqli oracles; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 62,
-      "focus": "vulnshop wallet race/cmdi/upload/xxe + escape.tech Hints + queue drain (owaspbased-lessons, broken_links)",
-      "improvements_shipped_this_run": 0
+      "focus": "vulnshop wallet race/cmdi/upload/xxe + escape.tech Hints + engine login SQLi/shadow_dom alias",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — primary Heroku 503",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — primary Heroku healthy",
+      "juice-shop.demo.escape.tech/rest/user/login: 6→34 findings — juice-shop-login-sqli-live-oracle shipped",
+      "the-internet.herokuapp.com/shadow_dom: 2→3 findings — shadow_dom alias matches shadowdom route oracle",
       "juice-shop.demo.escape.tech/api/Hints: 34-finding hub with hints-exposure-live-oracle + full BOLA suite",
       "vulnshop.vercel.app/*: 6-finding thin passes with client-side-vulnshop-evidence on wallet/cmdi/upload/xxe routes",
-      "owaspbased-lessons.vercel.app/challenges/info-disclosure|output-handling: 1-finding misconfig passes",
-      "the-internet.herokuapp.com/broken_links: 2-finding misconfig without link-rot oracle"
+      "pwnshop POST /search/filters prototype pollution live probe inconclusive — lodash merge did not surface injected keys on live target"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "pwnshop search-filters: client-side prototype-pollution evidence but live __proto__ merge oracle not confirmed on POST /search/filters",
       "vulnshop.vercel.app/api/v1/wallet/add-funds: race-condition wallet top-up oracle still absent",
       "vulnshop.vercel.app/run-diagnostic: command-injection live oracle still absent",
       "vulnshop.vercel.app/upload-review: unrestricted file-upload oracle still absent",
       "vulnshop.vercel.app/api/xml-import: XXE live oracle still absent",
+      "vwad gin-juice-shop login: reflexion-escalated-ssti likely FP on VWAD 404 shell",
+      "zerohealth.aliyu.dev/challenges/*: route-specific SQLi/IDOR/JWT/auth live oracles absent",
       "pygoat-web.herokuapp.com: Heroku dyno offline/404 — need alternate pygoat deploy",
-      "the-internet.herokuapp.com/shadow_dom: shadow-dom XSS oracle still absent"
+      "xss.vulnlab.dev/mxss: mxss-specific innerHTML reparse oracle may need route-level tuning"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.demo.escape.tech/rest/user/login": 34,
     "juice-shop.demo.escape.tech/api/Hints": 34,
     "juice-shop.demo.escape.tech/api/Recycles": 34,
     "juice-shop.demo.escape.tech/api/Deliverys": 34,
     "demo.owasp-juice.shop/api/Feedbacks": 33,
+    "juice-shop.herokuapp.com": 33,
+    "juice-shop-staging.herokuapp.com": 29,
     "pwnshop.ctfsecurity.com/api/settings/search-filters": 21,
     "ssrf.vulnlab.dev/metadata": 15,
     "ssrf.vulnlab.dev/r/": 13,
-    "juice-shop-staging.herokuapp.com": 29,
+    "the-internet.herokuapp.com/shadow_dom": 3,
     "vulnshop.vercel.app/api/v1/wallet/add-funds": 6,
     "vulnshop.vercel.app/run-diagnostic": 6
   }

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-login-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://juice-shop.demo.escape.tech/rest/user/login email=' OR 1=1-- returns authentication JWT with admin@juice-sh.op; juice-shop.demo.escape.tech/rest/user/login findings 6→34 with juice-shop-login-sqli-live-oracle; benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /rest/user/login confirms POST SQLi email bypass returns admin JWT; paired with juice-shop-login-sqli-live-oracle on escape.tech login route; benchmark 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-shadowdom-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /shadow_dom alias now matches shadowdom oracle — customElements.define my-paragraph + attachShadow open; the-internet.herokuapp.com/shadow_dom findings 2→3 with the-internet-shadowdom-route-live-oracle; benchmark 33 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:sqli.vulnlab.dev",
       "slug": "sqli-vulnlab-blind-time-live-oracle",
       "status": "shipped",
