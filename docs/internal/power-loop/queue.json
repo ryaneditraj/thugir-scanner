@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T01:05:00.000Z",
+  "updated_at": "2026-07-30T02:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://zerohealth.aliyu.dev/api/debug/token",
@@ -11874,6 +11874,31 @@
       "url": "https://pwnshop.ctfsecurity.com/api/v1/users/me",
       "source": "ctfsec/pwnshop — profile IDOR oracle GET /api/v1/users/me (ctfsec/pwnshop public training deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://brokencrystals.com/api/spongebob/movie/1",
+      "source": "NeuraLegion/brokencrystals — path traversal / LFI oracle GET /api/spongebob/movie/ (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/orders",
+      "source": "Escape Duck Store — admin order BOLA oracle GET /api/v1/admin/orders (escape.tech public vulnerable lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://google-gruyere.appspot.com/123456/",
+      "source": "Google Gruyere — user snippet XSS/CSRF training surface (google-gruyere.appspot.com public codelab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdomlocalstorage",
+      "source": "google/firing-range — DOM localStorage XSS variant (public-firing-range.appspot.com scanner testbed)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/raw?path=test",
+      "source": "NeuraLegion/brokencrystals — arbitrary file read oracle GET /api/file/raw?path= (Swagger public demo)",
+      "auth": "public_demo"
     }
   ]
 }
