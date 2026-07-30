@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-profile-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA /profile documents Mass Assignment [A01] balance field; vulnshop.vercel.app/profile findings 6→8 (+vulnshop-profile-mass-assignment-route-live-oracle + client-side-vulnshop-module-evidence); benchmark juice-shop.herokuapp.com 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-panel-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA /admin documents JWT is_admin bypass + zero-auth /api/debug/users plaintext passwords; vulnshop.vercel.app/admin findings 6→8 (+vulnshop-admin-panel-route-live-oracle); benchmark 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-users-enumeration-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA /users documents admin user table with Password (plaintext!) column; vulnshop.vercel.app/users findings 6→8 (+vulnshop-users-enumeration-route-live-oracle); benchmark 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-login-jwt-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents JWT is_admin bypass with weak secret \"secret\"; vulnshop.vercel.app/login findings 6→8 (+vulnshop-login-jwt-route-live-oracle + client-side-vulnshop-module-evidence); benchmark juice-shop-staging 30 findings 6/6 maintained"
@@ -16182,6 +16200,31 @@
       "source": "discovery:ssti.vulnlab.dev",
       "slug": "ssti-vulnlab-filtered-route-live-oracle",
       "shipped_at": "2026-07-30T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-profile-mass-assignment-live-oracle",
+      "shipped_at": "2026-07-30T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-profile-mass-assignment-route-live-oracle",
+      "shipped_at": "2026-07-30T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-panel-live-oracle",
+      "shipped_at": "2026-07-30T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-panel-route-live-oracle",
+      "shipped_at": "2026-07-30T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-users-enumeration-route-live-oracle",
+      "shipped_at": "2026-07-30T23:10:00.000Z"
     }
   ]
 }
