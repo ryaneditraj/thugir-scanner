@@ -37487,25 +37487,28 @@ const xssVulnlabStoredRouteLiveOracle: Rule = async (ctx) => {
 const xssVulnlabMxssLiveOracle: Rule = async (ctx) => {
   if (!isXssVulnlabHost(ctx)) return NEGATIVE;
   const origin = xssVulnlabProbeOrigin(ctx);
-  const url = new URL("/mxss/", origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  const canary = "thugirMxssProbe";
+  const url = new URL("/mxss/", origin);
+  url.searchParams.set("comment", canary);
+  const probeUrl = url.toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = doc.body;
   const hasInnerHtmlRoundTrip =
     /preview\.innerHTML\s*=\s*(?:tpl|template)\.innerHTML/i.test(body);
-  const hasRegexSanitizer =
-    /strips\s+<script>\s+and\s+on\*\s+attributes\s+with\s+regex/i.test(body) ||
-    (/<template[^>]+id=["']stored["']/i.test(body) && /id=["']preview["']/i.test(body));
-  if (!hasInnerHtmlRoundTrip || !hasRegexSanitizer) return NEGATIVE;
+  const hasTemplatePreview =
+    /<template[^>]+id=["']stored["']/i.test(body) && /id=["']preview["']/i.test(body);
+  if (!hasInnerHtmlRoundTrip || !hasTemplatePreview) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.92,
     evidence: {
-      url,
+      url: probeUrl,
+      canary,
       snippet:
         body.match(/preview\.innerHTML\s*=\s*(?:tpl|template)\.innerHTML[\s\S]{0,120}/i)?.[0]?.slice(0, 160) ||
         body.slice(0, 160),
-      note: "xss.vulnlab.dev /mxss/ regex sanitizer strips on* attrs then preview.innerHTML = template.innerHTML reparses noscript/style/svg payloads — mutation XSS oracle"
+      note: "xss.vulnlab.dev /mxss/?comment= regex sanitizer strips on* attrs then preview.innerHTML = template.innerHTML reparses noscript/style/svg payloads — mutation XSS oracle"
     }
   };
 };
@@ -37538,7 +37541,9 @@ const xssVulnlabCspBypassJsonpLiveOracle: Rule = async (ctx) => {
   const pageDoc = await ctx.probe.get(pageUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
   const body = pageDoc.body;
-  const hasRestrictiveCsp = /script-src\s*['']self['']/i.test(body);
+  const hasRestrictiveCsp =
+    /script-src\s*(?:'self'|&#39;self&#39;)/i.test(body) ||
+    (/script-src/i.test(body) && /&#39;self&#39;|'self'/i.test(body));
   const hasJsonpEndpoint = /csp-bypass\/jsonp/i.test(body);
   if (!hasRestrictiveCsp || !hasJsonpEndpoint) return NEGATIVE;
   return {
