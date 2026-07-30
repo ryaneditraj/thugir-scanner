@@ -1436,6 +1436,12 @@ const DEEP_RULES = new Set<string>([
   "ssrfVulnlabParserRouteLiveOracle",
   "ssrfVulnlabBlindLiveOracle",
   "ssrfVulnlabBlindRouteLiveOracle",
+  "sqliVulnlabErrorLiveOracle",
+  "sqliVulnlabErrorRouteLiveOracle",
+  "xssVulnlabDomLiveOracle",
+  "xssVulnlabDomRouteLiveOracle",
+  "xssVulnlabReflectedLiveOracle",
+  "xssVulnlabReflectedRouteLiveOracle",
   "juiceShopJwtAlgNoneLiveOracle",
   "juiceShopChatbotApiLiveOracle",
   "juiceShopChatbotRouteLiveOracle",
@@ -8715,6 +8721,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
+      if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-photo-bfla")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
