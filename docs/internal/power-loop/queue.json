@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T16:05:00.000Z",
+  "updated_at": "2026-07-30T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://sqli.vulnlab.dev/union/",
+      "source": "sampsonc/vulnlab.dev — in-band UNION-based SQLi product category filter lab (sqli.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/blind/",
+      "source": "sampsonc/vulnlab.dev — blind boolean SQLi product lookup oracle lab (sqli.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/time/",
+      "source": "sampsonc/vulnlab.dev — blind time-based SQLi SLEEP() username availability lab (sqli.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/second-order/",
+      "source": "sampsonc/vulnlab.dev — second-order SQLi stored registration → profile view lab (sqli.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/stored/",
+      "source": "sampsonc/vulnlab.dev — stored XSS guestbook Markup()|safe persistence lab (xss.vulnlab.dev)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ssti.vulnlab.dev/basic/",
       "source": "sampsonc/vulnlab.dev — Jinja2 render_template_string SSTI lab with /meta/ detection hints (ssti.vulnlab.dev)",
