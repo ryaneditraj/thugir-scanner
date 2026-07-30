@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T12:06:55.111Z",
-  "total": 1149,
-  "uniqueSlugs": 1144,
+  "generatedAt": "2026-07-30T14:17:14.912Z",
+  "total": 1153,
+  "uniqueSlugs": 1148,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1131,
+    "generic": 1135,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1064,
+    "deep": 1068,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 90,
     "Security misconfiguration": 109,
     "Broken authentication": 87,
-    "Injection": 212,
-    "Cross-site scripting": 153,
+    "Injection": 214,
+    "Cross-site scripting": 155,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 43,
@@ -820,6 +820,10 @@
     "ginandjuice-catalog-category-sqli-route-live-oracle",
     "ginandjuice-catalog-route-live-oracle",
     "ginandjuice-catalog-search-xss-live-oracle",
+    "ginandjuice-login-route-live-oracle",
+    "ginandjuice-login-username-reflection-live-oracle",
+    "ginandjuice-stock-xxe-live-oracle",
+    "ginandjuice-stock-xxe-route-live-oracle",
     "graphiql-ui-exposed",
     "graphql-endpoint-disclosed-in-docs",
     "graphql-introspection-enabled",

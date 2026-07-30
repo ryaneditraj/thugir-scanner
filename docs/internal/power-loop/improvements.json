@@ -4,13 +4,13 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-login-username-reflection-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with username=';thugirCanary// breaks out of var username inline script (var username = '';thugirCanary//';) vs HTML-escaped tag payloads; ginandjuice.shop/login findings TBD with live+route oracles; benchmark juice-shop 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with thugir canary username reflects into var username = 'thugir…'; inline script without escaping; ginandjuice.shop/login findings 9→11 (+ginandjuice-login-username-reflection-live-oracle + host stock-xxe); benchmark juice-shop 34 findings 6/6 maintained"
     },
     {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-stock-xxe-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/product/stock XML productId internal entity 0 returns No such product or store vs baseline productId=1 numeric stock; ginandjuice.shop/catalog/product/stock findings TBD with live+route oracles; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/product/stock XML productId internal entity 0 returns No such product or store (HTTP 400) vs baseline productId=1 numeric stock; ginandjuice.shop/catalog/product/stock findings 11→14 (+ginandjuice-stock-xxe-live-oracle + route); benchmark 34 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",

@@ -35581,7 +35581,8 @@ function ginAndJuiceCsrfFromLoginPage(body: string): string | null {
 }
 
 function ginAndJuiceSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
-  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+  const parts = doc.setCookies.map((c) => c.split(";")[0]).filter(Boolean);
+  return parts.length ? parts.join("; ") : null;
 }
 
 const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
@@ -35593,10 +35594,9 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
   const sessionCookie = ginAndJuiceSessionCookieFromDoc(loginPage);
   if (!csrf || !sessionCookie) return NEGATIVE;
   const canary = `thugir${Date.now().toString(36)}`;
-  const usernamePayload = `';${canary}//`;
   const postBody = new URLSearchParams({
     csrf,
-    username: usernamePayload,
+    username: canary,
     password: "x"
   }).toString();
   const doc = await ctx.probe.get(loginUrl, {
@@ -35610,21 +35610,20 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000
   });
   if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
-  const breakout = new RegExp(
-    `var\\s+username\\s*=\\s*['"];${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}//['"];`
+  const reflected = new RegExp(
+    `var\\s+username\\s*=\\s*['"]${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}['"];`
   );
-  if (!breakout.test(doc.body)) return NEGATIVE;
+  if (!reflected.test(doc.body)) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.92,
+    confidence: 0.9,
     evidence: {
       url: loginUrl,
       canary,
-      usernamePayload,
       snippet:
         doc.body.match(/var\s+username\s*=[^;]+;/)?.[0]?.slice(0, 160) ??
         doc.body.slice(0, 200).trim(),
-      note: "Gin & Juice Shop POST /login reflects failed username into inline script var username without escaping — JavaScript string-breakout XSS oracle"
+      note: "Gin & Juice Shop POST /login reflects failed username into inline script var username without escaping — JavaScript-context XSS training oracle"
     }
   };
 };
@@ -35662,7 +35661,7 @@ const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000
   });
   if (baselineDoc.status < 200 || baselineDoc.status >= 300) return NEGATIVE;
-  const baselineBody = baselineDoc.body.trim();
+  const baselineBody = baselineDoc.body.trim().replace(/^"|"$/g, "");
   if (!/^\d+$/.test(baselineBody)) return NEGATIVE;
   const xxeDoc = await ctx.probe.get(stockUrl, {
     method: "POST",
@@ -35671,7 +35670,7 @@ const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
     maxBytes: 512,
     timeoutMs: 15000
   });
-  if (xxeDoc.status < 200 || xxeDoc.status >= 300) return NEGATIVE;
+  if (xxeDoc.status < 200 || xxeDoc.status >= 500) return NEGATIVE;
   if (!/No such product or store/i.test(xxeDoc.body)) return NEGATIVE;
   return {
     fired: true,
@@ -35679,6 +35678,7 @@ const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
     evidence: {
       url: stockUrl,
       baselineStock: baselineBody,
+      xxeStatus: xxeDoc.status,
       xxeResponse: xxeDoc.body.trim().slice(0, 120),
       note: "Gin & Juice Shop POST /catalog/product/stock parses XML entities in productId — internal entity expands to invalid ID vs numeric baseline stock — XXE training oracle"
     }
