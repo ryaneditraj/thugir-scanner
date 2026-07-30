@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-feedbacks-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Feedbacks without auth returns UserId 1/2/3/21 product reviews with masked emails; juice-shop-staging benchmark findings 25→28 (+feedbacks-bola + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-security-answers-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/SecurityAnswers with alg:none JWT (data.id=1) returns UserId 1/2/3 password-reset answer SHA-256 hashes; juice-shop-staging benchmark findings 25→28 (+security-answers-disclosure + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-privacy-requests-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/PrivacyRequests with alg:none JWT (data.id=2) returns UserId=1 GDPR privacy request after seed POST; juice-shop-staging.herokuapp.com/api/PrivacyRequests hub gains route-specific BOLA oracle; benchmark findings 25→28; recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-memories-bola-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/memories without auth returns UserId 4/13/18/19/21 with nested User.email bjoern@owasp.org + password hash; juice-shop-staging benchmark findings 22→25 (+memories-bola + route); benchmark recall 6/6 maintained"
