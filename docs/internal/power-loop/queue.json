@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T20:05:00.000Z",
+  "updated_at": "2026-07-30T21:03:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/wallet/add-funds",
+      "source": "chethan-vinayak/vulnshop — race-condition wallet top-up oracle POST /api/v1/wallet/add-funds (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/run-diagnostic",
+      "source": "chethan-vinayak/vulnshop — command injection oracle GET /run-diagnostic?cmd= (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/upload-review",
+      "source": "chethan-vinayak/vulnshop — unrestricted file upload oracle POST /upload-review (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/xml-import",
+      "source": "chethan-vinayak/vulnshop — XXE oracle POST /api/xml-import (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Hints",
+      "source": "Escape.tech Juice Shop demo — challenge hints exposure oracle GET /api/Hints (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ssrf.vulnlab.dev/metadata",
       "source": "sampsonc/vulnlab.dev — AWS mock IMDSv1 SSRF lab at /metadata (ssrf.vulnlab.dev README)",
