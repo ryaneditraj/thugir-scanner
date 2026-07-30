@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T16:05:09.907Z",
-  "total": 1165,
-  "uniqueSlugs": 1160,
+  "generatedAt": "2026-07-30T17:03:48.334Z",
+  "total": 1171,
+  "uniqueSlugs": 1166,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1147,
+    "generic": 1153,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1080,
+    "deep": 1086,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 90,
     "Security misconfiguration": 109,
     "Broken authentication": 87,
-    "Injection": 216,
+    "Injection": 222,
     "Cross-site scripting": 159,
     "general": 20,
     "SSRF": 5,
@@ -1022,6 +1022,12 @@
     "ssrf-vulnlab-scheme-live-oracle",
     "ssrf-vulnlab-scheme-route-live-oracle",
     "ssti-template-injection",
+    "ssti-vulnlab-basic-live-oracle",
+    "ssti-vulnlab-basic-route-live-oracle",
+    "ssti-vulnlab-format-live-oracle",
+    "ssti-vulnlab-format-route-live-oracle",
+    "ssti-vulnlab-second-order-live-oracle",
+    "ssti-vulnlab-second-order-route-live-oracle",
     "stack-cors-wildcard-api",
     "stack-database-url-in-bundle",
     "stack-neon-url-in-bundle",
