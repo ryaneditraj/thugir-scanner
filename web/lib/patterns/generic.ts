@@ -27870,6 +27870,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-login-username-reflection-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop login username reflection live oracle",
+    description:
+      "POST /login reflects failed username into inline var username script without escaping — the PortSwigger Gin & Juice login JavaScript-context XSS training oracle.",
+    impactOneline:
+      "Unescaped username reflection in script literals enables JavaScript string-breakout XSS on failed login responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLoginUsernameReflectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input before embedding in JavaScript string literals.",
+      steps: [
+        "HTML-encode or JSON-encode usernames before inserting into inline scripts.",
+        "Avoid echoing raw request parameters into script blocks.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /login reflects usernames into var username without escaping. Show JavaScript-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-login-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /login route reflection live oracle",
+    description:
+      "When scanning /login, failed POST username is reflected into inline script without escaping — route-specific JavaScript-context XSS oracle.",
+    impactOneline:
+      "Route-specific confirmation that login error pages embed attacker-controlled usernames in script literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input before embedding in JavaScript string literals on /login.",
+      steps: [
+        "HTML-encode or JSON-encode usernames before inserting into inline scripts.",
+        "Avoid echoing raw request parameters into script blocks.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login route scan confirms username reflection in inline script. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-stock-xxe-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop stock check XXE live oracle",
+    description:
+      "POST /catalog/product/stock parses XML entities in productId — internal entity expansion alters stock lookup vs clean baseline — the PortSwigger Gin & Juice XXE training oracle.",
+    impactOneline:
+      "XML external entity processing in stock checks can leak server files or alter backend queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceStockXxeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable DTD and external entity processing in XML parsers.",
+      steps: [
+        "Use XML parsers with DTD processing disabled.",
+        "Validate productId as integers after parsing, not via entity expansion.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /catalog/product/stock endpoint expands XML entities in productId. Show XXE remediation for stock XML parsers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-stock-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /catalog/product/stock XXE route live oracle",
+    description:
+      "When scanning /catalog/product/stock, XML entity expansion in productId alters stock lookup vs numeric baseline — route-specific XXE oracle.",
+    impactOneline:
+      "Route-specific confirmation that stock XML endpoints process attacker-controlled entities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceStockXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable DTD and external entity processing on /catalog/product/stock XML handlers.",
+      steps: [
+        "Use XML parsers with DTD processing disabled.",
+        "Validate productId as integers after parsing.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/product/stock route scan confirms XML entity expansion. Show route-specific XXE remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-portal-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",

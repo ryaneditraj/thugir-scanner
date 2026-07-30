@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-login-username-reflection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with username=';thugirCanary// breaks out of var username inline script (var username = '';thugirCanary//';) vs HTML-escaped tag payloads; ginandjuice.shop/login findings TBD with live+route oracles; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-stock-xxe-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/product/stock XML productId internal entity 0 returns No such product or store vs baseline productId=1 numeric stock; ginandjuice.shop/catalog/product/stock findings TBD with live+route oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-photo-bfla-live-oracle",
       "status": "shipped",

@@ -35575,6 +35575,133 @@ const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function ginAndJuiceCsrfFromLoginPage(body: string): string | null {
+  const m = body.match(/name="csrf"\s+value="([^"]+)"/i);
+  return m?.[1] ?? null;
+}
+
+function ginAndJuiceSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (loginPage.status < 200 || loginPage.status >= 400) return NEGATIVE;
+  const csrf = ginAndJuiceCsrfFromLoginPage(loginPage.body);
+  const sessionCookie = ginAndJuiceSessionCookieFromDoc(loginPage);
+  if (!csrf || !sessionCookie) return NEGATIVE;
+  const canary = `thugir${Date.now().toString(36)}`;
+  const usernamePayload = `';${canary}//`;
+  const postBody = new URLSearchParams({
+    csrf,
+    username: usernamePayload,
+    password: "x"
+  }).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: postBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: sessionCookie
+    },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const breakout = new RegExp(
+    `var\\s+username\\s*=\\s*['"];${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}//['"];`
+  );
+  if (!breakout.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: loginUrl,
+      canary,
+      usernamePayload,
+      snippet:
+        doc.body.match(/var\s+username\s*=[^;]+;/)?.[0]?.slice(0, 160) ??
+        doc.body.slice(0, 200).trim(),
+      note: "Gin & Juice Shop POST /login reflects failed username into inline script var username without escaping — JavaScript string-breakout XSS oracle"
+    }
+  };
+};
+
+const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceLoginUsernameReflectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /login route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
+    }
+  };
+};
+
+const GIN_AND_JUICE_STOCK_XML_BASELINE =
+  '<?xml version="1.0"?><stockCheck><storeId>1</storeId><productId>1</productId></stockCheck>';
+const GIN_AND_JUICE_STOCK_XML_XXE_INTERNAL =
+  '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe "0">]><stockCheck><storeId>1</storeId><productId>&xxe;</productId></stockCheck>';
+
+const ginAndJuiceStockXxeLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const stockUrl = new URL("/catalog/product/stock?productId=1", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(stockUrl, {
+    method: "POST",
+    body: GIN_AND_JUICE_STOCK_XML_BASELINE,
+    headers: { "Content-Type": "application/xml" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 300) return NEGATIVE;
+  const baselineBody = baselineDoc.body.trim();
+  if (!/^\d+$/.test(baselineBody)) return NEGATIVE;
+  const xxeDoc = await ctx.probe.get(stockUrl, {
+    method: "POST",
+    body: GIN_AND_JUICE_STOCK_XML_XXE_INTERNAL,
+    headers: { "Content-Type": "application/xml" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (xxeDoc.status < 200 || xxeDoc.status >= 300) return NEGATIVE;
+  if (!/No such product or store/i.test(xxeDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: stockUrl,
+      baselineStock: baselineBody,
+      xxeResponse: xxeDoc.body.trim().slice(0, 120),
+      note: "Gin & Juice Shop POST /catalog/product/stock parses XML entities in productId — internal entity expands to invalid ID vs numeric baseline stock — XXE training oracle"
+    }
+  };
+};
+
+const ginAndJuiceStockXxeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\/product\/stock/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceStockXxeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog/product/stock route scan — XML entity expansion in productId alters stock lookup vs clean baseline — XXE training oracle"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -46765,6 +46892,10 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceBlogPostRouteLiveOracle,
   ginAndJuiceCatalogCategorySqliLiveOracle,
   ginAndJuiceCatalogCategorySqliRouteLiveOracle,
+  ginAndJuiceLoginUsernameReflectionLiveOracle,
+  ginAndJuiceLoginRouteLiveOracle,
+  ginAndJuiceStockXxeLiveOracle,
+  ginAndJuiceStockXxeRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
