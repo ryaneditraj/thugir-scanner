@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T07:06:11.787Z",
-  "total": 1119,
-  "uniqueSlugs": 1114,
+  "generatedAt": "2026-07-30T08:08:46.545Z",
+  "total": 1125,
+  "uniqueSlugs": 1120,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1101,
+    "generic": 1107,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1034,
+    "deep": 1040,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 277,
+    "Broken access control": 283,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -832,8 +832,14 @@
     "ist-edu-portal-sqli-route-live-oracle",
     "ist-edu-search-xss-route-live-oracle",
     "ist-edu-ssrf-redirect-route-live-oracle",
+    "juice-shop-addresss-bola-live-oracle",
+    "juice-shop-addresss-bola-route-live-oracle",
+    "juice-shop-basket-idor-live-oracle",
+    "juice-shop-basket-idor-route-live-oracle",
     "juice-shop-basket-items-bola-live-oracle",
     "juice-shop-basket-items-bola-route-live-oracle",
+    "juice-shop-cards-bola-live-oracle",
+    "juice-shop-cards-bola-route-live-oracle",
     "juice-shop-chatbot-api-live-oracle",
     "juice-shop-chatbot-route-live-oracle",
     "juice-shop-complaints-bola-live-oracle",
