@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T06:03:24.265Z",
+  "updated_at": "2026-07-30T07:42:59.885Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/api/Quantitys",
+      "source": "OWASP Juice Shop demo — product quantity manipulation oracle GET /api/Quantitys (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Memories",
+      "source": "OWASP Juice Shop demo — unauthenticated memories API oracle GET /api/Memories (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Deliverys",
+      "source": "OWASP Juice Shop demo — delivery address BOLA oracle GET /api/Deliverys (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Hints",
+      "source": "OWASP Juice Shop demo — challenge hints disclosure oracle GET /api/Hints (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/ImageCaptchas",
+      "source": "OWASP Juice Shop demo — captcha bypass oracle GET /api/ImageCaptchas (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/api/Complaints",
       "source": "OWASP Juice Shop demo — complaint API BOLA oracle GET/POST /api/Complaints (official demo.owasp-juice.shop)",
