@@ -14535,6 +14535,164 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sqli-vulnlab-blind-time-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev time-based blind SQLi live oracle",
+    description:
+      "GET /blind-time/?username= with SLEEP(3) inside IF(SUBSTRING(secret...)='V') delays ~3s for true predicate but stays fast for 'Z' — the sqli.vulnlab.dev time-based blind SQLi oracle.",
+    impactOneline:
+      "Time-based SQLi oracles leak secrets when injected predicates gate SLEEP() without changing visible response content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabBlindTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Use parameterized queries and cap query execution time — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Reject or normalize username inputs before embedding in SELECT.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blind-time username lookup is injectable with SLEEP-based timing oracles. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-vulnlab-blind-time-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev /blind-time route SQLi live oracle",
+    description:
+      "When scanning /blind-time/, SLEEP(3) timing differential confirms time-based blind SQLi — route-specific blind SQLi oracle.",
+    impactOneline:
+      "Route-specific time-based blind SQLi oracle confirms injectable timing predicates without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabBlindTimeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Use parameterized queries and cap query execution time — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Reject or normalize username inputs before embedding in SELECT.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blind-time route is injectable with SLEEP-based timing oracles. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-mxss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev mutation XSS live oracle",
+    description:
+      "GET /mxss/ regex sanitizer strips on* attrs then preview.innerHTML = template.innerHTML reparses noscript/style/svg payloads — the xss.vulnlab.dev mutation XSS oracle.",
+    impactOneline:
+      "innerHTML round-trips after regex sanitization can reactivate payloads via parser-mode escapes (mXSS).",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabMxssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid innerHTML round-trips after sanitization — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use DOMParser or trusted Types instead of regex HTML sanitizers.",
+        "Never reassign sanitized markup through innerHTML on a live DOM node.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /mxss route reparses regex-sanitized markup via innerHTML. Show mXSS-safe sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-mxss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev /mxss route XSS live oracle",
+    description:
+      "When scanning /mxss/, innerHTML round-trip after regex sanitizer confirms mutation XSS sink — route-specific mXSS oracle.",
+    impactOneline:
+      "Route-specific mXSS oracle confirms parser-mode escape without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabMxssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid innerHTML round-trips after sanitization — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use DOMParser or trusted Types instead of regex HTML sanitizers.",
+        "Never reassign sanitized markup through innerHTML on a live DOM node.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /mxss route reparses regex-sanitized markup via innerHTML. Show route-specific mXSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-csp-bypass-jsonp-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev JSONP CSP bypass live oracle",
+    description:
+      "CSP script-src 'self' but /csp-bypass/jsonp?cb= reflects callback into executable JS — the xss.vulnlab.dev JSONP CSP bypass oracle.",
+    impactOneline:
+      "Same-origin JSONP endpoints defeat script-src 'self' when reflected callbacks load as executable script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabCspBypassJsonpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove JSONP endpoints or block callback reflection — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Serve JSON responses without executable callback wrappers.",
+        "Use nonces or hashes in CSP instead of relying on script-src 'self' alone.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /csp-bypass JSONP endpoint reflects callbacks into executable JS under script-src 'self'. Show CSP bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-csp-bypass-jsonp-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev /csp-bypass JSONP route live oracle",
+    description:
+      "When scanning /csp-bypass/, same-origin /jsonp?cb= callback reflection confirms CSP bypass — route-specific JSONP CSP bypass oracle.",
+    impactOneline:
+      "Route-specific JSONP CSP bypass oracle confirms script-src 'self' bypass without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabCspBypassJsonpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove JSONP endpoints or block callback reflection — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Serve JSON responses without executable callback wrappers.",
+        "Use nonces or hashes in CSP instead of relying on script-src 'self' alone.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /csp-bypass route exposes JSONP callbacks that bypass script-src 'self'. Show route-specific CSP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssti-vulnlab-sandboxed-live-oracle",
     platform: "generic",
     category: "Injection",
