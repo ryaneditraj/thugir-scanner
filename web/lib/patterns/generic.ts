@@ -25900,6 +25900,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-feedbacks-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop product feedback BOLA live oracle",
+    description:
+      "GET /api/Feedbacks without auth returns product reviews spanning multiple UserId values — Juice Shop feedback BOLA oracle.",
+    impactOneline:
+      "Unauthenticated feedback reads expose other shoppers' masked emails and review content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopFeedbacksBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and scope feedback reads to the owning user.",
+      steps: [
+        "Gate /api/Feedbacks behind authenticated sessions.",
+        "Return only feedback authored by the authenticated user.",
+        "Strip masked email fragments from public review listings."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Feedbacks returns other users' product reviews without auth. Show BOLA authorization fixes for the Feedbacks API.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-feedbacks-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/Feedbacks BOLA route live oracle",
+    description:
+      "When scanning /api/Feedbacks, unauthenticated response lists cross-user product reviews — route-specific BOLA oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated cross-user feedback reads on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopFeedbacksBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and scope feedback reads to the owning user.",
+      steps: [
+        "Gate /api/Feedbacks behind authenticated sessions.",
+        "Return only feedback authored by the authenticated user.",
+        "Strip masked email fragments from public review listings."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Feedbacks route scan exposes cross-user reviews via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-security-answers-disclosure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Juice Shop security-answer hashes disclosed live oracle",
+    description:
+      "GET /api/SecurityAnswers with alg:none JWT returns password-reset answer hashes for multiple users — Juice Shop security-answer disclosure oracle.",
+    impactOneline:
+      "Leaked password-reset answer hashes enable offline cracking and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSecurityAnswersDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope security-answer reads to the authenticated user only.",
+      steps: [
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Return only the authenticated user's security answers.",
+        "Never expose other users' answer hashes in list endpoints."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/SecurityAnswers returns other users' password-reset answer hashes. Show authorization fixes for the SecurityAnswers API.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-security-answers-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Juice Shop /api/SecurityAnswers disclosure route live oracle",
+    description:
+      "When scanning /api/SecurityAnswers, authenticated response lists cross-user password-reset answer hashes — route-specific disclosure oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user security-answer hash disclosure on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSecurityAnswersDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope security-answer reads to the authenticated user only.",
+      steps: [
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Return only the authenticated user's security answers.",
+        "Never expose other users' answer hashes in list endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/SecurityAnswers route scan exposes cross-user answer hashes. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-privacy-requests-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop GDPR privacy-request BOLA live oracle",
+    description:
+      "GET /api/PrivacyRequests with alg:none JWT (data.id=2) returns another user's GDPR privacy request — Juice Shop privacy-request BOLA oracle.",
+    impactOneline:
+      "Cross-user privacy-request reads violate GDPR data-subject isolation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopPrivacyRequestsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind privacy-request reads to the authenticated data subject.",
+      steps: [
+        "Verify the requester owns each privacy request before returning it.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Scope list endpoints to the authenticated user's UserId only."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/PrivacyRequests lets one user read another user's GDPR privacy request. Show BOLA authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-privacy-requests-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/PrivacyRequests BOLA route live oracle",
+    description:
+      "When scanning /api/PrivacyRequests, authenticated user reads another user's GDPR privacy request — route-specific BOLA oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user privacy-request reads on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopPrivacyRequestsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind privacy-request reads to the authenticated data subject.",
+      steps: [
+        "Verify the requester owns each privacy request before returning it.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Scope list endpoints to the authenticated user's UserId only."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/PrivacyRequests route scan exposes another user's GDPR request via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "thugir-jwt-weak-claims",
     platform: "generic",
     category: "Broken authentication",

