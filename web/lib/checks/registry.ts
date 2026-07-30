@@ -37060,6 +37060,152 @@ const ssrfVulnlabBlindRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isSqliVulnlabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /sqli\.vulnlab\.dev/i.test(corpus);
+}
+
+function sqliVulnlabProbeOrigin(ctx: RuleContext): string {
+  if (!isSqliVulnlabHost(ctx)) return ctx.origin;
+  return "https://sqli.vulnlab.dev";
+}
+
+const sqliVulnlabErrorLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sqliVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/error/", origin).toString();
+  const postBody = new URLSearchParams({ username: "thugir'", password: "probe" }).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const html = doc.body;
+  const hasQuery = /SELECT id, role FROM users WHERE username=/i.test(html);
+  const hasSqlError = /SQL error:|SQL syntax|ProgrammingError|MariaDB server version/i.test(html);
+  const hasInjectedQuote =
+    /username=&#39;thugir&#39;&#39;/i.test(html) || /username='thugir''/i.test(html);
+  if (!hasQuery || !hasSqlError || !hasInjectedQuote) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      payload: "username=thugir'&password=probe",
+      snippet: html.match(/<pre class="body">([\s\S]{0,200})/i)?.[1]?.slice(0, 160) || "",
+      note: "sqli.vulnlab.dev POST /error/ with username=thugir' renders verbatim SQL syntax error and exposed query — error-based SQLi login oracle"
+    }
+  };
+};
+
+const sqliVulnlabErrorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqliVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/error\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sqliVulnlabErrorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+function isXssVulnlabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /xss\.vulnlab\.dev/i.test(corpus);
+}
+
+function xssVulnlabProbeOrigin(ctx: RuleContext): string {
+  if (!isXssVulnlabHost(ctx)) return ctx.origin;
+  return "https://xss.vulnlab.dev";
+}
+
+const xssVulnlabDomLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const origin = xssVulnlabProbeOrigin(ctx);
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let probePath = "/dom/";
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\b/i.test(parsed.pathname)) probePath = parsed.pathname;
+    } catch {
+      /* ignore */
+    }
+  }
+  const url = new URL(probePath, origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasDomSink =
+    /location\.hash/i.test(body) &&
+    /decodeURIComponent\s*\(\s*location\.hash/i.test(body) &&
+    /(?:getElementById\([^)]+\)\.)?innerHTML\s*=\s*raw\b/i.test(body);
+  if (!hasDomSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.match(/<script>[\s\S]{0,300}/i)?.[0]?.slice(0, 200) || body.slice(0, 160),
+      note: "xss.vulnlab.dev /dom/ reads location.hash and writes decodeURIComponent output into element.innerHTML — DOM XSS sink oracle"
+    }
+  };
+};
+
+const xssVulnlabDomRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssVulnlabDomLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const XSS_VULNLAB_REFLECTED_CANARY = "thugirxsscan7";
+
+const xssVulnlabReflectedLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const origin = xssVulnlabProbeOrigin(ctx);
+  const canary = XSS_VULNLAB_REFLECTED_CANARY;
+  const probeUrl = new URL(`/reflected/?q=${encodeURIComponent(canary)}`, origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (!new RegExp(`Results for:\\s*${canary}`, "i").test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      canary,
+      snippet: body.match(new RegExp(`Results for:[^<]{0,80}${canary}`, "i"))?.[0] || "",
+      note: "xss.vulnlab.dev GET /reflected/?q= reflects query unescaped into Results heading — reflected XSS oracle"
+    }
+  };
+};
+
+const xssVulnlabReflectedRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssVulnlabReflectedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -46809,6 +46955,12 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabParserRouteLiveOracle,
   ssrfVulnlabBlindLiveOracle,
   ssrfVulnlabBlindRouteLiveOracle,
+  sqliVulnlabErrorLiveOracle,
+  sqliVulnlabErrorRouteLiveOracle,
+  xssVulnlabDomLiveOracle,
+  xssVulnlabDomRouteLiveOracle,
+  xssVulnlabReflectedLiveOracle,
+  xssVulnlabReflectedRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,

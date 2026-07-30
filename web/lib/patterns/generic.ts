@@ -13963,6 +13963,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sqli-vulnlab-error-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev error-based SQLi live oracle",
+    description:
+      "POST /error/ with username=thugir' renders the concatenated SELECT query and a verbatim MariaDB syntax error — the sqli.vulnlab.dev error-based SQLi login oracle.",
+    impactOneline:
+      "String-concatenated login queries with verbose SQL error disclosure confirm injectable authentication endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabErrorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never render raw SQL errors to users — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Return generic login failures instead of database exception text.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /error login endpoint concatenates user input into SQL and shows raw database errors. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-vulnlab-error-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev /error route SQLi live oracle",
+    description:
+      "When scanning /error/, POST username=thugir' returns verbatim SQL syntax error and exposed query — route-specific error-based SQLi oracle.",
+    impactOneline:
+      "Route-specific error-based SQLi oracle confirms injectable login without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never render raw SQL errors to users — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements / ORM parameter binding.",
+        "Return generic login failures instead of database exception text.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /error route concatenates user input into SQL and shows raw database errors. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-dom-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev DOM XSS live oracle",
+    description:
+      "/dom/ inline script reads location.hash via decodeURIComponent and assigns it to element.innerHTML — the xss.vulnlab.dev DOM XSS sink oracle.",
+    impactOneline:
+      "Client-side hash-to-innerHTML sinks are invisible to server-side DAST that only inspects HTTP responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabDomLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign untrusted URL fragments to innerHTML — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use textContent instead of innerHTML for user-controlled values.",
+        "Sanitize DOM writes with a strict HTML allowlist if markup is required.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /dom page writes location.hash into innerHTML. Show safe DOM updates with textContent or sanitization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-dom-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev /dom route DOM XSS live oracle",
+    description:
+      "When scanning /dom/, inline script confirms location.hash → decodeURIComponent → innerHTML sink — route-specific DOM XSS oracle.",
+    impactOneline:
+      "Route-specific DOM XSS oracle confirms client-side sink without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabDomRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign untrusted URL fragments to innerHTML — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use textContent instead of innerHTML for user-controlled values.",
+        "Sanitize DOM writes with a strict HTML allowlist if markup is required.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /dom route writes location.hash into innerHTML. Show safe DOM updates with textContent or sanitization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-reflected-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev reflected XSS live oracle",
+    description:
+      "GET /reflected/?q= reflects the search query unescaped into the Results heading — the xss.vulnlab.dev reflected XSS oracle.",
+    impactOneline:
+      "Unescaped search reflection enables reflected XSS against any visitor loading the crafted URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabReflectedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all user input before rendering — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Escape dynamic output with context-appropriate encoding (HTML, attribute, JS).",
+        "Use a templating engine with auto-escaping enabled by default.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected search echoes ?q= without escaping. Show output encoding remediation for reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-reflected-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev /reflected route XSS live oracle",
+    description:
+      "When scanning /reflected/, GET ?q=canary reflects query unescaped into Results heading — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route-specific reflected XSS oracle confirms unescaped search output without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabReflectedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all user input before rendering — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Escape dynamic output with context-appropriate encoding (HTML, attribute, JS).",
+        "Use a templating engine with auto-escaping enabled by default.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected route echoes ?q= without escaping. Show output encoding remediation for reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
