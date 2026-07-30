@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T10:19:02.000Z",
+  "updated_at": "2026-07-30T11:09:29.923Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2960,
-  "total_findings": 28772,
+  "total_sites_scanned": 2968,
+  "total_findings": 29015,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2091,
+  "discovery_urls_added": 2096,
   "discovery_findings": 24434,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-30T10:19:02.000Z",
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-30T11:09:29.923Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 28,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 476,
+      "probes_run": 473,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,40 @@
           ]
         }
       },
-      "note": "Primary 503; staging 6/6 (28 findings post Feedbacks/SecurityAnswers/PrivacyRequests oracles); secret-resend slug still absent"
+      "note": "Primary 503; staging 6/6 (28 findings) — full BOLA oracle suite; secret-resend slug still absent"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 55,
-      "focus": "escape Cards/Addresss/Complaints + pentest-ground open_redirect + demo Deliverys/2 + vapi api5 drain (merged with 09 UTC parallel run)",
-      "improvements_shipped_this_run": 3
+      "findings": 215,
+      "focus": "vulnbank register BOPLA + brokencrystals dom-csrf/nestedJson/photo + testfire login + pentest-ground RestFlaw eval injection",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark 6/6 (28 findings) \u2014 Feedbacks/SecurityAnswers/PrivacyRequests oracles shipped in parallel 09 UTC run",
-      "juice-shop.demo.escape.tech/api/Complaints: 17-finding juice-shop hub",
-      "pentest-ground.com:4280/vulnerabilities/open_redirect/: 8 findings \u2014 open-redirect live oracle confirmed",
-      "juice-shop.demo.escape.tech/api/Cards + /api/Addresss/1: thin 2-finding passes without route-specific BOLA oracles",
-      "demo.owasp-juice.shop/api/Deliverys/2 + /api/Feedbacks: 503"
+      "juice-shop-staging.herokuapp.com: benchmark 6/6 (28 findings) — no category gaps",
+      "vulnbank.org/register: 21 findings — vulnbank-bopla-register-live-oracle + AI chat + merchant oracles",
+      "brokencrystals.com/api/auth/dom-csrf-flow: 60 findings — dom-csrf-flow route live oracle",
+      "brokencrystals.com/api/nestedJson: 61 findings — nestedJson route live oracle",
+      "brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true: 59 findings — mass-assignment photo oracle",
+      "pentest-ground.com:9000/api/users: 3 findings — RestFlaw eval code-injection live oracle",
+      "demo.owasp-juice.shop/api/Deliverys/2: 503"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark",
-      "escape Cards/Addresss: route-specific BOLA/IDOR live oracles absent",
       "demo.owasp-juice.shop intermittently 503",
-      "zerohealth/pwnshop API routes blocked by Cloudflare from cloud agent"
+      "euri-sec-csp-5d4beab5074d.herokuapp.com: thin 3-finding pass without route-specific CSP bypass oracle",
+      "juice-shop.demo.escape.tech Quantitys/Memories/Wallets/Orders/Feedbacks queued but not yet scanned"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 28,
-    "juice-shop.demo.escape.tech/api/Complaints": 17,
-    "pentest-ground.com:4280/vulnerabilities/open_redirect/": 8,
-    "vapi.tools.escape.tech/vapi/api5/user": 13,
-    "juice-shop.demo.escape.tech/api/Cards": 2
+    "vulnbank.org/register": 21,
+    "brokencrystals.com/api/nestedJson": 61,
+    "brokencrystals.com/api/auth/dom-csrf-flow": 60,
+    "brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true": 59,
+    "demo.testfire.net/login.jsp": 8,
+    "pentest-ground.com:9000/api/users": 3
   }
 }

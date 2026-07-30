@@ -1,550 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-29T11:07:25.552Z",
-      "url": "http://demo.testfire.net/login.jsp",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.86,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 550,
-      "status": "ok",
-      "scanned_at": "2026-07-29T11:07:25.552Z"
-    },
-    {
-      "run_id": "2026-07-29T11:07:40.782Z",
-      "url": "https://euri-sec-csp-5d4beab5074d.herokuapp.com/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 5,
-      "probes_run": 568,
-      "status": "ok",
-      "scanned_at": "2026-07-29T11:07:40.782Z"
-    },
-    {
-      "run_id": "2026-07-29T11:08:11.028Z",
-      "url": "https://pentest-ground.com:4280/vulnerabilities/xss_d/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-pentest-ground-hub-evidence",
-          "title": "Pentest-Ground vulnerable lab catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 602,
-      "status": "ok",
-      "scanned_at": "2026-07-29T11:08:11.028Z"
-    },
-    {
-      "run_id": "2026-07-29T11:08:45.841Z",
-      "url": "https://pentest-ground.com:4280/vulnerabilities/xss_s/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 546,
-      "status": "ok",
-      "scanned_at": "2026-07-29T11:08:45.841Z"
-    },
-    {
-      "run_id": "2026-07-29T11:09:16.608Z",
-      "url": "https://the-internet.herokuapp.com/file_upload",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 541,
-      "status": "ok",
-      "scanned_at": "2026-07-29T11:09:16.608Z"
-    },
-    {
-      "run_id": "2026-07-29T12:01:07.418Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-29T12:01:07.418Z",
-      "error": "We couldn't reach juice-shop.herokuapp.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-29T12:01:29.439Z",
-      "url": "https://juice-shop-staging.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 14,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 455,
-      "status": "ok",
-      "scanned_at": "2026-07-29T12:01:29.439Z"
-    },
-    {
-      "run_id": "2026-07-29T12:04:08.724Z",
-      "url": "https://pentest-ground.com:4280/vulnerabilities/sqli_blind/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-pentest-ground-hub-evidence",
-          "title": "Pentest-Ground vulnerable lab catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 603,
-      "status": "ok",
-      "scanned_at": "2026-07-29T12:04:08.724Z"
-    },
-    {
-      "run_id": "2026-07-29T12:04:42.746Z",
-      "url": "https://zerohealth.aliyu.dev/challenges/ssrf",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-zero-health-evidence",
-          "title": "Zero Health intentionally vulnerable healthcare platform disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 469,
-      "status": "ok",
-      "scanned_at": "2026-07-29T12:04:42.746Z"
-    },
-    {
-      "run_id": "2026-07-29T12:04:51.541Z",
-      "url": "https://zerohealth.aliyu.dev/challenges/xss",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-zero-health-evidence",
-          "title": "Zero Health intentionally vulnerable healthcare platform disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 469,
-      "status": "ok",
-      "scanned_at": "2026-07-29T12:04:51.541Z"
-    },
-    {
       "run_id": "2026-07-29T12:05:00.371Z",
       "url": "https://the-internet.herokuapp.com/dropdown",
       "auth": "public_demo",
@@ -724,7 +180,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-29T13:01:59.284Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-29T13:02:19.810Z",
@@ -1061,7 +517,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-29T13:05:24.703Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-29T13:05:45.156Z",
@@ -2415,7 +1871,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -2443,7 +1899,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF \u2014 server fetches attacker-controlled URL",
+          "title": "SSRF — server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -3189,7 +2645,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-29T19:01:57.553Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-29T19:02:17.995Z",
@@ -3705,7 +3161,7 @@
         "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
         "teachers_available": [],
         "missed_by_us": [],
-        "note": "Phase B skipped \u2014 no nuclei or thugir-node engine in cloud agent environment"
+        "note": "Phase B skipped — no nuclei or thugir-node engine in cloud agent environment"
       },
       "status": "ok",
       "scanned_at": "2026-07-29T19:08:15.000Z"
@@ -3724,7 +3180,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-29T22:03:22.490Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-29T22:03:42.991Z",
@@ -5874,7 +5330,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T01:01:39.163Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T01:01:59.664Z",
@@ -7090,7 +6546,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T02:03:32.419Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T02:03:52.866Z",
@@ -8432,7 +7888,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T03:02:04.313Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T03:02:24.762Z",
@@ -8597,7 +8053,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T03:04:50.148Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T03:05:21.405Z",
@@ -11764,7 +11220,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T07:06:21.407Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T07:06:41.916Z",
@@ -11907,7 +11363,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T07:34:32.528Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T07:34:53.767Z",
@@ -11922,7 +11378,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T07:34:53.767Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T07:35:15.009Z",
@@ -11937,7 +11393,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T07:35:15.009Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T07:35:36.254Z",
@@ -12454,7 +11910,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T08:06:09.973Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T08:06:31.500Z",
@@ -12469,7 +11925,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T08:06:31.500Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T08:06:52.677Z",
@@ -12484,7 +11940,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T08:06:52.677Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T08:07:13.862Z",
@@ -12499,7 +11955,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T08:07:13.862Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T08:07:35.123Z",
@@ -12593,7 +12049,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T08:09:15.899Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T08:09:36.432Z",
@@ -12758,7 +12214,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T08:12:08.184Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T08:12:28.634Z",
@@ -13416,7 +12872,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T09:02:56.212Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T09:03:16.676Z",
@@ -13601,7 +13057,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T09:05:12.615Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T09:36:36.079Z",
@@ -14489,7 +13945,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T09:42:20.639Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T09:42:41.993Z",
@@ -14504,7 +13960,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T09:42:41.993Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T09:43:03.258Z",
@@ -14519,7 +13975,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T09:43:03.258Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T09:45:12.473Z",
@@ -14535,7 +13991,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T09:45:12.473Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T09:45:33.005Z",
@@ -14742,7 +14198,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T10:04:25.621Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T10:04:46.128Z",
@@ -15134,7 +14590,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T10:15:33.715Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T10:15:42.804Z",
@@ -15149,7 +14605,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-07-30T10:15:42.804Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
       "run_id": "2026-07-30T10:15:57.878Z",
@@ -15362,6 +14818,1859 @@
       "probes_run": 563,
       "status": "ok",
       "scanned_at": "2026-07-30T10:16:45.573Z"
+    },
+    {
+      "run_id": "2026-07-30T11:02:59.080Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-30T11:02:59.080Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-07-30T11:03:19.518Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 28,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-users-idor-live-oracle",
+          "title": "Juice Shop user profile IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-items-bola-live-oracle",
+          "title": "Juice Shop basket items BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-complaints-bola-live-oracle",
+          "title": "Juice Shop complaints BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-questions-list-live-oracle",
+          "title": "Juice Shop security-question catalog live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-recycles-bola-live-oracle",
+          "title": "Juice Shop recycle requests BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-cards-bola-live-oracle",
+          "title": "Juice Shop payment cards BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-addresss-bola-live-oracle",
+          "title": "Juice Shop shipping addresses BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-idor-live-oracle",
+          "title": "Juice Shop basket IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-memories-bola-live-oracle",
+          "title": "Juice Shop memories BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-quantitys-exposure-live-oracle",
+          "title": "Juice Shop inventory quantities exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-hints-exposure-live-oracle",
+          "title": "Juice Shop challenge hints exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-feedbacks-bola-live-oracle",
+          "title": "Juice Shop product feedback BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-answers-disclosure-live-oracle",
+          "title": "Juice Shop security-answer hashes disclosed live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-privacy-requests-bola-live-oracle",
+          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 473,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:03:19.518Z"
+    },
+    {
+      "run_id": "2026-07-30T11:05:02.797Z",
+      "url": "https://demo.owasp-juice.shop/api/Deliverys/2",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-30T11:05:02.797Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-07-30T11:05:24.079Z",
+      "url": "https://vulnbank.org/register",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 21,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "vulnbank-ai-anonymous-chat-live-oracle",
+          "title": "Vuln Bank unauthenticated AI customer-support chat oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-bopla-register-live-oracle",
+          "title": "Vuln Bank registration BOPLA privilege escalation oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-merchant-register-live-oracle",
+          "title": "Vuln Bank merchant registration sensitive-data oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vulnbank-merchant-payment-charge-live-oracle",
+          "title": "Vuln Bank merchant payment charge debug-disclosure oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-virtual-cards-bola-live-oracle",
+          "title": "Vuln Bank virtual-cards BOLA live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
+          "title": "Vuln Bank profile-picture URL SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "vulnbank-transfer-negative-amount-live-oracle",
+          "title": "Vuln Bank money-transfer negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-request-loan-negative-amount-live-oracle",
+          "title": "Vuln Bank loan request negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-check-balance-idor-live-oracle",
+          "title": "Vuln Bank unauthenticated balance lookup by account number",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-graphql-introspection-live-oracle",
+          "title": "Vuln Bank GraphQL introspection live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+          "title": "Vuln Bank v1 forgot-password API leaks reset PIN",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-v2-forgot-password-enumeration-live-oracle",
+          "title": "Vuln Bank v2 forgot-password API enables username enumeration",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-sup3r-secret-admin-live-oracle",
+          "title": "Vuln Bank hidden admin panel reachable after BOPLA signup",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-request-loan-live-oracle",
+          "title": "Vuln Bank authenticated loan-request API oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 597,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:05:24.079Z"
+    },
+    {
+      "run_id": "2026-07-30T11:07:01.634Z",
+      "url": "https://brokencrystals.com/api/auth/dom-csrf-flow",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 60,
+      "findings": [
+        {
+          "slug": "exposed-env-file",
+          "title": "Environment file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-git-dir",
+          "title": "Exposed .git directory",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphiql-ui-exposed",
+          "title": "GraphiQL interactive IDE exposed in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sqli-query-param-injection",
+          "title": "SQL injection via raw query parameter",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xpath-injection-disclosure",
+          "title": "XPATH injection leaks credentials in XML response",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "command-injection-form-probe",
+          "title": "OS command injection via form POST parameter",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssti-template-injection",
+          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-xxe-evidence",
+          "title": "Client bundle documents XXE via external entity expansion",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xxe-xml-post-probe",
+          "title": "XXE confirmed via POST XML entity expansion",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "sqli-header-error-disclosure",
+          "title": "SQL injection via HTTP request header",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "brokencrystals-userlogin-css-injection-live-oracle",
+          "title": "Broken Crystals userlogin CSS injection live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-evidence",
+          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-goto-open-redirect-live-oracle",
+          "title": "Broken Crystals /api/goto open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals AWS metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals Azure metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals DigitalOcean metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-jwt-alg-none-live-oracle",
+          "title": "Broken Crystals JWT alg:none bypass live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "brokencrystals-hidden-upload-live-oracle",
+          "title": "Broken Crystals unrestricted file upload oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-ldap-injection-live-oracle",
+          "title": "Broken Crystals LDAP injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-dom-csrf-flow-live-oracle",
+          "title": "Broken Crystals DOM CSRF token oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "brokencrystals-dom-csrf-route-live-oracle",
+          "title": "Broken Crystals /api/auth/dom-csrf-flow route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "brokencrystals-nested-json-dos-live-oracle",
+          "title": "Broken Crystals nested JSON stack overflow oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Denial of service"
+        },
+        {
+          "slug": "brokencrystals-secrets-live-oracle",
+          "title": "Broken Crystals /api/secrets token exposure oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "brokencrystals-safe-files-rfi-live-oracle",
+          "title": "Broken Crystals /api/safe-files remote file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "brokencrystals-users-search-exposure-live-oracle",
+          "title": "Broken Crystals /api/users/search excessive data exposure oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-testimonials-sqli-live-oracle",
+          "title": "Broken Crystals /api/testimonials/count SQL injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-testimonials-xss-live-oracle",
+          "title": "Broken Crystals /api/testimonials/count reflected XSS oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-testimonials-iframe-injection-live-oracle",
+          "title": "Broken Crystals /testimonials videosrc iframe injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-subscriptions-xss-live-oracle",
+          "title": "Broken Crystals /api/subscriptions mailing-list reflected XSS oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-partner-login-xpath-live-oracle",
+          "title": "Broken Crystals /api/partners/partnerLogin XPATH injection oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-file-raw-lfi-live-oracle",
+          "title": "Broken Crystals /api/file/raw local file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-file-lfi-live-oracle",
+          "title": "Broken Crystals /api/file local file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-mass-assignment-live-oracle",
+          "title": "Broken Crystals mass-assignment privilege escalation oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-mcp-tools-live-oracle",
+          "title": "Broken Crystals MCP tools registry live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-mass-assignment-put-live-oracle",
+          "title": "Broken Crystals PUT profile mass-assignment oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-brokencrystals-dom-xss-evidence",
+          "title": "Broken Crystals homepage DOM XSS via maptitle and search reflection",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-marketplace-prototype-pollution-live-oracle",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "exposed-api-config",
+          "title": "Unauthenticated API config exposes database credentials",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-css-injection-evidence",
+          "title": "Client bundle reflects URL param into inline CSS",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
+          "severity": "high",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-public-cloud-storage-bucket",
+          "title": "Public cloud storage bucket lists objects without auth",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 521,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:07:01.634Z"
+    },
+    {
+      "run_id": "2026-07-30T11:07:06.461Z",
+      "url": "https://brokencrystals.com/api/nestedJson",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 61,
+      "findings": [
+        {
+          "slug": "exposed-env-file",
+          "title": "Environment file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-git-dir",
+          "title": "Exposed .git directory",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphiql-ui-exposed",
+          "title": "GraphiQL interactive IDE exposed in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sqli-query-param-injection",
+          "title": "SQL injection via raw query parameter",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xpath-injection-disclosure",
+          "title": "XPATH injection leaks credentials in XML response",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "command-injection-form-probe",
+          "title": "OS command injection via form POST parameter",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssti-template-injection",
+          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-xxe-evidence",
+          "title": "Client bundle documents XXE via external entity expansion",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xxe-xml-post-probe",
+          "title": "XXE confirmed via POST XML entity expansion",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "sqli-header-error-disclosure",
+          "title": "SQL injection via HTTP request header",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "brokencrystals-userlogin-css-injection-live-oracle",
+          "title": "Broken Crystals userlogin CSS injection live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-evidence",
+          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-goto-open-redirect-live-oracle",
+          "title": "Broken Crystals /api/goto open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals AWS metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals Azure metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals DigitalOcean metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-jwt-alg-none-live-oracle",
+          "title": "Broken Crystals JWT alg:none bypass live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "brokencrystals-hidden-upload-live-oracle",
+          "title": "Broken Crystals unrestricted file upload oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-ldap-injection-live-oracle",
+          "title": "Broken Crystals LDAP injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-dom-csrf-flow-live-oracle",
+          "title": "Broken Crystals DOM CSRF token oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "brokencrystals-nested-json-dos-live-oracle",
+          "title": "Broken Crystals nested JSON stack overflow oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Denial of service"
+        },
+        {
+          "slug": "brokencrystals-nested-json-route-live-oracle",
+          "title": "Broken Crystals /api/nestedJson route live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Denial of service"
+        },
+        {
+          "slug": "brokencrystals-secrets-live-oracle",
+          "title": "Broken Crystals /api/secrets token exposure oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "brokencrystals-safe-files-rfi-live-oracle",
+          "title": "Broken Crystals /api/safe-files remote file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "brokencrystals-users-search-exposure-live-oracle",
+          "title": "Broken Crystals /api/users/search excessive data exposure oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-testimonials-sqli-live-oracle",
+          "title": "Broken Crystals /api/testimonials/count SQL injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-testimonials-xss-live-oracle",
+          "title": "Broken Crystals /api/testimonials/count reflected XSS oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-testimonials-iframe-injection-live-oracle",
+          "title": "Broken Crystals /testimonials videosrc iframe injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-subscriptions-xss-live-oracle",
+          "title": "Broken Crystals /api/subscriptions mailing-list reflected XSS oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-partner-login-xpath-live-oracle",
+          "title": "Broken Crystals /api/partners/partnerLogin XPATH injection oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-file-raw-lfi-live-oracle",
+          "title": "Broken Crystals /api/file/raw local file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-file-lfi-live-oracle",
+          "title": "Broken Crystals /api/file local file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-mass-assignment-live-oracle",
+          "title": "Broken Crystals mass-assignment privilege escalation oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-mcp-tools-live-oracle",
+          "title": "Broken Crystals MCP tools registry live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-mass-assignment-put-live-oracle",
+          "title": "Broken Crystals PUT profile mass-assignment oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-brokencrystals-dom-xss-evidence",
+          "title": "Broken Crystals homepage DOM XSS via maptitle and search reflection",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-marketplace-prototype-pollution-live-oracle",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "exposed-api-config",
+          "title": "Unauthenticated API config exposes database credentials",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-css-injection-evidence",
+          "title": "Client bundle reflects URL param into inline CSS",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
+          "severity": "high",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-public-cloud-storage-bucket",
+          "title": "Public cloud storage bucket lists objects without auth",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 520,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:07:06.461Z"
+    },
+    {
+      "run_id": "2026-07-30T11:07:10.948Z",
+      "url": "http://demo.testfire.net/login.jsp",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.86,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 550,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:07:10.948Z"
+    },
+    {
+      "run_id": "2026-07-30T11:07:26.031Z",
+      "url": "https://euri-sec-csp-5d4beab5074d.herokuapp.com/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 568,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:07:26.031Z"
+    },
+    {
+      "run_id": "2026-07-30T11:08:07.495Z",
+      "url": "https://brokencrystals.com/api/users/one/regular_user/photo?isAdmin=true",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 59,
+      "findings": [
+        {
+          "slug": "exposed-env-file",
+          "title": "Environment file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "exposed-git-dir",
+          "title": "Exposed .git directory",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "exposed-source-maps",
+          "title": "Source maps published to production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "graphiql-ui-exposed",
+          "title": "GraphiQL interactive IDE exposed in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sqli-query-param-injection",
+          "title": "SQL injection via raw query parameter",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xpath-injection-disclosure",
+          "title": "XPATH injection leaks credentials in XML response",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "weak-api-default-credentials",
+          "title": "JSON login API accepts common default credentials",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "command-injection-form-probe",
+          "title": "OS command injection via form POST parameter",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssti-template-injection",
+          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-xxe-evidence",
+          "title": "Client bundle documents XXE via external entity expansion",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "xxe-xml-post-probe",
+          "title": "XXE confirmed via POST XML entity expansion",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "sqli-header-error-disclosure",
+          "title": "SQL injection via HTTP request header",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "brokencrystals-userlogin-css-injection-live-oracle",
+          "title": "Broken Crystals userlogin CSS injection live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-evidence",
+          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-goto-open-redirect-live-oracle",
+          "title": "Broken Crystals /api/goto open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals AWS metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals Azure metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
+          "title": "Broken Crystals DigitalOcean metadata SSRF oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "SSRF"
+        },
+        {
+          "slug": "brokencrystals-jwt-alg-none-live-oracle",
+          "title": "Broken Crystals JWT alg:none bypass live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "brokencrystals-hidden-upload-live-oracle",
+          "title": "Broken Crystals unrestricted file upload oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-ldap-injection-live-oracle",
+          "title": "Broken Crystals LDAP injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-dom-csrf-flow-live-oracle",
+          "title": "Broken Crystals DOM CSRF token oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "brokencrystals-nested-json-dos-live-oracle",
+          "title": "Broken Crystals nested JSON stack overflow oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Denial of service"
+        },
+        {
+          "slug": "brokencrystals-secrets-live-oracle",
+          "title": "Broken Crystals /api/secrets token exposure oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "brokencrystals-safe-files-rfi-live-oracle",
+          "title": "Broken Crystals /api/safe-files remote file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "brokencrystals-users-search-exposure-live-oracle",
+          "title": "Broken Crystals /api/users/search excessive data exposure oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-testimonials-sqli-live-oracle",
+          "title": "Broken Crystals /api/testimonials/count SQL injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-testimonials-xss-live-oracle",
+          "title": "Broken Crystals /api/testimonials/count reflected XSS oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-testimonials-iframe-injection-live-oracle",
+          "title": "Broken Crystals /testimonials videosrc iframe injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-subscriptions-xss-live-oracle",
+          "title": "Broken Crystals /api/subscriptions mailing-list reflected XSS oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-partner-login-xpath-live-oracle",
+          "title": "Broken Crystals /api/partners/partnerLogin XPATH injection oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "brokencrystals-file-raw-lfi-live-oracle",
+          "title": "Broken Crystals /api/file/raw local file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-file-lfi-live-oracle",
+          "title": "Broken Crystals /api/file local file inclusion oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "brokencrystals-mass-assignment-live-oracle",
+          "title": "Broken Crystals mass-assignment privilege escalation oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-mcp-tools-live-oracle",
+          "title": "Broken Crystals MCP tools registry live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "brokencrystals-mass-assignment-put-live-oracle",
+          "title": "Broken Crystals PUT profile mass-assignment oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-brokencrystals-dom-xss-evidence",
+          "title": "Broken Crystals homepage DOM XSS via maptitle and search reflection",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "brokencrystals-marketplace-prototype-pollution-live-oracle",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "exposed-api-config",
+          "title": "Unauthenticated API config exposes database credentials",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-css-injection-evidence",
+          "title": "Client bundle reflects URL param into inline CSS",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
+          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
+          "severity": "high",
+          "confidence": 0.89,
+          "category": "Injection"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-sitemap-sensitive-paths",
+          "title": "sitemap.xml lists sensitive routes",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-public-cloud-storage-bucket",
+          "title": "Public cloud storage bucket lists objects without auth",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "firebase-config-exposed",
+          "title": "Firebase web config present in bundle",
+          "severity": "info",
+          "confidence": 0.9,
+          "category": "Information exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 520,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:08:07.495Z"
+    },
+    {
+      "run_id": "2026-07-30T11:08:12.061Z",
+      "url": "https://pentest-ground.com:9000/api/users",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 3,
+      "findings": [
+        {
+          "slug": "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
+          "title": "Pentest-Ground RestFlaw eval code injection route live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 547,
+      "status": "ok",
+      "scanned_at": "2026-07-30T11:08:12.061Z"
     }
   ],
   "teacher_delta_runs": [
@@ -15371,7 +16680,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 12 findings, 6/6 recall (pages_crawled=6 probes=451; gap=[])",
+      "benchmark_status": "ok — primary 503; staging fallback 12 findings, 6/6 recall (pages_crawled=6 probes=451; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15388,7 +16697,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 21 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 with reflexion-escalated-ssti + thugir-dir-discovery + vibe-unauthenticated-api-routes; jwt-alg-none-accepted absent vs prior runs; secret-resend slug still absent. Discovery: +5 the-internet URLs (floating_menu, download_secure, shifting_content, windows, tables) + drained wrongsecrets/challenge/2 + ssrf.vulnlab basic/metadata-aws \u2192 23 discovery findings across 8 URLs; the-internet routes thin 2-finding misconfig passes (insecure-cookies new signal); download_secure no auth-bypass oracle; ssrf metadata-aws 2-finding hub without route-specific SSRF oracle.",
+      "notes": "No teacher tools available. 21 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 with reflexion-escalated-ssti + thugir-dir-discovery + vibe-unauthenticated-api-routes; jwt-alg-none-accepted absent vs prior runs; secret-resend slug still absent. Discovery: +5 the-internet URLs (floating_menu, download_secure, shifting_content, windows, tables) + drained wrongsecrets/challenge/2 + ssrf.vulnlab basic/metadata-aws → 23 discovery findings across 8 URLs; the-internet routes thin 2-finding misconfig passes (insecure-cookies new signal); download_secure no auth-bypass oracle; ssrf metadata-aws 2-finding hub without route-specific SSRF oracle.",
       "scanned_at": "2026-07-29T21:05:30.000Z"
     },
     {
@@ -15397,7 +16706,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
+      "benchmark_status": "ok — primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15423,7 +16732,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 15 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=459; gap=[])",
+      "benchmark_status": "ok — 15 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=459; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15440,7 +16749,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 22 UTC engine run: primary juice-shop.herokuapp.com 6/6 (15 findings); shipped download_secure oracle fix + floating_menu/tables route oracles; the-internet download_secure/floating_menu/tables 2\u21923 findings each.",
+      "notes": "No teacher tools available. 22 UTC engine run: primary juice-shop.herokuapp.com 6/6 (15 findings); shipped download_secure oracle fix + floating_menu/tables route oracles; the-internet download_secure/floating_menu/tables 2→3 findings each.",
       "scanned_at": "2026-07-29T22:10:30.000Z"
     },
     {
@@ -15449,7 +16758,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 17 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
+      "benchmark_status": "ok — 17 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15466,7 +16775,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 00 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (17 findings) with jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti; secret-resend slug still absent. Discovery: +5 URLs (zerohealth debug/token, debug/connection, prescriptions, appointments + demo.owasp-juice.shop/api/Challenges) + drained owaspbased-lessons prompt-injection + duck-store checkout/profile \u2192 86 discovery findings across 8 URLs; zerohealth routes 5-finding hubs with client-side-zero-health-evidence + reflexion-escalated-ssti but no route-specific JWT-secret or BOLA live oracles; demo.owasp-juice.shop/api/Challenges 18-finding juice-shop hub.",
+      "notes": "No teacher tools available. 00 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (17 findings) with jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti; secret-resend slug still absent. Discovery: +5 URLs (zerohealth debug/token, debug/connection, prescriptions, appointments + demo.owasp-juice.shop/api/Challenges) + drained owaspbased-lessons prompt-injection + duck-store checkout/profile → 86 discovery findings across 8 URLs; zerohealth routes 5-finding hubs with client-side-zero-health-evidence + reflexion-escalated-ssti but no route-specific JWT-secret or BOLA live oracles; demo.owasp-juice.shop/api/Challenges 18-finding juice-shop hub.",
       "scanned_at": "2026-07-30T00:08:30.000Z"
     },
     {
@@ -15475,7 +16784,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
+      "benchmark_status": "ok — primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15492,7 +16801,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 01 UTC run: primary juice-shop.herokuapp.com 503 cold start; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti + thugir-dir-discovery; secret-resend slug still absent. Discovery: +5 queued URLs (zerohealth doctors/profile + pwnshop products/orders/users/me) + drained duck-store hub (testimonials, auth/login, users/, uploads/fetch-url, products/filter, cart/add, admin/users) + dvga2/graphql \u2192 138 discovery findings across 8 URLs; duck-store testimonials 26-finding hub with stored-xss + put-bola oracles; dvga2/graphql thin 4-finding pass without introspection/injection route oracles.",
+      "notes": "No teacher tools available. 01 UTC run: primary juice-shop.herokuapp.com 503 cold start; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti + thugir-dir-discovery; secret-resend slug still absent. Discovery: +5 queued URLs (zerohealth doctors/profile + pwnshop products/orders/users/me) + drained duck-store hub (testimonials, auth/login, users/, uploads/fetch-url, products/filter, cart/add, admin/users) + dvga2/graphql → 138 discovery findings across 8 URLs; duck-store testimonials 26-finding hub with stored-xss + put-bola oracles; dvga2/graphql thin 4-finding pass without introspection/injection route oracles.",
       "scanned_at": "2026-07-30T01:09:30.000Z"
     },
     {
@@ -15501,7 +16810,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
+      "benchmark_status": "ok — primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15518,7 +16827,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 02 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti + thugir-dir-discovery + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (brokencrystals spongebob/file/raw + duck-store admin/orders + gruyere + firing-range toxicdomlocalstorage) + drained duck-store admin/products, testimonials/1, mcp, totp login, import-from-url, list_coupons + vapi.tools.escape.tech \u2192 156 discovery findings across 8 URLs; vapi BOLA oracle on /vapi/api1/user/1; zerohealth/pwnshop API routes still queued.",
+      "notes": "No teacher tools available. 02 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti + thugir-dir-discovery + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (brokencrystals spongebob/file/raw + duck-store admin/orders + gruyere + firing-range toxicdomlocalstorage) + drained duck-store admin/products, testimonials/1, mcp, totp login, import-from-url, list_coupons + vapi.tools.escape.tech → 156 discovery findings across 8 URLs; vapi BOLA oracle on /vapi/api1/user/1; zerohealth/pwnshop API routes still queued.",
       "scanned_at": "2026-07-30T02:17:00.000Z"
     },
     {
@@ -15527,7 +16836,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 16 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
+      "benchmark_status": "ok — 16 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15544,7 +16853,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 04 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (16 findings) with jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (Chimera SSRF webhook + GenAI chat/agent-browse, vulnerable-web-site login, juice-shop.demo Challenges) + drained demo.owasp-juice Feedbacks + vapi api5/user routes \u2192 79 discovery findings across 8 URLs; Chimera API routes 5-finding hubs without route-specific SSRF/prompt-injection live oracles; juice-shop.demo Challenges 18-finding hub; demo.owasp-juice Feedbacks 15-finding recovery.",
+      "notes": "No teacher tools available. 04 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (16 findings) with jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (Chimera SSRF webhook + GenAI chat/agent-browse, vulnerable-web-site login, juice-shop.demo Challenges) + drained demo.owasp-juice Feedbacks + vapi api5/user routes → 79 discovery findings across 8 URLs; Chimera API routes 5-finding hubs without route-specific SSRF/prompt-injection live oracles; juice-shop.demo Challenges 18-finding hub; demo.owasp-juice Feedbacks 15-finding recovery.",
       "scanned_at": "2026-07-30T04:12:46.000Z"
     },
     {
@@ -15553,7 +16862,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 16 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
+      "benchmark_status": "ok — 16 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15579,7 +16888,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 16 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
+      "benchmark_status": "ok — 16 findings, 6/6 recall on primary heroku (pages_crawled=6 probes=463; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15596,7 +16905,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 06 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (16 findings) with jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (demo.owasp-juice.shop/api/Complaints, Recycles, SecurityQuestions, Addresss, Cards) + drained ssrf.vulnlab blind/webhook/metadata-gcp \u2192 121 discovery findings across 8 URLs; Addresss/Cards recovered security-question-disclosure slug; ssrf.vulnlab routes now hit full SSRF live-oracle suite (basic/metadata-aws/blocklist/redirect/allowlist/gcp/azure/scheme/gopher/parser/blind).",
+      "notes": "No teacher tools available. 06 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (16 findings) with jwt-alg-none-accepted + chatbot-route + reflexion-escalated-ssti + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (demo.owasp-juice.shop/api/Complaints, Recycles, SecurityQuestions, Addresss, Cards) + drained ssrf.vulnlab blind/webhook/metadata-gcp → 121 discovery findings across 8 URLs; Addresss/Cards recovered security-question-disclosure slug; ssrf.vulnlab routes now hit full SSRF live-oracle suite (basic/metadata-aws/blocklist/redirect/allowlist/gcp/azure/scheme/gopher/parser/blind).",
       "scanned_at": "2026-07-30T06:16:00.000Z"
     },
     {
@@ -15605,7 +16914,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 16 findings, 6/6 recall (pages_crawled=6 probes=457; gap=[])",
+      "benchmark_status": "ok — primary 503; staging fallback 16 findings, 6/6 recall (pages_crawled=6 probes=457; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15622,7 +16931,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 07 UTC continuation run: +5 URLs (Quantitys/Memories/Deliverys/Hints/ImageCaptchas); drained pentest-ground sqli/exec/csp \u2192 61 discovery findings (5 ok, 3x demo.owasp-juice 503). Complements parallel run that shipped complaints/security-questions/recycles BOLA oracles.",
+      "notes": "No teacher tools available. 07 UTC continuation run: +5 URLs (Quantitys/Memories/Deliverys/Hints/ImageCaptchas); drained pentest-ground sqli/exec/csp → 61 discovery findings (5 ok, 3x demo.owasp-juice 503). Complements parallel run that shipped complaints/security-questions/recycles BOLA oracles.",
       "scanned_at": "2026-07-30T07:34:28.579Z"
     },
     {
@@ -15631,7 +16940,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 18 findings, 6/6 recall (pages_crawled=6 probes=461; gap=[]); parallel run achieved 22 with Cards/Addresss oracles",
+      "benchmark_status": "ok — primary 503; staging fallback 18 findings, 6/6 recall (pages_crawled=6 probes=461; gap=[]); parallel run achieved 22 with Cards/Addresss oracles",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15657,7 +16966,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 22 findings, 6/6 recall (pages_crawled=6 probes=467; gap=[])",
+      "benchmark_status": "ok — primary 503; staging fallback 22 findings, 6/6 recall (pages_crawled=6 probes=467; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15674,7 +16983,7 @@
           ]
         }
       },
-      "notes": "No teacher tools. 09 UTC run: benchmark 6/6 staging (22 findings); discovery +10 URLs (staging/escape PrivacyRequests/admin-config/search + demo.owasp-juice fallbacks) \u2192 114 findings across 5 ok + 3 demo 503 errors.",
+      "notes": "No teacher tools. 09 UTC run: benchmark 6/6 staging (22 findings); discovery +10 URLs (staging/escape PrivacyRequests/admin-config/search + demo.owasp-juice fallbacks) → 114 findings across 5 ok + 3 demo 503 errors.",
       "scanned_at": "2026-07-30T09:43:24.594Z"
     },
     {
@@ -15683,7 +16992,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok \u2014 primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
+      "benchmark_status": "ok — primary 503; staging fallback 14 findings, 6/6 recall (pages_crawled=6 probes=455; gap=[])",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -15700,8 +17009,34 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 10 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti + thugir-dir-discovery + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (escape Cards/Addresss/Complaints + pentest-ground open_redirect + demo Deliverys/2) + drained vapi api5/user+users \u2192 55 discovery findings across 8 URLs (6 ok, 2x demo.owasp-juice 503); Complaints 17-finding juice-shop hub; Cards/Addresss thin 2-finding passes without route-specific BOLA oracles; open_redirect 8 findings with pentest-ground-dvwa-open-redirect-route-live-oracle.",
+      "notes": "No teacher tools available. 10 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 (14 findings) with jwt-alg-none + chatbot + reflexion-escalated-ssti + thugir-dir-discovery + vibe-unauthenticated-api-routes; secret-resend slug still absent. Discovery: +5 URLs (escape Cards/Addresss/Complaints + pentest-ground open_redirect + demo Deliverys/2) + drained vapi api5/user+users → 55 discovery findings across 8 URLs (6 ok, 2x demo.owasp-juice 503); Complaints 17-finding juice-shop hub; Cards/Addresss thin 2-finding passes without route-specific BOLA oracles; open_redirect 8 findings with pentest-ground-dvwa-open-redirect-route-live-oracle.",
       "scanned_at": "2026-07-30T10:18:12.000Z"
+    },
+    {
+      "run_id": "2026-07-30T11:09:29.923Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop-staging.herokuapp.com",
+      "benchmark_status": "ok — primary 503; staging fallback 28 findings, 6/6 recall (pages_crawled=6 probes=473; gap=[])",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 11 UTC run: primary juice-shop.herokuapp.com 503; staging fallback 6/6 (28 findings) with full BOLA suite + jwt-alg-none + chatbot + reflexion-escalated-ssti; secret-resend slug still absent. Discovery: +5 juice-shop.demo.escape.tech API routes (Quantitys/Memories/Wallets/Orders/Feedbacks) + drained vulnbank/register + brokencrystals dom-csrf-flow/nestedJson/photo + testfire login + euri-sec-csp + pentest-ground RestFlaw → 215 discovery findings across 7 ok URLs (demo.owasp-juice Deliverys/2 503); vulnbank/register 21-finding hub with BOPLA register oracle; brokencrystals routes 59-61 finding hubs.",
+      "scanned_at": "2026-07-30T11:09:29.923Z"
     }
   ]
 }
