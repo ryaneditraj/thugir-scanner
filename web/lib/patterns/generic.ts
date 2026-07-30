@@ -14119,6 +14119,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssti-vulnlab-basic-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev Jinja2 SSTI live oracle",
+    description:
+      "GET /basic/?greeting={{7*7}} evaluates user input via flask.render_template_string and returns 49 — the ssti.vulnlab.dev basic Jinja2 SSTI oracle.",
+    impactOneline:
+      "Server-side template injection lets attackers evaluate arbitrary expressions and escalate to remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabBasicLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into render_template_string — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Render templates from static files with context variables instead of concatenating user input.",
+        "Use a logic-less template engine or strict sandbox with no dangerous globals.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /basic route passes user input into render_template_string. Show safe templating with static files and bound context.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-basic-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev /basic route SSTI live oracle",
+    description:
+      "When scanning /basic/, GET ?greeting={{7*7}} confirms Jinja2 evaluation via render_template_string — route-specific SSTI oracle.",
+    impactOneline:
+      "Route-specific SSTI oracle confirms template injection without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabBasicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into render_template_string — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Render templates from static files with context variables instead of concatenating user input.",
+        "Use a logic-less template engine or strict sandbox with no dangerous globals.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /basic route passes user input into render_template_string. Show safe templating with static files and bound context.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-format-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev format-string SSTI live oracle",
+    description:
+      "GET /format/?template=Hello, {user.name}! evaluates str.format(user=...) and returns Hello, alice! — the ssti.vulnlab.dev format-string SSTI oracle.",
+    impactOneline:
+      "User-controlled Python format templates enable attribute-walk SSTI chains that reach sensitive object fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabFormatLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never call str.format on user-controlled templates — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use static format strings with positional or named placeholders bound from a fixed allowlist.",
+        "Avoid exposing rich objects to format() callers.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /format route calls str.format on a user-controlled template. Show safe string formatting without attribute walks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-format-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev /format route SSTI live oracle",
+    description:
+      "When scanning /format/, GET ?template=Hello, {user.name}! confirms str.format(user=...) evaluation — route-specific format-string SSTI oracle.",
+    impactOneline:
+      "Route-specific format-string SSTI oracle confirms injectable templates without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabFormatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never call str.format on user-controlled templates — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use static format strings with positional or named placeholders bound from a fixed allowlist.",
+        "Avoid exposing rich objects to format() callers.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /format route calls str.format on a user-controlled template. Show safe string formatting without attribute walks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-second-order-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev second-order SSTI live oracle",
+    description:
+      "POST /second-order/save stores an SSTI payload then GET /second-order/preview?id= evaluates the stored draft via render_template_string — the ssti.vulnlab.dev second-order SSTI oracle.",
+    impactOneline:
+      "Second-order SSTI hides in stored drafts and fires on a later preview endpoint, evading per-request sink scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabSecondOrderLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat stored user content as data, not templates — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Never pass stored snippets into render_template_string during preview or export flows.",
+        "Track data from storage through every render path in threat models.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /second-order flow stores user drafts then renders them as templates on preview. Show safe preview without template evaluation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-second-order-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev /second-order route SSTI live oracle",
+    description:
+      "When scanning /second-order/, save-then-preview confirms stored draft SSTI via render_template_string — route-specific second-order SSTI oracle.",
+    impactOneline:
+      "Route-specific second-order SSTI oracle confirms cross-endpoint template injection without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabSecondOrderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat stored user content as data, not templates — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Never pass stored snippets into render_template_string during preview or export flows.",
+        "Track data from storage through every render path in threat models.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /second-order route stores user drafts then renders them as templates on preview. Show safe preview without template evaluation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",

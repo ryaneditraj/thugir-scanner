@@ -37206,6 +37206,156 @@ const xssVulnlabReflectedRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isSstiVulnlabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /ssti\.vulnlab\.dev/i.test(corpus);
+}
+
+function sstiVulnlabProbeOrigin(ctx: RuleContext): string {
+  if (!isSstiVulnlabHost(ctx)) return ctx.origin;
+  return "https://ssti.vulnlab.dev";
+}
+
+function sstiVulnlabDecodeBody(raw: string): string {
+  return raw
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+function sstiVulnlabRenderedBody(html: string): string | null {
+  const closed = html.match(/<pre class="rendered">([\s\S]*?)<\/pre>/i);
+  if (closed) return sstiVulnlabDecodeBody(closed[1]).trim();
+  const open = html.match(/<pre class="rendered">([\s\S]+)/i);
+  if (open && open[1].length > 0) return sstiVulnlabDecodeBody(open[1]).trim();
+  return null;
+}
+
+const SSTI_VULNLAB_BASIC_PAYLOAD = "{{7*7}}";
+const SSTI_VULNLAB_FORMAT_TEMPLATE = "Hello, {user.name}!";
+const SSTI_VULNLAB_SECOND_ORDER_KEY = "thugir-ssti-second-order-probe";
+
+const sstiVulnlabBasicLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sstiVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/basic/", origin);
+  probeUrl.searchParams.set("greeting", SSTI_VULNLAB_BASIC_PAYLOAD);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const rendered = sstiVulnlabRenderedBody(doc.body);
+  if (rendered !== "49") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      payload: `greeting=${SSTI_VULNLAB_BASIC_PAYLOAD}`,
+      rendered,
+      note: "ssti.vulnlab.dev GET /basic/?greeting={{7*7}} evaluates Jinja2 via render_template_string and returns 49 — basic SSTI oracle"
+    }
+  };
+};
+
+const sstiVulnlabBasicRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/basic\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sstiVulnlabBasicLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const sstiVulnlabFormatLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sstiVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/format/", origin);
+  probeUrl.searchParams.set("template", SSTI_VULNLAB_FORMAT_TEMPLATE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const rendered = sstiVulnlabRenderedBody(doc.body);
+  if (!rendered || !/^Hello,\s*alice!$/i.test(rendered)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      payload: `template=${SSTI_VULNLAB_FORMAT_TEMPLATE}`,
+      rendered,
+      note: "ssti.vulnlab.dev GET /format/?template=Hello, {user.name}! evaluates str.format(user=...) and returns Hello, alice! — format-string SSTI oracle"
+    }
+  };
+};
+
+const sstiVulnlabFormatRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/format\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sstiVulnlabFormatLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const sstiVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sstiVulnlabProbeOrigin(ctx);
+  const saveUrl = new URL("/second-order/save", origin).toString();
+  const saveBody = new URLSearchParams({
+    key: SSTI_VULNLAB_SECOND_ORDER_KEY,
+    body: SSTI_VULNLAB_BASIC_PAYLOAD
+  }).toString();
+  const saveDoc = await ctx.probe.get(saveUrl, {
+    method: "POST",
+    body: saveBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (saveDoc.status < 200 || saveDoc.status >= 500) return NEGATIVE;
+  const previewUrl = new URL("/second-order/preview", origin);
+  previewUrl.searchParams.set("id", SSTI_VULNLAB_SECOND_ORDER_KEY);
+  const previewDoc = await ctx.probe.get(previewUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (previewDoc.status < 200 || previewDoc.status >= 400) return NEGATIVE;
+  const rendered = sstiVulnlabRenderedBody(previewDoc.body);
+  if (rendered !== "49") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      saveUrl,
+      previewUrl: previewUrl.toString(),
+      payload: `body=${SSTI_VULNLAB_BASIC_PAYLOAD}`,
+      rendered,
+      note: "ssti.vulnlab.dev POST /second-order/save stores SSTI payload then GET /second-order/preview?id= evaluates stored draft via render_template_string — second-order SSTI oracle"
+    }
+  };
+};
+
+const sstiVulnlabSecondOrderRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/second-order\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sstiVulnlabSecondOrderLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -46961,6 +47111,12 @@ export const RULES: Record<string, Rule> = {
   xssVulnlabDomRouteLiveOracle,
   xssVulnlabReflectedLiveOracle,
   xssVulnlabReflectedRouteLiveOracle,
+  sstiVulnlabBasicLiveOracle,
+  sstiVulnlabBasicRouteLiveOracle,
+  sstiVulnlabFormatLiveOracle,
+  sstiVulnlabFormatRouteLiveOracle,
+  sstiVulnlabSecondOrderLiveOracle,
+  sstiVulnlabSecondOrderRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,
