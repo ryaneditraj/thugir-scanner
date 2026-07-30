@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T07:42:59.885Z",
+  "updated_at": "2026-07-30T08:24:41.744Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/api/Wallets",
+      "source": "OWASP Juice Shop demo — wallet balance BOLA oracle GET /api/Wallets (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Orders",
+      "source": "OWASP Juice Shop demo — order history IDOR oracle GET /api/Orders (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/PrivacyPolicies",
+      "source": "OWASP Juice Shop demo — privacy policy disclosure oracle GET /api/PrivacyPolicies (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/ProductReviews",
+      "source": "OWASP Juice Shop demo — product review XSS/BOLA oracle GET /api/ProductReviews (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Baskets",
+      "source": "OWASP Juice Shop demo — basket BOLA oracle GET /api/Baskets (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/api/Quantitys",
       "source": "OWASP Juice Shop demo — product quantity manipulation oracle GET /api/Quantitys (official demo.owasp-juice.shop)",
