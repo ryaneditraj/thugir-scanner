@@ -37401,7 +37401,9 @@ const sqliVulnlabSecondOrderLiveOracle: Rule = async (ctx) => {
   const body = profileDoc.body;
   const hasExposedQuery =
     /SELECT body FROM notes WHERE owner=/i.test(body) &&
-    /UNION SELECT value FROM secrets WHERE name='sqli-second-order'/i.test(body);
+    /UNION SELECT value FROM secrets WHERE name=(?:&#39;|'|\u2019)sqli-second-order(?:&#39;|'|\u2019)/i.test(
+      body
+    );
   if (!hasExposedQuery || !body.includes(SQLI_VULNLAB_SECOND_ORDER_SECRET)) return NEGATIVE;
   return {
     fired: true,
@@ -37452,7 +37454,10 @@ const xssVulnlabStoredLiveOracle: Rule = async (ctx) => {
   const getDoc = await ctx.probe.get(postUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
   const body = getDoc.body;
-  const reflected = new RegExp(`<mark\\s+id=${canary}>probe</mark>`, "i").test(body);
+  const reflected = new RegExp(
+    `<mark\\s+id=["']?${canary}["']?>probe</mark>`,
+    "i"
+  ).test(body);
   if (!reflected) return NEGATIVE;
   return {
     fired: true,

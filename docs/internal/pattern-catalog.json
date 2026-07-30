@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T17:03:48.334Z",
-  "total": 1171,
-  "uniqueSlugs": 1166,
+  "generatedAt": "2026-07-30T18:05:13.784Z",
+  "total": 1177,
+  "uniqueSlugs": 1172,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1153,
+    "generic": 1159,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1086,
+    "deep": 1092,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 90,
     "Security misconfiguration": 109,
     "Broken authentication": 87,
-    "Injection": 222,
-    "Cross-site scripting": 159,
+    "Injection": 226,
+    "Cross-site scripting": 161,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 45,
@@ -998,6 +998,8 @@
     "sqli-query-param-injection",
     "sqli-vulnlab-error-live-oracle",
     "sqli-vulnlab-error-route-live-oracle",
+    "sqli-vulnlab-second-order-live-oracle",
+    "sqli-vulnlab-second-order-route-live-oracle",
     "ssrf-endpoint-fetch",
     "ssrf-vulnlab-allowlist-bypass-live-oracle",
     "ssrf-vulnlab-allowlist-route-live-oracle",
@@ -1024,6 +1026,8 @@
     "ssti-template-injection",
     "ssti-vulnlab-basic-live-oracle",
     "ssti-vulnlab-basic-route-live-oracle",
+    "ssti-vulnlab-filtered-live-oracle",
+    "ssti-vulnlab-filtered-route-live-oracle",
     "ssti-vulnlab-format-live-oracle",
     "ssti-vulnlab-format-route-live-oracle",
     "ssti-vulnlab-second-order-live-oracle",
@@ -1208,6 +1212,8 @@
     "xss-vulnlab-dom-route-live-oracle",
     "xss-vulnlab-reflected-live-oracle",
     "xss-vulnlab-reflected-route-live-oracle",
+    "xss-vulnlab-stored-live-oracle",
+    "xss-vulnlab-stored-route-live-oracle",
     "xxe-xml-post-probe"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."
