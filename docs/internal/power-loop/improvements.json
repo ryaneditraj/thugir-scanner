@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-cards-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Cards with alg:none JWT (data.id=1) returns Administrator cardNum ************4368 + ************8108; juice-shop-staging benchmark findings 16→22 (+juice-shop-cards-bola-live-oracle + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-addresss-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Addresss with alg:none JWT returns streetAddress 0815 Test Street + mobileNum 1234567890 for Administrator; juice-shop-staging benchmark findings 16→22 (+juice-shop-addresss-bola-live-oracle + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-basket-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/basket/2 with alg:none JWT (data.id=1) returns UserId=2 vs /rest/basket/1 UserId=1; HTTP 401 without auth; juice-shop-staging benchmark findings 16→22 (+juice-shop-basket-idor-live-oracle + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-complaints-bola-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Complaints with alg:none JWT returns UserId 3+null complaints spanning multiple users; juice-shop-staging /api/Complaints findings 16→20 (+complaints-bola + route); benchmark juice-shop-staging 16 findings 6/6 maintained"
@@ -15801,6 +15819,36 @@
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-dvwa-weak-id-route-live-oracle",
       "shipped_at": "2026-07-29T14:25:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-cards-bola-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-cards-bola-route-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-addresss-bola-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-addresss-bola-route-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-basket-idor-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-basket-idor-route-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
     }
   ]
 }

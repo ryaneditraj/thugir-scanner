@@ -36877,6 +36877,17 @@ function juiceShopAlgNoneAuthHeader(): Record<string, string> {
   };
 }
 
+function juiceShopDataIdAuthHeader(): Record<string, string> {
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    Authorization: `Bearer ${buildAlgNoneJwt({
+      data: { id: 1 },
+      iat: now,
+      exp: now + 3600
+    })}`
+  };
+}
+
 const juiceShopUsersIdorLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -36926,7 +36937,7 @@ const juiceShopBasketItemsBolaLiveOracle: Rule = async (ctx) => {
   const url = new URL("/api/BasketItems", ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     maxBytes: 16384,
-    headers: juiceShopAlgNoneAuthHeader()
+    headers: juiceShopDataIdAuthHeader()
   });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
@@ -36969,7 +36980,7 @@ const juiceShopComplaintsBolaLiveOracle: Rule = async (ctx) => {
   const url = new URL("/api/Complaints", ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     maxBytes: 16384,
-    headers: juiceShopAlgNoneAuthHeader()
+    headers: juiceShopDataIdAuthHeader()
   });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
@@ -37104,7 +37115,7 @@ const juiceShopCardsBolaLiveOracle: Rule = async (ctx) => {
   const url = new URL("/api/Cards", ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     maxBytes: 8192,
-    headers: juiceShopAlgNoneAuthHeader()
+    headers: juiceShopDataIdAuthHeader()
   });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
@@ -37148,7 +37159,7 @@ const juiceShopAddresssBolaLiveOracle: Rule = async (ctx) => {
   const url = new URL("/api/Addresss", ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     maxBytes: 8192,
-    headers: juiceShopAlgNoneAuthHeader()
+    headers: juiceShopDataIdAuthHeader()
   });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
@@ -37188,7 +37199,7 @@ const juiceShopAddresssBolaRouteLiveOracle: Rule = async (ctx) => {
 const juiceShopBasketIdorLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const authHeader = juiceShopAlgNoneAuthHeader();
+  const authHeader = juiceShopDataIdAuthHeader();
   const ownUrl = new URL("/rest/basket/1", ctx.origin).toString();
   const victimUrl = new URL("/rest/basket/2", ctx.origin).toString();
   const [unauthDoc, ownDoc, victimDoc] = await Promise.all([
