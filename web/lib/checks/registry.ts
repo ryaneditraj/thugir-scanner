@@ -32177,6 +32177,78 @@ const theInternetGeolocationRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetHorizontalSliderRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/horizontal_slider(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const sliderUrl = new URL("/horizontal_slider", ctx.origin).toString();
+  const doc = await ctx.probe.get(sliderUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Horizontal Slider\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasRangeInput =
+    /<input[^>]+type=['"]range['"]/i.test(doc.body) &&
+    /onchange=['"]showValue\(this\.value\)['"]/i.test(doc.body) &&
+    /id=['"]range['"]/i.test(doc.body);
+  if (!hasRangeInput) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      sliderUrl,
+      markers: ["input[type=range]", "showValue(this.value)", "#range"],
+      note: "the-internet /horizontal_slider route scan — range input with onchange showValue sink — Elemental Selenium slider interaction training oracle"
+    }
+  };
+};
+
+const theInternetInputsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/inputs(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const inputsUrl = new URL("/inputs", ctx.origin).toString();
+  const doc = await ctx.probe.get(inputsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Inputs\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasNumberInput = /<input[^>]+type=['"]number['"]/i.test(doc.body);
+  if (!hasNumberInput) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      inputsUrl,
+      markers: ["h3 Inputs", "input type=number"],
+      note: "the-internet /inputs route scan — bare number input without validation constraints — Elemental Selenium input-type training oracle"
+    }
+  };
+};
+
+const theInternetEntryAdRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/entry_ad(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const entryUrl = new URL("/entry_ad", ctx.origin).toString();
+  const doc = await ctx.probe.get(entryUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Entry Ad\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasModal =
+    /id=['"]modal['"]/i.test(doc.body) &&
+    /class=['"]modal['"]/i.test(doc.body) &&
+    /Displays an ad on page load/i.test(doc.body);
+  if (!hasModal) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      entryUrl,
+      markers: ["#modal", ".modal-title", "Displays an ad on page load"],
+      note: "the-internet /entry_ad route scan — hidden #modal overlay shown on page load — Elemental Selenium entry-ad popup training oracle"
+    }
+  };
+};
+
 const theInternetWindowsRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -34970,6 +35042,109 @@ const dvgaGraphqlBatchingRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "DVGA /graphql route scan — JSON array batching returns multiple independent query results without auth"
+    }
+  };
+};
+
+const dvgaGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ __schema { mutationType { name } types { name } } }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"__schema"\s*:/.test(doc.body)) return NEGATIVE;
+  if (!/"mutationType"\s*:/.test(doc.body) || !/"types"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const typeCount = (doc.body.match(/"name"\s*:\s*"/g) || []).length;
+  if (typeCount < 5) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: typeCount >= 10 ? 0.93 : 0.91,
+    evidence: {
+      url: gqlUrl,
+      typeCount,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "DVGA POST /graphql __schema introspection returns mutationType and full types list — GraphQL schema disclosure oracle"
+    }
+  };
+};
+
+const dvgaGraphqlIntrospectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaGraphqlIntrospectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /graphql route scan — unauthenticated __schema introspection exposes mutationType and types — route-specific schema disclosure oracle"
+    }
+  };
+};
+
+const dvgaGraphqlSqliFilterLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const benignFilter = `thugirBenign${Date.now().toString(36)}`;
+  const benignDoc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `{ pastes(public: true, filter: "${benignFilter}") { id } }`
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (benignDoc.status < 200 || benignDoc.status >= 400) return NEGATIVE;
+  const benignCount = (benignDoc.body.match(/"id"\s*:\s*"/g) || []).length;
+  const sqliDoc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `{ pastes(public: true, filter: "' OR 1=1 --") { id } }`
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (sqliDoc.status < 200 || sqliDoc.status >= 400) return NEGATIVE;
+  const sqliCount = (sqliDoc.body.match(/"id"\s*:\s*"/g) || []).length;
+  if (sqliCount < 3 || sqliCount <= benignCount) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sqliCount >= 5 ? 0.93 : 0.9,
+    evidence: {
+      url: gqlUrl,
+      benignCount,
+      sqliCount,
+      snippet: sqliDoc.body.slice(0, 180).trim(),
+      note: "DVGA pastes(filter:) accepts SQL injection payload ' OR 1=1 -- and returns extra paste IDs — GraphQL SQLi oracle"
+    }
+  };
+};
+
+const dvgaGraphqlSqliFilterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaGraphqlSqliFilterLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /graphql route scan — pastes filter parameter vulnerable to SQL injection — route-specific GraphQL SQLi oracle"
     }
   };
 };
@@ -44908,6 +45083,9 @@ export const RULES: Record<string, Rule> = {
   theInternetExitIntentRouteLiveOracle,
   theInternetTyposRouteLiveOracle,
   theInternetGeolocationRouteLiveOracle,
+  theInternetHorizontalSliderRouteLiveOracle,
+  theInternetInputsRouteLiveOracle,
+  theInternetEntryAdRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
@@ -45199,6 +45377,10 @@ export const RULES: Record<string, Rule> = {
   dvgaGraphqlAuditRouteLiveOracle,
   dvgaGraphqlBatchingLiveOracle,
   dvgaGraphqlBatchingRouteLiveOracle,
+  dvgaGraphqlIntrospectionLiveOracle,
+  dvgaGraphqlIntrospectionRouteLiveOracle,
+  dvgaGraphqlSqliFilterLiveOracle,
+  dvgaGraphqlSqliFilterRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
   ginAndJuiceBlogPostOpenRedirectLiveOracle,

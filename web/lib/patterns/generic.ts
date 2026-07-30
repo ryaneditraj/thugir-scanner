@@ -24834,6 +24834,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-horizontal-slider-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet horizontal slider route live oracle",
+    description:
+      "When scanning /horizontal_slider, input[type=range] with onchange showValue writes into #range — Elemental Selenium slider interaction training route oracle.",
+    impactOneline:
+      "Range slider widgets require keyboard and drag interactions that differ from standard text inputs in automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetHorizontalSliderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use Actions API or arrow keys for range inputs.",
+      steps: [
+        "Focus the slider before sending arrow-key events.",
+        "Assert on #range text updates after onchange fires.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /horizontal_slider route uses input[type=range] with showValue sink. Show slider interaction patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-inputs-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet inputs route live oracle",
+    description:
+      "When scanning /inputs, bare input[type=number] accepts numeric input without validation — Elemental Selenium input-type training route oracle.",
+    impactOneline:
+      "Unconstrained number inputs document how automation must handle non-text field types.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetInputsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — send numeric values to type=number fields explicitly.",
+      steps: [
+        "Use send_keys with digit strings for number inputs.",
+        "Validate min/max constraints when testing real applications.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /inputs route exposes input[type=number]. Show numeric input handling patterns for browser automation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-entry-ad-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet entry ad route live oracle",
+    description:
+      "When scanning /entry_ad, hidden #modal overlay is shown on page load — Elemental Selenium entry-ad popup training route oracle.",
+    impactOneline:
+      "On-load modal overlays block underlying page interaction until dismissed in automation flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetEntryAdRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — dismiss entry-ad modals before continuing E2E flows.",
+      steps: [
+        "Wait for #modal visibility and click .modal-footer to close.",
+        "Handle unexpected overlays before interacting with page content.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /entry_ad route displays a modal on page load. Show overlay-dismissal patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -26176,6 +26254,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA /graphql route scan confirms JSON array batching. Show route-specific batching disablement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-introspection-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "DVGA GraphQL introspection live oracle",
+    description:
+      "POST /graphql { __schema { mutationType types } } on DVGA returns unauthenticated full schema introspection including Mutations type.",
+    impactOneline:
+      "Enabled introspection exposes every query, mutation, and field name to unauthenticated attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlIntrospectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production; auth-gate DVGA training deployments.",
+      steps: [
+        "Turn off __schema introspection on public GraphQL endpoints.",
+        "Require authentication before returning schema metadata.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql endpoint returns full __schema introspection without auth. Show how to disable introspection on GraphQL endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-introspection-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "DVGA /graphql introspection route live oracle",
+    description:
+      "When scanning /graphql on DVGA hosts, __schema introspection returns mutationType and types list — route-specific schema disclosure oracle.",
+    impactOneline:
+      "Route scans confirm GraphQL introspection is enabled on the endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlIntrospectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable introspection on public /graphql routes.",
+      steps: [
+        "Reject __schema queries at the GraphQL gateway.",
+        "Auth-gate schema metadata on lab hosts.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql route scan confirms unauthenticated introspection. Show route-specific introspection disablement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-sqli-filter-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVGA GraphQL pastes filter SQLi live oracle",
+    description:
+      "POST /graphql pastes(public:true, filter:\"' OR 1=1 --\") returns all paste IDs while benign filters return empty — DVGA GraphQL SQL injection oracle.",
+    impactOneline:
+      "Unsanitized filter arguments in GraphQL resolvers enable SQL injection against the backing database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlSqliFilterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries in GraphQL resolvers; never concatenate user input into SQL.",
+      steps: [
+        "Bind filter parameters with prepared statements.",
+        "Validate and allowlist filter values before querying.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA pastes(filter:) argument is vulnerable to SQL injection. Show parameterized query patterns for GraphQL resolvers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-sqli-filter-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVGA /graphql SQLi filter route live oracle",
+    description:
+      "When scanning /graphql on DVGA hosts, pastes filter SQL injection returns extra records — route-specific GraphQL SQLi oracle.",
+    impactOneline:
+      "Route scans confirm unsanitized filter arguments in GraphQL queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlSqliFilterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize GraphQL resolver SQL on public /graphql routes.",
+      steps: [
+        "Use prepared statements for all filter arguments.",
+        "Add input validation at the GraphQL layer.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql route scan confirms pastes filter SQLi. Show route-specific parameterized query hardening.",
     version: 1,
     enabled: true
   },
