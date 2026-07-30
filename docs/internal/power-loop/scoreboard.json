@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T14:12:00.000Z",
+  "updated_at": "2026-07-30T15:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2746,
-  "total_findings": 26805,
-  "critical_findings": 60,
+  "total_sites_scanned": 2755,
+  "total_findings": 26862,
+  "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22674,
-  "improvements_shipped": 1157,
-  "last_run": "2026-07-30T14:12:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22698,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-30T15:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 485,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,41 @@
           ]
         }
       },
-      "note": "Primary healthy 6/6 (34 findings) — no benchmark misses; teacher_delta skipped"
+      "note": "Primary healthy 6/6 (33 findings) — no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 25,
-      "focus": "ginandjuice.shop/login + catalog/product/stock live oracles",
-      "improvements_shipped_this_run": 2
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 24,
+      "focus": "ai-testing-lab + vulnlab.dev XSS/SQLi subdomains + llm-sec queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "ginandjuice.shop/login: 9→11 findings — ginandjuice-login-username-reflection-live-oracle shipped (var username JS-context reflection)",
-      "ginandjuice.shop/catalog/product/stock: 11→14 findings — ginandjuice-stock-xxe-live-oracle + route shipped (XML entity expansion in productId)",
-      "12 UTC parallel run shipped: brokencrystals-photo-bfla, testfire-login-sqli, euri-sec-csp-dynamic-script"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "ai-testing-lab.vercel.app: 6 findings — client-side-prompt-injection-evidence + postmessage-dom-xss-evidence + thugir-dir-discovery",
+      "xss.vulnlab.dev/reflected: 3 findings — client-side-xss-evidence on Markup()|safe search-box lab",
+      "sqli.vulnlab.dev/error: 2-finding thin pass — no sql-error-disclosure live oracle on MariaDB login lab",
+      "xss.vulnlab.dev/dom: 2-finding thin pass — DOM hash→innerHTML sink not surfaced",
+      "llm-sec.dev/labs/*: 3 findings each — reflexion-escalated-ssti likely false-positive on static lab pages"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "owaspbased-lessons.vercel.app: Vercel security challenge blocks session onboarding from cloud agent",
-      "zerohealth.aliyu.dev/api/debug/*: API routes return SPA landing page from cloud agent",
-      "pygoat.herokuapp.com dead (no-such-app)"
+      "sqli.vulnlab.dev/error: route-specific error-based SQLi live oracle absent (2-finding misconfig pass)",
+      "xss.vulnlab.dev/dom: DOM-only XSS sink absent from findings (2-finding misconfig pass)",
+      "vulnlab.dev/xss/sqli/sti subdomains: no per-lab vulnlab live oracles yet (only ssrf.vulnlab.dev has route oracles)",
+      "llm-sec.dev/labs/*: reflexion-escalated-ssti false-positive on LLM static challenge pages",
+      "pygoat/vampi/gin-juice-shop/shadow_dom still queued at queue tail"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
-    "ginandjuice.shop/login": 11,
+    "juice-shop.herokuapp.com": 33,
+    "ai-testing-lab.vercel.app": 6,
+    "xss.vulnlab.dev/reflected": 3,
+    "www.llm-sec.dev/labs/unbounded-consumption": 3,
+    "www.llm-sec.dev/labs/prompt-injection": 3,
     "ginandjuice.shop/catalog/product/stock": 14,
-    "demo.owasp-juice.shop/api/Deliverys/2": 33,
-    "brokencrystals.com/api/users/one/regular_user/photo": 60,
-    "demo.testfire.net/login.jsp": 10
+    "demo.owasp-juice.shop/api/Deliverys/2": 33
   }
 }

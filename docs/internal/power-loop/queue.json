@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T14:05:00.000Z",
+  "updated_at": "2026-07-30T15:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ai-testing-lab.vercel.app/",
+      "source": "gonzaloMorenoc/ai-testing-lab — OWASP LLM Top 10 red-team pytest suite + 42 attack prompts (Vercel OSS deploy, web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnlab.dev/",
+      "source": "sampsonc/vulnlab.dev — intentionally vulnerable web labs index (SSRF/XSS/SQLi/SSTI subdomains; web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/reflected/",
+      "source": "sampsonc/vulnlab.dev — reflected XSS Markup()|safe search-box lab (xss.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/error/",
+      "source": "sampsonc/vulnlab.dev — error-based SQLi login with verbose exception render (sqli.vulnlab.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/dom/",
+      "source": "sampsonc/vulnlab.dev — DOM-based XSS location.hash→innerHTML client-side sink lab (xss.vulnlab.dev)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.llm-sec.dev/labs/unbounded-consumption",
       "source": "llm-sec.dev — OWASP LLM10 unbounded consumption / denial-of-wallet interactive lab (October 2025 challenge)",
