@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T22:06:00.824Z",
+  "updated_at": "2026-07-30T22:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2827,
-  "total_findings": 27633,
-  "critical_findings": 79,
+  "total_sites_scanned": 2829,
+  "total_findings": 27693,
+  "critical_findings": 80,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1999,
-  "discovery_findings": 23207,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-30T22:06:00.824Z",
+  "discovery_findings": 23213,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-30T22:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 30,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,38 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (33 findings); full BOLA suite + login-sqli oracles; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 42,
-      "focus": "vapi api7 BOLA + duck-store SSRF import-from-url + the-internet auth/download routes",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "vulnshop JWT/SQLi/IDOR route live oracles validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — primary Heroku healthy, no benchmark misses",
-      "vapi.tools.escape.tech/vapi/api7/user/1: 13 findings — full vAPI oracle suite (api1-10 BOLA/BFLA/CORS/logging) on route-specific scan",
-      "duck-store.escape.tech/api/import-from-url: 18 findings — SSRF fetch-url hub with testimonials-stored-xss + put-bola + admin-orders oracles",
-      "the-internet.herokuapp.com/basic_auth: 3 findings — basic-auth route oracle",
-      "the-internet.herokuapp.com/download: 3 findings — download route misconfig hub"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — primary Heroku 503 cold start",
+      "vulnshop.vercel.app/login: 6→8 findings — vulnshop-login-jwt-route-live-oracle shipped (JWT is_admin weak secret)",
+      "vulnshop.vercel.app/products: 6→8 findings — vulnshop-products-sqli-route-live-oracle shipped (SQLi search module)",
+      "vulnshop.vercel.app/orders: 6→8 findings — vulnshop-orders-idor-route-live-oracle shipped (IDOR sequential order IDs)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "chimera.escape.tech/api/agent-browse: unreachable — GenAI agent-browse SSRF oracle untested",
-      "zerohealth.io/challenges/jwt: unreachable — JWT challenge oracle untested",
-      "ssrf.vulnlab.dev/blind/: skipped 48h cooldown — blind SSRF oracle not re-tested this run",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
-      "brokencrystals.com/api/render: SSTI live oracle still queued but not drained this run",
-      "vwad.owasp.org/app/oopssec-store/: oopssec-store VWAD instance still queued"
+      "vulnshop-production.up.railway.app: backend 404 — live API probes (JWT forge/SQLi/IDOR) await Railway recovery",
+      "vulnshop.vercel.app/api/v1/wallet/add-funds: Flask chethan-vinayak routes not in React SPA — race/cmdi/xxe/upload oracles still absent",
+      "zerohealth.aliyu.dev/challenges/*: landing page only — live /api/login and /api/debug/token oracles need full app deploy"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
-    "duck-store.escape.tech/api/import-from-url": 18,
-    "vapi.tools.escape.tech/vapi/api7/user/1": 13,
+    "juice-shop-staging.herokuapp.com": 30,
+    "vulnshop.vercel.app/login": 8,
+    "vulnshop.vercel.app/products": 8,
+    "vulnshop.vercel.app/orders": 8,
     "juice-shop.demo.escape.tech/api/Hints": 34,
-    "demo.owasp-juice.shop/api/Feedbacks": 33,
-    "ssrf.vulnlab.dev/metadata": 15,
-    "pwnshop.ctfsecurity.com/api/settings/search-filters": 21,
-    "the-internet.herokuapp.com/basic_auth": 3,
-    "the-internet.herokuapp.com/download": 3
+    "vapi.tools.escape.tech/vapi/api7/user/1": 13,
+    "duck-store.escape.tech/api/import-from-url": 18,
+    "pwnshop.ctfsecurity.com/api/settings/search-filters": 21
   }
 }
