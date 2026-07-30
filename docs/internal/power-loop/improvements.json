@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-introspection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { __schema { mutationType { name } types { name } } } returns Mutations + 20+ type names; dvga2.tools.escape.tech/graphql findings 4→10 (+dvga-graphql-introspection-live-oracle + route variant); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-sqli-filter-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pastes(public:true, filter:\"' OR 1=1 --\") returns 13 paste IDs vs 0 for benign filter; dvga2.tools.escape.tech/graphql gains dvga-graphql-sqli-filter-live-oracle + route variant; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-horizontal-slider-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /horizontal_slider h3 Horizontal Slider + input[type=range] onchange=showValue + #range; /inputs h3 Inputs + input type=number; /entry_ad h3 Entry Ad + #modal overlay; the-internet horizontal_slider/inputs/entry_ad findings 2→3 each (+3 route oracles); benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-exit-intent-route-live-oracle",
       "status": "shipped",
