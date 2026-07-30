@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T04:06:20.000Z",
+  "updated_at": "2026-07-30T05:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/api/Users/1",
+      "source": "OWASP Juice Shop demo \u2014 IDOR user profile oracle GET /api/Users/:id (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/BasketItems",
+      "source": "OWASP Juice Shop demo \u2014 BOLA basket HPP oracle POST /api/BasketItems (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/voice-goat/voiceadmin",
+      "source": "OWASP VWAD \u2014 redcaller/voice-goat VoiceAdmin excessive-functionality LLM lab (Show HN 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/basket/2",
+      "source": "OWASP Juice Shop \u2014 BOLA basket IDOR oracle GET /rest/basket/2 (primary Heroku benchmark host)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Products/1",
+      "source": "OWASP Juice Shop demo \u2014 product API oracle GET /api/Products/:id (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/webhook",
       "source": "atlas-crew/Chimera \u2014 CHM-ADMIN-002 SSRF webhook tester POST /api/v1/diagnostics/webhook (public demo portal)",
