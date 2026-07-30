@@ -25385,7 +25385,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "the-internet shadow DOM route live oracle",
     description:
-      "When scanning /shadowdom, customElements.define('my-paragraph') attaches an open shadow root with slotted template content — Elemental Selenium shadow DOM training route oracle.",
+      "When scanning /shadowdom or /shadow_dom, customElements.define('my-paragraph') attaches an open shadow root with slotted template content — Elemental Selenium shadow DOM training route oracle.",
     impactOneline:
       "Shadow DOM encapsulation labs document how slotted content and open mode affect automation and XSS boundaries.",
     detectorKind: "rule_ref",
@@ -26415,6 +26415,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /chatbot route exposes an unauthenticated /rest/chat LLM proxy. Show chatbot auth hardening and prompt-injection defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Juice Shop login SQL injection live oracle",
+    description:
+      "POST /rest/user/login accepts SQLi payloads in the email field and returns an authentication JWT — the Juice Shop SQL injection login-bypass oracle.",
+    impactOneline:
+      "SQL injection on login endpoints lets attackers bypass authentication and obtain privileged session tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all login credential lookups.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters or ORM queries.",
+        "Reject or escape SQL metacharacters in email/username fields.",
+        "Add regression tests for classic OR 1=1 login bypass payloads."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop POST /rest/user/login accepts SQLi email payloads and returns admin JWTs. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Juice Shop /rest/user/login SQLi route live oracle",
+    description:
+      "When scanning /rest/user/login, POST with SQLi email payload returns authentication JWT — route-specific Juice Shop login bypass oracle.",
+    impactOneline:
+      "Route-scoped scans should flag SQL injection authentication bypass on Juice Shop login APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all login credential lookups.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters or ORM queries.",
+        "Reject or escape SQL metacharacters in email/username fields.",
+        "Add regression tests for classic OR 1=1 login bypass payloads."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/user/login route scan confirms SQLi email bypass returns admin JWT. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },
