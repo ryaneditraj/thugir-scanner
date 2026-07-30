@@ -37246,6 +37246,133 @@ const juiceShopBasketIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const juiceShopMemoriesBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/memories", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 65536 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const userIds = [...doc.body.matchAll(/"UserId"\s*:\s*(\d+)/g)].map((m) => m[1]);
+  const uniqueUserIds = new Set(userIds);
+  const hasNestedUserPii =
+    /"User"\s*:\s*\{[^}]*"email"\s*:\s*"[^"]+"[^}]*"password"\s*:\s*"/.test(doc.body);
+  if (uniqueUserIds.size < 2 && !hasNestedUserPii) return NEGATIVE;
+  const emailMatch = doc.body.match(/"email"\s*:\s*"([^"]+)"/);
+  return {
+    fired: true,
+    confidence: hasNestedUserPii ? 0.94 : 0.91,
+    evidence: {
+      url,
+      userIds: [...uniqueUserIds].slice(0, 6),
+      memoryCount: userIds.length,
+      sampleEmail: emailMatch?.[1],
+      hasNestedUserPii,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /rest/memories without auth returns memories spanning multiple users with nested User email/password — BOLA oracle"
+    }
+  };
+};
+
+const juiceShopMemoriesBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/(?:api\/)?Memories\b|\/rest\/memories\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopMemoriesBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/memories route scan — unauthenticated memories API exposes cross-user PII — route-specific BOLA oracle"
+    }
+  };
+};
+
+const juiceShopQuantitysExposureLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Quantitys", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 32768 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const productIds = [...doc.body.matchAll(/"ProductId"\s*:\s*(\d+)/g)].map((m) => m[1]);
+  if (productIds.length < 3 || !/"quantity"\s*:\s*\d+/.test(doc.body)) return NEGATIVE;
+  const uniqueProducts = new Set(productIds);
+  return {
+    fired: true,
+    confidence: uniqueProducts.size >= 5 ? 0.92 : 0.9,
+    evidence: {
+      url,
+      productIds: [...uniqueProducts].slice(0, 6),
+      rowCount: productIds.length,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Quantitys without auth returns full product inventory quantities — information disclosure oracle"
+    }
+  };
+};
+
+const juiceShopQuantitysExposureRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Quantitys\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopQuantitysExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Quantitys route scan — unauthenticated inventory quantities exposed — route-specific disclosure oracle"
+    }
+  };
+};
+
+const juiceShopHintsExposureLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Hints", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const challengeIds = [...doc.body.matchAll(/"ChallengeId"\s*:\s*(\d+)/g)].map((m) => m[1]);
+  const hintTexts = [...doc.body.matchAll(/"text"\s*:\s*"([^"]{20,})"/g)];
+  if (challengeIds.length < 2 || hintTexts.length < 2) return NEGATIVE;
+  const uniqueChallenges = new Set(challengeIds);
+  return {
+    fired: true,
+    confidence: uniqueChallenges.size >= 3 ? 0.91 : 0.89,
+    evidence: {
+      url,
+      challengeIds: [...uniqueChallenges].slice(0, 6),
+      hintCount: hintTexts.length,
+      sampleHint: hintTexts[0]?.[1]?.slice(0, 80),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Hints without auth returns challenge walkthrough hints — information disclosure oracle"
+    }
+  };
+};
+
+const juiceShopHintsExposureRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Hints\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopHintsExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Hints route scan — unauthenticated challenge hints exposed — route-specific disclosure oracle"
+    }
+  };
+};
+
 function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
   return m?.[1] ?? null;
@@ -45913,6 +46040,12 @@ export const RULES: Record<string, Rule> = {
   juiceShopAddresssBolaRouteLiveOracle,
   juiceShopBasketIdorLiveOracle,
   juiceShopBasketIdorRouteLiveOracle,
+  juiceShopMemoriesBolaLiveOracle,
+  juiceShopMemoriesBolaRouteLiveOracle,
+  juiceShopQuantitysExposureLiveOracle,
+  juiceShopQuantitysExposureRouteLiveOracle,
+  juiceShopHintsExposureLiveOracle,
+  juiceShopHintsExposureRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
