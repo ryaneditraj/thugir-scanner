@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T18:09:01.800Z",
+  "updated_at": "2026-07-30T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1979,
   "discovery_findings": 22877,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-30T18:09:01.800Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-30T18:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -48,23 +48,23 @@
           ]
         }
       },
-      "note": "Primary Heroku healthy 6/6 (32 findings); no benchmark misses; teacher_delta skipped"
+      "note": "Primary healthy 6/6 (32 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 3,
       "urls_scanned": 8,
       "findings": 50,
-      "focus": "xss.vulnlab csp-bypass/mxss + pygoat/shadow_dom/gin-juice-shop queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "sqli.vulnlab second-order + xss.vulnlab stored + ssti.vulnlab filtered; xss csp-bypass/mxss queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "xss.vulnlab.dev/csp-bypass: 5 findings — dom+reflected oracles + vibe-weak-csp but no CSP-JSONP bypass live oracle",
+      "sqli.vulnlab.dev/second-order: 2→4 findings — sqli-vulnlab-second-order-live-oracle shipped (register→profile secret leak)",
+      "xss.vulnlab.dev/stored: 4→5 findings — xss-vulnlab-stored-live-oracle shipped (guestbook HTML persistence)",
+      "ssti.vulnlab.dev/filtered: 3→7 findings — ssti-vulnlab-filtered-live-oracle shipped ({{7*7}}→49 past blocklist)",
+      "xss.vulnlab.dev/csp-bypass: 5 findings — dom+reflected oracles but no CSP-JSONP bypass live oracle",
       "xss.vulnlab.dev/mxss: 3 findings — dom oracle only; no mutation-XSS innerHTML reparse live oracle",
-      "pygoat-web.herokuapp.com: 1 finding — thin misconfig pass; no Django SQLi/XSS challenge oracles",
-      "the-internet.herokuapp.com/shadow_dom: 2 findings — misconfig only; no shadow-DOM XSS live oracle",
-      "vwad.owasp.org/app/gin-juice-shop/login: 6 findings — reflexion-escalated-ssti likely FP on VWAD 404 shell",
       "demo.owasp-juice.shop/api/Feedbacks: 31 findings — full Juice Shop BOLA suite recovered when instance woke"
     ],
     "learning_gaps": [
@@ -72,21 +72,20 @@
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "xss.vulnlab.dev/csp-bypass: need xss-vulnlab-csp-jsonp-live-oracle (same-origin /jsonp callback bypass)",
       "xss.vulnlab.dev/mxss: need xss-vulnlab-mxss-live-oracle (regex sanitizer + innerHTML reparse)",
-      "xss.vulnlab.dev/stored: need xss-vulnlab-stored-live-oracle (guestbook Markup()|safe persistence)",
-      "sqli.vulnlab.dev/union/blind/time: need route-specific SQLi live oracles; error-oracle false-positives",
-      "ssti.vulnlab.dev/filtered/sandboxed: route-specific SSTI live oracles still absent",
+      "sqli.vulnlab.dev/union/blind/time: need route-specific SQLi live oracles; error-oracle FP fixed for non-/error routes",
+      "ssti.vulnlab.dev/sandboxed: route-specific sandbox-bypass oracle still absent (dump_diagnostics global)",
       "pygoat-web.herokuapp.com: need pygoat-sql/xss/auth challenge live oracles",
-      "the-internet shadow_dom: need shadow-dom-xss-live-oracle",
-      "vwad gin-juice-shop: VWAD app 404 — need gin-juice-shop SSTI/JWT live oracle on reachable deploy"
+      "the-internet shadow_dom: need shadow-dom-xss-live-oracle"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 32,
     "demo.owasp-juice.shop/api/Feedbacks": 31,
+    "sqli.vulnlab.dev/second-order": 4,
+    "ssti.vulnlab.dev/filtered": 7,
     "xss.vulnlab.dev/csp-bypass": 5,
-    "vwad.owasp.org/app/gin-juice-shop/rest/user/login": 6,
+    "xss.vulnlab.dev/stored": 5,
     "xss.vulnlab.dev/mxss": 3,
-    "the-internet.herokuapp.com/shadow_dom": 2,
-    "pygoat-web.herokuapp.com": 1
+    "the-internet.herokuapp.com/shadow_dom": 2
   }
 }

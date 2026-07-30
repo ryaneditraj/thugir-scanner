@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-second-order-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /second-order/register username=' UNION SELECT value FROM secrets WHERE name='sqli-second-order'# then GET /second-order/profile?id= leaks VULNLAB{sqli-second-order-via-stored-input}; sqli.vulnlab.dev/second-order findings 2→4 (+sqli-vulnlab-second-order-live-oracle + route); benchmark juice-shop 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-stored-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /stored/ author+body=<mark id=canary>probe</mark> persists unescaped HTML on GET /stored/; xss.vulnlab.dev/stored findings 4→5 (+xss-vulnlab-stored-live-oracle + route); benchmark 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-filtered-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /filtered/?greeting={{7*7}} → pre.rendered 49 past substring blocklist; ssti.vulnlab.dev/filtered findings 3→7 (+ssti-vulnlab-filtered-live-oracle + route); benchmark 32 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ssti.vulnlab.dev",
       "slug": "ssti-vulnlab-basic-live-oracle",
       "status": "shipped",
@@ -16062,6 +16080,36 @@
       "source": "discovery:ssti.vulnlab.dev",
       "slug": "ssti-vulnlab-second-order-route-live-oracle",
       "shipped_at": "2026-07-30T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-second-order-live-oracle",
+      "shipped_at": "2026-07-30T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-second-order-route-live-oracle",
+      "shipped_at": "2026-07-30T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-stored-live-oracle",
+      "shipped_at": "2026-07-30T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-stored-route-live-oracle",
+      "shipped_at": "2026-07-30T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-filtered-live-oracle",
+      "shipped_at": "2026-07-30T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-filtered-route-live-oracle",
+      "shipped_at": "2026-07-30T18:10:00.000Z"
     }
   ]
 }
