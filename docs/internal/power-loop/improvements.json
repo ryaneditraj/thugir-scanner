@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-abtest-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /abtest h3 No A/B Test + split testing copy simultaneously test and learn from different versions; the-internet.herokuapp.com/abtest findings 2→3 (+the-internet-abtest-route-live-oracle); benchmark juice-shop 18 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-users-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Users/2 with alg:none JWT returns status:success email jim@juice-sh.op; demo.owasp-juice.shop/api/Users/1 findings 16→19 (+juice-shop-users-idor-live-oracle + route variant); benchmark juice-shop 18 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-basket-items-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/BasketItems with alg:none JWT returns BasketId 2/3/4+ line items; demo.owasp-juice.shop/api/BasketItems findings 16→19 (+juice-shop-basket-items-bola-live-oracle + route variant); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
       "slug": "the-internet-checkboxes-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /checkboxes form#checkboxes with onclick setAttribute/removeAttribute checked guard; the-internet.herokuapp.com/checkboxes findings 2→3 (+the-internet-checkboxes-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
