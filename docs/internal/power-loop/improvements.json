@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-exit-intent-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /exit_intent h3 Exit Intent + ouibounce.min.js #ouibounce-modal viewport mouseout modal; the-internet.herokuapp.com/exit_intent findings 2→3 (+the-internet-exit-intent-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-typos-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /typos h3 Typos + copy documents random typo injection on each page load; the-internet.herokuapp.com/typos findings 2→3 (+the-internet-typos-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-geolocation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /geolocation navigator.geolocation.getCurrentPosition writes latitude/longitude into #lat-value/#long-value; the-internet.herokuapp.com/geolocation findings 2→3 (+the-internet-geolocation-route-live-oracle); benchmark juice-shop-staging 14 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
       "status": "shipped",
