@@ -9727,6 +9727,159 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-avatar-url-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Pwnshop avatar URL SSRF live oracle (PWN-029)",
+    description:
+      "POST /profile/update-avatar fetches attacker-controlled avatar_url server-side and returns the response body in JSON — the Pwnshop avatar URL SSRF oracle.",
+    impactOneline:
+      "Server-side avatar URL fetching enables SSRF to internal services and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAvatarUrlSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal IPs and validate avatar URLs against an allowlist — Pwnshop PWN-029 is intentional lab software.",
+      steps: [
+        "Disallow fetching user-supplied URLs for avatars; proxy through a sanitizer service.",
+        "Deny link-local, metadata, and private IP ranges on outbound HTTP clients.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /profile/update-avatar endpoint fetches avatar_url server-side and echoes the response. Show SSRF-safe avatar import remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-avatar-url-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Pwnshop avatar URL SSRF route live oracle (PWN-029)",
+    description:
+      "When scanning /profile, POST /profile/update-avatar server-side fetches attacker-controlled avatar_url and returns fetched content — route-specific avatar SSRF oracle.",
+    impactOneline:
+      "Route scans on profile pages need live SSRF confirmation beyond client-bundle evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAvatarUrlSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side avatar URL fetches to internal hosts — Pwnshop is intentional lab software.",
+      steps: [
+        "Validate avatar_url hosts against an allowlist before fetch.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route exposes avatar_url SSRF via /profile/update-avatar. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-order-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop order details IDOR live oracle (PWN-001)",
+    description:
+      "GET /order/1 returns another user's order items and shipping address for a freshly registered buyer session — the Pwnshop order details IDOR oracle.",
+    impactOneline:
+      "Missing object-level authorization on order pages exposes other customers' purchases and delivery addresses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOrderIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize order lookups against the session user_id — Pwnshop PWN-001 is intentional lab software.",
+      steps: [
+        "Verify req.session.user.id matches orders.user_id before rendering /order/:id.",
+        "Use non-guessable order tokens instead of sequential IDs.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /order/:id endpoint returns other users' orders without ownership checks. Show order authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-order-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop order details IDOR route live oracle (PWN-001)",
+    description:
+      "When scanning /order/:id, authenticated buyers can read order #1 shipping address without ownership validation — route-specific order IDOR oracle.",
+    impactOneline:
+      "Route scans on order pages need live IDOR confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOrderIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind order access to the owning user — Pwnshop is intentional lab software.",
+      steps: [
+        "Check order.user_id against session on every /order/:id request.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /order/:id route exposes other users' orders. Show route-specific order authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-wallet-topup-vulnbank-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Pwnshop Vulnbank wallet top-up live oracle (PWN-042)",
+    description:
+      "POST /wallet/topup/vulnbank accepts credited_amount alongside Vulnbank card funding when the lab integration is enabled — the Pwnshop wallet top-up business-logic oracle.",
+    impactOneline:
+      "Wallet top-up can credit arbitrary amounts when credited_amount overrides the charged card value.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopWalletTopupVulnbankLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-supplied credited_amount and verify settled charge amounts — Pwnshop PWN-042 is intentional lab software.",
+      steps: [
+        "Credit wallet only from verified Vulnbank settlement amounts.",
+        "Reject credited_amount overrides from POST bodies.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /wallet/topup/vulnbank endpoint honors credited_amount from the request body. Show wallet funding validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-wallet-topup-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Pwnshop wallet top-up route live oracle (PWN-042)",
+    description:
+      "When scanning /wallet or /profile, POST /wallet/topup/vulnbank processes Vulnbank card funding with credited_amount — route-specific wallet top-up oracle.",
+    impactOneline:
+      "Route scans on wallet pages need live confirmation that Vulnbank top-up accepts credited_amount.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopWalletTopupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate wallet credits against settled payment amounts — Pwnshop is intentional lab software.",
+      steps: [
+        "Strip credited_amount from client requests.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /wallet route exposes Vulnbank top-up with credited_amount override. Show route-specific wallet funding fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fauxbank-loans-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

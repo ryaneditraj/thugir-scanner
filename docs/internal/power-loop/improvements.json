@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-url-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /profile/update-avatar {\"avatar_url\":\"https://example.com/\"} returns ok:true with fetched Example Domain HTML; pwnshop.ctfsecurity.com/profile findings 35 (+pwnshop-avatar-url-ssrf-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-order-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /order/1 after OTP login returns Shipping Address 10 Kingsway Road, Ikoyi, Lagos for fresh buyer; pwnshop.ctfsecurity.com/order/1 findings 19→33 (+pwnshop-order-idor-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-vulnbank-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /wallet/topup/vulnbank amount=100 credited_amount=50000 redirects profile?wallet_error=Payment declined (Vulnbank wired, not unconfigured); pwnshop.ctfsecurity.com/profile findings 35 (+pwnshop-wallet-topup-vulnbank-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-login-username-reflection-live-oracle",
       "status": "shipped",
