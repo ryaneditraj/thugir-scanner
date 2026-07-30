@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-orders-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/login admin/admin + GET /api/v1/admin/orders returns 3+ orders from 2+ distinct user_id values with total_price/status; duck-store.escape.tech/api/v1/admin/orders findings 0→23 with duck-store-admin-orders-exposure-live-oracle + route variant; benchmark juice-shop 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-file-raw-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file/raw?path=package.json returns broken-crystals package.json with nest build script; brokencrystals.com/api/file/raw findings 60 with brokencrystals-file-raw-lfi-route-live-oracle added alongside base oracle; benchmark 17 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/function/eval returns Toxic DOM page with localStorage.getItem('badValue') passed to eval(payload); public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval findings 1→3 with firing-range-dom-localstorage-xss-live-oracle + route variant; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:dvga2.tools.escape.tech",
       "slug": "dvga-graphql-introspection-live-oracle",
       "status": "shipped",
