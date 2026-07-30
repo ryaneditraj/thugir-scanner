@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T16:06:21.567Z",
+  "updated_at": "2026-07-30T16:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2767,
-  "total_findings": 26979,
+  "total_findings": 26994,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1971,
-  "discovery_findings": 22784,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-30T16:06:21.567Z",
+  "discovery_findings": 22799,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-30T16:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
@@ -48,38 +48,41 @@
           ]
         }
       },
-      "note": "Primary 503; staging fallback 6/6 (31 findings) — no benchmark misses; secret-resend slug still absent"
+      "note": "Primary Heroku 503 — staging fallback 6/6 (31 findings); no benchmark misses; teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 23,
-      "focus": "ssti.vulnlab.dev SSTI lab suite + ai-testing-lab + vulnlab index + xss.vulnlab reflected queue drain",
-      "improvements_shipped_this_run": 0
+      "findings": 38,
+      "focus": "sqli.vulnlab.dev/error + xss.vulnlab.dev/dom/reflected live oracles + ssti.vulnlab queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — primary Heroku dyno 503",
+      "sqli.vulnlab.dev/error: 0→4 findings — sqli-vulnlab-error-live-oracle + route shipped (MariaDB syntax error + exposed query)",
+      "xss.vulnlab.dev/dom: 0→5 findings — xss-vulnlab-dom-live-oracle + route shipped (location.hash → innerHTML sink)",
+      "xss.vulnlab.dev/reflected: 3→6 findings — xss-vulnlab-reflected-live-oracle + route shipped (unescaped Results heading)",
       "ai-testing-lab.vercel.app: 6 findings with client-side-prompt-injection-evidence + postmessage-dom-xss-evidence",
-      "xss.vulnlab.dev/reflected: 3 findings with client-side-xss-evidence",
       "ssti.vulnlab.dev/basic: 2-finding thin pass (misconfig only, no SSTI live oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "ssti.vulnlab.dev/*: route-specific SSTI live oracles absent (basic/format/filtered/sandboxed/second-order all 2-3 finding thin passes)",
-      "sqli.vulnlab.dev/error: still queued — route-specific error-based SQLi live oracle absent",
-      "xss.vulnlab.dev/dom: still queued — DOM-only XSS sink absent from findings",
+      "zerohealth.aliyu.dev/api/*: backend API returns SPA landing page from cloud agent",
+      "llm-sec.dev/labs/*: Vercel Security Checkpoint intermittently blocks lab route scans",
+      "pwnshop VULNBANK_LAB_VULN=0 on public instance — credited_amount override (PWN-042) not exploitable without lab vuln mode",
       "pygoat/vampi/gin-juice-shop/shadow_dom still queued at queue tail"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
+    "sqli.vulnlab.dev/error": 4,
+    "xss.vulnlab.dev/dom": 5,
+    "xss.vulnlab.dev/reflected": 6,
     "ai-testing-lab.vercel.app": 6,
-    "xss.vulnlab.dev/reflected": 3,
     "ssti.vulnlab.dev/second-order": 3,
-    "ssti.vulnlab.dev/format": 3,
-    "ssti.vulnlab.dev/basic": 2,
-    "vulnlab.dev": 2
+    "pwnshop.ctfsecurity.com/profile": 35
   }
 }
