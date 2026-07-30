@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T06:16:00.000Z",
+  "updated_at": "2026-07-30T07:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2066,
   "discovery_findings": 24134,
-  "improvements_shipped": 1161,
-  "last_run": "2026-07-30T06:16:00.000Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-30T07:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 18,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 16,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,48 +48,44 @@
           ]
         }
       },
-      "note": "Primary Heroku healthy 6/6 (18 findings); juice-shop-users-idor + basket-items-bola live oracles shipped; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (16 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 121,
-      "focus": "demo.owasp-juice.shop API oracles (Complaints/Recycles/SecurityQuestions/Addresss/Cards) + ssrf.vulnlab blind/webhook/metadata-gcp queue drain",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 60,
+      "focus": "demo.owasp-juice.shop Complaints/SecurityQuestions/Recycles route-specific live oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (18 findings) — no benchmark category misses",
-      "demo.owasp-juice.shop/api/Users/1: 19 findings — juice-shop-users-idor-live-oracle shipped (prior run)",
-      "demo.owasp-juice.shop/api/BasketItems: 19 findings — juice-shop-basket-items-bola-live-oracle shipped (prior run)",
-      "demo.owasp-juice.shop/api/Addresss + /api/Cards: 16 findings each — security-question-disclosure slug recovered",
-      "demo.owasp-juice.shop/api/Complaints: 16-finding juice-shop hub without route-specific complaint BOLA oracle",
-      "demo.owasp-juice.shop/api/Recycles: 15-finding hub without route-specific recycle-request oracle",
-      "demo.owasp-juice.shop/api/SecurityQuestions: 15-finding hub; endpoint returns 500 but no route-specific disclosure oracle",
-      "ssrf.vulnlab.dev/blind: 15 findings — full SSRF live-oracle suite including blind-route oracle",
-      "ssrf.vulnlab.dev/webhook: 13 findings — SSRF oracles + unprotected-webhook-endpoint",
-      "ssrf.vulnlab.dev/metadata-gcp: 15 findings — metadata-gcp-route live oracle present"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (16 findings) — no benchmark category misses",
+      "juice-shop-staging /api/Complaints: 16→20 findings — juice-shop-complaints-bola-live-oracle shipped",
+      "juice-shop-staging /api/SecurityQuestions: 15→20 findings — juice-shop-security-questions-list-live-oracle shipped",
+      "juice-shop-staging /api/Recycles: 15→20 findings — juice-shop-recycles-bola-live-oracle shipped",
+      "demo.owasp-juice.shop/api/Complaints: 16-finding hub — route oracle now fires on staging validation",
+      "demo.owasp-juice.shop/api/Recycles: 15-finding hub — recycle IDOR oracle now fires",
+      "demo.owasp-juice.shop/api/SecurityQuestions: 500 on demo host; catalog oracle validated on staging"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/api/*: route-specific IDOR/BOLA live oracles absent on Complaints/Recycles/Cards despite 15-16 finding hubs",
-      "demo.owasp-juice.shop/api/SecurityQuestions: 500 error surface without dedicated security-question route oracle",
+      "demo.owasp-juice.shop/api/Cards + /api/Addresss: 16-finding hubs with 500 error surface — route-specific oracles still absent",
       "juice-shop.herokuapp.com/rest/basket/2: basket IDOR route oracle absent without authenticated session",
-      "vwad.owasp.org/app/voice-goat/voiceadmin: VoiceAdmin LLM excessive-functionality oracle absent"
+      "vwad.owasp.org/app/voice-goat/voiceadmin: VoiceAdmin LLM excessive-functionality oracle absent (404 shell)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com/api/Complaints": 20,
+    "juice-shop-staging.herokuapp.com/api/SecurityQuestions": 20,
+    "juice-shop-staging.herokuapp.com/api/Recycles": 20,
     "juice-shop.herokuapp.com": 18,
     "demo.owasp-juice.shop/api/Users/1": 19,
     "demo.owasp-juice.shop/api/BasketItems": 19,
     "demo.owasp-juice.shop/api/Addresss": 16,
     "demo.owasp-juice.shop/api/Cards": 16,
-    "demo.owasp-juice.shop/api/Complaints": 16,
     "ssrf.vulnlab.dev/blind": 15,
-    "ssrf.vulnlab.dev/metadata-gcp": 15,
-    "demo.owasp-juice.shop/api/Recycles": 15,
-    "demo.owasp-juice.shop/api/SecurityQuestions": 15,
-    "ssrf.vulnlab.dev/webhook": 13
+    "ssrf.vulnlab.dev/metadata-gcp": 15
   }
 }
