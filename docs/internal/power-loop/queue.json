@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T09:05:00.000Z",
+  "updated_at": "2026-07-30T09:35:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/PrivacyRequests",
+      "source": "OWASP Juice Shop staging — GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/admin/application-configuration",
+      "source": "OWASP Juice Shop staging — unauthenticated admin config oracle GET /rest/admin/application-configuration (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/products/search?q=test",
+      "source": "OWASP Juice Shop staging — SQLi search oracle GET /rest/products/search?q= (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/PrivacyRequests",
+      "source": "Escape.tech Juice Shop demo — GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/admin/application-configuration",
+      "source": "Escape.tech Juice Shop demo — unauthenticated admin config oracle GET /rest/admin/application-configuration (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/api/PrivacyRequests",
       "source": "OWASP Juice Shop demo — GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (official demo.owasp-juice.shop)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T09:04:00.701Z",
+  "updated_at": "2026-07-30T09:43:24.594Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2946,
-  "total_findings": 28522,
+  "total_sites_scanned": 2951,
+  "total_findings": 28636,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2076,
-  "discovery_findings": 24265,
+  "discovery_urls_added": 2086,
+  "discovery_findings": 24379,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-30T09:04:00.701Z",
+  "last_run": "2026-07-30T09:43:24.594Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 22,
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (22 findings with Cards/Addresss/basket IDOR oracles from parallel run); secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (22 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 10,
       "urls_scanned": 8,
-      "findings": 70,
-      "focus": "demo.owasp-juice.shop Wallets/Orders/PrivacyPolicies/ProductReviews/Baskets + queue drain Quantitys/Memories/Deliverys",
+      "findings": 114,
+      "focus": "juice-shop-staging + escape.tech PrivacyRequests/admin-config/search oracles; demo.owasp-juice.shop 503 on 3 retries",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (22 findings) — Cards/Addresss/basket IDOR oracles shipped in parallel run",
-      "demo.owasp-juice.shop/api/Memories: 21 findings — unauthenticated memories API hub",
-      "demo.owasp-juice.shop/api/Quantitys: 20 findings — juice-shop hub with full oracle suite when instance healthy",
-      "demo.owasp-juice.shop/api/Deliverys: 20 findings — delivery address BOLA hub",
-      "demo.owasp-juice.shop/api/Baskets: 9 findings — thin hub without route-specific basket BOLA oracle",
-      "demo.owasp-juice.shop/api/Wallets|Orders|PrivacyPolicies|ProductReviews: 503 errors — demo instance cold-start"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (22 findings) — full oracle suite on staging fallback",
+      "juice-shop-staging.herokuapp.com/api/PrivacyRequests: 22 findings — juice-shop hub with jwt-alg-none + BOLA oracles",
+      "juice-shop-staging.herokuapp.com/rest/admin/application-configuration: 22 findings — unauthenticated-admin-endpoint confirmed",
+      "juice-shop.demo.escape.tech/api/PrivacyRequests: 24 findings — escape oracle with jwt-alg-none-accepted slug",
+      "juice-shop.demo.escape.tech/rest/admin/application-configuration: 24 findings — admin config + full oracle suite",
+      "demo.owasp-juice.shop/api/PrivacyRequests|SecurityAnswers|Products: 503 errors — demo instance cold-start"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/api/Wallets|Orders|PrivacyPolicies|ProductReviews: unreachable during cold-start — retry on next run",
-      "demo.owasp-juice.shop/api/Baskets: 9-finding hub without route-specific basket BOLA live oracle",
-      "demo.owasp-juice.shop intermittently 503 — first 4 new URLs failed, instance woke for Baskets + queue drain",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "zerohealth.aliyu.dev/* blocked by Cloudflare 1010 from cloud agent"
+      "demo.owasp-juice.shop/*: intermittently 503 — staging/escape.tech fallbacks used for discovery",
+      "route-specific PrivacyRequests BOLA live oracle absent — hubs hit generic juice-shop oracles only",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 22,
+    "juice-shop.demo.escape.tech/rest/admin/application-configuration": 24,
+    "juice-shop.demo.escape.tech/api/PrivacyRequests": 24,
+    "juice-shop-staging.herokuapp.com/api/PrivacyRequests": 22,
+    "juice-shop-staging.herokuapp.com/rest/admin/application-configuration": 22,
     "demo.owasp-juice.shop/api/Memories": 21,
-    "demo.owasp-juice.shop/api/Quantitys": 20,
-    "demo.owasp-juice.shop/api/Deliverys": 20,
-    "demo.owasp-juice.shop/api/Cards": 16,
-    "demo.owasp-juice.shop/api/Baskets": 9,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
