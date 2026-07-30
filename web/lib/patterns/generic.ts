@@ -14275,6 +14275,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sqli-vulnlab-second-order-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev second-order SQLi live oracle",
+    description:
+      "POST /second-order/register stores a SQLi username then GET /second-order/profile?id= fires string-concatenated SELECT and leaks VULNLAB{sqli-second-order-via-stored-input} — the sqli.vulnlab.dev second-order SQLi oracle.",
+    impactOneline:
+      "Second-order SQLi hides in stored usernames and fires on a later profile lookup, evading per-request injection scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabSecondOrderLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize every query that touches stored user input — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use prepared statements for profile lookups that join stored usernames.",
+        "Treat registration and profile endpoints as one data-flow in threat models.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /second-order flow stores usernames then concatenates them into profile SQL. Show parameterized queries across the registration-to-profile path.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sqli-vulnlab-second-order-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "sqli.vulnlab.dev /second-order route SQLi live oracle",
+    description:
+      "When scanning /second-order/, register-then-profile confirms stored-input SQLi with leaked secret — route-specific second-order SQLi oracle.",
+    impactOneline:
+      "Route-specific second-order SQLi oracle confirms cross-endpoint injection without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqliVulnlabSecondOrderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize every query that touches stored user input — sqli.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use prepared statements for profile lookups that join stored usernames.",
+        "Treat registration and profile endpoints as one data-flow in threat models.",
+        "Run SQLi training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /second-order route stores usernames then concatenates them into profile SQL. Show parameterized queries across the registration-to-profile path.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-stored-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev stored XSS live oracle",
+    description:
+      "POST /stored/ persists guestbook comments rendered as raw HTML for every visitor — the xss.vulnlab.dev stored XSS guestbook oracle.",
+    impactOneline:
+      "Stored guestbook HTML sinks execute attacker markup for all subsequent visitors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabStoredLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode stored user comments before rendering — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "HTML-encode stored comments or sanitize with a strict allowlist.",
+        "Use Content-Security-Policy to mitigate inline script execution.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /stored guestbook renders persisted comments as raw HTML. Show stored XSS remediation with output encoding.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev /stored route XSS live oracle",
+    description:
+      "When scanning /stored/, POST guestbook comment confirms unescaped HTML persistence — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific stored XSS oracle confirms guestbook sink without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode stored user comments before rendering — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "HTML-encode stored comments or sanitize with a strict allowlist.",
+        "Use Content-Security-Policy to mitigate inline script execution.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /stored route renders persisted comments as raw HTML. Show stored XSS remediation with output encoding.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-filtered-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev filtered SSTI live oracle",
+    description:
+      "GET /filtered/?greeting={{7*7}} evaluates Jinja2 past a substring blocklist and returns 49 — the ssti.vulnlab.dev filtered SSTI bypass oracle.",
+    impactOneline:
+      "Substring blocklists fail against creative Jinja2 attribute-walk and filter bypass chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabFilteredLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into render_template_string — blocklists are not a substitute — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Render templates from static files with bound context variables.",
+        "Avoid deny-list filtering of template syntax; eliminate dynamic template compilation.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /filtered route uses a substring blocklist before render_template_string. Show safe templating without user-controlled template strings.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-filtered-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "ssti.vulnlab.dev /filtered route SSTI live oracle",
+    description:
+      "When scanning /filtered/, GET ?greeting={{7*7}} confirms Jinja2 evaluation past substring blocklist — route-specific filtered SSTI oracle.",
+    impactOneline:
+      "Route-specific filtered SSTI oracle confirms blocklist bypass without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabFilteredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into render_template_string — blocklists are not a substitute — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Render templates from static files with bound context variables.",
+        "Avoid deny-list filtering of template syntax; eliminate dynamic template compilation.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /filtered route uses a substring blocklist before render_template_string. Show safe templating without user-controlled template strings.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
