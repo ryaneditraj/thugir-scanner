@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-error-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /error/ username=thugir' returns ProgrammingError MariaDB syntax error + pre.query SELECT ... username='thugir''; sqli.vulnlab.dev/error findings 0→4 (+sqli-vulnlab-error-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-dom-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /dom/ inline script decodeURIComponent(location.hash.slice(1)) → getElementById('target').innerHTML = raw; xss.vulnlab.dev/dom findings 0→5 (+xss-vulnlab-dom-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-reflected-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/?q=thugirxsscan7 reflects unescaped into Results for: heading; xss.vulnlab.dev/reflected findings 0→6 (+xss-vulnlab-reflected-live-oracle + route + client-side-xss-evidence); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-avatar-url-ssrf-live-oracle",
       "status": "shipped",
@@ -15966,6 +15984,36 @@
       "source": "discovery:juice-shop.demo.escape.tech",
       "slug": "juice-shop-addresss-id-bola-live-oracle",
       "shipped_at": "2026-07-30T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-error-live-oracle",
+      "shipped_at": "2026-07-30T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-error-route-live-oracle",
+      "shipped_at": "2026-07-30T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-dom-live-oracle",
+      "shipped_at": "2026-07-30T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-dom-route-live-oracle",
+      "shipped_at": "2026-07-30T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-reflected-live-oracle",
+      "shipped_at": "2026-07-30T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-reflected-route-live-oracle",
+      "shipped_at": "2026-07-30T16:10:00.000Z"
     }
   ]
 }
