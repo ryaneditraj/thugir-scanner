@@ -27878,7 +27878,7 @@ export const genericPatterns: Pattern[] = [
     description:
       "POST /login reflects failed username into inline var username script without escaping — the PortSwigger Gin & Juice login JavaScript-context XSS training oracle.",
     impactOneline:
-      "Unescaped username reflection in script literals enables JavaScript string-breakout XSS on failed login responses.",
+      "Unescaped username reflection in script literals enables JavaScript-context XSS on failed login responses.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "ginAndJuiceLoginUsernameReflectionLiveOracle" },
     tierRequired: "deep",
