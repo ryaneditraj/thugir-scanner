@@ -15240,6 +15240,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-photo-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals photo-delete BFLA oracle",
+    description:
+      "DELETE /api/users/one/{id}/photo?isAdmin=true succeeds for non-admin JWT tokens — the Broken Crystals broken function-level authorization photo-delete oracle.",
+    impactOneline:
+      "Query-string isAdmin=true bypasses authorization checks and lets any authenticated user delete another user's profile photo.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsPhotoBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side authorization on photo mutations — Broken Crystals is intentional lab software.",
+      steps: [
+        "Ignore client-supplied isAdmin query parameters and derive roles from signed JWT claims only.",
+        "Verify the authenticated subject owns the target photo before DELETE.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DELETE /api/users/one/{id}/photo endpoint honors isAdmin=true from non-admin sessions. Show BFLA remediation for NestJS photo routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-photo-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals photo BFLA route live oracle",
+    description:
+      "When scanning /api/users/one/{id}/photo?isAdmin=true, DELETE with isAdmin=true bypasses authorization for non-admin JWT — route-specific BFLA photo-delete confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals photo endpoints honor attacker-controlled isAdmin query flags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsPhotoBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side authorization on photo mutations — Broken Crystals is intentional lab software.",
+      steps: [
+        "Ignore client-supplied isAdmin query parameters and derive roles from signed JWT claims only.",
+        "Verify the authenticated subject owns the target photo before DELETE.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/one/{id}/photo route scan confirms isAdmin=true BFLA. Show authorization remediation for photo DELETE endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Altoro Mutual login SQL injection oracle",
+    description:
+      "POST /doLogin with uid=admin' OR '1'='1 redirects to /bank/main.jsp and sets AltoroAccounts session cookie — the IBM Altoro Mutual SQL injection authentication bypass oracle.",
+    impactOneline:
+      "SQL injection in the login form bypasses authentication and grants access to the online banking portal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups — Altoro Mutual is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL in login handlers with prepared statements.",
+        "Return generic authentication failures without distinguishing SQL errors.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /doLogin endpoint accepts admin' OR '1'='1 and redirects to /bank/main.jsp. Show SQL injection remediation for Java login servlets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Altoro Mutual /login.jsp SQL injection route oracle",
+    description:
+      "When scanning /login.jsp, POST /doLogin with admin' OR '1'='1 redirects to /bank/main.jsp — route-specific SQL injection authentication bypass confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Altoro Mutual login is vulnerable to classic SQLi authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups — Altoro Mutual is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL in login handlers with prepared statements.",
+        "Return generic authentication failures without distinguishing SQL errors.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login.jsp route scan confirms SQLi auth bypass via /doLogin. Show parameterized query remediation for Java login servlets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "euri-sec-csp-dynamic-script-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "EuriSec CSP demo dynamic script injection oracle",
+    description:
+      "GET /csp/ecommerce-content/ dynamically injects googletagmanager.com scripts via document.createElement without nonce — the EuriSec CSP training dynamic-script oracle.",
+    impactOneline:
+      "Dynamically created script tags bypass naive CSP policies and demonstrate unsafe third-party script loading.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "euriSecCspDynamicScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use nonces or hashes for all script sources including dynamically injected tags — EuriSec CSP demo is intentional training software.",
+      steps: [
+        "Apply CSP nonces to dynamically created script elements.",
+        "Allowlist only required third-party script hosts explicitly in script-src.",
+        "Run CSP training demos only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /csp/ecommerce-content/ page injects GTM via document.createElement without nonce. Show CSP hardening for dynamic script tags.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "euri-sec-csp-dynamic-script-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "EuriSec CSP demo /ecommerce route oracle",
+    description:
+      "When scanning /ecommerce, iframe content at /csp/ecommerce-content/ dynamically injects external GTM scripts — route-specific CSP misconfiguration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the EuriSec CSP ecommerce demo loads third-party scripts without nonce protection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "euriSecCspDynamicScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use nonces or hashes for all script sources including dynamically injected tags — EuriSec CSP demo is intentional training software.",
+      steps: [
+        "Apply CSP nonces to dynamically created script elements.",
+        "Allowlist only required third-party script hosts explicitly in script-src.",
+        "Run CSP training demos only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /ecommerce route scan confirms dynamic GTM script injection in CSP demo iframe. Show CSP nonce remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-secrets-live-oracle",
     platform: "generic",
     category: "Exposed secret",

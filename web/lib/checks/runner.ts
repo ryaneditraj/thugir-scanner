@@ -1672,6 +1672,12 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsDomCsrfRouteLiveOracle",
   "brokencrystalsNestedJsonDoSLiveOracle",
   "brokencrystalsNestedJsonRouteLiveOracle",
+  "brokencrystalsPhotoBflaLiveOracle",
+  "brokencrystalsPhotoBflaRouteLiveOracle",
+  "testfireLoginSqliLiveOracle",
+  "testfireLoginSqliRouteLiveOracle",
+  "euriSecCspDynamicScriptLiveOracle",
+  "euriSecCspDynamicScriptRouteLiveOracle",
   "brokencrystalsSecretsLiveOracle",
   "brokencrystalsSecretsRouteLiveOracle",
   "brokencrystalsSafeFilesRfiLiveOracle",
@@ -8699,6 +8705,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-photo-bfla")) return -2;
+      if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
+      if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;
       if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
