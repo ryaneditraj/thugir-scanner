@@ -32328,6 +32328,90 @@ const theInternetSlowRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetCheckboxesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/checkboxes(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const checkboxesUrl = new URL("/checkboxes", ctx.origin).toString();
+  const doc = await ctx.probe.get(checkboxesUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasForm = /<form[^>]+id=['"]checkboxes['"]/i.test(doc.body);
+  const hasHeading = /<h3>\s*Checkboxes\s*<\/h3>/i.test(doc.body);
+  const hasOnclickGuard =
+    /checkboxes\[i\]\.onclick\s*=\s*function/i.test(doc.body) &&
+    /setAttribute\(["']checked["']/i.test(doc.body) &&
+    /removeAttribute\(["']checked["']/i.test(doc.body);
+  if (!hasForm || !hasHeading || !hasOnclickGuard) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      checkboxesUrl,
+      markers: ["form#checkboxes", "onclick prevents uncheck", "h3 Checkboxes"],
+      note: "the-internet /checkboxes route scan — form#checkboxes with onclick guard blocking uncheck — Elemental Selenium checkbox interaction training oracle"
+    }
+  };
+};
+
+const theInternetDragAndDropRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/drag_and_drop(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const dragUrl = new URL("/drag_and_drop", ctx.origin).toString();
+  const doc = await ctx.probe.get(dragUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasHeading = /<h3>\s*Drag and Drop\s*<\/h3>/i.test(doc.body);
+  const hasColumns =
+    /id=['"]column-a['"][^>]+draggable=['"]true['"]/i.test(doc.body) &&
+    /id=['"]column-b['"][^>]+draggable=['"]true['"]/i.test(doc.body);
+  const hasDragHandlers =
+    /handleDragStart/i.test(doc.body) &&
+    /handleDrop/i.test(doc.body) &&
+    /addEventListener\(['"]dragstart['"]/i.test(doc.body);
+  if (!hasHeading || !hasColumns || !hasDragHandlers) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      dragUrl,
+      markers: ["column-a/column-b draggable", "handleDragStart/handleDrop", "h3 Drag and Drop"],
+      note: "the-internet /drag_and_drop route scan — draggable columns with dragstart/drop handlers swap innerHTML — Elemental Selenium drag-and-drop training oracle"
+    }
+  };
+};
+
+const theInternetNotificationMessageRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/notification_message(?:_rendered)?(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const notifyUrl = new URL("/notification_message", ctx.origin).toString();
+  const renderedUrl = new URL("/notification_message_rendered", ctx.origin).toString();
+  const triggerDoc = await ctx.probe.get(notifyUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  const renderedDoc = await ctx.probe.get(renderedUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  const doc = renderedDoc.status >= 200 && renderedDoc.status < 400 ? renderedDoc : triggerDoc;
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasHeading = /<h3>\s*Notification Message\s*<\/h3>/i.test(doc.body);
+  const hasReloadLink = /href=['"]\/notification_message['"]/i.test(doc.body);
+  const hasFlashCopy =
+    /notification message/i.test(doc.body) &&
+    /Action (?:unsuccessful|successful)/i.test(doc.body);
+  if (!hasHeading || !hasReloadLink || !hasFlashCopy) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      notifyUrl,
+      renderedUrl,
+      redirectStatus: triggerDoc.status,
+      markers: ["h3 Notification Message", "flash notification copy", "href=/notification_message reload"],
+      note: "the-internet /notification_message route scan — 303 redirect sets flash cookie then /notification_message_rendered shows Action unsuccessful/successful banner — Elemental Selenium notification-message training oracle"
+    }
+  };
+};
+
 const theInternetWindowsRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -45293,6 +45377,9 @@ export const RULES: Record<string, Rule> = {
   theInternetJavascriptErrorRouteLiveOracle,
   theInternetDisappearingElementsRouteLiveOracle,
   theInternetSlowRouteLiveOracle,
+  theInternetCheckboxesRouteLiveOracle,
+  theInternetDragAndDropRouteLiveOracle,
+  theInternetNotificationMessageRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
