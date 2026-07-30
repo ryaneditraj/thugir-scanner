@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-login-jwt-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents JWT is_admin bypass with weak secret \"secret\"; vulnshop.vercel.app/login findings 6→8 (+vulnshop-login-jwt-route-live-oracle + client-side-vulnshop-module-evidence); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-products-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA /products module documents SQL injection via search parameter; vulnshop.vercel.app/products findings 6→8 (+vulnshop-products-sqli-route-live-oracle); benchmark 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-orders-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA /orders module documents IDOR via sequential order IDs without ownership check; vulnshop.vercel.app/orders findings 6→8 (+vulnshop-orders-idor-route-live-oracle); benchmark 30 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop.demo.escape.tech",
       "slug": "juice-shop-login-sqli-live-oracle",
       "status": "shipped",
