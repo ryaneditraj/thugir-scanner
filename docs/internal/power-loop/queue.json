@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T13:05:00.000Z",
+  "updated_at": "2026-07-30T14:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://www.llm-sec.dev/labs/unbounded-consumption",
+      "source": "llm-sec.dev — OWASP LLM10 unbounded consumption / denial-of-wallet interactive lab (October 2025 challenge)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.llm-sec.dev/labs/prompt-injection",
+      "source": "llm-sec.dev — OWASP LLM01 prompt injection CTF lab with hidden flag (llm-sec.dev/labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.llm-sec.dev/labs/supply-chain",
+      "source": "llm-sec.dev — OWASP LLM03 supply chain / plugin trust interactive lab (llm-sec.dev/labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.llm-sec.dev/labs/improper-output",
+      "source": "llm-sec.dev — OWASP LLM05 improper output handling interactive lab (llm-sec.dev/labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.llm-sec.dev/labs/system-prompt-leakage",
+      "source": "llm-sec.dev — OWASP LLM07 system prompt leakage interactive lab (llm-sec.dev/labs)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owaspbased-lessons.vercel.app/challenges/prompt-leakage",
       "source": "OWASP GenAI Security Lab — LLM07 system prompt leakage interactive lesson (owaspbased-lessons.vercel.app)",
