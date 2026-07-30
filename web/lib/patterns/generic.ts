@@ -25588,6 +25588,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-cards-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop payment cards BOLA live oracle",
+    description:
+      "GET /api/Cards with alg:none JWT returns stored payment card records including cardNum and fullName — Juice Shop PCI-sensitive BOLA oracle.",
+    impactOneline:
+      "Broken object-level authorization on payment cards exposes customer billing data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopCardsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope payment-card queries to the authenticated cardholder only.",
+      steps: [
+        "Filter /api/Cards responses by the authenticated user's ID.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Never return full card numbers — use tokenization and last-four display only."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Cards returns payment card records with alg:none JWT. Show BOLA authorization and PCI-safe card handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-cards-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/Cards BOLA route live oracle",
+    description:
+      "When scanning /api/Cards, alg:none JWT returns stored payment card records — route-specific PCI BOLA oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user payment card reads on Juice Shop APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopCardsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope payment-card queries to the authenticated cardholder only.",
+      steps: [
+        "Filter /api/Cards responses by the authenticated user's ID.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Never return full card numbers — use tokenization and last-four display only."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Cards route scan exposes payment card records via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-addresss-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop shipping addresses BOLA live oracle",
+    description:
+      "GET /api/Addresss with alg:none JWT returns shipping addresses with streetAddress and mobileNum — Juice Shop PII BOLA oracle.",
+    impactOneline:
+      "Broken object-level authorization on addresses exposes customer shipping and contact PII.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopAddresssBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope address queries to the authenticated user's records only.",
+      steps: [
+        "Filter /api/Addresss responses by the authenticated user's ID.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Add integration tests that prove cross-user address reads fail."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /api/Addresss returns shipping PII with alg:none JWT. Show BOLA authorization fixes for address APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-addresss-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/Addresss BOLA route live oracle",
+    description:
+      "When scanning /api/Addresss, alg:none JWT returns shipping addresses with street and mobile number — route-specific PII BOLA oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user address reads on Juice Shop APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopAddresssBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope address queries to the authenticated user's records only.",
+      steps: [
+        "Filter /api/Addresss responses by the authenticated user's ID.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm.",
+        "Add integration tests that prove cross-user address reads fail."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Addresss route scan exposes shipping PII via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-basket-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop basket IDOR live oracle",
+    description:
+      "GET /rest/basket/2 with alg:none JWT returns another user's basket (UserId mismatch vs /rest/basket/1) — Juice Shop basket IDOR oracle.",
+    impactOneline:
+      "Predictable basket IDs let attackers read other customers' shopping carts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopBasketIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind basket reads to the authenticated session's user ID.",
+      steps: [
+        "Verify the requested basket belongs to the authenticated user before returning data.",
+        "Use non-guessable basket identifiers or server-side session binding.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/basket/:id returns another user's basket with alg:none JWT. Show basket IDOR authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-basket-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /rest/basket/:id IDOR route live oracle",
+    description:
+      "When scanning /rest/basket/:id, alg:none JWT returns another user's basket — route-specific basket IDOR oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user basket reads on Juice Shop REST APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopBasketIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind basket reads to the authenticated session's user ID.",
+      steps: [
+        "Verify the requested basket belongs to the authenticated user before returning data.",
+        "Use non-guessable basket identifiers or server-side session binding.",
+        "Reject alg:none JWTs and pin verification to a strong algorithm."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/basket/:id route scan exposes another user's cart via IDOR. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "thugir-jwt-weak-claims",
     platform: "generic",
     category: "Broken authentication",
