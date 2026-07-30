@@ -1631,6 +1631,12 @@ const DEEP_RULES = new Set<string>([
   "dvragAdminConfigLiveOracle",
   "dvragRagPipelineLiveOracle",
   "vulnshopDebugApiLiveOracle",
+  "vulnshopJwtForgeLiveOracle",
+  "vulnshopLoginJwtRouteLiveOracle",
+  "vulnshopProductsSqliLiveOracle",
+  "vulnshopProductsSqliRouteLiveOracle",
+  "vulnshopOrdersIdorLiveOracle",
+  "vulnshopOrdersIdorRouteLiveOracle",
   "clientSideVulnlabAuditApiEvidence",
   "clientSideVulnlabHandsOnLabEvidence",
   "clientSideVibeEvalEvidence",
@@ -5964,7 +5970,19 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
   }
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/login", "/register", "/products", "/orders", "/admin", "/profile", "/users"]) {
+  for (const p of [
+    "/login",
+    "/register",
+    "/products",
+    "/orders",
+    "/admin",
+    "/profile",
+    "/users",
+    "/api/v1/wallet/add-funds",
+    "/run-diagnostic",
+    "/upload-review",
+    "/api/xml-import"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
