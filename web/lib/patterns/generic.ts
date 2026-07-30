@@ -10167,6 +10167,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-jwt-forge-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VulnShop JWT is_admin forge live oracle",
+    description:
+      "HS256 JWT signed with weak secret \"secret\" and is_admin:true grants admin profile access on the VulnShop Railway API — broken access control oracle.",
+    impactOneline:
+      "Forgeable JWT signing secrets let attackers escalate to admin by flipping is_admin claims.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopJwtForgeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strong JWT secrets and enforce server-side role checks — VulnShop is intentional training software.",
+      steps: [
+        "Rotate JWT signing secrets and reject client-supplied is_admin claims.",
+        "Validate roles server-side on every privileged API route.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop JWT accepts is_admin:true when signed with weak secret \"secret\". Show JWT hardening and server-side authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-login-jwt-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VulnShop /login JWT forge route live oracle",
+    description:
+      "When scanning /login, live HS256 JWT forge with is_admin:true or SPA documentation confirms broken access control via forgeable weak signing secret.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop login module documents JWT is_admin bypass with weak secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopLoginJwtRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strong JWT secrets and enforce server-side role checks on /login-issued tokens.",
+      steps: [
+        "Rotate JWT signing secrets and reject client-supplied is_admin claims.",
+        "Validate roles server-side on every privileged API route.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /login route documents JWT is_admin bypass. Show route-specific JWT hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-products-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop product search SQLi live oracle",
+    description:
+      "GET /api/products?search= reflects SQL injection — tautology payload returns extra rows or SQL error vs baseline search.",
+    impactOneline:
+      "Unparameterized product search lets attackers extract or manipulate database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductsSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize SQL product search queries — VulnShop is intentional training software.",
+      steps: [
+        "Use prepared statements for all search filters.",
+        "Never concatenate user input into SQL WHERE clauses.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/products search parameter is SQL-injectable. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-products-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop /products SQLi route live oracle",
+    description:
+      "When scanning /products, live SQLi on search parameter or SPA documentation confirms injectable product search.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /products module documents SQL injection via search.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductsSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize SQL product search queries on /products.",
+      steps: [
+        "Use prepared statements for all search filters.",
+        "Never concatenate user input into SQL WHERE clauses.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /products route documents SQLi search. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-orders-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop order IDOR live oracle",
+    description:
+      "Fresh user GET /api/orders/1 returns another user's order details without ownership verification.",
+    impactOneline:
+      "Sequential order IDs without authorization checks expose other customers' purchase data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopOrdersIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify order ownership server-side before returning order details.",
+      steps: [
+        "Bind order lookups to authenticated user ID.",
+        "Use non-enumerable order identifiers in production APIs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/orders/:id returns orders without ownership checks. Show IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-orders-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /orders IDOR route live oracle",
+    description:
+      "When scanning /orders, live IDOR on sequential order IDs or SPA documentation confirms missing ownership checks.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /orders module documents IDOR via unauthenticated order lookup.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopOrdersIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify order ownership server-side on /orders routes.",
+      steps: [
+        "Bind order lookups to authenticated user ID.",
+        "Use non-enumerable order identifiers in production APIs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /orders route documents IDOR. Show route-specific ownership verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwtlens-evidence",
     platform: "generic",
     category: "Broken authentication",

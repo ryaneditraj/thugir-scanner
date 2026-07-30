@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T21:05:05.926Z",
-  "total": 1191,
-  "uniqueSlugs": 1186,
+  "generatedAt": "2026-07-30T22:08:55.694Z",
+  "total": 1197,
+  "uniqueSlugs": 1192,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1173,
+    "generic": 1179,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1106,
+    "deep": 1112,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 295,
+    "Broken access control": 299,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 90,
     "Security misconfiguration": 109,
     "Broken authentication": 87,
-    "Injection": 236,
+    "Injection": 238,
     "Cross-site scripting": 165,
     "general": 20,
     "SSRF": 5,
@@ -1208,6 +1208,12 @@
     "vulnlab-validate-sqli-live-oracle",
     "vulnlab-validate-xss-live-oracle",
     "vulnshop-debug-api-live-oracle",
+    "vulnshop-jwt-forge-live-oracle",
+    "vulnshop-login-jwt-route-live-oracle",
+    "vulnshop-orders-idor-live-oracle",
+    "vulnshop-orders-idor-route-live-oracle",
+    "vulnshop-products-sqli-live-oracle",
+    "vulnshop-products-sqli-route-live-oracle",
     "vulnweb-comments-xss-route-live-oracle",
     "vulnweb-csrf-route-live-oracle",
     "vulnweb-profile-idor-route-live-oracle",
