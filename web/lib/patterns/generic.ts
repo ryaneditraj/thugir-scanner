@@ -24756,6 +24756,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the-internet-exit-intent-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet exit intent route live oracle",
+    description:
+      "When scanning /exit_intent, ouibounce.min.js displays #ouibounce-modal on viewport mouseout — Elemental Selenium exit-intent overlay training route oracle.",
+    impactOneline:
+      "Exit-intent modals triggered by mouseleave events break automation that does not account for overlay dismissal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetExitIntentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — dismiss exit-intent overlays before continuing E2E flows.",
+      steps: [
+        "Detect and close ouibounce-style modals before interacting with underlying page elements.",
+        "Use explicit waits that ignore elements hidden with display:none until triggered.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /exit_intent route uses ouibounce.min.js to show a modal on viewport mouseout. Show overlay-dismissal patterns for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-typos-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet typos route live oracle",
+    description:
+      "When scanning /typos, page copy documents random typo injection on each load — Elemental Selenium spellcheck and typo-detection training route oracle.",
+    impactOneline:
+      "Non-deterministic page text from random typos breaks exact-string assertions in browser automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetTyposRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — use fuzzy or partial text matching for non-deterministic copy.",
+      steps: [
+        "Assert on stable structural elements instead of exact typo-prone strings.",
+        "Use regex or contains matchers when page text varies between loads.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /typos route injects random typos on each page load. Show resilient text-matching patterns for flaky copy.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the-internet-geolocation-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "the-internet geolocation route live oracle",
+    description:
+      "When scanning /geolocation, navigator.geolocation.getCurrentPosition writes latitude/longitude into #lat-value/#long-value — Elemental Selenium geolocation permission training route oracle.",
+    impactOneline:
+      "Browser geolocation permission prompts and coordinate DOM sinks require explicit permission mocking in headless automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "theInternetGeolocationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "the-internet is intentional Selenium training — mock geolocation permissions in automated browsers.",
+      steps: [
+        "Grant geolocation permissions via browser capabilities or CDP before clicking the demo button.",
+        "Stub navigator.geolocation when testing apps that read device coordinates.",
+        "Run the-internet only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the-internet /geolocation route calls navigator.geolocation.getCurrentPosition and renders coordinates in the DOM. Show geolocation permission mocking for E2E tests.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
     platform: "generic",
     category: "Injection",

@@ -32095,6 +32095,88 @@ const theInternetShiftingContentRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const theInternetExitIntentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/exit_intent(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const exitUrl = new URL("/exit_intent", ctx.origin).toString();
+  const doc = await ctx.probe.get(exitUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Exit Intent\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasOuibounce =
+    /ouibounce\.min\.js/i.test(doc.body) &&
+    /id=['"]ouibounce-modal['"]/i.test(doc.body) &&
+    /Mouse out of the viewport pane/i.test(doc.body);
+  const hasModalCopy =
+    /<h3>\s*This is a modal window\s*<\/h3>/i.test(doc.body) &&
+    /class=['"]modal(?:-title|-body|-footer)?['"]/i.test(doc.body);
+  if (!hasOuibounce || !hasModalCopy) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      exitUrl,
+      markers: ["ouibounce.min.js", "#ouibounce-modal", "viewport mouseout modal"],
+      note: "the-internet /exit_intent route scan — ouibounce.min.js shows #ouibounce-modal on viewport mouseout — Elemental Selenium exit-intent overlay training oracle"
+    }
+  };
+};
+
+const theInternetTyposRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/typos(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const typosUrl = new URL("/typos", ctx.origin).toString();
+  const doc = await ctx.probe.get(typosUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Typos\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasTypoDemo =
+    /typo being introduced/i.test(doc.body) &&
+    /randomly on each page load/i.test(doc.body) &&
+    /Sometimes you(?:'|&#39;)ll see a typo/i.test(doc.body);
+  if (!hasTypoDemo) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      typosUrl,
+      markers: ["h3 Typos", "random typo on page load", "won,t intentional typo"],
+      note: "the-internet /typos route scan — page copy documents random typo injection on each load — Elemental Selenium spellcheck/typo training oracle"
+    }
+  };
+};
+
+const theInternetGeolocationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTheInternetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/geolocation(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const geoUrl = new URL("/geolocation", ctx.origin).toString();
+  const doc = await ctx.probe.get(geoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h3>\s*Geolocation\s*<\/h3>/i.test(doc.body)) return NEGATIVE;
+  const hasGeolocationApi =
+    /navigator\.geolocation/i.test(doc.body) &&
+    /getCurrentPosition\s*\(\s*showPosition\s*\)/i.test(doc.body);
+  const hasLatLongSink =
+    /position\.coords\.latitude/i.test(doc.body) &&
+    /position\.coords\.longitude/i.test(doc.body) &&
+    /id=['"]lat-value['"]/i.test(doc.body) &&
+    /id=['"]long-value['"]/i.test(doc.body);
+  if (!hasGeolocationApi || !hasLatLongSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      geoUrl,
+      markers: ["navigator.geolocation.getCurrentPosition", "#lat-value/#long-value", "Google Maps link"],
+      note: "the-internet /geolocation route scan — browser geolocation API writes latitude/longitude into DOM — Elemental Selenium geolocation permission training oracle"
+    }
+  };
+};
+
 const theInternetWindowsRouteLiveOracle: Rule = async (ctx) => {
   if (!isTheInternetHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -44823,6 +44905,9 @@ export const RULES: Record<string, Rule> = {
   theInternetTablesRouteLiveOracle,
   theInternetShiftingContentRouteLiveOracle,
   theInternetWindowsRouteLiveOracle,
+  theInternetExitIntentRouteLiveOracle,
+  theInternetTyposRouteLiveOracle,
+  theInternetGeolocationRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
