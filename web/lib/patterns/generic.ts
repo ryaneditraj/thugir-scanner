@@ -25432,6 +25432,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-complaints-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop complaints BOLA live oracle",
+    description:
+      "GET /api/Complaints with an alg:none JWT returns complaint messages from multiple UserId values — Juice Shop complaints BOLA oracle.",
+    impactOneline:
+      "Reading other users' complaint tickets exposes private support correspondence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopComplaintsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope complaint queries to the authenticated user's submissions only.",
+      steps: [
+        "Filter /api/Complaints by the caller's user ID.",
+        "Reject unsigned alg:none JWT tokens.",
+        "Add integration tests for cross-user complaint access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Complaints endpoint lists complaints from multiple users with alg:none JWT. Show BOLA fixes for complaint APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-complaints-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/Complaints BOLA route live oracle",
+    description:
+      "When scanning /api/Complaints, alg:none JWT access returns complaint messages spanning multiple UserId values — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user complaint exposure on Juice Shop support APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopComplaintsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope complaint queries to the authenticated user's submissions only.",
+      steps: [
+        "Filter /api/Complaints by the caller's user ID.",
+        "Reject unsigned alg:none JWT tokens.",
+        "Add integration tests for cross-user complaint access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Complaints route scan exposes cross-user complaint messages via alg:none JWT. Show route-level BOLA detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-security-questions-list-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Juice Shop security-question catalog live oracle",
+    description:
+      "GET /api/SecurityQuestions returns the full security-question catalog without authentication — Juice Shop account-recovery disclosure oracle.",
+    impactOneline:
+      "Publishing all security questions aids targeted password-reset attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSecurityQuestionsListLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before listing security questions and scope responses per user.",
+      steps: [
+        "Authenticate callers before returning security-question catalogs.",
+        "Return only the caller's configured question on recovery flows.",
+        "Audit Juice Shop REST routes for unauthenticated sensitive reads."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/SecurityQuestions endpoint exposes the full security-question catalog without auth. Show account-recovery disclosure fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-security-questions-list-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Juice Shop /api/SecurityQuestions catalog route live oracle",
+    description:
+      "When scanning /api/SecurityQuestions, unauthenticated access returns multiple security-question strings — route-specific account-recovery disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated security-question catalog reads on Juice Shop APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSecurityQuestionsListRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before listing security questions and scope responses per user.",
+      steps: [
+        "Authenticate callers before returning security-question catalogs.",
+        "Return only the caller's configured question on recovery flows.",
+        "Audit Juice Shop REST routes for unauthenticated sensitive reads."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/SecurityQuestions route scan exposes the security-question catalog without auth. Show route-level disclosure detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-recycles-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop recycle requests BOLA live oracle",
+    description:
+      "GET /api/Recycles/:id returns other users' recycle pickup requests without authentication — Juice Shop recycle BOLA/IDOR oracle.",
+    impactOneline:
+      "Reading another user's recycle requests exposes address and pickup schedule data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopRecyclesBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-user authorization on recycle request APIs.",
+      steps: [
+        "Bind /api/Recycles/:id responses to the authenticated subject.",
+        "Reject unauthenticated reads of recycle pickup records.",
+        "Add integration tests for cross-user recycle access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Recycles/:id endpoint returns other users' recycle requests without auth. Show BOLA/IDOR fixes for recycle APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-recycles-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /api/Recycles BOLA route live oracle",
+    description:
+      "When scanning /api/Recycles, unauthenticated access to /api/Recycles/:id returns recycle requests from multiple UserId values — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user recycle request reads on Juice Shop APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopRecyclesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-user authorization on recycle request APIs.",
+      steps: [
+        "Bind /api/Recycles/:id responses to the authenticated subject.",
+        "Reject unauthenticated reads of recycle pickup records.",
+        "Add integration tests for cross-user recycle access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /api/Recycles route scan exposes cross-user recycle requests without auth. Show route-level BOLA detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "thugir-jwt-weak-claims",
     platform: "generic",
     category: "Broken authentication",

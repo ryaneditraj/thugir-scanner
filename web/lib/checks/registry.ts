@@ -36963,6 +36963,141 @@ const juiceShopBasketItemsBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const juiceShopComplaintsBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/Complaints", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 16384,
+    headers: juiceShopAlgNoneAuthHeader()
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const userIds = [...doc.body.matchAll(/"UserId"\s*:\s*(null|\d+)/g)].map((m) => m[1]);
+  const uniqueUserIds = new Set(userIds);
+  if (uniqueUserIds.size < 2 || userIds.length < 2) return NEGATIVE;
+  const messageMatch = doc.body.match(/"message"\s*:\s*"([^"]{8,})"/);
+  return {
+    fired: true,
+    confidence: uniqueUserIds.size >= 3 ? 0.93 : 0.91,
+    evidence: {
+      url,
+      userIds: [...uniqueUserIds].slice(0, 6),
+      complaintCount: userIds.length,
+      sampleMessage: messageMatch?.[1]?.slice(0, 80),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/Complaints with alg:none JWT returns complaints spanning multiple UserId values — BOLA oracle"
+    }
+  };
+};
+
+const juiceShopComplaintsBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Complaints\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopComplaintsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Complaints route scan — alg:none JWT lists complaints from multiple users — route-specific BOLA oracle"
+    }
+  };
+};
+
+const juiceShopSecurityQuestionsListLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/api/SecurityQuestions", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const questions = [...doc.body.matchAll(/"question"\s*:\s*"([^"]{4,})"/g)].map((m) => m[1]);
+  if (questions.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: questions.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      url,
+      questionCount: questions.length,
+      sampleQuestions: questions.slice(0, 3),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /api/SecurityQuestions returns the full security-question catalog without authentication — sensitive account-recovery oracle"
+    }
+  };
+};
+
+const juiceShopSecurityQuestionsListRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/SecurityQuestions\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopSecurityQuestionsListLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/SecurityQuestions route scan — unauthenticated security-question catalog disclosure — route-specific oracle"
+    }
+  };
+};
+
+const juiceShopRecyclesBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const userIds: string[] = [];
+  let sampleUrl = "";
+  let sampleSnippet = "";
+  for (const id of [1, 2, 3]) {
+    const url = new URL(`/api/Recycles/${id}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 4096 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"UserId"\s*:\s*\d+/.test(doc.body)) continue;
+    const userIdMatch = doc.body.match(/"UserId"\s*:\s*(\d+)/);
+    if (!userIdMatch) continue;
+    userIds.push(userIdMatch[1]);
+    if (!sampleUrl) {
+      sampleUrl = url;
+      sampleSnippet = doc.body.slice(0, 180).trim();
+    }
+  }
+  const uniqueUserIds = new Set(userIds);
+  if (uniqueUserIds.size < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: uniqueUserIds.size >= 3 ? 0.93 : 0.91,
+    evidence: {
+      url: sampleUrl,
+      userIds: [...uniqueUserIds].slice(0, 6),
+      recycleIdsProbed: userIds.length,
+      snippet: sampleSnippet,
+      note: "Juice Shop GET /api/Recycles/:id returns other users' recycle requests without authentication — BOLA/IDOR oracle"
+    }
+  };
+};
+
+const juiceShopRecyclesBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/Recycles\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopRecyclesBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /api/Recycles route scan — unauthenticated cross-user recycle request reads — route-specific BOLA oracle"
+    }
+  };
+};
+
 function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
   return m?.[1] ?? null;
@@ -45618,6 +45753,12 @@ export const RULES: Record<string, Rule> = {
   juiceShopUsersIdorRouteLiveOracle,
   juiceShopBasketItemsBolaLiveOracle,
   juiceShopBasketItemsBolaRouteLiveOracle,
+  juiceShopComplaintsBolaLiveOracle,
+  juiceShopComplaintsBolaRouteLiveOracle,
+  juiceShopSecurityQuestionsListLiveOracle,
+  juiceShopSecurityQuestionsListRouteLiveOracle,
+  juiceShopRecyclesBolaLiveOracle,
+  juiceShopRecyclesBolaRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
