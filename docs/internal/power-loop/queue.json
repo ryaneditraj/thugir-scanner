@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T21:03:00.000Z",
+  "updated_at": "2026-07-30T22:03:48.115Z",
   "discovery_urls": [
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api7/user/1",
+      "source": "roottusk/vAPI — API7 BOLA oracle GET /vapi/api7/user/1 cross-user access (Escape hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blind/",
+      "source": "ssrf.vulnlab — blind SSRF oracle with out-of-band callback (public vuln lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.escape.tech/api/agent-browse",
+      "source": "Escape Chimera — GenAI agent-browse SSRF oracle (Escape hosted demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.io/challenges/jwt",
+      "source": "zerohealth.io — JWT algorithm confusion challenge oracle (public security lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/import-from-url",
+      "source": "Escape duck-store — SSRF import-from-url oracle POST (Escape hosted)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnshop.vercel.app/api/v1/wallet/add-funds",
       "source": "chethan-vinayak/vulnshop — race-condition wallet top-up oracle POST /api/v1/wallet/add-funds (Vercel OSS deploy)",
