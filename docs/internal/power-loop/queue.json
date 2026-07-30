@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T10:06:31.000Z",
+  "updated_at": "2026-07-30T10:19:02.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop.demo.escape.tech/api/Cards",
@@ -1048,27 +1048,27 @@
     },
     {
       "url": "https://vuln-expose.vercel.app/sqli/login",
-      "source": "JuaniVeltri/vuln-expose \u2014 SQLi authentication-bypass lab /api/auth/login (GitHub README Vercel deploy)",
+      "source": "JuaniVeltri/vuln-expose \u2014 SQLi authentication-bypass lab module (GitHub README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vuln-expose.vercel.app/sqli/search",
-      "source": "JuaniVeltri/vuln-expose \u2014 SQLi data-extraction lab /api/search union-based (GitHub README)",
+      "source": "JuaniVeltri/vuln-expose \u2014 SQLi data-extraction search lab module (GitHub README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vuln-expose.vercel.app/xss/playground",
-      "source": "JuaniVeltri/vuln-expose \u2014 stored/reflected/DOM XSS playground lab (GitHub README)",
+      "source": "JuaniVeltri/vuln-expose \u2014 interactive XSS playground with stored/reflected/DOM vectors (GitHub README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://vuln-expose.vercel.app/xss/comments",
-      "source": "JuaniVeltri/vuln-expose \u2014 stored XSS comments lab /api/comments (GitHub README)",
+      "source": "JuaniVeltri/vuln-expose \u2014 stored XSS persistent comments lab (GitHub README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
-      "source": "OWASP WrongSecrets \u2014 challenge-20 C++ binary secrets oracle (public Heroku benchmark)",
+      "source": "OWASP WrongSecrets \u2014 challenge-20 binary secrets oracle (public Heroku benchmark)",
       "auth": "public_demo"
     },
     {
@@ -1612,11 +1612,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
-      "source": "OWASP WrongSecrets \u2014 challenge-20 binary secrets oracle (public Heroku benchmark)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a8",
       "source": "OWASP NodeGoat \u2014 A8 cross-site request forgery / injection tutorial route (public Heroku benchmark)",
       "auth": "public_demo"
@@ -2118,8 +2113,8 @@
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/admin/login",
-      "source": "ctfsec/pwnshop README \u2014 admin SQLi login oracle POST /admin/login (PWN-011)",
-      "auth": "oss_deploy"
+      "source": "ctfsec/pwnshop \u2014 admin panel login / privilege-escalation oracle (GitHub README Key URLs)",
+      "auth": "public_demo"
     },
     {
       "url": "https://vulnbank.org/api/v1/forgot-password",
@@ -3113,7 +3108,7 @@
     },
     {
       "url": "https://wrongsecrets.onrender.com/",
-      "source": "OWASP WrongSecrets \u2014 official Render.io public demo (GitHub README)",
+      "source": "OWASP WrongSecrets \u2014 secrets-management CTF on Render.io (GitHub README public demo)",
       "auth": "public_demo"
     },
     {
@@ -3358,23 +3353,23 @@
     },
     {
       "url": "https://web-security-lab.vercel.app/learn/cookies-samesite",
-      "source": "Web \u5b89\u5168\u5b9e\u9a8c\u5ba4 \u2014 SameSite cookie attribute lesson chapter (web-security-lab.vercel.app)",
+      "source": "Web Security Lab \u2014 Cookie SameSite/HttpOnly/Secure lab chapter (Vercel deploy)",
       "auth": "public_demo"
     },
     {
       "url": "https://seclab.vercel.app/xss",
-      "source": "DaniSam-STU/security-lab \u2014 live XSS lab with vulnerable vs secure code comparison (GitHub README)",
+      "source": "DaniSam-STU/security-lab \u2014 live XSS module with vulnerable vs secure API routes (GitHub README)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://seclab.vercel.app/sqli",
-      "source": "DaniSam-STU/security-lab \u2014 live SQLi lab with in-memory SQLite backend (GitHub README)",
+      "source": "DaniSam-STU/security-lab \u2014 SQL injection hands-on module (GitHub README deploy)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/learn/modules",
-      "source": "Web Security Learning Labs \u2014 interactive module catalog (SQLi/IDOR/XSS chapters)",
-      "auth": "public_demo"
+      "source": "FarciarzYT/WebSecurityLearningLabs \u2014 interactive module catalog (33 OWASP labs on Vercel)",
+      "auth": "oss_deploy"
     },
     {
       "url": "https://hack-this-site-eta.vercel.app/labs/localstorage.html",
@@ -3448,12 +3443,12 @@
     },
     {
       "url": "https://web-security-lab.vercel.app/learn/xss",
-      "source": "Web \u5b89\u5168\u5b9e\u9a8c\u5ba4 \u2014 cross-site scripting lesson chapter (web-security-lab.vercel.app)",
+      "source": "Web Security Lab \u2014 XSS attack/defense side-by-side chapter (Vercel deploy)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-lab.vercel.app/learn/csrf",
-      "source": "Web \u5b89\u5168\u5b9e\u9a8c\u5ba4 \u2014 CSRF attack/defense lesson chapter (web-security-lab.vercel.app)",
+      "source": "Web Security Lab \u2014 CSRF synchronizer-token chapter (Vercel deploy)",
       "auth": "public_demo"
     },
     {
@@ -3798,7 +3793,7 @@
     },
     {
       "url": "https://server.vulnapp.id/",
-      "source": "vulnapp.id Metasploitable2 hub \u2014 DVWA/mutillidae/phpMyAdmin training surface index (web search)",
+      "source": "OWASP VWAD Metasploitable2 hub \u2014 public Indonesia-hosted intentionally vulnerable training VM shell",
       "auth": "public_demo"
     },
     {
@@ -3813,7 +3808,7 @@
     },
     {
       "url": "https://server.vulnapp.id/mutillidae/",
-      "source": "Metasploitable2 hub \u2014 Mutillidae II SQLi/XSS/command-injection training surface (web search)",
+      "source": "OWASP Mutillidae II \u2014 public Indonesia-hosted training instance (OWASP VWAD online)",
       "auth": "public_demo"
     },
     {
@@ -3873,7 +3868,7 @@
     },
     {
       "url": "https://brokencrystals.com/marketplace",
-      "source": "NeuraLegion/brokencrystals \u2014 client-side prototype pollution + DOM XSS oracle (README)",
+      "source": "NeuraLegion/brokencrystals \u2014 prototype pollution / insecure deserialization oracle (README)",
       "auth": "benchmark"
     },
     {
@@ -3883,12 +3878,12 @@
     },
     {
       "url": "https://brokencrystals.com/api/partners/partnerLogin",
-      "source": "NeuraLegion/brokencrystals \u2014 XPath injection login oracle (README)",
+      "source": "NeuraLegion/brokencrystals \u2014 XPATH injection login oracle (README)",
       "auth": "benchmark"
     },
     {
       "url": "https://pentest-fauxbank.vercel.app/login",
-      "source": "alfredang/pentest FauxBank \u2014 guided OWASP banking lab login surface (GitHub README)",
+      "source": "FauxBank \u2014 fictional banking pentest training login surface (web search)",
       "auth": "public_demo"
     },
     {
@@ -4693,11 +4688,6 @@
       "notes": "DNS NXDOMAIN from cloud \u2014 removed from active queue"
     },
     {
-      "url": "https://platform.sixhackacademy.com/",
-      "source": "SixHack Academy platform \u2014 OWASP Top 10 CTF labs (sixhackacademy.com platform subdomain)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://cve-2025-55182-demo.vercel.app/",
       "source": "Next.js CVE-2025-55182 RSC vulnerability interactive demo (web search)",
       "auth": "oss_deploy"
@@ -4753,11 +4743,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://server.vulnapp.id/mutillidae/",
-      "source": "OWASP Mutillidae II \u2014 public Indonesia-hosted training instance (OWASP VWAD online)",
-      "auth": "public_demo"
-    },
-    {
       "url": "http://www.itsecgames.com/",
       "source": "bWAPP / ITSEC Games \u2014 100+ OWASP Top 10 bugs landing (Malik Mesellem)",
       "auth": "public_demo"
@@ -4809,7 +4794,7 @@
     },
     {
       "url": "https://demo.owasp-juice.shop/",
-      "source": "OWASP Juice Shop official demo instance (owasp-juice.shop)",
+      "source": "OWASP Juice Shop \u2014 official public demo instance (owasp-juice.shop)",
       "auth": "benchmark"
     },
     {
@@ -5268,11 +5253,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://wrongsecrets.onrender.com/",
-      "source": "OWASP WrongSecrets \u2014 secrets-management CTF on Render.io (GitHub README public demo)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://lab.pentest-forge.com/",
       "source": "PentestForge Lab hub \u2014 10 live vuln targets (Juice Shop, DVWA, crAPI, DVGA, CVE labs) (web search)",
       "auth": "public_demo"
@@ -5619,7 +5599,7 @@
     },
     {
       "url": "https://cridzy2.github.io/",
-      "source": "cridzy2/JumpBox-Vulnerable-Webserver \u2014 intentionally vulnerable AD-integrated web lab portfolio (GitHub Pages)",
+      "source": "cridzy2/JumpBox-Vulnerable-Webserver \u2014 OWASP Top 10 + AD trust-boundary lab landing (GitHub Pages)",
       "auth": "oss_deploy"
     },
     {
@@ -5943,11 +5923,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://playhacklab.com/",
-      "source": "HackLab \u2014 browser-based OWASP Top 10 terminal security game (web search)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://v0-comprehensive-security-training.vercel.app/",
       "source": "v0 comprehensive security training \u2014 web pentest modules with live lab links (web search)",
       "auth": "oss_deploy"
@@ -6101,11 +6076,6 @@
       "url": "https://vuln-academy.vercel.app/",
       "source": "VulnAcademy \u2014 OWASP Top 10 interactive training platform with SQLi/XSS/SVG upload labs (Vercel OSS deploy)",
       "auth": "oss_deploy"
-    },
-    {
-      "url": "https://urban-vampi-staging.up.railway.app/",
-      "source": "apisec-inc/urban-VAmPI \u2014 OWASP API Top 10 staging Railway deploy (GitHub README)",
-      "auth": "public_demo"
     },
     {
       "url": "https://todoer.site/",
@@ -6585,11 +6555,6 @@
     {
       "url": "https://ctf.komodosec.com/",
       "source": "Komodo Consulting Application Security CTF \u2014 code-review vulnerability challenges (awesome-vulnerable-apps)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://server.vulnapp.id/",
-      "source": "OWASP VWAD Metasploitable2 hub \u2014 public Indonesia-hosted intentionally vulnerable training VM shell",
       "auth": "public_demo"
     },
     {
@@ -7103,11 +7068,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://seclab.vercel.app/sqli",
-      "source": "DaniSam-STU/security-lab \u2014 SQL injection hands-on module (GitHub README deploy)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://seclab.vercel.app/idor",
       "source": "DaniSam-STU/security-lab \u2014 IDOR vulnerability module (GitHub README deploy)",
       "auth": "oss_deploy"
@@ -7256,11 +7216,6 @@
     {
       "url": "https://ginandjuice.shop/blog/post?postId=3",
       "source": "PortSwigger Gin & Juice Shop \u2014 client-side prototype pollution / DOM XSS blog post oracle (vulnerabilities page)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/admin/login",
-      "source": "ctfsec/pwnshop \u2014 admin panel login / privilege-escalation oracle (GitHub README Key URLs)",
       "auth": "public_demo"
     },
     {
@@ -7419,26 +7374,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vuln-expose.vercel.app/sqli/login",
-      "source": "JuaniVeltri/vuln-expose \u2014 SQLi authentication-bypass lab module (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vuln-expose.vercel.app/sqli/search",
-      "source": "JuaniVeltri/vuln-expose \u2014 SQLi data-extraction search lab module (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vuln-expose.vercel.app/xss/playground",
-      "source": "JuaniVeltri/vuln-expose \u2014 interactive XSS playground with stored/reflected/DOM vectors (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vuln-expose.vercel.app/xss/comments",
-      "source": "JuaniVeltri/vuln-expose \u2014 stored XSS persistent comments lab (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level2.php",
       "source": "webspoilt/vulnforge-academy \u2014 Level 2 SQLi challenge (GitHub repo structure)",
       "auth": "public_demo"
@@ -7454,21 +7389,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://web-security-lab.vercel.app/learn/xss",
-      "source": "Web Security Lab \u2014 XSS attack/defense side-by-side chapter (Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://web-security-lab.vercel.app/learn/csrf",
-      "source": "Web Security Lab \u2014 CSRF synchronizer-token chapter (Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://web-security-lab.vercel.app/learn/cookies-samesite",
-      "source": "Web Security Lab \u2014 Cookie SameSite/HttpOnly/Secure lab chapter (Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://thecyberpunker.com/labs/insecureship/",
       "source": "TheCyberpunker/InsecureShip \u2014 OWASP API Top 10 deliberately vulnerable shipping API lab landing (web search)",
       "auth": "public_demo"
@@ -7477,11 +7397,6 @@
       "url": "http://xss.progphp.com/",
       "source": "ProgPHP XSS challenge platform \u2014 public reflected XSS training challenges (awesome-vulnerable-apps)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://seclab.vercel.app/xss",
-      "source": "DaniSam-STU/security-lab \u2014 live XSS module with vulnerable vs secure API routes (GitHub README)",
-      "auth": "oss_deploy"
     },
     {
       "url": "https://appsecmaster.net/labs/sqli",
@@ -7639,11 +7554,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://cridzy2.github.io/",
-      "source": "cridzy2/JumpBox-Vulnerable-Webserver \u2014 OWASP Top 10 + AD trust-boundary lab landing (GitHub Pages)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://www.hackthissite.org/missions/basic/1/",
       "source": "Hack This Site \u2014 Basic mission 1 HTML-comment password oracle (web search)",
       "auth": "public_demo"
@@ -7737,11 +7647,6 @@
       "url": "https://www.hackthissite.org/missions/basic/6/",
       "source": "Hack This Site \u2014 Basic mission 6 JavaScript obfuscation password oracle",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/",
-      "source": "OWASP Juice Shop \u2014 official public demo instance (owasp-juice.shop)",
-      "auth": "benchmark"
     },
     {
       "url": "https://www.hackthissite.org/missions/basic/7/",
@@ -11316,11 +11221,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://web-security-learning-labs.vercel.app/learn/modules",
-      "source": "FarciarzYT/WebSecurityLearningLabs \u2014 interactive module catalog (33 OWASP labs on Vercel)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://web-security-learning-labs.vercel.app/module/1000",
       "source": "FarciarzYT/WebSecurityLearningLabs \u2014 module 1000 hands-on lab (SQLi/IDOR/XSS track)",
       "auth": "oss_deploy"
@@ -11581,33 +11481,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://pentest-fauxbank.vercel.app/login",
-      "source": "FauxBank \u2014 fictional banking pentest training login surface (web search)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/graphql",
-      "source": "NeuraLegion/brokencrystals \u2014 GraphQL SSTI/RCE + introspection oracle (README)",
-      "auth": "benchmark"
-    },
-    {
       "url": "https://brokencrystals.com/swagger-json",
       "source": "NeuraLegion/brokencrystals \u2014 OpenAPI JSON spec for REST vuln oracles (README)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/testimonials/count",
-      "source": "NeuraLegion/brokencrystals \u2014 SQLi via query param oracle (README)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/partners/partnerLogin",
-      "source": "NeuraLegion/brokencrystals \u2014 XPATH injection login oracle (README)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/marketplace",
-      "source": "NeuraLegion/brokencrystals \u2014 prototype pollution / insecure deserialization oracle (README)",
       "auth": "benchmark"
     },
     {
@@ -11948,6 +11823,166 @@
     {
       "url": "https://brokencrystals.com/api/file/raw?path=test",
       "source": "NeuraLegion/brokencrystals \u2014 arbitrary file read oracle GET /api/file/raw?path= (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/PrivacyRequests",
+      "source": "OWASP Juice Shop staging \u2014 GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/admin/application-configuration",
+      "source": "OWASP Juice Shop staging \u2014 unauthenticated admin config oracle GET /rest/admin/application-configuration (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/products/search?q=test",
+      "source": "OWASP Juice Shop staging \u2014 SQLi search oracle GET /rest/products/search?q= (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/PrivacyRequests",
+      "source": "Escape.tech Juice Shop demo \u2014 GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/PrivacyRequests",
+      "source": "OWASP Juice Shop demo \u2014 GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/SecurityAnswers",
+      "source": "OWASP Juice Shop demo \u2014 password-reset security-answer disclosure oracle GET /api/SecurityAnswers (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Products",
+      "source": "OWASP Juice Shop demo \u2014 product catalog unauthenticated API oracle GET /api/Products (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Wallets",
+      "source": "OWASP Juice Shop demo \u2014 wallet balance BOLA oracle GET /api/Wallets (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Orders",
+      "source": "OWASP Juice Shop demo \u2014 order history IDOR oracle GET /api/Orders (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/PrivacyPolicies",
+      "source": "OWASP Juice Shop demo \u2014 privacy policy disclosure oracle GET /api/PrivacyPolicies (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/ProductReviews",
+      "source": "OWASP Juice Shop demo \u2014 product review XSS/BOLA oracle GET /api/ProductReviews (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Baskets",
+      "source": "OWASP Juice Shop demo \u2014 basket BOLA oracle GET /api/Baskets (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Quantitys",
+      "source": "OWASP Juice Shop demo \u2014 product quantity manipulation oracle GET /api/Quantitys (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Memories",
+      "source": "OWASP Juice Shop demo \u2014 unauthenticated memories API oracle GET /api/Memories (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Deliverys",
+      "source": "OWASP Juice Shop demo \u2014 delivery address BOLA oracle GET /api/Deliverys (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Hints",
+      "source": "OWASP Juice Shop demo \u2014 challenge hints disclosure oracle GET /api/Hints (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/ImageCaptchas",
+      "source": "OWASP Juice Shop demo \u2014 captcha bypass oracle GET /api/ImageCaptchas (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Complaints",
+      "source": "OWASP Juice Shop demo \u2014 complaint API BOLA oracle GET/POST /api/Complaints (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Recycles",
+      "source": "OWASP Juice Shop demo \u2014 recycle request API oracle GET /api/Recycles (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/SecurityQuestions",
+      "source": "OWASP Juice Shop demo \u2014 security question disclosure oracle GET /api/SecurityQuestions (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Addresss",
+      "source": "OWASP Juice Shop demo \u2014 address IDOR oracle GET /api/Addresss/:id (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Cards",
+      "source": "OWASP Juice Shop demo \u2014 payment card API oracle GET /api/Cards (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Users/1",
+      "source": "OWASP Juice Shop demo \u2014 IDOR user profile oracle GET /api/Users/:id (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/BasketItems",
+      "source": "OWASP Juice Shop demo \u2014 BOLA basket HPP oracle POST /api/BasketItems (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/voice-goat/voiceadmin",
+      "source": "OWASP VWAD \u2014 redcaller/voice-goat VoiceAdmin excessive-functionality LLM lab (Show HN 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/basket/2",
+      "source": "OWASP Juice Shop \u2014 BOLA basket IDOR oracle GET /rest/basket/2 (primary Heroku benchmark host)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Products/1",
+      "source": "OWASP Juice Shop demo \u2014 product API oracle GET /api/Products/:id (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/webhook",
+      "source": "atlas-crew/Chimera \u2014 CHM-ADMIN-002 SSRF webhook tester POST /api/v1/diagnostics/webhook (public demo portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/chat",
+      "source": "atlas-crew/Chimera \u2014 CHM-AI-001 prompt injection oracle POST /api/v1/genai/chat (public demo portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/agent/browse",
+      "source": "atlas-crew/Chimera \u2014 CHM-AI-002 SSRF via GenAI agent browse POST /api/v1/genai/agent/browse (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/login",
+      "source": "megmogmog1965/vulnerable-web-site \u2014 login/auth bypass and weak credential oracle (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Challenges",
+      "source": "Escape.tech Juice Shop demo \u2014 challenge scoreboard API oracle GET /api/Challenges (juice-shop.demo.escape.tech)",
       "auth": "public_demo"
     }
   ]

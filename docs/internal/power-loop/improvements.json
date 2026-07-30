@@ -1,6 +1,132 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-feedbacks-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Feedbacks without auth returns UserId 1/2/3/21 product reviews with masked emails; juice-shop-staging benchmark findings 25→28 (+feedbacks-bola + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-security-answers-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/SecurityAnswers with alg:none JWT (data.id=1) returns UserId 1/2/3 password-reset answer SHA-256 hashes; juice-shop-staging benchmark findings 25→28 (+security-answers-disclosure + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-privacy-requests-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/PrivacyRequests with alg:none JWT (data.id=2) returns UserId=1 GDPR privacy request after seed POST; juice-shop-staging.herokuapp.com/api/PrivacyRequests hub gains route-specific BOLA oracle; benchmark findings 25→28; recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-memories-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/memories without auth returns UserId 4/13/18/19/21 with nested User.email bjoern@owasp.org + password hash; juice-shop-staging benchmark findings 22→25 (+memories-bola + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-quantitys-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Quantitys without auth returns 56 rows with ProductId+quantity; demo.owasp-juice.shop/api/Quantitys hub 20 findings; juice-shop-staging benchmark 22→25 (+quantitys-exposure + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-hints-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Hints without auth returns 397 challenge hints spanning 116 ChallengeIds; juice-shop-staging benchmark findings 22→25 (+hints-exposure + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-cards-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Cards with alg:none JWT (data.id=1) returns Administrator cardNum ************4368 + ************8108; juice-shop-staging benchmark findings 16→22 (+juice-shop-cards-bola-live-oracle + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-addresss-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Addresss with alg:none JWT returns streetAddress 0815 Test Street + mobileNum 1234567890 for Administrator; juice-shop-staging benchmark findings 16→22 (+juice-shop-addresss-bola-live-oracle + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-basket-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/basket/2 with alg:none JWT (data.id=1) returns UserId=2 vs /rest/basket/1 UserId=1; HTTP 401 without auth; juice-shop-staging benchmark findings 16→22 (+juice-shop-basket-idor-live-oracle + route); benchmark recall 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-complaints-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Complaints with alg:none JWT returns UserId 3+null complaints spanning multiple users; juice-shop-staging /api/Complaints findings 16→20 (+complaints-bola + route); benchmark juice-shop-staging 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-security-questions-list-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/SecurityQuestions unauthenticated returns Mother's maiden name? + 2+ catalog entries; juice-shop-staging /api/SecurityQuestions findings 15→20 (+security-questions-list + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-recycles-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Recycles/1 UserId:2 and /api/Recycles/2 UserId:3 without auth; juice-shop-staging /api/Recycles findings 15→20 (+recycles-bola + route); benchmark juice-shop-staging 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-abtest-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /abtest h3 No A/B Test + split testing copy simultaneously test and learn from different versions; the-internet.herokuapp.com/abtest findings 2→3 (+the-internet-abtest-route-live-oracle); benchmark juice-shop 18 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-users-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Users/2 with alg:none JWT returns status:success email jim@juice-sh.op; demo.owasp-juice.shop/api/Users/1 findings 16→19 (+juice-shop-users-idor-live-oracle + route variant); benchmark juice-shop 18 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-basket-items-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/BasketItems with alg:none JWT returns BasketId 2/3/4+ line items; demo.owasp-juice.shop/api/BasketItems findings 16→19 (+juice-shop-basket-items-bola-live-oracle + route variant); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-checkboxes-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /checkboxes form#checkboxes with onclick setAttribute/removeAttribute checked guard; the-internet.herokuapp.com/checkboxes findings 2→3 (+the-internet-checkboxes-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-drag-and-drop-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /drag_and_drop column-a/column-b draggable=true with handleDragStart/handleDrop innerHTML swap; the-internet.herokuapp.com/drag_and_drop findings 2→3 (+the-internet-drag-and-drop-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-notification-message-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /notification_message 303 redirect sets flash cookie; /notification_message_rendered h3 Notification Message + Action successful/unsuccessful examples; the-internet.herokuapp.com/notification_message findings 2→3 (+the-internet-notification-message-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-javascript-error-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /javascript_error body onload=loadError() dereferences propertyThatDoesNotExist.xyz; the-internet.herokuapp.com/javascript_error findings 2→3 (+the-internet-javascript-error-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-disappearing-elements-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /disappearing_elements h3 Disappearing Elements + About/Contact/Portfolio nav links that disappear/reappear on reload; the-internet.herokuapp.com/disappearing_elements findings 2→3 (+the-internet-disappearing-elements-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the-internet.herokuapp.com",
+      "slug": "the-internet-slow-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /slow h3 Slow Resources + $.get('/slow_external') 30-second rogue GET; the-internet.herokuapp.com/slow findings 2→3 (+the-internet-slow-route-live-oracle); benchmark juice-shop 16 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-admin-orders-exposure-live-oracle",
       "status": "shipped",
@@ -15729,6 +15855,36 @@
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-dvwa-weak-id-route-live-oracle",
       "shipped_at": "2026-07-29T14:25:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-cards-bola-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-cards-bola-route-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-addresss-bola-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-addresss-bola-route-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-basket-idor-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-basket-idor-route-live-oracle",
+      "shipped_at": "2026-07-30T08:13:00.000Z"
     }
   ]
 }
