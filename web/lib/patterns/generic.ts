@@ -10323,6 +10323,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-profile-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop profile mass-assignment live oracle",
+    description:
+      "PUT /api/profile accepts client-supplied balance without restriction — authenticated user can set arbitrary wallet balance on the VulnShop Railway API.",
+    impactOneline:
+      "Mass-assignment on profile updates lets attackers inflate wallet balances without payment validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProfileMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable profile fields and validate balance changes server-side.",
+      steps: [
+        "Reject client-supplied balance on PUT /profile; compute balances from transactions only.",
+        "Use server-side role checks independent of JWT claims.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop PUT /api/profile accepts arbitrary balance values. Show mass-assignment remediation for profile updates.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-profile-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /profile mass-assignment route live oracle",
+    description:
+      "When scanning /profile, live PUT balance mass-assignment or SPA documentation confirms unrestricted balance updates.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /profile module documents mass-assignment via client-supplied balance field.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProfileMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable profile fields on /profile routes.",
+      steps: [
+        "Reject client-supplied balance on PUT /profile; compute balances from transactions only.",
+        "Use server-side role checks independent of JWT claims.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /profile route documents balance mass-assignment. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-admin-panel-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VulnShop admin panel user enumeration live oracle",
+    description:
+      "Forged is_admin JWT grants GET /api/admin/users returning all accounts with plaintext passwords and balances — admin panel broken access control oracle.",
+    impactOneline:
+      "JWT claim trust plus weak signing secret exposes full user database including plaintext passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminPanelLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side admin authorization and hash passwords — VulnShop is intentional training software.",
+      steps: [
+        "Validate admin role server-side; never trust is_admin JWT claims alone.",
+        "Rotate JWT signing secrets and hash stored passwords.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/admin/users returns plaintext passwords with forged is_admin JWT. Show admin authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-admin-panel-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VulnShop /admin panel route live oracle",
+    description:
+      "When scanning /admin, forged JWT user enumeration or SPA documentation confirms admin panel broken access control.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /admin module documents JWT is_admin bypass and debug route exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminPanelRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect /admin routes with server-side authorization checks.",
+      steps: [
+        "Validate admin role server-side; never trust is_admin JWT claims alone.",
+        "Remove zero-auth /api/debug/* routes from production backends.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /admin route documents JWT bypass and debug exposure. Show route-specific admin authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-users-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnShop /users enumeration route live oracle",
+    description:
+      "When scanning /users, forged JWT admin enumeration or SPA documentation confirms plaintext password disclosure via admin/debug routes.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop documents unauthenticated user enumeration with plaintext passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUsersEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect user enumeration endpoints and hash stored passwords.",
+      steps: [
+        "Require authentication and authorization before exposing /admin/users.",
+        "Never return plaintext passwords from any API response.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /users route documents plaintext password enumeration. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwtlens-evidence",
     platform: "generic",
     category: "Broken authentication",
