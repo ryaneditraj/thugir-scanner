@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T22:03:48.115Z",
+  "updated_at": "2026-07-30T23:05:01.479Z",
   "discovery_urls": [
+    {
+      "url": "https://pygoat.herokuapp.com/challenge/ssrf",
+      "source": "OWASP PyGoat — SSRF challenge route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pygoat.herokuapp.com/challenge/xxe",
+      "source": "OWASP PyGoat — XXE challenge route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pygoat.herokuapp.com/challenge/csrf",
+      "source": "OWASP PyGoat — CSRF challenge route (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/file_upload/",
+      "source": "Pentest Ground DVWA — file upload vulnerability lab (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/ctf/api/v1/challenges",
+      "source": "OWASP FinBot CTF — challenge catalog API oracle GET /ctf/api/v1/challenges (agentic AI lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.tools.escape.tech/vapi/api7/user/1",
       "source": "roottusk/vAPI — API7 BOLA oracle GET /vapi/api7/user/1 cross-user access (Escape hosted)",
