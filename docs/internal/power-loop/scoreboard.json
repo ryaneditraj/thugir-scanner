@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T12:14:34.800692Z",
+  "updated_at": "2026-07-30T13:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2733,
-  "total_findings": 26629,
-  "critical_findings": 58,
+  "total_sites_scanned": 2742,
+  "total_findings": 26713,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22597,
-  "improvements_shipped": 1164,
-  "last_run": "2026-07-30T12:14:34.800692Z",
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22649,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-30T13:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 14,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 455,
+      "probes_run": 486,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,37 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging 6/6 stable (14 findings); secret-resend slug still absent"
+      "note": "Primary healthy 6/6 (32 findings) — full oracle suite including jwt-alg-none, chatbot, Cards/Addresss/Feedbacks BOLA, reflexion-escalated-ssti; secret-resend slug still absent"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 92,
-      "focus": "vapi API4-10 route drain (BFLA/OTP/flag oracles) + queue pygoat/vampi/gin-juice-shop/shadow_dom for next run",
+      "urls_scanned": 8,
+      "findings": 52,
+      "focus": "OWASP GenAI Security Lab LLM03-09 challenge drain + demo.owasp-juice Deliverys/2 recovery + zerohealth debug routes",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (14 findings) \u2014 no benchmark misses",
-      "vapi.tools.escape.tech/vapi/api10/user/flag: 14 findings \u2014 vapi flag oracle hub",
-      "vapi.tools.escape.tech/vapi/api5/user: 13 findings \u2014 vapi API5 BFLA live oracle",
-      "vapi.tools.escape.tech/vapi/api4/login: 13 findings \u2014 vapi API4 OTP broken-auth oracle",
-      "demo.owasp-juice.shop/api/Feedbacks: 503 unavailable (Heroku cold start)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — primary healthy, no benchmark misses",
+      "demo.owasp-juice.shop/api/Deliverys/2: 33 findings — full juice-shop oracle hub recovered (was 503 prior runs)",
+      "owaspbased-lessons.vercel.app/challenges/data-poisoning: reflexion-escalated-ssti + thugir-dir-discovery (3 findings)",
+      "owaspbased-lessons.vercel.app/challenges/excessive-agency: reflexion-escalated-ssti + thugir-dir-discovery (3 findings)",
+      "zerohealth.aliyu.dev/api/debug/token: 5-finding hub with client-side-zero-health-evidence but no JWT-secret disclosure oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pygoat.herokuapp.com/challenge/sql+xss queued but not drained (behind vapi queue head)",
-      "vampi.lab.pentest-forge.com/users/v1 + gin-juice-shop login + the-internet shadow_dom still queued",
-      "demo.owasp-juice.shop/* intermittently 503 \u2014 prefer staging for juice-shop oracle"
+      "owaspbased-lessons prompt-leakage/misinformation/supply-chain: thin 1-finding misconfig passes without route-specific LLM oracles",
+      "zerohealth.aliyu.dev/api/debug/*: 5-finding hubs without route-specific JWT-secret or verbose-debug live oracles",
+      "pygoat.herokuapp.com/challenge/sql+xss + vampi.lab.pentest-forge.com/users/v1 + gin-juice-shop login + the-internet shadow_dom still queued"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 14,
-    "vapi.tools.escape.tech/vapi/api10/user/flag": 14,
-    "vapi.tools.escape.tech/vapi/api5/user": 13,
-    "vapi.tools.escape.tech/vapi/api5/users": 13,
-    "vapi.tools.escape.tech/vapi/api6/user": 13,
-    "vapi.tools.escape.tech/vapi/api7/user/key": 13,
-    "vapi.tools.escape.tech/vapi/api9/v1/user/login": 13,
-    "vapi.tools.escape.tech/vapi/api4/login": 13
+    "juice-shop.herokuapp.com": 32,
+    "demo.owasp-juice.shop/api/Deliverys/2": 33,
+    "zerohealth.aliyu.dev/api/debug/token": 5,
+    "zerohealth.aliyu.dev/api/debug/connection": 5,
+    "owaspbased-lessons.vercel.app/challenges/data-poisoning": 3,
+    "owaspbased-lessons.vercel.app/challenges/excessive-agency": 3
   }
 }

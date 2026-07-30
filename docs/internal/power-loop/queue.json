@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T12:05:00.000Z",
+  "updated_at": "2026-07-30T13:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/prompt-leakage",
+      "source": "OWASP GenAI Security Lab — LLM07 system prompt leakage interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/misinformation",
+      "source": "OWASP GenAI Security Lab — LLM09 misinformation / hallucination interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/supply-chain",
+      "source": "OWASP GenAI Security Lab — LLM03 supply chain / plugin trust interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/data-poisoning",
+      "source": "OWASP GenAI Security Lab — LLM04 training data poisoning interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/excessive-agency",
+      "source": "OWASP GenAI Security Lab — LLM06 excessive agency / tool abuse interactive lesson (owaspbased-lessons.vercel.app)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop.demo.escape.tech/api/Cards",
       "source": "Escape.tech Juice Shop demo \u2014 payment cards BOLA oracle GET /api/Cards (juice-shop.demo.escape.tech)",
