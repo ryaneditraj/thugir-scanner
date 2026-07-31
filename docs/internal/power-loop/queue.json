@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T16:05:30.073Z",
+  "updated_at": "2026-07-31T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/img?q=a",
+      "source": "google/firing-range — tag-based XSS parameter injected into IMG tag",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/script?q=a",
+      "source": "google/firing-range — tag-based XSS parameter injected into SCRIPT tag CDATA",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/css_style?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass in CSS style tag context",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/css_style?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass in CSS style tag context",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/iframe_srcdoc?q=a",
+      "source": "google/firing-range — reflected XSS parameter in iframe srcdoc attribute (sandbox bypass)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/address/location.hash/eval",
       "source": "google/firing-range — address DOM XSS location.hash piped to eval() sink",
