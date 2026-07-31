@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T18:47:00.000Z",
+  "updated_at": "2026-07-31T19:13:36.364Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/fetch",
+      "source": "google/firing-range — location.hash fetch API external resource DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/script.src",
+      "source": "google/firing-range — location.hash assigned to script.src DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/xhr.open",
+      "source": "google/firing-range — location.hash used in xhr.open() external fetch DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval",
+      "source": "google/firing-range — document.referrer piped to eval() toxicdom sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/documentwrite",
+      "source": "google/firing-range — location.hash piped to document.write() DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/textarea?q=a",
       "source": "google/firing-range — reflected XSS parameter echoed in textarea attribute value",
