@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-admin-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/admin/users') returns all users with forged admin debug JWT + challenges.md multi-stage admin escalation; zerohealth.aliyu.dev/api/admin/users findings 5→6 (+zerohealth-admin-users-route-live-oracle); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-messages-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js GET/POST /api/messages string-interpolates userId/content + stored XSS in message content; zerohealth.aliyu.dev/api/messages findings 5→6 (+zerohealth-messages-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-chatbot-history-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chatbot.js router.get('/history') SELECT FROM chat_history WHERE user_id = ${userId}; zerohealth.aliyu.dev/api/chatbot/history findings 5→6 (+zerohealth-chatbot-history-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-reset-password-reflected-xss-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ResetPassword.jsx dangerouslySetInnerHTML on formData.code + challenges.md Challenge 1 Reflected XSS; zerohealth.aliyu.dev/reset-password findings 5→6 (+zerohealth-reset-password-reflected-xss-route-live-oracle); benchmark juice-shop 33 findings 6/6 maintained"
