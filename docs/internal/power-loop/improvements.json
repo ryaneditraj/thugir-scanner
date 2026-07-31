@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-meta-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect/meta?q=https://evil-open-redirect-probe.example/thugir-redirect-test returns <meta http-equiv=refresh content=\"0;https://evil-open-redirect-probe.example/...\">; public-firing-range.appspot.com/redirect/meta findings 2→5 (+firing-range-meta-redirect-live-oracle + route variant); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-sink-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/document.location returns document.location= payload from hash.substr(1); form.action and area.href variants on sibling routes; urldom routes findings 2→5 (+firing-range-urldom-sink-live-oracle + route variant); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-info-route-live-oracle",
       "status": "shipped",

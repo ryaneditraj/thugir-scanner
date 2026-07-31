@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T11:05:24.147Z",
-  "total": 1234,
-  "uniqueSlugs": 1229,
+  "generatedAt": "2026-07-31T12:08:05.723Z",
+  "total": 1238,
+  "uniqueSlugs": 1233,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1216,
+    "generic": 1220,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1149,
+    "deep": 1153,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,8 @@
     "Security misconfiguration": 109,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 168,
+    "Cross-site scripting": 170,
+    "Open redirect": 7,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 45,
@@ -40,7 +41,6 @@
     "XML external entity injection": 1,
     "API security": 3,
     "Path traversal": 3,
-    "Open redirect": 5,
     "Denial of service": 2,
     "Authentication bypass": 2,
     "XSS": 1,
@@ -821,6 +821,10 @@
     "firebase-open-firestore-rules",
     "firing-range-dom-localstorage-xss-live-oracle",
     "firing-range-dom-localstorage-xss-route-live-oracle",
+    "firing-range-meta-redirect-live-oracle",
+    "firing-range-meta-redirect-route-live-oracle",
+    "firing-range-urldom-sink-live-oracle",
+    "firing-range-urldom-sink-route-live-oracle",
     "ginandjuice-blog-post-open-redirect-live-oracle",
     "ginandjuice-blog-post-route-live-oracle",
     "ginandjuice-catalog-category-sqli-live-oracle",
