@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-rate-limiting-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 10 Rate Limiting Bypass + server.js /api/auth/login-with-rate-limit X-Forwarded-For bypass; zerohealth.aliyu.dev/challenges/rate-limiting findings 5→6 (+zerohealth-rate-limiting-route-live-oracle); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 14 Mass Assignment + server.js PUT /api/users/profile accepts role:admin; zerohealth.aliyu.dev/challenges/mass-assignment findings 5→6 (+zerohealth-mass-assignment-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-information-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md + server.js GET /api/info exposes jwt_secret and admin_credentials; zerohealth.aliyu.dev/challenges/information-disclosure findings 5→6 (+zerohealth-information-disclosure-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-deserialization-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: server.js verifyToken alg:none + /api/debug/token + jwt.decode fallback; zerohealth.aliyu.dev/challenges/deserialization findings 5→6 (+zerohealth-deserialization-route-live-oracle); benchmark juice-shop-staging 30 findings 6/6 maintained"
@@ -16324,6 +16342,21 @@
       "source": "discovery:pygoat.herokuapp.com",
       "slug": "client-side-pygoat-challenge-route-evidence",
       "shipped_at": "2026-07-31T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-rate-limiting-route-live-oracle",
+      "shipped_at": "2026-07-31T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-mass-assignment-route-live-oracle",
+      "shipped_at": "2026-07-31T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-information-disclosure-route-live-oracle",
+      "shipped_at": "2026-07-31T05:10:00.000Z"
     }
   ]
 }
