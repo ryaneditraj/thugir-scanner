@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T06:05:00.000Z",
+  "updated_at": "2026-07-31T08:10:00.000Z",
   "discovery_urls": [
     {
       "url": "https://zerohealth.aliyu.dev/api/notifications",
@@ -12473,6 +12473,31 @@
     {
       "url": "https://gin-juice-shop.herokuapp.com/rest/user/login",
       "source": "OWASP Gin Juice Shop \u2014 broken authentication login oracle POST /rest/user/login (Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/clickjacking",
+      "source": "megmogmog1965/vulnerable-web-site \u2014 clickjacking UI-redress lab route (Vercel README deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/security/injection",
+      "source": "drag-security-flaws \u2014 general injection interactive lab module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://drag-security-flaws.vercel.app/security/brokenAuth",
+      "source": "drag-security-flaws \u2014 broken authentication interactive lab module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera vuln-api \u2014 SQLi auth-bypass oracle POST /api/v1/auth/login-vulnerable (GitHub apps/vuln-api README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=1",
+      "source": "atlas-crew/Chimera vuln-api \u2014 classic SQLi oracle GET /api/v1/patients/search?ssn= (GitHub apps/vuln-api README)",
       "auth": "public_demo"
     }
   ]
