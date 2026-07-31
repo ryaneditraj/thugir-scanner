@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T21:03:00.000Z",
+  "updated_at": "2026-07-31T22:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/iframe.src",
+      "source": "google/firing-range — location.hash assigned to iframe.src DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/input.formaction",
+      "source": "google/firing-range — location.hash used as input formaction DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/param.code.value",
+      "source": "google/firing-range — location.hash assigned to param[type=code].value DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/param.movie.value",
+      "source": "google/firing-range — location.hash assigned to param[type=movie].value DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/param.url.value",
+      "source": "google/firing-range — location.hash assigned to param[type=url].value DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/hash/base.href",
       "source": "google/firing-range — location.hash assigned to base.href DOM XSS sink",
