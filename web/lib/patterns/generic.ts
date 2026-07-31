@@ -1174,6 +1174,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-url-script-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected URL script src XSS oracle",
+    description:
+      "GET /reflected/url/script_src?q= reflects attacker-controlled URLs into script src attributes — Firing Range reflected DOM XSS training oracle.",
+    impactOneline:
+      "Reflected script src values let attackers load arbitrary JavaScript when victims visit crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlScriptSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block attacker-controlled URLs in reflected script src attributes.",
+      steps: [
+        "Allowlist safe script sources (same-origin paths or trusted CDNs).",
+        "Reject or encode user input before inserting into script src attributes.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/script_src?q= reflects into script src without validation. Show script src XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-script-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/url/script_src route XSS oracle",
+    description:
+      "When scanning /reflected/url/script_src, the q query parameter is reflected into script src without validation — route-specific reflected DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script src attributes cannot load attacker-controlled URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlScriptSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate script sources on /reflected/url/script_src before emitting script tags.",
+      steps: [
+        "Reject external or data: URLs in q parameter values.",
+        "Use relative paths or allowlisted hosts for script src targets.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/script_src route reflects q into script src. Show route-specific script src XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-css-import-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected URL CSS import oracle",
+    description:
+      "GET /reflected/url/css_import?q= reflects attacker-controlled URLs into stylesheet link href attributes — Firing Range reflected CSS injection training oracle.",
+    impactOneline:
+      "Reflected stylesheet href values let attackers inject malicious CSS or exfiltrate data via crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlCssImportLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block attacker-controlled URLs in reflected stylesheet link href attributes.",
+      steps: [
+        "Allowlist safe stylesheet sources (same-origin paths or trusted CDNs).",
+        "Reject or encode user input before inserting into link href attributes.",
+        "Use CSP style-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/css_import?q= reflects into stylesheet link href without validation. Show CSS injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-css-import-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/url/css_import route CSS oracle",
+    description:
+      "When scanning /reflected/url/css_import, the q query parameter is reflected into stylesheet link href without validation — route-specific reflected CSS injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm stylesheet link href attributes cannot load attacker-controlled URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlCssImportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate stylesheet sources on /reflected/url/css_import before emitting link tags.",
+      steps: [
+        "Reject external or data: URLs in q parameter values.",
+        "Use relative paths or allowlisted hosts for stylesheet href targets.",
+        "Add CSP to restrict stylesheet sources."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/css_import route reflects q into stylesheet link href. Show route-specific CSS injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
