@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-info-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/info') returns jwt_secret, admin_credentials, database host without auth; zerohealth.aliyu.dev/api/info findings 5→6 (+zerohealth-info-route-live-oracle); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-health-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/health') returns {status:'vulnerable'}; zerohealth.aliyu.dev/api/health findings 5→6 (+zerohealth-health-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-upload-advanced-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.post('/api/files/upload-advanced') weak extension filter + executeFile RCE + challenges.md Challenge 16; zerohealth.aliyu.dev/api/upload findings 5→6 (+zerohealth-upload-advanced-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-prescriptions-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/prescriptions') pharmacist role uses params=[] returning all prescriptions + challenges.md pharmacy BOLA; zerohealth.aliyu.dev/api/prescriptions findings 5→6 (+zerohealth-prescriptions-route-live-oracle); benchmark juice-shop-staging 32 findings 6/6 maintained"
