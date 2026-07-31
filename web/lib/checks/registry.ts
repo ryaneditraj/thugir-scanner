@@ -31612,7 +31612,7 @@ const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
 const pentestGroundDvwaUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/vulnerabilities\/upload\/?/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/vulnerabilities\/(?:upload|file_upload)\/?/i.test(pageUrl)) return NEGATIVE;
   const uploadUrl = new URL("/vulnerabilities/upload/", pentestGroundDvwaProbeOrigin(ctx)).toString();
   const probeName = `thugir-upload-${Date.now().toString(36)}.php`;
   const boundary = `----ThugirDvwaUpload${Date.now().toString(36)}`;
@@ -31684,7 +31684,8 @@ const pentestGroundDvwaXssRRouteLiveOracle: Rule = async (ctx) => {
 const pentestGroundDvwaFiRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/vulnerabilities\/fi\/?/i.test(pageUrl)) return NEGATIVE;
+  // Require exact /fi/ path — do not match /file_upload/ (substring "fi" false positive).
+  if (!/\/vulnerabilities\/fi(?:\/|$|[?#])/i.test(pageUrl)) return NEGATIVE;
   const fiUrl = new URL("/vulnerabilities/fi/", pentestGroundDvwaProbeOrigin(ctx));
   fiUrl.searchParams.set("page", "../../../../../../../etc/passwd");
   const doc = await ctx.probe.get(fiUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
@@ -34325,6 +34326,72 @@ const clientSidePygoatEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "PyGoat is an intentionally vulnerable Django application catalogued in OWASP VWAD for OWASP Top 10 challenge practice"
+    }
+  };
+};
+
+const PYGOAT_CHALLENGE_ROUTE_LABELS: Record<
+  string,
+  { label: string; category: string; note: string }
+> = {
+  ssrf: {
+    label: "SSRF challenge route",
+    category: "SSRF",
+    note: "PyGoat /challenge/ssrf route scan — OWASP Top 10 SSRF training lab (VWAD catalogued; Heroku demo may be offline)"
+  },
+  xxe: {
+    label: "XXE challenge route",
+    category: "XXE",
+    note: "PyGoat /challenge/xxe route scan — OWASP Top 10 XML external entity injection training lab (VWAD catalogued)"
+  },
+  csrf: {
+    label: "CSRF challenge route",
+    category: "CSRF",
+    note: "PyGoat /challenge/csrf route scan — OWASP Top 10 cross-site request forgery training lab (VWAD catalogued)"
+  }
+};
+
+const clientSidePygoatChallengeRouteEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const challengeMatch = pageUrl.match(/\/challenge\/(ssrf|xxe|csrf)\b/i);
+  if (!challengeMatch) return NEGATIVE;
+  const challengeKey = challengeMatch[1]!.toLowerCase();
+  const challengeMeta = PYGOAT_CHALLENGE_ROUTE_LABELS[challengeKey];
+  if (!challengeMeta) return NEGATIVE;
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (
+    /no such app|herokucdn\.com\/error-pages/i.test(corpus) ||
+    !/PyGoat|adeyosemanputra\/pygoat/i.test(corpus)
+  ) {
+    const vwad = await ctx.probe.get("https://vwad.owasp.org/app/pygoat/", {
+      maxBytes: 16384,
+      timeoutMs: 12000
+    });
+    if (vwad.status >= 200 && vwad.status < 400 && vwad.body.length > 200) {
+      corpus += `\n${vwad.body}`;
+    }
+  }
+
+  const hits: { label: string; sample: string }[] = [
+    { label: challengeMeta.label, sample: `/challenge/${challengeKey}` }
+  ];
+  for (const { label, re } of CLIENT_PYGOAT_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/PyGoat|pygoat|adeyosemanputra\/pygoat/i.test(corpus)) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.88 : 0.85,
+    evidence: {
+      markers: hits.slice(0, 4),
+      challenge: challengeKey,
+      category: challengeMeta.category,
+      scannedUrl: pageUrl,
+      note: challengeMeta.note
     }
   };
 };
@@ -47964,6 +48031,7 @@ export const RULES: Record<string, Rule> = {
   clientSideMontanajimXssClassroomEvidence,
   clientSideHackxorEvidence,
   clientSidePygoatEvidence,
+  clientSidePygoatChallengeRouteEvidence,
   clientSideDvnaEvidence,
   clientSideCmdChallengeEvidence,
   clientSideHackerFriendlyFirebaseEvidence,
