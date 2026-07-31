@@ -32238,6 +32238,215 @@ async function zerohealthDebugConnectionRouteLiveOracle(
   };
 }
 
+async function zerohealthInfoRouteLiveOracle(ctx: RuleContext): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/info\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const infoUrl = `${origin}/api/info`;
+    const infoDoc = await ctx.probe.get(infoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+    if (
+      isZeroHealthJsonBody(infoDoc.body) &&
+      infoDoc.status >= 200 &&
+      infoDoc.status < 300 &&
+      /"jwt_secret"\s*:|"admin_credentials"\s*:/i.test(infoDoc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: /"password"\s*:\s*['"]password123['"]/i.test(infoDoc.body) ? 0.94 : 0.92,
+        evidence: {
+          url: infoUrl,
+          snippet: infoDoc.body.slice(0, 280).trim(),
+          scannedUrl: pageUrl,
+          note: "Zero Health GET /api/info returns jwt_secret and admin_credentials without authentication — system info disclosure oracle"
+        }
+      };
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "info API route", sample: "/api/info" }
+  ];
+  const markers = [
+    { label: "info endpoint", re: /app\.get\('\/api\/info'|\/api\/info/i },
+    { label: "jwt secret exposure", re: /jwt_secret:\s*JWT_SECRET|"jwt_secret"/i },
+    { label: "admin credentials leak", re: /admin_credentials|admin@test\.com/i },
+    { label: "unauthenticated system metadata", re: /No authentication required - exposes system information/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/info exposes jwt_secret and admin_credentials without auth — system info disclosure oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthHealthRouteLiveOracle(ctx: RuleContext): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/health\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const healthUrl = `${origin}/api/health`;
+    const healthDoc = await ctx.probe.get(healthUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (
+      isZeroHealthJsonBody(healthDoc.body) &&
+      healthDoc.status >= 200 &&
+      healthDoc.status < 300 &&
+      /"status"\s*:\s*["']vulnerable["']/i.test(healthDoc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          url: healthUrl,
+          snippet: healthDoc.body.slice(0, 200).trim(),
+          scannedUrl: pageUrl,
+          note: "Zero Health GET /api/health advertises vulnerable status without authentication — debug health disclosure oracle"
+        }
+      };
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "health API route", sample: "/api/health" }
+  ];
+  const markers = [
+    { label: "health endpoint", re: /app\.get\('\/api\/health'|\/api\/health/i },
+    { label: "vulnerable status response", re: /status:\s*['"]vulnerable['"]|"status"\s*:\s*['"]vulnerable['"]/i },
+    { label: "health check swagger", re: /Basic health check endpoint|example:\s*vulnerable/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/health returns status:vulnerable — debug health disclosure oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthUploadAdvancedRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:upload|files\/upload-advanced)\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const token = await zeroHealthLogin(ctx, origin, "patient@test.com");
+    if (token) {
+      const boundary = `thugirZh${Date.now().toString(36)}`;
+      const filename = `thugir-probe-${Date.now().toString(36)}.txt`;
+      const body = [
+        `--${boundary}`,
+        `Content-Disposition: form-data; name="file"; filename="${filename}"`,
+        "Content-Type: text/plain",
+        "",
+        "thugir-zerohealth-upload-advanced-probe",
+        `--${boundary}`,
+        'Content-Disposition: form-data; name="executeFile"',
+        "",
+        "false",
+        `--${boundary}--`,
+        ""
+      ].join("\r\n");
+      const uploadUrl = `${origin}/api/files/upload-advanced`;
+      const uploadDoc = await ctx.probe.get(uploadUrl, {
+        method: "POST",
+        body,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": `multipart/form-data; boundary=${boundary}`
+        },
+        maxBytes: 8192,
+        timeoutMs: 20000
+      });
+      if (
+        isZeroHealthJsonBody(uploadDoc.body) &&
+        uploadDoc.status >= 200 &&
+        uploadDoc.status < 300 &&
+        /"fileName"\s*:|"originalName"\s*:|\/uploads\//i.test(uploadDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: /"executed"\s*:\s*false/i.test(uploadDoc.body) ? 0.92 : 0.9,
+          evidence: {
+            url: uploadUrl,
+            snippet: uploadDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health POST /api/files/upload-advanced accepts dangerous uploads with weak extension filtering and optional executeFile RCE — file upload oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "upload-advanced API route", sample: "/api/files/upload-advanced" }
+  ];
+  const markers = [
+    {
+      label: "upload-advanced endpoint",
+      re: /app\.post\('\/api\/files\/upload-advanced'|\/api\/files\/upload-advanced/i
+    },
+    { label: "executeFile RCE flag", re: /executeFile === 'true'|executeFile parameter/i },
+    {
+      label: "weak extension filter",
+      re: /dangerousExtensions = \['\.exe', '\.bat'\]|Only blocks obvious Windows executables/i
+    },
+    { label: "file upload RCE challenge", re: /File Upload to RCE|upload-advanced endpoint that offers execution/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/files/upload-advanced allows dangerous uploads with executeFile RCE — file upload oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
 async function zerohealthChatbotHistoryRouteLiveOracle(
   ctx: RuleContext
 ): Promise<RuleResult> {
@@ -49817,6 +50026,9 @@ export const RULES: Record<string, Rule> = {
   zerohealthPrescriptionsRouteLiveOracle,
   zerohealthDebugTokenRouteLiveOracle,
   zerohealthDebugConnectionRouteLiveOracle,
+  zerohealthInfoRouteLiveOracle,
+  zerohealthHealthRouteLiveOracle,
+  zerohealthUploadAdvancedRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideClawguardAiAuditEvidence,
