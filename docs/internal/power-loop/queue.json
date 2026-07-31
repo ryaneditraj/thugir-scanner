@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T13:03:17.651Z",
+  "updated_at": "2026-07-31T14:05:47.238Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body?q=a",
+      "source": "google/firing-range — reflected XSS parameter echoed in HTML BODY tag",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/tagname?q=a",
+      "source": "google/firing-range — reflected XSS parameter used as HTML tag name",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/attribute_unquoted?q=a",
+      "source": "google/firing-range — reflected XSS parameter in unquoted HTML attribute",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/css?q=a",
+      "source": "google/firing-range — URL-based XSS parameter assigned to STYLE tag SRC",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/script_src?q=a",
+      "source": "google/firing-range — URL-based XSS parameter assigned to SCRIPT tag SRC",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/body_comment?q=a",
       "source": "google/firing-range — reflected XSS parameter echoed inside HTML comment in BODY",
