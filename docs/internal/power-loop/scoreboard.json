@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T18:20:00.000Z",
+  "updated_at": "2026-07-31T18:50:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2990,
-  "total_findings": 29389,
+  "total_sites_scanned": 2997,
+  "total_findings": 29533,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2079,
-  "discovery_findings": 23991,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-31T18:20:00.000Z",
+  "discovery_urls_added": 2084,
+  "discovery_findings": 24103,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-31T18:50:30.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 20,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 477,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,43 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 6/6 (20 findings); no benchmark misses"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (32 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 5,
-      "findings": 101,
-      "focus": "firing-range escapeHtml/encodeUrl css_style + iframe_srcdoc + tags/img + tags/script route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 112,
+      "focus": "firing-range textarea + address/location.hash/innerHtml + eventtriggering/formSubmission + contentsniffing/plaintext + remoteinclude/script_hash",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (20 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/css_style: 13→20 findings — firing-range-escape-serverside-css-style shipped",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/css_style: 13→20 findings — firing-range-escape-serverside-css-style shipped",
-      "public-firing-range.appspot.com/reflected/parameter/iframe_srcdoc: 14→21 findings — firing-range-reflected-iframe-srcdoc shipped",
-      "public-firing-range.appspot.com/tags/tag/img: 13→20 findings — firing-range-tags-injection shipped",
-      "public-firing-range.appspot.com/tags/tag/script: 13→20 findings — firing-range-tags-injection shipped"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/reflected/parameter/textarea: 20 findings — reflected-param + generic firing-range oracles; no textarea-attribute context oracle",
+      "public-firing-range.appspot.com/address/location.hash/innerHtml: 19 findings — generic DOM oracles; no location.hash→innerHTML sink oracle",
+      "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml: 19 findings — generic oracles; no event-triggered formSubmission innerHtml oracle",
+      "public-firing-range.appspot.com/reflected/contentsniffing/plaintext: 20 findings — reflected-param fires; no content-sniffing plaintext oracle",
+      "public-firing-range.appspot.com/remoteinclude/script_hash.html: 19 findings — generic oracles; no remote-include hash-fragment script oracle",
+      "ssrf.vulnlab.dev/metadata: 15 findings — full SSRF oracle suite (AWS/GCP/Azure metadata + gopher + scheme bypass)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/reflected/url/param_src: HTTP 500 template missing",
-      "public-firing-range.appspot.com/tags/tag/iframe + tags/tag/body/onload: tag injection oracle covers img/script; iframe/body routes not yet in queue drain",
+      "public-firing-range.appspot.com/address/location.hash/innerHtml: generic firing-range oracles only — no location.hash→innerHTML sink oracle",
+      "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml: generic oracles only — no event-triggered innerHtml sink oracle",
+      "public-firing-range.appspot.com/reflected/contentsniffing/plaintext: reflected-param fires but no content-sniffing plaintext context oracle",
+      "public-firing-range.appspot.com/remoteinclude/script_hash.html: generic oracles only — no location.hash remote script inclusion oracle",
       "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 20,
-    "public-firing-range.appspot.com/escape/serverside/escapeHtml/css_style": 20,
-    "public-firing-range.appspot.com/escape/serverside/encodeUrl/css_style": 20,
-    "public-firing-range.appspot.com/reflected/parameter/iframe_srcdoc": 21,
-    "public-firing-range.appspot.com/tags/tag/img": 20,
-    "public-firing-range.appspot.com/tags/tag/script": 20,
-    "public-firing-range.appspot.com/address/location.hash/eval": 17,
+    "juice-shop-staging.herokuapp.com": 32,
+    "public-firing-range.appspot.com/reflected/parameter/textarea": 20,
+    "public-firing-range.appspot.com/address/location.hash/innerHtml": 19,
+    "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml": 19,
+    "public-firing-range.appspot.com/reflected/contentsniffing/plaintext": 20,
+    "public-firing-range.appspot.com/remoteinclude/script_hash.html": 19,
+    "ssrf.vulnlab.dev/metadata": 15,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
