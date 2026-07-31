@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T22:03:24.996Z",
+  "updated_at": "2026-07-31T22:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3013,
-  "total_findings": 29857,
+  "total_sites_scanned": 3021,
+  "total_findings": 29988,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2094,
-  "discovery_findings": 24326,
+  "discovery_urls_added": 2099,
+  "discovery_findings": 24457,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-31T22:03:24.996Z",
+  "last_run": "2026-07-31T22:09:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 30,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 478,
+      "probes_run": 484,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,44 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (31 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 78,
-      "focus": "firing-range urldom fetch + script.src + address documentwrite",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 131,
+      "focus": "firing-range urldom iframe.src + input.formaction + param.code/movie/url.value sinks",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — primary Heroku 503; staging fallback healthy",
-      "public-firing-range.appspot.com/urldom/location/hash/fetch: 19→26 findings — firing-range-urldom-location-hash-fetch-live-oracle shipped",
-      "public-firing-range.appspot.com/urldom/location/hash/script.src: 19→26 findings — firing-range-urldom-location-hash-script-src-live-oracle shipped",
-      "public-firing-range.appspot.com/address/location.hash/documentwrite: 19→26 findings — firing-range-address-location-hash-documentwrite-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (31 findings) — primary Heroku healthy, no fallback needed",
+      "public-firing-range.appspot.com/urldom/location/hash/iframe.src: 25 findings — generic firing-range oracles only, no iframe.src location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/input.formaction: 25 findings — generic oracles only, no input.formaction sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/param.code.value: 25 findings — generic oracles only, no param[code].value sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/param.movie.value: 25 findings — generic oracles only, no param[movie].value sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/param.url.value: 25 findings — generic oracles only, no param[url].value sink oracle",
+      "pygoat.herokuapp.com/challenge/ssrf|xxe|csrf: 2 findings each — client-side-pygoat-challenge-route-evidence only, no route-specific SSRF/XXE/CSRF live oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/urldom/location/hash/xhr.open: generic oracles only — no xhr.open location.hash sink oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval: generic toxicdom oracles only — no document.referrer→eval sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/base.href: generic firing-range oracles only — no base.href location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/embed.src: generic oracles only — no embed.src location.hash sink oracle",
-      "vulnshop.vercel.app/api/v1/wallet/add-funds: race-condition wallet top-up oracle still absent without authenticated session",
+      "public-firing-range.appspot.com/urldom/location/hash/iframe.src: generic firing-range oracles only — no iframe.src location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/input.formaction: generic oracles only — no input.formaction location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/param.code.value: generic oracles only — no param[code].value location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/param.movie.value: generic oracles only — no param[movie].value location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/param.url.value: generic oracles only — no param[url].value location.hash sink oracle",
+      "pygoat.herokuapp.com/challenge/ssrf|xxe|csrf: challenge-route evidence only — no SSRF/XXE/CSRF live oracles without authenticated session",
       "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 30,
-    "public-firing-range.appspot.com/urldom/location/hash/fetch": 26,
-    "public-firing-range.appspot.com/urldom/location/hash/script.src": 26,
-    "public-firing-range.appspot.com/address/location.hash/documentwrite": 26
+    "juice-shop.herokuapp.com": 31,
+    "public-firing-range.appspot.com/urldom/location/hash/iframe.src": 25,
+    "public-firing-range.appspot.com/urldom/location/hash/input.formaction": 25,
+    "public-firing-range.appspot.com/urldom/location/hash/param.code.value": 25,
+    "public-firing-range.appspot.com/urldom/location/hash/param.movie.value": 25,
+    "public-firing-range.appspot.com/urldom/location/hash/param.url.value": 25,
+    "pygoat.herokuapp.com/challenge/ssrf": 2
   }
 }
