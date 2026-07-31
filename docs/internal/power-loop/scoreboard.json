@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T09:06:00.000Z",
+  "updated_at": "2026-07-31T09:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,23 +16,23 @@
     }
   },
   "total_sites_scanned": 2923,
-  "total_findings": 28648,
-  "critical_findings": 98,
+  "total_findings": 28665,
+  "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2044,
-  "discovery_findings": 23600,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-31T09:06:00.000Z",
+  "discovery_findings": 23618,
+  "improvements_shipped": 1164,
+  "last_run": "2026-07-31T09:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 31,
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 479,
+      "probes_run": 487,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,35 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 31 findings 6/6 recall; login-sqli + memories-bola + reflexion-escalated-ssti; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 32 findings 6/6 recall maintained"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 17,
-      "focus": "the-internet jqueryui/menu/nested_frames/large/tinymce/ab_testing/frames queue drain; +5 queued (gin-juice-shop root, urban-vampi-staging users/v1, vampi-production _debug, pentest-ground DVGA graphql, fauxbank api/users)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 18,
+      "focus": "zerohealth.aliyu.dev api/reports/generate + api/files + api/users route oracle gaps",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "the-internet.herokuapp.com/jqueryui/menu: 3 findings with jqueryui-menu-route live oracle (XSS category)",
-      "the-internet.herokuapp.com/nested_frames: 3 findings with nested-frames-route live oracle",
-      "the-internet.herokuapp.com/large: 3 findings with large-route live oracle",
-      "the-internet.herokuapp.com/tinymce: 3 findings with tinymce-route live oracle (XSS category)",
-      "the-internet.herokuapp.com/frames: 3 findings with frames-route live oracle",
-      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: scan errors (unreachable)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "zerohealth.aliyu.dev/api/reports/generate: 5→6 findings — zerohealth-reports-generate-route-live-oracle shipped (wkhtmltopdf command injection)",
+      "zerohealth.aliyu.dev/api/files: 5→6 findings — zerohealth-files-route-live-oracle shipped (path traversal via /api/files/:filename)",
+      "zerohealth.aliyu.dev/api/users: 5→6 findings — zerohealth-users-route-live-oracle shipped (parameter pollution + SQLi on /api/users/profile)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "primary juice-shop.herokuapp.com dyno 503 — staging fallback required",
-      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent",
-      "gin-juice-shop + urban-vampi-staging + vampi-production _debug + DVGA graphql + fauxbank api/users: queued but not drained (queue limit 8)",
-      "the-internet.herokuapp.com/ab_testing: 2 findings only — no route-specific live oracle yet"
+      "zerohealth.aliyu.dev/api/notifications + api/insurance + api/billing + api/upload: no matching routes in Zero-Health server.js — cannot ship without evidence",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 31,
-    "the-internet.herokuapp.com/jqueryui/menu": 3,
-    "the-internet.herokuapp.com/nested_frames": 3,
-    "the-internet.herokuapp.com/large": 3,
-    "the-internet.herokuapp.com/tinymce": 3,
-    "the-internet.herokuapp.com/frames": 3,
-    "ssrf.vulnlab.dev/blind/": 15,
-    "juice-shop.demo.escape.tech/api/BasketItems": 36
+    "juice-shop-staging.herokuapp.com": 32,
+    "zerohealth.aliyu.dev/api/reports/generate": 6,
+    "zerohealth.aliyu.dev/api/files": 6,
+    "zerohealth.aliyu.dev/api/users": 6,
+    "juice-shop.herokuapp.com": 33,
+    "ssrf.vulnlab.dev/blind/": 15
   }
 }

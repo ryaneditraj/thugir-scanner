@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-reports-generate-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.post('/api/reports/generate') wkhtmltopdf shell command with patient name interpolation + challenges.md Challenge 15 Command Injection via PDF Generation; zerohealth.aliyu.dev/api/reports/generate findings 5→6 (+zerohealth-reports-generate-route-live-oracle); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-files-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/files/:filename') directory traversal via __dirname + '/uploads/' + filename; zerohealth.aliyu.dev/api/files findings 5→6 (+zerohealth-files-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/users/profile') parameter pollution + WHERE id = '${userId}' SQL injection; zerohealth.aliyu.dev/api/users findings 5→6 (+zerohealth-users-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-admin-users-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/admin/users') returns all users with forged admin debug JWT + challenges.md multi-stage admin escalation; zerohealth.aliyu.dev/api/admin/users findings 5→6 (+zerohealth-admin-users-route-live-oracle); benchmark juice-shop 33 findings 6/6 maintained"
