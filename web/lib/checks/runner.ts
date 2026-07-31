@@ -1344,6 +1344,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideBugBountyHunterChallengeScenarioEvidence",
   "clientSideBugCollectionEvidence",
   "clientSideZeroHealthEvidence",
+  "zerohealthFileUploadRouteLiveOracle",
+  "zerohealthCommandInjectionRouteLiveOracle",
+  "zerohealthXxeRouteLiveOracle",
   "clientSideAlfXssWargameEvidence",
   "clientSideLlmSecEvidence",
   "clientSideClawguardAiAuditEvidence",
@@ -8771,6 +8774,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (/zerohealth\.aliyu\.dev/i.test(origin) && p.slug.startsWith("zerohealth-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
