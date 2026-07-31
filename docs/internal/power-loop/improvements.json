@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-reset-password-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ResetPassword.jsx dangerouslySetInnerHTML on formData.code + challenges.md Challenge 1 Reflected XSS; zerohealth.aliyu.dev/reset-password findings 5→6 (+zerohealth-reset-password-reflected-xss-route-live-oracle); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-search-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js GET /api/search searchSummary embeds q unsanitized + challenges.md Challenge 4 Reflected XSS via Search; zerohealth.aliyu.dev/api/search findings 5→6 (+zerohealth-search-reflected-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-ai-chat-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chatbot.js POST /api/chatbot/enhanced-chat prompt injection + challenges.md Challenge 8 SQL Injection via AI Chatbot; zerohealth.aliyu.dev/api/ai/chat findings 5→6 (+zerohealth-ai-chat-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-rate-limiting-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 10 Rate Limiting Bypass + server.js /api/auth/login-with-rate-limit X-Forwarded-For bypass; zerohealth.aliyu.dev/challenges/rate-limiting findings 5→6 (+zerohealth-rate-limiting-route-live-oracle); benchmark juice-shop 34 findings 6/6 maintained"
@@ -16357,6 +16375,21 @@
       "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-information-disclosure-route-live-oracle",
       "shipped_at": "2026-07-31T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-reset-password-reflected-xss-route-live-oracle",
+      "shipped_at": "2026-07-31T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-search-reflected-xss-route-live-oracle",
+      "shipped_at": "2026-07-31T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-ai-chat-sqli-route-live-oracle",
+      "shipped_at": "2026-07-31T06:10:00.000Z"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T05:05:18.371Z",
-  "total": 1219,
-  "uniqueSlugs": 1214,
+  "generatedAt": "2026-07-31T06:03:31.138Z",
+  "total": 1222,
+  "uniqueSlugs": 1217,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1201,
+    "generic": 1204,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1134,
+    "deep": 1137,
     "continuous": 0
   },
   "byCategory": {
@@ -28,12 +28,12 @@
     "Security misconfiguration": 109,
     "Broken authentication": 88,
     "Injection": 239,
-    "Cross-site scripting": 166,
+    "Cross-site scripting": 168,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 45,
     "Sensitive data exposure": 29,
-    "AI security": 47,
+    "AI security": 48,
     "Business logic": 14,
     "Insecure file upload": 1,
     "Command injection": 1,
@@ -1248,6 +1248,7 @@
     "xss-vulnlab-stored-live-oracle",
     "xss-vulnlab-stored-route-live-oracle",
     "xxe-xml-post-probe",
+    "zerohealth-ai-chat-sqli-route-live-oracle",
     "zerohealth-command-injection-route-live-oracle",
     "zerohealth-deserialization-route-live-oracle",
     "zerohealth-file-upload-route-live-oracle",
@@ -1259,6 +1260,8 @@
     "zerohealth-prompt-injection-route-live-oracle",
     "zerohealth-race-condition-route-live-oracle",
     "zerohealth-rate-limiting-route-live-oracle",
+    "zerohealth-reset-password-reflected-xss-route-live-oracle",
+    "zerohealth-search-reflected-xss-route-live-oracle",
     "zerohealth-stored-xss-route-live-oracle",
     "zerohealth-xxe-route-live-oracle"
   ],
