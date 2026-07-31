@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T12:02:12.572Z",
+  "updated_at": "2026-07-31T12:07:38.897Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2938,
-  "total_findings": 28790,
+  "total_sites_scanned": 2944,
+  "total_findings": 28841,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2054,
-  "discovery_findings": 23648,
+  "discovery_urls_added": 2059,
+  "discovery_findings": 23699,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-31T12:02:12.572Z",
+  "last_run": "2026-07-31T12:07:38.897Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 31,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 478,
+      "probes_run": 487,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,38 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 31 findings 6/6 recall maintained"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (33 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 6,
-      "findings": 15,
-      "focus": "google/firing-range redirect/meta + NOSTARTSWITHJS + urldom document.location/form.action/area.href + juice-shop.demo.escape.tech/api/Addresss/1 queue drain",
+      "findings": 51,
+      "focus": "google/firing-range reflected XSS event-handler sinks (quoted/singlequoted/unquoted + attribute_script + url/href) + juice-shop.demo.escape.tech/api/Complaints queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/redirect/parameter/NOSTARTSWITHJS?url=/: 5 findings — open-redirect-query-param + reflected-xss-query-param + client-side-xss-evidence",
-      "public-firing-range.appspot.com/redirect/meta?q=/: 2 findings — generic localStorage DOM XSS oracle only (meta-tag redirect oracle absent)",
-      "public-firing-range.appspot.com/urldom/location/hash/document.location + form.action + location/search/area.href: 2 findings each — route-specific DOM sink oracles absent (generic localStorage oracle only)",
-      "juice-shop.demo.escape.tech/api/Addresss/1: 2-finding thin pass (missing-security-headers + juice-shop-leaked-api-key) — no address BOLA live oracle on escape.tech instance",
-      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent",
-      "parallel: zerohealth.aliyu.dev/api/info + api/health + api/upload route oracles shipped (5→6 findings each)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_*: 3 findings each — reflected-xss-query-param fires on quoted/singlequoted/unquoted onclick sinks",
+      "public-firing-range.appspot.com/reflected/parameter/attribute_script?q=a: 3 findings — reflected XSS via SCRIPT src attribute context",
+      "public-firing-range.appspot.com/reflected/url/href?q=a: 3 findings — reflected XSS via anchor HREF URL context",
+      "juice-shop.demo.escape.tech/api/Complaints: 36 findings — complaints-bola + complaints-bola-route live oracles shipped (vs 2-finding thin pass on Addresss/1)",
+      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/redirect/meta: meta-tag open-redirect oracle absent",
-      "public-firing-range.appspot.com/urldom/location/hash/document.location + form.action + location/search/area.href: route-specific DOM XSS sink oracles absent",
-      "juice-shop.demo.escape.tech/api/Addresss/1: address BOLA live oracle absent (2 findings vs 31 on staging)",
-      "zerohealth.aliyu.dev/api/notifications + api/insurance + api/billing: no OSS routes in server.js — cannot ship route oracles without evidence"
+      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_*: no route-specific event-handler context oracle (generic reflected-xss-query-param only)",
+      "public-firing-range.appspot.com/reflected/parameter/attribute_script: no SCRIPT src attribute breakout oracle",
+      "public-firing-range.appspot.com/reflected/url/href: no HREF URL-context XSS oracle beyond generic reflected-xss",
+      "juice-shop.demo.escape.tech/api/Addresss/1: address BOLA live oracle still absent (2 findings vs 36 on Complaints route)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 31,
-    "public-firing-range.appspot.com/redirect/parameter/NOSTARTSWITHJS?url=/": 5,
-    "zerohealth.aliyu.dev/api/info": 6,
-    "zerohealth.aliyu.dev/api/health": 6,
-    "zerohealth.aliyu.dev/api/upload": 6,
-    "public-firing-range.appspot.com/redirect/meta?q=/": 2,
-    "public-firing-range.appspot.com/urldom/location/hash/document.location#//example.org": 2,
+    "juice-shop.herokuapp.com": 33,
+    "juice-shop.demo.escape.tech/api/Complaints": 36,
+    "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_quoted/DOUBLE_QUOTED_ATTRIBUTE?q=a": 3,
+    "public-firing-range.appspot.com/reflected/url/href?q=a": 3,
     "juice-shop.demo.escape.tech/api/Addresss/1": 2,
     "ssrf.vulnlab.dev/blind/": 15
   }
