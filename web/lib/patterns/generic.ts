@@ -1746,6 +1746,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-address-location-hash-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash innerHTML DOM XSS oracle",
+    description:
+      "GET /address/location.hash/innerHtml returns a page that reads window.location.hash.substr(1) and assigns it to divEl.innerHTML — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to innerHTML enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from window.location.hash.",
+        "Treat URL fragments as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/innerHtml uses innerHTML on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/innerHtml route XSS oracle",
+    description:
+      "When scanning /address/location.hash/innerHtml, location.hash is assigned to innerHTML without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/innerHtml route uses innerHTML on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range form-submission innerHTML DOM XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/formSubmission/innerHtml returns a Toxic DOM page where form.onsubmit copies userInput into innerHTML — Firing Range event-triggered DOM XSS training oracle.",
+    impactOneline:
+      "Form submit handlers that assign user input to innerHTML enable DOM XSS on user interaction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign form input to innerHTML on submit — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on form field values.",
+        "Use textContent or safe DOM APIs for user-supplied text.",
+        "Add CSP as defense-in-depth against DOM XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/innerHtml assigns form input to innerHTML. Show event-triggered DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/.../innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/formSubmission/innerHtml, form submit passes userInput to innerHTML — route-specific event-triggered DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form submissions do not write user input to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix innerHTML sinks on form submission in /dom/eventtriggering routes.",
+      steps: [
+        "Audit form onsubmit handlers for dangerous DOM sinks.",
+        "Encode user input before DOM insertion.",
+        "Add output encoding tests for form-triggered XSS routes."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/innerHtml route assigns form input to innerHTML. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-script-hash-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range remote-include script hash DOM XSS oracle",
+    description:
+      "GET /remoteinclude/script_hash.html reads location.hash.substr(1) and sets script.src to the fragment — Firing Range remote-include hash-fragment DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values used as script.src enable attacker-controlled remote script inclusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeScriptHashLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never seed script.src from location.hash — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic script.src assignments from URL fragments.",
+        "Allow-list remote script origins.",
+        "Use CSP script-src to block attacker-controlled script loads."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/script_hash.html loads script.src from location.hash. Show remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-script-hash-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /remoteinclude/script_hash.html route XSS oracle",
+    description:
+      "When scanning /remoteinclude/script_hash.html, location.hash seeds attacker-controlled script.src — route-specific remote-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments cannot load arbitrary remote scripts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeScriptHashRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix script.src seeding from location.hash on /remoteinclude routes.",
+      steps: [
+        "Audit location.hash reads for script inclusion sinks.",
+        "Allow-list script origins.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/script_hash.html route seeds script.src from location.hash. Show route-specific remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
