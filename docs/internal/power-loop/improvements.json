@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/file-upload route scan matches challenges.md File Upload Bypass + /api/files/upload-advanced markers when OSS API not deployed on aliyu.dev; zerohealth.aliyu.dev/challenges/file-upload findings 5→6 (+zerohealth-file-upload-route-live-oracle); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/command-injection route scan matches challenges.md Command Injection via PDF Generation + /api/reports/generate + wkhtmltopdf markers; zerohealth.aliyu.dev/challenges/command-injection findings 5→6 (+zerohealth-command-injection-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/xxe route scan matches challenges.md XXE to RCE + /api/medical-history/import + {{eval:}} markers; zerohealth.aliyu.dev/challenges/xxe findings 5→6 (+zerohealth-xxe-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-dvwa-fi-route-fp-fix",
       "status": "shipped",
