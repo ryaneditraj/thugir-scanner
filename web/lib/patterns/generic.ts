@@ -10869,6 +10869,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Zero Health stored-xss challenge route live oracle",
+    description:
+      "When scanning /challenges/stored-xss, POST /api/appointments stores unsanitized reason-for-visit HTML displayed to doctors — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific oracle confirms appointment-booking stored XSS training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — sanitize all user-supplied fields before storage and rendering.",
+      steps: [
+        "Encode or sanitize appointment reason fields on input and output.",
+        "Use a strict HTML sanitizer for any rich-text patient inputs.",
+        "Apply Content-Security-Policy to limit script execution in doctor dashboards."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/stored-xss route documents stored XSS via appointment reason fields. Show output encoding and CSP for doctor-facing views.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "Zero Health prompt-injection challenge route live oracle",
+    description:
+      "When scanning /challenges/prompt-injection, POST /api/chatbot/enhanced-chat generates SQL from natural language with bypassable guardrails — route-specific AI prompt injection oracle.",
+    impactOneline:
+      "Route-specific oracle confirms AI chatbot SQL prompt-injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never let LLMs generate executable SQL from user prompts.",
+      steps: [
+        "Use parameterized queries with fixed query templates instead of LLM-generated SQL.",
+        "Apply output filtering and role-based data scoping on all AI chatbot responses.",
+        "Monitor and block prompt-injection patterns in healthcare AI assistants."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/prompt-injection route documents AI chatbot SQL generation. Show safe query templates without LLM-generated SQL.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-alf-xss-wargame-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -15313,6 +15365,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host an AI Security Platform with public /challenges routes. Show how to isolate lab backends and protect Supabase credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-privacy-policy-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI Security Platform deceptive privacy-policy challenge route live oracle",
+    description:
+      "When scanning /challenges/privacy-policy, the platform catalog documents CWE-1021 dark patterns burying harmful data-sale and plaintext-storage clauses — route-specific deceptive privacy policy oracle.",
+    impactOneline:
+      "Route-specific oracle confirms deceptive privacy policy training lab without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityPrivacyPolicyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — write transparent privacy policies without hidden data-sale clauses.",
+      steps: [
+        "Surface all data collection and sale practices prominently in privacy policies.",
+        "Avoid dark patterns that bury plaintext-storage or third-party sharing clauses.",
+        "Require explicit opt-in consent for sensitive data processing."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/privacy-policy route documents deceptive privacy policy dark patterns. Show transparent consent UX without buried data-sale clauses.",
     version: 1,
     enabled: true
   },
