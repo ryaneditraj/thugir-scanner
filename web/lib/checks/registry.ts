@@ -41969,7 +41969,7 @@ function isAiSecurityPlatformHost(ctx: RuleContext): boolean {
 
 async function aiSecurityPlatformFetchCatalog(ctx: RuleContext): Promise<string> {
   const doc = await ctx.probe.get(AI_SECURITY_PLATFORM_HOME, {
-    maxBytes: 22000,
+    maxBytes: 65536,
     timeoutMs: 12000
   });
   if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) return doc.body;

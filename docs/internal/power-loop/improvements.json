@@ -2,9 +2,21 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
-      "slug": "zerohealth-file-upload-route-live-oracle",
+      "slug": "zerohealth-stored-xss-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/file-upload route scan matches challenges.md File Upload Bypass + /api/files/upload-advanced markers when OSS API not deployed on aliyu.dev; zerohealth.aliyu.dev/challenges/file-upload findings 5→6 (+zerohealth-file-upload-route-live-oracle); benchmark juice-shop-staging 30 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 6 Stored XSS via Appointment Booking + /api/appointments reason field markers; zerohealth.aliyu.dev/challenges/stored-xss findings 5→6 (+zerohealth-stored-xss-route-live-oracle); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 11 AI Prompt Injection + /api/chatbot/enhanced-chat markers; zerohealth.aliyu.dev/challenges/prompt-injection findings 5→6 (+zerohealth-prompt-injection-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-privacy-policy-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage catalog CWE-1021 Dark Patterns + Burying harmful data-sale and plaintext-storage clauses; ai-security-platform-iota.vercel.app/challenges/privacy-policy findings include +ai-security-privacy-policy-route-live-oracle; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:zerohealth.aliyu.dev",
