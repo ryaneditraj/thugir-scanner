@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T10:05:03.831Z",
+  "updated_at": "2026-07-31T11:05:52.656Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/redirect/meta?q=/",
+      "source": "google/firing-range — meta-tag open redirect (/redirect/meta)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/redirect/parameter/NOSTARTSWITHJS?url=/",
+      "source": "google/firing-range — open redirect with javascript scheme block (/redirect/parameter/NOSTARTSWITHJS)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/document.location#//example.org",
+      "source": "google/firing-range — location.hash to document.location DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/form.action#//example.org",
+      "source": "google/firing-range — location.hash to form.action DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/area.href?q=//example.org",
+      "source": "google/firing-range — location.search to area.href DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/redirect?url=http://example.com",
       "source": "google/firing-range — URL-based DOM XSS suite open-redirect chaining service (/urldom/redirect)",
