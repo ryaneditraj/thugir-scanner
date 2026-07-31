@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T01:05:00.000Z",
+  "updated_at": "2026-07-31T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/api-security",
+      "source": "AI & Security Platform — broken API security / unauthenticated endpoints oracle (Vercel OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/race-condition",
+      "source": "aligorithm/zero-health — appointment booking race-condition TOCTOU challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/deserialization",
+      "source": "aligorithm/zero-health — insecure deserialization challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/path-traversal",
+      "source": "aligorithm/zero-health — path traversal / LFI medical records challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/medical-records",
+      "source": "aligorithm/zero-health — BOLA medical-records API oracle GET /api/medical-records (zerohealth.aliyu.dev healthcare lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-password-storage",
       "source": "AI & Security Platform — plaintext/MD5 password storage live demo (Vercel OSS deploy)",
