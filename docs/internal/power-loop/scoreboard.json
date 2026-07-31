@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T00:26:37.239Z",
+  "updated_at": "2026-07-31T01:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2846,
-  "total_findings": 27828,
+  "total_sites_scanned": 2852,
+  "total_findings": 27896,
   "critical_findings": 82,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2009,
-  "discovery_findings": 23252,
-  "improvements_shipped": 1163,
-  "last_run": "2026-07-31T00:26:37.239Z",
+  "discovery_urls_added": 2014,
+  "discovery_findings": 23290,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-31T01:07:24.133Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 30,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 480,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,49 +48,42 @@
           ]
         }
       },
-      "note": "Primary healthy 6/6 (34 findings) after cold-start retry; first pass degraded gap=xss (9 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings) with full BOLA suite + login-sqli + jwt-alg-none + hints/challenges exposure + reflexion-escalated-ssti; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 28,
-      "focus": "zerohealth file-upload/command-injection/stored-xss/prompt-injection/xxe challenge routes + the-internet floating_menu drain",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 5,
+      "findings": 38,
+      "focus": "ai-security-platform password/privacy/npm supply-chain challenges + juice-shop.demo BasketItems + ssrf.vulnlab blind drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — primary Heroku healthy after retry, no benchmark misses",
-      "zerohealth.aliyu.dev/challenges/file-upload: 5-finding thin pass with client-side-zero-health-evidence + reflexion-escalated-ssti; no file-upload bypass live oracle",
-      "zerohealth.aliyu.dev/challenges/command-injection: 5-finding thin pass without PDF cmdi live oracle",
-      "zerohealth.aliyu.dev/challenges/stored-xss: 5-finding thin pass without stored-XSS messages live oracle",
-      "zerohealth.aliyu.dev/challenges/prompt-injection: 5-finding thin pass without AI chatbot prompt-injection live oracle",
-      "zerohealth.aliyu.dev/challenges/xxe: 5-finding thin pass without XXE-to-RCE live oracle",
-      "the-internet.herokuapp.com/floating_menu: 3 findings with floating-menu-route-live-oracle",
-      "pentest-ground.com:4280/vulnerabilities/file_upload/: 3 findings — pentest-ground-dvwa-upload-route-live-oracle replaces FI false positive on file_upload discovery URL",
-      "pentest-ground.com:4280/vulnerabilities/fi/: FI path guard fix — /fi/ no longer matches /file_upload/ substring",
-      "pygoat.herokuapp.com/challenge/ssrf: 1→2 findings — client-side-pygoat-challenge-route-evidence (VWAD catalog when Heroku offline)",
-      "pygoat.herokuapp.com/challenge/xxe: 1→2 findings — client-side-pygoat-challenge-route-evidence",
-      "pygoat.herokuapp.com/challenge/csrf: 1→2 findings — client-side-pygoat-challenge-route-evidence"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — primary Heroku 503, staging fallback healthy, no benchmark misses",
+      "ssrf.vulnlab.dev/blind/: 15 findings — full SSRF oracle suite (basic/metadata-aws/blocklist/redirect/allowlist/gcp/azure/scheme/gopher/parser/blind)",
+      "ai-security-platform-iota.vercel.app/challenges/insecure-password-storage: 6-finding thin pass with client-side-ai-security-platform-evidence; no plaintext-password live oracle",
+      "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy-policy: 7-finding hub with reflexion-escalated-ssti; no dark-pattern privacy-policy live oracle",
+      "ai-security-platform-iota.vercel.app/challenges/vulnerable-npm-packages: 7-finding hub without outdated-npm-CVE live oracle",
+      "ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages: 3-finding thin pass without supply-chain npm attack live oracle",
+      "juice-shop.demo.escape.tech/api/BasketItems: unreachable — BOLA basket HPP oracle blocked"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zerohealth.aliyu.dev/challenges/*: route-specific file-upload/cmdi/stored-xss/prompt-injection/xxe live oracles absent (5-finding thin misconfig passes)",
+      "ai-security-platform-iota.vercel.app/challenges/*: route-specific password-storage/privacy-policy/npm-supply-chain live oracles absent (client-side evidence only)",
+      "juice-shop.demo.escape.tech/api/BasketItems: unreachable — basket HPP oracle blocked",
       "chimera.escape.tech/api/agent-browse: unreachable — GenAI SSRF oracle blocked by DNS/connectivity",
       "zerohealth.io/challenges/jwt: unreachable — JWT challenge oracle blocked",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
-      "pygoat.herokuapp.com/challenge/*: live SSRF/XXE/CSRF oracles blocked — Heroku demo offline (module evidence shipped)",
-      "vulnshop-production.up.railway.app: backend 404 — wallet/race/cmdi/xxe/upload live API probes still absent"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
-    "zerohealth.aliyu.dev/challenges/file-upload": 5,
-    "zerohealth.aliyu.dev/challenges/command-injection": 5,
-    "zerohealth.aliyu.dev/challenges/stored-xss": 5,
-    "zerohealth.aliyu.dev/challenges/prompt-injection": 5,
-    "zerohealth.aliyu.dev/challenges/xxe": 5,
-    "the-internet.herokuapp.com/floating_menu": 3,
+    "juice-shop-staging.herokuapp.com": 30,
+    "ssrf.vulnlab.dev/blind/": 15,
+    "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy-policy": 7,
+    "ai-security-platform-iota.vercel.app/challenges/vulnerable-npm-packages": 7,
+    "ai-security-platform-iota.vercel.app/challenges/insecure-password-storage": 6,
+    "ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages": 3,
     "owasp-finbot-ctf.org/ctf/api/v1/challenges": 6,
     "vulnshop.vercel.app/profile": 8,
     "pwnshop.ctfsecurity.com/api/settings/search-filters": 21
