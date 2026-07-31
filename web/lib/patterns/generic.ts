@@ -15915,6 +15915,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-info-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Zero Health /api/info system disclosure route live oracle",
+    description:
+      "When scanning /api/info, GET returns jwt_secret, admin_credentials, and database metadata without authentication — route-specific system info disclosure oracle.",
+    impactOneline:
+      "Route-specific oracle confirms unauthenticated /api/info leak training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — remove debug info endpoints and never expose secrets in API responses.",
+      steps: [
+        "Require authentication for any system metadata endpoints.",
+        "Never include JWT secrets or credentials in API responses.",
+        "Use environment-specific config separate from runtime info endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/info route leaks jwt_secret and admin_credentials without auth. Show secure system-info handling for healthcare APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-health-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Zero Health /api/health debug status route live oracle",
+    description:
+      "When scanning /api/health, GET returns status:vulnerable without authentication — route-specific debug health disclosure oracle.",
+    impactOneline:
+      "Route-specific oracle confirms debug health endpoint training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthHealthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — health endpoints should not advertise vulnerability status in production.",
+      steps: [
+        "Return minimal health status without security posture hints.",
+        "Require authentication for detailed health diagnostics.",
+        "Remove debug health endpoints from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /api/health route returns status:vulnerable publicly. Show production-safe health check responses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-upload-advanced-route-live-oracle",
+    platform: "generic",
+    category: "Insecure file upload",
+    severityDefault: "critical",
+    title: "Zero Health upload-advanced RCE route live oracle",
+    description:
+      "When scanning /api/upload or /api/files/upload-advanced, POST accepts dangerous file types with weak extension filtering and optional executeFile RCE — route-specific file upload oracle.",
+    impactOneline:
+      "Route-specific oracle confirms upload-advanced RCE training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthUploadAdvancedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — validate file types server-side and never execute uploads.",
+      steps: [
+        "Allowlist safe MIME types and extensions for medical document uploads.",
+        "Never pass executeFile or shell out to uploaded content.",
+        "Store uploads outside the web root and scan with antivirus."
+      ]
+    },
+    fixPrompt:
+      "Our /api/files/upload-advanced route allows dangerous uploads with executeFile RCE. Show server-side MIME validation and safe storage.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-api-security-route-live-oracle",
     platform: "generic",
     category: "API security",
