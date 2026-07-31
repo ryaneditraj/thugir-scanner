@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T05:05:00.000Z",
+  "updated_at": "2026-07-31T06:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/api/notifications",
+      "source": "aligorithm/zero-health — patient notifications BOLA oracle GET /api/notifications (Swagger docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/insurance",
+      "source": "aligorithm/zero-health — insurance records disclosure oracle GET /api/insurance (Swagger docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/billing",
+      "source": "aligorithm/zero-health — billing/payment data BOLA oracle GET /api/billing (Swagger docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/files",
+      "source": "aligorithm/zero-health — medical file upload/path-traversal oracle GET/POST /api/files (Swagger docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/upload",
+      "source": "aligorithm/zero-health — unrestricted file upload oracle POST /api/upload (challenges.md file-upload)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://zerohealth.aliyu.dev/api/admin/users",
       "source": "aligorithm/zero-health \u2014 BFLA admin user-management oracle GET /api/admin/users (Medium writeup + Swagger docs)",
