@@ -15837,6 +15837,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-prescriptions-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Zero Health prescriptions BOLA route live oracle",
+    description:
+      "When scanning /api/prescriptions, pharmacist role returns all patient prescriptions without per-patient scoping — route-specific pharmacy BOLA oracle.",
+    impactOneline:
+      "Route-specific oracle confirms prescriptions BOLA training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthPrescriptionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — scope pharmacist queries to authorized patients only.",
+      steps: [
+        "Bind prescription queries to verified patient identifiers from JWT claims.",
+        "Reject pharmacist-wide SELECT queries that omit patient filters.",
+        "Audit pharmacy access logs for cross-patient enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /api/prescriptions route returns all pharmacy records to pharmacist role. Show scoped queries with strict patient authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-debug-token-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Zero Health debug JWT forge route live oracle",
+    description:
+      "When scanning /api/debug/token, GET mints forgeable JWTs with alg:none and a weak debug-key secret — route-specific authentication bypass oracle.",
+    impactOneline:
+      "Route-specific oracle confirms JWT alg:none training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthDebugTokenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never expose debug token minting in production.",
+      steps: [
+        "Remove /api/debug/token from production builds.",
+        "Reject JWTs with alg:none and enforce strong signing algorithms.",
+        "Rotate secrets and validate algorithm headers server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /api/debug/token route forges JWTs with alg:none. Show secure JWT validation that rejects unsigned tokens.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-debug-connection-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Zero Health database connection disclosure route live oracle",
+    description:
+      "When scanning /api/debug/connection, GET returns live PostgreSQL pool.options host, database, and port — route-specific database info-disclosure oracle.",
+    impactOneline:
+      "Route-specific oracle confirms debug connection disclosure training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthDebugConnectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never expose database connection details in production.",
+      steps: [
+        "Remove /api/debug/connection from production deployments.",
+        "Load database credentials from environment variables only.",
+        "Restrict debug endpoints to local development networks."
+      ]
+    },
+    fixPrompt:
+      "Our /api/debug/connection route leaks PostgreSQL pool.options. Show how to remove debug endpoints and protect database credentials.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-api-security-route-live-oracle",
     platform: "generic",
     category: "API security",

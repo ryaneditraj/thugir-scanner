@@ -32037,6 +32037,207 @@ async function zerohealthUsersRouteLiveOracle(
   };
 }
 
+async function zerohealthPrescriptionsRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/prescriptions\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const pharmacistToken = await zeroHealthFetchDebugToken(ctx, origin, "pharmacist", "1");
+    if (pharmacistToken) {
+      const prescriptionsUrl = `${origin}/api/prescriptions`;
+      const prescriptionsDoc = await ctx.probe.get(prescriptionsUrl, {
+        headers: { Authorization: `Bearer ${pharmacistToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(prescriptionsDoc.body) &&
+        prescriptionsDoc.status >= 200 &&
+        prescriptionsDoc.status < 300 &&
+        /medication|prescription|dosage|patient_first_name|\[\s*\{|\{\s*"id"/i.test(
+          prescriptionsDoc.body
+        )
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            url: prescriptionsUrl,
+            snippet: prescriptionsDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/prescriptions returns all pharmacy records for pharmacist role without patient scoping — prescriptions BOLA oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "prescriptions API route", sample: "/api/prescriptions" }
+  ];
+  const markers = [
+    { label: "prescriptions endpoint", re: /app\.get\('\/api\/prescriptions'|\/api\/prescriptions/i },
+    {
+      label: "pharmacist unscoped query",
+      re: /userRole === 'pharmacist'[\s\S]{0,220}params = \[\]/i
+    },
+    { label: "prescription medication fields", re: /medication_name|dosage|frequency|duration/i },
+    { label: "prescription collect endpoint", re: /\/api\/prescriptions\/:id\/collect/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/prescriptions exposes all pharmacy records to pharmacist role — prescriptions BOLA oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthDebugTokenRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/debug\/token\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const debugUrl = `${origin}/api/debug/token?role=patient&id=1`;
+    const debugDoc = await ctx.probe.get(debugUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (
+      isZeroHealthJsonBody(debugDoc.body) &&
+      debugDoc.status >= 200 &&
+      debugDoc.status < 300 &&
+      /"debug_token"\s*:/i.test(debugDoc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          url: debugUrl,
+          snippet: debugDoc.body.slice(0, 280).trim(),
+          scannedUrl: pageUrl,
+          note: "Zero Health GET /api/debug/token mints forgeable JWTs with alg:none and weak debug-key — authentication bypass oracle"
+        }
+      };
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "debug token API route", sample: "/api/debug/token" }
+  ];
+  const markers = [
+    { label: "debug token endpoint", re: /app\.get\('\/api\/debug\/token'|\/api\/debug\/token/i },
+    { label: "alg none JWT signing", re: /algorithm:\s*'none'|algorithm:\s*"none"/i },
+    { label: "weak debug secret", re: /'debug-key'|"debug-key"/i },
+    {
+      label: "JWT challenge hint",
+      re: /\/api\/debug\/token.*generating debug tokens|change it to 'none'/i
+    }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.93 : 0.9,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/debug/token forges JWTs with alg:none — authentication bypass oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthDebugConnectionRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/debug\/connection\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const connectionUrl = `${origin}/api/debug/connection`;
+    const connectionDoc = await ctx.probe.get(connectionUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (
+      isZeroHealthJsonBody(connectionDoc.body) &&
+      connectionDoc.status >= 200 &&
+      connectionDoc.status < 300 &&
+      /"host"\s*:|"database"\s*:|"port"\s*:/i.test(connectionDoc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          url: connectionUrl,
+          snippet: connectionDoc.body.slice(0, 280).trim(),
+          scannedUrl: pageUrl,
+          note: "Zero Health GET /api/debug/connection returns live PostgreSQL pool.options credentials — database info-disclosure oracle"
+        }
+      };
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "debug connection API route", sample: "/api/debug/connection" }
+  ];
+  const markers = [
+    {
+      label: "debug connection endpoint",
+      re: /app\.get\('\/api\/debug\/connection'|\/api\/debug\/connection/i
+    },
+    { label: "pool options disclosure", re: /pool\.options\.user|pool\.options\.host|pool\.options\.database/i },
+    { label: "database connection details", re: /database connection details|Get database connection details/i },
+    { label: "exposed database connection", re: /Exposed database connection|zero_health/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/debug/connection leaks PostgreSQL connection settings — database info-disclosure oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
 async function zerohealthChatbotHistoryRouteLiveOracle(
   ctx: RuleContext
 ): Promise<RuleResult> {
@@ -49613,6 +49814,9 @@ export const RULES: Record<string, Rule> = {
   zerohealthReportsGenerateRouteLiveOracle,
   zerohealthFilesRouteLiveOracle,
   zerohealthUsersRouteLiveOracle,
+  zerohealthPrescriptionsRouteLiveOracle,
+  zerohealthDebugTokenRouteLiveOracle,
+  zerohealthDebugConnectionRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideClawguardAiAuditEvidence,
