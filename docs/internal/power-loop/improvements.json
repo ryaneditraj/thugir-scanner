@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-prescriptions-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/prescriptions') pharmacist role uses params=[] returning all prescriptions + challenges.md pharmacy BOLA; zerohealth.aliyu.dev/api/prescriptions findings 5→6 (+zerohealth-prescriptions-route-live-oracle); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-debug-token-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/debug/token') jwt.sign with algorithm:'none' and 'debug-key' + challenges.md JWT hint; zerohealth.aliyu.dev/api/debug/token findings 5→6 (+zerohealth-debug-token-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-debug-connection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.get('/api/debug/connection') returns pool.options user/host/database/port; zerohealth.aliyu.dev/api/debug/connection findings 5→6 (+zerohealth-debug-connection-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-reports-generate-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: server.js app.post('/api/reports/generate') wkhtmltopdf shell command with patient name interpolation + challenges.md Challenge 15 Command Injection via PDF Generation; zerohealth.aliyu.dev/api/reports/generate findings 5→6 (+zerohealth-reports-generate-route-live-oracle); benchmark juice-shop-staging 32 findings 6/6 maintained"
