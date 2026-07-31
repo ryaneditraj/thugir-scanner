@@ -31024,6 +31024,138 @@ const ZERO_HEALTH_CHALLENGE_META: Record<string, ZeroHealthChallengeMeta> = {
       return null;
     }
   },
+  "rate-limiting": {
+    routeRe: /\/challenges\/rate-limiting\b/i,
+    markers: [
+      { label: "Rate limiting bypass challenge", re: /Rate Limiting Bypass/i },
+      { label: "login-with-rate-limit endpoint", re: /\/api\/auth\/login-with-rate-limit/i },
+      {
+        label: "X-Forwarded-For client identification bypass",
+        re: /X-Forwarded-For|X-Real-IP/i
+      }
+    ],
+    note: "Zero Health rate-limiting challenge — /api/auth/login-with-rate-limit trusts client-controlled X-Forwarded-For headers for rate-limit bypass",
+    liveProbe: async (ctx, origin, _token) => {
+      const url = `${origin}/api/auth/login-with-rate-limit`;
+      const body = JSON.stringify({ email: "patient@test.com", password: "wrong-password" });
+      const doc1 = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Forwarded-For": "10.0.0.1"
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      const doc2 = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Forwarded-For": "10.0.0.2"
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (!isZeroHealthJsonBody(doc1.body) || !isZeroHealthJsonBody(doc2.body)) return null;
+      if (doc1.status === 429 || doc2.status === 429) return null;
+      if (!/login|attempt|invalid|password|rate/i.test(`${doc1.body}${doc2.body}`)) return null;
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url,
+          snippet: doc2.body.slice(0, 200).trim(),
+          note: "Zero Health POST /api/auth/login-with-rate-limit accepts rapid attempts from spoofed X-Forwarded-For IPs — rate-limit bypass oracle"
+        }
+      };
+    }
+  },
+  "mass-assignment": {
+    routeRe: /\/challenges\/mass-assignment\b/i,
+    markers: [
+      { label: "Mass assignment challenge", re: /Mass Assignment to Admin Escalation/i },
+      { label: "users profile update endpoint", re: /\/api\/users\/profile/i },
+      {
+        label: "Role field mass assignment",
+        re: /"role"\s*:\s*"admin"|modify restricted ones|role.*admin/i
+      }
+    ],
+    note: "Zero Health mass-assignment challenge — PUT /api/users/profile updates any field in the request body including restricted role",
+    liveProbe: async (ctx, origin, _token) => {
+      const token = await zeroHealthLogin(ctx, origin, "patient@test.com");
+      if (!token) return null;
+      const url = `${origin}/api/users/profile`;
+      const doc = await ctx.probe.get(url, {
+        method: "PUT",
+        body: JSON.stringify({ first_name: "ThugirProbe", role: "admin" }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (!isZeroHealthJsonBody(doc.body)) return null;
+      if (/"role"\s*:\s*"admin"/i.test(doc.body)) {
+        return {
+          fired: true,
+          confidence: 0.94,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 240).trim(),
+            note: "Zero Health PUT /api/users/profile accepts role:admin in request body — mass assignment privilege escalation oracle"
+          }
+        };
+      }
+      if (doc.status >= 200 && doc.status < 300 && /profile|updated|first_name/i.test(doc.body)) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "Zero Health /api/users/profile accepts unrestricted body fields — mass assignment training oracle"
+          }
+        };
+      }
+      return null;
+    }
+  },
+  "information-disclosure": {
+    routeRe: /\/challenges\/information-disclosure\b/i,
+    markers: [
+      { label: "Information disclosure challenge", re: /information disclosure|Information Disclosure/i },
+      { label: "system info endpoint", re: /\/api\/info/i },
+      {
+        label: "Exposed secrets or credentials",
+        re: /jwt_secret|admin_credentials|exposes system information/i
+      }
+    ],
+    note: "Zero Health information-disclosure challenge — GET /api/info exposes JWT secrets, admin credentials, and system metadata without authentication",
+    liveProbe: async (ctx, origin, _token) => {
+      const url = `${origin}/api/info`;
+      const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+      if (!isZeroHealthJsonBody(doc.body)) return null;
+      if (
+        /jwt_secret|admin_credentials|node_version|memory_usage/i.test(doc.body) &&
+        doc.status >= 200 &&
+        doc.status < 300
+      ) {
+        return {
+          fired: true,
+          confidence: /jwt_secret|admin_credentials/i.test(doc.body) ? 0.94 : 0.91,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 280).trim(),
+            note: "Zero Health GET /api/info returns JWT secret and admin credentials without auth — information disclosure oracle"
+          }
+        };
+      }
+      return null;
+    }
+  },
   "parameter-pollution": {
     routeRe: /\/challenges\/parameter-pollution\b/i,
     markers: [
@@ -31105,7 +31237,10 @@ async function zeroHealthChallengeRouteOracle(
   if (
     challengeKey === "path-traversal" ||
     challengeKey === "deserialization" ||
-    challengeKey === "parameter-pollution"
+    challengeKey === "parameter-pollution" ||
+    challengeKey === "mass-assignment" ||
+    challengeKey === "information-disclosure" ||
+    challengeKey === "rate-limiting"
   ) {
     const serverJs = await zeroHealthFetchServerJs(ctx);
     if (serverJs) corpus += `\n${serverJs}`;
@@ -31148,6 +31283,12 @@ const zerohealthDeserializationRouteLiveOracle: Rule = (ctx) =>
   zeroHealthChallengeRouteOracle(ctx, "deserialization");
 const zerohealthParameterPollutionRouteLiveOracle: Rule = (ctx) =>
   zeroHealthChallengeRouteOracle(ctx, "parameter-pollution");
+const zerohealthRateLimitingRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "rate-limiting");
+const zerohealthMassAssignmentRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "mass-assignment");
+const zerohealthInformationDisclosureRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "information-disclosure");
 
 async function zerohealthMedicalRecordsBolaRouteLiveOracle(
   ctx: RuleContext
@@ -48756,6 +48897,9 @@ export const RULES: Record<string, Rule> = {
   zerohealthPathTraversalRouteLiveOracle,
   zerohealthDeserializationRouteLiveOracle,
   zerohealthParameterPollutionRouteLiveOracle,
+  zerohealthRateLimitingRouteLiveOracle,
+  zerohealthMassAssignmentRouteLiveOracle,
+  zerohealthInformationDisclosureRouteLiveOracle,
   zerohealthMedicalRecordsBolaRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,

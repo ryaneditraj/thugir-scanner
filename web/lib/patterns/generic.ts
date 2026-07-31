@@ -15525,6 +15525,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-rate-limiting-route-live-oracle",
+    platform: "generic",
+    category: "API security",
+    severityDefault: "high",
+    title: "Zero Health rate-limiting challenge route live oracle",
+    description:
+      "When scanning /challenges/rate-limiting, POST /api/auth/login-with-rate-limit trusts client-controlled X-Forwarded-For headers enabling brute-force bypass — route-specific rate-limit oracle.",
+    impactOneline:
+      "Route-specific oracle confirms rate-limit bypass training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthRateLimitingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — rate limit by server-side session or account, not spoofable headers.",
+      steps: [
+        "Rate limit by authenticated account or server-observed IP, not X-Forwarded-For alone.",
+        "Apply exponential backoff after repeated failed logins.",
+        "Use CAPTCHA or account lockout for healthcare patient portals."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/rate-limiting route documents X-Forwarded-For rate-limit bypass at /api/auth/login-with-rate-limit. Show server-side throttling that cannot be spoofed.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Health mass-assignment challenge route live oracle",
+    description:
+      "When scanning /challenges/mass-assignment, PUT /api/users/profile accepts any request body field including role enabling privilege escalation — route-specific mass assignment oracle.",
+    impactOneline:
+      "Route-specific oracle confirms mass-assignment privilege escalation training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use explicit allow-lists for updatable profile fields.",
+      steps: [
+        "Reject unknown fields in profile update requests.",
+        "Never allow role or privilege fields from client-supplied JSON.",
+        "Enforce role changes only through admin workflows with audit logging."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/mass-assignment route documents role escalation via PUT /api/users/profile. Show allow-list validation for profile updates.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-information-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Zero Health information-disclosure challenge route live oracle",
+    description:
+      "When scanning /challenges/information-disclosure, GET /api/info exposes JWT secrets, admin credentials, and system metadata without authentication — route-specific information disclosure oracle.",
+    impactOneline:
+      "Route-specific oracle confirms unauthenticated system-info leak training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthInformationDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — remove debug info endpoints and never expose secrets in API responses.",
+      steps: [
+        "Require authentication for any system metadata endpoints.",
+        "Never include JWT secrets or credentials in API responses.",
+        "Use environment-specific config separate from runtime info endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/information-disclosure route documents unauthenticated /api/info leaking jwt_secret and admin_credentials. Show secure system-info handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-api-security-route-live-oracle",
     platform: "generic",
     category: "API security",
