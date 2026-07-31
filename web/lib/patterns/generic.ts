@@ -15759,6 +15759,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-reports-generate-route-live-oracle",
+    platform: "generic",
+    category: "Command injection",
+    severityDefault: "critical",
+    title: "Zero Health PDF report command injection route live oracle",
+    description:
+      "When scanning /api/reports/generate, POST embeds patient names in wkhtmltopdf shell commands without sanitization — route-specific command injection oracle.",
+    impactOneline:
+      "Route-specific oracle confirms PDF generation command injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthReportsGenerateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never pass user input to shell commands.",
+      steps: [
+        "Use a PDF library API instead of shelling out to wkhtmltopdf.",
+        "Sanitize all patient metadata before embedding in report generation.",
+        "Remove command strings from error responses."
+      ]
+    },
+    fixPrompt:
+      "Our /api/reports/generate route passes patient names to wkhtmltopdf via shell exec. Show safe PDF generation without command injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-files-route-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Zero Health file download path traversal route live oracle",
+    description:
+      "When scanning /api/files, GET /api/files/:filename concatenates user input into filesystem paths enabling ../../../etc/passwd reads — route-specific path traversal oracle.",
+    impactOneline:
+      "Route-specific oracle confirms file download path traversal training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthFilesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — validate filenames and resolve paths within uploads directory.",
+      steps: [
+        "Use path.basename() and reject any filename containing .. or path separators.",
+        "Resolve canonical paths and verify they remain under the uploads directory.",
+        "Require authentication and ownership checks on file downloads."
+      ]
+    },
+    fixPrompt:
+      "Our /api/files/:filename route concatenates user input into filesystem paths. Show safe file serving with path traversal prevention.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-users-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Health users profile IDOR route live oracle",
+    description:
+      "When scanning /api/users, GET /api/users/profile uses parameter pollution and string-interpolated SQL to return arbitrary user profiles — route-specific IDOR/SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms user profile IDOR training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — parameterize queries and enforce object-level authorization.",
+      steps: [
+        "Use parameterized queries for all user profile lookups.",
+        "Reject duplicate user_id parameters and bind IDs from verified JWT claims.",
+        "Apply ownership checks so admins cannot enumerate arbitrary profiles via pollution."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/profile route uses parameter pollution and string-interpolated SQL. Show parameterized queries with strict auth scoping.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-api-security-route-live-oracle",
     platform: "generic",
     category: "API security",

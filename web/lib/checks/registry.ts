@@ -31819,6 +31819,224 @@ async function zerohealthMessagesSqliRouteLiveOracle(
   };
 }
 
+async function zerohealthReportsGenerateRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/reports\/generate\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const doctorToken = await zeroHealthFetchDebugToken(ctx, origin, "doctor", "2");
+    if (doctorToken) {
+      const reportsUrl = `${origin}/api/reports/generate`;
+      const reportsDoc = await ctx.probe.get(reportsUrl, {
+        method: "POST",
+        body: JSON.stringify({ patient_id: 1, report_type: "summary" }),
+        headers: {
+          Authorization: `Bearer ${doctorToken}`,
+          "Content-Type": "application/json"
+        },
+        maxBytes: 4096,
+        timeoutMs: 20000
+      });
+      if (
+        isZeroHealthJsonBody(reportsDoc.body) &&
+        (/wkhtmltopdf/i.test(reportsDoc.body) && /"command"\s*:/i.test(reportsDoc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.94,
+          evidence: {
+            url: reportsUrl,
+            snippet: reportsDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health POST /api/reports/generate exposes wkhtmltopdf shell command with patient name interpolation — command injection oracle"
+          }
+        };
+      }
+      if (
+        isZeroHealthJsonBody(reportsDoc.body) &&
+        reportsDoc.status >= 200 &&
+        reportsDoc.status < 300
+      ) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            url: reportsUrl,
+            snippet: reportsDoc.body.slice(0, 200).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health /api/reports/generate reachable for doctor role — PDF generation uses shell commands with patient-controlled metadata"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "reports generate API route", sample: "/api/reports/generate" }
+  ];
+  const markers = [
+    { label: "reports generate endpoint", re: /app\.post\('\/api\/reports\/generate'|\/api\/reports\/generate/i },
+    { label: "wkhtmltopdf shell command", re: /wkhtmltopdf/i },
+    { label: "command injection in PDF metadata", re: /Command injection vulnerability|patient name used directly in PDF metadata/i },
+    { label: "command exposed in error response", re: /command:\s*command|Exposing command for debugging/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/reports/generate embeds patient names in wkhtmltopdf shell commands — command injection oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthFilesRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/files\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const token = await zeroHealthLogin(ctx, origin, "patient@test.com");
+    if (token) {
+      const traversalUrl = `${origin}/api/files/..%2F..%2F..%2Fetc%2Fpasswd`;
+      const traversalDoc = await ctx.probe.get(traversalUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (/root:x:0:0|bin\/bash/i.test(traversalDoc.body)) {
+        return {
+          fired: true,
+          confidence: 0.95,
+          evidence: {
+            url: traversalUrl,
+            snippet: traversalDoc.body.slice(0, 200).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/files/:filename concatenates user input enabling ../../../etc/passwd reads — path traversal oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "files API route", sample: "/api/files" }
+  ];
+  const markers = [
+    { label: "files filename endpoint", re: /app\.get\('\/api\/files\/:filename'|\/api\/files\/:filename/i },
+    { label: "directory traversal vulnerability", re: /Directory traversal vulnerability|direct concatenation allows \.\.\//i },
+    { label: "uploads path concatenation", re: /__dirname \+ '\/uploads\/' \+ filename|\/uploads\/' \+ filename/i },
+    { label: "path traversal challenge", re: /path traversal|etc\/passwd/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/files/:filename concatenates user input into filesystem paths — path traversal oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthUsersRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\b/i.test(pageUrl) || /\/api\/users\/profile\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const adminToken = await zeroHealthFetchDebugToken(ctx, origin, "admin", "1");
+    if (adminToken) {
+      const profileUrl = `${origin}/api/users/profile?user_id=1&user_id=2`;
+      const profileDoc = await ctx.probe.get(profileUrl, {
+        headers: { Authorization: `Bearer ${adminToken}` },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(profileDoc.body) &&
+        profileDoc.status >= 200 &&
+        profileDoc.status < 300 &&
+        /"email"|"role"|"first_name"/i.test(profileDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            url: profileUrl,
+            snippet: profileDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/users/profile returns user records via parameter pollution and string-interpolated SQL — IDOR/SQLi oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "users API route", sample: "/api/users" }
+  ];
+  const markers = [
+    { label: "users profile endpoint", re: /app\.get\('\/api\/users\/profile'|\/api\/users\/profile/i },
+    { label: "parameter pollution vulnerability", re: /Parameter pollution vulnerability|last value wins|multiple user_id params/i },
+    { label: "SQL injection in profile query", re: /WHERE id = '\$\{userId\}'|SQL injection vulnerability/i },
+    { label: "admin profile access control", re: /req\.user\.role === 'admin' && req\.query\.user_id/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/users/profile uses parameter pollution and string-interpolated SQL — IDOR/SQLi oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
 async function zerohealthChatbotHistoryRouteLiveOracle(
   ctx: RuleContext
 ): Promise<RuleResult> {
@@ -49392,6 +49610,9 @@ export const RULES: Record<string, Rule> = {
   zerohealthAdminUsersRouteLiveOracle,
   zerohealthMessagesSqliRouteLiveOracle,
   zerohealthChatbotHistoryRouteLiveOracle,
+  zerohealthReportsGenerateRouteLiveOracle,
+  zerohealthFilesRouteLiveOracle,
+  zerohealthUsersRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideClawguardAiAuditEvidence,
