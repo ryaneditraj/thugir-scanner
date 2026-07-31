@@ -39055,6 +39055,129 @@ const firingRangeUrldomLocationHashBaseHrefRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const FIRING_RANGE_URLDOM_HASH_IFRAME_SRC_PATH = "/urldom/location/hash/iframe.src";
+
+const firingRangeUrldomLocationHashIframeSrcLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_HASH_IFRAME_SRC_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasIframeSrcSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /iframe\.src\s*=\s*payload/i.test(body);
+  if (!hasIframeSrcSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/hash/iframe.src passes location.hash to iframe.src — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationHashIframeSrcRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/hash\/iframe\.src\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationHashIframeSrcLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/hash/iframe.src route scan — location.hash passed to iframe.src without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_HASH_INPUT_FORMACTION_PATH = "/urldom/location/hash/input.formaction";
+
+const firingRangeUrldomLocationHashInputFormactionLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_HASH_INPUT_FORMACTION_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasFormactionSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /input\.formAction\s*=\s*payload/i.test(body);
+  if (!hasFormactionSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/hash/input.formaction passes location.hash to input.formAction — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationHashInputFormactionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/hash\/input\.formaction\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationHashInputFormactionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/hash/input.formaction route scan — location.hash passed to input.formAction without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_HASH_EMBED_SRC_PATH = "/urldom/location/hash/embed.src";
+
+const firingRangeUrldomLocationHashEmbedSrcLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_HASH_EMBED_SRC_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasEmbedSrcSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /embedElement\.src\s*=\s*payload/i.test(body);
+  if (!hasEmbedSrcSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/hash/embed.src passes location.hash to embed.src — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationHashEmbedSrcRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/hash\/embed\.src\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationHashEmbedSrcLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/hash/embed.src route scan — location.hash passed to embed.src without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_REMOTEINCLUDE_SCRIPT_HASH_PATH = "/remoteinclude/script_hash.html";
 
 const firingRangeRemoteIncludeScriptHashLiveOracle: Rule = async (ctx) => {
@@ -51814,6 +51937,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationHashXhrOpenRouteLiveOracle,
   firingRangeUrldomLocationHashBaseHrefLiveOracle,
   firingRangeUrldomLocationHashBaseHrefRouteLiveOracle,
+  firingRangeUrldomLocationHashIframeSrcLiveOracle,
+  firingRangeUrldomLocationHashIframeSrcRouteLiveOracle,
+  firingRangeUrldomLocationHashInputFormactionLiveOracle,
+  firingRangeUrldomLocationHashInputFormactionRouteLiveOracle,
+  firingRangeUrldomLocationHashEmbedSrcLiveOracle,
+  firingRangeUrldomLocationHashEmbedSrcRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,

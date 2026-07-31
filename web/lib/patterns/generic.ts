@@ -2214,6 +2214,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-hash-iframe-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash iframe.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/iframe.src reads document.location.hash.substr(1) and assigns it to iframe.src — Firing Range iframe.src DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to iframe.src enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashIframeSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to iframe.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove iframe.src assignments on values from window.location.hash.",
+        "Allow-list iframe origins in production applications.",
+        "Use CSP frame-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/iframe.src uses iframe.src on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-iframe-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/iframe.src route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/iframe.src, location.hash is assigned to iframe.src without sanitization — route-specific iframe.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot load arbitrary iframe content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashIframeSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove iframe.src sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for iframe inclusion sinks.",
+        "Allow-list iframe origins.",
+        "Add CSP frame-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/iframe.src route assigns location.hash to iframe.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-input-formaction-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash input.formAction DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/input.formaction reads document.location.hash.substr(1) and assigns it to input.formAction — Firing Range formaction DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to input.formAction enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashInputFormactionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to input.formAction — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove input.formAction assignments on values from window.location.hash.",
+        "Allow-list form submission targets in production applications.",
+        "Use CSP form-action restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/input.formaction uses input.formAction on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-input-formaction-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/input.formaction route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/input.formaction, location.hash is assigned to input.formAction without sanitization — route-specific formaction DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot redirect form submissions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashInputFormactionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove input.formAction sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for form submission sinks.",
+        "Allow-list form submission targets.",
+        "Add CSP form-action restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/input.formaction route assigns location.hash to input.formAction. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-embed-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash embed.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/embed.src reads document.location.hash.substr(1) and assigns it to embed.src — Firing Range embed.src DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to embed.src enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashEmbedSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to embed.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove embed.src assignments on values from window.location.hash.",
+        "Allow-list embed origins in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/embed.src uses embed.src on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-embed-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/embed.src route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/embed.src, location.hash is assigned to embed.src without sanitization — route-specific embed.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot load arbitrary embed content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashEmbedSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove embed.src sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for embed inclusion sinks.",
+        "Allow-list embed origins.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/embed.src route assigns location.hash to embed.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
