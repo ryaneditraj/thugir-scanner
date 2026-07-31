@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T04:13:07.123671Z",
+  "updated_at": "2026-07-31T05:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/api/admin/users",
+      "source": "aligorithm/zero-health \u2014 BFLA admin user-management oracle GET /api/admin/users (Medium writeup + Swagger docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/messages",
+      "source": "aligorithm/zero-health \u2014 patient messaging BOLA oracle GET /api/messages (Medium writeup + Swagger docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/chatbot/history",
+      "source": "aligorithm/zero-health \u2014 chatbot conversation history disclosure oracle GET /api/chatbot/history (Medium writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/reports/generate",
+      "source": "aligorithm/zero-health \u2014 PDF report command-injection oracle POST /api/reports/generate (Swagger docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/health",
+      "source": "aligorithm/zero-health \u2014 debug/health info-disclosure oracle GET /api/health (Swagger docs)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://zerohealth.aliyu.dev/api/search",
       "source": "aligorithm/zero-health \u2014 reflected XSS via search API oracle GET /api/search?q= (challenges.md Challenge 4)",
