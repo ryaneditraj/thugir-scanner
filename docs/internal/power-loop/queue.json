@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T08:10:00.000Z",
+  "updated_at": "2026-07-31T09:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://zerohealth.aliyu.dev/api/notifications",
@@ -12499,6 +12499,31 @@
       "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=1",
       "source": "atlas-crew/Chimera vuln-api \u2014 classic SQLi oracle GET /api/v1/patients/search?ssn= (GitHub apps/vuln-api README)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://gin-juice-shop.herokuapp.com/",
+      "source": "OWASP Gin Juice Shop \u2014 Heroku public demo root (VWAD gin-juice-shop; SSTI/JWT training surface)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/users/v1",
+      "source": "apisec-inc/urban-VAmPI staging \u2014 user enumeration BOLA oracle GET /users/v1 (Railway OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/_debug",
+      "source": "erev0s/VAmPI production \u2014 excessive data exposure debug oracle GET /users/v1/_debug (Railway public demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/graphql",
+      "source": "Pentest Ground DVGA \u2014 GraphQL introspection/injection oracle (pentest-ground.com port 5013)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/users",
+      "source": "pentest-fauxbank \u2014 user enumeration / BOLA oracle GET /api/users (Vercel OSS banking lab)",
+      "auth": "oss_deploy"
     }
   ]
 }
