@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T17:05:00.000Z",
+  "updated_at": "2026-07-31T18:47:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/textarea?q=a",
+      "source": "google/firing-range — reflected XSS parameter echoed in textarea attribute value",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/innerHtml",
+      "source": "google/firing-range — location.hash piped to innerHTML DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml",
+      "source": "google/firing-range — event-triggered DOM XSS via form submission to innerHTML sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/plaintext?q=a",
+      "source": "google/firing-range — reflected XSS via content-sniffing plaintext response",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/remoteinclude/script_hash.html",
+      "source": "google/firing-range — remote script inclusion from location.hash fragment",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/tags/tag/img?q=a",
       "source": "google/firing-range — tag-based XSS parameter injected into IMG tag",
