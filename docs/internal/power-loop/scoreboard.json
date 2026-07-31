@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T21:02:27.367Z",
+  "updated_at": "2026-07-31T21:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3005,
-  "total_findings": 29677,
+  "total_sites_scanned": 3011,
+  "total_findings": 29800,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2089,
-  "discovery_findings": 24203,
+  "discovery_urls_added": 2094,
+  "discovery_findings": 24326,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-31T21:02:27.367Z",
+  "last_run": "2026-07-31T21:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "21",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 12,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 402,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +48,44 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (12 findings); no staging fallback needed; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com unreachable; staging fallback 6/6 (32 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 100,
-      "focus": "firing-range urldom fetch + script.src + xhr.open + toxicdom referrer/eval + address documentwrite",
+      "findings": 123,
+      "focus": "firing-range urldom base.href + embed.src + link.href + object.data + script.href",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses; primary healthy (no 503 fallback)",
-      "public-firing-range.appspot.com/urldom/location/hash/fetch: 19 findings — generic firing-range oracles; no fetch-API location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/script.src: 19 findings — generic oracles; no script.src location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/xhr.open: 19 findings — generic oracles; no xhr.open location.hash sink oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval: 18 findings — generic toxicdom oracles; no document.referrer→eval sink oracle",
-      "public-firing-range.appspot.com/address/location.hash/documentwrite: 19 findings — generic address oracles; no location.hash→document.write sink oracle",
-      "vulnshop.vercel.app/api/v1/wallet/add-funds: 6 findings — client-side lab evidence only; no race-condition wallet top-up live oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — primary Heroku dyno unreachable; staging fallback healthy",
+      "public-firing-range.appspot.com/urldom/location/hash/base.href: 22 findings — generic firing-range oracles + urldom-sink; no base.href-specific sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/embed.src: 22 findings — generic oracles; no embed.src location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/link.href: 22 findings — generic oracles; no link.href location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/object.data: 22 findings — generic oracles; no object.data location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/script.href: 22 findings — generic oracles; no script xlink:href location.hash sink oracle",
+      "vapi.tools.escape.tech/vapi/api7/user/1: 13 findings — full vAPI oracle suite (API1-10)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/urldom/location/hash/fetch: generic firing-range oracles only — no fetch-API location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/script.src: generic oracles only — no script.src location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/xhr.open: generic oracles only — no xhr.open location.hash sink oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval: generic toxicdom oracles only — no document.referrer→eval sink oracle",
-      "public-firing-range.appspot.com/address/location.hash/documentwrite: generic address oracles only — no location.hash→document.write sink oracle",
-      "vulnshop.vercel.app/api/v1/wallet/add-funds: race-condition wallet top-up oracle still absent without authenticated session",
+      "primary juice-shop.herokuapp.com Heroku dyno intermittent — staging fallback required this run",
+      "public-firing-range.appspot.com/urldom/location/hash/base.href: generic firing-range oracles only — no base.href location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/embed.src: generic oracles only — no embed.src location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/link.href: generic oracles only — no link.href location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/object.data: generic oracles only — no object.data location.hash sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/script.href: generic oracles only — no script xlink:href location.hash sink oracle",
       "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 12,
-    "public-firing-range.appspot.com/urldom/location/hash/fetch": 19,
-    "public-firing-range.appspot.com/urldom/location/hash/script.src": 19,
-    "public-firing-range.appspot.com/urldom/location/hash/xhr.open": 19,
-    "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval": 18,
-    "public-firing-range.appspot.com/address/location.hash/documentwrite": 19,
-    "vulnshop.vercel.app/api/v1/wallet/add-funds": 6
+    "juice-shop-staging.herokuapp.com": 32,
+    "public-firing-range.appspot.com/urldom/location/hash/base.href": 22,
+    "public-firing-range.appspot.com/urldom/location/hash/embed.src": 22,
+    "public-firing-range.appspot.com/urldom/location/hash/link.href": 22,
+    "public-firing-range.appspot.com/urldom/location/hash/object.data": 22,
+    "public-firing-range.appspot.com/urldom/location/hash/script.href": 22,
+    "vapi.tools.escape.tech/vapi/api7/user/1": 13
   }
 }
