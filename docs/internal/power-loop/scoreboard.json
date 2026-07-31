@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T22:10:00.000Z",
+  "updated_at": "2026-07-31T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3021,
-  "total_findings": 29988,
+  "total_sites_scanned": 3030,
+  "total_findings": 30183,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2099,
-  "discovery_findings": 24457,
-  "improvements_shipped": 1158,
-  "last_run": "2026-07-31T22:10:00.000Z",
+  "discovery_urls_added": 2104,
+  "discovery_findings": 24618,
+  "improvements_shipped": 1155,
+  "last_run": "2026-07-31T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 485,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (34 findings); secret-resend slug still absent"
+      "note": "Primary healthy 6/6 first-pass recall (34 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 86,
-      "focus": "firing-range xhr.open + toxicdom referrer/eval + base.href",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 161,
+      "focus": "firing-range script.src partial domain/path/query + location.search button.formaction/frame.src; drained zerohealth file-upload/command-injection/stored-xss",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/urldom/location/hash/xhr.open: 19→29 findings — firing-range-urldom-location-hash-xhr-open-live-oracle shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval: 18→28 findings — firing-range-dom-referrer-eval-live-oracle shipped",
-      "public-firing-range.appspot.com/urldom/location/hash/base.href: 19→29 findings — firing-range-urldom-location-hash-base-href-live-oracle shipped"
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain: 29 findings — generic firing-range oracles only; no partial-domain script.src sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_path: 29 findings — generic oracles only; no partial-path script.src sink oracle",
+      "public-firing-range.appspot.com/urldom/location/search/button.formaction: 28 findings — generic oracles only; no button.formaction location.search sink oracle",
+      "zerohealth.aliyu.dev/challenges/command-injection: 6 findings — zerohealth-command-injection-route-live-oracle + reflexion-escalated-ssti",
+      "zerohealth.aliyu.dev/challenges/file-upload: 6 findings — zerohealth-file-upload-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/urldom/location/hash/iframe.src: generic firing-range oracles only — no iframe.src location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/input.formaction: generic oracles only — no input.formaction location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/embed.src: generic oracles only — no embed.src location.hash sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/link.href: generic oracles only — no link.href location.hash sink oracle",
-      "pygoat.herokuapp.com/challenge/ssrf|xxe|csrf: challenge-route evidence only — no SSRF/XXE/CSRF live oracles without authenticated session",
-      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain|partial_path|partial_query: generic firing-range oracles only — no route-specific partial script.src sink oracles",
+      "public-firing-range.appspot.com/urldom/location/search/button.formaction|frame.src: generic oracles only — no location.search sink-specific oracles",
+      "zerohealth.aliyu.dev/challenges/stored-xss: route oracle present but no stored-XSS payload persistence confirmation without authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 34,
-    "public-firing-range.appspot.com/urldom/location/hash/xhr.open": 29,
-    "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval": 28,
-    "public-firing-range.appspot.com/urldom/location/hash/base.href": 29
+    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain": 29,
+    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_path": 29,
+    "public-firing-range.appspot.com/urldom/location/search/button.formaction": 28,
+    "zerohealth.aliyu.dev/challenges/command-injection": 6,
+    "zerohealth.aliyu.dev/challenges/file-upload": 6
   }
 }

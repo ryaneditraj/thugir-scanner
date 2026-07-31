@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T22:05:00.000Z",
+  "updated_at": "2026-07-31T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain#/urldom/",
+      "source": "google/firing-range — location.hash partial domain concatenated to script.src DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/script.src.partial_path#urldom/script.js",
+      "source": "google/firing-range — location.hash partial path concatenated to script.src DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/script.src.partial_query#firing-range",
+      "source": "google/firing-range — location.hash partial query string injected into script.src URI DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/button.formaction?//example.org",
+      "source": "google/firing-range — location.search assigned to button.formaction DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/frame.src?//example.org",
+      "source": "google/firing-range — location.search assigned to frame.src DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/hash/iframe.src",
       "source": "google/firing-range — location.hash assigned to iframe.src DOM XSS sink",
