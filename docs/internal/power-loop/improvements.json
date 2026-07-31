@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-race-condition-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 10 Rate Limiting Bypass + /api/auth/login-with-rate-limit + X-Forwarded-For markers; zerohealth.aliyu.dev/challenges/race-condition findings 5→6 (+zerohealth-race-condition-route-live-oracle); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-path-traversal-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js FILE DOWNLOAD ENDPOINT Directory Traversal + /api/files/:filename + ../../../etc/passwd markers; zerohealth.aliyu.dev/challenges/path-traversal findings 5→6 (+zerohealth-path-traversal-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-api-security-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage catalog Auth & API + IDOR CWE-639 + No rate limiting + Cookie Auth Bypass + Leaked Secrets CWE-200; ai-security-platform-iota.vercel.app/challenges/api-security findings 6→7 (+ai-security-api-security-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-stored-xss-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 6 Stored XSS via Appointment Booking + /api/appointments reason field markers; zerohealth.aliyu.dev/challenges/stored-xss findings 5→6 (+zerohealth-stored-xss-route-live-oracle); benchmark juice-shop 33 findings 6/6 maintained"

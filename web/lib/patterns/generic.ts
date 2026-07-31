@@ -15395,6 +15395,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-race-condition-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Zero Health race-condition challenge route live oracle",
+    description:
+      "When scanning /challenges/race-condition, POST /api/auth/login-with-rate-limit trusts client-controlled X-Forwarded-For headers enabling rate-limit bypass — route-specific TOCTOU oracle.",
+    impactOneline:
+      "Route-specific oracle confirms appointment/login rate-limit bypass training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthRaceConditionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — rate limit by server-side session or account, not spoofable headers.",
+      steps: [
+        "Rate limit by authenticated account or server-observed IP, not X-Forwarded-For alone.",
+        "Apply exponential backoff after repeated failed logins.",
+        "Use CAPTCHA or account lockout for healthcare patient portals."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/race-condition route documents rate-limit bypass via X-Forwarded-For. Show server-side throttling that cannot be spoofed by clients.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Health path-traversal challenge route live oracle",
+    description:
+      "When scanning /challenges/path-traversal, GET /api/files/:filename concatenates user input allowing ../../../etc/passwd reads — route-specific directory traversal oracle.",
+    impactOneline:
+      "Route-specific oracle confirms medical file download path traversal training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthPathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — resolve paths canonically and deny traversal sequences.",
+      steps: [
+        "Use path.basename and resolve files inside an upload root directory.",
+        "Reject filenames containing .. or absolute paths.",
+        "Serve medical files via opaque IDs instead of raw filenames."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/path-traversal route documents /api/files/:filename directory traversal. Show canonical path validation for medical file downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-api-security-route-live-oracle",
+    platform: "generic",
+    category: "API security",
+    severityDefault: "high",
+    title: "AI Security Platform broken API security challenge route live oracle",
+    description:
+      "When scanning /challenges/api-security, the platform Auth & API catalog documents IDOR (CWE-639), cookie auth bypass, missing rate limiting, and leaked secrets (CWE-200) — route-specific broken API security oracle.",
+    impactOneline:
+      "Route-specific oracle confirms Auth & API training modules without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityApiSecurityRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce authz, rate limits, and secret hygiene on all API routes.",
+      steps: [
+        "Require session auth and ownership checks on every object reference endpoint.",
+        "Apply per-IP and per-account rate limiting server-side.",
+        "Never expose API keys or service-role tokens in client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/api-security route documents broken API auth patterns. Show IDOR prevention, rate limiting, and secret management for Next.js APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-forgotten-backup-disclosure",
     platform: "generic",
     category: "Information disclosure",

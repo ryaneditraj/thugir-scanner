@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T02:07:02.678Z",
-  "total": 1210,
-  "uniqueSlugs": 1205,
+  "generatedAt": "2026-07-31T03:10:44.638Z",
+  "total": 1213,
+  "uniqueSlugs": 1208,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1192,
+    "generic": 1195,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1125,
+    "deep": 1128,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 304,
+    "Broken access control": 306,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -38,6 +38,7 @@
     "Insecure file upload": 1,
     "Command injection": 1,
     "XML external entity injection": 1,
+    "API security": 1,
     "Open redirect": 5,
     "Denial of service": 2,
     "Authentication bypass": 2,
@@ -49,6 +50,7 @@
     "agentpwn-attack-route-live-oracle",
     "agentpwn-context-window-route-live-oracle",
     "agentpwn-mcp-exploitation-route-live-oracle",
+    "ai-security-api-security-route-live-oracle",
     "ai-security-privacy-policy-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",
     "all-seeing-eye-read-route-live-oracle",
@@ -1248,7 +1250,9 @@
     "xxe-xml-post-probe",
     "zerohealth-command-injection-route-live-oracle",
     "zerohealth-file-upload-route-live-oracle",
+    "zerohealth-path-traversal-route-live-oracle",
     "zerohealth-prompt-injection-route-live-oracle",
+    "zerohealth-race-condition-route-live-oracle",
     "zerohealth-stored-xss-route-live-oracle",
     "zerohealth-xxe-route-live-oracle"
   ],
