@@ -1902,6 +1902,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-hash-fetch-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash fetch DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/fetch reads document.location.hash.substr(1), passes it to fetch(), and assigns the response to innerHTML — Firing Range fetch-API DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to fetch() and innerHTML enable DOM XSS when attackers control the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashFetchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to fetch() and innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove fetch() calls seeded from window.location.hash.",
+        "Treat URL fragments as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/fetch uses fetch on location.hash and writes to innerHTML. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-fetch-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/fetch route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/fetch, location.hash is passed to fetch() and innerHTML without sanitization — route-specific fetch-API DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values are not fetched and inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashFetchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove fetch+innerHTML sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/fetch route uses fetch on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-script-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash script.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/script.src reads document.location.hash.substr(1) and assigns it to scriptElement.src — Firing Range script.src DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to script.src enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to script.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove script.src assignments on values from window.location.hash.",
+        "Allow-list script origins in production applications.",
+        "Use CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src uses script.src on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-script-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/script.src route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/script.src, location.hash is assigned to script.src without sanitization — route-specific script.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot load arbitrary remote scripts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove script.src sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for script inclusion sinks.",
+        "Allow-list script origins.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src route assigns location.hash to script.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash document.write DOM XSS oracle",
+    description:
+      "GET /address/location.hash/documentwrite reads window.location.hash.substr(1) and passes it to document.write() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to document.write() enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from window.location.hash.",
+        "Treat URL fragments as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/documentwrite uses document.write on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/documentwrite route XSS oracle",
+    description:
+      "When scanning /address/location.hash/documentwrite, location.hash is passed to document.write() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/documentwrite route uses document.write on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
