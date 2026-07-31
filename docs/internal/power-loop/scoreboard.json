@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T18:50:30.000Z",
+  "updated_at": "2026-07-31T19:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2997,
-  "total_findings": 29533,
+  "total_sites_scanned": 2998,
+  "total_findings": 29565,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2084,
   "discovery_findings": 24103,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-31T18:50:30.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-31T19:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 32,
@@ -52,38 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 112,
-      "focus": "firing-range textarea + address/location.hash/innerHtml + eventtriggering/formSubmission + contentsniffing/plaintext + remoteinclude/script_hash",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 69,
+      "focus": "firing-range innerHtml + formSubmission + script_hash live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/reflected/parameter/textarea: 20 findings — reflected-param + generic firing-range oracles; no textarea-attribute context oracle",
-      "public-firing-range.appspot.com/address/location.hash/innerHtml: 19 findings — generic DOM oracles; no location.hash→innerHTML sink oracle",
-      "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml: 19 findings — generic oracles; no event-triggered formSubmission innerHtml oracle",
-      "public-firing-range.appspot.com/reflected/contentsniffing/plaintext: 20 findings — reflected-param fires; no content-sniffing plaintext oracle",
-      "public-firing-range.appspot.com/remoteinclude/script_hash.html: 19 findings — generic oracles; no remote-include hash-fragment script oracle",
-      "ssrf.vulnlab.dev/metadata: 15 findings — full SSRF oracle suite (AWS/GCP/Azure metadata + gopher + scheme bypass)"
+      "public-firing-range.appspot.com/address/location.hash/innerHtml: 19→23 findings — firing-range-address-location-hash-innerhtml live + route oracles shipped",
+      "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml: 19→23 findings — firing-range-dom-form-submission-innerhtml live + route oracles shipped",
+      "public-firing-range.appspot.com/remoteinclude/script_hash.html: 19→23 findings — firing-range-remoteinclude-script-hash live + route oracles shipped",
+      "public-firing-range.appspot.com/reflected/contentsniffing/plaintext: 20 findings — reflected-param fires; content-sniffing plaintext context oracle still absent",
+      "public-firing-range.appspot.com/reflected/parameter/textarea: 20 findings — reflected-param fires; textarea-attribute context oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/address/location.hash/innerHtml: generic firing-range oracles only — no location.hash→innerHTML sink oracle",
-      "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml: generic oracles only — no event-triggered innerHtml sink oracle",
       "public-firing-range.appspot.com/reflected/contentsniffing/plaintext: reflected-param fires but no content-sniffing plaintext context oracle",
-      "public-firing-range.appspot.com/remoteinclude/script_hash.html: generic oracles only — no location.hash remote script inclusion oracle",
+      "public-firing-range.appspot.com/reflected/parameter/textarea: reflected-param fires but no textarea-attribute context oracle",
       "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
-    "public-firing-range.appspot.com/reflected/parameter/textarea": 20,
-    "public-firing-range.appspot.com/address/location.hash/innerHtml": 19,
-    "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml": 19,
+    "public-firing-range.appspot.com/address/location.hash/innerHtml": 23,
+    "public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/innerHtml": 23,
+    "public-firing-range.appspot.com/remoteinclude/script_hash.html": 23,
     "public-firing-range.appspot.com/reflected/contentsniffing/plaintext": 20,
-    "public-firing-range.appspot.com/remoteinclude/script_hash.html": 19,
+    "public-firing-range.appspot.com/reflected/parameter/textarea": 20,
     "ssrf.vulnlab.dev/metadata": 15,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
