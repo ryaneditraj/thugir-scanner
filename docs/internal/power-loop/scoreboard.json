@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2903,
-  "total_findings": 28493,
+  "total_sites_scanned": 2909,
+  "total_findings": 28549,
   "critical_findings": 98,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2034,
-  "discovery_findings": 23543,
+  "discovery_findings": 23565,
   "improvements_shipped": 1158,
   "last_run": "2026-07-31T07:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 481,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,21 +48,25 @@
           ]
         }
       },
-      "note": "Primary heroku 6/6 (33 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (34 findings); no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 18,
-      "focus": "zerohealth admin/users + messages + chatbot/history route oracles shipped",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 6,
+      "findings": 22,
+      "focus": "drained reports/generate + api/health + the-internet download_secure/shifting_content/windows/tables",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
-      "zerohealth.aliyu.dev/api/admin/users: 5→6 findings — zerohealth-admin-users-route-live-oracle shipped",
-      "zerohealth.aliyu.dev/api/messages: 5→6 findings — zerohealth-messages-sqli-route-live-oracle shipped",
-      "zerohealth.aliyu.dev/api/chatbot/history: 5→6 findings — zerohealth-chatbot-history-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
+      "zerohealth.aliyu.dev/api/reports/generate: 5-finding thin pass — no PDF command-injection live oracle",
+      "zerohealth.aliyu.dev/api/health: 5-finding thin pass — no debug/health info-disclosure live oracle",
+      "the-internet.herokuapp.com/download_secure: 3 findings with download-secure-route live oracle",
+      "the-internet.herokuapp.com/shifting_content: 3 findings with shifting-content-route live oracle",
+      "the-internet.herokuapp.com/windows: 3 findings with windows-route live oracle",
+      "the-internet.herokuapp.com/tables: 3 findings with tables-route live oracle",
+      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -74,19 +78,16 @@
       "zerohealth.aliyu.dev/api/upload: route-specific unrestricted-upload live oracle absent",
       "zerohealth.aliyu.dev/api/reports/generate: route-specific PDF command-injection live oracle absent",
       "zerohealth.aliyu.dev/api/health: route-specific debug/health info-disclosure live oracle absent",
-      "zerohealth.aliyu.dev/api/users: route-specific users profile enumeration oracle still absent"
+      "chimera.escape.tech/api/agent-browse: unreachable in cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
+    "juice-shop.herokuapp.com": 34,
     "zerohealth.aliyu.dev/api/admin/users": 6,
     "zerohealth.aliyu.dev/api/messages": 6,
     "zerohealth.aliyu.dev/api/chatbot/history": 6,
-    "zerohealth.aliyu.dev/reset-password": 6,
-    "zerohealth.aliyu.dev/api/search": 6,
-    "zerohealth.aliyu.dev/api/ai/chat": 6,
-    "zerohealth.aliyu.dev/api/notifications": 5,
-    "zerohealth.aliyu.dev/api/insurance": 5,
-    "zerohealth.aliyu.dev/api/billing": 5
+    "the-internet.herokuapp.com/download_secure": 3,
+    "ssrf.vulnlab.dev/blind/": 15,
+    "juice-shop.demo.escape.tech/api/BasketItems": 36
   }
 }
