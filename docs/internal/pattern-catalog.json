@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T15:02:53.255Z",
-  "total": 1250,
-  "uniqueSlugs": 1245,
+  "generatedAt": "2026-07-31T16:02:44.171Z",
+  "total": 1256,
+  "uniqueSlugs": 1251,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1232,
+    "generic": 1238,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1165,
+    "deep": 1171,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 109,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 180,
+    "Cross-site scripting": 186,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -819,8 +819,12 @@
     "finbot-vendor-sidecar-route-live-oracle",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
+    "firing-range-dom-cookie-set-eval-live-oracle",
+    "firing-range-dom-cookie-set-eval-route-live-oracle",
     "firing-range-dom-localstorage-xss-live-oracle",
     "firing-range-dom-localstorage-xss-route-live-oracle",
+    "firing-range-dom-window-name-eval-live-oracle",
+    "firing-range-dom-window-name-eval-route-live-oracle",
     "firing-range-jsonp-live-oracle",
     "firing-range-jsonp-route-live-oracle",
     "firing-range-meta-redirect-live-oracle",
@@ -831,6 +835,8 @@
     "firing-range-reflected-url-css-import-route-live-oracle",
     "firing-range-reflected-url-href-live-oracle",
     "firing-range-reflected-url-href-route-live-oracle",
+    "firing-range-reflected-url-object-data-live-oracle",
+    "firing-range-reflected-url-object-data-route-live-oracle",
     "firing-range-reflected-url-script-src-live-oracle",
     "firing-range-reflected-url-script-src-route-live-oracle",
     "firing-range-urldom-redirect-live-oracle",
