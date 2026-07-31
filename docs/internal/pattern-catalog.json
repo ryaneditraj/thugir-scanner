@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T00:06:58.420Z",
-  "total": 1204,
-  "uniqueSlugs": 1199,
+  "generatedAt": "2026-07-31T01:06:52.206Z",
+  "total": 1207,
+  "uniqueSlugs": 1202,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1186,
+    "generic": 1189,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1119,
+    "deep": 1122,
     "continuous": 0
   },
   "byCategory": {
@@ -35,6 +35,9 @@
     "Sensitive data exposure": 29,
     "AI security": 45,
     "Business logic": 14,
+    "Insecure file upload": 1,
+    "Command injection": 1,
+    "XML external entity injection": 1,
     "Open redirect": 5,
     "Denial of service": 2,
     "Authentication bypass": 2,
@@ -1241,7 +1244,10 @@
     "xss-vulnlab-reflected-route-live-oracle",
     "xss-vulnlab-stored-live-oracle",
     "xss-vulnlab-stored-route-live-oracle",
-    "xxe-xml-post-probe"
+    "xxe-xml-post-probe",
+    "zerohealth-command-injection-route-live-oracle",
+    "zerohealth-file-upload-route-live-oracle",
+    "zerohealth-xxe-route-live-oracle"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."
 }
