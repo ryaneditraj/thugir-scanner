@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-deserialization-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js verifyToken alg:none + /api/debug/token + jwt.decode fallback; zerohealth.aliyu.dev/challenges/deserialization findings 5→6 (+zerohealth-deserialization-route-live-oracle); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-medical-records-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js GET/POST /api/medical-records + weak verifyToken + /api/debug/token forgeable user id; zerohealth.aliyu.dev/api/medical-records findings 5→6 (+zerohealth-medical-records-bola-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-parameter-pollution-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 9 Parameter Pollution + server.js /api/users/profile duplicate user_id last-value-wins; zerohealth.aliyu.dev/challenges/parameter-pollution findings 5→6 (+zerohealth-parameter-pollution-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-race-condition-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge 10 Rate Limiting Bypass + /api/auth/login-with-rate-limit + X-Forwarded-For markers; zerohealth.aliyu.dev/challenges/race-condition findings 5→6 (+zerohealth-race-condition-route-live-oracle); benchmark juice-shop 34 findings 6/6 maintained"
