@@ -37886,6 +37886,12 @@ const FIRING_RANGE_URLDOM_SINKS = [
     sinkRe: /area\.href\s*=\s*payload/i,
     sourceRe: /document\.location\.search\.substr\(1\)/i,
     label: "area.href assignment from query string"
+  },
+  {
+    path: "/urldom/location/search/document.location",
+    sinkRe: /document\.location\s*=\s*payload/i,
+    sourceRe: /document\.location\.search\.substr\(1\)/i,
+    label: "document.location assignment from query string"
   }
 ] as const;
 
@@ -38032,6 +38038,143 @@ const firingRangeJsonpRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /urldom/jsonp route scan — callback parameter reflected into executable JSONP wrapper without validation"
+    }
+  };
+};
+
+const FIRING_RANGE_REFLECTED_PARAM_PROBE = "thugirFrReflectedProbe";
+
+const FIRING_RANGE_REFLECTED_PARAM_PATHS = [
+  {
+    path: "/reflected/parameter/attribute_quoted",
+    bodyRe: /attribute\s*=\s*["']thugirFrReflectedProbe["']/i,
+    label: "double-quoted HTML attribute"
+  },
+  {
+    path: "/reflected/parameter/body_comment",
+    bodyRe: /<!--\s*thugirFrReflectedProbe\s*-->/i,
+    label: "HTML comment body"
+  },
+  {
+    path: "/reflected/parameter/css_style",
+    bodyRe: /<style>\s*thugirFrReflectedProbe/i,
+    label: "style element text"
+  },
+  {
+    path: "/reflected/parameter/css_style_value",
+    bodyRe: /color:\s*thugirFrReflectedProbe/i,
+    label: "CSS property value"
+  },
+  {
+    path: "/reflected/parameter/attribute_script",
+    bodyRe: /<script[^>]+thugirFrReflectedProbe/i,
+    label: "script src attribute"
+  }
+] as const;
+
+async function probeFiringRangeReflectedParam(
+  ctx: RuleContext,
+  target: (typeof FIRING_RANGE_REFLECTED_PARAM_PATHS)[number]
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_PARAM_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!target.bodyRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      context: target.label,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker input unescaped into ${target.label} — reflected XSS training oracle`
+    }
+  };
+}
+
+const firingRangeReflectedParamLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_REFLECTED_PARAM_PATHS];
+  if (/\/reflected\/parameter\//i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p.path));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const target of paths) {
+    const result = await probeFiringRangeReflectedParam(ctx, target);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeReflectedParamRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\//i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const target = FIRING_RANGE_REFLECTED_PARAM_PATHS.find((p) => pathname.startsWith(p.path));
+  if (!target) return NEGATIVE;
+  const result = await probeFiringRangeReflectedParam(ctx, target);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${target.path} route scan — q parameter reflected unescaped into ${target.label}`
+    }
+  };
+};
+
+const FIRING_RANGE_REFLECTED_HREF_PROBE = "javascript:thugirFrHrefProbe";
+
+const firingRangeReflectedUrlHrefLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/url/href", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_HREF_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hrefRe = new RegExp(
+    `<a\\s+href\\s*=\\s*["']${FIRING_RANGE_REFLECTED_HREF_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!hrefRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/url/href?q= reflects attacker-controlled javascript: URL into anchor href — reflected DOM XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedUrlHrefRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/url\/href\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedUrlHrefLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/url/href route scan — q parameter reflected into anchor href without validation"
     }
   };
 };
@@ -50710,6 +50853,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomRedirectRouteLiveOracle,
   firingRangeJsonpLiveOracle,
   firingRangeJsonpRouteLiveOracle,
+  firingRangeReflectedParamLiveOracle,
+  firingRangeReflectedParamRouteLiveOracle,
+  firingRangeReflectedUrlHrefLiveOracle,
+  firingRangeReflectedUrlHrefRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,

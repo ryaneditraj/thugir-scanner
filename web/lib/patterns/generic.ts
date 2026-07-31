@@ -1070,6 +1070,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-param-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected parameter XSS oracle",
+    description:
+      "GET /reflected/parameter/*?q= reflects attacker input unescaped into HTML attributes, comments, CSS, or script src — Firing Range reflected XSS training oracle.",
+    impactOneline:
+      "Reflected XSS in multiple HTML contexts lets attackers execute script in victim browsers via crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParamLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before reflecting into HTML, CSS, or URL attributes.",
+      steps: [
+        "HTML-encode reflected values based on output context (attribute, comment, style).",
+        "Reject javascript: and data: schemes in href/src attributes.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter routes reflect q into HTML without encoding. Show context-aware XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-param-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/* routes, the q query parameter is reflected unescaped into the page — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm reflected XSS cannot execute in attribute, comment, or CSS contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParamRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Context-encode q parameter output on /reflected/parameter routes.",
+      steps: [
+        "Audit each reflected context for proper encoding.",
+        "Add output encoding middleware for query parameters.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter route reflects q without encoding. Show route-specific reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected URL href XSS oracle",
+    description:
+      "GET /reflected/url/href?q= reflects attacker-controlled javascript: URLs into anchor href attributes — Firing Range reflected DOM XSS training oracle.",
+    impactOneline:
+      "Reflected javascript: href values let attackers execute script when victims click crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block javascript: and data: schemes in reflected href attributes.",
+      steps: [
+        "Allowlist safe URL schemes (https:, mailto:) for reflected href values.",
+        "Reject or encode user input before inserting into href attributes.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/href?q= reflects into anchor href without scheme validation. Show href XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/url/href route XSS oracle",
+    description:
+      "When scanning /reflected/url/href, the q query parameter is reflected into anchor href without scheme validation — route-specific reflected DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm href attributes cannot contain javascript: URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate URL schemes on /reflected/url/href before emitting anchor tags.",
+      steps: [
+        "Reject javascript: and data: schemes in q parameter values.",
+        "Use relative paths or allowlisted hosts for href targets.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/href route reflects q into href. Show route-specific href XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
