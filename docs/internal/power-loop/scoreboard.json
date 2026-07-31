@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T15:03:02.205Z",
+  "updated_at": "2026-07-31T15:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2962,
-  "total_findings": 29039,
+  "total_sites_scanned": 2968,
+  "total_findings": 29088,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2064,
-  "discovery_findings": 23794,
+  "discovery_urls_added": 2069,
+  "discovery_findings": 23843,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-31T15:03:02.205Z",
+  "last_run": "2026-07-31T15:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 32,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 490,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,42 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (32 findings pages=6 probes=490); no benchmark misses"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback healthy 6/6 (31 findings pages=6 probes=478); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 44,
-      "focus": "google/firing-range body/tagname/attribute_unquoted + url/css + url/script_src XSS contexts; queue drain llm-sec unbounded-consumption",
+      "urls_scanned": 8,
+      "findings": 49,
+      "focus": "google/firing-range url/css_import + object_data + param_src + toxicdom eval sinks; queue drain ssti.vulnlab.dev/basic",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/reflected/parameter/body: 7 findings — reflected-xss-query-param + generic firing-range DOM oracles",
-      "public-firing-range.appspot.com/reflected/parameter/tagname: 7 findings — reflected-xss-query-param fires; no tag-name context oracle",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted: 7 findings — reflected-xss-query-param fires; no unquoted-attribute context oracle",
-      "public-firing-range.appspot.com/reflected/url/css: 7 findings — reflected-xss-query-param fires; no URL-CSS-sink context oracle",
-      "public-firing-range.appspot.com/reflected/url/script_src: 7 findings — reflected-xss-query-param fires; no URL-script-src context oracle",
-      "www.llm-sec.dev/labs/unbounded-consumption: 9 findings — secret-aws-akid + client-side-llm-sec-evidence"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — primary Heroku dyno 503",
+      "public-firing-range.appspot.com/reflected/url/css_import: 9 findings — reflected-xss-query-param fires; no LINK stylesheet href context oracle",
+      "public-firing-range.appspot.com/reflected/url/object_data: 9 findings — reflected-xss-query-param fires; no OBJECT data-attribute context oracle",
+      "public-firing-range.appspot.com/reflected/url/param_src: 9 findings — reflected-xss-query-param fires; no OBJECT PARAM src context oracle",
+      "public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/eval: 7 findings — generic firing-range oracles; no cookie→eval toxicdom sink oracle",
+      "public-firing-range.appspot.com/dom/toxicdom/window/name/eval: 7 findings — generic firing-range oracles; no window.name→eval toxicdom sink oracle",
+      "ssti.vulnlab.dev/basic/: 8 findings — full ssti-vulnlab oracle suite (Jinja2 SSTI live oracles)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/reflected/parameter/tagname: reflected-xss-query-param fires but no tag-name injection context oracle",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted: no unquoted-attribute XSS context oracle",
-      "public-firing-range.appspot.com/reflected/url/css + url/script_src: no URL-based STYLE/SCRIPT sink context oracles",
+      "public-firing-range.appspot.com/reflected/url/css_import: reflected-xss-query-param fires but no CSS-import/LINK-href context oracle",
+      "public-firing-range.appspot.com/reflected/url/object_data + param_src: no OBJECT data/PARAM-src sink context oracles",
+      "public-firing-range.appspot.com/dom/toxicdom/*/eval: no toxicdom cookie_set or window.name eval() sink oracles",
       "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent",
-      "juice-shop.demo.escape.tech/api/Addresss/1: address BOLA oracles fire on fresh probe but blocked after crawl priming on shared demo host",
-      "zerohealth.aliyu.dev/api/notifications + api/insurance + api/billing: no OSS routes in server.js — cannot ship route oracles without evidence"
+      "juice-shop.demo.escape.tech/api/Addresss/1: address BOLA oracles fire on fresh probe but blocked after crawl priming on shared demo host"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 32,
-    "public-firing-range.appspot.com/reflected/parameter/body": 7,
-    "public-firing-range.appspot.com/reflected/parameter/tagname": 7,
-    "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted": 7,
-    "public-firing-range.appspot.com/reflected/url/css": 7,
-    "public-firing-range.appspot.com/reflected/url/script_src": 7,
-    "www.llm-sec.dev/labs/unbounded-consumption": 9
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/reflected/url/css_import": 9,
+    "public-firing-range.appspot.com/reflected/url/object_data": 9,
+    "public-firing-range.appspot.com/reflected/url/param_src": 9,
+    "public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/eval": 7,
+    "public-firing-range.appspot.com/dom/toxicdom/window/name/eval": 7,
+    "ssti.vulnlab.dev/basic": 8
   }
 }
