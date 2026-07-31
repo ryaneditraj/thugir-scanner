@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T05:05:00.000Z",
+  "updated_at": "2026-07-31T05:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2887,
-  "total_findings": 28353,
-  "critical_findings": 86,
+  "total_sites_scanned": 2890,
+  "total_findings": 28381,
+  "critical_findings": 89,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2029,
-  "discovery_findings": 23476,
-  "improvements_shipped": 1155,
-  "last_run": "2026-07-31T05:05:00.000Z",
+  "discovery_findings": 23494,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-31T05:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,30 +48,26 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (33 findings); no benchmark misses; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (34 findings); no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 28,
-      "focus": "zerohealth /api/admin/users + /api/messages + /api/chatbot/history + /api/reports/generate + /api/health + queue drain (the-internet download_secure)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 18,
+      "focus": "zerohealth rate-limiting + mass-assignment + information-disclosure route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
-      "zerohealth.aliyu.dev/api/admin/users: 5-finding thin pass with client-side-zero-health-evidence; BFLA admin-users live oracle still absent",
-      "zerohealth.aliyu.dev/api/messages: 5-finding thin pass without route-specific patient-messaging BOLA live oracle",
-      "zerohealth.aliyu.dev/api/chatbot/history: 5-finding thin pass without route-specific chatbot-history disclosure live oracle",
-      "zerohealth.aliyu.dev/api/reports/generate: 5-finding thin pass without route-specific PDF command-injection live oracle",
-      "zerohealth.aliyu.dev/api/health: 5-finding thin pass without route-specific debug/health info-disclosure live oracle",
-      "the-internet.herokuapp.com/download_secure: 3 findings — the-internet-download-secure-route-live-oracle shipped (broken access control on secure download)",
-      "chimera.escape.tech/api/agent-browse: unreachable (DNS/connect error)",
-      "zerohealth.io/challenges/jwt: unreachable (DNS/connect error)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
+      "zerohealth.aliyu.dev/challenges/rate-limiting: 5→6 findings — zerohealth-rate-limiting-route-live-oracle shipped (Challenge 10 X-Forwarded-For bypass)",
+      "zerohealth.aliyu.dev/challenges/mass-assignment: 5→6 findings — zerohealth-mass-assignment-route-live-oracle shipped (Challenge 14 role escalation via PUT /api/users/profile)",
+      "zerohealth.aliyu.dev/challenges/information-disclosure: 5→6 findings — zerohealth-information-disclosure-route-live-oracle shipped (GET /api/info leaks jwt_secret + admin_credentials)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "zerohealth.aliyu.dev/reset-password: reflected-XSS reset-password route oracle still absent",
       "zerohealth.aliyu.dev/api/admin/users: route-specific BFLA admin-user-management live oracle still absent",
       "zerohealth.aliyu.dev/api/messages: route-specific patient-messaging BOLA live oracle still absent",
       "zerohealth.aliyu.dev/api/chatbot/history: route-specific chatbot-history disclosure live oracle still absent",
@@ -81,12 +77,12 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
-    "zerohealth.aliyu.dev/api/admin/users": 5,
-    "zerohealth.aliyu.dev/api/messages": 5,
-    "zerohealth.aliyu.dev/api/chatbot/history": 5,
-    "zerohealth.aliyu.dev/api/reports/generate": 5,
-    "zerohealth.aliyu.dev/api/health": 5,
-    "the-internet.herokuapp.com/download_secure": 3
+    "juice-shop.herokuapp.com": 34,
+    "zerohealth.aliyu.dev/challenges/rate-limiting": 6,
+    "zerohealth.aliyu.dev/challenges/mass-assignment": 6,
+    "zerohealth.aliyu.dev/challenges/information-disclosure": 6,
+    "juice-shop.demo.escape.tech/api/BasketItems": 36,
+    "vulnbank.org/merchant/dashboard": 21,
+    "ssrf.vulnlab.dev/blind/": 15
   }
 }
