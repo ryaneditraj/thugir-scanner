@@ -38521,6 +38521,222 @@ const firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle: Rule = async 
   };
 };
 
+const FIRING_RANGE_ESCAPE_CSS_STYLE_PROBE = "thugirFrCssStyleProbe";
+const FIRING_RANGE_ESCAPE_CSS_STYLE_PATHS = [
+  {
+    path: "/escape/serverside/escapeHtml/css_style",
+    encoding: "escapeHtml"
+  },
+  {
+    path: "/escape/serverside/encodeUrl/css_style",
+    encoding: "encodeUrl"
+  }
+] as const;
+
+async function probeFiringRangeEscapeCssStyle(
+  ctx: RuleContext,
+  target: (typeof FIRING_RANGE_ESCAPE_CSS_STYLE_PATHS)[number]
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_ESCAPE_CSS_STYLE_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const styleRe = new RegExp(
+    `<style>\\s*${FIRING_RANGE_ESCAPE_CSS_STYLE_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*</style>`,
+    "i"
+  );
+  if (!styleRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      encoding: target.encoding,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker input into <style> despite ${target.encoding} — server-side CSS style escape bypass XSS oracle`
+    }
+  };
+}
+
+const firingRangeEscapeServersideCssStyleLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_ESCAPE_CSS_STYLE_PATHS];
+  if (/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/css_style\b/i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p.path));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const target of paths) {
+    const result = await probeFiringRangeEscapeCssStyle(ctx, target);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeEscapeServersideCssStyleRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/css_style\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const target = FIRING_RANGE_ESCAPE_CSS_STYLE_PATHS.find((p) => pathname.startsWith(p.path));
+  if (!target) return NEGATIVE;
+  const result = await probeFiringRangeEscapeCssStyle(ctx, target);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${target.path} route scan — ${target.encoding} bypass allows CSS style tag XSS`
+    }
+  };
+};
+
+const FIRING_RANGE_REFLECTED_IFRAME_SRCDOC_PROBE = "thugirFrSrcdocProbe";
+
+const firingRangeReflectedIframeSrcdocLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/parameter/iframe_srcdoc", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_IFRAME_SRCDOC_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const srcdocRe = new RegExp(
+    `srcdoc\\s*=\\s*["']${FIRING_RANGE_REFLECTED_IFRAME_SRCDOC_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!srcdocRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/iframe_srcdoc?q= reflects attacker input into iframe srcdoc attribute — reflected sandbox XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedIframeSrcdocRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/iframe_srcdoc\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedIframeSrcdocLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/iframe_srcdoc route scan — q parameter reflected into iframe srcdoc without validation"
+    }
+  };
+};
+
+const FIRING_RANGE_TAGS_INJECTION_PATHS = [
+  {
+    path: "/tags/tag/img",
+    q: "<img src=x>",
+    bodyRe: /<img\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "IMG tag injection"
+  },
+  {
+    path: "/tags/tag/script",
+    q: "<script>",
+    bodyRe: /<script><\/script>/i,
+    label: "SCRIPT tag CDATA injection"
+  },
+  {
+    path: "/tags/tag/iframe",
+    q: "<iframe src=x>",
+    bodyRe: /<iframe\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "IFRAME tag injection"
+  },
+  {
+    path: "/tags/tag/body/onload",
+    q: "<body>",
+    bodyRe: /<body><\/body>/i,
+    label: "BODY tag injection"
+  }
+] as const;
+
+async function probeFiringRangeTagsInjection(
+  ctx: RuleContext,
+  target: (typeof FIRING_RANGE_TAGS_INJECTION_PATHS)[number]
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
+  probeUrl.searchParams.set("q", target.q);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!target.bodyRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      context: target.label,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker-controlled HTML tags into ${target.label} context — tag injection XSS training oracle`
+    }
+  };
+}
+
+const firingRangeTagsInjectionLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_TAGS_INJECTION_PATHS];
+  if (/\/tags\/tag\//i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p.path));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const target of paths) {
+    const result = await probeFiringRangeTagsInjection(ctx, target);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeTagsInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tags\/tag\//i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const target = FIRING_RANGE_TAGS_INJECTION_PATHS.find((p) => pathname.startsWith(p.path));
+  if (!target) return NEGATIVE;
+  const result = await probeFiringRangeTagsInjection(ctx, target);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${target.path} route scan — q parameter allows ${target.label}`
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -51215,6 +51431,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeCorsDynamicAllowOriginRouteLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
+  firingRangeEscapeServersideCssStyleLiveOracle,
+  firingRangeEscapeServersideCssStyleRouteLiveOracle,
+  firingRangeReflectedIframeSrcdocLiveOracle,
+  firingRangeReflectedIframeSrcdocRouteLiveOracle,
+  firingRangeTagsInjectionLiveOracle,
+  firingRangeTagsInjectionRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
