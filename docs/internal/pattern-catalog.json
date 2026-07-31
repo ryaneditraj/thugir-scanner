@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T07:02:10.675Z",
-  "total": 1225,
-  "uniqueSlugs": 1220,
+  "generatedAt": "2026-07-31T09:04:29.707Z",
+  "total": 1228,
+  "uniqueSlugs": 1223,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1207,
+    "generic": 1210,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1140,
+    "deep": 1143,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 309,
+    "Broken access control": 310,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -36,13 +36,13 @@
     "AI security": 48,
     "Business logic": 14,
     "Insecure file upload": 1,
-    "Command injection": 1,
+    "Command injection": 2,
     "XML external entity injection": 1,
     "API security": 3,
+    "Path traversal": 3,
     "Open redirect": 5,
     "Denial of service": 2,
     "Authentication bypass": 2,
-    "Path traversal": 2,
     "XSS": 1,
     "Prompt injection": 2
   },
@@ -1254,6 +1254,7 @@
     "zerohealth-command-injection-route-live-oracle",
     "zerohealth-deserialization-route-live-oracle",
     "zerohealth-file-upload-route-live-oracle",
+    "zerohealth-files-route-live-oracle",
     "zerohealth-information-disclosure-route-live-oracle",
     "zerohealth-mass-assignment-route-live-oracle",
     "zerohealth-medical-records-bola-route-live-oracle",
@@ -1263,9 +1264,11 @@
     "zerohealth-prompt-injection-route-live-oracle",
     "zerohealth-race-condition-route-live-oracle",
     "zerohealth-rate-limiting-route-live-oracle",
+    "zerohealth-reports-generate-route-live-oracle",
     "zerohealth-reset-password-reflected-xss-route-live-oracle",
     "zerohealth-search-reflected-xss-route-live-oracle",
     "zerohealth-stored-xss-route-live-oracle",
+    "zerohealth-users-route-live-oracle",
     "zerohealth-xxe-route-live-oracle"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."
