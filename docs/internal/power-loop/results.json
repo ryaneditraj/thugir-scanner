@@ -1,639 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-30T21:06:41.434Z",
-      "url": "https://the-internet.herokuapp.com/broken_links",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 541,
-      "status": "ok",
-      "scanned_at": "2026-07-30T21:06:41.434Z"
-    },
-    {
-      "run_id": "2026-07-30T22:01:01.968Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 33,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-chatbot-route-live-oracle",
-          "title": "Juice Shop chatbot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-login-sqli-live-oracle",
-          "title": "Juice Shop login SQL injection live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-users-idor-live-oracle",
-          "title": "Juice Shop user profile IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-items-bola-live-oracle",
-          "title": "Juice Shop basket items BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-questions-list-live-oracle",
-          "title": "Juice Shop security-question catalog live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-recycles-bola-live-oracle",
-          "title": "Juice Shop recycle requests BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-cards-bola-live-oracle",
-          "title": "Juice Shop payment cards BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-addresss-bola-live-oracle",
-          "title": "Juice Shop shipping addresses BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-idor-live-oracle",
-          "title": "Juice Shop basket IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-memories-bola-live-oracle",
-          "title": "Juice Shop memories BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-quantitys-exposure-live-oracle",
-          "title": "Juice Shop inventory quantities exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-hints-exposure-live-oracle",
-          "title": "Juice Shop challenge hints exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-challenges-disclosure-live-oracle",
-          "title": "Juice Shop challenge scoreboard exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-deliverys-exposure-live-oracle",
-          "title": "Juice Shop delivery methods exposed live oracle",
-          "severity": "low",
-          "confidence": 0.89,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-addresss-id-bola-live-oracle",
-          "title": "Juice Shop address-by-ID BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-feedbacks-bola-live-oracle",
-          "title": "Juice Shop product feedback BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-answers-disclosure-live-oracle",
-          "title": "Juice Shop security-answer hashes disclosed live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 487,
-      "status": "ok",
-      "scanned_at": "2026-07-30T22:01:01.968Z",
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      }
-    },
-    {
-      "run_id": "2026-07-30T22:03:52.129Z",
-      "url": "https://vapi.tools.escape.tech/vapi/api7/user/1",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 13,
-      "findings": [
-        {
-          "slug": "vapi-api1-bola-live-oracle",
-          "title": "vAPI API1 BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api2-broken-auth-live-oracle",
-          "title": "vAPI API2 broken authentication live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vapi-api3-comment-bola-live-oracle",
-          "title": "vAPI API3 comment BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api4-otp-broken-auth-live-oracle",
-          "title": "vAPI API4 OTP broken authentication live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vapi-api4-user-exposure-live-oracle",
-          "title": "vAPI API4 user exposure live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api5-bfla-live-oracle",
-          "title": "vAPI API5 BFLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api6-mass-assignment-live-oracle",
-          "title": "vAPI API6 mass assignment live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vapi-api7-cors-misconfig-live-oracle",
-          "title": "vAPI API7 CORS misconfiguration live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-api7-cors-route-live-oracle",
-          "title": "vAPI API7 route CORS misconfiguration live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-api9-improper-inventory-live-oracle",
-          "title": "vAPI API9 improper inventory live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-api10-logging-live-oracle",
-          "title": "vAPI API10 insufficient logging live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vapi-route-live-oracle",
-          "title": "vAPI live instance route oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 564,
-      "status": "ok",
-      "scanned_at": "2026-07-30T22:03:52.129Z"
-    },
-    {
-      "run_id": "2026-07-30T22:04:40.229Z",
-      "url": "https://chimera.escape.tech/api/agent-browse",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-30T22:04:40.229Z",
-      "error": "We couldn't reach chimera.escape.tech. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-30T22:04:40.291Z",
-      "url": "https://zerohealth.io/challenges/jwt",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-30T22:04:40.291Z",
-      "error": "We couldn't reach zerohealth.io. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-30T22:04:40.358Z",
-      "url": "https://duck-store.escape.tech/api/import-from-url",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 18,
-      "findings": [
-        {
-          "slug": "duck-store-coupons-disclosure-live-oracle",
-          "title": "Duck Store private coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-ssrf-fetch-url-live-oracle",
-          "title": "Duck Store fetch-url SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "duck-store-mcp-coupons-disclosure-live-oracle",
-          "title": "Duck Store MCP coupon disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-products-filter-sqli-live-oracle",
-          "title": "Duck Store products filter SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "duck-store-cart-negative-quantity-live-oracle",
-          "title": "Duck Store cart negative-quantity live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-checkout-private-coupon-live-oracle",
-          "title": "Duck Store private coupon checkout live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-testimonials-stored-xss-live-oracle",
-          "title": "Duck Store testimonials stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "duck-store-auth-login-weak-credentials-live-oracle",
-          "title": "Duck Store weak admin credentials live oracle",
-          "severity": "critical",
-          "confidence": 0.95,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "duck-store-referral-code-abuse-live-oracle",
-          "title": "Duck Store referral code abuse live oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-admin-products-negative-price-live-oracle",
-          "title": "Duck Store admin negative product price live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Business logic"
-        },
-        {
-          "slug": "duck-store-admin-orders-exposure-live-oracle",
-          "title": "Duck Store admin orders exposure live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "duck-store-testimonials-put-bola-live-oracle",
-          "title": "Duck Store testimonials PUT BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 592,
-      "status": "ok",
-      "scanned_at": "2026-07-30T22:04:40.358Z"
-    },
-    {
-      "run_id": "2026-07-30T22:05:23.028Z",
-      "url": "https://the-internet.herokuapp.com/basic_auth",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "the-internet-basic-auth-route-live-oracle",
-          "title": "the-internet basic authentication route live oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 543,
-      "status": "ok",
-      "scanned_at": "2026-07-30T22:05:23.028Z"
-    },
-    {
-      "run_id": "2026-07-30T22:05:31.713Z",
-      "url": "https://the-internet.herokuapp.com/digest_auth",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 2,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "the-internet-digest-auth-route-live-oracle",
-          "title": "the-internet digest authentication route live oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 543,
-      "status": "ok",
-      "scanned_at": "2026-07-30T22:05:31.713Z"
-    },
-    {
       "run_id": "2026-07-30T22:05:40.244Z",
       "url": "https://the-internet.herokuapp.com/download",
       "auth": "public_demo",
@@ -14627,6 +13994,826 @@
       },
       "notes": "No teacher tools available. 19 UTC run: primary juice-shop.herokuapp.com healthy 6/6 (12 findings) — no staging fallback needed; secret-resend slug still absent. Discovery: +5 URLs (urldom fetch + script.src + xhr.open + toxicdom referrer/eval + address documentwrite).",
       "scanned_at": "2026-07-31T19:13:39.790Z"
+    },
+    {
+      "run_id": "2026-07-31T19:13:45.747Z",
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/fetch",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 19,
+      "findings": [
+        {
+          "slug": "firing-range-dom-localstorage-xss-live-oracle",
+          "title": "Google Firing Range toxic DOM localStorage XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-meta-redirect-live-oracle",
+          "title": "Google Firing Range meta-tag open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-urldom-sink-live-oracle",
+          "title": "Google Firing Range URL-based DOM XSS sink oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-urldom-redirect-live-oracle",
+          "title": "Google Firing Range urldom open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-jsonp-live-oracle",
+          "title": "Google Firing Range JSONP callback reflection oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-param-live-oracle",
+          "title": "Google Firing Range reflected parameter XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-href-live-oracle",
+          "title": "Google Firing Range reflected URL href XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-script-src-live-oracle",
+          "title": "Google Firing Range reflected URL script src XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-css-import-live-oracle",
+          "title": "Google Firing Range reflected URL CSS import oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-object-data-live-oracle",
+          "title": "Google Firing Range reflected URL object data XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-cookie-set-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM cookie eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-window-name-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM window.name eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-address-location-hash-eval-live-oracle",
+          "title": "Google Firing Range address location.hash eval DOM XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-cors-dynamic-allow-origin-live-oracle",
+          "title": "Google Firing Range dynamic CORS allow-origin oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "firing-range-escape-serverside-attribute-unquoted-live-oracle",
+          "title": "Google Firing Range server-side escapeHtml attribute bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-escape-serverside-css-style-live-oracle",
+          "title": "Google Firing Range server-side CSS style escape bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-iframe-srcdoc-live-oracle",
+          "title": "Google Firing Range iframe srcdoc reflection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-tags-injection-live-oracle",
+          "title": "Google Firing Range HTML tag injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 559,
+      "status": "ok",
+      "scanned_at": "2026-07-31T19:13:45.747Z"
+    },
+    {
+      "run_id": "2026-07-31T19:14:16.396Z",
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/script.src",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 19,
+      "findings": [
+        {
+          "slug": "firing-range-dom-localstorage-xss-live-oracle",
+          "title": "Google Firing Range toxic DOM localStorage XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-meta-redirect-live-oracle",
+          "title": "Google Firing Range meta-tag open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-urldom-sink-live-oracle",
+          "title": "Google Firing Range URL-based DOM XSS sink oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-urldom-redirect-live-oracle",
+          "title": "Google Firing Range urldom open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-jsonp-live-oracle",
+          "title": "Google Firing Range JSONP callback reflection oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-param-live-oracle",
+          "title": "Google Firing Range reflected parameter XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-href-live-oracle",
+          "title": "Google Firing Range reflected URL href XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-script-src-live-oracle",
+          "title": "Google Firing Range reflected URL script src XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-css-import-live-oracle",
+          "title": "Google Firing Range reflected URL CSS import oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-object-data-live-oracle",
+          "title": "Google Firing Range reflected URL object data XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-cookie-set-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM cookie eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-window-name-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM window.name eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-address-location-hash-eval-live-oracle",
+          "title": "Google Firing Range address location.hash eval DOM XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-cors-dynamic-allow-origin-live-oracle",
+          "title": "Google Firing Range dynamic CORS allow-origin oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "firing-range-escape-serverside-attribute-unquoted-live-oracle",
+          "title": "Google Firing Range server-side escapeHtml attribute bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-escape-serverside-css-style-live-oracle",
+          "title": "Google Firing Range server-side CSS style escape bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-iframe-srcdoc-live-oracle",
+          "title": "Google Firing Range iframe srcdoc reflection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-tags-injection-live-oracle",
+          "title": "Google Firing Range HTML tag injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 559,
+      "status": "ok",
+      "scanned_at": "2026-07-31T19:14:16.396Z"
+    },
+    {
+      "run_id": "2026-07-31T19:14:47.926Z",
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/xhr.open",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 19,
+      "findings": [
+        {
+          "slug": "firing-range-dom-localstorage-xss-live-oracle",
+          "title": "Google Firing Range toxic DOM localStorage XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-meta-redirect-live-oracle",
+          "title": "Google Firing Range meta-tag open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-urldom-sink-live-oracle",
+          "title": "Google Firing Range URL-based DOM XSS sink oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-urldom-redirect-live-oracle",
+          "title": "Google Firing Range urldom open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-jsonp-live-oracle",
+          "title": "Google Firing Range JSONP callback reflection oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-param-live-oracle",
+          "title": "Google Firing Range reflected parameter XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-href-live-oracle",
+          "title": "Google Firing Range reflected URL href XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-script-src-live-oracle",
+          "title": "Google Firing Range reflected URL script src XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-css-import-live-oracle",
+          "title": "Google Firing Range reflected URL CSS import oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-object-data-live-oracle",
+          "title": "Google Firing Range reflected URL object data XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-cookie-set-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM cookie eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-window-name-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM window.name eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-address-location-hash-eval-live-oracle",
+          "title": "Google Firing Range address location.hash eval DOM XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-cors-dynamic-allow-origin-live-oracle",
+          "title": "Google Firing Range dynamic CORS allow-origin oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "firing-range-escape-serverside-attribute-unquoted-live-oracle",
+          "title": "Google Firing Range server-side escapeHtml attribute bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-escape-serverside-css-style-live-oracle",
+          "title": "Google Firing Range server-side CSS style escape bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-iframe-srcdoc-live-oracle",
+          "title": "Google Firing Range iframe srcdoc reflection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-tags-injection-live-oracle",
+          "title": "Google Firing Range HTML tag injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 559,
+      "status": "ok",
+      "scanned_at": "2026-07-31T19:14:47.926Z"
+    },
+    {
+      "run_id": "2026-07-31T19:15:20.147Z",
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "firing-range-meta-redirect-live-oracle",
+          "title": "Google Firing Range meta-tag open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-urldom-sink-live-oracle",
+          "title": "Google Firing Range URL-based DOM XSS sink oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-urldom-redirect-live-oracle",
+          "title": "Google Firing Range urldom open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-jsonp-live-oracle",
+          "title": "Google Firing Range JSONP callback reflection oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-param-live-oracle",
+          "title": "Google Firing Range reflected parameter XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-href-live-oracle",
+          "title": "Google Firing Range reflected URL href XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-script-src-live-oracle",
+          "title": "Google Firing Range reflected URL script src XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-css-import-live-oracle",
+          "title": "Google Firing Range reflected URL CSS import oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-object-data-live-oracle",
+          "title": "Google Firing Range reflected URL object data XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-cookie-set-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM cookie eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-window-name-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM window.name eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-address-location-hash-eval-live-oracle",
+          "title": "Google Firing Range address location.hash eval DOM XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-cors-dynamic-allow-origin-live-oracle",
+          "title": "Google Firing Range dynamic CORS allow-origin oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "firing-range-escape-serverside-attribute-unquoted-live-oracle",
+          "title": "Google Firing Range server-side escapeHtml attribute bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-escape-serverside-css-style-live-oracle",
+          "title": "Google Firing Range server-side CSS style escape bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-iframe-srcdoc-live-oracle",
+          "title": "Google Firing Range iframe srcdoc reflection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-tags-injection-live-oracle",
+          "title": "Google Firing Range HTML tag injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 559,
+      "status": "ok",
+      "scanned_at": "2026-07-31T19:15:20.147Z"
+    },
+    {
+      "run_id": "2026-07-31T19:15:51.697Z",
+      "url": "https://public-firing-range.appspot.com/address/location.hash/documentwrite",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 19,
+      "findings": [
+        {
+          "slug": "firing-range-dom-localstorage-xss-live-oracle",
+          "title": "Google Firing Range toxic DOM localStorage XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-meta-redirect-live-oracle",
+          "title": "Google Firing Range meta-tag open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-urldom-sink-live-oracle",
+          "title": "Google Firing Range URL-based DOM XSS sink oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-urldom-redirect-live-oracle",
+          "title": "Google Firing Range urldom open redirect oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "firing-range-jsonp-live-oracle",
+          "title": "Google Firing Range JSONP callback reflection oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-param-live-oracle",
+          "title": "Google Firing Range reflected parameter XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-href-live-oracle",
+          "title": "Google Firing Range reflected URL href XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-script-src-live-oracle",
+          "title": "Google Firing Range reflected URL script src XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-css-import-live-oracle",
+          "title": "Google Firing Range reflected URL CSS import oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-url-object-data-live-oracle",
+          "title": "Google Firing Range reflected URL object data XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-cookie-set-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM cookie eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-dom-window-name-eval-live-oracle",
+          "title": "Google Firing Range toxic DOM window.name eval XSS oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-address-location-hash-eval-live-oracle",
+          "title": "Google Firing Range address location.hash eval DOM XSS oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-cors-dynamic-allow-origin-live-oracle",
+          "title": "Google Firing Range dynamic CORS allow-origin oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "firing-range-escape-serverside-attribute-unquoted-live-oracle",
+          "title": "Google Firing Range server-side escapeHtml attribute bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-escape-serverside-css-style-live-oracle",
+          "title": "Google Firing Range server-side CSS style escape bypass oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-reflected-iframe-srcdoc-live-oracle",
+          "title": "Google Firing Range iframe srcdoc reflection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "firing-range-tags-injection-live-oracle",
+          "title": "Google Firing Range HTML tag injection oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 559,
+      "status": "ok",
+      "scanned_at": "2026-07-31T19:15:51.697Z"
+    },
+    {
+      "run_id": "2026-07-31T19:16:22.995Z",
+      "url": "https://chimera.escape.tech/api/agent-browse",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-31T19:16:22.995Z",
+      "error": "We couldn't reach chimera.escape.tech. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-31T19:16:23.059Z",
+      "url": "https://zerohealth.io/challenges/jwt",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-07-31T19:16:23.059Z",
+      "error": "We couldn't reach zerohealth.io. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-07-31T19:16:23.076Z",
+      "url": "https://vulnshop.vercel.app/api/v1/wallet/add-funds",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-vulnshop-evidence",
+          "title": "VulnShop pentest practice lab disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 577,
+      "status": "ok",
+      "scanned_at": "2026-07-31T19:16:23.076Z"
     }
   ]
 }
