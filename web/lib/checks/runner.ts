@@ -900,6 +900,10 @@ const DEEP_RULES = new Set<string>([
   "firingRangeMetaRedirectRouteLiveOracle",
   "firingRangeUrldomSinkLiveOracle",
   "firingRangeUrldomSinkRouteLiveOracle",
+  "firingRangeUrldomRedirectLiveOracle",
+  "firingRangeUrldomRedirectRouteLiveOracle",
+  "firingRangeJsonpLiveOracle",
+  "firingRangeJsonpRouteLiveOracle",
   "clientSideIdorEvidence",
   "clientSideSqlEvidence",
   "clientSideCsrfEvidence",
@@ -8806,6 +8810,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
       if (/zerohealth\.aliyu\.dev/i.test(origin) && p.slug.startsWith("zerohealth-")) return -2;
+      if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
+      if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && /juice-shop-addresss/.test(p.slug)) return -3;
+      if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && p.slug.startsWith("juice-shop-")) return -2;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T13:07:00.000Z",
+  "updated_at": "2026-07-31T13:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2731,
-  "total_findings": 26565,
-  "critical_findings": 55,
+  "total_sites_scanned": 2954,
+  "total_findings": 28932,
+  "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22512,
-  "improvements_shipped": 1161,
-  "last_run": "2026-07-31T13:07:00.000Z",
+  "discovery_urls_added": 2059,
+  "discovery_findings": 23750,
+  "improvements_shipped": 1160,
+  "last_run": "2026-07-31T13:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 32,
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 488,
+      "probes_run": 487,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,37 @@
           ]
         }
       },
-      "note": "Primary healthy 6/6 (32 findings); juice-shop-login-sqli-live-oracle present; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (31 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 25,
-      "focus": "firing-range body_comment + css_style + css_style_value + attribute_quoted + urldom document.location queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 35,
+      "focus": "google/firing-range urldom redirect+jsonp+window.open+a.href sink oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/reflected/parameter/body_comment: 5 findings — reflected-xss-query-param fires in HTML comment context",
-      "public-firing-range.appspot.com/reflected/parameter/css_style: 5 findings — reflected-xss-query-param but no CSS-context-specific oracle",
-      "public-firing-range.appspot.com/reflected/parameter/css_style_value: 5 findings — reflected-xss-query-param but no CSS value-context oracle",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_quoted: 5 findings — reflected-xss-query-param in double-quoted attribute",
-      "public-firing-range.appspot.com/urldom/location/search/document.location: 4 findings — generic urldom sink oracle only",
-      "owaspbased-lessons.vercel.app/challenges/prompt-leakage: 1 finding — missing-security-headers only; no prompt-leakage oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/urldom/redirect: 2→7 findings — firing-range-urldom-redirect-live-oracle shipped (302 Location to url param)",
+      "public-firing-range.appspot.com/urldom/jsonp: 2→7 findings — firing-range-jsonp-live-oracle shipped (callback reflected in JSONP wrapper)",
+      "public-firing-range.appspot.com/urldom/location/hash/window.open: 2→7 findings — window.open sink added to urldom-sink oracle",
+      "public-firing-range.appspot.com/urldom/location/hash/a.href: 2→7 findings — anchor.href sink added to urldom-sink oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/reflected/parameter/css_style*: no CSS-context-specific XSS oracle (generic reflected-xss-query-param only)",
-      "public-firing-range.appspot.com/urldom/location/search/document.location: document.location route-specific DOM XSS oracle absent",
-      "owaspbased-lessons.vercel.app/challenges/prompt-leakage: LLM prompt-leakage oracle absent",
-      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
+      "juice-shop.demo.escape.tech/api/Addresss/1: address BOLA oracles fire on fresh probe but blocked after crawl priming on shared demo host",
+      "zerohealth.aliyu.dev/api/notifications + api/insurance + api/billing: no OSS routes in server.js — cannot ship route oracles without evidence"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 32,
-    "public-firing-range.appspot.com/reflected/parameter/body_comment": 5,
-    "public-firing-range.appspot.com/reflected/parameter/css_style": 5,
-    "public-firing-range.appspot.com/reflected/parameter/css_style_value": 5,
-    "public-firing-range.appspot.com/reflected/parameter/attribute_quoted": 5,
-    "public-firing-range.appspot.com/urldom/location/search/document.location": 4,
-    "owaspbased-lessons.vercel.app/challenges/prompt-leakage": 1
+    "juice-shop.herokuapp.com": 31,
+    "public-firing-range.appspot.com/urldom/redirect": 7,
+    "public-firing-range.appspot.com/urldom/jsonp": 7,
+    "public-firing-range.appspot.com/urldom/location/hash/window.open": 7,
+    "public-firing-range.appspot.com/urldom/location/hash/a.href": 7,
+    "public-firing-range.appspot.com/redirect/meta?q=/": 5,
+    "juice-shop.demo.escape.tech/api/Addresss/1": 2
   }
 }

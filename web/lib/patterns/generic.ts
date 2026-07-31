@@ -920,7 +920,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range URL-based DOM XSS sink oracle",
     description:
-      "GET /urldom/location/hash/* and /urldom/location/search/* assign URL hash or query fragments to document.location, form.action, or area.href without sanitization — Firing Range URL-based DOM XSS training oracle.",
+      "GET /urldom/location/hash/* and /urldom/location/search/* assign URL hash or query fragments to document.location, form.action, window.open, anchor.href, or area.href without sanitization — Firing Range URL-based DOM XSS training oracle.",
     impactOneline:
       "URL-based DOM XSS sinks let attackers execute script via crafted hash or query fragments.",
     detectorKind: "rule_ref",
@@ -946,7 +946,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range /urldom route DOM XSS sink oracle",
     description:
-      "When scanning /urldom/location routes, the response assigns hash or query fragments to document.location, form.action, or area.href — route-specific URL-based DOM XSS oracle.",
+      "When scanning /urldom/location routes, the response assigns hash or query fragments to document.location, form.action, window.open, anchor.href, or area.href — route-specific URL-based DOM XSS oracle.",
     impactOneline:
       "Route-specific scans should confirm URL fragments cannot drive dangerous DOM navigation sinks.",
     detectorKind: "rule_ref",
@@ -962,6 +962,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /urldom route assigns URL fragments to DOM sinks. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Google Firing Range urldom open redirect oracle",
+    description:
+      "GET /urldom/redirect?url= issues an HTTP redirect to the attacker-controlled url parameter — Firing Range open-redirect chaining service for DOM XSS exploit crafting.",
+    impactOneline:
+      "Open redirects on urldom routes let attackers chain trusted Firing Range links into phishing flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets on /urldom/redirect before issuing Location headers.",
+      steps: [
+        "Reject external hosts in url query parameters.",
+        "Use same-origin relative paths only for redirect chaining.",
+        "Run Firing Range only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/redirect?url= reflects the query parameter into an HTTP Location redirect. Show open redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Google Firing Range /urldom/redirect route open redirect oracle",
+    description:
+      "When scanning /urldom/redirect, the url query parameter is reflected into an HTTP Location header without validation — route-specific urldom open redirect oracle.",
+    impactOneline:
+      "Route-specific scans should confirm /urldom/redirect cannot target external hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate url parameter targets before redirecting on /urldom/redirect.",
+      steps: [
+        "Reject external hosts in url query parameters.",
+        "Use relative paths only for in-app navigation.",
+        "Add redirect allowlist checks server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/redirect route reflects url into Location. Show route-specific open redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-jsonp-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range JSONP callback reflection oracle",
+    description:
+      "GET /urldom/jsonp?callback= reflects the attacker-controlled callback name into a JSONP script wrapper — Firing Range DOM XSS exploit-crafting oracle.",
+    impactOneline:
+      "Reflected JSONP callbacks let attackers execute script when combined with DOM XSS sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeJsonpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect unvalidated callback names in JSONP responses.",
+      steps: [
+        "Allowlist JSONP callback identifiers to safe alphanumeric names.",
+        "Prefer CORS JSON APIs instead of JSONP endpoints.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/jsonp?callback= reflects the callback parameter into JSONP output. Show JSONP XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-jsonp-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/jsonp route JSONP oracle",
+    description:
+      "When scanning /urldom/jsonp, the callback query parameter is reflected into executable JSONP wrapper without validation — route-specific JSONP reflection oracle.",
+    impactOneline:
+      "Route-specific scans should flag unvalidated JSONP callback reflection on /urldom/jsonp.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeJsonpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist callback names on /urldom/jsonp before emitting JSONP wrappers.",
+      steps: [
+        "Reject callback values outside a strict alphanumeric allowlist.",
+        "Migrate JSONP endpoints to authenticated JSON APIs.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/jsonp route reflects callback into JSONP output. Show route-specific JSONP remediation.",
     version: 1,
     enabled: true
   },
