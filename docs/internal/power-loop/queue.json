@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-30T23:05:01.479Z",
+  "updated_at": "2026-07-31T00:25:22.806Z",
   "discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/file-upload",
+      "source": "aligorithm/zero-health — unrestricted file upload challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/command-injection",
+      "source": "aligorithm/zero-health — PDF report command injection challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/stored-xss",
+      "source": "aligorithm/zero-health — stored XSS in messages challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/prompt-injection",
+      "source": "aligorithm/zero-health — AI chatbot prompt injection challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/xxe",
+      "source": "aligorithm/zero-health — XXE to RCE challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pygoat.herokuapp.com/challenge/ssrf",
       "source": "OWASP PyGoat — SSRF challenge route (Heroku public demo)",
