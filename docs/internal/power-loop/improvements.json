@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-css-style-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/escapeHtml/css_style?q=thugirFrCssStyleProbe returns <style>thugirFrCssStyleProbe</style> despite escapeHtml; GET /encodeUrl/css_style same; escapeHtml/css_style findings 13→20 (+firing-range-escape-serverside-css-style-live-oracle + route); benchmark juice-shop 20 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-iframe-srcdoc-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/iframe_srcdoc?q=thugirFrSrcdocProbe returns <iframe srcdoc=\"thugirFrSrcdocProbe\">; iframe_srcdoc route scan findings 14→21 (+firing-range-reflected-iframe-srcdoc-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/img?q=<img src=x> returns <img src=\"x\">; GET /tags/tag/script?q=<script> returns <script></script>; tags/img findings 13→20 (+firing-range-tags-injection-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-address-location-hash-eval-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/eval returns window.location.hash.substr(1) passed to eval(payload); address/location.hash/eval route scan findings 10→17 (+firing-range-address-location-hash-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
