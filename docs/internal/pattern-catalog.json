@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T10:04:17.050Z",
-  "total": 1231,
-  "uniqueSlugs": 1226,
+  "generatedAt": "2026-07-31T11:05:24.147Z",
+  "total": 1234,
+  "uniqueSlugs": 1229,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1213,
+    "generic": 1216,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1146,
+    "deep": 1149,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 92,
+    "Information disclosure": 94,
     "Security misconfiguration": 109,
     "Broken authentication": 89,
     "Injection": 241,
@@ -35,7 +35,7 @@
     "Sensitive data exposure": 29,
     "AI security": 48,
     "Business logic": 14,
-    "Insecure file upload": 1,
+    "Insecure file upload": 2,
     "Command injection": 2,
     "XML external entity injection": 1,
     "API security": 3,
@@ -1257,6 +1257,8 @@
     "zerohealth-deserialization-route-live-oracle",
     "zerohealth-file-upload-route-live-oracle",
     "zerohealth-files-route-live-oracle",
+    "zerohealth-health-route-live-oracle",
+    "zerohealth-info-route-live-oracle",
     "zerohealth-information-disclosure-route-live-oracle",
     "zerohealth-mass-assignment-route-live-oracle",
     "zerohealth-medical-records-bola-route-live-oracle",
@@ -1271,6 +1273,7 @@
     "zerohealth-reset-password-reflected-xss-route-live-oracle",
     "zerohealth-search-reflected-xss-route-live-oracle",
     "zerohealth-stored-xss-route-live-oracle",
+    "zerohealth-upload-advanced-route-live-oracle",
     "zerohealth-users-route-live-oracle",
     "zerohealth-xxe-route-live-oracle"
   ],
