@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T02:02:22.368Z",
+  "updated_at": "2026-07-31T02:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2853,
-  "total_findings": 27925,
+  "total_sites_scanned": 2861,
+  "total_findings": 27967,
   "critical_findings": 85,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2014,
-  "discovery_findings": 23290,
+  "discovery_urls_added": 2019,
+  "discovery_findings": 23332,
   "improvements_shipped": 1155,
-  "last_run": "2026-07-31T02:02:22.368Z",
+  "last_run": "2026-07-31T02:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 30,
+      "oracle_findings": 29,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 480,
+      "probes_run": 479,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,48 +48,45 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 18,
-      "focus": "zerohealth file-upload/command-injection/xxe challenge route oracle validation",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 42,
+      "focus": "zerohealth race-condition/deserialization/path-traversal + api-security-platform api-security challenge + queue drain (ai-security-platform password/privacy/npm)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
-      "zerohealth.aliyu.dev/challenges/file-upload: 5→6 findings — zerohealth-file-upload-route-live-oracle shipped (challenges.md oracle)",
-      "zerohealth.aliyu.dev/challenges/command-injection: 5→6 findings — zerohealth-command-injection-route-live-oracle shipped (wkhtmltopdf cmdi markers)",
-      "zerohealth.aliyu.dev/challenges/xxe: 5→6 findings — zerohealth-xxe-route-live-oracle shipped (medical-history/import XXE markers)",
-      "zerohealth.aliyu.dev/challenges/stored-xss: 5-finding thin pass without stored-XSS messages live oracle",
-      "zerohealth.aliyu.dev/challenges/prompt-injection: 5-finding thin pass without AI chatbot prompt-injection live oracle",
-      "ssrf.vulnlab.dev/blind/: 15 findings — full SSRF oracle suite from parallel 01 UTC drain"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — no benchmark misses",
+      "ai-security-platform-iota.vercel.app/challenges/api-security: 6-finding thin pass with client-side-ai-security-platform-evidence — no route-specific API-security live oracle",
+      "zerohealth.aliyu.dev/challenges/race-condition: 5-finding thin pass without race-condition TOCTOU live oracle",
+      "zerohealth.aliyu.dev/challenges/deserialization: 5-finding thin pass without insecure-deserialization live oracle",
+      "zerohealth.aliyu.dev/challenges/path-traversal: 5-finding thin pass without path-traversal/LFI live oracle",
+      "zerohealth.aliyu.dev/api/medical-records: 5-finding thin pass without BOLA medical-records live oracle",
+      "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy-policy: 7 findings with reflexion-escalated-ssti FP signal"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zerohealth.aliyu.dev/challenges/stored-xss + prompt-injection: route-specific live oracles still absent (OSS API not deployed on aliyu.dev)",
-      "ai-security-platform-iota.vercel.app/challenges/*: route-specific password-storage/privacy-policy/npm-supply-chain live oracles absent",
-      "chimera.escape.tech/api/agent-browse: unreachable — GenAI SSRF oracle blocked by DNS/connectivity",
-      "zerohealth.io/challenges/jwt: unreachable — JWT challenge oracle blocked",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
-      "pygoat.herokuapp.com/challenge/*: live SSRF/XXE/CSRF oracles blocked — Heroku demo offline (module evidence shipped)",
-      "vulnshop-production.up.railway.app: backend 404 — wallet/race/cmdi/xxe/upload live API probes still absent"
+      "zerohealth.aliyu.dev/challenges/race-condition + deserialization + path-traversal: route-specific live oracles absent (OSS API not deployed on aliyu.dev)",
+      "zerohealth.aliyu.dev/api/medical-records: BOLA medical-records live oracle still absent",
+      "ai-security-platform-iota.vercel.app/challenges/api-security: route-specific broken-API-security live oracle absent",
+      "juice-shop.demo.escape.tech/api/BasketItems: unreachable in cloud agent — still queued",
+      "pygoat.herokuapp.com/challenge/*: live SSRF/XXE/CSRF oracles blocked — Heroku demo offline"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 30,
-    "ssrf.vulnlab.dev/blind/": 15,
-    "zerohealth.aliyu.dev/challenges/file-upload": 6,
-    "zerohealth.aliyu.dev/challenges/command-injection": 6,
-    "zerohealth.aliyu.dev/challenges/xxe": 6,
-    "zerohealth.aliyu.dev/challenges/stored-xss": 5,
-    "zerohealth.aliyu.dev/challenges/prompt-injection": 5,
+    "juice-shop-staging.herokuapp.com": 29,
     "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy-policy": 7,
-    "owasp-finbot-ctf.org/ctf/api/v1/challenges": 6,
-    "vulnshop.vercel.app/profile": 8,
+    "ai-security-platform-iota.vercel.app/challenges/api-security": 6,
+    "ai-security-platform-iota.vercel.app/challenges/insecure-password-storage": 6,
+    "zerohealth.aliyu.dev/challenges/race-condition": 5,
+    "zerohealth.aliyu.dev/challenges/deserialization": 5,
+    "zerohealth.aliyu.dev/challenges/path-traversal": 5,
+    "zerohealth.aliyu.dev/api/medical-records": 5,
+    "ssrf.vulnlab.dev/blind/": 15,
     "pwnshop.ctfsecurity.com/api/settings/search-filters": 21
   }
 }
