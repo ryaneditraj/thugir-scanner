@@ -13105,6 +13105,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pygoat-challenge-route-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "PyGoat OWASP Top 10 challenge route disclosed",
+    description:
+      "When scanning pygoat.herokuapp.com/challenge/{ssrf,xxe,csrf}, VWAD catalog markers confirm the route-specific OWASP Top 10 training module even when the Heroku demo is offline.",
+    impactOneline:
+      "PyGoat challenge routes document SSRF, XXE, and CSRF training targets for scanner benchmarking when live labs are unreachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePygoatChallengeRouteEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PyGoat is intentional training software — keep installs offline from production.",
+      steps: [
+        "Install PyGoat only in local VMs or isolated containers.",
+        "Do not expose PyGoat instances to the public internet.",
+        "Use PyGoat challenge findings to patch similar patterns in production Django code."
+      ]
+    },
+    fixPrompt:
+      "Our PyGoat /challenge route documents deliberately insecure Django exercises. Show how to keep lab installs isolated from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvna-evidence",
     platform: "generic",
     category: "Injection",
@@ -25193,6 +25219,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Pentest-Ground DVWA /vulnerabilities/upload/ route accepts arbitrary PHP uploads. Show secure file upload validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-dvwa-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA file_upload route live oracle",
+    description:
+      "When scanning /vulnerabilities/file_upload/, POST multipart to /vulnerabilities/upload/ accepts PHP files and returns ../../hackable/uploads/... succesfully uploaded — Pentest-Ground DVWA discovery alias for unrestricted file upload.",
+    impactOneline:
+      "Unrestricted file upload on DVWA file_upload discovery route lets attackers plant web shells under hackable/uploads without type validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — validate file types and store uploads outside the web root.",
+      steps: [
+        "Allow-list image MIME types and verify magic bytes server-side.",
+        "Store uploads outside the web root or serve via a non-executable handler.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA /vulnerabilities/file_upload/ discovery route maps to unrestricted PHP upload. Show secure file upload validation.",
     version: 1,
     enabled: true
   },

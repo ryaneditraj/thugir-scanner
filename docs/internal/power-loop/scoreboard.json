@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2009,
   "discovery_findings": 23252,
-  "improvements_shipped": 1155,
+  "improvements_shipped": 1163,
   "last_run": "2026-07-31T00:26:37.239Z",
   "last_run_summary": {
     "hour_utc": "00",
@@ -56,7 +56,7 @@
       "urls_scanned": 6,
       "findings": 28,
       "focus": "zerohealth file-upload/command-injection/stored-xss/prompt-injection/xxe challenge routes + the-internet floating_menu drain",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — primary Heroku healthy after retry, no benchmark misses",
@@ -65,7 +65,12 @@
       "zerohealth.aliyu.dev/challenges/stored-xss: 5-finding thin pass without stored-XSS messages live oracle",
       "zerohealth.aliyu.dev/challenges/prompt-injection: 5-finding thin pass without AI chatbot prompt-injection live oracle",
       "zerohealth.aliyu.dev/challenges/xxe: 5-finding thin pass without XXE-to-RCE live oracle",
-      "the-internet.herokuapp.com/floating_menu: 3 findings with floating-menu-route-live-oracle"
+      "the-internet.herokuapp.com/floating_menu: 3 findings with floating-menu-route-live-oracle",
+      "pentest-ground.com:4280/vulnerabilities/file_upload/: 3 findings — pentest-ground-dvwa-upload-route-live-oracle replaces FI false positive on file_upload discovery URL",
+      "pentest-ground.com:4280/vulnerabilities/fi/: FI path guard fix — /fi/ no longer matches /file_upload/ substring",
+      "pygoat.herokuapp.com/challenge/ssrf: 1→2 findings — client-side-pygoat-challenge-route-evidence (VWAD catalog when Heroku offline)",
+      "pygoat.herokuapp.com/challenge/xxe: 1→2 findings — client-side-pygoat-challenge-route-evidence",
+      "pygoat.herokuapp.com/challenge/csrf: 1→2 findings — client-side-pygoat-challenge-route-evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -73,7 +78,9 @@
       "zerohealth.aliyu.dev/challenges/*: route-specific file-upload/cmdi/stored-xss/prompt-injection/xxe live oracles absent (5-finding thin misconfig passes)",
       "chimera.escape.tech/api/agent-browse: unreachable — GenAI SSRF oracle blocked by DNS/connectivity",
       "zerohealth.io/challenges/jwt: unreachable — JWT challenge oracle blocked",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
+      "pygoat.herokuapp.com/challenge/*: live SSRF/XXE/CSRF oracles blocked — Heroku demo offline (module evidence shipped)",
+      "vulnshop-production.up.railway.app: backend 404 — wallet/race/cmdi/xxe/upload live API probes still absent"
     ]
   },
   "discovery_highlights": {

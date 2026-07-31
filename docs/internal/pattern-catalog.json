@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-30T23:05:58.197Z",
-  "total": 1202,
-  "uniqueSlugs": 1197,
+  "generatedAt": "2026-07-31T00:06:58.420Z",
+  "total": 1204,
+  "uniqueSlugs": 1199,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1184,
+    "generic": 1186,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1117,
+    "deep": 1119,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 303,
+    "Broken access control": 304,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 90,
     "Security misconfiguration": 109,
     "Broken authentication": 87,
-    "Injection": 238,
+    "Injection": 239,
     "Cross-site scripting": 165,
     "general": 20,
     "SSRF": 5,
@@ -538,6 +538,7 @@
     "client-side-pwnshop-evidence",
     "client-side-pwnshop-path-traversal-oracle",
     "client-side-pwnshop-ssti-oracle",
+    "client-side-pygoat-challenge-route-evidence",
     "client-side-pygoat-evidence",
     "client-side-qamax-adversary-evidence",
     "client-side-railsgoat-evidence",
@@ -911,6 +912,7 @@
     "pentest-ground-dvwa-csrf-route-live-oracle",
     "pentest-ground-dvwa-exec-cmdi-route-live-oracle",
     "pentest-ground-dvwa-fi-route-live-oracle",
+    "pentest-ground-dvwa-file-upload-route-live-oracle",
     "pentest-ground-dvwa-javascript-route-live-oracle",
     "pentest-ground-dvwa-open-redirect-route-live-oracle",
     "pentest-ground-dvwa-sqli-route-live-oracle",

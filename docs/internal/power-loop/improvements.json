@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-fi-route-fp-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/fi(?:/|$|[?#]) path guard rejected /vulnerabilities/file_upload/ substring false positive (fi inside file_upload); pentest-ground.com:4280/vulnerabilities/file_upload/ no longer fires pentest-ground-dvwa-fi-route-live-oracle; benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/file_upload/ route scan POST /vulnerabilities/upload/ multipart uploaded=thugir-*.php returns succesfully uploaded + hackable/uploads path; pentest-ground.com:4280/vulnerabilities/file_upload/ findings 3→3 with pentest-ground-dvwa-upload-route-live-oracle replacing FI false positive; benchmark 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pygoat.herokuapp.com",
+      "slug": "client-side-pygoat-challenge-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/{ssrf,xxe,csrf} route scans fetch vwad.owasp.org/app/pygoat/ markers when Heroku returns no-such-app shell; pygoat.herokuapp.com/challenge/ssrf|xxe|csrf findings 1→2 (+client-side-pygoat-challenge-route-evidence); benchmark 30 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-profile-mass-assignment-live-oracle",
       "status": "shipped",
@@ -16225,6 +16243,21 @@
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-users-enumeration-route-live-oracle",
       "shipped_at": "2026-07-30T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-fi-route-fp-fix",
+      "shipped_at": "2026-07-31T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-file-upload-route-live-oracle",
+      "shipped_at": "2026-07-31T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:pygoat.herokuapp.com",
+      "slug": "client-side-pygoat-challenge-route-evidence",
+      "shipped_at": "2026-07-31T00:15:00.000Z"
     }
   ]
 }
