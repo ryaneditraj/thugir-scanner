@@ -1434,6 +1434,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-address-location-hash-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash eval DOM XSS oracle",
+    description:
+      "GET /address/location.hash/eval returns a page that reads window.location.hash.substr(1) and passes it to eval() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to eval() enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from window.location.hash.",
+        "Treat URL fragments as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/eval uses eval on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/eval route XSS oracle",
+    description:
+      "When scanning /address/location.hash/eval, location.hash is passed to eval() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values are not executed via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/eval route uses eval on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-dynamic-allow-origin-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range dynamic CORS allow-origin oracle",
+    description:
+      "POST /cors/alloworigin/dynamicAllowOrigin reflects arbitrary Origin with Access-Control-Allow-Credentials: true — Firing Range CORS misconfiguration training oracle.",
+    impactOneline:
+      "Dynamic CORS origin reflection with credentials lets any attacker-controlled site read authenticated responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsDynamicAllowOriginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect arbitrary Origin headers with credentials enabled.",
+      steps: [
+        "Use a strict allowlist for Access-Control-Allow-Origin.",
+        "Disable Access-Control-Allow-Credentials unless strictly required.",
+        "Reject unknown origins instead of echoing them."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/dynamicAllowOrigin reflects arbitrary Origin with credentials. Show CORS misconfiguration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-dynamic-allow-origin-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/dynamicAllowOrigin route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/dynamicAllowOrigin, POST requests reflect attacker Origin with credentials — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm CORS headers do not reflect arbitrary origins with credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsDynamicAllowOriginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Lock down CORS on /cors/alloworigin/dynamicAllowOrigin route handlers.",
+      steps: [
+        "Allowlist trusted origins only.",
+        "Remove Access-Control-Allow-Credentials for public endpoints.",
+        "Audit all CORS middleware for dynamic origin reflection."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/dynamicAllowOrigin route reflects arbitrary Origin. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-attribute-unquoted-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml attribute bypass oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/attribute_unquoted?q= reflects attacker input into an unquoted HTML attribute despite escapeHtml — Firing Range server-side escape bypass training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in attribute contexts enables reflected XSS even when escapeHtml is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideAttributeUnquotedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml is insufficient for unquoted attribute contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Use context-aware encoding for HTML attributes (quote and escape).",
+        "Prefer framework auto-escaping with quoted attributes.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/attribute_unquoted bypasses escapeHtml in unquoted attributes. Show server-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-attribute-unquoted-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/attribute_unquoted route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/attribute_unquoted, q parameter reflects unescaped into unquoted attribute — route-specific server-side escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml output is safe in all HTML contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix context-aware escaping on /escape/serverside/escapeHtml/attribute_unquoted route.",
+      steps: [
+        "Quote all HTML attributes and encode values.",
+        "Audit escapeHtml usage for attribute_unquoted contexts.",
+        "Add output encoding tests for each reflection context."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/attribute_unquoted route bypasses escapeHtml. Show route-specific escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
