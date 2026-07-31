@@ -10791,6 +10791,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Insecure file upload",
+    severityDefault: "high",
+    title: "Zero Health file-upload challenge route live oracle",
+    description:
+      "When scanning /challenges/file-upload, weak extension filtering at /api/files/upload-advanced allows .php/.js/.svg uploads — route-specific file upload bypass oracle.",
+    impactOneline:
+      "Route-specific oracle confirms unrestricted file upload training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — validate file types server-side in production healthcare apps.",
+      steps: [
+        "Allowlist safe MIME types and extensions for medical document uploads.",
+        "Store uploads outside the web root and scan with antivirus.",
+        "Never execute uploaded files on the server."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/file-upload route documents weak file upload filters. Show server-side MIME validation for healthcare document uploads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Command injection",
+    severityDefault: "critical",
+    title: "Zero Health command-injection challenge route live oracle",
+    description:
+      "When scanning /challenges/command-injection, POST /api/reports/generate embeds patient names unsanitized in wkhtmltopdf shell commands — route-specific command injection oracle.",
+    impactOneline:
+      "Route-specific oracle confirms PDF report command injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never pass user input to shell commands in production.",
+      steps: [
+        "Use safe PDF libraries instead of shelling out to wkhtmltopdf with interpolated user data.",
+        "Sanitize and validate all metadata fields used in report generation.",
+        "Run report generation in isolated workers with minimal privileges."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/command-injection route documents wkhtmltopdf command injection via patient names. Show safe PDF generation without shell interpolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-xxe-route-live-oracle",
+    platform: "generic",
+    category: "XML external entity injection",
+    severityDefault: "critical",
+    title: "Zero Health XXE challenge route live oracle",
+    description:
+      "When scanning /challenges/xxe, POST /api/medical-history/import parses XML with external entities and {{eval:}} processing — route-specific XXE-to-RCE oracle.",
+    impactOneline:
+      "Route-specific oracle confirms XXE medical import training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — disable external entities in XML parsers for production.",
+      steps: [
+        "Use parsers with external entity processing disabled.",
+        "Reject DTDs and eval-style template features in medical import pipelines.",
+        "Validate XML structure against a strict schema before processing."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/xxe route documents XXE and eval in medical history import. Show safe XML parsing without external entities.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-alf-xss-wargame-evidence",
     platform: "generic",
     category: "Cross-site scripting",

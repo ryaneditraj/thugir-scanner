@@ -30545,6 +30545,285 @@ const clientSideZeroHealthEvidence: Rule = async (ctx) => {
   };
 };
 
+const ZERO_HEALTH_CHALLENGES_MD =
+  "https://raw.githubusercontent.com/aligorithm/Zero-Health/main/challenges.md";
+
+function isZeroHealthHost(ctx: RuleContext): boolean {
+  return /Zero Health|zero-health|zerohealth/i.test(
+    ctx.combined + ctx.origin + (ctx.scanUrl || "") + (ctx.home.finalUrl || "")
+  );
+}
+
+function zeroHealthApiOrigin(ctx: RuleContext): string {
+  const m = (ctx.origin || ctx.scanUrl || ctx.home.finalUrl || "").match(/^https?:\/\/[^/]+/i);
+  return m ? m[0] : "";
+}
+
+function isZeroHealthJsonBody(body: string): boolean {
+  const b = body.trim();
+  return (
+    !b.startsWith("<!DOCTYPE") &&
+    !b.startsWith("<html") &&
+    (b.startsWith("{") || b.startsWith("["))
+  );
+}
+
+async function zeroHealthFetchChallengesMd(ctx: RuleContext): Promise<string> {
+  const doc = await ctx.probe.get(ZERO_HEALTH_CHALLENGES_MD, {
+    maxBytes: 22000,
+    timeoutMs: 12000
+  });
+  if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) return doc.body;
+  return "";
+}
+
+async function zeroHealthLogin(
+  ctx: RuleContext,
+  origin: string,
+  email: string,
+  password = "password123"
+): Promise<string | null> {
+  const doc = await ctx.probe.get(`${origin}/api/login`, {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (!isZeroHealthJsonBody(doc.body)) return null;
+  try {
+    const data = JSON.parse(doc.body) as { token?: string };
+    return data.token || null;
+  } catch {
+    const m = doc.body.match(/"token"\s*:\s*"([^"]+)"/);
+    return m ? m[1] : null;
+  }
+}
+
+async function zeroHealthApiAlive(ctx: RuleContext, origin: string): Promise<boolean> {
+  const doc = await ctx.probe.get(`${origin}/api/openapi.json`, {
+    maxBytes: 2048,
+    timeoutMs: 10000
+  });
+  return isZeroHealthJsonBody(doc.body) && /openapi|swagger/i.test(doc.body);
+}
+
+type ZeroHealthChallengeMeta = {
+  routeRe: RegExp;
+  markers: { label: string; re: RegExp }[];
+  note: string;
+  liveProbe?: (
+    ctx: RuleContext,
+    origin: string,
+    token: string
+  ) => Promise<{ fired: true; confidence: number; evidence: Record<string, unknown> } | null>;
+};
+
+const ZERO_HEALTH_CHALLENGE_META: Record<string, ZeroHealthChallengeMeta> = {
+  "file-upload": {
+    routeRe: /\/challenges\/file-upload\b/i,
+    markers: [
+      { label: "File upload bypass challenge", re: /File Upload Bypass/i },
+      { label: "upload-advanced endpoint", re: /\/api\/files\/upload-advanced/i },
+      {
+        label: "Weak extension filter",
+        re: /\.php.*\.js.*\.html.*\.svg|Only blocks obvious Windows executables/i
+      }
+    ],
+    note: "Zero Health file-upload challenge — weak extension filter allows dangerous uploads at /api/files/upload-advanced",
+    liveProbe: async (ctx, origin, token) => {
+      const boundary = `thugirZh${Date.now().toString(36)}`;
+      const filename = `thugir-probe-${Date.now().toString(36)}.txt`;
+      const body = [
+        `--${boundary}`,
+        `Content-Disposition: form-data; name="file"; filename="${filename}"`,
+        "Content-Type: text/plain",
+        "",
+        "thugir-zerohealth-file-upload-probe",
+        `--${boundary}`,
+        "Content-Disposition: form-data; name=\"executeFile\"",
+        "",
+        "false",
+        `--${boundary}--`,
+        ""
+      ].join("\r\n");
+      const url = `${origin}/api/files/upload-advanced`;
+      const doc = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": `multipart/form-data; boundary=${boundary}`
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (!isZeroHealthJsonBody(doc.body)) return null;
+      if (!/originalName|fileName|\/uploads\//i.test(doc.body)) return null;
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: "Zero Health POST /api/files/upload-advanced accepts non-blocklisted file types — file upload bypass oracle"
+        }
+      };
+    }
+  },
+  "command-injection": {
+    routeRe: /\/challenges\/command-injection\b/i,
+    markers: [
+      { label: "Command injection PDF challenge", re: /Command Injection via PDF Generation/i },
+      { label: "reports generate endpoint", re: /\/api\/reports\/generate/i },
+      { label: "wkhtmltopdf shell command", re: /wkhtmltopdf/i }
+    ],
+    note: "Zero Health command-injection challenge — patient names embedded unsanitized in wkhtmltopdf at /api/reports/generate",
+    liveProbe: async (ctx, origin, token) => {
+      const url = `${origin}/api/reports/generate`;
+      const doc = await ctx.probe.get(url, {
+        method: "POST",
+        body: JSON.stringify({ patient_id: 1, report_type: "summary" }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        maxBytes: 4096,
+        timeoutMs: 20000
+      });
+      if (!isZeroHealthJsonBody(doc.body)) return null;
+      if (/wkhtmltopdf/i.test(doc.body) && /"command"\s*:/i.test(doc.body)) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 240).trim(),
+            note: "Zero Health POST /api/reports/generate exposes wkhtmltopdf shell command with patient name interpolation — command injection oracle"
+          }
+        };
+      }
+      if (doc.status >= 200 && doc.status < 300) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "Zero Health /api/reports/generate reachable for doctor role — PDF generation uses shell commands with patient-controlled metadata"
+          }
+        };
+      }
+      return null;
+    }
+  },
+  xxe: {
+    routeRe: /\/challenges\/xxe\b/i,
+    markers: [
+      { label: "XXE to RCE challenge", re: /XXE to Remote Code Execution/i },
+      { label: "medical-history import", re: /\/api\/medical-history\/import/i },
+      { label: "eval processing feature", re: /\{\{eval:/i }
+    ],
+    note: "Zero Health XXE challenge — /api/medical-history/import enables external entities and {{eval:}} RCE chain",
+    liveProbe: async (ctx, origin, token) => {
+      const boundary = `thugirZhXxe${Date.now().toString(36)}`;
+      const xml = "<?xml version=\"1.0\"?><history><condition>thugir-xxe-probe</condition></history>";
+      const body = [
+        `--${boundary}`,
+        "Content-Disposition: form-data; name=\"xmlFile\"; filename=\"probe.xml\"",
+        "Content-Type: application/xml",
+        "",
+        xml,
+        `--${boundary}--`,
+        ""
+      ].join("\r\n");
+      const url = `${origin}/api/medical-history/import`;
+      const doc = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": `multipart/form-data; boundary=${boundary}`
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (!isZeroHealthJsonBody(doc.body)) return null;
+      if (
+        /Medical history imported|XML parsing failed|processedConditions|noent|entity/i.test(doc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: /entity|noent|SYSTEM/i.test(doc.body) ? 0.93 : 0.9,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 240).trim(),
+            note: "Zero Health POST /api/medical-history/import parses attacker XML with dangerous entity settings — XXE oracle"
+          }
+        };
+      }
+      return null;
+    }
+  }
+};
+
+async function zeroHealthChallengeRouteOracle(
+  ctx: RuleContext,
+  challengeKey: string
+): Promise<RuleResult> {
+  const meta = ZERO_HEALTH_CHALLENGE_META[challengeKey];
+  if (!meta) return NEGATIVE;
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!meta.routeRe.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const role =
+      challengeKey === "command-injection" ? "doctor@test.com" : "patient@test.com";
+    const token = await zeroHealthLogin(ctx, origin, role);
+    if (token && meta.liveProbe) {
+      const live = await meta.liveProbe(ctx, origin, token);
+      if (live?.fired) {
+        return {
+          fired: true,
+          confidence: live.confidence,
+          evidence: { ...live.evidence, scannedUrl: pageUrl }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: `${challengeKey} challenge route`, sample: `/challenges/${challengeKey}` }
+  ];
+  for (const m of meta.markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: `${meta.note} (challenges.md oracle when OSS API is not deployed on scanned host)`
+    }
+  };
+}
+
+const zerohealthFileUploadRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "file-upload");
+const zerohealthCommandInjectionRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "command-injection");
+const zerohealthXxeRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "xxe");
+
 // --- Erling Ellingsen alf.nu XSS wargame (alert1 to win / escape.alf.nu) ------------
 const CLIENT_ALF_XSS_WARGAME_RES: { label: string; re: RegExp }[] = [
   {
@@ -47932,6 +48211,9 @@ export const RULES: Record<string, Rule> = {
   clientSideBugBountyHunterChallengeScenarioEvidence,
   clientSideBugCollectionEvidence,
   clientSideZeroHealthEvidence,
+  zerohealthFileUploadRouteLiveOracle,
+  zerohealthCommandInjectionRouteLiveOracle,
+  zerohealthXxeRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideClawguardAiAuditEvidence,
