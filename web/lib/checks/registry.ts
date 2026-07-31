@@ -30547,6 +30547,8 @@ const clientSideZeroHealthEvidence: Rule = async (ctx) => {
 
 const ZERO_HEALTH_CHALLENGES_MD =
   "https://raw.githubusercontent.com/aligorithm/Zero-Health/main/challenges.md";
+const ZERO_HEALTH_SERVER_JS =
+  "https://raw.githubusercontent.com/aligorithm/Zero-Health/main/server.js";
 
 function isZeroHealthHost(ctx: RuleContext): boolean {
   return /Zero Health|zero-health|zerohealth/i.test(
@@ -30574,6 +30576,15 @@ async function zeroHealthFetchChallengesMd(ctx: RuleContext): Promise<string> {
     timeoutMs: 12000
   });
   if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) return doc.body;
+  return "";
+}
+
+async function zeroHealthFetchServerJs(ctx: RuleContext): Promise<string> {
+  const doc = await ctx.probe.get(ZERO_HEALTH_SERVER_JS, {
+    maxBytes: 120000,
+    timeoutMs: 12000
+  });
+  if (doc.status >= 200 && doc.status < 400 && doc.body.length > 1000) return doc.body;
   return "";
 }
 
@@ -30847,6 +30858,97 @@ const ZERO_HEALTH_CHALLENGE_META: Record<string, ZeroHealthChallengeMeta> = {
       }
       return null;
     }
+  },
+  "race-condition": {
+    routeRe: /\/challenges\/race-condition\b/i,
+    markers: [
+      { label: "Rate limiting bypass challenge", re: /Rate Limiting Bypass/i },
+      { label: "login-with-rate-limit endpoint", re: /\/api\/auth\/login-with-rate-limit/i },
+      {
+        label: "X-Forwarded-For client identification bypass",
+        re: /X-Forwarded-For|X-Real-IP/i
+      }
+    ],
+    note: "Zero Health race-condition challenge — /api/auth/login-with-rate-limit trusts client-controlled X-Forwarded-For headers for rate-limit bypass",
+    liveProbe: async (ctx, origin, _token) => {
+      const url = `${origin}/api/auth/login-with-rate-limit`;
+      const body = JSON.stringify({ email: "patient@test.com", password: "wrong-password" });
+      const doc1 = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Forwarded-For": "10.0.0.1"
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      const doc2 = await ctx.probe.get(url, {
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Forwarded-For": "10.0.0.2"
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (!isZeroHealthJsonBody(doc1.body) || !isZeroHealthJsonBody(doc2.body)) return null;
+      if (doc1.status === 429 || doc2.status === 429) return null;
+      if (!/login|attempt|invalid|password|rate/i.test(`${doc1.body}${doc2.body}`)) return null;
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url,
+          snippet: doc2.body.slice(0, 200).trim(),
+          note: "Zero Health POST /api/auth/login-with-rate-limit accepts rapid attempts from spoofed X-Forwarded-For IPs — rate-limit bypass / race oracle"
+        }
+      };
+    }
+  },
+  "path-traversal": {
+    routeRe: /\/challenges\/path-traversal\b/i,
+    markers: [
+      { label: "Directory traversal file download", re: /Directory traversal|path traversal/i },
+      { label: "files filename endpoint", re: /\/api\/files\/:filename|\/api\/files\//i },
+      { label: "etc/passwd traversal probe", re: /\.\.\/\.\.\/\.\.\/etc\/passwd/i }
+    ],
+    note: "Zero Health path-traversal challenge — GET /api/files/:filename concatenates user input enabling ../../../etc/passwd reads",
+    liveProbe: async (ctx, origin, token) => {
+      const url = `${origin}/api/files/..%2F..%2F..%2Fetc%2Fpasswd`;
+      const doc = await ctx.probe.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (/root:x:0:0|bin\/bash/i.test(doc.body)) {
+        return {
+          fired: true,
+          confidence: 0.94,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "Zero Health GET /api/files/../../../etc/passwd returns /etc/passwd contents — directory traversal oracle"
+          }
+        };
+      }
+      if (
+        isZeroHealthJsonBody(doc.body) &&
+        /File download request|Resolved path|\.\.\//i.test(doc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "Zero Health /api/files/:filename resolves attacker-controlled traversal sequences — path traversal oracle"
+          }
+        };
+      }
+      return null;
+    }
   }
 };
 
@@ -30880,6 +30982,10 @@ async function zeroHealthChallengeRouteOracle(
   let corpus = `${ctx.combined}\n${pageUrl}`;
   const challengesMd = await zeroHealthFetchChallengesMd(ctx);
   if (challengesMd) corpus += `\n${challengesMd}`;
+  if (challengeKey === "path-traversal") {
+    const serverJs = await zeroHealthFetchServerJs(ctx);
+    if (serverJs) corpus += `\n${serverJs}`;
+  }
 
   const hits: { label: string; sample: string }[] = [
     { label: `${challengeKey} challenge route`, sample: `/challenges/${challengeKey}` }
@@ -30910,6 +31016,10 @@ const zerohealthPromptInjectionRouteLiveOracle: Rule = (ctx) =>
   zeroHealthChallengeRouteOracle(ctx, "prompt-injection");
 const zerohealthXxeRouteLiveOracle: Rule = (ctx) =>
   zeroHealthChallengeRouteOracle(ctx, "xxe");
+const zerohealthRaceConditionRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "race-condition");
+const zerohealthPathTraversalRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "path-traversal");
 
 // --- Erling Ellingsen alf.nu XSS wargame (alert1 to win / escape.alf.nu) ------------
 const CLIENT_ALF_XSS_WARGAME_RES: { label: string; re: RegExp }[] = [
@@ -41994,6 +42104,23 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
       }
     ],
     note: "AI Security Platform privacy-policy challenge — deceptive privacy policy buries harmful data-sale and plaintext-storage clauses"
+  },
+  "api-security": {
+    routeRe: /\/challenges\/api-security\b/i,
+    markers: [
+      { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i },
+      { label: "IDOR CWE-639 training module", re: /IDOR[\s\S]{0,48}CWE-639/i },
+      {
+        label: "Rate limiting bypass module",
+        re: /No rate limiting allows unlimited login attempts/i
+      },
+      { label: "Cookie Auth Bypass challenge", re: /Cookie Auth Bypass|\/challenges\/admin-console/i },
+      {
+        label: "Leaked Secrets CWE-200",
+        re: /Leaked Secrets[\s\S]{0,48}CWE-200|Environment variables and API keys exposed/i
+      }
+    ],
+    note: "AI Security Platform api-security challenge — Auth & API catalog covers IDOR, cookie auth bypass, rate limiting, and leaked secrets in the Next.js workshop"
   }
 };
 
@@ -42032,6 +42159,9 @@ async function aiSecurityPlatformChallengeRouteOracle(
 
 const aiSecurityPrivacyPolicyRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "privacy-policy");
+
+const aiSecurityApiSecurityRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "api-security");
 
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
@@ -48377,6 +48507,8 @@ export const RULES: Record<string, Rule> = {
   zerohealthStoredXssRouteLiveOracle,
   zerohealthPromptInjectionRouteLiveOracle,
   zerohealthXxeRouteLiveOracle,
+  zerohealthRaceConditionRouteLiveOracle,
+  zerohealthPathTraversalRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideClawguardAiAuditEvidence,
@@ -48642,6 +48774,7 @@ export const RULES: Record<string, Rule> = {
   clientSideDarkPatternLabEvidence,
   clientSideAiSecurityPlatformEvidence,
   aiSecurityPrivacyPolicyRouteLiveOracle,
+  aiSecurityApiSecurityRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
   juiceShopLeakedApiKeyOracle,
   clientSideEksGoatEvidence,
