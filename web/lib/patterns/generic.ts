@@ -15447,6 +15447,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-deserialization-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Zero Health deserialization challenge route live oracle",
+    description:
+      "When scanning /challenges/deserialization, /api/debug/token issues alg:none JWTs and verifyToken accepts unverified decoded tokens — route-specific insecure JWT deserialization oracle.",
+    impactOneline:
+      "Route-specific oracle confirms JWT algorithm-confusion training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthDeserializationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — always verify JWT signatures with a fixed allow-listed algorithm.",
+      steps: [
+        "Reject algorithm:none and unverified jwt.decode fallbacks in production middleware.",
+        "Use asymmetric keys with explicit algorithm allow-lists.",
+        "Remove debug token endpoints from production healthcare APIs."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/deserialization route documents JWT alg:none and unverified decode bypass. Show strict JWT verification middleware.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-medical-records-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Health medical-records BOLA route live oracle",
+    description:
+      "When scanning /api/medical-records, GET returns PHI scoped only by forgeable JWT user id from /api/debug/token — route-specific medical-records BOLA oracle.",
+    impactOneline:
+      "Route-specific oracle confirms medical-records broken object-level authorization without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthMedicalRecordsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — enforce server-side authorization on every medical record access.",
+      steps: [
+        "Validate record ownership on every GET /api/medical-records request.",
+        "Use short-lived signed JWTs with server-side session revocation.",
+        "Audit and alert on cross-patient medical record access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/medical-records endpoint trusts forgeable JWT user ids. Show BOLA remediation for healthcare PHI APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-parameter-pollution-route-live-oracle",
+    platform: "generic",
+    category: "API security",
+    severityDefault: "high",
+    title: "Zero Health parameter-pollution challenge route live oracle",
+    description:
+      "When scanning /challenges/parameter-pollution, GET /api/users/profile uses the last user_id when duplicate query params are supplied — route-specific parameter pollution oracle.",
+    impactOneline:
+      "Route-specific oracle confirms parameter-pollution access-control bypass training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthParameterPollutionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — reject duplicate query parameters and enforce consistent parameter handling.",
+      steps: [
+        "Use the first canonical user_id value or reject requests with duplicate params.",
+        "Enforce authorization checks independent of query parameter ordering.",
+        "Log and alert on parameter pollution patterns in healthcare APIs."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/parameter-pollution route documents duplicate user_id bypass at /api/users/profile. Show consistent parameter parsing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-api-security-route-live-oracle",
     platform: "generic",
     category: "API security",

