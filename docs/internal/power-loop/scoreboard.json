@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T03:30:00.000Z",
+  "updated_at": "2026-07-31T04:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2862,
-  "total_findings": 28004,
-  "critical_findings": 86,
+  "total_sites_scanned": 2866,
+  "total_findings": 28043,
+  "critical_findings": 89,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2019,
-  "discovery_findings": 23335,
-  "improvements_shipped": 1164,
-  "last_run": "2026-07-31T03:30:00.000Z",
+  "discovery_findings": 23344,
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-31T04:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 30,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,45 +48,40 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (34 findings); no benchmark misses; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings); no benchmark misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 3,
-      "focus": "zerohealth race-condition/path-traversal + ai-security api-security route oracle validation",
+      "findings": 18,
+      "focus": "zerohealth deserialization/medical-records BOLA/parameter-pollution route oracle validation",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "zerohealth.aliyu.dev/challenges/race-condition: 5→6 findings — zerohealth-race-condition-route-live-oracle shipped (challenges.md Challenge 10 + /api/auth/login-with-rate-limit)",
-      "zerohealth.aliyu.dev/challenges/path-traversal: 5→6 findings — zerohealth-path-traversal-route-live-oracle shipped (server.js /api/files/:filename traversal)",
-      "ai-security-platform-iota.vercel.app/challenges/api-security: 6→7 findings — ai-security-api-security-route-live-oracle shipped (homepage Auth & API catalog IDOR/rate-limit/secrets)",
-      "zerohealth.aliyu.dev/challenges/deserialization: route-specific live oracle still absent",
-      "zerohealth.aliyu.dev/api/medical-records: BOLA medical-records live oracle still absent"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
+      "zerohealth.aliyu.dev/challenges/deserialization: 5→6 findings — zerohealth-deserialization-route-live-oracle shipped (server.js /api/debug/token alg:none + verifyToken decode fallback)",
+      "zerohealth.aliyu.dev/api/medical-records: 5→6 findings — zerohealth-medical-records-bola-route-live-oracle shipped (GET /api/medical-records PHI via forgeable JWT user id)",
+      "zerohealth.aliyu.dev/challenges/parameter-pollution: 5→6 findings — zerohealth-parameter-pollution-route-live-oracle shipped (challenges.md Challenge 9 + /api/users/profile?user_id=1&user_id=2)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zerohealth.aliyu.dev/challenges/deserialization: route-specific insecure-deserialization live oracle still absent",
-      "zerohealth.aliyu.dev/api/medical-records: BOLA medical-records live oracle still absent",
-      "zerohealth.aliyu.dev/challenges/rate-limiting/parameter-pollution/mass-assignment/reset-password/information-disclosure: route-specific live oracles still absent",
+      "zerohealth.aliyu.dev/challenges/rate-limiting/mass-assignment/reset-password/information-disclosure: route-specific live oracles still absent",
       "ai-security-platform-iota.vercel.app/challenges/insecure-passwords + hacked-npm-packages: route-specific live oracles still absent (login-gated challenge pages)",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
+    "juice-shop-staging.herokuapp.com": 30,
+    "zerohealth.aliyu.dev/challenges/deserialization": 6,
+    "zerohealth.aliyu.dev/api/medical-records": 6,
+    "zerohealth.aliyu.dev/challenges/parameter-pollution": 6,
     "zerohealth.aliyu.dev/challenges/race-condition": 6,
     "zerohealth.aliyu.dev/challenges/path-traversal": 6,
     "ai-security-platform-iota.vercel.app/challenges/api-security": 7,
     "zerohealth.aliyu.dev/challenges/stored-xss": 6,
     "zerohealth.aliyu.dev/challenges/prompt-injection": 6,
-    "zerohealth.aliyu.dev/challenges/file-upload": 6,
-    "zerohealth.aliyu.dev/challenges/command-injection": 6,
-    "zerohealth.aliyu.dev/challenges/xxe": 6,
-    "ai-security-platform-iota.vercel.app/challenges/privacy-policy": 8,
-    "ai-security-platform-iota.vercel.app/challenges/insecure-passwords": 7
+    "ai-security-platform-iota.vercel.app/challenges/privacy-policy": 8
   }
 }
