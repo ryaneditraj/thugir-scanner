@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-fetch-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/fetch returns document.location.hash.substr(1) passed to fetch(resourceUri) with response assigned to divElement.innerHTML; fetch route scan findings 19→26 (+firing-range-urldom-location-hash-fetch-live-oracle + route); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-script-src-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/script.src returns document.location.hash.substr(1) assigned to scriptElement.src; script.src route scan findings 19→26 (+firing-range-urldom-location-hash-script-src-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/documentwrite returns window.location.hash.substr(1) passed to document.write(payload); documentwrite route scan findings 19→26 (+firing-range-address-location-hash-documentwrite-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-address-location-hash-innerhtml-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/innerHtml returns window.location.hash.substr(1) assigned to divEl.innerHTML; address/location.hash/innerHtml route scan findings 19→23 (+firing-range-address-location-hash-innerhtml-live-oracle + route); benchmark juice-shop-staging 32 findings 6/6 maintained"
