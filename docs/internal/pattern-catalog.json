@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-31T01:06:52.206Z",
-  "total": 1207,
-  "uniqueSlugs": 1202,
+  "generatedAt": "2026-07-31T02:07:02.678Z",
+  "total": 1210,
+  "uniqueSlugs": 1205,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1189,
+    "generic": 1192,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1122,
+    "deep": 1125,
     "continuous": 0
   },
   "byCategory": {
@@ -28,12 +28,12 @@
     "Security misconfiguration": 109,
     "Broken authentication": 87,
     "Injection": 239,
-    "Cross-site scripting": 165,
+    "Cross-site scripting": 166,
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 45,
     "Sensitive data exposure": 29,
-    "AI security": 45,
+    "AI security": 47,
     "Business logic": 14,
     "Insecure file upload": 1,
     "Command injection": 1,
@@ -49,6 +49,7 @@
     "agentpwn-attack-route-live-oracle",
     "agentpwn-context-window-route-live-oracle",
     "agentpwn-mcp-exploitation-route-live-oracle",
+    "ai-security-privacy-policy-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",
     "all-seeing-eye-read-route-live-oracle",
     "auth-security-project-dashboard-xss-route-live-oracle",
@@ -1247,6 +1248,8 @@
     "xxe-xml-post-probe",
     "zerohealth-command-injection-route-live-oracle",
     "zerohealth-file-upload-route-live-oracle",
+    "zerohealth-prompt-injection-route-live-oracle",
+    "zerohealth-stored-xss-route-live-oracle",
     "zerohealth-xxe-route-live-oracle"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."

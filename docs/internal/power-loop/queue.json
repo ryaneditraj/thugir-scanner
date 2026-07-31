@@ -27,17 +27,17 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-password-storage",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
       "source": "AI & Security Platform — plaintext/MD5 password storage live demo (Vercel OSS deploy)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/deceptive-privacy-policy",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/privacy-policy",
       "source": "AI & Security Platform — dark-pattern privacy policy / silent consent oracle (Vercel OSS deploy)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/vulnerable-npm-packages",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/vulnerable-deps",
       "source": "AI & Security Platform — outdated npm CVE dependency oracle (Vercel OSS deploy)",
       "auth": "public_demo"
     },
