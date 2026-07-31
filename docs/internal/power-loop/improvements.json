@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/eval returns window.location.hash.substr(1) passed to eval(payload); address/location.hash/eval route scan findings 10→17 (+firing-range-address-location-hash-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-dynamic-allow-origin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/dynamicAllowOrigin with Origin https://evil-cors-probe.example returns Access-Control-Allow-Origin echoed with Allow-Credentials true; cors/dynamicAllowOrigin route scan findings 10→17 (+firing-range-cors-dynamic-allow-origin-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-attribute-unquoted-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/escapeHtml/attribute_unquoted?q=thugirFrEscapeProbe returns <tag attribute=thugirFrEscapeProbe> despite escapeHtml; escape/attribute_unquoted route scan findings 10→17 (+firing-range-escape-serverside-attribute-unquoted-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-url-object-data-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/url/object_data?q=thugirFrObjectDataProbe returns <object data=\"thugirFrObjectDataProbe\">; object_data route scan findings 9→15 (+firing-range-reflected-url-object-data-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
