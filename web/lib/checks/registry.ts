@@ -37808,6 +37808,142 @@ const firingRangeDomLocalStorageXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function firingRangeMetaRefreshTarget(body: string): string | null {
+  const m = body.match(
+    /<meta[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*content\s*=\s*["']0;\s*([^"']+)/i
+  );
+  return m ? m[1].trim() : null;
+}
+
+const firingRangeMetaRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/redirect/meta", ctx.origin);
+  probeUrl.searchParams.set("q", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const target = firingRangeMetaRefreshTarget(doc.body);
+  if (!target || !resolvesToOpenRedirectProbe(target, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      metaRefresh: target,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /redirect/meta?q= issues meta http-equiv=refresh content=\"0;<url>\" to attacker URL — meta-tag open redirect oracle"
+    }
+  };
+};
+
+const firingRangeMetaRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirect\/meta\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeMetaRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /redirect/meta route scan — q query parameter reflected into meta-refresh redirect without validation"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SINKS = [
+  {
+    path: "/urldom/location/hash/document.location",
+    sinkRe: /document\.location\s*=\s*payload/i,
+    sourceRe: /document\.location\.hash\.substr\(1\)/i,
+    label: "document.location assignment from hash fragment"
+  },
+  {
+    path: "/urldom/location/hash/form.action",
+    sinkRe: /formElement\.action\s*=\s*payload/i,
+    sourceRe: /document\.location\.hash\.substr\(1\)/i,
+    label: "form.action assignment from hash fragment"
+  },
+  {
+    path: "/urldom/location/search/area.href",
+    sinkRe: /area\.href\s*=\s*payload/i,
+    sourceRe: /document\.location\.search\.substr\(1\)/i,
+    label: "area.href assignment from query string"
+  }
+] as const;
+
+async function probeFiringRangeUrldomSink(
+  ctx: RuleContext,
+  sink: (typeof FIRING_RANGE_URLDOM_SINKS)[number]
+): Promise<RuleResult> {
+  const url = new URL(sink.path, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasTitle = /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body);
+  if (!hasTitle || !sink.sourceRe.test(body) || !sink.sinkRe.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      sink: sink.label,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${sink.path} assigns URL fragment/query to ${sink.label} — URL-based DOM XSS sink oracle`
+    }
+  };
+}
+
+const firingRangeUrldomSinkLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let sinks = [...FIRING_RANGE_URLDOM_SINKS];
+  if (/\/urldom\//i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = sinks.filter((s) => pathname.startsWith(s.path));
+      if (matched.length) sinks = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const sink of sinks) {
+    const result = await probeFiringRangeUrldomSink(ctx, sink);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeUrldomSinkRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\//i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const sink = FIRING_RANGE_URLDOM_SINKS.find((s) => pathname.startsWith(s.path));
+  if (!sink) return NEGATIVE;
+  const result = await probeFiringRangeUrldomSink(ctx, sink);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${sink.path} route scan — ${sink.label} without sanitization`
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -50473,6 +50609,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreAuthTotpBypassRouteLiveOracle,
   firingRangeDomLocalStorageXssLiveOracle,
   firingRangeDomLocalStorageXssRouteLiveOracle,
+  firingRangeMetaRedirectLiveOracle,
+  firingRangeMetaRedirectRouteLiveOracle,
+  firingRangeUrldomSinkLiveOracle,
+  firingRangeUrldomSinkRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
