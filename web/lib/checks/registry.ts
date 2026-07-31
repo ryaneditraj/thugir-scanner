@@ -38271,6 +38271,127 @@ const firingRangeReflectedUrlCssImportRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_REFLECTED_OBJECT_DATA_PROBE = "thugirFrObjectDataProbe";
+
+const firingRangeReflectedUrlObjectDataLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/url/object_data", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_OBJECT_DATA_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const dataRe = new RegExp(
+    `<object\\s+[^>]*\\bdata\\s*=\\s*["']${FIRING_RANGE_REFLECTED_OBJECT_DATA_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!dataRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/url/object_data?q= reflects attacker-controlled URL into object data attribute — reflected DOM XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedUrlObjectDataRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/url\/object_data\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedUrlObjectDataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/url/object_data route scan — q parameter reflected into object data attribute without validation"
+    }
+  };
+};
+
+async function probeFiringRangeToxicdomEval(
+  ctx: RuleContext,
+  probePath: string,
+  sourceRe: RegExp,
+  label: string
+): Promise<RuleResult> {
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasToxicDom =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    sourceRe.test(body) &&
+    /eval\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasToxicDom) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(body) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${probePath} passes ${label} to eval() — toxic DOM XSS sink oracle`
+    }
+  };
+}
+
+const firingRangeDomCookieSetEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/document/cookie_set/eval",
+    /lookupCookie\s*\(\s*['"]badValue['"]\s*\)/i,
+    "document.cookie badValue"
+  );
+};
+
+const firingRangeDomCookieSetEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/cookie_set\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomCookieSetEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/cookie_set/eval route scan — cookie badValue passed to eval() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomWindowNameEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/window/name/eval",
+    /var\s+payload\s*=\s*window\.name/i,
+    "window.name"
+  );
+};
+
+const firingRangeDomWindowNameEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/window\/name\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomWindowNameEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/window/name/eval route scan — window.name passed to eval() without sanitization"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -50953,6 +51074,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedUrlScriptSrcRouteLiveOracle,
   firingRangeReflectedUrlCssImportLiveOracle,
   firingRangeReflectedUrlCssImportRouteLiveOracle,
+  firingRangeReflectedUrlObjectDataLiveOracle,
+  firingRangeReflectedUrlObjectDataRouteLiveOracle,
+  firingRangeDomCookieSetEvalLiveOracle,
+  firingRangeDomCookieSetEvalRouteLiveOracle,
+  firingRangeDomWindowNameEvalLiveOracle,
+  firingRangeDomWindowNameEvalRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,

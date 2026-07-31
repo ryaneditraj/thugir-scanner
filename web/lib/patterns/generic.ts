@@ -1278,6 +1278,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-url-object-data-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected URL object data XSS oracle",
+    description:
+      "GET /reflected/url/object_data?q= reflects attacker-controlled URLs into object data attributes — Firing Range reflected DOM XSS training oracle.",
+    impactOneline:
+      "Reflected object data values let attackers load arbitrary content when victims visit crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlObjectDataLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block attacker-controlled URLs in reflected object data attributes.",
+      steps: [
+        "Allowlist safe object data sources (same-origin paths or trusted hosts).",
+        "Reject or encode user input before inserting into object data attributes.",
+        "Use CSP object-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/object_data?q= reflects into object data without validation. Show object data XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-object-data-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/url/object_data route XSS oracle",
+    description:
+      "When scanning /reflected/url/object_data, the q query parameter is reflected into object data without validation — route-specific reflected DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm object data attributes cannot load attacker-controlled URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlObjectDataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate object data sources on /reflected/url/object_data before emitting object tags.",
+      steps: [
+        "Reject external or data: URLs in q parameter values.",
+        "Use relative paths or allowlisted hosts for object data targets.",
+        "Add CSP to block dangerous object embeds."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/object_data route reflects q into object data. Show route-specific object data XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM cookie eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie_set/eval returns a page that reads document.cookie badValue and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Cookie values passed to eval() enable DOM XSS when attackers can set the badValue cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/eval uses eval on cookie values. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie_set/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie_set/eval, cookie badValue is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not executed via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/eval route uses eval on cookie values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM window.name eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/window/name/eval returns a page that reads window.name and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "window.name values passed to eval() enable DOM XSS when attackers can set window.name via navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.name to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from window.name.",
+        "Treat window.name as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/eval uses eval on window.name. Show toxic DOM window.name XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/window/name/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/window/name/eval, window.name is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm window.name values are not executed via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on window.name in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all window.name reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/eval route uses eval on window.name. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
