@@ -1590,6 +1590,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-escape-serverside-css-style-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side CSS style escape bypass oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/css_style or /encodeUrl/css_style?q= reflects attacker input into a <style> element despite escapeHtml/encodeUrl — Firing Range CSS style context escape bypass training oracle.",
+    impactOneline:
+      "Incomplete escaping in CSS style contexts enables reflected XSS even when escapeHtml or encodeUrl is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideCssStyleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml/encodeUrl is insufficient for <style> text contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Use context-aware encoding for CSS and style element text.",
+        "Avoid reflecting user input into <style> blocks.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/css_style bypasses escapeHtml in style tags. Show server-side CSS style escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-css-style-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/*/css_style route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/css_style or /encodeUrl/css_style, q parameter reflects unescaped into <style> — route-specific server-side CSS escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escape output is safe in CSS style tag contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideCssStyleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix context-aware escaping on /escape/serverside/*/css_style routes.",
+      steps: [
+        "Encode user input for CSS style text contexts.",
+        "Audit escapeHtml/encodeUrl usage for css_style routes.",
+        "Add output encoding tests for each reflection context."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/css_style route bypasses escapeHtml in style tags. Show route-specific CSS escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-iframe-srcdoc-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range iframe srcdoc reflection oracle",
+    description:
+      "GET /reflected/parameter/iframe_srcdoc?q= reflects attacker input into an iframe srcdoc attribute — Firing Range sandbox srcdoc XSS training oracle.",
+    impactOneline:
+      "Unvalidated srcdoc attribute reflection enables sandboxed iframe XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedIframeSrcdocLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and encode all user input reflected into iframe srcdoc attributes.",
+      steps: [
+        "Avoid reflecting user input into srcdoc attributes.",
+        "Use allow-listed HTML fragments if srcdoc is required.",
+        "Add CSP sandbox directives as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/iframe_srcdoc reflects q into srcdoc without validation. Show iframe srcdoc XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-iframe-srcdoc-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/iframe_srcdoc route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/iframe_srcdoc, q parameter reflects unescaped into iframe srcdoc — route-specific sandbox XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm srcdoc reflection cannot inject attacker HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedIframeSrcdocRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix srcdoc attribute encoding on /reflected/parameter/iframe_srcdoc route.",
+      steps: [
+        "Encode user input for srcdoc attribute contexts.",
+        "Audit iframe srcdoc reflection points.",
+        "Add output encoding tests for srcdoc contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/iframe_srcdoc route reflects q into srcdoc. Show route-specific srcdoc XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-injection-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range HTML tag injection oracle",
+    description:
+      "GET /tags/tag/img, /script, /iframe, or /body/onload?q= accepts attacker-controlled HTML tags and reflects them into the response — Firing Range tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient tag filtering allows attacker-controlled HTML elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode HTML tag injection in /tags/tag/* routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/* routes accept HTML tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/* route XSS oracle",
+    description:
+      "When scanning /tags/tag/img, /script, /iframe, or /body/onload, q parameter injects attacker-controlled HTML tags — route-specific tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix tag filtering on /tags/tag/* routes.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts per route.",
+        "Add output encoding tests for tag injection routes."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/img route allows tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
