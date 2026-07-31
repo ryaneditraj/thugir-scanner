@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T15:05:00.000Z",
+  "updated_at": "2026-07-31T16:05:30.073Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/eval",
+      "source": "google/firing-range — address DOM XSS location.hash piped to eval() sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/dynamicAllowOrigin",
+      "source": "google/firing-range — CORS dynamic Allow-Origin reflection misconfiguration",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/iframe?q=a",
+      "source": "google/firing-range — tag-based XSS parameter injected into IFRAME tag",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/body/onload?q=a",
+      "source": "google/firing-range — tag-based XSS parameter injected into BODY onload event handler",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_unquoted?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass in unquoted HTML attribute context",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/url/css_import?q=a",
       "source": "google/firing-range — URL-based XSS parameter assigned to LINK stylesheet href (CSS import sink)",
