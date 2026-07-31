@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-sink-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/window.open returns window.open(payload) from hash.substr(1); GET /urldom/location/hash/a.href returns anchor.href=payload; urldom/window.open and urldom/a.href route scans 2→7 (+firing-range-urldom-sink-live-oracle + route); benchmark juice-shop 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/redirect?url=https://evil-open-redirect-probe.example/thugir-redirect-test returns HTTP 302 Location to probe host; urldom/redirect route scan 2→7 (+firing-range-urldom-redirect-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-jsonp-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/jsonp?callback=thugirJsonpProbe returns /**/thugirJsonpProbe({'msg':'Hello there!'}); urldom/jsonp route scan 2→7 (+firing-range-jsonp-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-meta-redirect-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect/meta?q=https://evil-open-redirect-probe.example/thugir-redirect-test returns <meta http-equiv=refresh content=\"0;https://evil-open-redirect-probe.example/...\">; public-firing-range.appspot.com/redirect/meta findings 2→5 (+firing-range-meta-redirect-live-oracle + route variant); benchmark juice-shop 34 findings 6/6 maintained"

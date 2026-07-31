@@ -37870,6 +37870,18 @@ const FIRING_RANGE_URLDOM_SINKS = [
     label: "form.action assignment from hash fragment"
   },
   {
+    path: "/urldom/location/hash/window.open",
+    sinkRe: /window\.open\s*\(\s*payload\s*\)/i,
+    sourceRe: /document\.location\.hash\.substr\(1\)/i,
+    label: "window.open from hash fragment"
+  },
+  {
+    path: "/urldom/location/hash/a.href",
+    sinkRe: /anchor\.href\s*=\s*payload/i,
+    sourceRe: /document\.location\.hash\.substr\(1\)/i,
+    label: "anchor href assignment from hash fragment"
+  },
+  {
     path: "/urldom/location/search/area.href",
     sinkRe: /area\.href\s*=\s*payload/i,
     sourceRe: /document\.location\.search\.substr\(1\)/i,
@@ -37940,6 +37952,86 @@ const firingRangeUrldomSinkRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: `Google Firing Range ${sink.path} route scan — ${sink.label} without sanitization`
+    }
+  };
+};
+
+const FIRING_RANGE_JSONP_CALLBACK = "thugirJsonpProbe";
+
+const firingRangeUrldomRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/urldom/redirect", ctx.origin);
+  probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 512,
+    redirect: "manual",
+    timeoutMs: 8000
+  });
+  if (doc.status < 300 || doc.status >= 400) return NEGATIVE;
+  const location = doc.headers["location"] || doc.headers["Location"] || "";
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      location,
+      status: doc.status,
+      note: "Google Firing Range GET /urldom/redirect?url= issues HTTP redirect to attacker-controlled URL — urldom open-redirect chaining oracle"
+    }
+  };
+};
+
+const firingRangeUrldomRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/redirect\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/redirect route scan — url query parameter reflected into HTTP Location without validation"
+    }
+  };
+};
+
+const firingRangeJsonpLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/urldom/jsonp", ctx.origin);
+  probeUrl.searchParams.set("callback", FIRING_RANGE_JSONP_CALLBACK);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body.trim();
+  const prefix = `/**/${FIRING_RANGE_JSONP_CALLBACK}({'msg':`;
+  if (!body.startsWith(prefix) || !/\}\)\s*;?\s*$/.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 120),
+      note: "Google Firing Range GET /urldom/jsonp?callback= reflects attacker-controlled function name in JSONP response — DOM XSS exploit-crafting oracle"
+    }
+  };
+};
+
+const firingRangeJsonpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/jsonp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeJsonpLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/jsonp route scan — callback parameter reflected into executable JSONP wrapper without validation"
     }
   };
 };
@@ -41093,7 +41185,8 @@ const juiceShopAddresssIdBolaLiveOracle: Rule = async (ctx) => {
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const routeId = pageUrl.match(/\/api\/Addresss\/(\d+)/i)?.[1];
-  const ids = routeId ? [routeId, "2", "3", "4"] : ["2", "3", "4", "5"];
+  const defaultIds = ["3", "10", "11", "2", "4", "5"];
+  const ids = routeId ? [routeId, ...defaultIds] : defaultIds;
   const authHeader = juiceShopDataIdAuthHeader();
   for (const id of [...new Set(ids)]) {
     const url = new URL(`/api/Addresss/${id}`, ctx.origin).toString();
@@ -50613,6 +50706,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeMetaRedirectRouteLiveOracle,
   firingRangeUrldomSinkLiveOracle,
   firingRangeUrldomSinkRouteLiveOracle,
+  firingRangeUrldomRedirectLiveOracle,
+  firingRangeUrldomRedirectRouteLiveOracle,
+  firingRangeJsonpLiveOracle,
+  firingRangeJsonpRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
