@@ -15603,6 +15603,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-reset-password-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Zero Health reset-password reflected XSS route live oracle",
+    description:
+      "When scanning /reset-password, the React ResetPassword component renders the code URL parameter via dangerouslySetInnerHTML without sanitization — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route-specific oracle confirms password-reset reflected XSS training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthResetPasswordReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never render URL parameters as HTML.",
+      steps: [
+        "Remove dangerouslySetInnerHTML from password reset code display.",
+        "Render reset codes as textContent or escaped text nodes.",
+        "Validate reset tokens server-side without reflecting them in HTML."
+      ]
+    },
+    fixPrompt:
+      "Our /reset-password route reflects the code URL param via dangerouslySetInnerHTML. Show safe reset-code rendering without HTML injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-search-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Zero Health search API reflected XSS route live oracle",
+    description:
+      "When scanning /api/search, GET /api/search embeds the q query parameter unsanitized in searchSummary HTML returned to doctors — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route-specific oracle confirms search reflected XSS training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthSearchReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — encode all user input before embedding in HTML responses.",
+      steps: [
+        "HTML-encode search queries before embedding in searchSummary.",
+        "Return structured JSON without inline HTML fragments.",
+        "Use parameterized queries instead of string interpolation for search SQL."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search route reflects the q param unsanitized in searchSummary HTML. Show XSS-safe search responses and parameterized SQL.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-ai-chat-sqli-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "Zero Health AI chat SQL injection route live oracle",
+    description:
+      "When scanning /api/ai/chat, the chatbot enhanced-chat endpoint generates and executes SQL from natural language with bypassable prompt-injection guardrails — route-specific AI SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms AI chatbot SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthAiChatSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never let LLMs generate executable SQL from user prompts.",
+      steps: [
+        "Use parameterized queries with fixed intent handlers instead of LLM-generated SQL.",
+        "Enforce strict output schemas and block SQL keywords in model responses.",
+        "Apply role-based data scoping independent of chatbot output."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/chat route documents SQL injection via AI chatbot prompt injection. Show safe intent handlers without LLM-generated SQL.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-api-security-route-live-oracle",
     platform: "generic",
     category: "API security",
