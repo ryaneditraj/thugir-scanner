@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T19:13:36.364Z",
+  "updated_at": "2026-07-31T21:03:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/base.href",
+      "source": "google/firing-range — location.hash assigned to base.href DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/embed.src",
+      "source": "google/firing-range — location.hash assigned to embed.src DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/link.href",
+      "source": "google/firing-range — location.hash assigned to link.href DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/object.data",
+      "source": "google/firing-range — location.hash assigned to object.data DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/script.href",
+      "source": "google/firing-range — location.hash assigned to script xlink:href DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/hash/fetch",
       "source": "google/firing-range — location.hash fetch API external resource DOM XSS sink",
