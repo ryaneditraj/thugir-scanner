@@ -908,6 +908,10 @@ const DEEP_RULES = new Set<string>([
   "firingRangeReflectedParamRouteLiveOracle",
   "firingRangeReflectedUrlHrefLiveOracle",
   "firingRangeReflectedUrlHrefRouteLiveOracle",
+  "firingRangeReflectedUrlScriptSrcLiveOracle",
+  "firingRangeReflectedUrlScriptSrcRouteLiveOracle",
+  "firingRangeReflectedUrlCssImportLiveOracle",
+  "firingRangeReflectedUrlCssImportRouteLiveOracle",
   "clientSideIdorEvidence",
   "clientSideSqlEvidence",
   "clientSideCsrfEvidence",
@@ -3889,7 +3893,10 @@ function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
     "/reflected/parameter/body",
     "/reflected/parameter/title",
     "/reflected/parameter/head",
-    "/reflected/parameter/attribute_unquoted"
+    "/reflected/parameter/attribute_unquoted",
+    "/reflected/parameter/tagname",
+    "/reflected/url/css_import",
+    "/reflected/url/script_src"
   ]) {
     try {
       out.add(new URL(p, origin).toString());

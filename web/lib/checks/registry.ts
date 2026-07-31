@@ -38046,6 +38046,16 @@ const FIRING_RANGE_REFLECTED_PARAM_PROBE = "thugirFrReflectedProbe";
 
 const FIRING_RANGE_REFLECTED_PARAM_PATHS = [
   {
+    path: "/reflected/parameter/attribute_unquoted",
+    bodyRe: /attribute\s*=\s*thugirFrReflectedProbe[\s>]/i,
+    label: "unquoted HTML attribute"
+  },
+  {
+    path: "/reflected/parameter/tagname",
+    bodyRe: /<thugirFrReflectedProbe[\s>]/i,
+    label: "HTML tag name"
+  },
+  {
     path: "/reflected/parameter/attribute_quoted",
     bodyRe: /attribute\s*=\s*["']thugirFrReflectedProbe["']/i,
     label: "double-quoted HTML attribute"
@@ -38175,6 +38185,88 @@ const firingRangeReflectedUrlHrefRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /reflected/url/href route scan — q parameter reflected into anchor href without validation"
+    }
+  };
+};
+
+const FIRING_RANGE_REFLECTED_SCRIPT_SRC_PROBE = "thugirFrScriptSrcProbe";
+
+const firingRangeReflectedUrlScriptSrcLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/url/script_src", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_SCRIPT_SRC_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const srcRe = new RegExp(
+    `<script\\s+src\\s*=\\s*["']${FIRING_RANGE_REFLECTED_SCRIPT_SRC_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!srcRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/url/script_src?q= reflects attacker-controlled URL into script src attribute — reflected DOM XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedUrlScriptSrcRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/url\/script_src\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedUrlScriptSrcLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/url/script_src route scan — q parameter reflected into script src without validation"
+    }
+  };
+};
+
+const FIRING_RANGE_REFLECTED_CSS_IMPORT_PROBE = "thugirFrCssImportProbe";
+
+const firingRangeReflectedUrlCssImportLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/url/css_import", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_CSS_IMPORT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const linkRe = new RegExp(
+    `<link\\s+[^>]*href\\s*=\\s*["']${FIRING_RANGE_REFLECTED_CSS_IMPORT_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!linkRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/url/css_import?q= reflects attacker-controlled URL into stylesheet link href — reflected CSS injection training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedUrlCssImportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/url\/css(?:_import)?\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedUrlCssImportLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/url/css_import route scan — q parameter reflected into stylesheet link href without validation"
     }
   };
 };
@@ -50857,6 +50949,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedParamRouteLiveOracle,
   firingRangeReflectedUrlHrefLiveOracle,
   firingRangeReflectedUrlHrefRouteLiveOracle,
+  firingRangeReflectedUrlScriptSrcLiveOracle,
+  firingRangeReflectedUrlScriptSrcRouteLiveOracle,
+  firingRangeReflectedUrlCssImportLiveOracle,
+  firingRangeReflectedUrlCssImportRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
