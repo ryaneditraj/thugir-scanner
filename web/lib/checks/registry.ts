@@ -38392,6 +38392,135 @@ const firingRangeDomWindowNameEvalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_ADDRESS_HASH_EVAL_PATH = "/address/location.hash/eval";
+
+const firingRangeAddressLocationHashEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_ADDRESS_HASH_EVAL_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasHashEval =
+    /<title>\s*Address based DOM XSS\s*<\/title>/i.test(body) &&
+    /window\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /eval\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasHashEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /address/location.hash/eval passes location.hash to eval() — address-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeAddressLocationHashEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/address\/location\.hash\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAddressLocationHashEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /address/location.hash/eval route scan — location.hash passed to eval() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_CORS_DYNAMIC_ORIGIN_PATH = "/cors/alloworigin/dynamicAllowOrigin";
+const FIRING_RANGE_CORS_PROBE_ORIGIN = "https://evil-cors-probe.example";
+
+const firingRangeCorsDynamicAllowOriginLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_CORS_DYNAMIC_ORIGIN_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: FIRING_RANGE_CORS_PROBE_ORIGIN }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== FIRING_RANGE_CORS_PROBE_ORIGIN) return NEGATIVE;
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  return {
+    fired: true,
+    confidence: creds ? 0.93 : 0.9,
+    evidence: {
+      url,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      note: "Google Firing Range /cors/alloworigin/dynamicAllowOrigin reflects arbitrary Origin with credentials on POST — CORS misconfiguration oracle"
+    }
+  };
+};
+
+const firingRangeCorsDynamicAllowOriginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cors\/alloworigin\/dynamicAllowOrigin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeCorsDynamicAllowOriginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /cors/alloworigin/dynamicAllowOrigin route scan — arbitrary Origin reflected with credentials"
+    }
+  };
+};
+
+const FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PROBE = "thugirFrEscapeProbe";
+const FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PATH =
+  "/escape/serverside/escapeHtml/attribute_unquoted";
+
+const firingRangeEscapeServersideAttributeUnquotedLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const attrRe = new RegExp(
+    `attribute\\s*=\\s*${FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[\\s>]`,
+    "i"
+  );
+  if (!attrRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range /escape/serverside/escapeHtml/attribute_unquoted reflects q into unquoted attribute despite escapeHtml — server-side escape bypass XSS oracle"
+    }
+  };
+};
+
+const firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/escape\/serverside\/escapeHtml\/attribute_unquoted\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeEscapeServersideAttributeUnquotedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /escape/serverside/escapeHtml/attribute_unquoted route scan — escapeHtml bypass allows unquoted attribute XSS"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -51080,6 +51209,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomCookieSetEvalRouteLiveOracle,
   firingRangeDomWindowNameEvalLiveOracle,
   firingRangeDomWindowNameEvalRouteLiveOracle,
+  firingRangeAddressLocationHashEvalLiveOracle,
+  firingRangeAddressLocationHashEvalRouteLiveOracle,
+  firingRangeCorsDynamicAllowOriginLiveOracle,
+  firingRangeCorsDynamicAllowOriginRouteLiveOracle,
+  firingRangeEscapeServersideAttributeUnquotedLiveOracle,
+  firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
