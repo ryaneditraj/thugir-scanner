@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/innerHtml returns window.location.hash.substr(1) assigned to divEl.innerHTML; address/location.hash/innerHtml route scan findings 19→23 (+firing-range-address-location-hash-innerhtml-live-oracle + route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-form-submission-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/formSubmission/innerHtml returns Toxic DOM page with form.onsubmit copying userInput to innerHTML; formSubmission/innerHtml route scan findings 19→23 (+firing-range-dom-form-submission-innerhtml-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-remoteinclude-script-hash-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /remoteinclude/script_hash.html reads location.hash.substr(1) and sets script.src=target; remoteinclude/script_hash.html route scan findings 19→23 (+firing-range-remoteinclude-script-hash-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-escape-serverside-css-style-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/escapeHtml/css_style?q=thugirFrCssStyleProbe returns <style>thugirFrCssStyleProbe</style> despite escapeHtml; GET /encodeUrl/css_style same; escapeHtml/css_style findings 13→20 (+firing-range-escape-serverside-css-style-live-oracle + route); benchmark juice-shop 20 findings 6/6 maintained"
