@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T10:12:00.000Z",
+  "updated_at": "2026-07-31T11:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2930,
-  "total_findings": 28711,
+  "total_sites_scanned": 2931,
+  "total_findings": 28742,
   "critical_findings": 101,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2049,
   "discovery_findings": 23633,
-  "improvements_shipped": 1167,
-  "last_run": "2026-07-31T10:12:00.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-07-31T11:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 31,
@@ -52,33 +52,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 15,
-      "focus": "google/firing-range urldom + redirect/parameter suite + juice-shop.demo.escape.tech/api/Cards queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 18,
+      "focus": "zerohealth.aliyu.dev api/info + api/health + api/upload route oracle validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/redirect/parameter?url=/: 5 findings — open-redirect-query-param + reflected-xss-query-param + client-side-xss-evidence",
-      "public-firing-range.appspot.com/urldom/*: 2 findings each — firing-range-dom-localstorage-xss-live-oracle (generic; route-specific window.open/a.href DOM sinks not yet oracled)",
-      "juice-shop.demo.escape.tech/api/Cards: 2-finding thin pass (missing-security-headers + juice-shop-leaked-api-key) — no cards BOLA live oracle on escape.tech instance",
-      "chimera.escape.tech/api/agent-browse + zerohealth.io/challenges/jwt: unreachable in cloud agent"
+      "zerohealth.aliyu.dev/api/info: 5→6 findings — zerohealth-info-route-live-oracle shipped (jwt_secret + admin_credentials disclosure via server.js)",
+      "zerohealth.aliyu.dev/api/health: 5→6 findings — zerohealth-health-route-live-oracle shipped (status:vulnerable debug health)",
+      "zerohealth.aliyu.dev/api/upload: 5→6 findings — zerohealth-upload-advanced-route-live-oracle shipped (weak filter + executeFile RCE at /api/files/upload-advanced)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "zerohealth.aliyu.dev/api/notifications + api/insurance + api/billing: no OSS routes in aligorithm/Zero-Health server.js — cannot ship route oracles without evidence",
       "public-firing-range.appspot.com/urldom/location/hash/*: route-specific DOM XSS oracles absent (window.open, a.href sinks get generic localStorage oracle only)",
-      "public-firing-range.appspot.com/urldom/jsonp: JSONP callback injection oracle absent",
-      "juice-shop.demo.escape.tech/api/Cards: cards BOLA live oracle absent (2 findings vs 31 on staging)",
-      "zerohealth.aliyu.dev/api/notifications + api/insurance + api/billing + api/upload: still 5-finding thin passes without route-specific oracles"
+      "juice-shop.demo.escape.tech/api/Cards: cards BOLA live oracle absent (2 findings vs 31 on staging)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
+    "zerohealth.aliyu.dev/api/info": 6,
+    "zerohealth.aliyu.dev/api/health": 6,
+    "zerohealth.aliyu.dev/api/upload": 6,
     "public-firing-range.appspot.com/redirect/parameter?url=/": 5,
-    "public-firing-range.appspot.com/urldom/redirect?url=http://example.com": 2,
-    "juice-shop.demo.escape.tech/api/Cards": 2,
     "ssrf.vulnlab.dev/blind/": 15
   }
 }
