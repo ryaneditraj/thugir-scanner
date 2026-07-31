@@ -862,6 +862,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-meta-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Google Firing Range meta-tag open redirect oracle",
+    description:
+      "GET /redirect/meta?q= returns a meta http-equiv=refresh tag with content=\"0;<url>\" pointing to the attacker-controlled q parameter — the Firing Range meta-tag redirect training oracle.",
+    impactOneline:
+      "Meta-refresh open redirects let attackers phish users via trusted Google Firing Range links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeMetaRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into meta-refresh URLs without an allowlist.",
+      steps: [
+        "Validate redirect targets against same-origin or explicit allowlists.",
+        "Prefer HTTP 302 redirects with server-side validation over meta refresh.",
+        "Run Firing Range only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/meta?q= reflects the query parameter into a meta-refresh redirect. Show meta-tag open redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-meta-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Google Firing Range /redirect/meta route open redirect oracle",
+    description:
+      "When scanning /redirect/meta, the q query parameter is reflected into meta http-equiv=refresh without validation — route-specific meta-tag open redirect oracle.",
+    impactOneline:
+      "Route-specific scans should confirm meta-refresh redirects cannot target external hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeMetaRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate q parameter targets before emitting meta-refresh on /redirect/meta.",
+      steps: [
+        "Reject external hosts in q query parameters.",
+        "Use relative paths only for in-app navigation.",
+        "Add redirect allowlist checks server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/meta route reflects q into meta-refresh. Show route-specific open redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-sink-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range URL-based DOM XSS sink oracle",
+    description:
+      "GET /urldom/location/hash/* and /urldom/location/search/* assign URL hash or query fragments to document.location, form.action, or area.href without sanitization — Firing Range URL-based DOM XSS training oracle.",
+    impactOneline:
+      "URL-based DOM XSS sinks let attackers execute script via crafted hash or query fragments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomSinkLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign URL fragments or query strings to navigation sinks without validation.",
+      steps: [
+        "Validate hash/query values against same-origin relative paths.",
+        "Avoid assigning user-controlled URLs to location, form.action, or href sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom routes assign URL fragments to DOM navigation sinks. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-sink-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom route DOM XSS sink oracle",
+    description:
+      "When scanning /urldom/location routes, the response assigns hash or query fragments to document.location, form.action, or area.href — route-specific URL-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments cannot drive dangerous DOM navigation sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomSinkRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove unvalidated URL fragment assignments on /urldom routes.",
+      steps: [
+        "Audit hash and search parameter reads for dangerous sinks.",
+        "Encode or allowlist before DOM assignment.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom route assigns URL fragments to DOM sinks. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
