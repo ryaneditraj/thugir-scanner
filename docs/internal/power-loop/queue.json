@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T02:05:00.000Z",
+  "updated_at": "2026-07-31T03:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/rate-limiting",
+      "source": "aligorithm/zero-health — rate-limiting bypass challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/parameter-pollution",
+      "source": "aligorithm/zero-health — HTTP parameter pollution challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/mass-assignment",
+      "source": "aligorithm/zero-health — mass-assignment / profile update challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/reset-password",
+      "source": "aligorithm/zero-health — reflected XSS via dangerouslySetInnerHTML reset-password oracle (challenges.md)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/challenges/information-disclosure",
+      "source": "aligorithm/zero-health — information disclosure / debug endpoint challenge lab (zerohealth.aliyu.dev OSS deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/api-security",
       "source": "AI & Security Platform — broken API security / unauthenticated endpoints oracle (Vercel OSS deploy)",
