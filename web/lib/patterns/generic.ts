@@ -15681,6 +15681,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-admin-users-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Health admin users API broken access control route live oracle",
+    description:
+      "When scanning /api/admin/users, GET returns all user accounts with email and role fields when a forged admin JWT is supplied — route-specific admin enumeration oracle.",
+    impactOneline:
+      "Route-specific oracle confirms admin user enumeration training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthAdminUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — enforce strict admin authorization and never expose full user lists to weak tokens.",
+      steps: [
+        "Require cryptographically verified admin JWTs with role claims bound to the signing key.",
+        "Apply object-level authorization on every admin list endpoint.",
+        "Remove debug token generators from any internet-reachable deployment."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/users route returns all accounts with a forged admin debug JWT. Show proper admin authorization and remove debug token endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-messages-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health messages API SQL injection route live oracle",
+    description:
+      "When scanning /api/messages, GET and POST endpoints build SQL queries via string interpolation on userId and message fields — route-specific SQLi and stored-XSS oracle.",
+    impactOneline:
+      "Route-specific oracle confirms messaging SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthMessagesSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries and sanitize stored message content.",
+      steps: [
+        "Replace string-interpolated SQL in message queries with parameterized statements.",
+        "HTML-encode message content before storage and rendering.",
+        "Validate recipient_id as an integer and enforce ownership checks."
+      ]
+    },
+    fixPrompt:
+      "Our /api/messages route uses string-interpolated SQL and stores unsanitized content. Show parameterized queries and XSS-safe message handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-chatbot-history-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health chatbot history SQL injection route live oracle",
+    description:
+      "When scanning /api/chatbot/history, GET loads chat transcripts via string-interpolated user_id in chat_history queries — route-specific chat history SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms chatbot history SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthChatbotHistoryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — parameterize all chat_history queries and scope results to the authenticated user.",
+      steps: [
+        "Use parameterized queries for chat_history SELECT and INSERT statements.",
+        "Bind user_id from verified JWT claims, never from client-controlled input.",
+        "Apply rate limiting on chat history endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chatbot/history route uses string-interpolated SQL on user_id. Show parameterized chat history queries with strict auth scoping.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-api-security-route-live-oracle",
     platform: "generic",
     category: "API security",

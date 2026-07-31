@@ -30551,6 +30551,8 @@ const ZERO_HEALTH_SERVER_JS =
   "https://raw.githubusercontent.com/aligorithm/Zero-Health/main/server.js";
 const ZERO_HEALTH_RESET_PASSWORD_JSX =
   "https://raw.githubusercontent.com/aligorithm/Zero-Health/main/client/src/components/ResetPassword.jsx";
+const ZERO_HEALTH_CHATBOT_JS =
+  "https://raw.githubusercontent.com/aligorithm/Zero-Health/main/routes/chatbot.js";
 
 function isZeroHealthHost(ctx: RuleContext): boolean {
   return /Zero Health|zero-health|zerohealth/i.test(
@@ -30597,6 +30599,34 @@ async function zeroHealthFetchResetPasswordJsx(ctx: RuleContext): Promise<string
   });
   if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) return doc.body;
   return "";
+}
+
+async function zeroHealthFetchChatbotJs(ctx: RuleContext): Promise<string> {
+  const doc = await ctx.probe.get(ZERO_HEALTH_CHATBOT_JS, {
+    maxBytes: 80000,
+    timeoutMs: 12000
+  });
+  if (doc.status >= 200 && doc.status < 400 && doc.body.length > 1000) return doc.body;
+  return "";
+}
+
+async function zeroHealthFetchDebugToken(
+  ctx: RuleContext,
+  origin: string,
+  role: string,
+  id = "1"
+): Promise<string | null> {
+  const debugDoc = await ctx.probe.get(`${origin}/api/debug/token?role=${role}&id=${id}`, {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (!isZeroHealthJsonBody(debugDoc.body)) return null;
+  try {
+    return (JSON.parse(debugDoc.body) as { debug_token?: string }).debug_token || null;
+  } catch {
+    const m = debugDoc.body.match(/"debug_token"\s*:\s*"([^"]+)"/);
+    return m ? m[1] : null;
+  }
 }
 
 async function zeroHealthLogin(
@@ -31638,6 +31668,226 @@ async function zerohealthAiChatSqliRouteLiveOracle(
       markers: hits.slice(0, 4),
       scannedUrl: pageUrl,
       note: "Zero Health /api/ai/chat maps to chatbot endpoints that generate SQL from natural language — prompt injection oracle (chatbot.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthAdminUsersRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/users\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const adminToken = await zeroHealthFetchDebugToken(ctx, origin, "admin", "1");
+    if (adminToken) {
+      const usersUrl = `${origin}/api/admin/users`;
+      const usersDoc = await ctx.probe.get(usersUrl, {
+        headers: { Authorization: `Bearer ${adminToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(usersDoc.body) &&
+        usersDoc.status >= 200 &&
+        usersDoc.status < 300 &&
+        /\[\s*\{[\s\S]*"email"[\s\S]*"role"/i.test(usersDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.94,
+          evidence: {
+            url: usersUrl,
+            snippet: usersDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/admin/users returns all user records with forged admin debug JWT — broken access control oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "admin users API route", sample: "/api/admin/users" }
+  ];
+  const markers = [
+    { label: "admin users endpoint", re: /app\.get\('\/api\/admin\/users'|\/api\/admin\/users/i },
+    { label: "admin role gate", re: /req\.user\.role\s*!==\s*'admin'|Admin access required/i },
+    { label: "user enumeration query", re: /SELECT id, email, role.*FROM users ORDER BY/i },
+    { label: "multi-stage admin escalation", re: /privilege escalation|administrative access|Mass Assignment to Admin/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/admin/users lists all accounts behind weak admin JWT check — broken access control oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthMessagesSqliRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/messages\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const token = await zeroHealthLogin(ctx, origin, "patient@test.com");
+    if (token) {
+      const messagesUrl = `${origin}/api/messages`;
+      const messagesDoc = await ctx.probe.get(messagesUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(messagesDoc.body) &&
+        messagesDoc.status >= 200 &&
+        messagesDoc.status < 300 &&
+        (/\[\s*\{[\s\S]*"subject"|"content"|sender_first_name|recipient_first_name/i.test(
+          messagesDoc.body
+        ) ||
+          messagesDoc.body.trim() === "[]")
+      ) {
+        return {
+          fired: true,
+          confidence: /sender_first_name|recipient_first_name/i.test(messagesDoc.body)
+            ? 0.93
+            : 0.9,
+          evidence: {
+            url: messagesUrl,
+            snippet: messagesDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/messages returns message records with string-interpolated SQL query — SQLi/stored-XSS oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "messages API route", sample: "/api/messages" }
+  ];
+  const markers = [
+    { label: "messages GET endpoint", re: /app\.get\('\/api\/messages'|\/api\/messages/i },
+    {
+      label: "SQL injection in messages query",
+      re: /WHERE m\.sender_id = '\$\{userId\}'|SQL injection vulnerable query[\s\S]{0,80}messages/i
+    },
+    {
+      label: "stored XSS in message content",
+      re: /Stored XSS vulnerability[\s\S]{0,80}content stored without sanitization/i
+    },
+    { label: "message attachment upload", re: /upload\.single\('attachment'\)|attachment_path/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/messages uses string-interpolated SQL and stores unsanitized content — SQLi/stored-XSS oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthChatbotHistoryRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/chatbot\/history\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const token = await zeroHealthLogin(ctx, origin, "patient@test.com");
+    if (token) {
+      const historyUrl = `${origin}/api/chatbot/history`;
+      const historyDoc = await ctx.probe.get(historyUrl, {
+        headers: { Authorization: `Bearer ${token}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(historyDoc.body) &&
+        historyDoc.status >= 200 &&
+        historyDoc.status < 300 &&
+        /"messages"\s*:\s*\[/i.test(historyDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            url: historyUrl,
+            snippet: historyDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/chatbot/history returns chat transcripts with string-interpolated SQL — chat history SQLi oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const chatbotJs = await zeroHealthFetchChatbotJs(ctx);
+  if (chatbotJs) corpus += `\n${chatbotJs}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "chatbot history API route", sample: "/api/chatbot/history" }
+  ];
+  const markers = [
+    { label: "chat history endpoint", re: /router\.get\('\/history'|\/api\/chatbot\/history/i },
+    {
+      label: "vulnerable chat_history query",
+      re: /FROM chat_history WHERE user_id = \$\{userId\}|deliberately vulnerable query/i
+    },
+    { label: "chat history table", re: /chat_history|INSERT INTO chat_history/i },
+    { label: "AI prompt injection challenge", re: /AI Prompt Injection|enhanced-chat|prompt injection/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/chatbot/history loads chat transcripts via string-interpolated SQL — chat history SQLi oracle (chatbot.js when OSS API is not deployed on scanned host)"
     }
   };
 }
@@ -49139,6 +49389,9 @@ export const RULES: Record<string, Rule> = {
   zerohealthResetPasswordReflectedXssRouteLiveOracle,
   zerohealthSearchReflectedXssRouteLiveOracle,
   zerohealthAiChatSqliRouteLiveOracle,
+  zerohealthAdminUsersRouteLiveOracle,
+  zerohealthMessagesSqliRouteLiveOracle,
+  zerohealthChatbotHistoryRouteLiveOracle,
   clientSideAlfXssWargameEvidence,
   clientSideLlmSecEvidence,
   clientSideClawguardAiAuditEvidence,
