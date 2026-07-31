@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T12:02:52.633Z",
+  "updated_at": "2026-07-31T13:03:17.651Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body_comment?q=a",
+      "source": "google/firing-range — reflected XSS parameter echoed inside HTML comment in BODY",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/css_style?q=a",
+      "source": "google/firing-range — reflected XSS parameter echoed as STYLE tag content in HEAD",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/css_style_value?q=a",
+      "source": "google/firing-range — reflected XSS parameter echoed as CSS color value in STYLE tag",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/attribute_quoted?q=a",
+      "source": "google/firing-range — reflected XSS parameter in double-quoted HTML attribute",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/document.location?q=//example.org",
+      "source": "google/firing-range — location.search to document.location DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_quoted/DOUBLE_QUOTED_ATTRIBUTE?q=a",
       "source": "google/firing-range — reflected XSS event handler double-quoted onclick sink",
