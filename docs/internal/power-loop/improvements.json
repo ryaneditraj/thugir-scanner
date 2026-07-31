@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-xhr-open-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/xhr.open returns document.location.hash.substr(1) passed to xhttp.open(\"GET\",payload,false) with responseText assigned to div.innerHTML; xhr.open route scan findings 19→29 (+firing-range-urldom-location-hash-xhr-open-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/referrer/eval returns unescape(document.referrer) passed to eval(payload) with async trigger(document.referrer); referrer/eval route scan findings 18→28 (+firing-range-dom-referrer-eval-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-base-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/base.href returns document.location.hash.substr(1) assigned to baseElement.href; base.href route scan findings 19→29 (+firing-range-urldom-location-hash-base-href-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-hash-fetch-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/fetch returns document.location.hash.substr(1) passed to fetch(resourceUri) with response assigned to divElement.innerHTML; fetch route scan findings 19→26 (+firing-range-urldom-location-hash-fetch-live-oracle + route); benchmark juice-shop-staging 30 findings 6/6 maintained"

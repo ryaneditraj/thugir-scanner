@@ -1434,6 +1434,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-referrer-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM document.referrer eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/referrer/eval returns a page that unescapes document.referrer and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "document.referrer values passed to eval() enable DOM XSS when attackers can set the Referer header.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass document.referrer to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from document.referrer.",
+        "Treat referrer data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/eval uses eval on document.referrer. Show toxic DOM referrer XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-referrer-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/referrer/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/referrer/eval, document.referrer is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm referrer-backed values are not executed via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on document.referrer in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.referrer reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/eval route uses eval on document.referrer. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2054,6 +2106,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /address/location.hash/documentwrite route uses document.write on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-xhr-open-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash xhr.open DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/xhr.open reads document.location.hash.substr(1), passes it to XMLHttpRequest.open(), and assigns responseText to innerHTML — Firing Range XHR DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to XMLHttpRequest.open() and innerHTML enable DOM XSS when attackers control the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashXhrOpenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to XMLHttpRequest.open() and innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove XMLHttpRequest.open() calls seeded from window.location.hash.",
+        "Treat URL fragments as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/xhr.open uses xhr.open on location.hash and writes to innerHTML. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-xhr-open-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/xhr.open route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/xhr.open, location.hash is passed to XMLHttpRequest.open() and innerHTML without sanitization — route-specific XHR DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values are not fetched via XHR and inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashXhrOpenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove xhr.open+innerHTML sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/xhr.open route uses xhr.open on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-base-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash base.href DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/base.href reads document.location.hash.substr(1) and assigns it to baseElement.href — Firing Range base.href DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to base.href enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashBaseHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to base.href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove base.href assignments on values from window.location.hash.",
+        "Allow-list base URL origins in production applications.",
+        "Use CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/base.href uses base.href on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-base-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/base.href route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/base.href, location.hash is assigned to base.href without sanitization — route-specific base.href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot rewrite the document base URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashBaseHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove base.href sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for base URL inclusion sinks.",
+        "Allow-list base URL origins.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/base.href route assigns location.hash to base.href. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
