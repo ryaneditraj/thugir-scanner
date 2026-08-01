@@ -2526,6 +2526,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-search-input-formaction-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search input.formAction DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/input.formaction reads document.location.search.substr(1) and assigns it to input.formAction — Firing Range formaction DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to input.formAction enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchInputFormactionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to input.formAction — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove input.formAction assignments on values from window.location.search.",
+        "Allow-list form submission targets in production applications.",
+        "Use CSP form-action restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/input.formaction uses input.formAction on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-input-formaction-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/input.formaction route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/input.formaction, location.search is assigned to input.formAction without sanitization — route-specific formaction DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot redirect form submissions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchInputFormactionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove input.formAction sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for form submission sinks.",
+        "Allow-list form submission targets.",
+        "Add CSP form-action restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/input.formaction route assigns location.search to input.formAction. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-window-open-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search window.open DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/window.open reads document.location.search.substr(1) and passes it to window.open() — Firing Range window.open DOM XSS training oracle.",
+    impactOneline:
+      "location.search values passed to window.open() enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchWindowOpenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to window.open() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove window.open() calls on values from window.location.search.",
+        "Allow-list popup navigation targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/window.open uses window.open on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-window-open-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/window.open route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/window.open, location.search is passed to window.open() without sanitization — route-specific window.open DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot trigger arbitrary popups.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchWindowOpenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove window.open sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for popup navigation sinks.",
+        "Allow-list popup targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/window.open route passes location.search to window.open(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-iframe-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search iframe.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/iframe.src reads document.location.search.substr(1) and assigns it to iframe.src — Firing Range iframe.src DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to iframe.src enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchIframeSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to iframe.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove iframe.src assignments on values from window.location.search.",
+        "Allow-list iframe origins in production applications.",
+        "Use CSP frame-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/iframe.src uses iframe.src on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-iframe-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/iframe.src route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/iframe.src, location.search is assigned to iframe.src without sanitization — route-specific iframe.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot load arbitrary iframe content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchIframeSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove iframe.src sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for iframe inclusion sinks.",
+        "Allow-list iframe origins.",
+        "Add CSP frame-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/iframe.src route assigns location.search to iframe.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-assign-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
