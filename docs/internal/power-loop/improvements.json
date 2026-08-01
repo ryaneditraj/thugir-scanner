@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdomscripts/sessionStorage/property/documentWrite returns sessionStorage.badValue → document.write(payload) sync+async; sessionStorage/documentWrite route scan findings 53→60 (+firing-range-dom-sessionstorage-documentwrite-live-oracle + route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-leakedcookie-httponly-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /leakedcookie/leakedcookie Set-Cookie HttpOnly value echoed in HTML body; leakedcookie route scan findings 48→64 (+firing-range-leakedcookie-httponly-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-mixedcontent-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /mixedcontent/ HTTPS page loads <script src=\"http://public-firing-range.appspot.com/mixedcontent/script.js\">; mixedcontent route scan findings 48→64 (+firing-range-mixedcontent-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-postmessage-innerhtml-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/innerHtml addEventListener('message') JSON.parse(msg.data) → div.innerHTML = content.html; postMessage/innerHtml route scan findings 54→56 (+firing-range-dom-postmessage-innerhtml-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
