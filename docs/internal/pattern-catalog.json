@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-01T16:01:36.787Z",
-  "total": 1392,
-  "uniqueSlugs": 1387,
+  "generatedAt": "2026-08-01T17:14:03.908Z",
+  "total": 1400,
+  "uniqueSlugs": 1395,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1374,
+    "generic": 1382,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1307,
+    "deep": 1315,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 96,
-    "Security misconfiguration": 117,
+    "Security misconfiguration": 125,
     "Broken authentication": 89,
     "Injection": 241,
     "Cross-site scripting": 308,
@@ -877,6 +877,10 @@
     "firing-range-escape-serverside-tagname-route-live-oracle",
     "firing-range-flashinjection-live-oracle",
     "firing-range-flashinjection-route-live-oracle",
+    "firing-range-hsts-max-age-low-live-oracle",
+    "firing-range-hsts-max-age-low-route-live-oracle",
+    "firing-range-hsts-missing-live-oracle",
+    "firing-range-hsts-missing-route-live-oracle",
     "firing-range-jsonp-live-oracle",
     "firing-range-jsonp-route-live-oracle",
     "firing-range-leakedcookie-httponly-live-oracle",
@@ -933,6 +937,10 @@
     "firing-range-reverseclickjacking-route-live-oracle",
     "firing-range-tags-injection-live-oracle",
     "firing-range-tags-injection-route-live-oracle",
+    "firing-range-third-party-sri-dynamic-live-oracle",
+    "firing-range-third-party-sri-dynamic-route-live-oracle",
+    "firing-range-third-party-sri-missing-live-oracle",
+    "firing-range-third-party-sri-missing-route-live-oracle",
     "firing-range-urldom-location-hash-area-href-live-oracle",
     "firing-range-urldom-location-hash-area-href-route-live-oracle",
     "firing-range-urldom-location-hash-base-href-live-oracle",

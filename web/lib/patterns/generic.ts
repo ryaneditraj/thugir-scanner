@@ -4762,6 +4762,214 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-hsts-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_missing serves HTTPS without a Strict-Transport-Security response header — Firing Range HSTS misconfiguration training oracle.",
+    impactOneline:
+      "Missing HSTS lets browsers accept downgrade attacks and cookie delivery over cleartext HTTP.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Send Strict-Transport-Security on all HTTPS responses.",
+      steps: [
+        "Set Strict-Transport-Security with max-age of at least one year.",
+        "Include includeSubDomains when all subdomains support HTTPS.",
+        "Consider preload for apex domains with stable HTTPS."
+      ]
+    },
+    fixPrompt:
+      "Our HTTPS responses omit Strict-Transport-Security on /stricttransportsecurity/hsts_missing. Show HSTS header remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_missing route HSTS oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_missing, the HTTPS response omits Strict-Transport-Security — route-specific HSTS missing training oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HSTS headers on strict-transport-security lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Send Strict-Transport-Security on route-specific HTTPS lab responses.",
+      steps: [
+        "Configure HSTS at the edge for all HTTPS routes.",
+        "Use max-age of at least 31536000 seconds.",
+        "Validate lab routes inherit production HSTS policy."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_missing route scan shows missing HSTS. Show route-specific HSTS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-max-age-low-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS max-age too low oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_max_age_too_low returns Strict-Transport-Security with max-age below one year — Firing Range weak HSTS duration training oracle.",
+    impactOneline:
+      "Short HSTS max-age windows expire quickly and weaken downgrade protection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeLowLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use HSTS max-age of at least one year (31536000 seconds).",
+      steps: [
+        "Increase max-age to 31536000 or higher on HTTPS responses.",
+        "Pair with includeSubDomains when subdomains are HTTPS-ready.",
+        "Monitor certificate renewal before shortening max-age."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_too_low sets HSTS max-age below recommended minimum. Show HSTS max-age remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-max-age-low-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_max_age_too_low route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_max_age_too_low, Strict-Transport-Security max-age is below one year — route-specific weak HSTS duration oracle.",
+    impactOneline:
+      "Route-specific scans should flag undersized HSTS max-age values on lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeLowRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Raise HSTS max-age on route-specific HTTPS responses.",
+      steps: [
+        "Set max-age to at least 31536000 seconds.",
+        "Avoid per-route HSTS overrides that weaken policy.",
+        "Document HSTS policy in security configuration."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_too_low route scan shows weak HSTS max-age. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range third-party script missing SRI oracle",
+    description:
+      "GET /insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity.html loads a protocol-relative external script without an integrity attribute — Firing Range missing subresource integrity training oracle.",
+    impactOneline:
+      "Third-party scripts without SRI cannot detect CDN or supply-chain tampering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add subresource integrity hashes to third-party script tags.",
+      steps: [
+        "Generate SRI hashes for each external script URL.",
+        "Add integrity and crossorigin attributes on script tags.",
+        "Prefer self-hosted or first-party script bundles when SRI is impractical."
+      ]
+    },
+    fixPrompt:
+      "Our third_party_scripts_without_subresource_integrity.html loads external script without integrity. Show SRI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range missing SRI route oracle",
+    description:
+      "When scanning third_party_scripts_without_subresource_integrity.html, external script tags lack integrity attributes — route-specific missing SRI training oracle.",
+    impactOneline:
+      "Route-specific scans should confirm subresource integrity on third-party script labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add integrity attributes on route-specific third-party script tags.",
+      steps: [
+        "Hash external script contents and add integrity attributes.",
+        "Use crossorigin when loading cross-origin scripts with SRI.",
+        "Monitor third-party script versions for hash updates."
+      ]
+    },
+    fixPrompt:
+      "Our third_party_scripts_without_subresource_integrity.html route scan lacks SRI. Show route-specific SRI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-dynamic-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range dynamically injected script missing SRI oracle",
+    description:
+      "GET third_party_scripts_without_subresource_integrity_dynamically_added.html injects a protocol-relative script via createElement without integrity — Firing Range dynamic missing SRI training oracle.",
+    impactOneline:
+      "Dynamically injected third-party scripts without SRI are vulnerable to supply-chain substitution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriDynamicLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set integrity on dynamically created script elements.",
+      steps: [
+        "Compute SRI hashes before assigning script.src dynamically.",
+        "Set integrity and crossorigin on createElement script nodes.",
+        "Prefer module bundlers that emit integrity metadata for runtime injection."
+      ]
+    },
+    fixPrompt:
+      "Our dynamically_added SRI lab injects script via createElement without integrity. Show dynamic SRI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-dynamic-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range dynamic SRI route oracle",
+    description:
+      "When scanning third_party_scripts_without_subresource_integrity_dynamically_added.html, createElement script injection lacks integrity — route-specific dynamic missing SRI oracle.",
+    impactOneline:
+      "Route-specific scans should flag dynamically injected scripts missing subresource integrity.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriDynamicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply SRI to dynamically injected scripts on route-specific pages.",
+      steps: [
+        "Set integrity when assigning script.src in JavaScript.",
+        "Use trusted script loaders that verify hashes before execution.",
+        "Audit all createElement('script') call sites for SRI coverage."
+      ]
+    },
+    fixPrompt:
+      "Our dynamically_added SRI route scan injects script without integrity. Show route-specific dynamic SRI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-flashinjection-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
