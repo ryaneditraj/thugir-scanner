@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T04:11:30.000Z",
+  "updated_at": "2026-08-01T04:12:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3079,
-  "total_findings": 31643,
+  "total_sites_scanned": 3080,
+  "total_findings": 31712,
   "critical_findings": 103,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2129,
-  "discovery_findings": 25891,
-  "improvements_shipped": 1155,
-  "last_run": "2026-08-01T04:11:30.000Z",
+  "discovery_findings": 26030,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-01T04:12:30.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -55,16 +55,18 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 307,
-      "focus": "firing-range Angular $parse sinks + remote script inclusion + location.hash area.href",
-      "improvements_shipped_this_run": 0
+      "focus": "firing-range Angular $parse sinks + remote script inclusion + location.hash area.href; concurrent run shipped a.href/location.assign/attribute_singlequoted oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/angular/angular_body/1.2.0: 43 findings — generic firing-range oracles only, no Angular interpolation sink oracle",
+      "public-firing-range.appspot.com/urldom/location/search/a.href: 46 findings — firing-range-urldom-location-search-a-href-live-oracle shipped (concurrent run)",
+      "public-firing-range.appspot.com/urldom/location/search/location.assign: 46 findings — location.assign oracle shipped (concurrent run)",
+      "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted: 47 findings — attribute_singlequoted oracle shipped (concurrent run)",
+      "public-firing-range.appspot.com/angular/angular_body/1.2.0: 43 findings — generic oracles only, no Angular interpolation sink oracle",
       "public-firing-range.appspot.com/angular/angular_cookie_parse/1.6.0: 43 findings — generic oracles only, no $parse cookie-injection oracle",
       "public-firing-range.appspot.com/remoteinclude/parameter/script: 43 findings — generic oracles only, no remote-inclusion sink oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/area.href: 43 findings — generic oracles only, no route-specific area.href sink oracle",
-      "vulnerable-web-site.vercel.app/sqli: 5 findings — generic client-side lab evidence only"
+      "public-firing-range.appspot.com/urldom/location/hash/area.href: 43 findings — generic oracles only, no route-specific area.href sink oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -72,17 +74,19 @@
       "public-firing-range.appspot.com/angular/*: AngularJS server-side interpolation / $parse cookie+form injection oracles absent",
       "public-firing-range.appspot.com/remoteinclude/parameter/script: remote script inclusion parameter oracle absent",
       "public-firing-range.appspot.com/urldom/location/hash/area.href: route-specific location.hash→area.href sink oracle absent",
+      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: route-specific SVG xlink:href sink oracle absent",
       "vulnerable-web-site.vercel.app/sqli: route-specific SQLi oracle absent (generic lab evidence only)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted": 47,
+    "public-firing-range.appspot.com/urldom/location/search/a.href": 46,
+    "public-firing-range.appspot.com/urldom/location/search/location.assign": 46,
     "public-firing-range.appspot.com/reflected/parameter/noscript": 44,
     "public-firing-range.appspot.com/angular/angular_body/1.2.0": 43,
     "public-firing-range.appspot.com/angular/angular_cookie_parse/1.6.0": 43,
     "public-firing-range.appspot.com/remoteinclude/parameter/script": 43,
-    "public-firing-range.appspot.com/urldom/location/hash/area.href": 43,
-    "public-firing-range.appspot.com/address/location/innerHtml": 43,
-    "vulnerable-web-site.vercel.app/sqli": 5
+    "public-firing-range.appspot.com/urldom/location/hash/area.href": 43
   }
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-01T03:05:09.173Z",
-  "total": 1316,
-  "uniqueSlugs": 1311,
+  "generatedAt": "2026-08-01T04:03:44.886Z",
+  "total": 1320,
+  "uniqueSlugs": 1315,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1298,
+    "generic": 1302,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1231,
+    "deep": 1235,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 111,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 244,
+    "Cross-site scripting": 248,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -887,6 +887,8 @@
     "firing-range-urldom-location-hash-script-src-route-live-oracle",
     "firing-range-urldom-location-hash-xhr-open-live-oracle",
     "firing-range-urldom-location-hash-xhr-open-route-live-oracle",
+    "firing-range-urldom-location-search-a-href-live-oracle",
+    "firing-range-urldom-location-search-a-href-route-live-oracle",
     "firing-range-urldom-location-search-button-formaction-live-oracle",
     "firing-range-urldom-location-search-button-formaction-route-live-oracle",
     "firing-range-urldom-location-search-form-action-live-oracle",
@@ -897,6 +899,8 @@
     "firing-range-urldom-location-search-iframe-src-route-live-oracle",
     "firing-range-urldom-location-search-input-formaction-live-oracle",
     "firing-range-urldom-location-search-input-formaction-route-live-oracle",
+    "firing-range-urldom-location-search-location-assign-live-oracle",
+    "firing-range-urldom-location-search-location-assign-route-live-oracle",
     "firing-range-urldom-location-search-window-open-live-oracle",
     "firing-range-urldom-location-search-window-open-route-live-oracle",
     "firing-range-urldom-redirect-live-oracle",

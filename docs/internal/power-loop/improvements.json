@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-a-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/a.href returns document.location.search.substr(1) assigned to anchor.href; a.href route scan findings 34→46 (+firing-range-urldom-location-search-a-href-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-location-assign-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/location.assign returns document.location.search.substr(1) passed to location.assign(payload); location.assign route scan findings 37→46 (+firing-range-urldom-location-search-location-assign-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-param-attribute-singlequoted",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/attribute_singlequoted?q=thugirFrReflectedProbe returns <tag attribute='thugirFrReflectedProbe'>; attribute_singlequoted route scan findings 35→47 (+firing-range-reflected-param-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-input-formaction-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/input.formaction returns document.location.search.substr(1) assigned to input.formAction; input.formaction route scan findings 40→44 (+firing-range-urldom-location-search-input-formaction-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
