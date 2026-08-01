@@ -38697,6 +38697,128 @@ const firingRangeReflectedBodyBlocksUppercaseScriptRouteLiveOracle: Rule = async
   };
 };
 
+const FIRING_RANGE_BODY_BLOCKS_ANY_SCRIPT_PATH =
+  "/reflected/parameter/body/blocks_any_script";
+const FIRING_RANGE_ANY_SCRIPT_PROBE = "thugirFrAnyScriptProbe";
+
+const firingRangeReflectedBodyBlocksAnyScriptLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_BODY_BLOCKS_ANY_SCRIPT_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", `<ScRiPt>${FIRING_RANGE_ANY_SCRIPT_PROBE}</ScRiPt>`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const marker = `<ScRiPt>${FIRING_RANGE_ANY_SCRIPT_PROBE}</ScRiPt>`;
+  if (!doc.body.includes(marker)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/body/blocks_any_script?q= reflects mixed-case <ScRiPt> tag unescaped — case-insensitive script filter bypass training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedBodyBlocksAnyScriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/body\/blocks_any_script\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedBodyBlocksAnyScriptLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/body/blocks_any_script route scan — mixed-case <ScRiPt> bypasses case-insensitive script filter"
+    }
+  };
+};
+
+const FIRING_RANGE_ATTR_UNQUOTED_BLOCKS_DQ_SQ_PATH =
+  "/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote";
+const FIRING_RANGE_DQ_SQ_PROBE = "thugirFrDqSqProbe";
+
+const firingRangeReflectedAttrUnquotedBlocksDqSqLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_ATTR_UNQUOTED_BLOCKS_DQ_SQ_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", `${FIRING_RANGE_DQ_SQ_PROBE} onmouseover=alert(1) x=`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const marker = `attribute=${FIRING_RANGE_DQ_SQ_PROBE} onmouseover=alert(1) x=`;
+  if (!doc.body.includes(marker)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote?q= reflects unquoted attribute with event handler — double/single-quote filter bypass training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedAttrUnquotedBlocksDqSqRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/attribute_unquoted\/blocks_doublequotesinglequote\b/i.test(pageUrl))
+    return NEGATIVE;
+  const result = await firingRangeReflectedAttrUnquotedBlocksDqSqLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote route scan — unquoted attribute event handler bypasses quote filters"
+    }
+  };
+};
+
+const FIRING_RANGE_BODY_BLOCKS_SPACE_DQ_SLASH_EQ_PATH =
+  "/reflected/parameter/body/blocks_space_doublequote_slash_equals";
+const FIRING_RANGE_CHARSET_PROBE = "thugirFrCharsetProbe";
+
+const firingRangeReflectedBodyBlocksSpaceDqSlashEqLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_BODY_BLOCKS_SPACE_DQ_SLASH_EQ_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", `<img src=x onerror=${FIRING_RANGE_CHARSET_PROBE}>`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const marker = `<img src=x onerror=${FIRING_RANGE_CHARSET_PROBE}>`;
+  if (!doc.body.includes(marker)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/body/blocks_space_doublequote_slash_equals?q= reflects <img> tag unescaped — space/quote/slash/equals charset filter bypass training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedBodyBlocksSpaceDqSlashEqRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/body\/blocks_space_doublequote_slash_equals\b/i.test(pageUrl))
+    return NEGATIVE;
+  const result = await firingRangeReflectedBodyBlocksSpaceDqSlashEqLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/body/blocks_space_doublequote_slash_equals route scan — <img> tag bypasses space/quote/slash/equals charset filter"
+    }
+  };
+};
+
 const FIRING_RANGE_JS_EVAL_PATH = "/reflected/parameter/js_eval";
 const FIRING_RANGE_JS_EVAL_PROBE = "thugirFrJsEvalProbe";
 
@@ -53747,6 +53869,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedBodyBlocksLowercaseScriptRouteLiveOracle,
   firingRangeReflectedBodyBlocksUppercaseScriptLiveOracle,
   firingRangeReflectedBodyBlocksUppercaseScriptRouteLiveOracle,
+  firingRangeReflectedBodyBlocksAnyScriptLiveOracle,
+  firingRangeReflectedBodyBlocksAnyScriptRouteLiveOracle,
+  firingRangeReflectedAttrUnquotedBlocksDqSqLiveOracle,
+  firingRangeReflectedAttrUnquotedBlocksDqSqRouteLiveOracle,
+  firingRangeReflectedBodyBlocksSpaceDqSlashEqLiveOracle,
+  firingRangeReflectedBodyBlocksSpaceDqSlashEqRouteLiveOracle,
   firingRangeReflectedJsEvalLiveOracle,
   firingRangeReflectedJsEvalRouteLiveOracle,
   firingRangeReflectedJsQuotedStringLiveOracle,
