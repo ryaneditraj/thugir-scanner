@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-preload-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_preload_missing returns strict-transport-security: max-age=63072000; includeSubDomains (no preload); hsts_preload_missing route scan findings 82→89 (+preload-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-null-origin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowNullOrigin Origin:null returns access-control-allow-origin: null with allow-credentials: true; allowNullOrigin route scan findings 82→89 (+null-origin live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-insecure-scheme-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowInsecureScheme Origin:http://public-firing-range.appspot.com returns ACAO matching HTTP origin with credentials on HTTPS; allowInsecureScheme route scan findings 82→89 (+insecure-scheme live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-hsts-max-age-missing-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_max_age_missing returns strict-transport-security: includeSubDomains; preload (no max-age); hsts_max_age_missing route scan findings 83→86 (+max-age-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
