@@ -3046,6 +3046,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-escape-serverside-body-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml body-sink oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/body or /encodeUrl/body?q= reflects attacker input into the HTML body despite escapeHtml/encodeUrl — Firing Range server-side body-sink escape bypass XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in body contexts enables reflected XSS even when escapeHtml or encodeUrl is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideBodyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml/encodeUrl is insufficient for HTML body text contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Apply context-aware encoding for all HTML body reflection contexts.",
+        "Avoid reflecting raw user input inside body elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/body bypasses escapeHtml in body context. Show server-side body-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-body-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/body route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/body or /encodeUrl/body, q parameter reflects unescaped into HTML body — route-specific server-side body-sink escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml/encodeUrl output is safe in body text contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideBodyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix body-sink escaping on /escape/serverside escapeHtml/encodeUrl body routes.",
+      steps: [
+        "Audit escapeHtml/encodeUrl usage for body text contexts.",
+        "Encode user input for HTML body reflection points.",
+        "Add output encoding tests for body-sink contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/body route bypasses escapeHtml in body context. Show route-specific body-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-json-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JSON parameter oracle",
+    description:
+      "GET /reflected/parameter/json?q= reflects attacker input in a JSON body served with text/html content-type — Firing Range reflected JSON parameter XSS training oracle.",
+    impactOneline:
+      "JSON responses served as HTML with unescaped reflection enable content-type confusion XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterJsonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serve JSON with application/json content-type and encode reflected values.",
+      steps: [
+        "Set Content-Type: application/json for JSON API responses.",
+        "Encode user input before embedding in JSON string values.",
+        "Add X-Content-Type-Options: nosniff as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/json reflects q into JSON served as text/html. Show reflected JSON parameter XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-json-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/json route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/json, q parameter is reflected unescaped in JSON body with text/html content-type — route-specific reflected JSON parameter XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm JSON parameter reflection cannot enable XSS via content-type confusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix content-type and encoding on /reflected/parameter/json route.",
+      steps: [
+        "Serve JSON responses with application/json content-type.",
+        "Encode reflected parameter values in JSON strings.",
+        "Add nosniff header to prevent MIME sniffing."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/json route reflects q into JSON with text/html content-type. Show route-specific JSON parameter XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage document.write oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/documentWrite loads a script that parses msg.data via JSON.parse and passes content to document.write() — Firing Range postMessage document.write DOM XSS training oracle.",
+    impactOneline:
+      "postMessage handlers that write untrusted message data via document.write enable DOM XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate postMessage origin and avoid document.write with untrusted data.",
+      steps: [
+        "Validate event.origin against an allowlist before processing messages.",
+        "Never pass message data to document.write or other dangerous sinks.",
+        "Use safe DOM APIs with strict input validation."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/documentWrite passes msg.data to document.write. Show postMessage document.write DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage/documentWrite, postMessage handler writes untrusted msg.data via document.write — route-specific postMessage document.write DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not sink untrusted data to document.write.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix postMessage origin validation and remove document.write sink on this route.",
+      steps: [
+        "Add event.origin validation to the postMessage handler.",
+        "Replace document.write with safe DOM manipulation.",
+        "Audit all postMessage handlers for dangerous sinks."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/documentWrite route sinks msg.data to document.write. Show route-specific postMessage document.write remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-iframe-srcdoc-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
