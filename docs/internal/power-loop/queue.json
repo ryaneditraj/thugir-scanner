@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T03:05:54.206Z",
+  "updated_at": "2026-08-01T04:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body/1.2.0?q=test",
+      "source": "google/firing-range — AngularJS server-side interpolation XSS sink (angular_body/1.2.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_cookie_parse/1.6.0",
+      "source": "google/firing-range — AngularJS $parse injection via cookie value (angular_cookie_parse/1.6.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_form_parse/1.6.0",
+      "source": "google/firing-range — AngularJS $parse injection via form value (angular_form_parse/1.6.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/remoteinclude/parameter/script?q=https://google.com",
+      "source": "google/firing-range — remote script inclusion via URL parameter (/remoteinclude/parameter/script)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/area.href",
+      "source": "google/firing-range — location.hash to area.href DOM XSS sink (/urldom/location/hash/area.href)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnerable-web-site.vercel.app/sqli",
       "source": "megmogmog1965/vulnerable-web-site — SQL injection lab module (Vercel OSS deploy)",
