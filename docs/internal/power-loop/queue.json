@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T00:15:08.233Z",
+  "updated_at": "2026-08-01T01:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/input.formaction?q=//example.org",
+      "source": "google/firing-range — location.search assigned to input.formaction DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted?q=a",
+      "source": "google/firing-range — reflected XSS parameter echoed in single-quoted HTML attribute",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/window.open?q=//example.org",
+      "source": "google/firing-range — location.search to window.open DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/iframe.src?q=//example.org",
+      "source": "google/firing-range — location.search assigned to iframe.src DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/a.href?q=//example.org",
+      "source": "google/firing-range — location.search assigned to anchor href DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://serverless.fail/",
       "source": "OWASP DVSA — Damn Vulnerable Serverless Application public demo (serverless.fail)",
