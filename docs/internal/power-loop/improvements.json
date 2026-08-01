@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-quoted-string-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_quoted_string?q=thugirFrJsQuotedProbe returns var foo=\"thugirFrJsQuotedProbe\"; js_quoted_string route scan findings 64→71 (+firing-range-reflected-js-quoted-string-live-oracle + route); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-singlequoted-string-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_singlequoted_string?q=thugirFrJsSingleQuotedProbe returns var foo='thugirFrJsSingleQuotedProbe'; js_singlequoted_string route scan findings 64→71 (+firing-range-reflected-js-singlequoted-string-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-slashquoted-string-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_slashquoted_string?q=thugirFrJsSlashQuotedProbe returns var foo=/thugirFrJsSlashQuotedProbe/; js_slashquoted_string route scan findings 64→71 (+firing-range-reflected-js-slashquoted-string-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-body-blocks-lowercase-script-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_lowercase_script?q=<ScRiPt>thugirFrLcScriptProbe</ScRiPt> reflects mixed-case script tag unescaped; blocks_lowercase_script route scan findings 61→68 (+firing-range-reflected-body-blocks-lowercase-script-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
