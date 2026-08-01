@@ -37882,6 +37882,12 @@ const FIRING_RANGE_URLDOM_SINKS = [
     label: "anchor href assignment from hash fragment"
   },
   {
+    path: "/urldom/location/hash/area.href",
+    sinkRe: /area\.href\s*=\s*payload/i,
+    sourceRe: /document\.location\.hash\.substr\(1\)/i,
+    label: "area.href assignment from hash fragment"
+  },
+  {
     path: "/urldom/location/search/area.href",
     sinkRe: /area\.href\s*=\s*payload/i,
     sourceRe: /document\.location\.search\.substr\(1\)/i,
@@ -38461,6 +38467,47 @@ const firingRangeAddressLocationHashEvalRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /address/location.hash/eval route scan — location.hash passed to eval() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_ADDRESS_LOCATION_EVAL_PATH = "/address/location/eval";
+
+const firingRangeAddressLocationEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_ADDRESS_LOCATION_EVAL_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasLocationEval =
+    /<title>\s*Address based DOM XSS\s*<\/title>/i.test(body) &&
+    /var\s+payload\s*=\s*window\.location\s*;/i.test(body) &&
+    /eval\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasLocationEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /address/location/eval passes window.location to eval() — address-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeAddressLocationEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/address\/location\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAddressLocationEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /address/location/eval route scan — window.location passed to eval() without sanitization"
     }
   };
 };
@@ -39224,6 +39271,47 @@ const firingRangeUrldomLocationHashLinkHrefRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const FIRING_RANGE_URLDOM_HASH_AREA_HREF_PATH = "/urldom/location/hash/area.href";
+
+const firingRangeUrldomLocationHashAreaHrefLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_HASH_AREA_HREF_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAreaHrefSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /area\.href\s*=\s*payload/i.test(body);
+  if (!hasAreaHrefSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/hash/area.href passes location.hash to area.href — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationHashAreaHrefRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/hash\/area\.href\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationHashAreaHrefLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/hash/area.href route scan — location.hash passed to area.href without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_URLDOM_SEARCH_BUTTON_FORMACTION_PATH = "/urldom/location/search/button.formaction";
 
 const firingRangeUrldomLocationSearchButtonFormactionLiveOracle: Rule = async (ctx) => {
@@ -39797,6 +39885,52 @@ const firingRangeRemoteIncludeScriptHashRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /remoteinclude/script_hash.html route scan — location.hash seeds attacker-controlled script.src"
+    }
+  };
+};
+
+const FIRING_RANGE_REMOTEINCLUDE_PARAMETER_SCRIPT_PATH = "/remoteinclude/parameter/script";
+const FIRING_RANGE_REMOTEINCLUDE_SCRIPT_PROBE = "https://thugir-remoteinclude-probe.example/script.js";
+
+const firingRangeRemoteIncludeParameterScriptLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_REMOTEINCLUDE_PARAMETER_SCRIPT_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REMOTEINCLUDE_SCRIPT_PROBE);
+  const url = probeUrl.toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasQueryScriptSrc =
+    /<title>\s*Remote include - URL seeded from query parameter\s*<\/title>/i.test(body) &&
+    new RegExp(
+      `<script\\s+src\\s*=\\s*["']?${FIRING_RANGE_REMOTEINCLUDE_SCRIPT_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']?\\s*>`,
+      "i"
+    ).test(body);
+  if (!hasQueryScriptSrc) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /remoteinclude/parameter/script reflects query parameter into script.src — remote-include parameter DOM XSS oracle"
+    }
+  };
+};
+
+const firingRangeRemoteIncludeParameterScriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/remoteinclude\/parameter\/script\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeRemoteIncludeParameterScriptLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /remoteinclude/parameter/script route scan — query parameter seeds attacker-controlled script.src"
     }
   };
 };
@@ -52505,10 +52639,14 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsInjectionRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
+  firingRangeAddressLocationEvalLiveOracle,
+  firingRangeAddressLocationEvalRouteLiveOracle,
   firingRangeDomFormSubmissionInnerHtmlLiveOracle,
   firingRangeDomFormSubmissionInnerHtmlRouteLiveOracle,
   firingRangeRemoteIncludeScriptHashLiveOracle,
   firingRangeRemoteIncludeScriptHashRouteLiveOracle,
+  firingRangeRemoteIncludeParameterScriptLiveOracle,
+  firingRangeRemoteIncludeParameterScriptRouteLiveOracle,
   firingRangeUrldomLocationHashFetchLiveOracle,
   firingRangeUrldomLocationHashFetchRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcLiveOracle,
@@ -52527,6 +52665,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationHashEmbedSrcRouteLiveOracle,
   firingRangeUrldomLocationHashLinkHrefLiveOracle,
   firingRangeUrldomLocationHashLinkHrefRouteLiveOracle,
+  firingRangeUrldomLocationHashAreaHrefLiveOracle,
+  firingRangeUrldomLocationHashAreaHrefRouteLiveOracle,
   firingRangeUrldomLocationSearchButtonFormactionLiveOracle,
   firingRangeUrldomLocationSearchButtonFormactionRouteLiveOracle,
   firingRangeUrldomLocationSearchFrameSrcLiveOracle,
