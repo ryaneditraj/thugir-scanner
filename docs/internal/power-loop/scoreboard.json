@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T14:02:36.490Z",
+  "updated_at": "2026-08-01T14:09:12.706Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3157,
-  "total_findings": 34996,
+  "total_sites_scanned": 3165,
+  "total_findings": 35552,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2167,
-  "discovery_findings": 29033,
+  "discovery_urls_added": 2172,
+  "discovery_findings": 29589,
   "improvements_shipped": 1155,
-  "last_run": "2026-08-01T14:02:36.490Z",
+  "last_run": "2026-08-01T14:09:12.706Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 30,
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 477,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,41 @@
           ]
         }
       },
-      "note": "primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings; gap=[])"
+      "note": "primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings; gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 284,
-      "focus": "firing-range JS string-context oracles (quoted/singlequoted/slashquoted) + object/data route alias",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 556,
+      "focus": "firing-range escape/js client-side sanitizer bypass + serverside tagname/encodeUrl attribute_unquoted + queue drain (body_comment, escapedparameter eventhandler)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/reflected/parameter/js_quoted_string: 64→71 findings — double-quoted JS string-context oracle shipped",
-      "public-firing-range.appspot.com/reflected/parameter/js_singlequoted_string: 64→71 findings — single-quoted JS string-context oracle shipped",
-      "public-firing-range.appspot.com/reflected/parameter/js_slashquoted_string: 64→71 findings — slash-quoted JS regex-context oracle shipped",
-      "public-firing-range.appspot.com/reflected/url/object/data: 64→71 findings — object-data route alias now fires (underscore path probe)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/escape/js/html_escape: 69 findings — generic firing-range oracles only; no escape/js sanitizer-bypass live oracle",
+      "public-firing-range.appspot.com/escape/js/encodeURIComponent: 69 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/escape/js/escape: 69 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname: 69 findings — generic firing-range oracles only; no tagname-injection live oracle",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_unquoted: 69 findings — firing-range-escape-serverside-attribute-unquoted-live-oracle fires",
+      "public-firing-range.appspot.com/reflected/parameter/body_comment: 71 findings — generic oracles only",
+      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_quoted: 70 findings — generic oracles only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script: case-insensitive script filter bypass oracle absent",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote: quote-filter bypass oracle absent",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals: charset-block bypass oracle absent",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: xlink-href template unavailable (500)"
+      "public-firing-range.appspot.com/escape/js/*: client-side html_escape/encodeURIComponent/escape sanitizer-bypass live oracles absent",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname: tagname injection live oracle absent",
+      "public-firing-range.appspot.com/reflected/parameter/body_comment: HTML-comment-context XSS live oracle absent",
+      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_*: escaped event-handler attribute bypass live oracles absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 30,
-    "public-firing-range.appspot.com/reflected/parameter/js_quoted_string": 71,
-    "public-firing-range.appspot.com/reflected/parameter/js_singlequoted_string": 71,
-    "public-firing-range.appspot.com/reflected/parameter/js_slashquoted_string": 71,
-    "public-firing-range.appspot.com/reflected/url/object/data": 71,
-    "public-firing-range.appspot.com/reflected/parameter/js_eval": 68,
-    "public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script": 68
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/reflected/parameter/body_comment": 71,
+    "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_quoted/DOUBLE_QUOTED_ATTRIBUTE": 70,
+    "public-firing-range.appspot.com/escape/js/html_escape": 69,
+    "public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_unquoted": 69,
+    "public-firing-range.appspot.com/reflected/parameter/js_quoted_string": 71
   }
 }
