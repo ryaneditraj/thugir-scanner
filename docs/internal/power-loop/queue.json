@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T20:03:20.864Z",
+  "updated_at": "2026-08-01T21:04:37.049Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/object?q=a",
+      "source": "google/firing-range — tag-restricted OBJECT XSS (/tags/tag/object)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/embed?q=a",
+      "source": "google/firing-range — tag-restricted EMBED XSS (/tags/tag/embed)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/svg?q=a",
+      "source": "google/firing-range — tag-restricted SVG XSS (/tags/tag/svg)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/link?q=a",
+      "source": "google/firing-range — tag-restricted LINK XSS (/tags/tag/link)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/base?q=a",
+      "source": "google/firing-range — tag-restricted BASE XSS (/tags/tag/base)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/tags/tag/meta?q=a",
       "source": "google/firing-range — tag-restricted META redirect XSS (/tags/tag/meta)",
