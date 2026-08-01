@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-01T22:08:37.797Z",
-  "total": 1418,
-  "uniqueSlugs": 1413,
+  "generatedAt": "2026-08-01T23:08:27.019Z",
+  "total": 1424,
+  "uniqueSlugs": 1419,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1400,
+    "generic": 1406,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1333,
+    "deep": 1339,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 135,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 316,
+    "Cross-site scripting": 322,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -949,10 +949,16 @@
     "firing-range-reverseclickjacking-route-live-oracle",
     "firing-range-tags-injection-live-oracle",
     "firing-range-tags-injection-route-live-oracle",
+    "firing-range-tags-tag-a-href-live-oracle",
+    "firing-range-tags-tag-a-href-route-live-oracle",
+    "firing-range-tags-tag-div-style-live-oracle",
+    "firing-range-tags-tag-div-style-route-live-oracle",
     "firing-range-tags-tag-embed-live-oracle",
     "firing-range-tags-tag-embed-route-live-oracle",
     "firing-range-tags-tag-object-live-oracle",
     "firing-range-tags-tag-object-route-live-oracle",
+    "firing-range-tags-tag-script-src-live-oracle",
+    "firing-range-tags-tag-script-src-route-live-oracle",
     "firing-range-tags-tag-svg-live-oracle",
     "firing-range-tags-tag-svg-route-live-oracle",
     "firing-range-third-party-sri-dynamic-live-oracle",

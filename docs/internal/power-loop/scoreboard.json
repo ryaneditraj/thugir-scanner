@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T22:32:00.000Z",
+  "updated_at": "2026-08-01T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3241,
-  "total_findings": 41111,
+  "total_sites_scanned": 3242,
+  "total_findings": 41142,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2212,
-  "discovery_findings": 34873,
-  "improvements_shipped": 1158,
-  "last_run": "2026-08-01T22:32:00.000Z",
+  "discovery_findings": 34904,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-01T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 11,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 233,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,37 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 6/6 (11 findings); staging fallback 30 findings also available; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_scanned": 3,
-      "findings": 279,
-      "focus": "firing-range tags/tag/object|embed|svg tag-restricted XSS route oracles",
+      "findings": 286,
+      "focus": "firing-range attribute-restricted tag XSS route oracles (a/href, script/src, div/style)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (11 findings) — no category gaps",
-      "public-firing-range.appspot.com/tags/tag/object?q=a: 88→93 findings — object/embed/svg tag injection live+route oracles shipped",
-      "public-firing-range.appspot.com/tags/tag/embed?q=a: 88→93 findings — embed tag injection live+route oracles",
-      "public-firing-range.appspot.com/tags/tag/svg?q=a: 88→93 findings — svg tag injection live+route oracles",
-      "public-firing-range.appspot.com/urldom/location/hash/iframe.src: 89 findings — iframe-src-route live oracle fires"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no category gaps",
+      "public-firing-range.appspot.com/tags/tag/a/href?q=a: 88→95 findings — a-href attribute injection live+route oracles shipped",
+      "public-firing-range.appspot.com/tags/tag/script/src?q=a: 88→96 findings — script-src attribute injection live+route oracles",
+      "public-firing-range.appspot.com/tags/tag/div/style?q=a: 88→95 findings — div-style attribute injection live+route oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "public-firing-range.appspot.com/tags/tag?q=a|a/style: any-tag and A STYLE attribute-restricted route oracles still absent",
+      "public-firing-range.appspot.com/tags/expression: CSS expression filter bypass oracle still absent",
       "public-firing-range.appspot.com/tags/tag/link|base: dedicated link/base route slugs not shipped (covered by extended tags-injection-route)",
-      "public-firing-range.appspot.com/tags/tag?q=a|a/href|a/style|div/style|script/src: attribute-restricted XSS route-specific live oracles absent",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval + cookie_set/eval + window/name/eval: route oracles exist; queued scans pending",
       "pwnshop.ctfsecurity.com authenticated oracles (coupon-bypass, wallet-top-up) require reliable OTP mail delivery"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 11,
-    "juice-shop-staging.herokuapp.com": 30,
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/tags/tag/a/href?q=a": 95,
+    "public-firing-range.appspot.com/tags/tag/script/src?q=a": 96,
+    "public-firing-range.appspot.com/tags/tag/div/style?q=a": 95,
     "public-firing-range.appspot.com/tags/tag/object?q=a": 93,
     "public-firing-range.appspot.com/tags/tag/embed?q=a": 93,
-    "public-firing-range.appspot.com/tags/tag/svg?q=a": 93,
-    "public-firing-range.appspot.com/urldom/location/hash/iframe.src": 89,
-    "public-firing-range.appspot.com/urldom/location/hash/link.href": 89,
-    "public-firing-range.appspot.com/tags/tag/link?q=a": 88
+    "public-firing-range.appspot.com/tags/tag/svg?q=a": 93
   }
 }
