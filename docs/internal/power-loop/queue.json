@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T18:03:08.315Z",
+  "updated_at": "2026-08-01T19:04:54.752Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/meta?q=a",
+      "source": "google/firing-range — tag-restricted META redirect XSS (/tags/tag/meta)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/div?q=a",
+      "source": "google/firing-range — tag-restricted DIV XSS (/tags/tag/div)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/style?q=a",
+      "source": "google/firing-range — tag-restricted STYLE XSS (/tags/tag/style)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/expression?q=a",
+      "source": "google/firing-range — CSS expression filter bypass tag XSS (/tags/expression)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/multiline?q=a",
+      "source": "google/firing-range — multiline tag regex bypass XSS (/tags/multiline)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/stricttransportsecurity/hsts_max_age_missing",
       "source": "google/firing-range — HSTS header missing max-age directive (/stricttransportsecurity/hsts_max_age_missing)",
