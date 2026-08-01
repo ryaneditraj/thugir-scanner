@@ -2526,6 +2526,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-address-location-hash-assign-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash assign DOM XSS oracle",
+    description:
+      "GET /address/location.hash/assign returns a page that reads window.location.hash.substr(1) and passes it to location.assign() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to location.assign() enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashAssignLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to location.assign() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove location.assign() calls on values from window.location.hash.",
+        "Allow-list navigation targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/assign uses location.assign on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-assign-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/assign route XSS oracle",
+    description:
+      "When scanning /address/location.hash/assign, location.hash is passed to location.assign() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot trigger arbitrary navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashAssignRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove location.assign sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for navigation sinks.",
+        "Allow-list navigation targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/assign route uses location.assign on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-form-action-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search form.action DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/form.action reads document.location.search.substr(1) and assigns it to form.action — Firing Range form.action DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to form.action enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchFormActionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to form.action — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove form.action assignments on values from window.location.search.",
+        "Allow-list form submission targets in production applications.",
+        "Use CSP form-action restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/form.action uses form.action on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-form-action-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/form.action route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/form.action, location.search is assigned to form.action without sanitization — route-specific form.action DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot redirect form submissions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchFormActionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove form.action sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for form submission sinks.",
+        "Allow-list form submission targets.",
+        "Add CSP form-action restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/form.action route assigns location.search to form.action. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-script-src-partial-domain-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash partial-domain script.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/script.src.partial_domain reads document.location.hash.substr(1) and assigns location.origin + payload + '/script.js' to script.src — Firing Range partial-domain script.src DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values concatenated into script.src enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcPartialDomainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never concatenate location.hash into script.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic script.src assignments from URL fragments.",
+        "Allow-list script origins in production applications.",
+        "Use CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src.partial_domain concatenates location.hash into script.src. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-script-src-partial-domain-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/script.src.partial_domain route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/script.src.partial_domain, location.hash is concatenated into script.src without sanitization — route-specific partial-domain script.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot load arbitrary scripts via origin concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcPartialDomainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove partial-domain script.src sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for script inclusion sinks.",
+        "Allow-list script origins.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src.partial_domain route concatenates location.hash into script.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
