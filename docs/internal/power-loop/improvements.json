@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-assign-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/assign returns window.location.hash.substr(1) passed to location.assign(payload); assign route scan findings 31→38 (+firing-range-address-location-hash-assign-live-oracle + route); benchmark juice-shop-staging 29 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-form-action-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/form.action returns document.location.search.substr(1) assigned to formElement.action; form.action route scan findings 31→38 (+firing-range-urldom-location-search-form-action-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-script-src-partial-domain-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/script.src.partial_domain returns scriptElement.src = location.origin + payload + '/script.js'; partial_domain route scan findings 32→39 (+firing-range-urldom-location-hash-script-src-partial-domain-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-hash-link-href-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/link.href returns document.location.hash.substr(1) assigned to linkElement.href; link.href route scan findings include +firing-range-urldom-location-hash-link-href-live-oracle + route; benchmark juice-shop-staging 29 findings 6/6 maintained"
@@ -16693,6 +16711,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-url-css-import-live-oracle",
       "shipped_at": "2026-07-31T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-assign-live-oracle",
+      "shipped_at": "2026-08-01T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-form-action-live-oracle",
+      "shipped_at": "2026-08-01T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-script-src-partial-domain-live-oracle",
+      "shipped_at": "2026-08-01T01:10:00.000Z"
     }
   ]
 }
