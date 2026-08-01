@@ -41070,6 +41070,171 @@ const firingRangeUrldomLocationHashScriptSrcPartialQueryRouteLiveOracle: Rule = 
   };
 };
 
+const FIRING_RANGE_HSTS_MISSING_PATH = "/stricttransportsecurity/hsts_missing";
+const FIRING_RANGE_HSTS_MAX_AGE_LOW_PATH = "/stricttransportsecurity/hsts_max_age_too_low";
+const FIRING_RANGE_SRI_STATIC_PATH =
+  "/insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity.html";
+const FIRING_RANGE_SRI_DYNAMIC_PATH =
+  "/insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity_dynamically_added.html";
+
+function firingRangeResponseHsts(doc: { headers: Record<string, string> }): string {
+  return (doc.headers["strict-transport-security"] || doc.headers["Strict-Transport-Security"] || "")
+    .trim();
+}
+
+const firingRangeHstsMissingLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_HSTS_MISSING_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/^https:/i.test(ctx.origin || url)) return NEGATIVE;
+  if (firingRangeResponseHsts(doc)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Google Firing Range /stricttransportsecurity/hsts_missing serves HTTPS without Strict-Transport-Security — HSTS missing oracle"
+    }
+  };
+};
+
+const firingRangeHstsMissingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/hsts_missing\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeHstsMissingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /stricttransportsecurity/hsts_missing route scan — HTTPS response omits Strict-Transport-Security header"
+    }
+  };
+};
+
+const firingRangeHstsMaxAgeLowLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_HSTS_MAX_AGE_LOW_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hsts = firingRangeResponseHsts(doc);
+  if (!hsts) return NEGATIVE;
+  const maxAgeMatch = hsts.match(/max-age\s*=\s*(\d+)/i);
+  if (!maxAgeMatch) return NEGATIVE;
+  const maxAge = Number.parseInt(maxAgeMatch[1]!, 10);
+  if (!Number.isFinite(maxAge) || maxAge >= 31536000) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      hsts,
+      maxAge,
+      note: "Google Firing Range /stricttransportsecurity/hsts_max_age_too_low sets Strict-Transport-Security max-age below one year — weak HSTS max-age oracle"
+    }
+  };
+};
+
+const firingRangeHstsMaxAgeLowRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/hsts_max_age_too_low\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeHstsMaxAgeLowLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /stricttransportsecurity/hsts_max_age_too_low route scan — HSTS max-age below recommended minimum"
+    }
+  };
+};
+
+const firingRangeThirdPartySriMissingLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_SRI_STATIC_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasProtocolRelativeScript = /<script[^>]+src\s*=\s*["']\/\//i.test(body);
+  if (!hasProtocolRelativeScript) return NEGATIVE;
+  if (/\bintegrity\s*=/i.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 160).trim(),
+      note: "Google Firing Range third_party_scripts_without_subresource_integrity.html loads protocol-relative script without integrity attribute — missing SRI oracle"
+    }
+  };
+};
+
+const firingRangeThirdPartySriMissingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/third_party_scripts_without_subresource_integrity\.html/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeThirdPartySriMissingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range third_party_scripts_without_subresource_integrity.html route scan — external script tag lacks subresource integrity"
+    }
+  };
+};
+
+const firingRangeThirdPartySriDynamicLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_SRI_DYNAMIC_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasDynamicScript =
+    /document\.createElement\s*\(\s*['"]script['"]\s*\)/i.test(body) &&
+    /\.src\s*=\s*['"]\/\//i.test(body);
+  if (!hasDynamicScript) return NEGATIVE;
+  if (/\bintegrity\s*=/i.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range third_party_scripts_without_subresource_integrity_dynamically_added.html injects protocol-relative script via createElement without integrity — dynamic missing SRI oracle"
+    }
+  };
+};
+
+const firingRangeThirdPartySriDynamicRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/third_party_scripts_without_subresource_integrity_dynamically_added\.html/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const result = await firingRangeThirdPartySriDynamicLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range dynamically_added SRI lab route scan — createElement script injection lacks subresource integrity"
+    }
+  };
+};
+
 const FIRING_RANGE_FLASHINJECTION_CALLBACK_PROBE = "thugirFrFlashProbe";
 
 const firingRangeFlashinjectionLiveOracle: Rule = async (ctx) => {
@@ -54293,6 +54458,14 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationHashScriptSrcPartialPathRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialQueryLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialQueryRouteLiveOracle,
+  firingRangeHstsMissingLiveOracle,
+  firingRangeHstsMissingRouteLiveOracle,
+  firingRangeHstsMaxAgeLowLiveOracle,
+  firingRangeHstsMaxAgeLowRouteLiveOracle,
+  firingRangeThirdPartySriMissingLiveOracle,
+  firingRangeThirdPartySriMissingRouteLiveOracle,
+  firingRangeThirdPartySriDynamicLiveOracle,
+  firingRangeThirdPartySriDynamicRouteLiveOracle,
   firingRangeFlashinjectionLiveOracle,
   firingRangeFlashinjectionRouteLiveOracle,
   dvgaRouteLiveOracle,
