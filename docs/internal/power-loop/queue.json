@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T05:05:00.000Z",
+  "updated_at": "2026-08-01T06:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/js?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into JS eval sink (/escape/serverside/escapeHtml/js)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/js?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into JS eval sink (/escape/serverside/encodeUrl/js)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/eval?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into eval() sink (/escape/serverside/escapeHtml/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/eval?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into eval() sink (/escape/serverside/encodeUrl/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/search?q=test",
+      "source": "chethan-vinayak/vulnshop — SQLi product search oracle GET /search?q= (Vercel OSS deploy README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/url/object_param?q=a",
       "source": "google/firing-range — reflected URL param echoed in OBJECT PARAM src attribute (/reflected/url/object_param)",
