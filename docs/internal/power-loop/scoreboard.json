@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T17:12:00.000Z",
+  "updated_at": "2026-08-01T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3195,
-  "total_findings": 37479,
+  "total_sites_scanned": 3196,
+  "total_findings": 37510,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2187,
   "discovery_findings": 31393,
-  "improvements_shipped": 1158,
-  "last_run": "2026-08-01T17:12:00.000Z",
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-01T18:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 31,
@@ -48,43 +48,38 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings); secret-resend slug still absent (key not in current social feeds)"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 629,
-      "focus": "firing-range stricttransportsecurity + insecurethirdpartyscripts HSTS/SRI route oracles",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 258,
+      "focus": "firing-range HSTS max-age/includeSubDomains + javascripturi DOM sink route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no category gaps",
-      "public-firing-range.appspot.com/stricttransportsecurity/hsts_missing: 78→83 — firing-range-hsts-missing-live-oracle shipped",
-      "public-firing-range.appspot.com/stricttransportsecurity/hsts_max_age_too_low: 78→83 — firing-range-hsts-max-age-low-live-oracle shipped (max-age=1337)",
-      "public-firing-range.appspot.com/insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity.html: 78→83 — firing-range-third-party-sri-missing-live-oracle shipped",
-      "public-firing-range.appspot.com/insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity_dynamically_added.html: 78→83 — firing-range-third-party-sri-dynamic-live-oracle shipped",
-      "public-firing-range.appspot.com/reverseclickjacking/universalreverseclickjacking_actiononly: 79 findings — reverseclickjacking-route live oracle fires",
-      "public-firing-range.appspot.com/vulnerablelibraries/jquery: 79 findings — vulnerablelibraries-route live oracle fires (jQuery 1.8.1)"
+      "public-firing-range.appspot.com/stricttransportsecurity/hsts_max_age_missing: 83→86 — firing-range-hsts-max-age-missing-live-oracle shipped (HSTS without max-age)",
+      "public-firing-range.appspot.com/stricttransportsecurity/hsts_includesubdomains_missing: 83→86 — firing-range-hsts-includesubdomains-missing-live-oracle shipped",
+      "public-firing-range.appspot.com/dom/javascripturi.html: 78→86 — firing-range-dom-javascripturi-live-oracle shipped (javascript: URI href sink)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (Resend key removed from current Bluesky/Mastodon/Reddit feeds)",
-      "firing-range stricttransportsecurity: hsts_max_age_missing / hsts_includesubdomains_missing / hsts_preload_missing route oracles still absent",
-      "public-firing-range.appspot.com/dom/javascripturi: javascript: URI DOM sink route-specific live oracle absent",
-      "public-firing-range.appspot.com/invalidframingconfig: X-Frame-Options / framing misconfig route-specific live oracle absent",
+      "secret-resend slug still absent on juice-shop benchmark (Resend key removed from current social feeds)",
+      "firing-range stricttransportsecurity: hsts_preload_missing route oracle still absent",
+      "public-firing-range.appspot.com/clickjacking: X-Frame-Options / CSP frame-ancestors route-specific live oracle absent",
       "public-firing-range.appspot.com/remoteinclude/object_hash: URL-fragment object remote-inclusion route-specific live oracle absent",
       "pwnshop.ctfsecurity.com authenticated oracles (coupon-bypass, wallet-top-up) require reliable OTP mail delivery"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/stricttransportsecurity/hsts_max_age_missing": 86,
+    "public-firing-range.appspot.com/stricttransportsecurity/hsts_includesubdomains_missing": 86,
+    "public-firing-range.appspot.com/dom/javascripturi.html": 86,
     "public-firing-range.appspot.com/stricttransportsecurity/hsts_missing": 83,
-    "public-firing-range.appspot.com/stricttransportsecurity/hsts_max_age_too_low": 83,
-    "public-firing-range.appspot.com/insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity.html": 83,
     "public-firing-range.appspot.com/reverseclickjacking/universalreverseclickjacking_actiononly": 79,
-    "public-firing-range.appspot.com/vulnerablelibraries/jquery": 79,
-    "public-firing-range.appspot.com/dom/javascripturi": 78,
     "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }
