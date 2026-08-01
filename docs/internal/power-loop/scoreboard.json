@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T09:10:00.000Z",
+  "updated_at": "2026-08-01T10:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3128,
-  "total_findings": 33348,
+  "total_sites_scanned": 3137,
+  "total_findings": 33865,
   "critical_findings": 109,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2152,
-  "discovery_findings": 27523,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-01T09:10:00.000Z",
+  "discovery_urls_added": 2157,
+  "discovery_findings": 28011,
+  "improvements_shipped": 1155,
+  "last_run": "2026-08-01T10:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 32,
+      "oracle_findings": 29,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 482,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,48 +48,46 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (32 findings pages=6 probes=459; gap=[]); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings pages=6 probes=482; gap=[]); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 188,
-      "focus": "firing-range sessionStorage document.write + leakedcookie httpOnly + mixedcontent suites",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 488,
+      "focus": "firing-range reflected JS sinks (js_eval, js_assignment, js_comment, attribute_name, form) + urldom redirect/jsonp/window.open drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/documentWrite: 53→60 — firing-range-dom-sessionstorage-documentwrite-live-oracle shipped",
-      "public-firing-range.appspot.com/leakedcookie/: 48→64 — firing-range-leakedcookie-httponly-live-oracle shipped",
-      "public-firing-range.appspot.com/mixedcontent/: 48→64 — firing-range-mixedcontent-live-oracle shipped",
-      "public-firing-range.appspot.com/badscriptimport/: 48 findings — generic oracles only, no bad-script-import sink oracle",
-      "public-firing-range.appspot.com/vulnerablelibraries/: 48 findings — generic oracles only, no known-vulnerable-library oracle",
-      "public-firing-range.appspot.com/reverseclickjacking/: 48 findings — generic oracles only, no clickjacking/UI-redress oracle",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: 45 findings — generic oracles only, no SVG xlink:href sink oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/reflected/parameter/js_eval: 61 findings — generic firing-range-reflected-param-live-oracle only, no route-specific eval() sink oracle",
+      "public-firing-range.appspot.com/reflected/parameter/js_assignment: 61 findings — generic oracles only, no unquoted JS assignment sink oracle",
+      "public-firing-range.appspot.com/reflected/parameter/js_comment: 61 findings — generic oracles only, no JS comment injection sink oracle",
+      "public-firing-range.appspot.com/reflected/parameter/attribute_name: 61 findings — generic oracles only, no attribute-name injection sink oracle",
+      "public-firing-range.appspot.com/reflected/parameter/form: 61 findings — generic oracles only, no POST-only form XSS trigger oracle",
+      "public-firing-range.appspot.com/urldom/redirect: 61 findings — firing-range-urldom-redirect-live-oracle present",
+      "public-firing-range.appspot.com/urldom/jsonp: 61 findings — firing-range-jsonp-live-oracle present"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "public-firing-range.appspot.com/reflected/parameter/js_eval: route-specific eval() sink oracle absent",
+      "public-firing-range.appspot.com/reflected/parameter/js_assignment: unquoted JS assignment sink oracle absent",
+      "public-firing-range.appspot.com/reflected/parameter/js_comment: JS comment injection sink oracle absent",
+      "public-firing-range.appspot.com/reflected/parameter/attribute_name: attribute-name injection sink oracle absent",
+      "public-firing-range.appspot.com/reflected/parameter/form: POST-only form XSS trigger oracle absent",
       "public-firing-range.appspot.com/badscriptimport/: bad JavaScript import / typosquatting-domain oracle absent",
-      "public-firing-range.appspot.com/vulnerablelibraries/: known-vulnerable JS library inclusion oracle absent",
-      "public-firing-range.appspot.com/reverseclickjacking/: reverse clickjacking / UI-redress oracle absent",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: route-specific SVG xlink:href sink oracle absent",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/js: template unavailable (CANNOT FIND THAT TEMPLATE)",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/js: template unavailable",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/eval: template unavailable",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/eval: template unavailable",
-      "zerohealth.aliyu.dev/api/*: route-specific BOLA/SSRF live oracles absent on notifications/insurance/billing hubs"
+      "public-firing-range.appspot.com/vulnerablelibraries/: known-vulnerable JS library inclusion oracle absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 32,
-    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/documentWrite": 60,
-    "public-firing-range.appspot.com/leakedcookie": 64,
-    "public-firing-range.appspot.com/mixedcontent": 64,
-    "public-firing-range.appspot.com/badscriptimport": 48,
-    "public-firing-range.appspot.com/vulnerablelibraries": 48,
-    "public-firing-range.appspot.com/reverseclickjacking": 48,
-    "public-firing-range.appspot.com/urldom/location/search/a.xlink-href": 45
+    "juice-shop-staging.herokuapp.com": 29,
+    "public-firing-range.appspot.com/reflected/parameter/js_eval": 61,
+    "public-firing-range.appspot.com/reflected/parameter/js_assignment": 61,
+    "public-firing-range.appspot.com/reflected/parameter/js_comment": 61,
+    "public-firing-range.appspot.com/reflected/parameter/attribute_name": 61,
+    "public-firing-range.appspot.com/reflected/parameter/form": 61,
+    "public-firing-range.appspot.com/urldom/redirect": 61,
+    "public-firing-range.appspot.com/urldom/jsonp": 61
   }
 }
