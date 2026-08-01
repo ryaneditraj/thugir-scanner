@@ -1850,6 +1850,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-body-blocks-any-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range case-insensitive script filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_any_script?q= reflects mixed-case <ScRiPt> tags unescaped — Firing Range case-insensitive script filter bypass training oracle.",
+    impactOneline:
+      "Case-insensitive script filters are bypassed with mixed-case tags, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksAnyScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and block script tags case-insensitively before reflecting user input.",
+      steps: [
+        "Strip or encode <script> tags regardless of character case.",
+        "Use a strict HTML sanitizer for all reflected body content.",
+        "Deploy CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_any_script route allows mixed-case script tag bypass. Show case-insensitive filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-any-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range case-insensitive script filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_any_script, mixed-case <ScRiPt> tags bypass case-insensitive filters — route-specific script-case bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm case-insensitive script filters cannot be bypassed with mixed-case tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksAnyScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply case-insensitive script tag filtering on this route.",
+      steps: [
+        "Normalize input to lowercase before applying script blocklists.",
+        "HTML-encode reflected body content.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_any_script route allows mixed-case script bypass. Show route-specific filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-attr-unquoted-blocks-dq-sq-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range unquoted attribute quote-filter bypass oracle",
+    description:
+      "GET /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote?q= reflects unquoted attribute with event handler — Firing Range double/single-quote filter bypass training oracle.",
+    impactOneline:
+      "Quote filters on unquoted attributes are bypassed via event handlers without quotes, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedAttrUnquotedBlocksDqSqLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Always quote attribute values and block event-handler injection.",
+      steps: [
+        "Wrap all reflected attribute values in double quotes.",
+        "Strip or encode event-handler attribute names (on*).",
+        "Use a strict HTML sanitizer for reflected attribute contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote route allows event-handler injection without quotes. Show quote-filter bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-attr-unquoted-blocks-dq-sq-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range unquoted attribute quote-filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote, unquoted attribute event handlers bypass quote filters — route-specific attribute XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm quote filters cannot be bypassed in unquoted attribute contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedAttrUnquotedBlocksDqSqRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Quote attribute values and block event handlers on this route.",
+      steps: [
+        "Always quote reflected attribute values.",
+        "Block on* event-handler attributes in reflected output.",
+        "Use CSP to restrict inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_doublequotesinglequote route allows unquoted attribute event-handler bypass. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-space-dq-slash-eq-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range charset-block filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_space_doublequote_slash_equals?q= reflects <img> tags unescaped — Firing Range space/quote/slash/equals charset filter bypass training oracle.",
+    impactOneline:
+      "Charset blocklists omitting spaces or equals allow <img> tag injection, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksSpaceDqSlashEqLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use comprehensive HTML sanitization instead of character blocklists.",
+      steps: [
+        "Replace charset blocklists with a strict HTML allowlist sanitizer.",
+        "Encode all reflected body content by default.",
+        "Deploy CSP img-src and script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_space_doublequote_slash_equals route allows <img> tag bypass. Show charset-block filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-space-dq-slash-eq-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range charset-block filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_space_doublequote_slash_equals, <img> tags bypass space/quote/slash/equals charset filters — route-specific body XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm charset blocklists cannot be bypassed with unblocked characters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksSpaceDqSlashEqRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace charset blocklists with HTML sanitization on this route.",
+      steps: [
+        "Use an allowlist HTML sanitizer for reflected body content.",
+        "Encode reflected output by default.",
+        "Use CSP to block inline event handlers."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_space_doublequote_slash_equals route allows <img> charset-block bypass. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-js-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
