@@ -4866,6 +4866,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-hsts-max-age-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS max-age missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_max_age_missing returns Strict-Transport-Security without a max-age directive — Firing Range incomplete HSTS training oracle.",
+    impactOneline:
+      "HSTS without max-age provides no browser enforcement window for HTTPS-only access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Always include max-age in Strict-Transport-Security headers.",
+      steps: [
+        "Set max-age to at least 31536000 seconds on all HTTPS responses.",
+        "Pair with includeSubDomains and preload when appropriate.",
+        "Validate HSTS syntax with security header scanners."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_missing omits HSTS max-age. Show complete HSTS header remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-max-age-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_max_age_missing route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_max_age_missing, Strict-Transport-Security lacks max-age — route-specific incomplete HSTS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HSTS max-age on strict-transport-security lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Include max-age on route-specific HSTS responses.",
+      steps: [
+        "Configure max-age of at least one year on all HTTPS routes.",
+        "Avoid HSTS directives without max-age on any production path.",
+        "Audit edge configuration for partial HSTS policies."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_missing route scan shows HSTS without max-age. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-includesubdomains-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS includeSubDomains missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_includesubdomains_missing returns HSTS without includeSubDomains — Firing Range incomplete HSTS training oracle.",
+    impactOneline:
+      "HSTS without includeSubDomains leaves subdomains vulnerable to SSL stripping attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsIncludesubdomainsMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add includeSubDomains when all subdomains support HTTPS.",
+      steps: [
+        "Verify every subdomain serves valid HTTPS before enabling includeSubDomains.",
+        "Set Strict-Transport-Security: max-age=31536000; includeSubDomains.",
+        "Consider preload for apex domains with stable HTTPS coverage."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_includesubdomains_missing omits includeSubDomains. Show HSTS subdomain coverage remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-includesubdomains-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_includesubdomains_missing route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_includesubdomains_missing, HSTS omits includeSubDomains — route-specific incomplete HSTS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm includeSubDomains on strict-transport-security lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsIncludesubdomainsMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enable includeSubDomains on route-specific HSTS when subdomains are HTTPS-ready.",
+      steps: [
+        "Audit subdomain HTTPS coverage before adding includeSubDomains.",
+        "Apply consistent HSTS policy across apex and subdomains.",
+        "Test with HSTS preload submission tools when eligible."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_includesubdomains_missing route scan shows HSTS without includeSubDomains. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-javascripturi-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range javascript: URI DOM sink oracle",
+    description:
+      "GET /dom/javascripturi.html exposes an anchor with javascript: URI href assigning location.href — Firing Range javascript:-URI DOM XSS training oracle.",
+    impactOneline:
+      "javascript: URI sinks enable DOM XSS via implicit document write behavior when user input reaches href attributes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomJavascripturiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block javascript: URIs in user-controlled href and navigation sinks.",
+      steps: [
+        "Allow-list safe URL schemes (https:, mailto:) for dynamic href values.",
+        "Use Content-Security-Policy script-src to restrict inline script execution.",
+        "Sanitize or encode user input before assigning to location.href or anchor href."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/javascripturi.html uses javascript: URI in href with location.href sink. Show javascript:-URI DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-javascripturi-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /javascripturi.html route oracle",
+    description:
+      "When scanning /dom/javascripturi.html, anchor href uses javascript: URI with location.href assignment — route-specific javascript:-URI DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should flag javascript: URI sinks in DOM navigation handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomJavascripturiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove javascript: URI sinks from route-specific DOM navigation code.",
+      steps: [
+        "Replace javascript: href values with safe event handlers bound via addEventListener.",
+        "Validate URL schemes before navigation assignments.",
+        "Add CSP to block unsafe inline script execution paths."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/javascripturi.html route scan shows javascript: URI href sink. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-third-party-sri-missing-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
