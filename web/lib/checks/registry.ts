@@ -37912,6 +37912,168 @@ const firingRangeDomPostMessageEvalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_POSTMESSAGE_INNERHTML_PATH = "/dom/toxicdom/postMessage/innerHtml";
+
+const firingRangeDomPostMessageInnerHtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let probePath = FIRING_RANGE_POSTMESSAGE_INNERHTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/postMessage\//i.test(parsed.pathname)) probePath = parsed.pathname;
+    } catch {
+      /* ignore */
+    }
+  }
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasPostMessageInnerHtml =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /addEventListener\s*\(\s*['"]message['"]/i.test(body) &&
+    /JSON\.parse\s*\(\s*msg\.data\s*\)/i.test(body) &&
+    /\.innerHTML\s*=\s*content\.html/i.test(body);
+  if (!hasPostMessageInnerHtml) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /dom/toxicdom/postMessage/innerHtml parses msg.data and writes content.html to innerHTML — postMessage DOM XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomPostMessageInnerHtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/postMessage\//i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomPostMessageInnerHtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/postMessage route scan — postMessage handler writes JSON-parsed message data to innerHTML without origin validation"
+    }
+  };
+};
+
+const FIRING_RANGE_ANGULAR_COOKIE_PARSE_DEFAULT = "/angular/angular_cookie_parse/1.6.0";
+const FIRING_RANGE_ANGULAR_FORM_PARSE_DEFAULT = "/angular/angular_form_parse/1.6.0";
+
+function firingRangeAngularVersionPath(
+  pageUrl: string,
+  routePrefix: string,
+  defaultPath: string
+): string {
+  if (!pageUrl) return defaultPath;
+  try {
+    const parsed = new URL(pageUrl);
+    if (new RegExp(`${routePrefix.replace(/\//g, "\\/")}\\/[^/]+`, "i").test(parsed.pathname)) {
+      return parsed.pathname;
+    }
+  } catch {
+    /* ignore */
+  }
+  return defaultPath;
+}
+
+const firingRangeAngularCookieParseLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePath = firingRangeAngularVersionPath(
+    pageUrl,
+    "/angular/angular_cookie_parse",
+    FIRING_RANGE_ANGULAR_COOKIE_PARSE_DEFAULT
+  );
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAngularCookieParse =
+    /<title>\s*Angular Cookie Parse\s*<\/title>/i.test(body) &&
+    /\$parse\s*\(\s*lookupCookie\s*\(/i.test(body) &&
+    /VulnerableController/i.test(body);
+  if (!hasAngularCookieParse) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /angular/angular_cookie_parse passes cookie value to $parse() — AngularJS expression injection oracle"
+    }
+  };
+};
+
+const firingRangeAngularCookieParseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/angular\/angular_cookie_parse\//i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAngularCookieParseLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /angular/angular_cookie_parse route scan — cookie value passed to $parse() without validation"
+    }
+  };
+};
+
+const firingRangeAngularFormParseLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePath = firingRangeAngularVersionPath(
+    pageUrl,
+    "/angular/angular_form_parse",
+    FIRING_RANGE_ANGULAR_FORM_PARSE_DEFAULT
+  );
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAngularFormParse =
+    /<title>\s*Angular Form Parse\s*<\/title>/i.test(body) &&
+    /\$parse\s*\(\s*expression\s*\)/i.test(body) &&
+    /ng-model\s*=\s*["']expression["']/i.test(body);
+  if (!hasAngularFormParse) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /angular/angular_form_parse passes user form input to $parse() — AngularJS expression injection oracle"
+    }
+  };
+};
+
+const firingRangeAngularFormParseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/angular\/angular_form_parse\//i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAngularFormParseLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /angular/angular_form_parse route scan — user-controlled expression passed to $parse() on form submit"
+    }
+  };
+};
+
 const firingRangeAngularBodyXssLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/angular/angular_body/1.2.0", ctx.origin);
@@ -52876,6 +53038,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomSessionStorageInnerHtmlRouteLiveOracle,
   firingRangeDomPostMessageEvalLiveOracle,
   firingRangeDomPostMessageEvalRouteLiveOracle,
+  firingRangeDomPostMessageInnerHtmlLiveOracle,
+  firingRangeDomPostMessageInnerHtmlRouteLiveOracle,
+  firingRangeAngularCookieParseLiveOracle,
+  firingRangeAngularCookieParseRouteLiveOracle,
+  firingRangeAngularFormParseLiveOracle,
+  firingRangeAngularFormParseRouteLiveOracle,
   firingRangeAngularBodyXssLiveOracle,
   firingRangeAngularBodyXssRouteLiveOracle,
   firingRangeMetaRedirectLiveOracle,
