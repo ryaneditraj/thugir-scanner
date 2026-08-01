@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T08:10:00.000Z",
+  "updated_at": "2026-08-01T09:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://public-firing-range.appspot.com/badscriptimport/",
@@ -13073,6 +13073,31 @@
     {
       "url": "https://demo2.testfire.net/doLogin",
       "source": "HCL AltoroJ demo2.testfire.net — SQLi login oracle POST /doLogin (ZAP AltoroJ benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/graphiql",
+      "source": "dolevf/DVGA on Pentest Ground — GraphiQL introspection interface (port 5013 public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/my_pastes",
+      "source": "dolevf/DVGA on Pentest Ground — private pastes IDOR/BOLA oracle GET /my_pastes",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/import_paste",
+      "source": "dolevf/DVGA on Pentest Ground — SSRF via paste import oracle (/import_paste)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/upload_paste",
+      "source": "dolevf/DVGA on Pentest Ground — stored XSS / file upload oracle (/upload_paste)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/create_paste",
+      "source": "dolevf/DVGA on Pentest Ground — stored XSS / log injection oracle (/create_paste)",
       "auth": "public_demo"
     }
   ]
