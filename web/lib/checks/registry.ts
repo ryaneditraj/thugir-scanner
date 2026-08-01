@@ -39650,6 +39650,8 @@ const firingRangeAddressLocationInnerHtmlRouteLiveOracle: Rule = async (ctx) => 
 };
 
 const FIRING_RANGE_CORS_DYNAMIC_ORIGIN_PATH = "/cors/alloworigin/dynamicAllowOrigin";
+const FIRING_RANGE_CORS_ALLOW_NULL_ORIGIN_PATH = "/cors/alloworigin/allowNullOrigin";
+const FIRING_RANGE_CORS_ALLOW_INSECURE_SCHEME_PATH = "/cors/alloworigin/allowInsecureScheme";
 const FIRING_RANGE_CORS_PROBE_ORIGIN = "https://evil-cors-probe.example";
 
 const firingRangeCorsDynamicAllowOriginLiveOracle: Rule = async (ctx) => {
@@ -39690,6 +39692,94 @@ const firingRangeCorsDynamicAllowOriginRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /cors/alloworigin/dynamicAllowOrigin route scan — arbitrary Origin reflected with credentials"
+    }
+  };
+};
+
+const firingRangeCorsAllowNullOriginLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_CORS_ALLOW_NULL_ORIGIN_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: "null" }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== "null") return NEGATIVE;
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!creds) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      note: "Google Firing Range /cors/alloworigin/allowNullOrigin reflects Origin: null with Access-Control-Allow-Credentials: true — CORS null-origin misconfiguration oracle"
+    }
+  };
+};
+
+const firingRangeCorsAllowNullOriginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cors\/alloworigin\/allowNullOrigin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeCorsAllowNullOriginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /cors/alloworigin/allowNullOrigin route scan — null Origin allowed with credentials"
+    }
+  };
+};
+
+const firingRangeCorsAllowInsecureSchemeLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  if (!/^https:/i.test(ctx.origin || "")) return NEGATIVE;
+  const httpOrigin = ctx.origin.replace(/^https:/i, "http:");
+  const url = new URL(FIRING_RANGE_CORS_ALLOW_INSECURE_SCHEME_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: httpOrigin }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== httpOrigin) return NEGATIVE;
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!creds) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      note: "Google Firing Range /cors/alloworigin/allowInsecureScheme allows HTTP-scheme Origin on HTTPS resource with credentials — CORS insecure-scheme misconfiguration oracle"
+    }
+  };
+};
+
+const firingRangeCorsAllowInsecureSchemeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cors\/alloworigin\/allowInsecureScheme\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeCorsAllowInsecureSchemeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /cors/alloworigin/allowInsecureScheme route scan — HTTP Origin allowed on HTTPS resource with credentials"
     }
   };
 };
@@ -41231,6 +41321,44 @@ const firingRangeHstsIncludesubdomainsMissingRouteLiveOracle: Rule = async (ctx)
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /stricttransportsecurity/hsts_includesubdomains_missing route scan — HSTS header omits includeSubDomains directive"
+    }
+  };
+};
+
+const firingRangeHstsPreloadMissingLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_HSTS_PRELOAD_MISSING_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hsts = firingRangeResponseHsts(doc);
+  if (!hsts) return NEGATIVE;
+  if (!/max-age\s*=/i.test(hsts)) return NEGATIVE;
+  if (!/includesubdomains/i.test(hsts)) return NEGATIVE;
+  if (/\bpreload\b/i.test(hsts)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      hsts,
+      note: "Google Firing Range /stricttransportsecurity/hsts_preload_missing serves HSTS without preload directive — incomplete HSTS oracle"
+    }
+  };
+};
+
+const firingRangeHstsPreloadMissingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/hsts_preload_missing\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeHstsPreloadMissingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /stricttransportsecurity/hsts_preload_missing route scan — HSTS header omits preload directive"
     }
   };
 };
@@ -54497,6 +54625,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeAddressLocationHashEvalRouteLiveOracle,
   firingRangeCorsDynamicAllowOriginLiveOracle,
   firingRangeCorsDynamicAllowOriginRouteLiveOracle,
+  firingRangeCorsAllowNullOriginLiveOracle,
+  firingRangeCorsAllowNullOriginRouteLiveOracle,
+  firingRangeCorsAllowInsecureSchemeLiveOracle,
+  firingRangeCorsAllowInsecureSchemeRouteLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   firingRangeEscapeServersideCssStyleLiveOracle,
@@ -54583,6 +54715,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeHstsMaxAgeMissingRouteLiveOracle,
   firingRangeHstsIncludesubdomainsMissingLiveOracle,
   firingRangeHstsIncludesubdomainsMissingRouteLiveOracle,
+  firingRangeHstsPreloadMissingLiveOracle,
+  firingRangeHstsPreloadMissingRouteLiveOracle,
   firingRangeDomJavascripturiLiveOracle,
   firingRangeDomJavascripturiRouteLiveOracle,
   firingRangeThirdPartySriMissingLiveOracle,
