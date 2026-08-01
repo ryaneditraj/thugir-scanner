@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-my-pastes-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { pastes(public: false) { id title content owner { name } } } returns private pastes (555-555-1337, Testing Testing) without auth; pentest-ground.com:5013/my_pastes findings 11→15 (+dvga-my-pastes-idor-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-import-paste-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mutation importPaste(host:127.0.0.1,port:1,path:/,scheme:http) returns data.importPaste without auth error; pentest-ground.com:5013/import_paste findings 11→15 (+dvga-import-paste-ssrf-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-create-paste-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mutation createPaste stores <img src=x onerror=canary> unescaped in content field; pentest-ground.com:5013/create_paste findings 11→15 (+dvga-create-paste-stored-xss-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-sessionstorage-documentwrite-live-oracle",
       "status": "shipped",

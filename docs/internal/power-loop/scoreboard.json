@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T10:12:00.000Z",
+  "updated_at": "2026-08-01T10:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,18 +17,18 @@
   },
   "total_sites_scanned": 3137,
   "total_findings": 33865,
-  "critical_findings": 109,
+  "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2157,
   "discovery_findings": 28011,
-  "improvements_shipped": 1155,
-  "last_run": "2026-08-01T10:12:00.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-08-01T10:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 29,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,45 +48,41 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings pages=6 probes=482; gap=[]); secret-resend slug still absent"
+      "note": "juice-shop.herokuapp.com 6/6 (33 findings pages=6 probes=482; gap=[]); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 488,
-      "focus": "firing-range reflected JS sinks (js_eval, js_assignment, js_comment, attribute_name, form) + urldom redirect/jsonp/window.open drain",
-      "improvements_shipped_this_run": 0
+      "focus": "pentest-ground DVGA my_pastes IDOR + import_paste SSRF + create_paste stored XSS route oracles + firing-range reflected JS sink drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "pentest-ground.com:5013/my_pastes: 11→15 — dvga-my-pastes-idor-live-oracle shipped (pastes(public:false) BOLA without auth)",
+      "pentest-ground.com:5013/import_paste: 11→15 — dvga-import-paste-ssrf-live-oracle shipped (importPaste mutation SSRF)",
+      "pentest-ground.com:5013/create_paste: 11→15 — dvga-create-paste-stored-xss-live-oracle shipped (unsanitized HTML in createPaste content)",
       "public-firing-range.appspot.com/reflected/parameter/js_eval: 61 findings — generic firing-range-reflected-param-live-oracle only, no route-specific eval() sink oracle",
       "public-firing-range.appspot.com/reflected/parameter/js_assignment: 61 findings — generic oracles only, no unquoted JS assignment sink oracle",
-      "public-firing-range.appspot.com/reflected/parameter/js_comment: 61 findings — generic oracles only, no JS comment injection sink oracle",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_name: 61 findings — generic oracles only, no attribute-name injection sink oracle",
-      "public-firing-range.appspot.com/reflected/parameter/form: 61 findings — generic oracles only, no POST-only form XSS trigger oracle",
-      "public-firing-range.appspot.com/urldom/redirect: 61 findings — firing-range-urldom-redirect-live-oracle present",
-      "public-firing-range.appspot.com/urldom/jsonp: 61 findings — firing-range-jsonp-live-oracle present"
+      "pentest-ground.com:5013/upload_paste: route-specific upload oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "pentest-ground.com:5013/upload_paste: uploadPaste file-upload oracle still absent",
       "public-firing-range.appspot.com/reflected/parameter/js_eval: route-specific eval() sink oracle absent",
       "public-firing-range.appspot.com/reflected/parameter/js_assignment: unquoted JS assignment sink oracle absent",
-      "public-firing-range.appspot.com/reflected/parameter/js_comment: JS comment injection sink oracle absent",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_name: attribute-name injection sink oracle absent",
-      "public-firing-range.appspot.com/reflected/parameter/form: POST-only form XSS trigger oracle absent",
-      "public-firing-range.appspot.com/badscriptimport/: bad JavaScript import / typosquatting-domain oracle absent",
-      "public-firing-range.appspot.com/vulnerablelibraries/: known-vulnerable JS library inclusion oracle absent"
+      "public-firing-range.appspot.com/badscriptimport/: bad JavaScript import oracle absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 29,
+    "juice-shop.herokuapp.com": 33,
+    "pentest-ground.com:5013/my_pastes": 15,
+    "pentest-ground.com:5013/import_paste": 15,
+    "pentest-ground.com:5013/create_paste": 15,
     "public-firing-range.appspot.com/reflected/parameter/js_eval": 61,
     "public-firing-range.appspot.com/reflected/parameter/js_assignment": 61,
-    "public-firing-range.appspot.com/reflected/parameter/js_comment": 61,
-    "public-firing-range.appspot.com/reflected/parameter/attribute_name": 61,
-    "public-firing-range.appspot.com/reflected/parameter/form": 61,
     "public-firing-range.appspot.com/urldom/redirect": 61,
     "public-firing-range.appspot.com/urldom/jsonp": 61
   }
