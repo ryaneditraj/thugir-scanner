@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-area-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/area.href returns document.location.hash.substr(1) assigned to area.href; area.href route scan findings 43→50 (+firing-range-urldom-location-hash-area-href-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-remoteinclude-parameter-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /remoteinclude/parameter/script?q= reflects query param into script.src; remoteinclude/parameter/script route scan findings 43→49 (+firing-range-remoteinclude-parameter-script-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location/eval returns var payload=window.location; eval(payload); address/location/eval route scan findings 43→49 (+firing-range-address-location-eval-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-a-href-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/a.href returns document.location.search.substr(1) assigned to anchor.href; a.href route scan findings 34→46 (+firing-range-urldom-location-search-a-href-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
@@ -16795,6 +16813,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-iframe-src-live-oracle",
       "shipped_at": "2026-08-01T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-area-href-live-oracle",
+      "shipped_at": "2026-08-01T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-remoteinclude-parameter-script-live-oracle",
+      "shipped_at": "2026-08-01T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-eval-live-oracle",
+      "shipped_at": "2026-08-01T05:10:00.000Z"
     }
   ]
 }
