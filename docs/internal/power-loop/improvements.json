@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-badscriptimport-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /badscriptimport/ documents localhost/private-network/typosquatting imports; probe /remoteinclude/parameter/script?q=http://127.0.0.2/localhost_import.js returns <script src=\"http://127.0.0.2/localhost_import.js\">; badscriptimport route scan findings 48→67 (+firing-range-badscriptimport-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-vulnerablelibraries-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerablelibraries/jquery.html loads jquery-1.8.1.js with attribute-selector XSS gadget (ticket/11290); vulnerablelibraries route scan findings 48→67 (+firing-range-vulnerablelibraries-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reverseclickjacking-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reverseclickjacking/singlepage/ParameterInQuery/InCallback/?q=urc_button.click reflects callback=urc_button.click in JSONP script src; reverseclickjacking route scan findings 48→67 (+firing-range-reverseclickjacking-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-ground.com",
       "slug": "dvga-my-pastes-idor-live-oracle",
       "status": "shipped",
