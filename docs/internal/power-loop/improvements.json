@@ -16948,6 +16948,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-mixedcontent-live-oracle",
       "shipped_at": "2026-08-01T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-my-pastes-idor-live-oracle",
+      "shipped_at": "2026-08-01T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-import-paste-ssrf-live-oracle",
+      "shipped_at": "2026-08-01T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-create-paste-stored-xss-live-oracle",
+      "shipped_at": "2026-08-01T10:10:00.000Z"
     }
   ]
 }
