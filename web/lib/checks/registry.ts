@@ -38861,6 +38861,90 @@ const firingRangeReflectedJsEvalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_BODY_COMMENT_PATH = "/reflected/parameter/body_comment";
+const FIRING_RANGE_BODY_COMMENT_PROBE = "thugirFrBodyCommentProbe";
+
+const firingRangeReflectedBodyCommentLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_BODY_COMMENT_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_BODY_COMMENT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const commentRe = new RegExp(
+    `<!--\\s*${FIRING_RANGE_BODY_COMMENT_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*-->`,
+    "i"
+  );
+  if (!commentRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/body_comment?q= reflects attacker input unescaped into HTML comment — reflected comment-context XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedBodyCommentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/body_comment\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedBodyCommentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/body_comment route scan — q parameter reflected unescaped into HTML comment"
+    }
+  };
+};
+
+const FIRING_RANGE_JS_ASSIGNMENT_PATH = "/reflected/parameter/js_assignment";
+const FIRING_RANGE_JS_ASSIGNMENT_PROBE = "thugirFrJsAssignProbe";
+
+const firingRangeReflectedJsAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_ASSIGNMENT_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_ASSIGNMENT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const assignRe = new RegExp(
+    `var\\s+\\w+\\s*=\\s*${FIRING_RANGE_JS_ASSIGNMENT_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*;`,
+    "i"
+  );
+  if (!assignRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/js_assignment?q= reflects attacker input into unquoted JS assignment — reflected JS assignment-context XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedJsAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/js_assignment\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedJsAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/js_assignment route scan — q parameter reflected into unquoted JS assignment without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_JS_QUOTED_STRING_PATH = "/reflected/parameter/js_quoted_string";
 const FIRING_RANGE_JS_QUOTED_STRING_PROBE = "thugirFrJsQuotedProbe";
 
@@ -39633,6 +39717,48 @@ const firingRangeEscapeServersideCssStyleRouteLiveOracle: Rule = async (ctx) => 
       ...result.evidence,
       scannedUrl: pageUrl,
       note: `Google Firing Range ${target.path} route scan — ${target.encoding} bypass allows CSS style tag XSS`
+    }
+  };
+};
+
+const FIRING_RANGE_ESCAPE_TAGNAME_PROBE = "thugirFrEscapeTagnameProbe";
+const FIRING_RANGE_ESCAPE_TAGNAME_PATH = "/escape/serverside/escapeHtml/tagname";
+
+const firingRangeEscapeServersideTagnameLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_ESCAPE_TAGNAME_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_ESCAPE_TAGNAME_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const tagRe = new RegExp(
+    `<${FIRING_RANGE_ESCAPE_TAGNAME_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[\\s>]`,
+    "i"
+  );
+  if (!tagRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range /escape/serverside/escapeHtml/tagname reflects q into attacker-controlled HTML tag name despite escapeHtml — server-side tagname injection XSS oracle"
+    }
+  };
+};
+
+const firingRangeEscapeServersideTagnameRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/escape\/serverside\/escapeHtml\/tagname\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeEscapeServersideTagnameLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /escape/serverside/escapeHtml/tagname route scan — escapeHtml bypass allows tagname injection XSS"
     }
   };
 };
@@ -53877,6 +54003,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedBodyBlocksSpaceDqSlashEqRouteLiveOracle,
   firingRangeReflectedJsEvalLiveOracle,
   firingRangeReflectedJsEvalRouteLiveOracle,
+  firingRangeReflectedBodyCommentLiveOracle,
+  firingRangeReflectedBodyCommentRouteLiveOracle,
+  firingRangeReflectedJsAssignmentLiveOracle,
+  firingRangeReflectedJsAssignmentRouteLiveOracle,
   firingRangeReflectedJsQuotedStringLiveOracle,
   firingRangeReflectedJsQuotedStringRouteLiveOracle,
   firingRangeReflectedJsSinglequotedStringLiveOracle,
@@ -53909,6 +54039,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   firingRangeEscapeServersideCssStyleLiveOracle,
   firingRangeEscapeServersideCssStyleRouteLiveOracle,
+  firingRangeEscapeServersideTagnameLiveOracle,
+  firingRangeEscapeServersideTagnameRouteLiveOracle,
   firingRangeReflectedIframeSrcdocLiveOracle,
   firingRangeReflectedIframeSrcdocRouteLiveOracle,
   firingRangeTagsInjectionLiveOracle,
