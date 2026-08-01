@@ -39178,6 +39178,129 @@ const firingRangeUrldomLocationHashEmbedSrcRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const FIRING_RANGE_URLDOM_HASH_LINK_HREF_PATH = "/urldom/location/hash/link.href";
+
+const firingRangeUrldomLocationHashLinkHrefLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_HASH_LINK_HREF_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasLinkHrefSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /linkElement\.href\s*=\s*payload/i.test(body);
+  if (!hasLinkHrefSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/hash/link.href passes location.hash to link.href — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationHashLinkHrefRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/hash\/link\.href\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationHashLinkHrefLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/hash/link.href route scan — location.hash passed to link.href without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SEARCH_BUTTON_FORMACTION_PATH = "/urldom/location/search/button.formaction";
+
+const firingRangeUrldomLocationSearchButtonFormactionLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_BUTTON_FORMACTION_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasButtonFormactionSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /button\.formAction\s*=\s*payload/i.test(body);
+  if (!hasButtonFormactionSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/button.formaction passes location.search to button.formAction — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchButtonFormactionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/button\.formaction\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchButtonFormactionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/button.formaction route scan — location.search passed to button.formAction without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SEARCH_FRAME_SRC_PATH = "/urldom/location/search/frame.src";
+
+const firingRangeUrldomLocationSearchFrameSrcLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_FRAME_SRC_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasFrameSrcSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /frame\.src\s*=\s*payload/i.test(body);
+  if (!hasFrameSrcSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/frame.src passes location.search to frame.src — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchFrameSrcRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/frame\.src\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchFrameSrcLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/frame.src route scan — location.search passed to frame.src without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_REMOTEINCLUDE_SCRIPT_HASH_PATH = "/remoteinclude/script_hash.html";
 
 const firingRangeRemoteIncludeScriptHashLiveOracle: Rule = async (ctx) => {
@@ -51943,6 +52066,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationHashInputFormactionRouteLiveOracle,
   firingRangeUrldomLocationHashEmbedSrcLiveOracle,
   firingRangeUrldomLocationHashEmbedSrcRouteLiveOracle,
+  firingRangeUrldomLocationHashLinkHrefLiveOracle,
+  firingRangeUrldomLocationHashLinkHrefRouteLiveOracle,
+  firingRangeUrldomLocationSearchButtonFormactionLiveOracle,
+  firingRangeUrldomLocationSearchButtonFormactionRouteLiveOracle,
+  firingRangeUrldomLocationSearchFrameSrcLiveOracle,
+  firingRangeUrldomLocationSearchFrameSrcRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
