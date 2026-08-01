@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T06:05:00.000Z",
+  "updated_at": "2026-08-01T07:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/js?q=a",
@@ -13024,6 +13024,31 @@
       "url": "https://pentest-fauxbank.vercel.app/api/users",
       "source": "pentest-fauxbank — user enumeration / BOLA oracle GET /api/users (Vercel OSS banking lab)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/register",
+      "source": "apisec-inc/urban-VAmPI production — mass-assignment admin oracle POST /users/v1/register (Railway README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/_debug",
+      "source": "apisec-inc/urban-VAmPI production — excessive data exposure debug oracle GET /users/v1/_debug (Railway README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo2.testfire.net/search.jsp",
+      "source": "HCL AltoroJ demo2.testfire.net — reflected XSS/SQLi search oracle (ZAP testfire benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo2.testfire.net/bank/customize.jsp",
+      "source": "HCL AltoroJ demo2.testfire.net — reflected XSS customize oracle (ZAP AltoroJ benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo2.testfire.net/doLogin",
+      "source": "HCL AltoroJ demo2.testfire.net — SQLi login oracle POST /doLogin (ZAP AltoroJ benchmark)",
+      "auth": "public_demo"
     }
   ]
 }
