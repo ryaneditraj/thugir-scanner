@@ -41072,6 +41072,11 @@ const firingRangeUrldomLocationHashScriptSrcPartialQueryRouteLiveOracle: Rule = 
 
 const FIRING_RANGE_HSTS_MISSING_PATH = "/stricttransportsecurity/hsts_missing";
 const FIRING_RANGE_HSTS_MAX_AGE_LOW_PATH = "/stricttransportsecurity/hsts_max_age_too_low";
+const FIRING_RANGE_HSTS_MAX_AGE_MISSING_PATH = "/stricttransportsecurity/hsts_max_age_missing";
+const FIRING_RANGE_HSTS_INCLUDESUBDOMAINS_MISSING_PATH =
+  "/stricttransportsecurity/hsts_includesubdomains_missing";
+const FIRING_RANGE_HSTS_PRELOAD_MISSING_PATH = "/stricttransportsecurity/hsts_preload_missing";
+const FIRING_RANGE_DOM_JAVASCRIPTURI_PATH = "/dom/javascripturi.html";
 const FIRING_RANGE_SRI_STATIC_PATH =
   "/insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity.html";
 const FIRING_RANGE_SRI_DYNAMIC_PATH =
@@ -41153,6 +41158,118 @@ const firingRangeHstsMaxAgeLowRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /stricttransportsecurity/hsts_max_age_too_low route scan — HSTS max-age below recommended minimum"
+    }
+  };
+};
+
+const firingRangeHstsMaxAgeMissingLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_HSTS_MAX_AGE_MISSING_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hsts = firingRangeResponseHsts(doc);
+  if (!hsts) return NEGATIVE;
+  if (/max-age\s*=/i.test(hsts)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      hsts,
+      note: "Google Firing Range /stricttransportsecurity/hsts_max_age_missing serves Strict-Transport-Security without max-age directive — incomplete HSTS oracle"
+    }
+  };
+};
+
+const firingRangeHstsMaxAgeMissingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/hsts_max_age_missing\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeHstsMaxAgeMissingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /stricttransportsecurity/hsts_max_age_missing route scan — HSTS header omits max-age directive"
+    }
+  };
+};
+
+const firingRangeHstsIncludesubdomainsMissingLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_HSTS_INCLUDESUBDOMAINS_MISSING_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hsts = firingRangeResponseHsts(doc);
+  if (!hsts) return NEGATIVE;
+  if (!/max-age\s*=/i.test(hsts)) return NEGATIVE;
+  if (/includesubdomains/i.test(hsts)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      hsts,
+      note: "Google Firing Range /stricttransportsecurity/hsts_includesubdomains_missing serves HSTS without includeSubDomains — incomplete HSTS oracle"
+    }
+  };
+};
+
+const firingRangeHstsIncludesubdomainsMissingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/hsts_includesubdomains_missing\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeHstsIncludesubdomainsMissingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /stricttransportsecurity/hsts_includesubdomains_missing route scan — HSTS header omits includeSubDomains directive"
+    }
+  };
+};
+
+const firingRangeDomJavascripturiLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_DOM_JAVASCRIPTURI_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasJavascriptUriSink =
+    /<title>\s*javascript:-URI\s*<\/title>/i.test(body) &&
+    /href\s*=\s*["']javascript:/i.test(body) &&
+    /location\.href\s*=\s*location\.href/i.test(body);
+  if (!hasJavascriptUriSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url,
+      snippet: body.slice(0, 160).trim(),
+      note: "Google Firing Range /dom/javascripturi.html exposes javascript: URI in anchor href with location.href sink — DOM XSS training oracle"
+    }
+  };
+};
+
+const firingRangeDomJavascripturiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/javascripturi\.html\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomJavascripturiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/javascripturi.html route scan — javascript: URI href sink with implicit document write behavior"
     }
   };
 };
@@ -54462,6 +54579,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeHstsMissingRouteLiveOracle,
   firingRangeHstsMaxAgeLowLiveOracle,
   firingRangeHstsMaxAgeLowRouteLiveOracle,
+  firingRangeHstsMaxAgeMissingLiveOracle,
+  firingRangeHstsMaxAgeMissingRouteLiveOracle,
+  firingRangeHstsIncludesubdomainsMissingLiveOracle,
+  firingRangeHstsIncludesubdomainsMissingRouteLiveOracle,
+  firingRangeDomJavascripturiLiveOracle,
+  firingRangeDomJavascripturiRouteLiveOracle,
   firingRangeThirdPartySriMissingLiveOracle,
   firingRangeThirdPartySriMissingRouteLiveOracle,
   firingRangeThirdPartySriDynamicLiveOracle,
