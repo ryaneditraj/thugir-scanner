@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-link-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/link.href returns document.location.hash.substr(1) assigned to linkElement.href; link.href route scan findings include +firing-range-urldom-location-hash-link-href-live-oracle + route; benchmark juice-shop-staging 29 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-button-formaction-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/button.formaction returns document.location.search.substr(1) assigned to button.formAction; button.formaction route scan findings include +firing-range-urldom-location-search-button-formaction-live-oracle + route; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-frame-src-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/frame.src returns document.location.search.substr(1) assigned to frame.src; frame.src route scan findings include +firing-range-urldom-location-search-frame-src-live-oracle + route; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-hash-iframe-src-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/iframe.src returns document.location.hash.substr(1) assigned to iframe.src; iframe.src route scan findings 25→32 (+firing-range-urldom-location-hash-iframe-src-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
