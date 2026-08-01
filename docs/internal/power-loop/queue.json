@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T14:03:55.400Z",
+  "updated_at": "2026-08-01T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/body?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into HTML body sink (/escape/serverside/escapeHtml/body)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/body?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into HTML body sink (/escape/serverside/encodeUrl/body)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml",
+      "source": "google/firing-range — postMessage handler missing origin check sinks to innerHTML (/dom/toxicdom/postMessage/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite",
+      "source": "google/firing-range — postMessage handler missing origin check sinks to document.write (/dom/toxicdom/postMessage/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/json?q=a",
+      "source": "google/firing-range — reflected XSS via JSON parameter with JSON content-type (/reflected/parameter/json)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/escape/js/html_escape?q=a",
       "source": "google/firing-range — client-side html_escape() bypass XSS oracle (/escape/js/html_escape)",

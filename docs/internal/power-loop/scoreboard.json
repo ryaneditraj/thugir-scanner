@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T14:20:00.000Z",
+  "updated_at": "2026-08-01T15:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3165,
-  "total_findings": 35552,
+  "total_sites_scanned": 3174,
+  "total_findings": 36161,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2172,
-  "discovery_findings": 29589,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-01T14:20:00.000Z",
+  "discovery_urls_added": 2177,
+  "discovery_findings": 30167,
+  "improvements_shipped": 1155,
+  "last_run": "2026-08-01T15:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 30,
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,42 @@
           ]
         }
       },
-      "note": "primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings; gap=[])"
+      "note": "primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings; gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 223,
-      "focus": "firing-range filter-bypass oracles (blocks_any_script, quote-filter, charset-block)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 578,
+      "focus": "firing-range escape/serverside body sinks + postMessage innerHtml/documentWrite + reflected JSON parameter",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script: 61→74 findings — case-insensitive script filter bypass oracle shipped",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote: 61→75 findings — unquoted attribute quote-filter bypass oracle shipped",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals: 61→74 findings — charset-block filter bypass oracle shipped"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml: 71 findings — innerHTML route oracle fires (firing-range-dom-postmessage-innerhtml-route-live-oracle)",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/body: 72 findings — generic firing-range oracles only, no server-side escapeHtml body-bypass live oracle",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/body: 72 findings — generic firing-range oracles only, no server-side encodeUrl body-bypass live oracle",
+      "public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite: 69 findings — generic oracles only, no postMessage→documentWrite route-specific live oracle",
+      "public-firing-range.appspot.com/reflected/parameter/json: 73 findings — reflected-xss-query-param fires but no JSON content-type route-specific live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/body|encodeUrl/body: server-side sanitizer-bypass body-sink live oracles absent",
+      "public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite: postMessage→documentWrite route-specific live oracle absent",
+      "public-firing-range.appspot.com/reflected/parameter/json: JSON content-type reflected XSS route-specific live oracle absent",
       "public-firing-range.appspot.com/escape/js/*: client-side html_escape/encodeURIComponent/escape sanitizer-bypass live oracles absent",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname: tagname injection live oracle absent",
-      "public-firing-range.appspot.com/reflected/parameter/body_comment: HTML-comment-context XSS live oracle absent",
-      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_*: escaped event-handler attribute bypass live oracles absent",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: xlink-href template unavailable (500)",
-      "public-firing-range.appspot.com/reflected/parameter/js_assignment: unquoted JS assignment sink oracle absent"
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname: tagname injection live oracle absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 30,
-    "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote": 75,
-    "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script": 74,
-    "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals": 74,
-    "public-firing-range.appspot.com/reflected/parameter/js_quoted_string": 71,
-    "public-firing-range.appspot.com/reflected/parameter/js_eval": 68
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/escape/serverside/escapeHtml/body": 72,
+    "public-firing-range.appspot.com/escape/serverside/encodeUrl/body": 72,
+    "public-firing-range.appspot.com/reflected/parameter/json": 73,
+    "public-firing-range.appspot.com/reflected/parameter/tagname": 74,
+    "public-firing-range.appspot.com/reflected/parameter/css_style": 74,
+    "public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml": 71,
+    "public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite": 69
   }
 }
