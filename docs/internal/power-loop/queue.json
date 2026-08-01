@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T19:04:54.752Z",
+  "updated_at": "2026-08-01T20:03:20.864Z",
   "discovery_urls": [
     {
       "url": "https://public-firing-range.appspot.com/tags/tag/meta?q=a",
@@ -13324,6 +13324,31 @@
       "url": "https://pentest-ground.com:5013/create_paste",
       "source": "dolevf/DVGA on Pentest Ground — stored XSS / log injection oracle (/create_paste)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/comments?comment=test",
+      "source": "zahidoverflow/damn-vulnerable-web-university — reflected/stored XSS oracle GET /api/comments (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/search?q=test",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi search oracle GET /api/search (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/redirect?url=https://example.com",
+      "source": "zahidoverflow/damn-vulnerable-web-university — open redirect oracle GET /api/redirect (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/messages/1",
+      "source": "MRMcyber/vaultapp — private message IDOR oracle GET /api/messages/:id (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/notes/1",
+      "source": "MRMcyber/vaultapp — private note IDOR oracle GET /api/notes/:id (Vercel OSS deploy)",
+      "auth": "oss_deploy"
     }
   ]
 }
