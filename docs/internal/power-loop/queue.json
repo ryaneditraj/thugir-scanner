@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T04:05:00.000Z",
+  "updated_at": "2026-08-01T05:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/object_param?q=a",
+      "source": "google/firing-range — reflected URL param echoed in OBJECT PARAM src attribute (/reflected/url/object_param)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/json?q=a",
+      "source": "google/firing-range — MIME content-sniffing XSS via JSON body with HTML content-type (/reflected/contentsniffing/json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml",
+      "source": "google/firing-range — sessionStorage function sink to innerHTML DOM XSS (/dom/toxicdom/sessionStorage/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/eval",
+      "source": "google/firing-range — postMessage handler missing origin check sinks to eval (/dom/toxicdom/postMessage/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/documentWrite",
+      "source": "google/firing-range — external script sessionStorage property to document.write DOM XSS",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/angular/angular_body/1.2.0?q=test",
       "source": "google/firing-range — AngularJS server-side interpolation XSS sink (angular_body/1.2.0)",
