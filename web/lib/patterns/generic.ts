@@ -2890,6 +2890,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-cors-allow-null-origin-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS null-origin oracle",
+    description:
+      "POST /cors/alloworigin/allowNullOrigin reflects Origin: null with Access-Control-Allow-Credentials: true — Firing Range CORS null-origin misconfiguration training oracle.",
+    impactOneline:
+      "Allowing null Origin with credentials enables sandboxed iframe and data: URL attackers to read authenticated responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowNullOriginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never allow Origin: null with Access-Control-Allow-Credentials.",
+      steps: [
+        "Reject null Origin requests on credentialed endpoints.",
+        "Use a strict allowlist instead of reflecting Origin headers.",
+        "Disable Access-Control-Allow-Credentials unless strictly required."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowNullOrigin allows null Origin with credentials. Show CORS null-origin remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-null-origin-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowNullOrigin route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowNullOrigin, POST requests allow Origin: null with credentials — route-specific CORS null-origin misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm null Origin is not permitted with credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowNullOriginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block null Origin on /cors/alloworigin/allowNullOrigin route handlers.",
+      steps: [
+        "Reject Origin: null on credentialed CORS endpoints.",
+        "Allowlist trusted origins only.",
+        "Audit CORS middleware for null-origin reflection."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowNullOrigin route allows null Origin with credentials. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-insecure-scheme-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS insecure-scheme oracle",
+    description:
+      "POST /cors/alloworigin/allowInsecureScheme allows HTTP-scheme Origin on HTTPS resource with Access-Control-Allow-Credentials: true — Firing Range CORS insecure-scheme misconfiguration training oracle.",
+    impactOneline:
+      "Permitting HTTP origins on HTTPS resources with credentials enables MITM attackers to read authenticated API responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowInsecureSchemeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never allow HTTP-scheme origins on HTTPS resources with credentials.",
+      steps: [
+        "Require HTTPS origins when serving over HTTPS.",
+        "Reject origins whose scheme does not match the resource scheme.",
+        "Disable Access-Control-Allow-Credentials on public endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowInsecureScheme allows HTTP Origin on HTTPS with credentials. Show CORS insecure-scheme remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-insecure-scheme-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowInsecureScheme route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowInsecureScheme, POST requests allow HTTP-scheme Origin on HTTPS with credentials — route-specific CORS insecure-scheme misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HTTP origins are not permitted on HTTPS resources with credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowInsecureSchemeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block HTTP-scheme origins on HTTPS /cors/alloworigin/allowInsecureScheme handlers.",
+      steps: [
+        "Match allowed Origin scheme to the resource scheme.",
+        "Redirect all HTTP traffic to HTTPS before enabling CORS.",
+        "Audit CORS configuration for scheme-downgrade allowances."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowInsecureScheme route allows HTTP Origin on HTTPS. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-escape-serverside-attribute-unquoted-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4966,6 +5070,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /stricttransportsecurity/hsts_includesubdomains_missing route scan shows HSTS without includeSubDomains. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-preload-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS preload missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_preload_missing returns HSTS with max-age and includeSubDomains but without preload — Firing Range incomplete HSTS training oracle.",
+    impactOneline:
+      "HSTS without preload leaves the domain off browser preload lists, delaying HTTPS enforcement for first visits.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsPreloadMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add preload directive when HSTS policy is stable and all subdomains support HTTPS.",
+      steps: [
+        "Verify max-age of at least 31536000 and includeSubDomains are set.",
+        "Submit eligible domains to the HSTS preload list.",
+        "Set Strict-Transport-Security: max-age=31536000; includeSubDomains; preload."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_preload_missing omits HSTS preload. Show HSTS preload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-preload-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_preload_missing route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_preload_missing, HSTS omits preload directive — route-specific incomplete HSTS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm preload on strict-transport-security lab pages eligible for preload.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsPreloadMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enable preload on route-specific HSTS when policy is production-ready.",
+      steps: [
+        "Confirm all subdomains serve valid HTTPS before adding preload.",
+        "Add preload directive to Strict-Transport-Security header.",
+        "Submit to hstspreload.org when requirements are met."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_preload_missing route scan shows HSTS without preload. Show route-specific remediation.",
     version: 1,
     enabled: true
   },
