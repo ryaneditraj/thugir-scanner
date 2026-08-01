@@ -2370,6 +2370,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-hash-link-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash link.href DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/link.href reads document.location.hash.substr(1) and assigns it to link.href — Firing Range link.href DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to link.href enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashLinkHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to link.href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove link.href assignments on values from window.location.hash.",
+        "Allow-list link/import origins in production applications.",
+        "Use CSP default-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/link.href uses link.href on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-link-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/link.href route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/link.href, location.hash is assigned to link.href without sanitization — route-specific link.href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot load arbitrary HTML imports.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashLinkHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove link.href sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for link/import inclusion sinks.",
+        "Allow-list link origins.",
+        "Add CSP default-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/link.href route assigns location.hash to link.href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-button-formaction-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search button.formAction DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/button.formaction reads document.location.search.substr(1) and assigns it to button.formAction — Firing Range formaction DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to button.formAction enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchButtonFormactionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to button.formAction — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove button.formAction assignments on values from window.location.search.",
+        "Allow-list form submission targets in production applications.",
+        "Use CSP form-action restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/button.formaction uses button.formAction on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-button-formaction-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/button.formaction route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/button.formaction, location.search is assigned to button.formAction without sanitization — route-specific formaction DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot redirect form submissions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchButtonFormactionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove button.formAction sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for form submission sinks.",
+        "Allow-list form submission targets.",
+        "Add CSP form-action restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/button.formaction route assigns location.search to button.formAction. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-frame-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search frame.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/frame.src reads document.location.search.substr(1) and assigns it to frame.src — Firing Range frame.src DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to frame.src enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchFrameSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to frame.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove frame.src assignments on values from window.location.search.",
+        "Allow-list frame origins in production applications.",
+        "Use CSP frame-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/frame.src uses frame.src on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-frame-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/frame.src route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/frame.src, location.search is assigned to frame.src without sanitization — route-specific frame.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot load arbitrary frame content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchFrameSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove frame.src sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for frame inclusion sinks.",
+        "Allow-list frame origins.",
+        "Add CSP frame-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/frame.src route assigns location.search to frame.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
