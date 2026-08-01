@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-01T15:04:54.633Z",
-  "total": 1386,
-  "uniqueSlugs": 1381,
+  "generatedAt": "2026-08-01T16:01:36.787Z",
+  "total": 1392,
+  "uniqueSlugs": 1387,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1368,
+    "generic": 1374,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1301,
+    "deep": 1307,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 117,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 302,
+    "Cross-site scripting": 308,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -853,6 +853,8 @@
     "firing-range-dom-form-submission-innerhtml-route-live-oracle",
     "firing-range-dom-localstorage-xss-live-oracle",
     "firing-range-dom-localstorage-xss-route-live-oracle",
+    "firing-range-dom-postmessage-documentwrite-live-oracle",
+    "firing-range-dom-postmessage-documentwrite-route-live-oracle",
     "firing-range-dom-postmessage-eval-live-oracle",
     "firing-range-dom-postmessage-eval-route-live-oracle",
     "firing-range-dom-postmessage-innerhtml-live-oracle",
@@ -867,6 +869,8 @@
     "firing-range-dom-window-name-eval-route-live-oracle",
     "firing-range-escape-serverside-attribute-unquoted-live-oracle",
     "firing-range-escape-serverside-attribute-unquoted-route-live-oracle",
+    "firing-range-escape-serverside-body-live-oracle",
+    "firing-range-escape-serverside-body-route-live-oracle",
     "firing-range-escape-serverside-css-style-live-oracle",
     "firing-range-escape-serverside-css-style-route-live-oracle",
     "firing-range-escape-serverside-tagname-live-oracle",
@@ -909,6 +913,8 @@
     "firing-range-reflected-js-slashquoted-string-route-live-oracle",
     "firing-range-reflected-param-live-oracle",
     "firing-range-reflected-param-route-live-oracle",
+    "firing-range-reflected-parameter-json-live-oracle",
+    "firing-range-reflected-parameter-json-route-live-oracle",
     "firing-range-reflected-url-css-import-live-oracle",
     "firing-range-reflected-url-css-import-route-live-oracle",
     "firing-range-reflected-url-href-live-oracle",

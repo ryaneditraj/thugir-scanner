@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-body-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/escapeHtml/body?q=thugirFrEscapeBodyProbe returns <body>thugirFrEscapeBodyProbe</body> despite escapeHtml; escapeHtml/body route scan findings 72→79 (+live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-json-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/json?q=thugirFrParameterJsonProbe returns {\"parameter\":\"thugirFrParameterJsonProbe\"} with text/html content-type; parameter/json route scan findings 73→80 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/documentWrite returns postMessage handler with JSON.parse(msg.data) → document.write(); documentWrite route scan findings 69→76 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-body-comment-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body_comment?q=thugirFrBodyCommentProbe returns <!-- thugirFrBodyCommentProbe --> in body; body_comment route scan findings 71→78 (+live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
