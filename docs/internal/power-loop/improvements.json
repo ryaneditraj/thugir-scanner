@@ -2,7 +2,22 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
-      "slug": "firing-range-hsts-preload-missing-live-oracle",
+      "slug": "firing-range-tags-tag-object-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/object?q=%3Cobject%20src=x%3E returns <object src=\"x\"></object>; object route scan findings 88→93 (+object live+route + tags-injection-route); benchmark juice-shop 11 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-embed-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/embed?q=%3Cembed%20src=x%3E returns <embed src=\"x\">; embed route scan findings 88→93 (+embed live+route + tags-injection-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-svg-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/svg?q=%3Csvg%20src=x%3E returns <svg src=\"x\"></svg>; svg route scan findings 88→93 (+svg live+route + tags-injection-route); benchmark 6/6 maintained"
+    },
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_preload_missing returns strict-transport-security: max-age=63072000; includeSubDomains (no preload); hsts_preload_missing route scan findings 82→89 (+preload-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
     },
@@ -17175,6 +17190,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-third-party-sri-dynamic-live-oracle",
       "shipped_at": "2026-08-01T17:12:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-object-live-oracle",
+      "shipped_at": "2026-08-01T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-embed-live-oracle",
+      "shipped_at": "2026-08-01T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-svg-live-oracle",
+      "shipped_at": "2026-08-01T22:32:00.000Z"
     }
   ]
 }
