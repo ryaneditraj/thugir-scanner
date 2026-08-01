@@ -1902,6 +1902,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-js-quoted-string-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS double-quoted string oracle",
+    description:
+      "GET /reflected/parameter/js_quoted_string?q= reflects attacker input into a double-quoted JavaScript string literal — Firing Range reflected JS string-context XSS training oracle.",
+    impactOneline:
+      "Reflected double-quoted JS strings let attackers break out with \"; and execute arbitrary script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsQuotedStringLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode or escape reflected values before embedding in double-quoted JS strings.",
+      steps: [
+        "Use JSON.stringify() for all values embedded in script blocks.",
+        "Avoid reflecting user input directly into JavaScript string literals.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_quoted_string route reflects q into a double-quoted JS string. Show JS string-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-quoted-string-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_quoted_string route oracle",
+    description:
+      "When scanning /reflected/parameter/js_quoted_string, the q query parameter is reflected into a double-quoted JavaScript string without sanitization — route-specific JS string-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of double-quoted JS string literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsQuotedStringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode reflected values on /reflected/parameter/js_quoted_string.",
+      steps: [
+        "Use JSON.stringify() for all embedded script values.",
+        "Reject or encode quotes and backslashes in reflected input.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_quoted_string route reflects q into a double-quoted JS string. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-singlequoted-string-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS single-quoted string oracle",
+    description:
+      "GET /reflected/parameter/js_singlequoted_string?q= reflects attacker input into a single-quoted JavaScript string literal — Firing Range reflected JS string-context XSS training oracle.",
+    impactOneline:
+      "Reflected single-quoted JS strings let attackers break out with '; and execute arbitrary script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSinglequotedStringLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode or escape reflected values before embedding in single-quoted JS strings.",
+      steps: [
+        "Use JSON.stringify() for all values embedded in script blocks.",
+        "Avoid reflecting user input directly into JavaScript string literals.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_singlequoted_string route reflects q into a single-quoted JS string. Show JS string-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-singlequoted-string-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_singlequoted_string route oracle",
+    description:
+      "When scanning /reflected/parameter/js_singlequoted_string, the q query parameter is reflected into a single-quoted JavaScript string without sanitization — route-specific JS string-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of single-quoted JS string literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSinglequotedStringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode reflected values on /reflected/parameter/js_singlequoted_string.",
+      steps: [
+        "Use JSON.stringify() for all embedded script values.",
+        "Reject or encode quotes and backslashes in reflected input.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_singlequoted_string route reflects q into a single-quoted JS string. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-slashquoted-string-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS slash-quoted regex oracle",
+    description:
+      "GET /reflected/parameter/js_slashquoted_string?q= reflects attacker input into a slash-quoted JavaScript regex literal — Firing Range reflected JS regex-context XSS training oracle.",
+    impactOneline:
+      "Reflected slash-quoted JS regex literals let attackers break out with /; and execute arbitrary script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSlashquotedStringLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into JavaScript regex literals.",
+      steps: [
+        "Avoid embedding user input in /regex/ literals.",
+        "Use safe string handling and JSON encoding for script values.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_slashquoted_string route reflects q into a slash-quoted JS regex. Show JS regex-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-slashquoted-string-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_slashquoted_string route oracle",
+    description:
+      "When scanning /reflected/parameter/js_slashquoted_string, the q query parameter is reflected into a slash-quoted JavaScript regex literal without sanitization — route-specific JS regex-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of slash-quoted JS regex literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSlashquotedStringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Eliminate regex-literal reflection on /reflected/parameter/js_slashquoted_string.",
+      steps: [
+        "Do not embed user input in /regex/ literals.",
+        "Use JSON.stringify() for safe script embedding.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_slashquoted_string route reflects q into a slash-quoted JS regex. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-url-href-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

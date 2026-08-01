@@ -38739,6 +38739,132 @@ const firingRangeReflectedJsEvalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_JS_QUOTED_STRING_PATH = "/reflected/parameter/js_quoted_string";
+const FIRING_RANGE_JS_QUOTED_STRING_PROBE = "thugirFrJsQuotedProbe";
+
+const firingRangeReflectedJsQuotedStringLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_QUOTED_STRING_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_QUOTED_STRING_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const quotedRe = new RegExp(
+    `var\\s+\\w+\\s*=\\s*["']${FIRING_RANGE_JS_QUOTED_STRING_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!quotedRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/js_quoted_string?q= reflects attacker input into double-quoted JavaScript string — reflected JS string-context XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedJsQuotedStringRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/js_quoted_string\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedJsQuotedStringLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/js_quoted_string route scan — q parameter reflected into double-quoted JS string without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_JS_SINGLEQUOTED_STRING_PATH = "/reflected/parameter/js_singlequoted_string";
+const FIRING_RANGE_JS_SINGLEQUOTED_STRING_PROBE = "thugirFrJsSingleQuotedProbe";
+
+const firingRangeReflectedJsSinglequotedStringLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_SINGLEQUOTED_STRING_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_SINGLEQUOTED_STRING_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const singleQuotedRe = new RegExp(
+    `var\\s+\\w+\\s*=\\s*'${FIRING_RANGE_JS_SINGLEQUOTED_STRING_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}'`,
+    "i"
+  );
+  if (!singleQuotedRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/js_singlequoted_string?q= reflects attacker input into single-quoted JavaScript string — reflected JS string-context XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedJsSinglequotedStringRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/js_singlequoted_string\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedJsSinglequotedStringLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/js_singlequoted_string route scan — q parameter reflected into single-quoted JS string without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_JS_SLASHQUOTED_STRING_PATH = "/reflected/parameter/js_slashquoted_string";
+const FIRING_RANGE_JS_SLASHQUOTED_STRING_PROBE = "thugirFrJsSlashQuotedProbe";
+
+const firingRangeReflectedJsSlashquotedStringLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_SLASHQUOTED_STRING_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_SLASHQUOTED_STRING_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const slashQuotedRe = new RegExp(
+    `var\\s+\\w+\\s*=\\s*/${FIRING_RANGE_JS_SLASHQUOTED_STRING_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/`,
+    "i"
+  );
+  if (!slashQuotedRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/js_slashquoted_string?q= reflects attacker input into slash-quoted JavaScript regex literal — reflected JS regex-context XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedJsSlashquotedStringRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/js_slashquoted_string\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedJsSlashquotedStringLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/js_slashquoted_string route scan — q parameter reflected into slash-quoted JS regex literal without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_REFLECTED_HREF_PROBE = "javascript:thugirFrHrefProbe";
 
 const firingRangeReflectedUrlHrefLiveOracle: Rule = async (ctx) => {
@@ -38889,7 +39015,7 @@ const firingRangeReflectedUrlObjectDataLiveOracle: Rule = async (ctx) => {
 const firingRangeReflectedUrlObjectDataRouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/reflected\/url\/object_data\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/reflected\/url\/object(?:_data|\/data)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await firingRangeReflectedUrlObjectDataLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -38930,7 +39056,7 @@ const firingRangeReflectedUrlObjectParamLiveOracle: Rule = async (ctx) => {
 const firingRangeReflectedUrlObjectParamRouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/reflected\/url\/object_param\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/reflected\/url\/(?:object_param|param\/src)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await firingRangeReflectedUrlObjectParamLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53623,6 +53749,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedBodyBlocksUppercaseScriptRouteLiveOracle,
   firingRangeReflectedJsEvalLiveOracle,
   firingRangeReflectedJsEvalRouteLiveOracle,
+  firingRangeReflectedJsQuotedStringLiveOracle,
+  firingRangeReflectedJsQuotedStringRouteLiveOracle,
+  firingRangeReflectedJsSinglequotedStringLiveOracle,
+  firingRangeReflectedJsSinglequotedStringRouteLiveOracle,
+  firingRangeReflectedJsSlashquotedStringLiveOracle,
+  firingRangeReflectedJsSlashquotedStringRouteLiveOracle,
   firingRangeReflectedUrlHrefLiveOracle,
   firingRangeReflectedUrlHrefRouteLiveOracle,
   firingRangeReflectedUrlScriptSrcLiveOracle,
