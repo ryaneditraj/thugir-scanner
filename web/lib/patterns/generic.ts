@@ -862,6 +862,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-sessionstorage-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/function/innerHtml returns a page that reads sessionStorage.getItem('badValue') and passes it to innerHTML — Firing Range toxic DOM sessionStorage XSS training oracle.",
+    impactOneline:
+      "DOM XSS via sessionStorage lets attackers persist payloads for the browser tab session that execute when written to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from sessionStorage.",
+        "Treat storage as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our page reads sessionStorage and passes it to innerHTML. Show how to remove storage-backed DOM XSS sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage innerHTML route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage routes, the response contains innerHTML(sessionStorage.getItem('badValue')) — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM XSS sinks that write sessionStorage-backed payloads to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on sessionStorage-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage route uses innerHTML on sessionStorage values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage eval DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/eval registers a message listener that evals msg.data — Firing Range postMessage code-execution DOM XSS training oracle.",
+    impactOneline:
+      "postMessage handlers that eval untrusted message data enable arbitrary script execution from cross-origin iframes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval postMessage data — validate origin and parse safely.",
+      steps: [
+        "Remove eval() from postMessage handlers.",
+        "Validate event.origin before processing messages.",
+        "Use JSON.parse with schema validation instead of eval."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler evals msg.data. Show safe postMessage handling without eval.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage routes, the response contains a message listener that evals msg.data — route-specific postMessage code-execution oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not eval untrusted cross-window payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on postMessage payloads in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all message event listeners for eval and Function constructors.",
+        "Validate message origin before processing.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage route evals message data. Show route-specific postMessage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS body interpolation XSS oracle",
+    description:
+      "GET /angular/angular_body reflects the q query parameter into an AngularJS {{}} interpolation template — Firing Range server-side Angular template injection training oracle.",
+    impactOneline:
+      "User input reflected into AngularJS interpolation is evaluated as an expression, enabling XSS and sandbox escape.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into AngularJS templates — encode or use one-time binding.",
+      steps: [
+        "Escape {{ and }} in server-side template generation.",
+        "Use ng-bind instead of interpolation for dynamic data.",
+        "Upgrade from AngularJS and avoid mixing server/client templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body route reflects user input into {{}} interpolation. Show AngularJS SSTI/XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body route XSS oracle",
+    description:
+      "When scanning /angular/angular_body routes, the q parameter is reflected into AngularJS {{}} interpolation — route-specific Angular template injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input is not embedded in AngularJS expression templates.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove user-input reflection into AngularJS interpolation on /angular routes.",
+      steps: [
+        "Escape template delimiters server-side.",
+        "Use ng-bind for dynamic values.",
+        "Audit all server-generated Angular templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body route reflects query parameters into Angular interpolation. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-meta-redirect-live-oracle",
     platform: "generic",
     category: "Open redirect",
