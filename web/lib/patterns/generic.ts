@@ -1330,6 +1330,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-url-object-param-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected URL object param src XSS oracle",
+    description:
+      "GET /reflected/url/object_param?q= reflects attacker-controlled URLs into object param src attributes — Firing Range reflected DOM XSS training oracle.",
+    impactOneline:
+      "Reflected object param src values let attackers load arbitrary Flash/plugin content when victims visit crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlObjectParamLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block attacker-controlled URLs in reflected object param src attributes.",
+      steps: [
+        "Allowlist safe object param sources (same-origin paths or trusted hosts).",
+        "Reject or encode user input before inserting into object param attributes.",
+        "Use CSP object-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/object_param?q= reflects into object param src without validation. Show object param XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-object-param-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/url/object_param route XSS oracle",
+    description:
+      "When scanning /reflected/url/object_param, the q query parameter is reflected into object param src without validation — route-specific reflected DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm object param src attributes cannot load attacker-controlled URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlObjectParamRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate object param src sources on /reflected/url/object_param before emitting object tags.",
+      steps: [
+        "Reject external URLs in q parameter values.",
+        "Use relative paths or allowlisted hosts for object param targets.",
+        "Add CSP to block dangerous object embeds."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/object_param route reflects q into object param src. Show route-specific object param XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-contentsniffing-json-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range MIME content-sniffing JSON XSS oracle",
+    description:
+      "GET /reflected/contentsniffing/json?q= reflects attacker input in an application/json response without X-Content-Type-Options nosniff — Firing Range content-sniffing XSS training oracle.",
+    impactOneline:
+      "Reflected JSON bodies without nosniff can be interpreted as HTML by legacy browsers when attackers inject script markup.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedContentsniffingJsonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set X-Content-Type-Options: nosniff and encode reflected JSON values.",
+      steps: [
+        "Add X-Content-Type-Options: nosniff on all API responses.",
+        "JSON-encode user input before embedding in response bodies.",
+        "Use Content-Type: application/json with charset=utf-8 consistently."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/contentsniffing/json reflects q into JSON without nosniff. Show MIME content-sniffing XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-contentsniffing-json-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/contentsniffing/json route XSS oracle",
+    description:
+      "When scanning /reflected/contentsniffing/json, the q parameter is reflected unescaped in application/json without nosniff — route-specific content-sniffing XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm JSON endpoints cannot be sniffed as HTML with reflected attacker input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedContentsniffingJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add nosniff and encode reflected values on /reflected/contentsniffing/json.",
+      steps: [
+        "Set X-Content-Type-Options: nosniff on this endpoint.",
+        "Escape special characters in JSON string values.",
+        "Audit other JSON endpoints for the same pattern."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/contentsniffing/json route reflects q into JSON without nosniff. Show route-specific content-sniffing XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-cookie-set-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2990,6 +3094,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /address/location/eval route passes window.location to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location innerHTML DOM XSS oracle",
+    description:
+      "GET /address/location/innerHtml returns a page that assigns window.location to payload and passes it to divEl.innerHTML — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "window.location values assigned to innerHTML enable DOM XSS when attackers can influence the address bar.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.location to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from window.location.",
+        "Treat location data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/innerHtml uses innerHTML on window.location. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location/innerHtml route XSS oracle",
+    description:
+      "When scanning /address/location/innerHtml, window.location is assigned to innerHTML without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location-backed values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on window.location in /address handlers.",
+      steps: [
+        "Audit all window.location reads for dangerous DOM sinks.",
+        "Replace innerHTML with textContent or safe DOM APIs.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/innerHtml route passes window.location to innerHTML. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
