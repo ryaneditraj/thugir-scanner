@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T17:05:00.000Z",
+  "updated_at": "2026-08-01T18:03:08.315Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/stricttransportsecurity/hsts_max_age_missing",
+      "source": "google/firing-range — HSTS header missing max-age directive (/stricttransportsecurity/hsts_max_age_missing)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/stricttransportsecurity/hsts_includesubdomains_missing",
+      "source": "google/firing-range — HSTS header missing includeSubDomains (/stricttransportsecurity/hsts_includesubdomains_missing)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/stricttransportsecurity/hsts_preload_missing",
+      "source": "google/firing-range — HSTS header missing preload directive (/stricttransportsecurity/hsts_preload_missing)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowNullOrigin",
+      "source": "google/firing-range — CORS allows null origin with credentials (/cors/alloworigin/allowNullOrigin)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowInsecureScheme",
+      "source": "google/firing-range — CORS allows HTTP origin on HTTPS resource (/cors/alloworigin/allowInsecureScheme)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/javascripturi",
       "source": "google/firing-range — DOM XSS via javascript: URI sinks (/dom/javascripturi)",
