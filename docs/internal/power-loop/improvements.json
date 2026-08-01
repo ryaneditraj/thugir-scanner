@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-max-age-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_max_age_missing returns strict-transport-security: includeSubDomains; preload (no max-age); hsts_max_age_missing route scan findings 83→86 (+max-age-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-includesubdomains-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_includesubdomains_missing returns strict-transport-security: max-age=63072000; preload (no includeSubDomains); hsts_includesubdomains_missing route scan findings 83→86 (+includesubdomains-missing live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-javascripturi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/javascripturi.html returns <a href=\"javascript:location.href=location.href\">; javascripturi.html route scan findings 78→86 (+javascripturi live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-hsts-missing-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_missing returns HTTPS 200 without Strict-Transport-Security header; hsts_missing route scan findings 78→83 (+hsts-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
