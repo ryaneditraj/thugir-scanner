@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T16:05:00.000Z",
+  "updated_at": "2026-08-01T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/javascripturi",
+      "source": "google/firing-range — DOM XSS via javascript: URI sinks (/dom/javascripturi)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/invalidframingconfig",
+      "source": "google/firing-range — invalid X-Frame-Options / clickjacking framing misconfig lab (/invalidframingconfig)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/remoteinclude/object_hash",
+      "source": "google/firing-range — remote object inclusion via URL fragment hash (/remoteinclude/object_hash)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reverseclickjacking/universalreverseclickjacking_actiononly",
+      "source": "google/firing-range — universal reverse clickjacking action-only variant (/reverseclickjacking/universalreverseclickjacking_actiononly)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/vulnerablelibraries/jquery",
+      "source": "google/firing-range — known-vulnerable jQuery 1.8.1 inclusion testbed (/vulnerablelibraries/jquery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/function/innerHtml",
       "source": "google/firing-range — localStorage function sink to innerHTML DOM XSS (/dom/toxicdom/localStorage/function/innerHtml)",
