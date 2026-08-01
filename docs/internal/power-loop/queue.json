@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T22:05:00.000Z",
+  "updated_at": "2026-08-01T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/object.data?q=//example.org",
+      "source": "google/firing-range — location.search to object.data DOM XSS sink (/urldom/location/search/object.data)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/embed.src?q=//example.org",
+      "source": "google/firing-range — location.search to embed.src DOM XSS sink (/urldom/location/search/embed.src)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/link.href?q=//example.org",
+      "source": "google/firing-range — location.search to link.href DOM XSS sink (/urldom/location/search/link.href)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/base.href?q=//example.org",
+      "source": "google/firing-range — location.search to base.href DOM XSS sink (/urldom/location/search/base.href)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval",
+      "source": "google/firing-range — localStorage function sink to eval() DOM XSS (/dom/toxicdom/localStorage/function/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/tags/tag?q=a",
       "source": "google/firing-range — any-tag XSS filter bypass (/tags/tag)",
