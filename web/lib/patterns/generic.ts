@@ -2682,6 +2682,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-hash-script-src-partial-path-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash partial-path script.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/script.src.partial_path reads document.location.hash.substr(1) and assigns '/' + payload to script.src — Firing Range partial-path script.src DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values concatenated into script.src enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcPartialPathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never concatenate location.hash into script.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic script.src assignments from URL fragments.",
+        "Allow-list script paths in production applications.",
+        "Use CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src.partial_path concatenates location.hash into script.src. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-script-src-partial-path-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/script.src.partial_path route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/script.src.partial_path, location.hash is concatenated into script.src without sanitization — route-specific partial-path script.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot load arbitrary scripts via path concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcPartialPathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove partial-path script.src sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for script inclusion sinks.",
+        "Allow-list script paths.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src.partial_path route concatenates location.hash into script.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-script-src-partial-query-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash partial-query script.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/script.src.partial_query reads document.location.hash.substr(1) and assigns origin + '/urldom/jsonp?referrer=' + payload + '&callback=helloWorld' to script.src — Firing Range partial-query script.src DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values concatenated into JSONP script.src enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcPartialQueryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never concatenate location.hash into JSONP script.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic script.src assignments from URL fragments.",
+        "Allow-list JSONP callback and referrer parameters.",
+        "Use CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src.partial_query concatenates location.hash into JSONP script.src. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-script-src-partial-query-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/script.src.partial_query route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/script.src.partial_query, location.hash is concatenated into JSONP script.src without sanitization — route-specific partial-query script.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot load arbitrary JSONP scripts via query concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashScriptSrcPartialQueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove partial-query script.src sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for JSONP script inclusion sinks.",
+        "Allow-list JSONP endpoints and parameters.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/script.src.partial_query route concatenates location.hash into JSONP script.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-flashinjection-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range Flash injection JSONP callback oracle",
+    description:
+      "GET /flashinjection/callbackIsEchoedBack?callback= reflects the attacker-controlled callback name into a JSONP script wrapper — Firing Range Rosetta Flash / JSONP injection training oracle.",
+    impactOneline:
+      "Reflected JSONP callbacks enable Rosetta Flash-style attacks when combined with Flash Player or permissive script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeFlashinjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect unvalidated callback names in JSONP responses.",
+      steps: [
+        "Allowlist JSONP callback identifiers to safe alphanumeric names.",
+        "Prefer CORS JSON APIs instead of JSONP endpoints.",
+        "Use CSP script-src restrictions and retire Flash-dependent endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /flashinjection/callbackIsEchoedBack?callback= reflects the callback parameter into JSONP output. Show Rosetta Flash / JSONP XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-flashinjection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /flashinjection/ route JSONP oracle",
+    description:
+      "When scanning /flashinjection/, the callbackIsEchoedBack endpoint reflects the callback query parameter into executable JSONP wrapper without validation — route-specific Rosetta Flash training oracle.",
+    impactOneline:
+      "Route-specific scans should confirm JSONP callback reflection on flash-injection endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeFlashinjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate callback parameters on /flashinjection/ JSONP endpoints.",
+      steps: [
+        "Reject or allowlist callback names on JSONP endpoints.",
+        "Prefer CORS JSON APIs instead of JSONP.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /flashinjection/ route loads JSONP endpoints that reflect callback names. Show route-specific Rosetta Flash remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dom-eval-xss",
     platform: "generic",
     category: "Cross-site scripting",
