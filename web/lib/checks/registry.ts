@@ -40275,6 +40275,111 @@ const firingRangeTagsTagSvgRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
   firingRangeTagsTagSvgLiveOracle
 );
 
+type FiringRangeTagsAttrTarget = {
+  path: string;
+  q: string;
+  bodyRe: RegExp;
+  label: string;
+  routeRe: RegExp;
+};
+
+async function probeFiringRangeTagsAttrInjection(
+  ctx: RuleContext,
+  target: FiringRangeTagsAttrTarget
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
+  probeUrl.searchParams.set("q", target.q);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!target.bodyRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      context: target.label,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker-controlled attributes into ${target.label} context — attribute-restricted XSS training oracle`
+    }
+  };
+}
+
+function firingRangeTagsAttrRouteLiveOracle(
+  target: FiringRangeTagsAttrTarget,
+  liveOracle: Rule
+): Rule {
+  return async (ctx) => {
+    if (!isFiringRangeHost(ctx)) return NEGATIVE;
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+    if (!target.routeRe.test(pageUrl)) return NEGATIVE;
+    const result = await liveOracle(ctx);
+    if (!result.fired) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: `Google Firing Range ${target.path} route scan — q parameter allows ${target.label}`
+      }
+    };
+  };
+}
+
+const FIRING_RANGE_TAGS_TAG_A_HREF: FiringRangeTagsAttrTarget = {
+  path: "/tags/tag/a/href",
+  q: "<a href=javascript:alert(1)>",
+  bodyRe: /<a\s+href\s*=\s*["']?javascript:alert\(1\)["']?\s*>/i,
+  label: "A HREF attribute injection",
+  routeRe: /\/tags\/tag\/a\/href\b/i
+};
+
+const firingRangeTagsTagAHrefLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsAttrInjection(ctx, FIRING_RANGE_TAGS_TAG_A_HREF);
+};
+
+const firingRangeTagsTagAHrefRouteLiveOracle = firingRangeTagsAttrRouteLiveOracle(
+  FIRING_RANGE_TAGS_TAG_A_HREF,
+  firingRangeTagsTagAHrefLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_SCRIPT_SRC: FiringRangeTagsAttrTarget = {
+  path: "/tags/tag/script/src",
+  q: "<script src=//evil.example/x.js>",
+  bodyRe: /<script\s+src\s*=\s*["']?\/\/evil\.example\/x\.js["']?\s*>/i,
+  label: "SCRIPT SRC attribute injection",
+  routeRe: /\/tags\/tag\/script\/src\b/i
+};
+
+const firingRangeTagsTagScriptSrcLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsAttrInjection(ctx, FIRING_RANGE_TAGS_TAG_SCRIPT_SRC);
+};
+
+const firingRangeTagsTagScriptSrcRouteLiveOracle = firingRangeTagsAttrRouteLiveOracle(
+  FIRING_RANGE_TAGS_TAG_SCRIPT_SRC,
+  firingRangeTagsTagScriptSrcLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_DIV_STYLE: FiringRangeTagsAttrTarget = {
+  path: "/tags/tag/div/style",
+  q: "<div style=background:red>",
+  bodyRe: /<div\s+style\s*=\s*["']?background:red["']?\s*>/i,
+  label: "DIV STYLE attribute injection",
+  routeRe: /\/tags\/tag\/div\/style\b/i
+};
+
+const firingRangeTagsTagDivStyleLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsAttrInjection(ctx, FIRING_RANGE_TAGS_TAG_DIV_STYLE);
+};
+
+const firingRangeTagsTagDivStyleRouteLiveOracle = firingRangeTagsAttrRouteLiveOracle(
+  FIRING_RANGE_TAGS_TAG_DIV_STYLE,
+  firingRangeTagsTagDivStyleLiveOracle
+);
+
 const FIRING_RANGE_ADDRESS_HASH_INNERHTML_PATH = "/address/location.hash/innerHtml";
 
 const firingRangeAddressLocationHashInnerHtmlLiveOracle: Rule = async (ctx) => {
@@ -54759,6 +54864,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsTagEmbedRouteLiveOracle,
   firingRangeTagsTagSvgLiveOracle,
   firingRangeTagsTagSvgRouteLiveOracle,
+  firingRangeTagsTagAHrefLiveOracle,
+  firingRangeTagsTagAHrefRouteLiveOracle,
+  firingRangeTagsTagScriptSrcLiveOracle,
+  firingRangeTagsTagScriptSrcRouteLiveOracle,
+  firingRangeTagsTagDivStyleLiveOracle,
+  firingRangeTagsTagDivStyleRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
   firingRangeAddressLocationEvalLiveOracle,

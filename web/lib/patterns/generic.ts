@@ -3566,6 +3566,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-tags-tag-a-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range A HREF attribute injection oracle",
+    description:
+      "GET /tags/tag/a/href?q= accepts attacker-controlled href attributes on anchor tags and reflects them into the response — Firing Range attribute-restricted XSS training oracle.",
+    impactOneline:
+      "Insufficient href attribute filtering allows javascript: URIs and other dangerous anchor href values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode href attribute injection in /tags/tag/a/href routes.",
+      steps: [
+        "Reject javascript: and data: schemes in href attributes.",
+        "Use strict allow-lists for permitted URL schemes.",
+        "Add CSP as defense-in-depth against attribute injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/a/href route accepts href attribute injection via q parameter. Show attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-a-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/a/href route XSS oracle",
+    description:
+      "When scanning /tags/tag/a/href, q parameter injects attacker-controlled href attributes — route-specific A HREF attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm href attribute injection cannot create exploitable anchors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix href attribute filtering on /tags/tag/a/href route.",
+      steps: [
+        "Encode or reject dangerous href values in q parameter.",
+        "Audit attribute injection contexts on /tags/tag/a/href.",
+        "Add output encoding tests for href attribute injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/a/href route allows href attribute injection via q. Show route-specific attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-script-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range SCRIPT SRC attribute injection oracle",
+    description:
+      "GET /tags/tag/script/src?q= accepts attacker-controlled src attributes on script tags and reflects them into the response — Firing Range attribute-restricted XSS training oracle.",
+    impactOneline:
+      "Insufficient src attribute filtering allows attacker-controlled external script URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagScriptSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode src attribute injection in /tags/tag/script/src routes.",
+      steps: [
+        "Reject protocol-relative and external script URLs in src attributes.",
+        "Use strict allow-lists for permitted script origins.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/script/src route accepts src attribute injection via q parameter. Show attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-script-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/script/src route XSS oracle",
+    description:
+      "When scanning /tags/tag/script/src, q parameter injects attacker-controlled src attributes — route-specific SCRIPT SRC attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm src attribute injection cannot load external scripts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagScriptSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix src attribute filtering on /tags/tag/script/src route.",
+      steps: [
+        "Encode or reject external script URLs in q parameter.",
+        "Audit attribute injection contexts on /tags/tag/script/src.",
+        "Add output encoding tests for src attribute injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/script/src route allows src attribute injection via q. Show route-specific attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-div-style-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DIV STYLE attribute injection oracle",
+    description:
+      "GET /tags/tag/div/style?q= accepts attacker-controlled style attributes on div tags and reflects them into the response — Firing Range attribute-restricted XSS training oracle.",
+    impactOneline:
+      "Insufficient style attribute filtering allows attacker-controlled CSS that may enable XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagDivStyleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode style attribute injection in /tags/tag/div/style routes.",
+      steps: [
+        "Reject expression(), url(javascript:), and other dangerous CSS in style attributes.",
+        "Use strict allow-lists for permitted CSS properties.",
+        "Add CSP style-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/div/style route accepts style attribute injection via q parameter. Show attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-div-style-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/div/style route XSS oracle",
+    description:
+      "When scanning /tags/tag/div/style, q parameter injects attacker-controlled style attributes — route-specific DIV STYLE attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm style attribute injection cannot create exploitable CSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagDivStyleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix style attribute filtering on /tags/tag/div/style route.",
+      steps: [
+        "Encode or reject dangerous CSS in q parameter.",
+        "Audit attribute injection contexts on /tags/tag/div/style.",
+        "Add output encoding tests for style attribute injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/div/style route allows style attribute injection via q. Show route-specific attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
