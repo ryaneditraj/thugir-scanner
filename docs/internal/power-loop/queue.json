@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T10:05:00.000Z",
+  "updated_at": "2026-08-01T11:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script?q=a",
+      "source": "google/firing-range — reflected XSS body sink with lowercase 'script' filter bypass (/reflected/parameter/body/blocks_lowercase_script)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_uppercase_script?q=a",
+      "source": "google/firing-range — reflected XSS body sink with uppercase 'SCRIPT' filter bypass (/reflected/parameter/body/blocks_uppercase_script)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script?q=a",
+      "source": "google/firing-range — reflected XSS body sink with case-insensitive 'script' filter bypass (/reflected/parameter/body/blocks_any_script)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote?q=a",
+      "source": "google/firing-range — reflected XSS unquoted attribute with quote-filter bypass (/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals?q=a",
+      "source": "google/firing-range — reflected XSS body sink with space/dquote/slash/equals filter bypass (/reflected/parameter/body/blocks_space_doublequote_slash_equals)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/js_eval?q=a",
       "source": "google/firing-range — reflected XSS parameter piped into eval() JS sink (/reflected/parameter/js_eval)",
