@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T02:05:00.000Z",
+  "updated_at": "2026-08-01T03:05:54.206Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnerable-web-site.vercel.app/sqli",
+      "source": "megmogmog1965/vulnerable-web-site — SQL injection lab module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/noscript?q=a",
+      "source": "google/firing-range — reflected XSS parameter echoed inside noscript element",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location/innerHtml",
+      "source": "google/firing-range — raw location to innerHTML DOM XSS sink (/address/location/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location/eval",
+      "source": "google/firing-range — raw location to eval() DOM XSS sink (/address/location/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/a.xlink-href?//example.org",
+      "source": "google/firing-range — location.search to SVG anchor xlink:href DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/search/location.assign?//example.org",
       "source": "google/firing-range — location.search to document.location.assign DOM XSS sink",
