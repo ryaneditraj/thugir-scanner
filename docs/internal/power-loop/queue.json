@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T15:05:00.000Z",
+  "updated_at": "2026-08-01T16:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/function/innerHtml",
+      "source": "google/firing-range — localStorage function sink to innerHTML DOM XSS (/dom/toxicdom/localStorage/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/complexMessageDocumentWriteEval",
+      "source": "google/firing-range — postMessage complex message documentWrite+eval route (/dom/toxicdom/postMessage/complexMessageDocumentWriteEval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison",
+      "source": "google/firing-range — postMessage weak origin check (partial string match) (/dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithRegExp",
+      "source": "google/firing-range — postMessage weak origin check (insecure RegExp) (/dom/toxicdom/postMessage/improperOriginValidationWithRegExp)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/401?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 401 status (/reflected/parameter/body/401)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/body?q=a",
       "source": "google/firing-range — server-side escapeHtml bypass into HTML body sink (/escape/serverside/escapeHtml/body)",
