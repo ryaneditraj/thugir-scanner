@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-url-object-param-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/url/object_param?q= reflects into <param name=\"src\" value=\"...\">; object_param route scan findings 46→53 (+firing-range-reflected-url-object-param-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-contentsniffing-json-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/contentsniffing/json?q= returns application/json body {\"parameter\":\"...\"} without nosniff; contentsniffing/json route scan findings 45→52 (+firing-range-reflected-contentsniffing-json-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location/innerHtml passes window.location to divEl.innerHTML; address/location/innerHtml route scan findings 43→52 (+firing-range-address-location-innerhtml-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-hash-area-href-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/area.href returns document.location.hash.substr(1) assigned to area.href; area.href route scan findings 43→50 (+firing-range-urldom-location-hash-area-href-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"

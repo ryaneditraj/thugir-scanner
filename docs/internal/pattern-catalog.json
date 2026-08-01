@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-01T05:03:24.782Z",
-  "total": 1326,
-  "uniqueSlugs": 1321,
+  "generatedAt": "2026-08-01T06:03:32.738Z",
+  "total": 1332,
+  "uniqueSlugs": 1327,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1308,
+    "generic": 1314,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1241,
+    "deep": 1247,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 111,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 254,
+    "Cross-site scripting": 260,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -829,6 +829,8 @@
     "firing-range-address-location-hash-eval-route-live-oracle",
     "firing-range-address-location-hash-innerhtml-live-oracle",
     "firing-range-address-location-hash-innerhtml-route-live-oracle",
+    "firing-range-address-location-innerhtml-live-oracle",
+    "firing-range-address-location-innerhtml-route-live-oracle",
     "firing-range-cors-dynamic-allow-origin-live-oracle",
     "firing-range-cors-dynamic-allow-origin-route-live-oracle",
     "firing-range-dom-cookie-set-eval-live-oracle",
@@ -851,6 +853,8 @@
     "firing-range-jsonp-route-live-oracle",
     "firing-range-meta-redirect-live-oracle",
     "firing-range-meta-redirect-route-live-oracle",
+    "firing-range-reflected-contentsniffing-json-live-oracle",
+    "firing-range-reflected-contentsniffing-json-route-live-oracle",
     "firing-range-reflected-iframe-srcdoc-live-oracle",
     "firing-range-reflected-iframe-srcdoc-route-live-oracle",
     "firing-range-reflected-param-live-oracle",
@@ -861,6 +865,8 @@
     "firing-range-reflected-url-href-route-live-oracle",
     "firing-range-reflected-url-object-data-live-oracle",
     "firing-range-reflected-url-object-data-route-live-oracle",
+    "firing-range-reflected-url-object-param-live-oracle",
+    "firing-range-reflected-url-object-param-route-live-oracle",
     "firing-range-reflected-url-script-src-live-oracle",
     "firing-range-reflected-url-script-src-route-live-oracle",
     "firing-range-remoteinclude-parameter-script-live-oracle",
