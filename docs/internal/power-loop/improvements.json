@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-lowercase-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_lowercase_script?q=<ScRiPt>thugirFrLcScriptProbe</ScRiPt> reflects mixed-case script tag unescaped; blocks_lowercase_script route scan findings 61→68 (+firing-range-reflected-body-blocks-lowercase-script-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-uppercase-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_uppercase_script?q=<script>thugirFrUcScriptProbe</script> reflects lowercase script tag unescaped; blocks_uppercase_script route scan findings 61→68 (+firing-range-reflected-body-blocks-uppercase-script-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_eval?q=thugirFrJsEvalProbe returns eval(\"thugirFrJsEvalProbe\") in body; js_eval route scan findings 61→68 (+firing-range-reflected-js-eval-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-badscriptimport-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /badscriptimport/ documents localhost/private-network/typosquatting imports; probe /remoteinclude/parameter/script?q=http://127.0.0.2/localhost_import.js returns <script src=\"http://127.0.0.2/localhost_import.js\">; badscriptimport route scan findings 48→67 (+firing-range-badscriptimport-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
@@ -16981,6 +16999,21 @@
       "source": "discovery:pentest-ground.com",
       "slug": "dvga-create-paste-stored-xss-live-oracle",
       "shipped_at": "2026-08-01T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-lowercase-script-live-oracle",
+      "shipped_at": "2026-08-01T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-uppercase-script-live-oracle",
+      "shipped_at": "2026-08-01T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-eval-live-oracle",
+      "shipped_at": "2026-08-01T12:10:00.000Z"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T11:14:23.804Z",
+  "updated_at": "2026-08-01T12:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3146,
-  "total_findings": 34389,
+  "total_sites_scanned": 3147,
+  "total_findings": 34424,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2162,
-  "discovery_findings": 28500,
+  "discovery_findings": 28521,
   "improvements_shipped": 1158,
-  "last_run": "2026-08-01T11:14:23.804Z",
+  "last_run": "2026-08-01T12:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 35,
@@ -48,30 +48,25 @@
           ]
         }
       },
-      "note": "juice-shop.herokuapp.com 6/6 (35 findings pages=6 probes=485; gap=[]); secret-resend slug still absent"
+      "note": "juice-shop.herokuapp.com 6/6 (35 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 489,
-      "focus": "firing-range reflected XSS filter-bypass sinks (script-case + quote + charset blocks) + JS sink drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 204,
+      "focus": "firing-range script-case filter bypass + js_eval sink oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (35 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script: 61 findings — generic firing-range oracles only, no script-case-filter bypass oracle",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_uppercase_script: 61 findings — generic oracles only, no uppercase SCRIPT filter bypass oracle",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script: 61 findings — generic oracles only, no case-insensitive script filter bypass oracle",
-      "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote: 62 findings — generic oracles only, no quote-filter bypass oracle",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals: 61 findings — generic oracles only, no charset-block bypass oracle",
-      "public-firing-range.appspot.com/reflected/parameter/js_eval: 61 findings — generic oracles only (queue drain)"
+      "public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script: 61→68 findings — firing-range-reflected-body-blocks-lowercase-script-live-oracle shipped",
+      "public-firing-range.appspot.com/reflected/parameter/body/blocks_uppercase_script: 61→68 findings — firing-range-reflected-body-blocks-uppercase-script-live-oracle shipped",
+      "public-firing-range.appspot.com/reflected/parameter/js_eval: 61→68 findings — firing-range-reflected-js-eval-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script: script-case filter bypass oracle absent",
-      "public-firing-range.appspot.com/reflected/parameter/body/blocks_uppercase_script: uppercase SCRIPT filter bypass oracle absent",
       "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script: case-insensitive script filter bypass oracle absent",
       "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote: quote-filter bypass oracle absent",
       "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals: space/dquote/slash/equals charset-block bypass oracle absent"
@@ -79,12 +74,12 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 35,
-    "public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script": 61,
-    "public-firing-range.appspot.com/reflected/parameter/body/blocks_uppercase_script": 61,
+    "public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script": 68,
+    "public-firing-range.appspot.com/reflected/parameter/body/blocks_uppercase_script": 68,
     "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script": 61,
     "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote": 62,
     "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals": 61,
-    "public-firing-range.appspot.com/reflected/parameter/js_eval": 61,
+    "public-firing-range.appspot.com/reflected/parameter/js_eval": 68,
     "public-firing-range.appspot.com/reflected/parameter/js_comment": 61
   }
 }
