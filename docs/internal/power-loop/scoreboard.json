@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T08:10:00.000Z",
+  "updated_at": "2026-08-01T09:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3119,
-  "total_findings": 33269,
+  "total_sites_scanned": 3128,
+  "total_findings": 33348,
   "critical_findings": 109,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2147,
-  "discovery_findings": 27475,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-01T08:10:00.000Z",
+  "discovery_urls_added": 2152,
+  "discovery_findings": 27523,
+  "improvements_shipped": 1155,
+  "last_run": "2026-08-01T09:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 485,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,54 +48,48 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (34 findings pages=6 probes=485; gap=[]); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings pages=6 probes=478; gap=[]); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 335,
-      "focus": "firing-range badscriptimport + leakedcookie + vulnerablelibraries + mixedcontent + reverseclickjacking suites",
-      "improvements_shipped_this_run": 3
+      "findings": 48,
+      "focus": "pentest-ground DVGA graphiql + my_pastes + import_paste + upload_paste + create_paste queued; zerohealth api/upload→api/users drained",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — primary healthy, no benchmark misses",
-      "public-firing-range.appspot.com/badscriptimport/: 48 findings — generic oracles only, no bad-script-import sink oracle",
-      "public-firing-range.appspot.com/leakedcookie/: 48 findings — generic oracles only, no httpOnly-cookie-leak oracle",
-      "public-firing-range.appspot.com/vulnerablelibraries/: 48 findings — generic oracles only, no known-vulnerable-library oracle",
-      "public-firing-range.appspot.com/mixedcontent/: 48 findings — generic oracles only, no mixed-content misconfig oracle",
-      "public-firing-range.appspot.com/reverseclickjacking/: 48 findings — generic oracles only, no clickjacking/UI-redress oracle",
-      "public-firing-range.appspot.com/address/location/eval: 45 findings — generic oracles only, no route-specific eval sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: 45 findings — generic oracles only, no SVG xlink:href sink oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml: 54→56 — firing-range-dom-postmessage-innerhtml-live-oracle shipped",
-      "public-firing-range.appspot.com/angular/angular_cookie_parse/1.6.0: 43→58 — firing-range-angular-cookie-parse-live-oracle shipped",
-      "public-firing-range.appspot.com/angular/angular_form_parse/1.6.0: 43→58 — firing-range-angular-form-parse-live-oracle shipped"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — primary Heroku 503, staging fallback; no benchmark misses",
+      "zerohealth.aliyu.dev/api/upload: 6 findings — zerohealth-upload-advanced-route-live-oracle + reflexion-escalated-ssti",
+      "zerohealth.aliyu.dev/api/admin/users: 6 findings — generic oracles only, no route-specific admin BOLA oracle",
+      "zerohealth.aliyu.dev/api/messages: 6 findings — generic oracles only, no route-specific messages IDOR oracle",
+      "zerohealth.aliyu.dev/api/chatbot/history: 6 findings — generic oracles only, no route-specific chatbot history oracle",
+      "zerohealth.aliyu.dev/api/reports/generate: 6 findings — generic oracles only, no route-specific report-generation oracle",
+      "zerohealth.aliyu.dev/api/health: 6 findings — generic oracles only",
+      "zerohealth.aliyu.dev/api/search: 6 findings — generic oracles only, no route-specific search injection oracle",
+      "zerohealth.aliyu.dev/api/users: 6 findings — generic oracles only, no route-specific user enumeration oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/badscriptimport/: bad JavaScript import / typosquatting-domain oracle absent",
-      "public-firing-range.appspot.com/leakedcookie/: httpOnly cookie leaked to JavaScript oracle absent",
-      "public-firing-range.appspot.com/vulnerablelibraries/: known-vulnerable JS library inclusion oracle absent",
-      "public-firing-range.appspot.com/mixedcontent/: mixed HTTP/HTTPS content misconfiguration oracle absent",
-      "public-firing-range.appspot.com/reverseclickjacking/: reverse clickjacking / UI-redress oracle absent",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: route-specific SVG xlink:href sink oracle absent",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/js: template unavailable (CANNOT FIND THAT TEMPLATE)",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/js: template unavailable",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/eval: template unavailable",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/eval: template unavailable",
-      "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/documentWrite: sessionStorage→document.write sink oracle absent",
-      "zerohealth.aliyu.dev/api/*: route-specific BOLA/SSRF live oracles absent on notifications/insurance/billing hubs"
+      "pentest-ground.com:5013/graphiql + my_pastes + import_paste + upload_paste + create_paste: queued but not yet scanned (DVGA SSRF/XSS/IDOR oracles pending)",
+      "zerohealth.aliyu.dev/api/admin/users: route-specific admin BOLA oracle absent",
+      "zerohealth.aliyu.dev/api/messages: route-specific messages IDOR oracle absent",
+      "zerohealth.aliyu.dev/api/chatbot/history: route-specific chatbot history disclosure oracle absent",
+      "zerohealth.aliyu.dev/api/reports/generate: route-specific report-generation oracle absent",
+      "zerohealth.aliyu.dev/api/search: route-specific search injection oracle absent",
+      "zerohealth.aliyu.dev/api/users: route-specific user enumeration oracle absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
-    "public-firing-range.appspot.com/badscriptimport": 48,
-    "public-firing-range.appspot.com/leakedcookie": 48,
-    "public-firing-range.appspot.com/vulnerablelibraries": 48,
-    "public-firing-range.appspot.com/mixedcontent": 48,
-    "public-firing-range.appspot.com/reverseclickjacking": 48,
-    "public-firing-range.appspot.com/address/location/eval": 45,
-    "public-firing-range.appspot.com/urldom/location/search/a.xlink-href": 45
+    "juice-shop-staging.herokuapp.com": 31,
+    "zerohealth.aliyu.dev/api/upload": 6,
+    "zerohealth.aliyu.dev/api/admin/users": 6,
+    "zerohealth.aliyu.dev/api/messages": 6,
+    "zerohealth.aliyu.dev/api/chatbot/history": 6,
+    "zerohealth.aliyu.dev/api/reports/generate": 6,
+    "zerohealth.aliyu.dev/api/health": 6,
+    "zerohealth.aliyu.dev/api/search": 6,
+    "zerohealth.aliyu.dev/api/users": 6
   }
 }
