@@ -39425,6 +39425,131 @@ const firingRangeUrldomLocationHashScriptSrcPartialDomainRouteLiveOracle: Rule =
   };
 };
 
+const FIRING_RANGE_URLDOM_HASH_SCRIPT_SRC_PARTIAL_PATH_PATH =
+  "/urldom/location/hash/script.src.partial_path";
+
+const firingRangeUrldomLocationHashScriptSrcPartialPathLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_HASH_SCRIPT_SRC_PARTIAL_PATH_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasPartialPathScriptSrcSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /scriptElement\.src\s*=\s*["']\/["']\s*\+\s*payload/i.test(body);
+  if (!hasPartialPathScriptSrcSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/hash/script.src.partial_path passes location.hash into '/' + payload script.src — partial-path DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationHashScriptSrcPartialPathRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/hash\/script\.src\.partial_path\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationHashScriptSrcPartialPathLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/hash/script.src.partial_path route scan — location.hash concatenated into script.src without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_HASH_SCRIPT_SRC_PARTIAL_QUERY_PATH =
+  "/urldom/location/hash/script.src.partial_query";
+
+const firingRangeUrldomLocationHashScriptSrcPartialQueryLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_HASH_SCRIPT_SRC_PARTIAL_QUERY_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasPartialQueryScriptSrcSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /scriptElement\.src\s*=\s*[\s\S]*location\.origin\s*\+\s*["']\/urldom\/jsonp\?referrer=["']\s*\+\s*payload\s*\+\s*["']&callback=helloWorld["']/i.test(
+      body
+    );
+  if (!hasPartialQueryScriptSrcSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 240).trim(),
+      note: "Google Firing Range /urldom/location/hash/script.src.partial_query passes location.hash into JSONP referrer query in script.src — partial-query DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationHashScriptSrcPartialQueryRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/hash\/script\.src\.partial_query\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationHashScriptSrcPartialQueryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/hash/script.src.partial_query route scan — location.hash concatenated into JSONP script.src without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_FLASHINJECTION_CALLBACK_PROBE = "thugirFrFlashProbe";
+
+const firingRangeFlashinjectionLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/flashinjection/callbackIsEchoedBack", ctx.origin);
+  probeUrl.searchParams.set("callback", FIRING_RANGE_FLASHINJECTION_CALLBACK_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body.trim();
+  const expected = `${FIRING_RANGE_FLASHINJECTION_CALLBACK_PROBE}({});`;
+  if (!body.startsWith(expected)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 120),
+      note: "Google Firing Range GET /flashinjection/callbackIsEchoedBack?callback= reflects attacker-controlled callback name in JSONP response — Rosetta Flash / JSONP injection oracle"
+    }
+  };
+};
+
+const firingRangeFlashinjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/flashinjection\/?(?:\?|#|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeFlashinjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /flashinjection/ route scan — callback parameter reflected into executable JSONP wrapper (Rosetta Flash training oracle)"
+    }
+  };
+};
+
 const FIRING_RANGE_REMOTEINCLUDE_SCRIPT_HASH_PATH = "/remoteinclude/script_hash.html";
 
 const firingRangeRemoteIncludeScriptHashLiveOracle: Rule = async (ctx) => {
@@ -52202,6 +52327,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationSearchFormActionRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialDomainLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialDomainRouteLiveOracle,
+  firingRangeUrldomLocationHashScriptSrcPartialPathLiveOracle,
+  firingRangeUrldomLocationHashScriptSrcPartialPathRouteLiveOracle,
+  firingRangeUrldomLocationHashScriptSrcPartialQueryLiveOracle,
+  firingRangeUrldomLocationHashScriptSrcPartialQueryRouteLiveOracle,
+  firingRangeFlashinjectionLiveOracle,
+  firingRangeFlashinjectionRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
