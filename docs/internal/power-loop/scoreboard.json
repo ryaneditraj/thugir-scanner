@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2114,
   "discovery_findings": 25197,
-  "improvements_shipped": 1155,
+  "improvements_shipped": 1167,
   "last_run": "2026-08-01T01:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings) with full BOLA suite + jwt-alg-none + login-sqli + reflexion-escalated-ssti; secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -56,16 +56,17 @@
       "urls_scanned": 8,
       "findings": 248,
       "focus": "firing-range location.search sinks (input.formaction, window.open, iframe.src, a.href) + reflected attribute_singlequoted; drained button.formaction + frame.src + ai-security-platform api-security",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — no benchmark misses; primary Heroku 503",
-      "public-firing-range.appspot.com/urldom/location/search/input.formaction: 34 findings — generic firing-range oracles only; no location.search input.formaction sink oracle",
+      "public-firing-range.appspot.com/address/location.hash/assign: 31→38 findings — firing-range-address-location-hash-assign-live-oracle shipped",
+      "public-firing-range.appspot.com/urldom/location/search/form.action: 31→38 findings — firing-range-urldom-location-search-form-action-live-oracle shipped",
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain: 32→39 findings — partial-domain script.src oracle shipped",
+      "public-firing-range.appspot.com/urldom/location/search/input.formaction: 34 findings — generic oracles only; no location.search input.formaction sink oracle",
       "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted: 35 findings — generic reflected-param oracle; no single-quoted attribute context oracle",
-      "public-firing-range.appspot.com/urldom/location/search/window.open: 34 findings — generic oracles only; no location.search window.open sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/iframe.src: 34 findings — generic oracles only; no location.search iframe.src sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/a.href: 34 findings — generic oracles only; no location.search a.href sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/button.formaction: 35 findings — route-specific button.formAction oracle shipped",
+      "public-firing-range.appspot.com/urldom/location/search/window.open|iframe.src|a.href: 34 findings each — route-specific location.search sink oracles absent",
+      "public-firing-range.appspot.com/urldom/location/search/button.formaction: 35 findings — route-specific button.formAction oracle present",
       "ai-security-platform-iota.vercel.app/challenges/api-security: 7 findings — api-security challenge route oracle present"
     ],
     "learning_gaps": [
@@ -73,11 +74,17 @@
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "public-firing-range.appspot.com/urldom/location/search/input.formaction: route-specific location.search input.formaction sink oracle absent",
       "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted: single-quoted HTML attribute reflection oracle absent",
-      "public-firing-range.appspot.com/urldom/location/search/window.open|iframe.src|a.href: route-specific location.search sink oracles absent (generic urldom-sink only)"
+      "public-firing-range.appspot.com/urldom/location/search/window.open|iframe.src|a.href: route-specific location.search sink oracles absent",
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_path|partial_query: partial script.src sink oracles still absent",
+      "public-firing-range.appspot.com/flashinjection/: flash-injection route oracle absent",
+      "public-firing-range.appspot.com/address/location.hash/document.writeln: template unavailable on live Firing Range (404)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 29,
+    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain": 39,
+    "public-firing-range.appspot.com/address/location.hash/assign": 38,
+    "public-firing-range.appspot.com/urldom/location/search/form.action": 38,
     "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted": 35,
     "public-firing-range.appspot.com/urldom/location/search/button.formaction": 35,
     "public-firing-range.appspot.com/urldom/location/search/frame.src": 35,
