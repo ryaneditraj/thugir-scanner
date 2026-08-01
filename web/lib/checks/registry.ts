@@ -40098,6 +40098,36 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<body>",
     bodyRe: /<body><\/body>/i,
     label: "BODY tag injection"
+  },
+  {
+    path: "/tags/tag/object",
+    q: "<object src=x>",
+    bodyRe: /<object\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "OBJECT tag injection"
+  },
+  {
+    path: "/tags/tag/embed",
+    q: "<embed src=x>",
+    bodyRe: /<embed\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "EMBED tag injection"
+  },
+  {
+    path: "/tags/tag/svg",
+    q: "<svg src=x>",
+    bodyRe: /<svg\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "SVG tag injection"
+  },
+  {
+    path: "/tags/tag/link",
+    q: "<link src=x>",
+    bodyRe: /<link\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "LINK tag injection"
+  },
+  {
+    path: "/tags/tag/base",
+    q: "<base src=x>",
+    bodyRe: /<base\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "BASE tag injection"
   }
 ] as const;
 
@@ -40166,6 +40196,84 @@ const firingRangeTagsInjectionRouteLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+function firingRangeTagsTagRouteLiveOracle(
+  tag: string,
+  label: string,
+  liveOracle: Rule
+): Rule {
+  return async (ctx) => {
+    if (!isFiringRangeHost(ctx)) return NEGATIVE;
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+    const pathRe = new RegExp(`/tags/tag/${tag}\\b`, "i");
+    if (!pathRe.test(pageUrl)) return NEGATIVE;
+    const result = await liveOracle(ctx);
+    if (!result.fired) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: `Google Firing Range /tags/tag/${tag} route scan — q parameter allows ${label}`
+      }
+    };
+  };
+}
+
+const FIRING_RANGE_TAGS_TAG_OBJECT = {
+  path: "/tags/tag/object",
+  q: "<object src=x>",
+  bodyRe: /<object\s+src\s*=\s*["']?x["']?\s*>/i,
+  label: "OBJECT tag injection"
+} as const;
+
+const firingRangeTagsTagObjectLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_OBJECT);
+};
+
+const firingRangeTagsTagObjectRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "object",
+  "OBJECT tag injection",
+  firingRangeTagsTagObjectLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_EMBED = {
+  path: "/tags/tag/embed",
+  q: "<embed src=x>",
+  bodyRe: /<embed\s+src\s*=\s*["']?x["']?\s*>/i,
+  label: "EMBED tag injection"
+} as const;
+
+const firingRangeTagsTagEmbedLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_EMBED);
+};
+
+const firingRangeTagsTagEmbedRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "embed",
+  "EMBED tag injection",
+  firingRangeTagsTagEmbedLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_SVG = {
+  path: "/tags/tag/svg",
+  q: "<svg src=x>",
+  bodyRe: /<svg\s+src\s*=\s*["']?x["']?\s*>/i,
+  label: "SVG tag injection"
+} as const;
+
+const firingRangeTagsTagSvgLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_SVG);
+};
+
+const firingRangeTagsTagSvgRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "svg",
+  "SVG tag injection",
+  firingRangeTagsTagSvgLiveOracle
+);
 
 const FIRING_RANGE_ADDRESS_HASH_INNERHTML_PATH = "/address/location.hash/innerHtml";
 
@@ -54645,6 +54753,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedIframeSrcdocRouteLiveOracle,
   firingRangeTagsInjectionLiveOracle,
   firingRangeTagsInjectionRouteLiveOracle,
+  firingRangeTagsTagObjectLiveOracle,
+  firingRangeTagsTagObjectRouteLiveOracle,
+  firingRangeTagsTagEmbedLiveOracle,
+  firingRangeTagsTagEmbedRouteLiveOracle,
+  firingRangeTagsTagSvgLiveOracle,
+  firingRangeTagsTagSvgRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
   firingRangeAddressLocationEvalLiveOracle,

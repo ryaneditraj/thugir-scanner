@@ -3410,6 +3410,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-tags-tag-object-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range OBJECT tag injection oracle",
+    description:
+      "GET /tags/tag/object?q= accepts attacker-controlled <object> tags and reflects them into the response — Firing Range OBJECT tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient OBJECT tag filtering allows attacker-controlled object elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagObjectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode OBJECT tag injection in /tags/tag/object routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/object route accepts OBJECT tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-object-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/object route XSS oracle",
+    description:
+      "When scanning /tags/tag/object, q parameter injects attacker-controlled <object> tags — route-specific OBJECT tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm OBJECT tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagObjectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix OBJECT tag filtering on /tags/tag/object route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/object.",
+        "Add output encoding tests for OBJECT tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/object route allows OBJECT tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-embed-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range EMBED tag injection oracle",
+    description:
+      "GET /tags/tag/embed?q= accepts attacker-controlled <embed> tags and reflects them into the response — Firing Range EMBED tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient EMBED tag filtering allows attacker-controlled embed elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagEmbedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode EMBED tag injection in /tags/tag/embed routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/embed route accepts EMBED tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-embed-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/embed route XSS oracle",
+    description:
+      "When scanning /tags/tag/embed, q parameter injects attacker-controlled <embed> tags — route-specific EMBED tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm EMBED tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagEmbedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix EMBED tag filtering on /tags/tag/embed route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/embed.",
+        "Add output encoding tests for EMBED tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/embed route allows EMBED tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-svg-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range SVG tag injection oracle",
+    description:
+      "GET /tags/tag/svg?q= accepts attacker-controlled <svg> tags and reflects them into the response — Firing Range SVG tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient SVG tag filtering allows attacker-controlled svg elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagSvgLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode SVG tag injection in /tags/tag/svg routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/svg route accepts SVG tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-svg-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/svg route XSS oracle",
+    description:
+      "When scanning /tags/tag/svg, q parameter injects attacker-controlled <svg> tags — route-specific SVG tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm SVG tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagSvgRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix SVG tag filtering on /tags/tag/svg route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/svg.",
+        "Add output encoding tests for SVG tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/svg route allows SVG tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
