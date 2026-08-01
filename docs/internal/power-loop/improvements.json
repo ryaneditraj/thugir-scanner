@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/innerHtml addEventListener('message') JSON.parse(msg.data) → div.innerHTML = content.html; postMessage/innerHtml route scan findings 54→56 (+firing-range-dom-postmessage-innerhtml-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-cookie-parse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_cookie_parse/1.6.0 $parse(lookupCookie(irrelevantAngularCookie))({}) in VulnerableController; angular_cookie_parse route scan findings 43→58 (+firing-range-angular-cookie-parse-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-form-parse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_form_parse/1.6.0 ng-submit calls $parse(expression)({}) on user form input; angular_form_parse route scan findings 43→58 (+firing-range-angular-form-parse-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-sessionstorage-innerhtml-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/function/innerHtml returns sessionStorage.getItem('badValue') assigned to div.innerHTML; sessionStorage route scan findings 47→54 (+firing-range-dom-sessionstorage-innerhtml-live-oracle + route); benchmark juice-shop-staging 30 findings 6/6 maintained"
@@ -16864,6 +16882,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-address-location-eval-live-oracle",
       "shipped_at": "2026-08-01T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-innerhtml-live-oracle",
+      "shipped_at": "2026-08-01T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-cookie-parse-live-oracle",
+      "shipped_at": "2026-08-01T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-form-parse-live-oracle",
+      "shipped_at": "2026-08-01T08:10:00.000Z"
     }
   ]
 }
