@@ -1954,6 +1954,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-remoteinclude-parameter-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range remote-include parameter script DOM XSS oracle",
+    description:
+      "GET /remoteinclude/parameter/script?q= reflects the query parameter into script.src — Firing Range remote-include parameter DOM XSS training oracle.",
+    impactOneline:
+      "URL query parameters used as script.src enable attacker-controlled remote script inclusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeParameterScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never seed script.src from URL query parameters — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic script.src assignments from query parameters.",
+        "Allow-list remote script origins.",
+        "Use CSP script-src to block attacker-controlled script loads."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/parameter/script loads script.src from a query parameter. Show remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-parameter-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /remoteinclude/parameter/script route XSS oracle",
+    description:
+      "When scanning /remoteinclude/parameter/script, the q query parameter seeds attacker-controlled script.src — route-specific remote-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm query parameters cannot load arbitrary remote scripts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeParameterScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix script.src seeding from query parameters on /remoteinclude routes.",
+      steps: [
+        "Audit query parameter reads for script inclusion sinks.",
+        "Allow-list script origins.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/parameter/script route seeds script.src from a query parameter. Show route-specific remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-urldom-location-hash-fetch-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2786,6 +2838,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-hash-area-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash area.href DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/area.href reads document.location.hash.substr(1) and assigns it to area.href — Firing Range area.href DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to area.href enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashAreaHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to area.href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove area.href assignments on values from window.location.hash.",
+        "Allow-list link targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/area.href uses area.href on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-area-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/area.href route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/area.href, location.hash is assigned to area.href without sanitization — route-specific area.href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot set arbitrary area hrefs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashAreaHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove area.href sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for link navigation sinks.",
+        "Allow-list link targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/area.href route assigns location.hash to area.href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-assign-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2834,6 +2938,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /address/location.hash/assign route uses location.assign on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location eval DOM XSS oracle",
+    description:
+      "GET /address/location/eval returns a page that assigns window.location to payload and passes it to eval() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "window.location values passed to eval() enable DOM XSS when attackers can influence the address bar.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.location to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from window.location.",
+        "Treat location data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/eval uses eval on window.location. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location/eval route XSS oracle",
+    description:
+      "When scanning /address/location/eval, window.location is passed to eval() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location-backed values are not executed via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on window.location in /address handlers.",
+      steps: [
+        "Audit all window.location reads for code execution sinks.",
+        "Replace eval with safe DOM APIs.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/eval route passes window.location to eval(). Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
