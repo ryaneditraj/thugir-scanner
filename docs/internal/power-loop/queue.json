@@ -1,54 +1,29 @@
 {
-  "updated_at": "2026-08-01T07:05:00.000Z",
+  "updated_at": "2026-08-01T08:10:00.000Z",
   "discovery_urls": [
     {
-      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/js?q=a",
-      "source": "google/firing-range — server-side escapeHtml bypass into JS eval sink (/escape/serverside/escapeHtml/js)",
+      "url": "https://public-firing-range.appspot.com/badscriptimport/",
+      "source": "google/firing-range — bad JavaScript import from typosquatting/private-network domains (/badscriptimport/)",
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/js?q=a",
-      "source": "google/firing-range — server-side encodeUrl bypass into JS eval sink (/escape/serverside/encodeUrl/js)",
+      "url": "https://public-firing-range.appspot.com/leakedcookie/",
+      "source": "google/firing-range — httpOnly cookie leaked to JavaScript (/leakedcookie/)",
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/eval?q=a",
-      "source": "google/firing-range — server-side escapeHtml bypass into eval() sink (/escape/serverside/escapeHtml/eval)",
+      "url": "https://public-firing-range.appspot.com/vulnerablelibraries/",
+      "source": "google/firing-range — known-vulnerable JS library inclusion testbed (/vulnerablelibraries/)",
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/eval?q=a",
-      "source": "google/firing-range — server-side encodeUrl bypass into eval() sink (/escape/serverside/encodeUrl/eval)",
+      "url": "https://public-firing-range.appspot.com/mixedcontent/",
+      "source": "google/firing-range — mixed HTTP/HTTPS content misconfiguration lab (/mixedcontent/)",
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnshop.vercel.app/search?q=test",
-      "source": "chethan-vinayak/vulnshop — SQLi product search oracle GET /search?q= (Vercel OSS deploy README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://public-firing-range.appspot.com/reflected/url/object_param?q=a",
-      "source": "google/firing-range — reflected URL param echoed in OBJECT PARAM src attribute (/reflected/url/object_param)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/json?q=a",
-      "source": "google/firing-range — MIME content-sniffing XSS via JSON body with HTML content-type (/reflected/contentsniffing/json)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml",
-      "source": "google/firing-range — sessionStorage function sink to innerHTML DOM XSS (/dom/toxicdom/sessionStorage/function/innerHtml)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/eval",
-      "source": "google/firing-range — postMessage handler missing origin check sinks to eval (/dom/toxicdom/postMessage/eval)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/documentWrite",
-      "source": "google/firing-range — external script sessionStorage property to document.write DOM XSS",
+      "url": "https://public-firing-range.appspot.com/reverseclickjacking/",
+      "source": "google/firing-range — reverse clickjacking UI-redress testbed (/reverseclickjacking/)",
       "auth": "public_demo"
     },
     {
@@ -13024,6 +12999,56 @@
       "url": "https://pentest-fauxbank.vercel.app/api/users",
       "source": "pentest-fauxbank — user enumeration / BOLA oracle GET /api/users (Vercel OSS banking lab)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/js?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into JS eval sink (/escape/serverside/escapeHtml/js)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/js?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into JS eval sink (/escape/serverside/encodeUrl/js)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/eval?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into eval() sink (/escape/serverside/escapeHtml/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/eval?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into eval() sink (/escape/serverside/encodeUrl/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/search?q=test",
+      "source": "chethan-vinayak/vulnshop — SQLi product search oracle GET /search?q= (Vercel OSS deploy README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/object_param?q=a",
+      "source": "google/firing-range — reflected URL param echoed in OBJECT PARAM src attribute (/reflected/url/object_param)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/json?q=a",
+      "source": "google/firing-range — MIME content-sniffing XSS via JSON body with HTML content-type (/reflected/contentsniffing/json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml",
+      "source": "google/firing-range — sessionStorage function sink to innerHTML DOM XSS (/dom/toxicdom/sessionStorage/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/eval",
+      "source": "google/firing-range — postMessage handler missing origin check sinks to eval (/dom/toxicdom/postMessage/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/documentWrite",
+      "source": "google/firing-range — external script sessionStorage property to document.write DOM XSS",
+      "auth": "public_demo"
     },
     {
       "url": "https://urban-vampi-production.up.railway.app/users/v1/register",
