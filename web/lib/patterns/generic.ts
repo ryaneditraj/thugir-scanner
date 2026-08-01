@@ -1018,6 +1018,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-postmessage-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage innerHTML DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/innerHtml registers a message listener that JSON.parses msg.data and writes content.html to innerHTML — Firing Range postMessage DOM XSS training oracle.",
+    impactOneline:
+      "postMessage handlers that assign parsed message data to innerHTML enable DOM XSS from cross-origin iframes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign postMessage data to innerHTML — validate origin and sanitize.",
+      steps: [
+        "Remove innerHTML assignments from postMessage handlers.",
+        "Validate event.origin before processing messages.",
+        "Use textContent or DOMPurify for message payload rendering."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler writes JSON-parsed msg.data to innerHTML. Show safe postMessage handling without innerHTML sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage innerHTML route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage routes, the response contains a message listener that writes JSON-parsed data to innerHTML — route-specific postMessage DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not write untrusted cross-window payloads to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on postMessage payloads in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all message event listeners for innerHTML assignments.",
+        "Validate message origin before processing.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage route writes message data to innerHTML. Show route-specific postMessage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-cookie-parse-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS $parse(cookie) injection oracle",
+    description:
+      "GET /angular/angular_cookie_parse passes a cookie value to AngularJS $parse() — Firing Range Angular expression injection training oracle.",
+    impactOneline:
+      "Passing attacker-controlled cookie values to $parse() enables AngularJS sandbox escape and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularCookieParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to $parse() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove $parse() calls on untrusted cookie data.",
+        "Treat cookies as opaque strings, not Angular expressions.",
+        "Upgrade from AngularJS and avoid expression evaluation on user input."
+      ]
+    },
+    fixPrompt:
+      "Our Angular app passes cookie values to $parse(). Show AngularJS expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-cookie-parse-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_cookie_parse route XSS oracle",
+    description:
+      "When scanning /angular/angular_cookie_parse routes, cookie values are passed to $parse() — route-specific Angular expression injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie data is not evaluated as AngularJS expressions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularCookieParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove $parse() on cookie values in /angular/angular_cookie_parse handlers.",
+      steps: [
+        "Audit all $parse usage for untrusted input sources.",
+        "Use static expressions instead of dynamic cookie values.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_cookie_parse route passes cookies to $parse(). Show route-specific Angular expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-form-parse-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS $parse(form) injection oracle",
+    description:
+      "GET /angular/angular_form_parse passes user form input to AngularJS $parse() on submit — Firing Range Angular expression injection training oracle.",
+    impactOneline:
+      "Evaluating user-controlled form input via $parse() enables AngularJS sandbox escape and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularFormParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user form input to $parse() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove $parse() calls on user-controlled form fields.",
+        "Use static Angular expressions and bind to validated data models.",
+        "Upgrade from AngularJS and avoid dynamic expression evaluation."
+      ]
+    },
+    fixPrompt:
+      "Our Angular form passes user input to $parse() on submit. Show AngularJS expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-form-parse-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_form_parse route XSS oracle",
+    description:
+      "When scanning /angular/angular_form_parse routes, form input is passed to $parse() on submit — route-specific Angular expression injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user form input is not evaluated as AngularJS expressions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularFormParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove $parse() on form input in /angular/angular_form_parse handlers.",
+      steps: [
+        "Audit all $parse usage for user-controlled sources.",
+        "Validate and sanitize form input before any expression evaluation.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_form_parse route passes form input to $parse(). Show route-specific Angular expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-meta-redirect-live-oracle",
     platform: "generic",
     category: "Open redirect",
