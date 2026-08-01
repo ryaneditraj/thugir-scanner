@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-any-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_any_script?q=<ScRiPt>thugirFrAnyScriptProbe</ScRiPt> reflects mixed-case script tag unescaped; blocks_any_script route scan findings 61→74 (+live+route oracles); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-attr-unquoted-blocks-dq-sq-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote?q=thugirFrDqSqProbe onmouseover=alert(1) x= reflects unquoted attribute event handler; blocks_doublequotesinglequote route scan findings 61→75 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-space-dq-slash-eq-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_space_doublequote_slash_equals?q=<img src=x onerror=thugirFrCharsetProbe> reflects img tag unescaped; blocks_space_doublequote_slash_equals route scan findings 61→74 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-js-quoted-string-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_quoted_string?q=thugirFrJsQuotedProbe returns var foo=\"thugirFrJsQuotedProbe\"; js_quoted_string route scan findings 64→71 (+firing-range-reflected-js-quoted-string-live-oracle + route); benchmark juice-shop-staging 30 findings 6/6 maintained"

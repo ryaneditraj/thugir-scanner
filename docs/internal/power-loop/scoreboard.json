@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T14:09:12.706Z",
+  "updated_at": "2026-08-01T14:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2172,
   "discovery_findings": 29589,
-  "improvements_shipped": 1155,
-  "last_run": "2026-08-01T14:09:12.706Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-01T14:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 31,
+      "oracle_findings": 30,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 477,
+      "probes_run": 486,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,25 +48,21 @@
           ]
         }
       },
-      "note": "primary juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings; gap=[])"
+      "note": "primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings; gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 556,
-      "focus": "firing-range escape/js client-side sanitizer bypass + serverside tagname/encodeUrl attribute_unquoted + queue drain (body_comment, escapedparameter eventhandler)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 223,
+      "focus": "firing-range filter-bypass oracles (blocks_any_script, quote-filter, charset-block)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/escape/js/html_escape: 69 findings — generic firing-range oracles only; no escape/js sanitizer-bypass live oracle",
-      "public-firing-range.appspot.com/escape/js/encodeURIComponent: 69 findings — generic firing-range oracles only",
-      "public-firing-range.appspot.com/escape/js/escape: 69 findings — generic firing-range oracles only",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname: 69 findings — generic firing-range oracles only; no tagname-injection live oracle",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_unquoted: 69 findings — firing-range-escape-serverside-attribute-unquoted-live-oracle fires",
-      "public-firing-range.appspot.com/reflected/parameter/body_comment: 71 findings — generic oracles only",
-      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_quoted: 70 findings — generic oracles only"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script: 61→74 findings — case-insensitive script filter bypass oracle shipped",
+      "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote: 61→75 findings — unquoted attribute quote-filter bypass oracle shipped",
+      "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals: 61→74 findings — charset-block filter bypass oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -74,15 +70,17 @@
       "public-firing-range.appspot.com/escape/js/*: client-side html_escape/encodeURIComponent/escape sanitizer-bypass live oracles absent",
       "public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname: tagname injection live oracle absent",
       "public-firing-range.appspot.com/reflected/parameter/body_comment: HTML-comment-context XSS live oracle absent",
-      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_*: escaped event-handler attribute bypass live oracles absent"
+      "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_*: escaped event-handler attribute bypass live oracles absent",
+      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: xlink-href template unavailable (500)",
+      "public-firing-range.appspot.com/reflected/parameter/js_assignment: unquoted JS assignment sink oracle absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 31,
-    "public-firing-range.appspot.com/reflected/parameter/body_comment": 71,
-    "public-firing-range.appspot.com/reflected/escapedparameter/js_eventhandler_quoted/DOUBLE_QUOTED_ATTRIBUTE": 70,
-    "public-firing-range.appspot.com/escape/js/html_escape": 69,
-    "public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_unquoted": 69,
-    "public-firing-range.appspot.com/reflected/parameter/js_quoted_string": 71
+    "juice-shop-staging.herokuapp.com": 30,
+    "public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote": 75,
+    "public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script": 74,
+    "public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals": 74,
+    "public-firing-range.appspot.com/reflected/parameter/js_quoted_string": 71,
+    "public-firing-range.appspot.com/reflected/parameter/js_eval": 68
   }
 }
