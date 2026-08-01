@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T06:02:19.817Z",
+  "updated_at": "2026-08-01T06:09:03.661Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3090,
-  "total_findings": 32096,
+  "total_sites_scanned": 3098,
+  "total_findings": 32438,
   "critical_findings": 103,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2134,
-  "discovery_findings": 26348,
+  "discovery_urls_added": 2139,
+  "discovery_findings": 26690,
   "improvements_shipped": 1155,
-  "last_run": "2026-08-01T06:02:19.817Z",
+  "last_run": "2026-08-01T06:09:03.661Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,45 +48,48 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 6/6 (34 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (33 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 318,
-      "focus": "firing-range location.hash area.href + remoteinclude parameter script + address/location eval oracles shipped",
-      "improvements_shipped_this_run": 3
+      "findings": 342,
+      "focus": "firing-range escape/serverside js+eval bypass sinks + vulnshop SQLi search route"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/urldom/location/hash/area.href: 43→50 findings — firing-range-urldom-location-hash-area-href-live-oracle shipped",
-      "public-firing-range.appspot.com/remoteinclude/parameter/script: 43→49 findings — firing-range-remoteinclude-parameter-script-live-oracle shipped",
-      "public-firing-range.appspot.com/address/location/eval: 43→49 findings — firing-range-address-location-eval-live-oracle shipped",
-      "public-firing-range.appspot.com/reflected/url/object_param: 46 findings — generic oracles only, no object PARAM src sink oracle",
-      "public-firing-range.appspot.com/reflected/contentsniffing/json: 45 findings — generic oracles only, no MIME content-sniffing JSON oracle",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: template unavailable on Firing Range host"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/js: 48 findings — generic oracles only, no escapeHtml→JS eval bypass oracle",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/js: 48 findings — generic oracles only, no encodeUrl→JS eval bypass oracle",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/eval: 48 findings — generic oracles only, no escapeHtml→eval() sink oracle",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/eval: 48 findings — generic oracles only, no encodeUrl→eval() sink oracle",
+      "vulnshop.vercel.app/search?q=test: 6 findings — client-side lab evidence only, no route-specific SQLi live oracle",
+      "public-firing-range.appspot.com/reflected/url/object_param: 49 findings — generic oracles only",
+      "public-firing-range.appspot.com/reflected/contentsniffing/json: 48 findings — generic oracles only",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml: 47 findings — generic oracles only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/js: server-side escapeHtml bypass into JS eval sink oracle absent",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/js: server-side encodeUrl bypass into JS eval sink oracle absent",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/eval: escapeHtml→eval() reflected XSS oracle absent",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/eval: encodeUrl→eval() reflected XSS oracle absent",
+      "vulnshop.vercel.app/search: route-specific SQLi search live oracle absent",
       "public-firing-range.appspot.com/reflected/url/object_param: route-specific OBJECT PARAM src XSS oracle absent",
       "public-firing-range.appspot.com/reflected/contentsniffing/json: MIME content-sniffing JSON XSS oracle absent",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/*: sessionStorage sink oracles absent",
-      "public-firing-range.appspot.com/dom/toxicdom/postMessage/eval: postMessage missing origin-check eval sink oracle absent",
-      "public-firing-range.appspot.com/angular/*: AngularJS server-side interpolation / $parse cookie+form injection oracles absent",
-      "public-firing-range.appspot.com/address/location/innerHtml: route-specific window.location→innerHTML oracle absent"
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/*: sessionStorage sink oracles absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
-    "public-firing-range.appspot.com/urldom/location/hash/area.href": 50,
-    "public-firing-range.appspot.com/remoteinclude/parameter/script": 49,
-    "public-firing-range.appspot.com/address/location/eval": 49,
-    "public-firing-range.appspot.com/reflected/url/object_param": 46,
-    "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted": 47,
-    "public-firing-range.appspot.com/urldom/location/search/a.href": 46,
-    "public-firing-range.appspot.com/reflected/contentsniffing/json": 45,
-    "public-firing-range.appspot.com/angular/angular_body/1.2.0": 43
+    "juice-shop.herokuapp.com": 33,
+    "public-firing-range.appspot.com/reflected/url/object_param": 49,
+    "public-firing-range.appspot.com/escape/serverside/escapeHtml/js": 48,
+    "public-firing-range.appspot.com/escape/serverside/encodeUrl/js": 48,
+    "public-firing-range.appspot.com/escape/serverside/escapeHtml/eval": 48,
+    "public-firing-range.appspot.com/escape/serverside/encodeUrl/eval": 48,
+    "public-firing-range.appspot.com/reflected/contentsniffing/json": 48,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml": 47,
+    "vulnshop.vercel.app/search": 6
   }
 }
