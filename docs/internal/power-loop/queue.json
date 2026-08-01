@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T12:05:00.000Z",
+  "updated_at": "2026-08-01T14:03:55.400Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/escape/js/html_escape?q=a",
+      "source": "google/firing-range — client-side html_escape() bypass XSS oracle (/escape/js/html_escape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/js/encodeURIComponent?q=a",
+      "source": "google/firing-range — client-side encodeURIComponent() bypass XSS oracle (/escape/js/encodeURIComponent)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/js/escape?q=a",
+      "source": "google/firing-range — client-side escape() bypass XSS oracle (/escape/js/escape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname?q=a",
+      "source": "google/firing-range — server-side escapeHtml tagname injection sink (/escape/serverside/escapeHtml/tagname)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_unquoted?q=a",
+      "source": "google/firing-range — server-side encodeUrl unquoted attribute XSS sink (/escape/serverside/encodeUrl/attribute_unquoted)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/js_quoted_string?q=a",
       "source": "google/firing-range — reflected XSS parameter in double-quoted JS string assignment (/reflected/parameter/js_quoted_string)",
