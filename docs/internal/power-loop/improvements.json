@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-script-src-partial-path-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/script.src.partial_path returns scriptElement.src = '/' + payload from location.hash; partial_path route scan findings 32→42 (+firing-range-urldom-location-hash-script-src-partial-path-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-script-src-partial-query-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/script.src.partial_query returns scriptElement.src = origin + '/urldom/jsonp?referrer=' + payload + '&callback=helloWorld'; partial_query route scan findings 32→42 (+firing-range-urldom-location-hash-script-src-partial-query-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-flashinjection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /flashinjection/callbackIsEchoedBack?callback=thugirFrFlashProbe returns thugirFrFlashProbe({}); flashinjection/ route scan findings 34→44 (+firing-range-flashinjection-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-address-location-hash-assign-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/assign returns window.location.hash.substr(1) passed to location.assign(payload); assign route scan findings 31→38 (+firing-range-address-location-hash-assign-live-oracle + route); benchmark juice-shop-staging 29 findings 6/6 maintained"
