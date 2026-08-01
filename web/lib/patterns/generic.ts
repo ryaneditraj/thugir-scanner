@@ -1070,6 +1070,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-badscriptimport-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range bad JavaScript import oracle",
+    description:
+      "GET /badscriptimport/ documents script inclusions from localhost, private-network IPs, and typosquatting domains — confirmed via 127.0.0.2 localhost_import.js script.src probe.",
+    impactOneline:
+      "Importing scripts from localhost, RFC1918 addresses, or typosquatting domains enables supply-chain and internal-network pivot attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeBadscriptimportLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Only load JavaScript from trusted, owner-controlled HTTPS origins.",
+      steps: [
+        "Block script imports from localhost and private-network addresses.",
+        "Use Subresource Integrity (SRI) for third-party scripts.",
+        "Validate CDN and package URLs against an allowlist."
+      ]
+    },
+    fixPrompt:
+      "Our app imports JavaScript from untrusted or internal-network sources. Show how to restrict script origins and add SRI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-badscriptimport-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /badscriptimport route bad JavaScript import oracle",
+    description:
+      "When scanning /badscriptimport routes, the testbed documents and demonstrates script imports from localhost, private-network, and typosquatting domains.",
+    impactOneline:
+      "Route-specific scans should flag script tags sourcing JavaScript from non-owner-controlled or internal-network origins.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeBadscriptimportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove script imports from localhost, private-network, and typosquatting domains.",
+      steps: [
+        "Audit all script src attributes for untrusted origins.",
+        "Use CSP script-src to restrict allowed script origins.",
+        "Host all JavaScript on owner-controlled HTTPS domains."
+      ]
+    },
+    fixPrompt:
+      "Our /badscriptimport route loads scripts from untrusted sources. Show route-specific script origin remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-vulnerablelibraries-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range vulnerable JavaScript library oracle",
+    description:
+      "GET /vulnerablelibraries/jquery.html loads jQuery 1.8.1 with an attribute-selector XSS gadget (bugs.jquery.com/ticket/11290) — known-vulnerable library inclusion oracle.",
+    impactOneline:
+      "Outdated JavaScript libraries with known CVEs enable XSS and other client-side attacks via library-specific gadgets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeVulnerablelibrariesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade jQuery and other client libraries to patched versions.",
+      steps: [
+        "Run npm audit or Snyk to identify vulnerable library versions.",
+        "Upgrade jQuery to 3.7+ and remove deprecated selector patterns.",
+        "Pin dependencies and enable automated dependency scanning in CI."
+      ]
+    },
+    fixPrompt:
+      "Our app includes jQuery 1.8.1 with known XSS gadgets. Show how to upgrade and audit client-side library versions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-vulnerablelibraries-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /vulnerablelibraries route known-vulnerable library oracle",
+    description:
+      "When scanning /vulnerablelibraries routes, the testbed includes pages with outdated JavaScript libraries and exploitable gadgets.",
+    impactOneline:
+      "Route-specific scans should detect pages loading known-vulnerable JavaScript library versions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeVulnerablelibrariesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or upgrade vulnerable library versions on /vulnerablelibraries routes.",
+      steps: [
+        "Inventory all client-side library versions.",
+        "Upgrade to patched releases and test for breaking changes.",
+        "Add dependency scanning to CI/CD pipeline."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerablelibraries route loads outdated JS libraries. Show route-specific library upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reverseclickjacking-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reverse clickjacking / SOME oracle",
+    description:
+      "GET /reverseclickjacking/singlepage/ParameterInQuery/InCallback/ reflects user input into JSONP callback=urc_button.click — Universal Reverse Clickjacking / Same Origin Method Execution oracle.",
+    impactOneline:
+      "Controllable JSONP callback parameters enable cross-origin method execution, letting attackers trigger clicks and form submissions on victim pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReverseclickjackingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate JSONP callback parameters against a strict allowlist of function names.",
+      steps: [
+        "Never reflect user input directly into JSONP callback parameters.",
+        "Use a fixed callback name or validate against /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.",
+        "Prefer CORS with credentials over JSONP for cross-origin data access."
+      ]
+    },
+    fixPrompt:
+      "Our JSONP endpoint reflects user input into the callback parameter. Show safe JSONP callback validation to prevent reverse clickjacking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reverseclickjacking-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reverseclickjacking route SOME oracle",
+    description:
+      "When scanning /reverseclickjacking routes, JSONP callback parameters are controllable to execute DOM methods like element.click — route-specific reverse clickjacking oracle.",
+    impactOneline:
+      "Route-specific scans should detect JSONP endpoints where callback parameters enable Same Origin Method Execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReverseclickjackingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict JSONP callback parameters on /reverseclickjacking routes.",
+      steps: [
+        "Allowlist valid callback function names.",
+        "Remove parameter pollution vectors in JSONP URL construction.",
+        "Migrate from JSONP to CORS-based APIs."
+      ]
+    },
+    fixPrompt:
+      "Our /reverseclickjacking route has a controllable JSONP callback. Show route-specific SOME/reverse clickjacking remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-postmessage-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

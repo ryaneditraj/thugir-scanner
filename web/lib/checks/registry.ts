@@ -40520,6 +40520,139 @@ const firingRangeRemoteIncludeParameterScriptRouteLiveOracle: Rule = async (ctx)
   };
 };
 
+const FIRING_RANGE_BADSCRIPTIMPORT_PATH = "/badscriptimport/";
+const FIRING_RANGE_BADSCRIPTIMPORT_LOCALHOST_PROBE =
+  "/remoteinclude/parameter/script?q=http://127.0.0.2/localhost_import.js";
+
+const firingRangeBadscriptimportLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const indexUrl = new URL(FIRING_RANGE_BADSCRIPTIMPORT_PATH, ctx.origin).toString();
+  const indexDoc = await ctx.probe.get(indexUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (indexDoc.status < 200 || indexDoc.status >= 400) return NEGATIVE;
+  const indexBody = indexDoc.body;
+  const hasBadImportIndex =
+    /<title>\s*Firing Range - Bad import of JavaScript sources\s*<\/title>/i.test(indexBody) &&
+    /127\.0\.0\.\d/i.test(indexBody) &&
+    /192\.168\.\d/i.test(indexBody) &&
+    /typosquatting|g00gle\.com/i.test(indexBody);
+  if (!hasBadImportIndex) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_BADSCRIPTIMPORT_LOCALHOST_PROBE, ctx.origin).toString();
+  const probeDoc = await ctx.probe.get(probeUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (probeDoc.status < 200 || probeDoc.status >= 400) return NEGATIVE;
+  const hasLocalhostScriptSrc =
+    /<script\s+src\s*=\s*["']http:\/\/127\.0\.0\.\d\/localhost_import\.js["']/i.test(probeDoc.body);
+  if (!hasLocalhostScriptSrc) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: probeDoc.body.slice(0, 220).trim(),
+      note: "Google Firing Range /badscriptimport/ documents script imports from localhost, private-network, and typosquatting domains — confirmed via 127.0.0.2 localhost_import.js script.src oracle"
+    }
+  };
+};
+
+const firingRangeBadscriptimportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/badscriptimport\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeBadscriptimportLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /badscriptimport route scan — bad JavaScript import from untrusted sources oracle"
+    }
+  };
+};
+
+const FIRING_RANGE_VULNERABLELIBRARIES_JQUERY_PATH = "/vulnerablelibraries/jquery.html";
+
+const firingRangeVulnerablelibrariesLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_VULNERABLELIBRARIES_JQUERY_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasVulnerableJquery =
+    /<title>\s*Firing Range - vulnerable libraries - JQuery\s*<\/title>/i.test(body) &&
+    /jquery-1\.8\.1\.js/i.test(body) &&
+    /ticket\/11290|onerror\s*=\s*fail/i.test(body);
+  if (!hasVulnerableJquery) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /vulnerablelibraries/jquery.html loads jQuery 1.8.1 with attribute-selector XSS gadget (ticket/11290) — known-vulnerable library oracle"
+    }
+  };
+};
+
+const firingRangeVulnerablelibrariesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerablelibraries\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeVulnerablelibrariesLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /vulnerablelibraries route scan — known-vulnerable JavaScript library inclusion oracle"
+    }
+  };
+};
+
+const FIRING_RANGE_REVERSECLICKJACKING_PROBE_PATH =
+  "/reverseclickjacking/singlepage/ParameterInQuery/InCallback/?q=urc_button.click";
+
+const firingRangeReverseclickjackingLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_REVERSECLICKJACKING_PROBE_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasReverseClickjacking =
+    /Universal Reverse Clickjacking/i.test(body) &&
+    /id\s*=\s*['"]urc_button['"]/i.test(body) &&
+    /callback\s*=\s*urc_button\.click/i.test(body);
+  if (!hasReverseClickjacking) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range reverse clickjacking JSONP callback reflects urc_button.click — Universal Reverse Clickjacking / SOME oracle"
+    }
+  };
+};
+
+const firingRangeReverseclickjackingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reverseclickjacking\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReverseclickjackingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reverseclickjacking route scan — JSONP callback parameter pollution / SOME oracle"
+    }
+  };
+};
+
 function isDvgaLiveHost(ctx: RuleContext): boolean {
   const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
   return urls.some((raw) => {
@@ -53404,6 +53537,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeRemoteIncludeScriptHashRouteLiveOracle,
   firingRangeRemoteIncludeParameterScriptLiveOracle,
   firingRangeRemoteIncludeParameterScriptRouteLiveOracle,
+  firingRangeBadscriptimportLiveOracle,
+  firingRangeBadscriptimportRouteLiveOracle,
+  firingRangeVulnerablelibrariesLiveOracle,
+  firingRangeVulnerablelibrariesRouteLiveOracle,
+  firingRangeReverseclickjackingLiveOracle,
+  firingRangeReverseclickjackingRouteLiveOracle,
   firingRangeUrldomLocationHashFetchLiveOracle,
   firingRangeUrldomLocationHashFetchRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcLiveOracle,
