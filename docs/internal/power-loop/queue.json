@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T11:05:00.000Z",
+  "updated_at": "2026-08-01T12:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_quoted_string?q=a",
+      "source": "google/firing-range — reflected XSS parameter in double-quoted JS string assignment (/reflected/parameter/js_quoted_string)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_singlequoted_string?q=a",
+      "source": "google/firing-range — reflected XSS parameter in single-quoted JS string assignment (/reflected/parameter/js_singlequoted_string)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_slashquoted_string?q=a",
+      "source": "google/firing-range — reflected XSS parameter in slash-quoted JS string assignment (/reflected/parameter/js_slashquoted_string)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/object/data?q=a",
+      "source": "google/firing-range — reflected XSS via OBJECT data URL sink (/reflected/url/object/data)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/param/src?q=a",
+      "source": "google/firing-range — reflected XSS via OBJECT PARAM src URL sink (/reflected/url/param/src)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script?q=a",
       "source": "google/firing-range — reflected XSS body sink with lowercase 'script' filter bypass (/reflected/parameter/body/blocks_lowercase_script)",
