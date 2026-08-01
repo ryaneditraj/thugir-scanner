@@ -17068,6 +17068,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-js-eval-live-oracle",
       "shipped_at": "2026-08-01T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-comment-live-oracle",
+      "shipped_at": "2026-08-01T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-assignment-live-oracle",
+      "shipped_at": "2026-08-01T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-tagname-live-oracle",
+      "shipped_at": "2026-08-01T15:15:00.000Z"
     }
   ]
 }
