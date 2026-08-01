@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-01T02:07:53.957Z",
+  "updated_at": "2026-08-01T02:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2119,
   "discovery_findings": 25400,
-  "improvements_shipped": 1155,
-  "last_run": "2026-08-01T02:08:00.000Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-08-01T02:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 29,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 480,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,25 +48,22 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (29 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (33 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 203,
-      "focus": "firing-range location.search sinks (location.assign, param.code/src/movie.value, svg.a); drained zerohealth rate-limiting + parameter-pollution + mass-assignment",
-      "improvements_shipped_this_run": 0
+      "focus": "firing-range partial_path/partial_query script.src + flashinjection JSONP callback oracles; location.search sinks drained",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — no benchmark misses; primary Heroku 503",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_path: 32→42 findings — firing-range-urldom-location-hash-script-src-partial-path-live-oracle shipped",
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_query: 32→42 findings — firing-range-urldom-location-hash-script-src-partial-query-live-oracle shipped",
+      "public-firing-range.appspot.com/flashinjection/: 34→44 findings — firing-range-flashinjection-live-oracle shipped (Rosetta Flash JSONP callback reflection)",
       "public-firing-range.appspot.com/urldom/location/search/location.assign: 37 findings — generic firing-range oracles only; no location.search assign sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/param.code.value: 37 findings — generic oracles only; no param[code].value sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/param.src.value: 37 findings — generic oracles only; no param[src].value sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/svg.a: 37 findings — generic oracles only; no SVG xlink:href sink oracle",
-      "public-firing-range.appspot.com/urldom/location/search/param.movie.value: 37 findings — generic oracles only; no param[movie].value sink oracle",
-      "zerohealth.aliyu.dev/challenges/rate-limiting: 6 findings — zerohealth-rate-limiting-route-live-oracle present",
-      "zerohealth.aliyu.dev/challenges/parameter-pollution: 6 findings — zerohealth-parameter-pollution-route-live-oracle present",
       "zerohealth.aliyu.dev/challenges/mass-assignment: 6 findings — zerohealth-mass-assignment-route-live-oracle present (critical)"
     ],
     "learning_gaps": [
@@ -75,19 +72,21 @@
       "public-firing-range.appspot.com/urldom/location/search/location.assign: route-specific document.location.assign sink oracle absent",
       "public-firing-range.appspot.com/urldom/location/search/param.code.value|param.src.value|param.movie.value: route-specific param[].value sink oracles absent",
       "public-firing-range.appspot.com/urldom/location/search/svg.a: route-specific SVG xlink:href sink oracle absent",
-      "public-firing-range.appspot.com/urldom/location/search/input.formaction|window.open|iframe.src|a.href: route-specific location.search sink oracles still absent (01 UTC gap persists)",
-      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_path|partial_query: partial script.src sink oracles still absent"
+      "public-firing-range.appspot.com/urldom/location/search/input.formaction|window.open|iframe.src|a.href: route-specific location.search sink oracles still absent",
+      "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted: single-quoted HTML attribute reflection oracle absent",
+      "public-firing-range.appspot.com/address/location.hash/document.writeln: template unavailable on live Firing Range (404)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 29,
+    "juice-shop.herokuapp.com": 33,
+    "public-firing-range.appspot.com/flashinjection/": 44,
+    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_path": 42,
+    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_query": 42,
     "public-firing-range.appspot.com/urldom/location/search/location.assign": 37,
     "public-firing-range.appspot.com/urldom/location/search/param.code.value": 37,
-    "public-firing-range.appspot.com/urldom/location/search/param.src.value": 37,
-    "public-firing-range.appspot.com/urldom/location/search/svg.a": 37,
-    "public-firing-range.appspot.com/urldom/location/search/param.movie.value": 37,
+    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain": 39,
+    "public-firing-range.appspot.com/address/location.hash/assign": 38,
     "zerohealth.aliyu.dev/challenges/mass-assignment": 6,
-    "zerohealth.aliyu.dev/challenges/rate-limiting": 6,
-    "zerohealth.aliyu.dev/challenges/parameter-pollution": 6
+    "zerohealth.aliyu.dev/challenges/rate-limiting": 6
   }
 }
