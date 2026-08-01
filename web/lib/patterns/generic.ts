@@ -2058,6 +2058,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-body-comment-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected HTML comment context oracle",
+    description:
+      "GET /reflected/parameter/body_comment?q= reflects attacker input unescaped into an HTML comment — Firing Range comment-context XSS training oracle.",
+    impactOneline:
+      "Reflected HTML comment contexts let attackers break out with --> and inject arbitrary markup or script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyCommentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into HTML comments without encoding.",
+      steps: [
+        "HTML-encode reflected values before embedding in comment contexts.",
+        "Avoid reflecting user input into HTML comments entirely.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body_comment route reflects q into an HTML comment. Show comment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-comment-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/body_comment route oracle",
+    description:
+      "When scanning /reflected/parameter/body_comment, the q query parameter is reflected unescaped into an HTML comment — route-specific comment-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of HTML comment contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyCommentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode reflected values before embedding in HTML comments on this route.",
+      steps: [
+        "HTML-encode all reflected comment content.",
+        "Avoid reflecting user input into HTML comments.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body_comment route reflects q into an HTML comment. Show route-specific comment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-assignment-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS unquoted assignment oracle",
+    description:
+      "GET /reflected/parameter/js_assignment?q= reflects attacker input into an unquoted JavaScript assignment — Firing Range reflected JS assignment-context XSS training oracle.",
+    impactOneline:
+      "Reflected unquoted JS assignments let attackers inject arbitrary expressions or statements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into unquoted JavaScript assignment contexts.",
+      steps: [
+        "Quote and JSON-encode all values embedded in script blocks.",
+        "Avoid reflecting user input directly into JavaScript assignments.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_assignment route reflects q into an unquoted JS assignment. Show JS assignment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_assignment route oracle",
+    description:
+      "When scanning /reflected/parameter/js_assignment, the q query parameter is reflected into an unquoted JS assignment without sanitization — route-specific JS assignment-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot reach unquoted JS assignment sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Quote and encode reflected values before JS assignment embedding on this route.",
+      steps: [
+        "Use JSON.stringify() for all values in script blocks.",
+        "Avoid unquoted JS assignment reflection.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_assignment route reflects q into an unquoted JS assignment. Show route-specific assignment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-js-quoted-string-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2886,6 +2990,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /escape/serverside/escapeHtml/css_style route bypasses escapeHtml in style tags. Show route-specific CSS escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-tagname-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml tagname injection oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/tagname?q= reflects attacker input into an HTML tag name despite escapeHtml — Firing Range server-side tagname injection XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in tagname contexts enables reflected XSS via attacker-controlled element names.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideTagnameLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml is insufficient for tagname contexts — validate tag names against an allowlist.",
+      steps: [
+        "Allowlist permitted HTML tag names before reflection.",
+        "Use context-aware encoding for all HTML reflection contexts.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/tagname bypasses escapeHtml in tagname context. Show server-side tagname injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-tagname-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/tagname route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/tagname, q parameter reflects unescaped into attacker-controlled HTML tag name — route-specific server-side tagname injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml output is safe in tagname contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideTagnameRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist tag names and apply context-aware escaping on this route.",
+      steps: [
+        "Validate tag names against an allowlist.",
+        "Audit escapeHtml usage for tagname contexts.",
+        "Add output encoding tests for each reflection context."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/tagname route bypasses escapeHtml in tagname context. Show route-specific tagname injection remediation.",
     version: 1,
     enabled: true
   },
