@@ -38061,6 +38061,11 @@ const FIRING_RANGE_REFLECTED_PARAM_PATHS = [
     label: "double-quoted HTML attribute"
   },
   {
+    path: "/reflected/parameter/attribute_singlequoted",
+    bodyRe: /attribute\s*=\s*'thugirFrReflectedProbe'/i,
+    label: "single-quoted HTML attribute"
+  },
+  {
     path: "/reflected/parameter/body_comment",
     bodyRe: /<!--\s*thugirFrReflectedProbe\s*-->/i,
     label: "HTML comment body"
@@ -39420,6 +39425,88 @@ const firingRangeUrldomLocationSearchIframeSrcRouteLiveOracle: Rule = async (ctx
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /urldom/location/search/iframe.src route scan — location.search passed to iframe.src without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SEARCH_A_HREF_PATH = "/urldom/location/search/a.href";
+
+const firingRangeUrldomLocationSearchAHrefLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_A_HREF_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAnchorHrefSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /anchor\.href\s*=\s*payload/i.test(body);
+  if (!hasAnchorHrefSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/a.href passes location.search to anchor.href — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchAHrefRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/a\.href\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchAHrefLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/a.href route scan — location.search passed to anchor.href without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SEARCH_LOCATION_ASSIGN_PATH = "/urldom/location/search/location.assign";
+
+const firingRangeUrldomLocationSearchLocationAssignLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_LOCATION_ASSIGN_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasLocationAssignSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /(?:window\.)?location\.assign\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasLocationAssignSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/location.assign passes location.search to location.assign() — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchLocationAssignRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/location\.assign\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchLocationAssignLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/location.assign route scan — location.search passed to location.assign() without sanitization"
     }
   };
 };
@@ -52450,6 +52537,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationSearchWindowOpenRouteLiveOracle,
   firingRangeUrldomLocationSearchIframeSrcLiveOracle,
   firingRangeUrldomLocationSearchIframeSrcRouteLiveOracle,
+  firingRangeUrldomLocationSearchAHrefLiveOracle,
+  firingRangeUrldomLocationSearchAHrefRouteLiveOracle,
+  firingRangeUrldomLocationSearchLocationAssignLiveOracle,
+  firingRangeUrldomLocationSearchLocationAssignRouteLiveOracle,
   firingRangeAddressLocationHashAssignLiveOracle,
   firingRangeAddressLocationHashAssignRouteLiveOracle,
   firingRangeUrldomLocationSearchFormActionLiveOracle,
