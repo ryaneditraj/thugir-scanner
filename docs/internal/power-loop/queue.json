@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T21:04:37.049Z",
+  "updated_at": "2026-08-01T22:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag?q=a",
+      "source": "google/firing-range — any-tag XSS filter bypass (/tags/tag)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/a/href?q=a",
+      "source": "google/firing-range — attribute-restricted A HREF XSS (/tags/tag/a/href)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/a/style?q=a",
+      "source": "google/firing-range — attribute-restricted A STYLE XSS (/tags/tag/a/style)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/div/style?q=a",
+      "source": "google/firing-range — attribute-restricted DIV STYLE XSS (/tags/tag/div/style)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/script/src?q=a",
+      "source": "google/firing-range — attribute-restricted SCRIPT SRC XSS (/tags/tag/script/src)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/tags/tag/object?q=a",
       "source": "google/firing-range — tag-restricted OBJECT XSS (/tags/tag/object)",
