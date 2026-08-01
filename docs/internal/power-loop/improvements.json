@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-comment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body_comment?q=thugirFrBodyCommentProbe returns <!-- thugirFrBodyCommentProbe --> in body; body_comment route scan findings 71→78 (+live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_assignment?q=thugirFrJsAssignProbe returns var foo=thugirFrJsAssignProbe; js_assignment route scan findings 71→77 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-tagname-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/escapeHtml/tagname?q=thugirFrEscapeTagnameProbe returns <thugirFrEscapeTagnameProbe> tag injection; tagname route scan findings 71→76 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-body-blocks-any-script-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_any_script?q=<ScRiPt>thugirFrAnyScriptProbe</ScRiPt> reflects mixed-case script tag unescaped; blocks_any_script route scan findings 61→74 (+live+route oracles); benchmark juice-shop-staging 30 findings 6/6 maintained"
