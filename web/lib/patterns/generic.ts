@@ -2682,6 +2682,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-search-a-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search anchor.href DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/a.href reads document.location.search.substr(1) and assigns it to anchor.href — Firing Range anchor.href DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to anchor.href enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchAHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to anchor.href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove anchor.href assignments on values from window.location.search.",
+        "Allow-list link targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/a.href uses anchor.href on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-a-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/a.href route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/a.href, location.search is assigned to anchor.href without sanitization — route-specific anchor.href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot set arbitrary anchor hrefs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchAHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove anchor.href sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for link navigation sinks.",
+        "Allow-list link targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/a.href route assigns location.search to anchor.href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-location-assign-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search location.assign DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/location.assign reads document.location.search.substr(1) and passes it to location.assign() — Firing Range location.assign DOM XSS training oracle.",
+    impactOneline:
+      "location.search values passed to location.assign() enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchLocationAssignLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to location.assign() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove location.assign() calls on values from window.location.search.",
+        "Allow-list navigation targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/location.assign uses location.assign on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-location-assign-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/location.assign route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/location.assign, location.search is passed to location.assign() without sanitization — route-specific location.assign DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot trigger arbitrary navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchLocationAssignRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove location.assign sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for navigation sinks.",
+        "Allow-list navigation targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/location.assign route passes location.search to location.assign(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-assign-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
