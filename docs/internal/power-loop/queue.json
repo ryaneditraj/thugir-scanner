@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T01:05:00.000Z",
+  "updated_at": "2026-08-01T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/location.assign?//example.org",
+      "source": "google/firing-range — location.search to document.location.assign DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/param.code.value?//example.org",
+      "source": "google/firing-range — location.search to param[code].value DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/param.src.value?//example.org",
+      "source": "google/firing-range — location.search to param[src].value DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/svg.a?//example.org",
+      "source": "google/firing-range — location.search to SVG anchor xlink:href DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/param.movie.value?//example.org",
+      "source": "google/firing-range — location.search to param[movie].value DOM XSS sink",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/search/input.formaction?q=//example.org",
       "source": "google/firing-range — location.search assigned to input.formaction DOM XSS sink",
