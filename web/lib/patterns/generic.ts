@@ -32835,6 +32835,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvga-my-pastes-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "DVGA private pastes BOLA/IDOR live oracle",
+    description:
+      "POST /graphql { pastes(public: false) } on DVGA returns other users' private pastes (title, content, owner) without authentication.",
+    impactOneline:
+      "Unauthenticated GraphQL queries expose private paste data — classic broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaMyPastesIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-user authorization on pastes queries; never return private records without session checks.",
+      steps: [
+        "Require authentication before querying pastes(public: false).",
+        "Filter results to the authenticated user's owner ID.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql pastes(public:false) query returns private pastes without auth. Show per-user authorization in GraphQL resolvers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-my-pastes-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "DVGA /my_pastes BOLA route live oracle",
+    description:
+      "When scanning /my_pastes on DVGA hosts, unauthenticated pastes(public:false) query returns private paste gallery data — route-specific IDOR oracle.",
+    impactOneline:
+      "Route scans on DVGA private-pastes pages confirm broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaMyPastesIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate private paste queries on /my_pastes routes.",
+      steps: [
+        "Require session before returning private pastes.",
+        "Scope GraphQL pastes resolver to the authenticated owner.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /my_pastes route scan confirms private pastes are readable without auth. Show route-specific BOLA hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-import-paste-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "DVGA importPaste SSRF live oracle",
+    description:
+      "POST /graphql importPaste(host,port,path,scheme) mutation on DVGA fetches attacker-controlled URLs without authentication.",
+    impactOneline:
+      "Unauthenticated SSRF via paste import lets attackers probe internal networks and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaImportPasteSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or strictly validate server-side fetch in importPaste; require authentication.",
+      steps: [
+        "Denylist private IP ranges and link-local metadata URLs.",
+        "Require authentication before importPaste mutations.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA importPaste mutation performs unauthenticated server-side fetches. Show SSRF validation and auth-gating for GraphQL mutations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-import-paste-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "DVGA /import_paste SSRF route live oracle",
+    description:
+      "When scanning /import_paste on DVGA hosts, importPaste mutation accepts attacker-controlled host/port/path — route-specific SSRF oracle.",
+    impactOneline:
+      "Route scans on DVGA import pages confirm server-side request forgery via paste import.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaImportPasteSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate and validate URL fetches on /import_paste routes.",
+      steps: [
+        "Block private/metadata targets in importPaste resolver.",
+        "Require authentication for paste import mutations.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /import_paste route scan confirms SSRF via importPaste. Show route-specific SSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-create-paste-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVGA createPaste stored XSS live oracle",
+    description:
+      "POST /graphql createPaste mutation on DVGA stores unsanitized HTML/script tags in paste content without encoding.",
+    impactOneline:
+      "Stored XSS in paste content can compromise any user viewing public or private pastes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaCreatePasteStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode paste content on write; use CSP to mitigate stored XSS.",
+      steps: [
+        "HTML-encode or sanitize content before persisting pastes.",
+        "Serve user content with strict Content-Security-Policy.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA createPaste mutation stores raw HTML in paste content. Show output encoding and CSP for stored XSS prevention.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-create-paste-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVGA /create_paste stored XSS route live oracle",
+    description:
+      "When scanning /create_paste on DVGA hosts, createPaste accepts unsanitized HTML in the content field — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route scans on DVGA create-paste pages confirm stored XSS via unsanitized content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaCreatePasteStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize paste content on /create_paste write paths.",
+      steps: [
+        "Encode HTML entities in paste content before storage.",
+        "Validate and strip script-bearing tags at the GraphQL layer.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /create_paste route scan confirms stored XSS. Show route-specific content sanitization.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-catalog-search-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

