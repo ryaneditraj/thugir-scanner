@@ -37860,6 +37860,158 @@ const firingRangeDomSessionStorageInnerHtmlRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const FIRING_RANGE_SESSIONSTORAGE_DOCUMENTWRITE_HTML_PATH =
+  "/dom/toxicdom/external/sessionStorage/property/documentWrite";
+const FIRING_RANGE_SESSIONSTORAGE_DOCUMENTWRITE_SCRIPT_PATH =
+  "/dom/toxicdomscripts/sessionStorage/property/documentWrite";
+
+const firingRangeDomSessionStorageDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_SESSIONSTORAGE_DOCUMENTWRITE_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/sessionStorage\//i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_SESSIONSTORAGE_DOCUMENTWRITE_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasDocumentWriteSink =
+    /sessionStorage\.badValue/i.test(script) &&
+    /document\.write\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasDocumentWriteSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /sessionStorage\/property\/documentWrite/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external sessionStorage script passes sessionStorage.badValue to document.write() — toxic DOM sessionStorage document.write XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomSessionStorageDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/sessionStorage\//i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomSessionStorageDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/sessionStorage route scan — sessionStorage payload passed to document.write() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_LEAKEDCOOKIE_PATH = "/leakedcookie/leakedcookie";
+
+const firingRangeLeakedcookieHttponlyLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_LEAKEDCOOKIE_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (!/Leaking httpOnly cookie from the Set-Cookie header in the body/i.test(body)) {
+    return NEGATIVE;
+  }
+  const setCookie = doc.headers["set-cookie"] || "";
+  if (!/httponly/i.test(setCookie)) return NEGATIVE;
+  const cookieMatch = setCookie.match(/^([^=]+)=([^;]+)/);
+  if (!cookieMatch) return NEGATIVE;
+  const cookieValue = cookieMatch[2].trim();
+  if (!cookieValue || !body.includes(cookieValue)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      cookieName: cookieMatch[1],
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /leakedcookie/leakedcookie sets HttpOnly cookie then leaks its value in the HTML body — httpOnly cookie disclosure oracle"
+    }
+  };
+};
+
+const firingRangeLeakedcookieHttponlyRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/leakedcookie\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeLeakedcookieHttponlyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /leakedcookie route scan — HttpOnly cookie value disclosed in response body"
+    }
+  };
+};
+
+const FIRING_RANGE_MIXEDCONTENT_PATH = "/mixedcontent/";
+
+const firingRangeMixedContentLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_MIXEDCONTENT_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (!/Mixed Content/i.test(body)) return NEGATIVE;
+  const hasHttpScript = /<script[^>]+src\s*=\s*["']http:\/\//i.test(body);
+  if (!hasHttpScript) return NEGATIVE;
+  const originHttps = /^https:/i.test(ctx.origin || url);
+  if (!originHttps) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /mixedcontent/ loads an active HTTP script on an HTTPS page — mixed content misconfiguration oracle"
+    }
+  };
+};
+
+const firingRangeMixedContentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mixedcontent\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeMixedContentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /mixedcontent route scan — HTTP script loaded on HTTPS page"
+    }
+  };
+};
+
 const FIRING_RANGE_POSTMESSAGE_EVAL_PATH = "/dom/toxicdom/postMessage/eval";
 const FIRING_RANGE_ANGULAR_BODY_PROBE = "thugirFrAngularProbe";
 
@@ -53036,6 +53188,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomLocalStorageXssRouteLiveOracle,
   firingRangeDomSessionStorageInnerHtmlLiveOracle,
   firingRangeDomSessionStorageInnerHtmlRouteLiveOracle,
+  firingRangeDomSessionStorageDocumentwriteLiveOracle,
+  firingRangeDomSessionStorageDocumentwriteRouteLiveOracle,
+  firingRangeLeakedcookieHttponlyLiveOracle,
+  firingRangeLeakedcookieHttponlyRouteLiveOracle,
+  firingRangeMixedContentLiveOracle,
+  firingRangeMixedContentRouteLiveOracle,
   firingRangeDomPostMessageEvalLiveOracle,
   firingRangeDomPostMessageEvalRouteLiveOracle,
   firingRangeDomPostMessageInnerHtmlLiveOracle,

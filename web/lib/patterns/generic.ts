@@ -914,6 +914,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-sessionstorage-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/external/sessionStorage/property/documentWrite loads a script that reads sessionStorage.badValue and passes it to document.write() — Firing Range toxic DOM sessionStorage document.write XSS training oracle.",
+    impactOneline:
+      "DOM XSS via sessionStorage lets attackers persist payloads for the browser tab session that execute when written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from sessionStorage.",
+        "Treat storage as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our page reads sessionStorage and passes it to document.write(). Show how to remove storage-backed DOM XSS sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage document.write route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/external/sessionStorage routes, the external script passes sessionStorage.badValue to document.write() — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM XSS sinks that write sessionStorage-backed payloads via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on sessionStorage-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/external/sessionStorage route uses document.write on sessionStorage values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-leakedcookie-httponly-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Google Firing Range HttpOnly cookie leak oracle",
+    description:
+      "GET /leakedcookie/leakedcookie sets an HttpOnly cookie in Set-Cookie then echoes the cookie value in the HTML body — Firing Range httpOnly cookie disclosure training oracle.",
+    impactOneline:
+      "Leaking HttpOnly cookie values in page bodies defeats the HttpOnly protection and enables session theft via XSS or cache poisoning.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeLeakedcookieHttponlyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never echo HttpOnly cookie values in HTML responses — Firing Range is an intentional disclosure testbed.",
+      steps: [
+        "Keep session identifiers out of response bodies and client-side JavaScript.",
+        "Audit server templates for cookie value reflection.",
+        "Use server-side session storage instead of echoing tokens."
+      ]
+    },
+    fixPrompt:
+      "Our page sets HttpOnly cookies but leaks their values in the HTML body. Show how to stop cookie disclosure.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-leakedcookie-httponly-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Google Firing Range /leakedcookie HttpOnly cookie leak route oracle",
+    description:
+      "When scanning /leakedcookie routes, the response sets HttpOnly cookies and leaks their values in the body — route-specific cookie disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HttpOnly session cookies are not reflected in HTML bodies.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeLeakedcookieHttponlyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove cookie value reflection from /leakedcookie handlers.",
+      steps: [
+        "Audit all Set-Cookie usage for downstream body reflection.",
+        "Keep session identifiers server-side only.",
+        "Add response review for sensitive header leakage."
+      ]
+    },
+    fixPrompt:
+      "Our /leakedcookie route leaks HttpOnly cookie values in HTML. Show route-specific cookie disclosure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-mixedcontent-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range mixed content misconfiguration oracle",
+    description:
+      "GET /mixedcontent/ serves an HTTPS page that loads an active HTTP script — Firing Range mixed content training oracle.",
+    impactOneline:
+      "Mixed HTTP scripts on HTTPS pages can be tampered with in transit and enable man-in-the-middle code injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeMixedContentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Load all active content over HTTPS — Firing Range is an intentional mixed-content testbed.",
+      steps: [
+        "Upgrade script, stylesheet, and iframe sources to HTTPS.",
+        "Use Content-Security-Policy upgrade-insecure-requests.",
+        "Block mixed active content at the CDN or reverse proxy."
+      ]
+    },
+    fixPrompt:
+      "Our HTTPS page loads HTTP scripts. Show how to eliminate mixed content and enforce upgrade-insecure-requests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-mixedcontent-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /mixedcontent route mixed content oracle",
+    description:
+      "When scanning /mixedcontent routes, the HTTPS page includes active HTTP script sources — route-specific mixed content misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HTTPS pages do not load active content over plain HTTP.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeMixedContentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove HTTP script sources from /mixedcontent handlers.",
+      steps: [
+        "Serve all scripts over HTTPS.",
+        "Add CSP upgrade-insecure-requests on HTTPS pages.",
+        "Audit templates for protocol-relative or hardcoded http:// assets."
+      ]
+    },
+    fixPrompt:
+      "Our /mixedcontent route loads HTTP scripts on HTTPS. Show route-specific mixed content remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-postmessage-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
