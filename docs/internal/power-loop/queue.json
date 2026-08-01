@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-07-31T23:05:00.000Z",
+  "updated_at": "2026-08-01T00:15:08.233Z",
   "discovery_urls": [
+    {
+      "url": "https://serverless.fail/",
+      "source": "OWASP DVSA — Damn Vulnerable Serverless Application public demo (serverless.fail)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/assign",
+      "source": "google/firing-range — location.hash to window.location.assign DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/document.writeln",
+      "source": "google/firing-range — location.hash to document.writeln DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/form.action?q=//example.org",
+      "source": "google/firing-range — location.search to form.action DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/flashinjection/",
+      "source": "google/firing-range — Flash injection XSS lab suite (/flashinjection/)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain#/urldom/",
       "source": "google/firing-range — location.hash partial domain concatenated to script.src DOM XSS sink",
