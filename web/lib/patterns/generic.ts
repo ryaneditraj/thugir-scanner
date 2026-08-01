@@ -1746,6 +1746,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-body-blocks-lowercase-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range lowercase script filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_lowercase_script?q= reflects mixed-case <ScRiPt> tags unescaped — Firing Range script-case filter bypass training oracle.",
+    impactOneline:
+      "Case-sensitive script filters are bypassed with mixed-case tags, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksLowercaseScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and block script tags case-insensitively before reflecting user input.",
+      steps: [
+        "Strip or encode <script> tags regardless of character case.",
+        "Use a strict HTML sanitizer for all reflected body content.",
+        "Deploy CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_lowercase_script route allows mixed-case script tag bypass. Show case-insensitive filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-lowercase-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range lowercase script filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_lowercase_script, mixed-case <ScRiPt> tags bypass lowercase-only filters — route-specific script-case bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script filters cannot be bypassed with mixed-case tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksLowercaseScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply case-insensitive script tag filtering on this route.",
+      steps: [
+        "Normalize input to lowercase before applying script blocklists.",
+        "HTML-encode reflected body content.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_lowercase_script route allows mixed-case script bypass. Show route-specific filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-uppercase-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range uppercase SCRIPT filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_uppercase_script?q= reflects lowercase <script> tags unescaped — Firing Range uppercase SCRIPT filter bypass training oracle.",
+    impactOneline:
+      "Uppercase-only SCRIPT filters are bypassed with lowercase script tags, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksUppercaseScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and block script tags case-insensitively before reflecting user input.",
+      steps: [
+        "Strip or encode <script> tags regardless of character case.",
+        "Use a strict HTML sanitizer for all reflected body content.",
+        "Deploy CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_uppercase_script route allows lowercase script tag bypass. Show case-insensitive filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-uppercase-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range uppercase SCRIPT filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_uppercase_script, lowercase <script> tags bypass uppercase-only filters — route-specific script-case bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm uppercase SCRIPT filters cannot be bypassed with lowercase tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksUppercaseScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply case-insensitive script tag filtering on this route.",
+      steps: [
+        "Normalize input to lowercase before applying script blocklists.",
+        "HTML-encode reflected body content.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_uppercase_script route allows lowercase script bypass. Show route-specific filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS eval sink oracle",
+    description:
+      "GET /reflected/parameter/js_eval?q= reflects attacker input into eval() — Firing Range reflected JavaScript eval sink training oracle.",
+    impactOneline:
+      "Reflected eval() sinks let attackers execute arbitrary JavaScript in victim browsers via crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to eval() or similar dynamic code execution sinks.",
+      steps: [
+        "Remove eval() and replace with safe JSON parsing or allowlisted callbacks.",
+        "HTML-encode or reject reflected values before embedding in script blocks.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_eval route reflects q into eval(). Show eval sink remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_eval route oracle",
+    description:
+      "When scanning /reflected/parameter/js_eval, the q query parameter is reflected into eval() without sanitization — route-specific JS eval sink oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot reach eval() sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Eliminate eval() sinks on /reflected/parameter/js_eval.",
+      steps: [
+        "Remove eval() and use safe data handling instead.",
+        "Encode reflected values before script embedding.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_eval route reflects q into eval(). Show route-specific eval sink remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-url-href-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

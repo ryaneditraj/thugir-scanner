@@ -38617,6 +38617,128 @@ const firingRangeReflectedParamRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_BODY_BLOCKS_LOWERCASE_SCRIPT_PATH =
+  "/reflected/parameter/body/blocks_lowercase_script";
+const FIRING_RANGE_LC_SCRIPT_PROBE = "thugirFrLcScriptProbe";
+
+const firingRangeReflectedBodyBlocksLowercaseScriptLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_BODY_BLOCKS_LOWERCASE_SCRIPT_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", `<ScRiPt>${FIRING_RANGE_LC_SCRIPT_PROBE}</ScRiPt>`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const marker = `<ScRiPt>${FIRING_RANGE_LC_SCRIPT_PROBE}</ScRiPt>`;
+  if (!doc.body.includes(marker)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/body/blocks_lowercase_script?q= reflects mixed-case <ScRiPt> tag unescaped — lowercase script filter bypass training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedBodyBlocksLowercaseScriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/body\/blocks_lowercase_script\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedBodyBlocksLowercaseScriptLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/body/blocks_lowercase_script route scan — mixed-case <ScRiPt> bypasses lowercase-only script filter"
+    }
+  };
+};
+
+const FIRING_RANGE_BODY_BLOCKS_UPPERCASE_SCRIPT_PATH =
+  "/reflected/parameter/body/blocks_uppercase_script";
+const FIRING_RANGE_UC_SCRIPT_PROBE = "thugirFrUcScriptProbe";
+
+const firingRangeReflectedBodyBlocksUppercaseScriptLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_BODY_BLOCKS_UPPERCASE_SCRIPT_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", `<script>${FIRING_RANGE_UC_SCRIPT_PROBE}</script>`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const marker = `<script>${FIRING_RANGE_UC_SCRIPT_PROBE}</script>`;
+  if (!doc.body.includes(marker)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/body/blocks_uppercase_script?q= reflects lowercase <script> tag unescaped — uppercase SCRIPT filter bypass training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedBodyBlocksUppercaseScriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/body\/blocks_uppercase_script\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedBodyBlocksUppercaseScriptLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/body/blocks_uppercase_script route scan — lowercase <script> bypasses uppercase-only SCRIPT filter"
+    }
+  };
+};
+
+const FIRING_RANGE_JS_EVAL_PATH = "/reflected/parameter/js_eval";
+const FIRING_RANGE_JS_EVAL_PROBE = "thugirFrJsEvalProbe";
+
+const firingRangeReflectedJsEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_EVAL_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_EVAL_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const evalRe = new RegExp(
+    `eval\\s*\\(\\s*["']${FIRING_RANGE_JS_EVAL_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']\\s*\\)`,
+    "i"
+  );
+  if (!evalRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/js_eval?q= reflects attacker input into eval() — reflected JS eval sink training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedJsEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/js_eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedJsEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/js_eval route scan — q parameter reflected into eval() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_REFLECTED_HREF_PROBE = "javascript:thugirFrHrefProbe";
 
 const firingRangeReflectedUrlHrefLiveOracle: Rule = async (ctx) => {
@@ -53495,6 +53617,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeJsonpRouteLiveOracle,
   firingRangeReflectedParamLiveOracle,
   firingRangeReflectedParamRouteLiveOracle,
+  firingRangeReflectedBodyBlocksLowercaseScriptLiveOracle,
+  firingRangeReflectedBodyBlocksLowercaseScriptRouteLiveOracle,
+  firingRangeReflectedBodyBlocksUppercaseScriptLiveOracle,
+  firingRangeReflectedBodyBlocksUppercaseScriptRouteLiveOracle,
+  firingRangeReflectedJsEvalLiveOracle,
+  firingRangeReflectedJsEvalRouteLiveOracle,
   firingRangeReflectedUrlHrefLiveOracle,
   firingRangeReflectedUrlHrefRouteLiveOracle,
   firingRangeReflectedUrlScriptSrcLiveOracle,
