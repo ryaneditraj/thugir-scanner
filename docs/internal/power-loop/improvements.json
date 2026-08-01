@@ -16915,6 +16915,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-angular-form-parse-live-oracle",
       "shipped_at": "2026-08-01T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-documentwrite-live-oracle",
+      "shipped_at": "2026-08-01T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-leakedcookie-httponly-live-oracle",
+      "shipped_at": "2026-08-01T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-mixedcontent-live-oracle",
+      "shipped_at": "2026-08-01T09:10:00.000Z"
     }
   ]
 }
