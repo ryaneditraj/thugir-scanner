@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-textarea-attribute-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/textarea_attribute_value?q=<script>alert(1)</script> reflects attribute='<script>alert(1)</script>' in <textarea>; public-firing-range.appspot.com/reflected/parameter/textarea_attribute_value findings 104→111 (+textarea-attribute-value live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-style-attribute-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/style_attribute_value?q=<script>alert(1)</script> reflects attribute='<script>alert(1)</script>' in <style>; public-firing-range.appspot.com/reflected/parameter/style_attribute_value findings 104→111 (+style-attribute-value live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-form-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/form?q=<form> reflects <form></form>; public-firing-range.appspot.com/tags/tag/form findings 104→111 (+form live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-tags-tag-option-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/option?q=<option> reflects <option></option>; public-firing-range.appspot.com/tags/tag/option findings 97→108 (+option live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
