@@ -3878,6 +3878,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-tags-tag-option-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range OPTION tag injection oracle",
+    description:
+      "GET /tags/tag/option?q= accepts attacker-controlled <option> tags and reflects them into the response — Firing Range OPTION tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient OPTION tag filtering allows attacker-controlled option elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagOptionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode OPTION tag injection in /tags/tag/option routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/option route accepts OPTION tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-option-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/option route XSS oracle",
+    description:
+      "When scanning /tags/tag/option, q parameter injects attacker-controlled <option> tags — route-specific OPTION tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm OPTION tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagOptionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix OPTION tag filtering on /tags/tag/option route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/option.",
+        "Add output encoding tests for OPTION tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/option route allows OPTION tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-textarea-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range TEXTAREA tag injection oracle",
+    description:
+      "GET /tags/tag/textarea?q= accepts attacker-controlled <textarea> tags and reflects them into the response — Firing Range TEXTAREA tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient TEXTAREA tag filtering allows attacker-controlled textarea elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagTextareaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode TEXTAREA tag injection in /tags/tag/textarea routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/textarea route accepts TEXTAREA tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-textarea-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/textarea route XSS oracle",
+    description:
+      "When scanning /tags/tag/textarea, q parameter injects attacker-controlled <textarea> tags — route-specific TEXTAREA tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm TEXTAREA tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagTextareaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix TEXTAREA tag filtering on /tags/tag/textarea route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/textarea.",
+        "Add output encoding tests for TEXTAREA tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/textarea route allows TEXTAREA tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-iframe-attribute-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range iframe attribute value reflected XSS oracle",
+    description:
+      "GET /reflected/parameter/iframe_attribute_value?q= reflects attacker input into an iframe attribute value — Firing Range attribute-sink reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped user input in iframe attribute values enables reflected XSS when attackers control the q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterIframeAttributeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject user input reflected into iframe attribute values.",
+      steps: [
+        "HTML-encode all user input before inserting into attribute values.",
+        "Use strict Content-Security-Policy to mitigate XSS impact.",
+        "Add output encoding tests for attribute-sink reflection contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/iframe_attribute_value route reflects q into iframe attribute values. Show attribute-sink reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-iframe-attribute-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/iframe_attribute_value route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/iframe_attribute_value, q parameter is reflected into iframe attribute without validation — route-specific attribute-sink reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm iframe attribute values cannot contain unescaped attacker-controlled script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterIframeAttributeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix attribute value encoding on /reflected/parameter/iframe_attribute_value route.",
+      steps: [
+        "Encode or reject script tags in q parameter before attribute insertion.",
+        "Audit all attribute-sink reflection contexts on this route.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/iframe_attribute_value route reflects q into iframe attributes. Show route-specific attribute-sink XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
