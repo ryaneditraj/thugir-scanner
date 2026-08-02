@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T10:03:47.517Z",
-  "total": 1485,
-  "uniqueSlugs": 1480,
+  "generatedAt": "2026-08-02T11:03:24.057Z",
+  "total": 1491,
+  "uniqueSlugs": 1486,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1467,
+    "generic": 1473,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1400,
+    "deep": 1406,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 96,
-    "Security misconfiguration": 135,
+    "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
     "Cross-site scripting": 380,
@@ -854,6 +854,12 @@
     "firing-range-cors-allow-insecure-scheme-route-live-oracle",
     "firing-range-cors-allow-null-origin-live-oracle",
     "firing-range-cors-allow-null-origin-route-live-oracle",
+    "firing-range-cors-allow-origin-ends-with-live-oracle",
+    "firing-range-cors-allow-origin-ends-with-route-live-oracle",
+    "firing-range-cors-allow-origin-regex-dot-live-oracle",
+    "firing-range-cors-allow-origin-regex-dot-route-live-oracle",
+    "firing-range-cors-allow-origin-starts-with-live-oracle",
+    "firing-range-cors-allow-origin-starts-with-route-live-oracle",
     "firing-range-cors-dynamic-allow-origin-live-oracle",
     "firing-range-cors-dynamic-allow-origin-route-live-oracle",
     "firing-range-dom-cookie-set-eval-live-oracle",
