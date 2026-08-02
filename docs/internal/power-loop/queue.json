@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T04:05:10.577Z",
+  "updated_at": "2026-08-02T05:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/403?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 403 status (/reflected/parameter/body/403)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/404?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 404 status (/reflected/parameter/body/404)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/500?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 500 status (/reflected/parameter/body/500)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/replace",
+      "source": "google/firing-range — location.hash to String.replace DOM XSS sink (/address/location.hash/replace)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/function",
+      "source": "google/firing-range — location.hash to Function constructor DOM XSS sink (/address/location.hash/function)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginStartsWith",
       "source": "google/firing-range — CORS origin.startsWith bypass misconfig (/cors/alloworigin/allowOriginStartsWith)",
