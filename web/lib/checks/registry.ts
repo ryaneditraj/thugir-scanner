@@ -39599,6 +39599,67 @@ const firingRangeDomCookieSetEvalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_DOM_COOKIE_UNSET_NAME =
+  "ThisCookieIsTotallyRandomAndCantPossiblyBeSet";
+const FIRING_RANGE_DOM_COOKIE_UNSET_SOURCE_RE = new RegExp(
+  `lookupCookie\\s*\\(\\s*['"]${FIRING_RANGE_DOM_COOKIE_UNSET_NAME}['"]\\s*\\)`,
+  "i"
+);
+
+const firingRangeDomCookieEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/document/cookie/eval",
+    FIRING_RANGE_DOM_COOKIE_UNSET_SOURCE_RE,
+    "document.cookie (unset lookup)"
+  );
+};
+
+const firingRangeDomCookieEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/cookie\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomCookieEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/cookie/eval route scan — unset cookie lookup passed to eval() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomCookieInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomInnerHtml(
+    ctx,
+    "/dom/toxicdom/document/cookie/innerHtml",
+    FIRING_RANGE_DOM_COOKIE_UNSET_SOURCE_RE,
+    "document.cookie (unset lookup)"
+  );
+};
+
+const firingRangeDomCookieInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/cookie\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomCookieInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/cookie/innerHtml route scan — unset cookie lookup passed to innerHTML without sanitization"
+    }
+  };
+};
+
 const firingRangeDomWindowNameEvalLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   return probeFiringRangeToxicdomEval(
@@ -41720,6 +41781,49 @@ const firingRangeDomPropagationEvalRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/dompropagation/document/formSubmission/eval route scan — location.hash propagates via window.status to eval()"
+    }
+  };
+};
+
+const FIRING_RANGE_DOM_PROPAGATION_WINDOW_EVAL_PATH =
+  "/dom/dompropagation/window/formSubmission/eval";
+
+const firingRangeDomPropagationWindowEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_DOM_PROPAGATION_WINDOW_EVAL_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasPropagationEval =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /window\.status\s*=\s*payload/i.test(body) &&
+    /eval\s*\(\s*retrieved_payload\s*\)/i.test(body);
+  if (!hasPropagationEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/dompropagation/window/formSubmission/eval propagates location.hash via window.status into eval() — DOM propagation XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeDomPropagationWindowEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/dompropagation\/window\/formSubmission\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomPropagationWindowEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/dompropagation/window/formSubmission/eval route scan — location.hash propagates via window.status to eval()"
     }
   };
 };
@@ -56421,6 +56525,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedContentsniffingJsonRouteLiveOracle,
   firingRangeDomCookieSetEvalLiveOracle,
   firingRangeDomCookieSetEvalRouteLiveOracle,
+  firingRangeDomCookieEvalLiveOracle,
+  firingRangeDomCookieEvalRouteLiveOracle,
+  firingRangeDomCookieInnerhtmlLiveOracle,
+  firingRangeDomCookieInnerhtmlRouteLiveOracle,
   firingRangeDomWindowNameEvalLiveOracle,
   firingRangeDomWindowNameEvalRouteLiveOracle,
   firingRangeDomReferrerEvalLiveOracle,
@@ -56529,6 +56637,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomFormSubmissionDocumentwriteRouteLiveOracle,
   firingRangeDomPropagationEvalLiveOracle,
   firingRangeDomPropagationEvalRouteLiveOracle,
+  firingRangeDomPropagationWindowEvalLiveOracle,
+  firingRangeDomPropagationWindowEvalRouteLiveOracle,
   firingRangeRemoteIncludeScriptHashLiveOracle,
   firingRangeRemoteIncludeScriptHashRouteLiveOracle,
   firingRangeRemoteIncludeParameterScriptLiveOracle,
