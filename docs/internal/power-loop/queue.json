@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T01:05:00.000Z",
+  "updated_at": "2026-08-02T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/iframe_attribute_value?q=a",
+      "source": "google/firing-range — reflected XSS iframe attribute value sink (/reflected/parameter/iframe_attribute_value)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/textarea_attribute_value?q=a",
+      "source": "google/firing-range — reflected XSS textarea attribute value sink (/reflected/parameter/textarea_attribute_value)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/style_attribute_value?q=a",
+      "source": "google/firing-range — reflected XSS style attribute value sink (/reflected/parameter/style_attribute_value)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/eval",
+      "source": "google/firing-range — sessionStorage function sink to eval() DOM XSS (/dom/toxicdom/sessionStorage/function/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/setTimeout",
+      "source": "google/firing-range — location.hash to setTimeout DOM XSS sink (/address/location.hash/setTimeout)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/tags/tag/label?q=a",
       "source": "google/firing-range — tag-restricted LABEL XSS (/tags/tag/label)",
