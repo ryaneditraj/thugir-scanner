@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T17:03:34.993Z",
+  "updated_at": "2026-08-02T18:10:00.000Z",
   "discovery_urls": [
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/innerHtml",
@@ -13874,7 +13874,32 @@
       "url": "https://vulnshop.vercel.app/api/users",
       "source": "chethan-vinayak/vulnshop — excessive data exposure oracle GET /api/users (Vercel OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/products/1/reviews",
+      "source": "Escape.tech Juice Shop demo — product reviews BOLA oracle GET /rest/products/:id/reviews (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/docs/",
+      "source": "Invicti/Acunetix rest.vulnweb.com — Swagger/OpenAPI docs surface for JWT/Basic/OAuth2 API vuln training (vulnweb.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testasp.vulnweb.com/ShowForum.asp?id=0",
+      "source": "Acunetix Acuforum — classic ASP SQLi forum oracle GET /ShowForum.asp?id= (testasp.vulnweb.com IIS/ASP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testaspnet.vulnweb.com/Comments.aspx?id=1",
+      "source": "Acunetix Acublog — ASP.NET IDOR/comments oracle GET /Comments.aspx?id= (testaspnet.vulnweb.com lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testasp.vulnweb.com/login.asp",
+      "source": "Acunetix Acuforum — ASP authentication bypass / SQLi login oracle POST /login.asp (testasp.vulnweb.com lab)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 5
+  "discovery_urls_added": 10
 }
