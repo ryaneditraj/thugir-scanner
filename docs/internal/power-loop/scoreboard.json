@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T06:25:00.000Z",
+  "updated_at": "2026-08-02T07:13:58.054Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3317,
-  "total_findings": 47787,
+  "total_sites_scanned": 3326,
+  "total_findings": 48637,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2252,
-  "discovery_findings": 41272,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-02T06:25:00.000Z",
+  "discovery_urls_added": 2257,
+  "discovery_findings": 42091,
+  "improvements_shipped": 1155,
+  "last_run": "2026-08-02T07:13:58.054Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 35,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,29 +48,34 @@
           ]
         }
       },
-      "note": "juice-shop.herokuapp.com 6/6 (35 findings); no benchmark misses; secret-resend slug still absent"
+      "note": "juice-shop.herokuapp.com 503; staging fallback 6/6 (31 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "firing-range escape head-sink + noscript reflection + select/source tag injection",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 819,
+      "focus": "firing-range escape attribute_quoted + body/iframe + remoteinclude object_raw + pentest-ground weak_id",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (35 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/head: 112→115 findings — firing-range-escape-serverside-head live+route oracles shipped",
-      "public-firing-range.appspot.com/reflected/parameter/noscript: 113→117 findings — firing-range-reflected-parameter-noscript live+route oracles shipped",
-      "public-firing-range.appspot.com/tags/tag/select: route-specific tag injection oracle for select/source tags"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — primary Heroku 503",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_quoted: 114 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_quoted: 114 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/reflected/parameter/body/iframe: 115 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/remoteinclude/parameter/object_raw: 114 findings — generic firing-range oracles only",
+      "pentest-ground.com:4280/vulnerabilities/weak_id/: 8 findings — generic DVWA lab evidence only",
+      "public-firing-range.appspot.com/badscriptimport/: 118 findings — bad-script-import route hub",
+      "public-firing-range.appspot.com/leakedcookie/: 118 findings — leaked-cookie route hub",
+      "public-firing-range.appspot.com/vulnerablelibraries/: 118 findings — vulnerable-libraries route hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/angular/*: AngularJS server-side interpolation / $parse cookie+form injection oracles absent",
-      "public-firing-range.appspot.com/escape/serverside/encodeUrl/title: template unavailable on live Firing Range host",
-      "public-firing-range.appspot.com/address/location.hash/range.createContextualFragment: template unavailable on live Firing Range host",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: route-specific SVG xlink:href sink oracle absent"
+      "public-firing-range.appspot.com/escape/serverside/attribute_quoted: generic firing-range oracles only — no quoted-attribute route-specific live oracles",
+      "public-firing-range.appspot.com/reflected/parameter/body/iframe: generic firing-range oracles only — no iframe body-sink route-specific live oracle",
+      "public-firing-range.appspot.com/remoteinclude/parameter/object_raw: generic firing-range oracles only — no remote object-raw inclusion route-specific live oracle",
+      "pentest-ground.com:4280/vulnerabilities/weak_id/: weak-ID/IDOR route-specific live oracle absent"
     ]
   },
   "discovery_highlights": {
@@ -81,6 +86,14 @@
     "public-firing-range.appspot.com/urldom/location/hash/area.href": 114,
     "public-firing-range.appspot.com/reflected/parameter/attribute_singlequoted": 47,
     "public-firing-range.appspot.com/angular/angular_body/1.2.0": 43,
-    "public-firing-range.appspot.com/angular/angular_cookie_parse/1.6.0": 43
+    "public-firing-range.appspot.com/angular/angular_cookie_parse/1.6.0": 43,
+    "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_quoted?q=a": 114,
+    "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_quoted?q=a": 114,
+    "https://public-firing-range.appspot.com/reflected/parameter/body/iframe?q=a": 115,
+    "https://public-firing-range.appspot.com/remoteinclude/parameter/object_raw?q=https://example.com": 114,
+    "https://pentest-ground.com:4280/vulnerabilities/weak_id/": 8,
+    "https://public-firing-range.appspot.com/badscriptimport/": 118,
+    "https://public-firing-range.appspot.com/leakedcookie/": 118,
+    "https://public-firing-range.appspot.com/vulnerablelibraries/": 118
   }
 }

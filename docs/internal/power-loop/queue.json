@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T06:05:00.000Z",
+  "updated_at": "2026-08-02T07:05:46.889Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_quoted?q=a",
+      "source": "google/firing-range — server-side escapeHtml quoted-attribute XSS sink (/escape/serverside/escapeHtml/attribute_quoted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_quoted?q=a",
+      "source": "google/firing-range — server-side encodeUrl quoted-attribute XSS sink (/escape/serverside/encodeUrl/attribute_quoted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/iframe?q=a",
+      "source": "google/firing-range — reflected parameter into iframe body sink (/reflected/parameter/body/iframe)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/remoteinclude/parameter/object_raw?q=https://example.com",
+      "source": "google/firing-range — remote raw object inclusion via URL parameter (/remoteinclude/parameter/object_raw)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/weak_id/",
+      "source": "Pentest-Ground DVWA — weak ID / IDOR lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/head?q=a",
       "source": "google/firing-range — server-side encodeUrl bypass into HTML head sink (/escape/serverside/encodeUrl/head)",
