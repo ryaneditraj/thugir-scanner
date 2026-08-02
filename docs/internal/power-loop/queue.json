@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T21:03:57.145Z",
+  "updated_at": "2026-08-02T22:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite",
+      "source": "google/firing-range — localStorage function sink to document.write DOM XSS (/dom/toxicdom/localStorage/function/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/array/innerHtml",
+      "source": "google/firing-range — localStorage array sink to innerHTML DOM XSS (/dom/toxicdom/localStorage/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/array/documentWrite",
+      "source": "google/firing-range — localStorage array sink to document.write DOM XSS (/dom/toxicdom/localStorage/array/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/documentWrite",
+      "source": "google/firing-range — external script localStorage function to document.write DOM XSS (/dom/toxicdom/external/localStorage/function/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/innerHtml",
+      "source": "google/firing-range — external script localStorage array to innerHTML DOM XSS (/dom/toxicdom/external/localStorage/array/innerHtml)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/tags/tag/video?q=a",
       "source": "google/firing-range — tag-restricted VIDEO XSS (/tags/tag/video)",
