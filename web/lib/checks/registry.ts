@@ -41245,6 +41245,129 @@ const firingRangeUrldomLocationSearchFormActionRouteLiveOracle: Rule = async (ct
   };
 };
 
+const FIRING_RANGE_URLDOM_SEARCH_OBJECT_DATA_PATH = "/urldom/location/search/object.data";
+
+const firingRangeUrldomLocationSearchObjectDataLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_OBJECT_DATA_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasObjectDataSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /objectElement\.data\s*=\s*payload/i.test(body);
+  if (!hasObjectDataSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/object.data passes location.search to object.data — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchObjectDataRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/object\.data\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchObjectDataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/object.data route scan — location.search passed to object.data without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SEARCH_EMBED_SRC_PATH = "/urldom/location/search/embed.src";
+
+const firingRangeUrldomLocationSearchEmbedSrcLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_EMBED_SRC_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasEmbedSrcSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /embedElement\.src\s*=\s*payload/i.test(body);
+  if (!hasEmbedSrcSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/embed.src passes location.search to embed.src — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchEmbedSrcRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/embed\.src\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchEmbedSrcLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/embed.src route scan — location.search passed to embed.src without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SEARCH_LINK_HREF_PATH = "/urldom/location/search/link.href";
+
+const firingRangeUrldomLocationSearchLinkHrefLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_LINK_HREF_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasLinkHrefSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /linkElement\.href\s*=\s*payload/i.test(body);
+  if (!hasLinkHrefSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/link.href passes location.search to link.href — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchLinkHrefRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/link\.href\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchLinkHrefLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/link.href route scan — location.search passed to link.href without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_URLDOM_HASH_SCRIPT_SRC_PARTIAL_DOMAIN_PATH =
   "/urldom/location/hash/script.src.partial_domain";
 
@@ -54926,6 +55049,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeAddressLocationHashAssignRouteLiveOracle,
   firingRangeUrldomLocationSearchFormActionLiveOracle,
   firingRangeUrldomLocationSearchFormActionRouteLiveOracle,
+  firingRangeUrldomLocationSearchObjectDataLiveOracle,
+  firingRangeUrldomLocationSearchObjectDataRouteLiveOracle,
+  firingRangeUrldomLocationSearchEmbedSrcLiveOracle,
+  firingRangeUrldomLocationSearchEmbedSrcRouteLiveOracle,
+  firingRangeUrldomLocationSearchLinkHrefLiveOracle,
+  firingRangeUrldomLocationSearchLinkHrefRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialDomainLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialDomainRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialPathLiveOracle,

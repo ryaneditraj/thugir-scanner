@@ -5022,6 +5022,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-search-object-data-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search object.data DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/object.data reads document.location.search.substr(1) and assigns it to object.data — Firing Range object.data DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to object.data enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchObjectDataLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to object.data — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove object.data assignments on values from window.location.search.",
+        "Allow-list object data origins in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/object.data uses object.data on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-object-data-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/object.data route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/object.data, location.search is assigned to object.data without sanitization — route-specific object.data DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot load arbitrary object data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchObjectDataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove object.data sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for object inclusion sinks.",
+        "Allow-list object data origins.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/object.data route assigns location.search to object.data. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-embed-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search embed.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/embed.src reads document.location.search.substr(1) and assigns it to embed.src — Firing Range embed.src DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to embed.src enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchEmbedSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to embed.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove embed.src assignments on values from window.location.search.",
+        "Allow-list embed origins in production applications.",
+        "Use CSP default-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/embed.src uses embed.src on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-embed-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/embed.src route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/embed.src, location.search is assigned to embed.src without sanitization — route-specific embed.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot load arbitrary embed content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchEmbedSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove embed.src sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for embed inclusion sinks.",
+        "Allow-list embed origins.",
+        "Add CSP default-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/embed.src route assigns location.search to embed.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-link-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search link.href DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/link.href reads document.location.search.substr(1) and assigns it to link.href — Firing Range link.href DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to link.href enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchLinkHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to link.href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove link.href assignments on values from window.location.search.",
+        "Allow-list stylesheet/import targets in production applications.",
+        "Use CSP style-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/link.href uses link.href on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-link-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/link.href route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/link.href, location.search is assigned to link.href without sanitization — route-specific link.href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot set arbitrary link hrefs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchLinkHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove link.href sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for link import sinks.",
+        "Allow-list link targets.",
+        "Add CSP style-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/link.href route assigns location.search to link.href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-urldom-location-hash-script-src-partial-domain-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
