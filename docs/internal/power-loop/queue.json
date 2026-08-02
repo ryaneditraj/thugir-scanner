@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T02:05:00.000Z",
+  "updated_at": "2026-08-02T03:02:10.511Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/javascript_eval?q=a",
+      "source": "google/firing-range — reflected XSS parameter piped into eval() JS sink (/reflected/parameter/javascript_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/tag_name?q=a",
+      "source": "google/firing-range — reflected XSS parameter used as HTML tag name (/reflected/parameter/tag_name)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/javascript_comment?q=a",
+      "source": "google/firing-range — reflected XSS parameter in JS comment block (/reflected/parameter/javascript_comment)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/quoted_onclick?q=a",
+      "source": "google/firing-range — reflected XSS double-quoted onclick event handler sink (/reflected/parameter/quoted_onclick)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/callback?q=a",
+      "source": "google/firing-range — MIME content-sniffing XSS via hidden JSONP callback param (/reflected/contentsniffing/callback)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/iframe_attribute_value?q=a",
       "source": "google/firing-range — reflected XSS iframe attribute value sink (/reflected/parameter/iframe_attribute_value)",
