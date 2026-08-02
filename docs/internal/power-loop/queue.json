@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T04:05:00.000Z",
+  "updated_at": "2026-08-02T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/eval",
+      "source": "google/firing-range — postMessage handler missing origin check → eval() DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml",
+      "source": "google/firing-range — postMessage handler missing origin check → innerHTML DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite",
+      "source": "google/firing-range — postMessage handler missing origin check → document.write DOM XSS sink",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/json?q=a",
+      "source": "google/firing-range — MIME content-sniffing JSON reflected XSS (/reflected/contentsniffing/json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml",
+      "source": "google/firing-range — DOM propagation stored payload → innerHTML sink (/dom/dompropagation/window/innerHtml)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/angular/angular_body/1.2.0?q=test",
       "source": "google/firing-range — AngularJS server-side interpolation XSS sink (angular_body/1.2.0)",
