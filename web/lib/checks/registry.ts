@@ -39734,6 +39734,87 @@ const firingRangeDomWindowNameInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const firingRangeDomWindowNameDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/window/name/documentWrite",
+    /var\s+payload\s*=\s*window\.name/i,
+    "window.name"
+  );
+};
+
+const firingRangeDomWindowNameDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/window\/name\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomWindowNameDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/window/name/documentWrite route scan — window.name passed to document.write() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomSessionstoragePropertyDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/sessionStorage/property/documentWrite",
+    /sessionStorage\.badValue/i,
+    "sessionStorage.badValue"
+  );
+};
+
+const firingRangeDomSessionstoragePropertyDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/sessionStorage\/property\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomSessionstoragePropertyDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/sessionStorage/property/documentWrite route scan — sessionStorage.badValue passed to document.write() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomLocalstoragePropertyDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/localStorage/property/documentWrite",
+    /localStorage\.badValue/i,
+    "localStorage.badValue"
+  );
+};
+
+const firingRangeDomLocalstoragePropertyDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/property\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalstoragePropertyDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/property/documentWrite route scan — localStorage.badValue passed to document.write() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_ADDRESS_HASH_EVAL_PATH = "/address/location.hash/eval";
 
 const firingRangeAddressLocationHashEvalLiveOracle: Rule = async (ctx) => {
@@ -55924,6 +56005,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomReferrerDocumentwriteRouteLiveOracle,
   firingRangeDomWindowNameInnerhtmlLiveOracle,
   firingRangeDomWindowNameInnerhtmlRouteLiveOracle,
+  firingRangeDomWindowNameDocumentwriteLiveOracle,
+  firingRangeDomWindowNameDocumentwriteRouteLiveOracle,
+  firingRangeDomSessionstoragePropertyDocumentwriteLiveOracle,
+  firingRangeDomSessionstoragePropertyDocumentwriteRouteLiveOracle,
+  firingRangeDomLocalstoragePropertyDocumentwriteLiveOracle,
+  firingRangeDomLocalstoragePropertyDocumentwriteRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,
   firingRangeAddressLocationHashEvalRouteLiveOracle,
   firingRangeCorsDynamicAllowOriginLiveOracle,
