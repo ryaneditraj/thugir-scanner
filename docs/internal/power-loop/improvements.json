@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-set-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie_set/innerHtml returns lookupCookie(badValue) passed to div.innerHTML=payload; cookie_set/innerHtml route scan findings 128→142 (+firing-range-dom-cookie-set-innerhtml-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-set-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie_set/documentWrite returns lookupCookie(badValue) passed to document.write(payload); cookie_set/documentWrite route scan findings 128→141 (+firing-range-dom-cookie-set-documentwrite-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-documentwrite-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/window/documentWrite/eval propagates location.hash via window.status to eval(retrieved_payload); documentWrite/eval route scan findings 129→142 (+firing-range-dom-propagation-window-documentwrite-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-cookie-documentwrite-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie/documentWrite returns Toxic DOM page with lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') passed to document.write(payload); cookie/documentWrite route scan findings 131→138 (+firing-range-dom-cookie-documentwrite-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
