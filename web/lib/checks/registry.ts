@@ -40135,6 +40135,127 @@ const firingRangeDomSessionstoragePropertyEvalRouteLiveOracle: Rule = async (ctx
   };
 };
 
+const firingRangeDomSessionstoragePropertyInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomInnerHtml(
+    ctx,
+    "/dom/toxicdom/sessionStorage/property/innerHtml",
+    /sessionStorage\.badValue/i,
+    "sessionStorage.badValue"
+  );
+};
+
+const firingRangeDomSessionstoragePropertyInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/sessionStorage\/property\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomSessionstoragePropertyInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/sessionStorage/property/innerHtml route scan — sessionStorage.badValue passed to innerHTML without sanitization"
+    }
+  };
+};
+
+async function probeFiringRangeInputTypingSink(
+  ctx: RuleContext,
+  probePath: string,
+  sinkRe: RegExp,
+  sinkLabel: string
+): Promise<RuleResult> {
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasInputTyping =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /addEventListener\s*\(\s*['"]keyup['"]/i.test(body) &&
+    /e\.target\.value/i.test(body) &&
+    sinkRe.test(body);
+  if (!hasInputTyping) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${probePath} passes input keystrokes to ${sinkLabel} — inputTyping DOM XSS sink oracle`
+    }
+  };
+}
+
+const firingRangeDomInputtypingInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeInputTypingSink(
+    ctx,
+    "/dom/toxicdom/document/inputTyping/innerHtml",
+    /\.innerHTML\s*=\s*payload/i,
+    "innerHTML"
+  );
+};
+
+const firingRangeDomInputtypingInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/inputTyping\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomInputtypingInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/inputTyping/innerHtml route scan — input keystrokes passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_JSONCALLBACK_PROBE = "thugirJsonCallbackProbe";
+
+const firingRangeReflectedJsoncallbackLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/jsoncallback", ctx.origin);
+  probeUrl.searchParams.set("callback", FIRING_RANGE_JSONCALLBACK_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body.trim();
+  if (!body.startsWith(`${FIRING_RANGE_JSONCALLBACK_PROBE}(`) || !/\}\)\s*;?\s*$/.test(body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 120),
+      note: "Google Firing Range GET /reflected/jsoncallback?callback= reflects attacker-controlled function name in JSONP response — content-sniffing XSS oracle"
+    }
+  };
+};
+
+const firingRangeReflectedJsoncallbackRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/jsoncallback\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedJsoncallbackLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/jsoncallback route scan — callback parameter reflected into executable JSONP wrapper without validation"
+    }
+  };
+};
+
 const FIRING_RANGE_ADDRESS_HASH_EVAL_PATH = "/address/location.hash/eval";
 
 const firingRangeAddressLocationHashEvalLiveOracle: Rule = async (ctx) => {
@@ -56859,6 +56980,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomLocalstoragePropertyInnerhtmlRouteLiveOracle,
   firingRangeDomSessionstoragePropertyEvalLiveOracle,
   firingRangeDomSessionstoragePropertyEvalRouteLiveOracle,
+  firingRangeDomSessionstoragePropertyInnerhtmlLiveOracle,
+  firingRangeDomSessionstoragePropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomInputtypingInnerhtmlLiveOracle,
+  firingRangeDomInputtypingInnerhtmlRouteLiveOracle,
+  firingRangeReflectedJsoncallbackLiveOracle,
+  firingRangeReflectedJsoncallbackRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,
   firingRangeAddressLocationHashEvalRouteLiveOracle,
   firingRangeCorsDynamicAllowOriginLiveOracle,

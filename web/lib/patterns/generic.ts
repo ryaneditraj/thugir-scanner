@@ -3514,6 +3514,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage property innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/property/innerHtml returns a page that reads sessionStorage.badValue and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage property values passed to innerHTML enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/innerHtml uses innerHTML on sessionStorage.badValue. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/property/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/property/innerHtml, sessionStorage.badValue is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage property values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/innerHtml route uses innerHTML on sessionStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM inputTyping innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/inputTyping/innerHtml returns a page that copies input keystrokes into innerHTML on keyup/change — Firing Range inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to innerHTML enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from input keyup/change handlers.",
+        "Treat user input as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/innerHtml uses innerHTML on input keystrokes. Show inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/inputTyping/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/inputTyping/innerHtml, input keystrokes are passed to innerHTML without sanitization — route-specific inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on inputTyping handlers in /dom/toxicdom routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/innerHtml route uses innerHTML on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-jsoncallback-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JSONP callback XSS oracle",
+    description:
+      "GET /reflected/jsoncallback?callback= reflects the attacker-controlled callback name into a JSONP script wrapper — Firing Range content-sniffing XSS training oracle.",
+    impactOneline:
+      "Unvalidated JSONP callback names enable reflected XSS when responses are interpreted as script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsoncallbackLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist callback names on /reflected/jsoncallback before emitting JSONP wrappers.",
+      steps: [
+        "Reject callback values outside a strict alphanumeric allowlist.",
+        "Migrate JSONP endpoints to authenticated JSON APIs.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/jsoncallback?callback= reflects the callback parameter into JSONP output. Show JSONP XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-jsoncallback-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/jsoncallback route XSS oracle",
+    description:
+      "When scanning /reflected/jsoncallback, the callback query parameter is reflected into executable JSONP wrapper without validation — route-specific JSONP reflection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm JSONP callback parameters cannot inject arbitrary function names.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsoncallbackRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist callback names on /reflected/jsoncallback route handlers.",
+      steps: [
+        "Reject callback values outside a strict alphanumeric allowlist.",
+        "Migrate JSONP endpoints to authenticated JSON APIs.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/jsoncallback route reflects callback into JSONP output. Show route-specific JSONP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
