@@ -41460,6 +41460,24 @@ const firingRangeReflectedIframeSrcdocRouteLiveOracle: Rule = async (ctx) => {
 
 const FIRING_RANGE_TAGS_INJECTION_PATHS = [
   {
+    path: "/tags/expression",
+    q: "<script>",
+    bodyRe: /<script><\/script>/i,
+    label: "expression context SCRIPT tag injection"
+  },
+  {
+    path: "/tags/tag/div",
+    q: "<div>",
+    bodyRe: /<div><\/div>/i,
+    label: "DIV tag injection"
+  },
+  {
+    path: "/tags/tag/style",
+    q: "<style>",
+    bodyRe: /<style><\/style>/i,
+    label: "STYLE tag injection"
+  },
+  {
     path: "/tags/tag/img",
     q: "<img src=x>",
     bodyRe: /<img\s+src\s*=\s*["']?x["']?\s*>/i,
@@ -41607,7 +41625,7 @@ const firingRangeTagsInjectionLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let paths = [...FIRING_RANGE_TAGS_INJECTION_PATHS];
-  if (/\/tags\/tag\//i.test(pageUrl)) {
+  if (/\/tags\/(?:tag\/|expression\b)/i.test(pageUrl)) {
     try {
       const pathname = new URL(pageUrl).pathname;
       const matched = paths.filter((p) => pathname.startsWith(p.path));
@@ -41626,7 +41644,7 @@ const firingRangeTagsInjectionLiveOracle: Rule = async (ctx) => {
 const firingRangeTagsInjectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/tags\/tag\//i.test(pageUrl)) return NEGATIVE;
+  if (!/\/tags\/(?:tag\/|expression\b)/i.test(pageUrl)) return NEGATIVE;
   let pathname = "";
   try {
     pathname = new URL(pageUrl).pathname;
@@ -42325,6 +42343,132 @@ const firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle: Rule = as
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/dompropagation/window/documentWrite/eval route scan — location.hash propagates via window.status to eval()"
+    }
+  };
+};
+
+const FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS = [
+  "/dom/dompropagation/window/innerHtml/innerHtml",
+  "/dom/dompropagation/window/eval/eval",
+  "/dom/dompropagation/window/innerHtml/eval",
+  "/dom/dompropagation/window/innerHtml/documentWrite",
+  "/dom/dompropagation/window/documentWrite/innerHtml",
+  "/dom/dompropagation/window/documentWrite/documentWrite",
+  "/dom/dompropagation/window/eval/innerHtml"
+] as const;
+
+async function probeFiringRangeDomPropagationWindowStatusEval(
+  ctx: RuleContext,
+  path: string
+): Promise<RuleResult> {
+  const url = new URL(path, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasPropagationEval =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /window\.status\s*=\s*payload/i.test(body) &&
+    /eval\s*\(\s*retrieved_payload\s*\)/i.test(body);
+  if (!hasPropagationEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${path} propagates location.hash via window.status into eval() — DOM propagation XSS sink oracle`
+    }
+  };
+}
+
+const firingRangeDomPropagationWindowStatusEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS];
+  if (/\/dom\/dompropagation\/window\//i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const path of paths) {
+    const result = await probeFiringRangeDomPropagationWindowStatusEval(ctx, path);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeDomPropagationWindowStatusEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/dompropagation\/window\//i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const path = FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS.find((p) =>
+    pathname.startsWith(p)
+  );
+  if (!path) return NEGATIVE;
+  const result = await probeFiringRangeDomPropagationWindowStatusEval(ctx, path);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${path} route scan — location.hash propagates via window.status to eval()`
+    }
+  };
+};
+
+const FIRING_RANGE_TOXICDOM_FORM_SUBMISSION_EVAL_PATH =
+  "/dom/toxicdom/document/formSubmission/eval";
+
+const firingRangeToxicdomFormSubmissionEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_TOXICDOM_FORM_SUBMISSION_EVAL_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasToxicdomFormEval =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /form\.onsubmit\s*=/i.test(body) &&
+    /getElementById\s*\(\s*['"]userInput['"]\s*\)/i.test(body) &&
+    /appendChild\s*\(\s*form\s*\)[\s\S]{0,48}eval\s*\(\s*payload\s*\)/i.test(body) &&
+    /function\s+trigger\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasToxicdomFormEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/toxicdom/document/formSubmission/eval assigns form input to eval() — toxicdom formSubmission eval DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeToxicdomFormSubmissionEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/formSubmission\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeToxicdomFormSubmissionEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/formSubmission/eval route scan — form input passed to eval() on submit"
     }
   };
 };
@@ -57170,6 +57314,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomPropagationWindowEvalRouteLiveOracle,
   firingRangeDomPropagationWindowDocumentwriteEvalLiveOracle,
   firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle,
+  firingRangeDomPropagationWindowStatusEvalLiveOracle,
+  firingRangeDomPropagationWindowStatusEvalRouteLiveOracle,
+  firingRangeToxicdomFormSubmissionEvalLiveOracle,
+  firingRangeToxicdomFormSubmissionEvalRouteLiveOracle,
   firingRangeRemoteIncludeScriptHashLiveOracle,
   firingRangeRemoteIncludeScriptHashRouteLiveOracle,
   firingRangeRemoteIncludeParameterScriptLiveOracle,
