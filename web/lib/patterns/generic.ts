@@ -3306,6 +3306,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-parameter-body-non2xx-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected body non-2xx status oracle",
+    description:
+      "GET /reflected/parameter/body/403, /body/404, or /body/500?q= reflects attacker input into the HTML body even when the response status is 403, 404, or 500 — Firing Range reflected XSS despite error-status training oracle.",
+    impactOneline:
+      "Scanners that skip non-2xx responses miss reflected XSS when error pages echo user input unescaped.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterBodyNon2xxLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input on error pages and avoid reflecting raw query parameters in body contexts.",
+      steps: [
+        "HTML-encode all user input reflected into body elements on error responses.",
+        "Scan error and redirect responses for reflected XSS, not only HTTP 200 pages.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/* routes reflect q into body on 403/404/500 responses. Show error-page reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-body-non2xx-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/body/* non-2xx route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/body/403, /body/404, or /body/500, q parameter reflects unescaped into body despite non-2xx HTTP status — route-specific error-page reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm error responses do not echo attacker-controlled markup in body contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterBodyNon2xxRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix body reflection on /reflected/parameter/body/* error-status routes.",
+      steps: [
+        "Encode user input for body reflection on 403/404/500 handlers.",
+        "Audit error-page templates for dangerous reflection.",
+        "Add output encoding tests for non-2xx routes."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/* routes reflect q into body on error responses. Show route-specific error-page XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-parameter-json-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -5590,6 +5642,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /address/location.hash/assign route uses location.assign on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-replace-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash replace DOM XSS oracle",
+    description:
+      "GET /address/location.hash/replace returns a page that reads window.location.hash.substr(1) and passes it to location.replace() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to location.replace() enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashReplaceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to location.replace() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove location.replace() calls on values from window.location.hash.",
+        "Allow-list navigation targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/replace uses location.replace on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-replace-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/replace route XSS oracle",
+    description:
+      "When scanning /address/location.hash/replace, location.hash is passed to location.replace() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot trigger arbitrary navigation via replace().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashReplaceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove location.replace sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for navigation sinks.",
+        "Allow-list navigation targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/replace route uses location.replace on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-function-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash Function constructor DOM XSS oracle",
+    description:
+      "GET /address/location.hash/function returns a page that reads window.location.hash.substr(1) and passes it to new Function() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to new Function() enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashFunctionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to new Function() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove new Function() and eval() on values from window.location.hash.",
+        "Treat URL fragments as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/function uses new Function on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-function-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/function route XSS oracle",
+    description:
+      "When scanning /address/location.hash/function, location.hash is passed to new Function() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values are not executed via the Function constructor.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashFunctionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Function-constructor sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/function route uses new Function on location.hash. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
