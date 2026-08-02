@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T05:05:00.000Z",
+  "updated_at": "2026-08-02T06:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/head?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into HTML head sink (/escape/serverside/encodeUrl/head)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/title?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into HTML title sink (/escape/serverside/encodeUrl/title)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/head?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into HTML head sink (/escape/serverside/escapeHtml/head)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/title?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into HTML title sink (/escape/serverside/escapeHtml/title)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/range.createContextualFragment",
+      "source": "google/firing-range — location.hash to range.createContextualFragment DOM XSS sink (/address/location.hash/range.createContextualFragment)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/body/403?q=a",
       "source": "google/firing-range — reflected XSS in BODY with HTTP 403 status (/reflected/parameter/body/403)",
