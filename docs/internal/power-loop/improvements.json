@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-label-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/label?q=<label for=x> reflects <label for=\"x\"></label>; public-firing-range.appspot.com/tags/tag/label findings 97→105 (+label live+route oracles); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-a-style-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/a/style?q=<a style=background:red> reflects <a style=\"background:red\"></a>; public-firing-range.appspot.com/tags/tag/a/style findings 100→104 (+a-style live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-any-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag?q=<a> reflects <a></a> without tag-name restriction; public-firing-range.appspot.com/tags/tag findings 88→104 (+any-tag live+route oracles); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-param-code-value-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/param.code.value returns paramCodeElement.value=payload from location.search.substr(1); param.code.value route scan findings 37→101 (+param-code live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"

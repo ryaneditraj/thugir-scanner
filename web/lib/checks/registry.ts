@@ -40137,9 +40137,16 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
   }
 ] as const;
 
+type FiringRangeTagsInjectionTarget = {
+  path: string;
+  q: string;
+  bodyRe: RegExp;
+  label: string;
+};
+
 async function probeFiringRangeTagsInjection(
   ctx: RuleContext,
-  target: (typeof FIRING_RANGE_TAGS_INJECTION_PATHS)[number]
+  target: FiringRangeTagsInjectionTarget
 ): Promise<RuleResult> {
   const probeUrl = new URL(target.path, ctx.origin);
   probeUrl.searchParams.set("q", target.q);
