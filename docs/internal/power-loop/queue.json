@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T16:05:38.020Z",
+  "updated_at": "2026-08-02T17:03:34.993Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/innerHtml",
+      "source": "google/firing-range — sessionStorage property sink to innerHTML DOM XSS (/dom/toxicdom/sessionStorage/property/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml/eval",
+      "source": "google/firing-range — DOM propagation window.name innerHTML sink to eval() DOM XSS (/dom/dompropagation/window/innerHtml/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/documentWrite/innerHtml",
+      "source": "google/firing-range — DOM propagation window.name documentWrite sink to innerHTML DOM XSS (/dom/dompropagation/window/documentWrite/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/formSubmission/innerHtml",
+      "source": "google/firing-range — document formSubmission sink to innerHTML DOM XSS (/dom/toxicdom/document/formSubmission/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/formSubmission/documentWrite",
+      "source": "google/firing-range — document formSubmission sink to document.write DOM XSS (/dom/toxicdom/document/formSubmission/documentWrite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/hash/document.location",
       "source": "google/firing-range — location.hash to document.location DOM XSS sink (/urldom/location/hash/document.location)",
@@ -13850,5 +13875,6 @@
       "source": "chethan-vinayak/vulnshop — excessive data exposure oracle GET /api/users (Vercel OSS deploy)",
       "auth": "oss_deploy"
     }
-  ]
+  ],
+  "discovery_urls_added": 5
 }
