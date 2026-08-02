@@ -40161,6 +40161,80 @@ const firingRangeReflectedParameterNoscriptRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const FIRING_RANGE_REFLECTED_BODY_NON2XX_PROBE = "thugirFrBodyNon2xxProbe";
+const FIRING_RANGE_REFLECTED_BODY_NON2XX_PATHS = [
+  { path: "/reflected/parameter/body/403", expectedStatus: 403 },
+  { path: "/reflected/parameter/body/404", expectedStatus: 404 },
+  { path: "/reflected/parameter/body/500", expectedStatus: 500 }
+] as const;
+
+async function probeFiringRangeReflectedBodyNon2xx(
+  ctx: RuleContext,
+  target: (typeof FIRING_RANGE_REFLECTED_BODY_NON2XX_PATHS)[number]
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_BODY_NON2XX_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status !== target.expectedStatus) return NEGATIVE;
+  const bodyRe = new RegExp(
+    `<body>\\s*${FIRING_RANGE_REFLECTED_BODY_NON2XX_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*</body>`,
+    "i"
+  );
+  if (!bodyRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      status: doc.status,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker input into HTML body with HTTP ${target.expectedStatus} — reflected body-sink XSS despite non-2xx status training oracle`
+    }
+  };
+}
+
+const firingRangeReflectedParameterBodyNon2xxLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_REFLECTED_BODY_NON2XX_PATHS];
+  const routeMatch = pageUrl.match(/\/reflected\/parameter\/body\/(403|404|500)\b/i);
+  if (routeMatch) {
+    const code = Number(routeMatch[1]) as 403 | 404 | 500;
+    const matched = paths.filter((p) => p.expectedStatus === code);
+    if (matched.length) paths = matched;
+  }
+  for (const target of paths) {
+    const result = await probeFiringRangeReflectedBodyNon2xx(ctx, target);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeReflectedParameterBodyNon2xxRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/body\/(403|404|500)\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const target = FIRING_RANGE_REFLECTED_BODY_NON2XX_PATHS.find((p) => pathname.startsWith(p.path));
+  if (!target) return NEGATIVE;
+  const result = await probeFiringRangeReflectedBodyNon2xx(ctx, target);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${target.path} route scan — q parameter reflected into body with HTTP ${target.expectedStatus} without validation`
+    }
+  };
+};
+
 const FIRING_RANGE_REFLECTED_IFRAME_ATTR_PROBE = "<script>alert(1)</script>";
 
 const firingRangeReflectedParameterIframeAttributeValueLiveOracle: Rule = async (ctx) => {
@@ -41675,6 +41749,88 @@ const firingRangeAddressLocationHashAssignRouteLiveOracle: Rule = async (ctx) =>
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /address/location.hash/assign route scan — location.hash passed to location.assign() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_ADDRESS_HASH_REPLACE_PATH = "/address/location.hash/replace";
+
+const firingRangeAddressLocationHashReplaceLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_ADDRESS_HASH_REPLACE_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasLocationReplaceSink =
+    /<title>\s*Address based DOM XSS\s*<\/title>/i.test(body) &&
+    /window\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /location\.replace\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasLocationReplaceSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /address/location.hash/replace passes location.hash to location.replace() — address-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeAddressLocationHashReplaceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/address\/location\.hash\/replace\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAddressLocationHashReplaceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /address/location.hash/replace route scan — location.hash passed to location.replace() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_ADDRESS_HASH_FUNCTION_PATH = "/address/location.hash/function";
+
+const firingRangeAddressLocationHashFunctionLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_ADDRESS_HASH_FUNCTION_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasFunctionConstructorSink =
+    /<title>\s*Address based DOM XSS\s*<\/title>/i.test(body) &&
+    /window\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /new\s+Function\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasFunctionConstructorSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /address/location.hash/function passes location.hash to new Function() — address-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeAddressLocationHashFunctionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/address\/location\.hash\/function\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAddressLocationHashFunctionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /address/location.hash/function route scan — location.hash passed to new Function() without sanitization"
     }
   };
 };
@@ -55575,6 +55731,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeEscapeServersideTagnameRouteLiveOracle,
   firingRangeReflectedParameterNoscriptLiveOracle,
   firingRangeReflectedParameterNoscriptRouteLiveOracle,
+  firingRangeReflectedParameterBodyNon2xxLiveOracle,
+  firingRangeReflectedParameterBodyNon2xxRouteLiveOracle,
   firingRangeReflectedParameterJsonLiveOracle,
   firingRangeReflectedParameterJsonRouteLiveOracle,
   firingRangeDomPostMessageDocumentwriteLiveOracle,
@@ -55673,6 +55831,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationSearchLocationAssignRouteLiveOracle,
   firingRangeAddressLocationHashAssignLiveOracle,
   firingRangeAddressLocationHashAssignRouteLiveOracle,
+  firingRangeAddressLocationHashReplaceLiveOracle,
+  firingRangeAddressLocationHashReplaceRouteLiveOracle,
+  firingRangeAddressLocationHashFunctionLiveOracle,
+  firingRangeAddressLocationHashFunctionRouteLiveOracle,
   firingRangeUrldomLocationSearchFormActionLiveOracle,
   firingRangeUrldomLocationSearchFormActionRouteLiveOracle,
   firingRangeUrldomLocationSearchObjectDataLiveOracle,
