@@ -39520,6 +39520,58 @@ async function probeFiringRangeToxicdomEval(
   };
 }
 
+async function probeFiringRangeToxicdomInnerHtml(
+  ctx: RuleContext,
+  probePath: string,
+  sourceRe: RegExp,
+  label: string
+): Promise<RuleResult> {
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasToxicDom =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    sourceRe.test(body) &&
+    /\.innerHTML\s*=\s*payload/i.test(body);
+  if (!hasToxicDom) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(body) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${probePath} passes ${label} to innerHTML — toxic DOM XSS sink oracle`
+    }
+  };
+}
+
+async function probeFiringRangeToxicdomDocumentwrite(
+  ctx: RuleContext,
+  probePath: string,
+  sourceRe: RegExp,
+  label: string
+): Promise<RuleResult> {
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasToxicDom =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    sourceRe.test(body) &&
+    /document\.write\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasToxicDom) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(body) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${probePath} passes ${label} to document.write() — toxic DOM XSS sink oracle`
+    }
+  };
+}
+
 const firingRangeDomCookieSetEvalLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   return probeFiringRangeToxicdomEval(
@@ -39597,6 +39649,87 @@ const firingRangeDomReferrerEvalRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/document/referrer/eval route scan — document.referrer passed to eval() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomReferrerInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomInnerHtml(
+    ctx,
+    "/dom/toxicdom/document/referrer/innerHtml",
+    /unescape\s*\(\s*document\.referrer\s*\)/i,
+    "document.referrer"
+  );
+};
+
+const firingRangeDomReferrerInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/referrer\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomReferrerInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/referrer/innerHtml route scan — document.referrer passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const firingRangeDomReferrerDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/document/referrer/documentWrite",
+    /unescape\s*\(\s*document\.referrer\s*\)/i,
+    "document.referrer"
+  );
+};
+
+const firingRangeDomReferrerDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/referrer\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomReferrerDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/referrer/documentWrite route scan — document.referrer passed to document.write() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomWindowNameInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomInnerHtml(
+    ctx,
+    "/dom/toxicdom/window/name/innerHtml",
+    /var\s+payload\s*=\s*window\.name/i,
+    "window.name"
+  );
+};
+
+const firingRangeDomWindowNameInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/window\/name\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomWindowNameInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/window/name/innerHtml route scan — window.name passed to innerHTML without sanitization"
     }
   };
 };
@@ -55785,6 +55918,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomWindowNameEvalRouteLiveOracle,
   firingRangeDomReferrerEvalLiveOracle,
   firingRangeDomReferrerEvalRouteLiveOracle,
+  firingRangeDomReferrerInnerhtmlLiveOracle,
+  firingRangeDomReferrerInnerhtmlRouteLiveOracle,
+  firingRangeDomReferrerDocumentwriteLiveOracle,
+  firingRangeDomReferrerDocumentwriteRouteLiveOracle,
+  firingRangeDomWindowNameInnerhtmlLiveOracle,
+  firingRangeDomWindowNameInnerhtmlRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,
   firingRangeAddressLocationHashEvalRouteLiveOracle,
   firingRangeCorsDynamicAllowOriginLiveOracle,

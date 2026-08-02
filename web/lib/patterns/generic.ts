@@ -2786,6 +2786,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-referrer-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM document.referrer innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/referrer/innerHtml returns a page that unescapes document.referrer and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "document.referrer values passed to innerHTML enable DOM XSS when attackers can set the Referer header.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass document.referrer to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from document.referrer.",
+        "Treat referrer data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/innerHtml uses innerHTML on document.referrer. Show toxic DOM referrer XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-referrer-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/referrer/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/referrer/innerHtml, document.referrer is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm referrer-backed values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on document.referrer in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.referrer reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/innerHtml route uses innerHTML on document.referrer. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-referrer-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM document.referrer document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/referrer/documentWrite returns a page that unescapes document.referrer and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "document.referrer values passed to document.write() enable DOM XSS when attackers can set the Referer header.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass document.referrer to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from document.referrer.",
+        "Treat referrer data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/documentWrite uses document.write on document.referrer. Show toxic DOM referrer XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-referrer-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/referrer/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/referrer/documentWrite, document.referrer is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm referrer-backed values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on document.referrer in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.referrer reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/documentWrite route uses document.write on document.referrer. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM window.name innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/window/name/innerHtml returns a page that reads window.name and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "window.name values passed to innerHTML enable DOM XSS when attackers can set window.name via navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.name to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from window.name.",
+        "Treat window.name as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/innerHtml uses innerHTML on window.name. Show toxic DOM window.name XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/window/name/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/window/name/innerHtml, window.name is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm window.name values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on window.name in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all window.name reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/innerHtml route uses innerHTML on window.name. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
