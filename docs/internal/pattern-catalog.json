@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T05:03:16.348Z",
-  "total": 1460,
-  "uniqueSlugs": 1455,
+  "generatedAt": "2026-08-02T06:22:29.804Z",
+  "total": 1464,
+  "uniqueSlugs": 1459,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1442,
+    "generic": 1446,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1375,
+    "deep": 1379,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 135,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 358,
+    "Cross-site scripting": 362,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -879,6 +879,8 @@
     "firing-range-escape-serverside-body-route-live-oracle",
     "firing-range-escape-serverside-css-style-live-oracle",
     "firing-range-escape-serverside-css-style-route-live-oracle",
+    "firing-range-escape-serverside-head-live-oracle",
+    "firing-range-escape-serverside-head-route-live-oracle",
     "firing-range-escape-serverside-tagname-live-oracle",
     "firing-range-escape-serverside-tagname-route-live-oracle",
     "firing-range-flashinjection-live-oracle",
@@ -933,6 +935,8 @@
     "firing-range-reflected-parameter-iframe-attribute-value-route-live-oracle",
     "firing-range-reflected-parameter-json-live-oracle",
     "firing-range-reflected-parameter-json-route-live-oracle",
+    "firing-range-reflected-parameter-noscript-live-oracle",
+    "firing-range-reflected-parameter-noscript-route-live-oracle",
     "firing-range-reflected-parameter-style-attribute-value-live-oracle",
     "firing-range-reflected-parameter-style-attribute-value-route-live-oracle",
     "firing-range-reflected-parameter-textarea-attribute-value-live-oracle",

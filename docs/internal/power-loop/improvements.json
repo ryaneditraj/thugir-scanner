@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-head-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/encodeUrl/head?q=thugirFrEscapeHeadProbe returns <head>thugirFrEscapeHeadProbe</head>; encodeUrl/head route scan findings 112→115 (+escape-serverside-head live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-noscript-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/noscript?q=thugirFrNoscriptProbe returns <noscript>thugirFrNoscriptProbe</noscript>; noscript route scan findings 113→117 (+reflected-parameter-noscript live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/select?q=<select> → <select></select>; GET /tags/tag/source?q=<source> → <source>; tags/tag/select route scan fires firing-range-tags-injection-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-tags-tag-area-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/area?q=<area> reflects <area> tag; public-firing-range.appspot.com/tags/tag/area findings 97→114 (+area live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
