@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-starts-with-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowOriginStartsWith Origin https://public-firing-range.appspot.com.evil.com reflected with Access-Control-Allow-Credentials true; allowOriginStartsWith route scan findings 106→127 (+starts-with live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-ends-with-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowOriginEndsWith Origin https://evilpublic-firing-range.appspot.com reflected with credentials; allowOriginEndsWith route scan findings 106→127 (+ends-with live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-regex-dot-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowOriginRegexDot Origin https://public-firing-rangeXappspot.com reflected with credentials (unescaped dot regex bypass); allowOriginRegexDot route scan findings 106→127 (+regex-dot live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-window-name-documentwrite-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/window/name/documentWrite var payload=window.name → document.write(payload); window/name/documentWrite route scan findings 116→123 (+window-name-documentwrite live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
@@ -17490,6 +17508,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-prototype-pollution-search-filters-route-live-oracle",
       "shipped_at": "2026-08-02T08:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-starts-with-live-oracle",
+      "shipped_at": "2026-08-02T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-ends-with-live-oracle",
+      "shipped_at": "2026-08-02T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-regex-dot-live-oracle",
+      "shipped_at": "2026-08-02T11:10:00.000Z"
     }
   ]
 }
