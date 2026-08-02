@@ -40216,6 +40216,60 @@ const firingRangeDomInputtypingInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const firingRangeDomInputtypingEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeInputTypingSink(
+    ctx,
+    "/dom/toxicdom/document/inputTyping/eval",
+    /eval\s*\(\s*payload\s*\)/i,
+    "eval()"
+  );
+};
+
+const firingRangeDomInputtypingEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/inputTyping\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomInputtypingEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/inputTyping/eval route scan — input keystrokes passed to eval() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomInputtypingDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeInputTypingSink(
+    ctx,
+    "/dom/toxicdom/document/inputTyping/documentWrite",
+    /document\.write\s*\(\s*payload\s*\)/i,
+    "document.write()"
+  );
+};
+
+const firingRangeDomInputtypingDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/inputTyping\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomInputtypingDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/inputTyping/documentWrite route scan — input keystrokes passed to document.write() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_JSONCALLBACK_PROBE = "thugirJsonCallbackProbe";
 
 const firingRangeReflectedJsoncallbackLiveOracle: Rule = async (ctx) => {
@@ -41512,6 +41566,12 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<source>",
     bodyRe: /<source\s*>/i,
     label: "SOURCE tag injection"
+  },
+  {
+    path: "/tags/tag/meta",
+    q: "<meta>",
+    bodyRe: /<meta\s*>/i,
+    label: "META tag injection"
   }
 ] as const;
 
@@ -41948,6 +42008,24 @@ const firingRangeTagsTagButtonRouteLiveOracle = firingRangeTagsTagRouteLiveOracl
   "button",
   "BUTTON tag injection",
   firingRangeTagsTagButtonLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_META = {
+  path: "/tags/tag/meta",
+  q: "<meta>",
+  bodyRe: /<meta\s*>/i,
+  label: "META tag injection"
+} as const;
+
+const firingRangeTagsTagMetaLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_META);
+};
+
+const firingRangeTagsTagMetaRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "meta",
+  "META tag injection",
+  firingRangeTagsTagMetaLiveOracle
 );
 
 const FIRING_RANGE_ADDRESS_HASH_INNERHTML_PATH = "/address/location.hash/innerHtml";
@@ -56984,6 +57062,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomSessionstoragePropertyInnerhtmlRouteLiveOracle,
   firingRangeDomInputtypingInnerhtmlLiveOracle,
   firingRangeDomInputtypingInnerhtmlRouteLiveOracle,
+  firingRangeDomInputtypingEvalLiveOracle,
+  firingRangeDomInputtypingEvalRouteLiveOracle,
+  firingRangeDomInputtypingDocumentwriteLiveOracle,
+  firingRangeDomInputtypingDocumentwriteRouteLiveOracle,
   firingRangeReflectedJsoncallbackLiveOracle,
   firingRangeReflectedJsoncallbackRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,
@@ -57068,6 +57150,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsTagInputRouteLiveOracle,
   firingRangeTagsTagButtonLiveOracle,
   firingRangeTagsTagButtonRouteLiveOracle,
+  firingRangeTagsTagMetaLiveOracle,
+  firingRangeTagsTagMetaRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
   firingRangeAddressLocationEvalLiveOracle,
