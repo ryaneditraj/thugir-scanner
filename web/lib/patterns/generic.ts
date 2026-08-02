@@ -4034,6 +4034,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-parameter-textarea-attribute-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range textarea attribute value reflected XSS oracle",
+    description:
+      "GET /reflected/parameter/textarea_attribute_value?q= reflects attacker input into a textarea attribute value — Firing Range attribute-sink reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped user input in textarea attribute values enables reflected XSS when attackers control the q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterTextareaAttributeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject user input reflected into textarea attribute values.",
+      steps: [
+        "HTML-encode all user input before inserting into attribute values.",
+        "Use strict Content-Security-Policy to mitigate XSS impact.",
+        "Add output encoding tests for attribute-sink reflection contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/textarea_attribute_value route reflects q into textarea attribute values. Show attribute-sink reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-textarea-attribute-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/textarea_attribute_value route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/textarea_attribute_value, q parameter is reflected into textarea attribute without validation — route-specific attribute-sink reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm textarea attribute values cannot contain unescaped attacker-controlled script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterTextareaAttributeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix attribute value encoding on /reflected/parameter/textarea_attribute_value route.",
+      steps: [
+        "Encode or reject script tags in q parameter before attribute insertion.",
+        "Audit all attribute-sink reflection contexts on this route.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/textarea_attribute_value route reflects q into textarea attributes. Show route-specific attribute-sink XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-style-attribute-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range style attribute value reflected XSS oracle",
+    description:
+      "GET /reflected/parameter/style_attribute_value?q= reflects attacker input into a style attribute value — Firing Range attribute-sink reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped user input in style attribute values enables reflected XSS when attackers control the q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterStyleAttributeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject user input reflected into style attribute values.",
+      steps: [
+        "HTML-encode all user input before inserting into attribute values.",
+        "Use strict Content-Security-Policy to mitigate XSS impact.",
+        "Add output encoding tests for attribute-sink reflection contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/style_attribute_value route reflects q into style attribute values. Show attribute-sink reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-style-attribute-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/style_attribute_value route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/style_attribute_value, q parameter is reflected into style attribute without validation — route-specific attribute-sink reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm style attribute values cannot contain unescaped attacker-controlled script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterStyleAttributeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix attribute value encoding on /reflected/parameter/style_attribute_value route.",
+      steps: [
+        "Encode or reject script tags in q parameter before attribute insertion.",
+        "Audit all attribute-sink reflection contexts on this route.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/style_attribute_value route reflects q into style attributes. Show route-specific attribute-sink XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-form-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range FORM tag injection oracle",
+    description:
+      "GET /tags/tag/form?q= accepts attacker-controlled <form> tags and reflects them into the response — Firing Range FORM tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient FORM tag filtering allows attacker-controlled form elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagFormLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode FORM tag injection in /tags/tag/form routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/form route accepts FORM tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-form-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/form route XSS oracle",
+    description:
+      "When scanning /tags/tag/form, q parameter injects attacker-controlled <form> tags — route-specific FORM tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm FORM tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagFormRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix FORM tag filtering on /tags/tag/form route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/form.",
+        "Add output encoding tests for FORM tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/form route allows FORM tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
