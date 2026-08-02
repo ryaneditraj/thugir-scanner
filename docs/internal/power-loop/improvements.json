@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/referrer/innerHtml unescape(document.referrer) → div.innerHTML=payload; referrer/innerHtml route scan findings 116→120 (+referrer-innerhtml live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-innerhtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/document/referrer/innerHtml confirms document.referrer → innerHTML toxic DOM sink; findings 116→120; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/referrer/documentWrite unescape(document.referrer) → document.write(payload); referrer/documentWrite route scan findings 116→120 (+referrer-documentwrite live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/document/referrer/documentWrite confirms document.referrer → document.write() toxic DOM sink; findings 116→120; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/window/name/innerHtml var payload=window.name → div.innerHTML=payload; window.name/innerHtml route scan findings 116→120 (+window-name-innerhtml live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-innerhtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/window/name/innerHtml confirms window.name → innerHTML toxic DOM sink; findings 116→120; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "client-side-pwnshop-prototype-pollution-oracle",
       "status": "shipped",
