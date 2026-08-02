@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/inputTyping/eval returns keyup/change handler passing e.target.value to eval(payload); inputTyping/eval route scan findings 143→150 (+firing-range-dom-inputtyping-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/inputTyping/documentWrite returns keyup/change handler passing e.target.value to document.write(payload); inputTyping/documentWrite route scan findings 143→150 (+firing-range-dom-inputtyping-documentwrite-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-meta-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/meta?q=%3Cmeta%3E reflects <meta> tag in response body; tags/tag/meta route scan findings 144→152 (+firing-range-tags-tag-meta-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/property/innerHtml returns sessionStorage.badValue passed to div.innerHTML=payload; sessionStorage/property/innerHtml route scan findings 139→146 (+firing-range-dom-sessionstorage-property-innerhtml-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
