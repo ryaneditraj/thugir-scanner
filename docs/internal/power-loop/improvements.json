@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-object-data-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/object.data returns objectElement.data=payload from location.search.substr(1); object.data route scan fires object-data live+route oracles; benchmark juice-shop-staging 26 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-embed-src-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/embed.src returns embedElement.src=payload from location.search.substr(1); embed.src route scan fires embed-src live+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-link-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/link.href returns linkElement.href=payload from location.search.substr(1); link.href route scan fires link-href live+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-tags-tag-object-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/object?q=%3Cobject%20src=x%3E returns <object src=\"x\"></object>; object route scan findings 88→93 (+object live+route + tags-injection-route); benchmark juice-shop 11 findings 6/6 maintained"
@@ -17226,6 +17244,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-tags-tag-svg-live-oracle",
       "shipped_at": "2026-08-01T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-object-data-live-oracle",
+      "shipped_at": "2026-08-02T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-embed-src-live-oracle",
+      "shipped_at": "2026-08-02T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-link-href-live-oracle",
+      "shipped_at": "2026-08-02T00:15:00.000Z"
     }
   ]
 }
