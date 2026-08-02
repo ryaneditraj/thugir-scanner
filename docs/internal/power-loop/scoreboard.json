@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T23:10:00.000Z",
+  "updated_at": "2026-08-02T23:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3089,
-  "total_findings": 32101,
+  "total_sites_scanned": 3092,
+  "total_findings": 32160,
   "critical_findings": 103,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2134,
-  "discovery_findings": 26388,
-  "improvements_shipped": 1158,
-  "last_run": "2026-08-02T23:10:00.000Z",
+  "discovery_findings": 26451,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-02T23:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -52,39 +52,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 358,
-      "focus": "firing-range postMessage eval/innerHtml/documentWrite + contentsniffing/json + dompropagation/window/innerHtml; drained address/location/eval + urldom a.xlink-href + iframe.src",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 0,
+      "focus": "firing-range dompropagation window/innerHtml base route + a.xlink-href queue alias + postMessage documentWrite route validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/postMessage/eval: 44 findings — generic firing-range oracles only, no postMessage→eval route oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml: 44 findings — generic oracles only, no postMessage→innerHTML route oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite: 44 findings — generic oracles only, no postMessage→document.write route oracle",
-      "public-firing-range.appspot.com/reflected/contentsniffing/json: 45 findings — generic oracles only, no MIME content-sniffing JSON route oracle",
-      "public-firing-range.appspot.com/dom/dompropagation/window/innerHtml: 45 findings — generic oracles only, no DOM-propagation stored-payload route oracle",
-      "public-firing-range.appspot.com/urldom/location/hash/iframe.src: 46 findings — route-specific iframe.src oracle present (prior run)"
+      "public-firing-range.appspot.com/dom/dompropagation/window/innerHtml: 45→160 findings — firing-range-dom-propagation-window-innerhtml-base-route-live-oracle shipped",
+      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: 45→160 findings — firing-range-urldom-location-search-a-xlink-href-route-live-oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite: route oracle confirmed (+firing-range-dom-postmessage-documentwrite-route-live-oracle on route scan)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/dom/toxicdom/postMessage/*: postMessage origin-bypass→eval/innerHTML/document.write route oracles absent",
-      "public-firing-range.appspot.com/reflected/contentsniffing/json: MIME content-sniffing JSON reflected XSS route oracle absent",
-      "public-firing-range.appspot.com/dom/dompropagation/window/innerHtml: DOM propagation stored-payload→innerHTML route oracle absent",
-      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href: route-specific SVG xlink:href sink oracle absent"
+      "vulnerable-web-site.vercel.app/sqli: route redirects to login — no public SQLi oracle without session",
+      "public-firing-range.appspot.com/angular/angular_form_parse/1.6.0: $parse form-injection route oracle present but hub URL coverage incomplete"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/dom/dompropagation/window/innerHtml": 160,
+    "public-firing-range.appspot.com/urldom/location/search/a.xlink-href": 160,
+    "public-firing-range.appspot.com/urldom/location/search/svg.a": 159,
+    "public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite": 156,
     "public-firing-range.appspot.com/urldom/location/hash/iframe.src": 46,
-    "public-firing-range.appspot.com/reflected/contentsniffing/json": 45,
-    "public-firing-range.appspot.com/dom/dompropagation/window/innerHtml": 45,
-    "public-firing-range.appspot.com/address/location/eval": 45,
-    "public-firing-range.appspot.com/urldom/location/search/a.xlink-href": 45,
-    "public-firing-range.appspot.com/dom/toxicdom/postMessage/eval": 44,
-    "public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml": 44,
-    "public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite": 44
+    "public-firing-range.appspot.com/reflected/contentsniffing/json": 45
   }
 }

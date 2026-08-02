@@ -42420,6 +42420,7 @@ const firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle: Rule = as
 };
 
 const FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS = [
+  "/dom/dompropagation/window/innerHtml",
   "/dom/dompropagation/window/innerHtml/innerHtml",
   "/dom/dompropagation/window/eval/eval",
   "/dom/dompropagation/window/innerHtml/eval",
@@ -43776,7 +43777,7 @@ const firingRangeUrldomLocationSearchSvgALiveOracle: Rule = async (ctx) => {
 const firingRangeUrldomLocationSearchSvgARouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/urldom\/location\/search\/svg\.a\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/urldom\/location\/search\/(?:svg\.a|a\.xlink-href)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await firingRangeUrldomLocationSearchSvgALiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -43785,7 +43786,53 @@ const firingRangeUrldomLocationSearchSvgARouteLiveOracle: Rule = async (ctx) => 
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Google Firing Range /urldom/location/search/svg.a route scan — location.search passed to SVG xlink:href without sanitization"
+      note: /a\.xlink-href/i.test(pageUrl)
+        ? "Google Firing Range /urldom/location/search/a.xlink-href route scan — queue alias maps to svg.a SVG xlink:href sink oracle"
+        : "Google Firing Range /urldom/location/search/svg.a route scan — location.search passed to SVG xlink:href without sanitization"
+    }
+  };
+};
+
+const firingRangeDomPropagationWindowInnerHtmlBaseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/dompropagation\/window\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname.replace(/\/$/, "");
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/dom/dompropagation/window/innerHtml") return NEGATIVE;
+  const result = await probeFiringRangeDomPropagationWindowStatusEval(
+    ctx,
+    "/dom/dompropagation/window/innerHtml"
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/dompropagation/window/innerHtml route scan — location.hash propagates via window.status to eval()"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchAXlinkHrefRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/a\.xlink-href\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchSvgALiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/a.xlink-href route scan — queue alias maps to svg.a SVG xlink:href sink oracle"
     }
   };
 };
@@ -57530,6 +57577,7 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle,
   firingRangeDomPropagationWindowStatusEvalLiveOracle,
   firingRangeDomPropagationWindowStatusEvalRouteLiveOracle,
+  firingRangeDomPropagationWindowInnerHtmlBaseRouteLiveOracle,
   firingRangeToxicdomFormSubmissionEvalLiveOracle,
   firingRangeToxicdomFormSubmissionEvalRouteLiveOracle,
   firingRangeToxicdomFormSubmissionInnerHtmlLiveOracle,
@@ -57602,6 +57650,7 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationSearchParamSrcValueRouteLiveOracle,
   firingRangeUrldomLocationSearchSvgALiveOracle,
   firingRangeUrldomLocationSearchSvgARouteLiveOracle,
+  firingRangeUrldomLocationSearchAXlinkHrefRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialDomainLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialDomainRouteLiveOracle,
   firingRangeUrldomLocationHashScriptSrcPartialPathLiveOracle,

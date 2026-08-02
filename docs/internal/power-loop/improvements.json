@@ -758,6 +758,24 @@
     },
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-innerhtml-base-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/window/innerHtml returns location.hash→window.status→eval(retrieved_payload); innerHtml route scan findings 45→160 (+firing-range-dom-propagation-window-innerhtml-base-route-live-oracle + status-eval-route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-a-xlink-href-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue URL /urldom/location/search/a.xlink-href aliases to svg.a setAttributeNS xlink:href sink; a.xlink-href route scan findings 45→160 (+firing-range-urldom-location-search-a-xlink-href-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/documentWrite JSON.parse(msg.data)→document.write script src; documentWrite route scan confirms firing-range-dom-postmessage-documentwrite-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-a-href-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/a.href returns document.location.search.substr(1) assigned to anchor.href; a.href route scan findings 34→46 (+firing-range-urldom-location-search-a-href-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"

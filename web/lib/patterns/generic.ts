@@ -6530,6 +6530,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-propagation-window-innerhtml-base-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/window/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/window/innerHtml, location.hash propagates via window.status to eval() — route-specific DOM propagation stored-payload oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments are not propagated through window.status to eval() on the innerHtml hub route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowInnerHtmlBaseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on DOM-propagated values at /dom/dompropagation/window/innerHtml.",
+      steps: [
+        "Audit location.hash reads that write to window.status.",
+        "Encode or sanitize before any dangerous sink.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/innerHtml route propagates location.hash via window.status to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-toxicdom-form-submission-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -8346,6 +8372,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /urldom/location/search/svg.a route assigns location.search to SVG xlink:href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-a-xlink-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/a.xlink-href route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/a.xlink-href, the queue alias maps to the svg.a SVG xlink:href sink — route-specific SVG xlink:href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans on a.xlink-href should confirm location.search cannot set arbitrary SVG xlink:href.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchAXlinkHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove SVG xlink:href sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for SVG link navigation sinks.",
+        "Allow-list SVG link targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/a.xlink-href route maps to the svg.a xlink:href sink. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
