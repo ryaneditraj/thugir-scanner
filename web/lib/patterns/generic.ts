@@ -3722,6 +3722,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-escape-js-html-escape-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range client-side html_escape eval XSS oracle",
+    description:
+      "GET /escape/js/html_escape?q= reflects attacker input into eval() after naive &lt;/&amp;/&gt; string replace — Firing Range client-side html_escape bypass XSS training oracle.",
+    impactOneline:
+      "Naive HTML entity replacement before eval() leaves quote-breakout XSS when user input is embedded in JavaScript string literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsHtmlEscapeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval() user-controlled strings; html entity replace is not JS escaping — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on reflected user input.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/html_escape reflects q into eval() after naive html entity replace. Show client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-html-escape-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/js/html_escape route XSS oracle",
+    description:
+      "When scanning /escape/js/html_escape, q parameter reflects into eval() after naive html entity replace — route-specific client-side html_escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm html entity replace does not safely embed user input in eval() contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsHtmlEscapeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval() reflection on /escape/js/html_escape route.",
+      steps: [
+        "Remove eval() on reflected user input for this route.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add route-specific output encoding tests."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/html_escape route reflects q into eval() after naive html replace. Show route-specific client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-encodeuricomponent-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range client-side encodeURIComponent eval XSS oracle",
+    description:
+      "GET /escape/js/encodeURIComponent?q= reflects attacker input into eval(encodeURIComponent()) — Firing Range client-side encodeURIComponent bypass XSS training oracle.",
+    impactOneline:
+      "encodeURIComponent does not escape JavaScript string delimiters; eval(encodeURIComponent(userInput)) enables quote-breakout XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEncodeUriLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "encodeURIComponent is not JavaScript escaping — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Never eval() user-controlled strings.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/encodeURIComponent reflects q into eval(encodeURIComponent()). Show client-side encodeURIComponent bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-encodeuricomponent-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/js/encodeURIComponent route XSS oracle",
+    description:
+      "When scanning /escape/js/encodeURIComponent, q parameter reflects into eval(encodeURIComponent()) — route-specific client-side encodeURIComponent bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm encodeURIComponent does not safely embed user input in eval() contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEncodeUriRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval() reflection on /escape/js/encodeURIComponent route.",
+      steps: [
+        "Remove eval() on reflected user input for this route.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add route-specific output encoding tests."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/encodeURIComponent route reflects q into eval(encodeURIComponent()). Show route-specific client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-escape-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range client-side escape() eval XSS oracle",
+    description:
+      "GET /escape/js/escape?q= reflects attacker input into eval(escape()) — Firing Range client-side escape() bypass XSS training oracle.",
+    impactOneline:
+      "Legacy escape() does not escape quotes or @; eval(escape(userInput)) enables quote-breakout XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEscapeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escape() is deprecated and not JavaScript escaping — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Never eval() user-controlled strings.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/escape reflects q into eval(escape()). Show client-side escape() bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-escape-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/js/escape route XSS oracle",
+    description:
+      "When scanning /escape/js/escape, q parameter reflects into eval(escape()) — route-specific client-side escape() bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escape() does not safely embed user input in eval() contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEscapeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval() reflection on /escape/js/escape route.",
+      steps: [
+        "Remove eval() on reflected user input for this route.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add route-specific output encoding tests."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/escape route reflects q into eval(escape()). Show route-specific client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-parameter-noscript-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

@@ -40579,6 +40579,127 @@ const firingRangeEscapeServersideHeadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_JS_HTML_ESCAPE_PROBE = "thugirFrJsHtmlEscapeProbe";
+const FIRING_RANGE_JS_HTML_ESCAPE_PATH = "/escape/js/html_escape";
+
+const firingRangeEscapeJsHtmlEscapeLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_HTML_ESCAPE_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_HTML_ESCAPE_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const probeEsc = FIRING_RANGE_JS_HTML_ESCAPE_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!new RegExp(`eval\\('${probeEsc}'\\.replace\\(/</g`, "i").test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range /escape/js/html_escape reflects q into eval() after naive &lt;/&amp;/&gt; replace — client-side html_escape bypass XSS oracle"
+    }
+  };
+};
+
+const firingRangeEscapeJsHtmlEscapeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/escape\/js\/html_escape\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeEscapeJsHtmlEscapeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /escape/js/html_escape route scan — naive html entity replace before eval() enables XSS"
+    }
+  };
+};
+
+const FIRING_RANGE_JS_ENCODE_URI_PROBE = "thugirFrJsEncodeUriProbe";
+const FIRING_RANGE_JS_ENCODE_URI_PATH = "/escape/js/encodeURIComponent";
+
+const firingRangeEscapeJsEncodeUriLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_ENCODE_URI_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_ENCODE_URI_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const probeEsc = FIRING_RANGE_JS_ENCODE_URI_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!new RegExp(`eval\\s*\\(\\s*encodeURIComponent\\s*\\(\\s*'${probeEsc}'\\s*\\)\\s*\\)`, "i").test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range /escape/js/encodeURIComponent reflects q into eval(encodeURIComponent()) — client-side encodeURIComponent bypass XSS oracle"
+    }
+  };
+};
+
+const firingRangeEscapeJsEncodeUriRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/escape\/js\/encodeURIComponent\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeEscapeJsEncodeUriLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /escape/js/encodeURIComponent route scan — encodeURIComponent before eval() enables XSS"
+    }
+  };
+};
+
+const FIRING_RANGE_JS_ESCAPE_PROBE = "thugirFrJsEscapeProbe";
+const FIRING_RANGE_JS_ESCAPE_PATH = "/escape/js/escape";
+
+const firingRangeEscapeJsEscapeLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_JS_ESCAPE_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_JS_ESCAPE_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const probeEsc = FIRING_RANGE_JS_ESCAPE_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  if (!new RegExp(`eval\\s*\\(\\s*escape\\s*\\(\\s*'${probeEsc}'\\s*\\)\\s*\\)`, "i").test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range /escape/js/escape reflects q into eval(escape()) — client-side escape() bypass XSS oracle"
+    }
+  };
+};
+
+const firingRangeEscapeJsEscapeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/escape\/js\/escape\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeEscapeJsEscapeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /escape/js/escape route scan — escape() before eval() enables XSS"
+    }
+  };
+};
+
 const FIRING_RANGE_REFLECTED_NOSCRIPT_PROBE = "thugirFrNoscriptProbe";
 
 const firingRangeReflectedParameterNoscriptLiveOracle: Rule = async (ctx) => {
@@ -56340,6 +56461,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeEscapeServersideHeadRouteLiveOracle,
   firingRangeEscapeServersideTagnameLiveOracle,
   firingRangeEscapeServersideTagnameRouteLiveOracle,
+  firingRangeEscapeJsHtmlEscapeLiveOracle,
+  firingRangeEscapeJsHtmlEscapeRouteLiveOracle,
+  firingRangeEscapeJsEncodeUriLiveOracle,
+  firingRangeEscapeJsEncodeUriRouteLiveOracle,
+  firingRangeEscapeJsEscapeLiveOracle,
+  firingRangeEscapeJsEscapeRouteLiveOracle,
   firingRangeReflectedParameterNoscriptLiveOracle,
   firingRangeReflectedParameterNoscriptRouteLiveOracle,
   firingRangeReflectedParameterBodyNon2xxLiveOracle,
