@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T17:20:00.000Z",
+  "updated_at": "2026-08-02T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2782,
-  "total_findings": 32843,
+  "total_sites_scanned": 2783,
+  "total_findings": 32874,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1981,
-  "discovery_findings": 28683,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-02T17:20:00.000Z",
+  "discovery_findings": 28714,
+  "improvements_shipped": 1176,
+  "last_run": "2026-08-02T18:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 477,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,35 +54,33 @@
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 432,
-      "focus": "firing-range localStorage/property/{eval,innerHtml} + sessionStorage/property/eval",
+      "findings": 441,
+      "focus": "sessionStorage/property/innerHtml + inputTyping/innerHtml + reflected/jsoncallback",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range localStorage/property/eval: 137→144 findings — firing-range-dom-localstorage-property-eval-live-oracle shipped (localStorage.badValue → eval)",
-      "public-firing-range localStorage/property/innerHtml: 137→144 findings — firing-range-dom-localstorage-property-innerhtml-live-oracle shipped (localStorage.badValue → innerHTML)",
-      "public-firing-range sessionStorage/property/eval: 137→144 findings — firing-range-dom-sessionstorage-property-eval-live-oracle shipped (sessionStorage.badValue → eval)"
+      "public-firing-range sessionStorage/property/innerHtml: 139→146 findings — firing-range-dom-sessionstorage-property-innerhtml-live-oracle shipped (sessionStorage.badValue → innerHTML)",
+      "public-firing-range inputTyping/innerHtml: 147 findings — firing-range-dom-inputtyping-innerhtml-live-oracle shipped (keyup/change → innerHTML)",
+      "public-firing-range reflected/jsoncallback: 148 findings — firing-range-reflected-jsoncallback-live-oracle shipped (callback param → JSONP wrapper)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range sessionStorage/property/innerHtml: no route-specific property-sink live oracle",
+      "public-firing-range inputTyping/eval + inputTyping/documentWrite: no route-specific property-sink live oracles",
       "public-firing-range dompropagation/window/innerHtml|documentWrite chains: generic firing-range oracles only",
       "public-firing-range toxicdom/document/formSubmission innerHtml/documentWrite: generic firing-range oracles only — no formSubmission route-specific live oracles",
       "public-firing-range urldom/location/hash/document.location + form.action: generic firing-range oracles only — no route-specific live oracles",
-      "public-firing-range document/inputTyping + reflected/jsoncallback: no route-specific live oracles",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/innerHtml": 146,
+    "public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/innerHtml": 147,
+    "public-firing-range.appspot.com/reflected/jsoncallback": 148,
     "public-firing-range.appspot.com/dom/toxicdom/localStorage/property/eval": 144,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/property/innerHtml": 144,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/eval": 144,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/innerHtml": 139,
     "public-firing-range.appspot.com/dom/dompropagation/window/innerHtml/eval": 141,
-    "public-firing-range.appspot.com/urldom/location/hash/document.location": 142,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

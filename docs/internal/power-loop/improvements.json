@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/property/innerHtml returns sessionStorage.badValue passed to div.innerHTML=payload; sessionStorage/property/innerHtml route scan findings 139→146 (+firing-range-dom-sessionstorage-property-innerhtml-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/inputTyping/innerHtml returns keyup/change handler passing e.target.value to innerHTML; inputTyping/innerHtml route scan findings +firing-range-dom-inputtyping-innerhtml-live-oracle + route (147 total); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-jsoncallback-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/jsoncallback?callback=thugirJsonCallbackProbe returns thugirJsonCallbackProbe({'foobar':'foo'}); reflected/jsoncallback route scan +firing-range-reflected-jsoncallback-live-oracle + route (148 total); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-localstorage-property-eval-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/property/eval returns localStorage.badValue passed to eval(payload); localStorage/property/eval route scan findings 137→144 (+firing-range-dom-localstorage-property-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
@@ -17706,6 +17724,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-sessionstorage-property-eval-live-oracle",
       "shipped_at": "2026-08-02T17:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
+      "shipped_at": "2026-08-02T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-innerhtml-live-oracle",
+      "shipped_at": "2026-08-02T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-jsoncallback-live-oracle",
+      "shipped_at": "2026-08-02T18:10:00.000Z"
     }
   ]
 }
