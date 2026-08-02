@@ -3306,6 +3306,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-cors-allow-origin-starts-with-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS startsWith bypass oracle",
+    description:
+      "POST /cors/alloworigin/allowOriginStartsWith allows attacker Origin when host starts with allowed prefix (e.g. public-firing-range.appspot.com.evil.com) with Access-Control-Allow-Credentials: true — Firing Range CORS startsWith bypass training oracle.",
+    impactOneline:
+      "Naive startsWith origin checks let attackers register domains that prefix-match a trusted host and steal credentialed responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginStartsWithLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use exact origin allowlists — never startsWith/endsWith/regex without anchoring.",
+      steps: [
+        "Compare full Origin URLs against a strict allowlist.",
+        "Disable Access-Control-Allow-Credentials unless strictly required.",
+        "Reject subdomain-squatting patterns like trusted.example.evil.com."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginStartsWith uses a startsWith origin check bypassable via subdomain prefix. Show CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-starts-with-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowOriginStartsWith route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowOriginStartsWith, POST requests allow attacker Origin via startsWith bypass with credentials — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm startsWith origin checks cannot be bypassed with prefix domains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginStartsWithRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace startsWith checks with exact origin matching on this route.",
+      steps: [
+        "Allowlist full Origin URLs only.",
+        "Disable credentials on public CORS endpoints.",
+        "Audit CORS middleware for prefix-matching bypasses."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginStartsWith route uses bypassable startsWith origin checks. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-ends-with-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS endsWith bypass oracle",
+    description:
+      "POST /cors/alloworigin/allowOriginEndsWith allows attacker Origin when host ends with allowed suffix (e.g. evilpublic-firing-range.appspot.com) with Access-Control-Allow-Credentials: true — Firing Range CORS endsWith bypass training oracle.",
+    impactOneline:
+      "Naive endsWith origin checks let attackers register domains that suffix-match a trusted host and steal credentialed responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginEndsWithLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use exact origin allowlists — never endsWith checks without full URL validation.",
+      steps: [
+        "Compare full Origin URLs against a strict allowlist.",
+        "Disable Access-Control-Allow-Credentials unless strictly required.",
+        "Reject suffix-squatting patterns like eviltrusted.example.com."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginEndsWith uses an endsWith origin check bypassable via suffix domains. Show CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-ends-with-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowOriginEndsWith route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowOriginEndsWith, POST requests allow attacker Origin via endsWith bypass with credentials — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm endsWith origin checks cannot be bypassed with suffix domains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginEndsWithRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace endsWith checks with exact origin matching on this route.",
+      steps: [
+        "Allowlist full Origin URLs only.",
+        "Disable credentials on public CORS endpoints.",
+        "Audit CORS middleware for suffix-matching bypasses."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginEndsWith route uses bypassable endsWith origin checks. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-regex-dot-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS regex dot bypass oracle",
+    description:
+      "POST /cors/alloworigin/allowOriginRegexDot allows attacker Origin when unescaped dot regex matches (e.g. public-firing-rangeXappspot.com) with Access-Control-Allow-Credentials: true — Firing Range CORS regex bypass training oracle.",
+    impactOneline:
+      "Unescaped dots in CORS origin regexes match any character, letting attackers register lookalike domains and steal credentialed responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginRegexDotLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape regex metacharacters or use exact origin allowlists instead of regex.",
+      steps: [
+        "Escape dots and other regex metacharacters in origin patterns.",
+        "Prefer exact string matching over regex for CORS allowlists.",
+        "Disable Access-Control-Allow-Credentials unless strictly required."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginRegexDot uses an unescaped dot regex bypassable via lookalike domains. Show CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-regex-dot-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowOriginRegexDot route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowOriginRegexDot, POST requests allow attacker Origin via unescaped dot regex bypass with credentials — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm regex origin checks escape metacharacters and cannot be bypassed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginRegexDotRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix regex escaping or replace with exact origin matching on this route.",
+      steps: [
+        "Escape dots in origin regex patterns.",
+        "Allowlist full Origin URLs instead of regex.",
+        "Audit CORS middleware for regex bypass vectors."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginRegexDot route uses bypassable regex origin checks. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-escape-serverside-attribute-unquoted-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
