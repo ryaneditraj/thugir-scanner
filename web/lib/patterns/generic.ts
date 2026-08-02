@@ -5126,6 +5126,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-tags-tag-video-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range VIDEO tag injection oracle",
+    description:
+      "GET /tags/tag/video?q= accepts attacker-controlled <video> tags and reflects them into the response — Firing Range VIDEO tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient VIDEO tag filtering allows attacker-controlled video elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagVideoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode VIDEO tag injection in /tags/tag/video routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/video route accepts VIDEO tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-video-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/video route XSS oracle",
+    description:
+      "When scanning /tags/tag/video, q parameter injects attacker-controlled <video> tags — route-specific VIDEO tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm VIDEO tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagVideoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix VIDEO tag filtering on /tags/tag/video route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/video.",
+        "Add output encoding tests for VIDEO tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/video route allows VIDEO tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-audio-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AUDIO tag injection oracle",
+    description:
+      "GET /tags/tag/audio?q= accepts attacker-controlled <audio> tags and reflects them into the response — Firing Range AUDIO tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient AUDIO tag filtering allows attacker-controlled audio elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAudioLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode AUDIO tag injection in /tags/tag/audio routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/audio route accepts AUDIO tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-audio-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/audio route XSS oracle",
+    description:
+      "When scanning /tags/tag/audio, q parameter injects attacker-controlled <audio> tags — route-specific AUDIO tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm AUDIO tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAudioRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix AUDIO tag filtering on /tags/tag/audio route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/audio.",
+        "Add output encoding tests for AUDIO tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/audio route allows AUDIO tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-canvas-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range CANVAS tag injection oracle",
+    description:
+      "GET /tags/tag/canvas?q= accepts attacker-controlled <canvas> tags and reflects them into the response — Firing Range CANVAS tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient CANVAS tag filtering allows attacker-controlled canvas elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagCanvasLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode CANVAS tag injection in /tags/tag/canvas routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/canvas route accepts CANVAS tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-canvas-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/canvas route XSS oracle",
+    description:
+      "When scanning /tags/tag/canvas, q parameter injects attacker-controlled <canvas> tags — route-specific CANVAS tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm CANVAS tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagCanvasRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix CANVAS tag filtering on /tags/tag/canvas route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/canvas.",
+        "Add output encoding tests for CANVAS tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/canvas route allows CANVAS tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-tags-tag-a-href-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

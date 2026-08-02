@@ -41520,6 +41520,24 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     label: "SVG tag injection"
   },
   {
+    path: "/tags/tag/video",
+    q: "<video src=x>",
+    bodyRe: /<video\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "VIDEO tag injection"
+  },
+  {
+    path: "/tags/tag/audio",
+    q: "<audio src=x>",
+    bodyRe: /<audio\s+src\s*=\s*["']?x["']?\s*>/i,
+    label: "AUDIO tag injection"
+  },
+  {
+    path: "/tags/tag/canvas",
+    q: "<canvas>",
+    bodyRe: /<canvas><\/canvas>/i,
+    label: "CANVAS tag injection"
+  },
+  {
     path: "/tags/tag/link",
     q: "<link src=x>",
     bodyRe: /<link\s+src\s*=\s*["']?x["']?\s*>/i,
@@ -41742,6 +41760,60 @@ const firingRangeTagsTagSvgRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
   "svg",
   "SVG tag injection",
   firingRangeTagsTagSvgLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_VIDEO = {
+  path: "/tags/tag/video",
+  q: "<video src=x>",
+  bodyRe: /<video\s+src\s*=\s*["']?x["']?\s*>/i,
+  label: "VIDEO tag injection"
+} as const;
+
+const firingRangeTagsTagVideoLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_VIDEO);
+};
+
+const firingRangeTagsTagVideoRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "video",
+  "VIDEO tag injection",
+  firingRangeTagsTagVideoLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_AUDIO = {
+  path: "/tags/tag/audio",
+  q: "<audio src=x>",
+  bodyRe: /<audio\s+src\s*=\s*["']?x["']?\s*>/i,
+  label: "AUDIO tag injection"
+} as const;
+
+const firingRangeTagsTagAudioLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_AUDIO);
+};
+
+const firingRangeTagsTagAudioRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "audio",
+  "AUDIO tag injection",
+  firingRangeTagsTagAudioLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_CANVAS = {
+  path: "/tags/tag/canvas",
+  q: "<canvas>",
+  bodyRe: /<canvas><\/canvas>/i,
+  label: "CANVAS tag injection"
+} as const;
+
+const firingRangeTagsTagCanvasLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_CANVAS);
+};
+
+const firingRangeTagsTagCanvasRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "canvas",
+  "CANVAS tag injection",
+  firingRangeTagsTagCanvasLiveOracle
 );
 
 type FiringRangeTagsAttrTarget = {
@@ -57406,6 +57478,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsTagEmbedRouteLiveOracle,
   firingRangeTagsTagSvgLiveOracle,
   firingRangeTagsTagSvgRouteLiveOracle,
+  firingRangeTagsTagVideoLiveOracle,
+  firingRangeTagsTagVideoRouteLiveOracle,
+  firingRangeTagsTagAudioLiveOracle,
+  firingRangeTagsTagAudioRouteLiveOracle,
+  firingRangeTagsTagCanvasLiveOracle,
+  firingRangeTagsTagCanvasRouteLiveOracle,
   firingRangeTagsTagAHrefLiveOracle,
   firingRangeTagsTagAHrefRouteLiveOracle,
   firingRangeTagsTagScriptSrcLiveOracle,
