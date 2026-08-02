@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T05:11:17.622Z",
+  "updated_at": "2026-08-02T06:13:06.150Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3307,
-  "total_findings": 46909,
+  "total_sites_scanned": 3316,
+  "total_findings": 47735,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2247,
-  "discovery_findings": 40480,
-  "improvements_shipped": 1158,
-  "last_run": "2026-08-02T05:11:17.622Z",
+  "discovery_urls_added": 2252,
+  "discovery_findings": 41272,
+  "improvements_shipped": 1155,
+  "last_run": "2026-08-02T06:13:06.150Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,38 +48,41 @@
           ]
         }
       },
-      "note": "primary juice-shop.herokuapp.com healthy 6/6 (33 findings pages=6 probes=486; gap=[]); secret-resend slug still absent"
+      "note": "primary juice-shop.herokuapp.com healthy 6/6 (34 findings pages=6 probes=486; gap=[]); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 878,
-      "focus": "firing-range HTTP error-status reflected XSS (403/404/500) + location.hash replace/Function constructor sinks; drained angular_cookie_parse + angular_form_parse + remoteinclude/parameter/script",
+      "findings": 792,
+      "focus": "firing-range escape/serverside encodeUrl+escapeHtml head/title sinks + location.hash range.createContextualFragment; drained urldom/location/hash/area.href + reflected/parameter/noscript + vulnerable-web-site sqli",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — primary Heroku dyno healthy; no benchmark misses",
-      "public-firing-range.appspot.com/reflected/parameter/body/403: 110 findings — generic firing-range oracles only; no HTTP-403-status route-specific live oracle",
-      "public-firing-range.appspot.com/reflected/parameter/body/404: 110 findings — generic firing-range oracles only; no HTTP-404-status route-specific live oracle",
-      "public-firing-range.appspot.com/reflected/parameter/body/500: 110 findings — generic firing-range oracles only; no HTTP-500-status route-specific live oracle",
-      "public-firing-range.appspot.com/address/location.hash/replace: 109 findings — generic firing-range oracles only; no location.hash-replace route-specific live oracle",
-      "public-firing-range.appspot.com/address/location.hash/function: 109 findings — generic firing-range oracles only; no Function-constructor route-specific live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — primary Heroku dyno healthy; no benchmark misses",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/head: 112 findings — generic firing-range oracles only; no encodeUrl-head route-specific live oracle",
+      "public-firing-range.appspot.com/escape/serverside/encodeUrl/title: 112 findings — generic firing-range oracles only; no encodeUrl-title route-specific live oracle",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/head: 112 findings — generic firing-range oracles only; no escapeHtml-head route-specific live oracle",
+      "public-firing-range.appspot.com/escape/serverside/escapeHtml/title: 112 findings — generic firing-range oracles only; no escapeHtml-title route-specific live oracle",
+      "public-firing-range.appspot.com/address/location.hash/range.createContextualFragment: 112 findings — generic firing-range oracles only; no range.createContextualFragment route-specific live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range reflected/parameter/body/403|404|500: generic firing-range oracles only — no HTTP error-status route-specific live oracles",
-      "public-firing-range address/location.hash/replace|function: generic firing-range oracles only — no route-specific live oracles",
-      "public-firing-range angular/angular_cookie_parse|angular_form_parse: generic firing-range oracles only — no Angular $parse injection route-specific live oracles"
+      "public-firing-range escape/serverside/encodeUrl|escapeHtml/head|title: generic firing-range oracles only — no server-side escape-bypass route-specific live oracles",
+      "public-firing-range address/location.hash/range.createContextualFragment: generic firing-range oracles only — no route-specific live oracle",
+      "public-firing-range urldom/location/hash/area.href: generic firing-range oracles only — no area.href hash-sink route-specific live oracle",
+      "public-firing-range reflected/parameter/noscript: generic firing-range oracles only — no noscript-context route-specific live oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
-    "public-firing-range.appspot.com/reflected/parameter/body/403?q=a": 110,
-    "public-firing-range.appspot.com/reflected/parameter/body/404?q=a": 110,
-    "public-firing-range.appspot.com/reflected/parameter/body/500?q=a": 110,
-    "public-firing-range.appspot.com/address/location.hash/replace": 109,
-    "public-firing-range.appspot.com/address/location.hash/function": 109
+    "juice-shop.herokuapp.com": 34,
+    "public-firing-range.appspot.com/escape/serverside/encodeUrl/head?q=a": 112,
+    "public-firing-range.appspot.com/escape/serverside/encodeUrl/title?q=a": 112,
+    "public-firing-range.appspot.com/escape/serverside/escapeHtml/head?q=a": 112,
+    "public-firing-range.appspot.com/escape/serverside/escapeHtml/title?q=a": 112,
+    "public-firing-range.appspot.com/address/location.hash/range.createContextualFragment": 112,
+    "public-firing-range.appspot.com/urldom/location/hash/area.href": 114,
+    "public-firing-range.appspot.com/reflected/parameter/noscript?q=a": 113
   }
 }
