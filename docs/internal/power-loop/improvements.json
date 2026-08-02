@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-prototype-pollution-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PWN-041 CVE-2019-10744 POST /search/filters lodash _.merge() docs on /vulnerabilities; pwnshop.ctfsecurity.com/api/settings/search-filters findings 26→34 (+client-side-pwnshop-prototype-pollution-oracle); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /search/filters constructor.prototype.thugirProbePP=polluted merged into filters JSON via lodash _.merge(); live oracle fires after OTP session; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/settings/search-filters confirms POST /search/filters unsafe lodash merge (PWN-041); findings 26→34 with route-specific slug; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-parameter-body-non2xx-live-oracle",
       "status": "shipped",
@@ -17385,6 +17403,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-link-href-live-oracle",
       "shipped_at": "2026-08-02T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-prototype-pollution-oracle",
+      "shipped_at": "2026-08-02T08:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-live-oracle",
+      "shipped_at": "2026-08-02T08:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-route-live-oracle",
+      "shipped_at": "2026-08-02T08:20:00.000Z"
     }
   ]
 }

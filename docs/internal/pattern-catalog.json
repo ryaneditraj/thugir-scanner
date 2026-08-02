@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T07:14:40.456Z",
-  "total": 1470,
-  "uniqueSlugs": 1465,
+  "generatedAt": "2026-08-02T08:21:28.760Z",
+  "total": 1473,
+  "uniqueSlugs": 1468,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1452,
+    "generic": 1455,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1385,
+    "deep": 1388,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 96,
     "Security misconfiguration": 135,
     "Broken authentication": 89,
-    "Injection": 241,
+    "Injection": 244,
     "Cross-site scripting": 368,
     "Open redirect": 9,
     "general": 20,
@@ -543,6 +543,7 @@
     "client-side-pwning-juice-shop-companion-evidence",
     "client-side-pwnshop-evidence",
     "client-side-pwnshop-path-traversal-oracle",
+    "client-side-pwnshop-prototype-pollution-oracle",
     "client-side-pwnshop-ssti-oracle",
     "client-side-pygoat-challenge-route-evidence",
     "client-side-pygoat-evidence",
@@ -1191,6 +1192,8 @@
     "pwnshop-order-idor-live-oracle",
     "pwnshop-order-idor-route-live-oracle",
     "pwnshop-product-search-sqli-live-oracle",
+    "pwnshop-prototype-pollution-search-filters-live-oracle",
+    "pwnshop-prototype-pollution-search-filters-route-live-oracle",
     "pwnshop-seller-preview-ssti-live-oracle",
     "pwnshop-seller-preview-ssti-route-live-oracle",
     "pwnshop-track-idor-live-oracle",
