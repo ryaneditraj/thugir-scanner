@@ -107434,7 +107434,7 @@
       "scanned_at": "2026-08-02T10:13:38.509Z"
     },
     {
-      "run_id": "2026-08-02T11:00:46.397Z",
+      "run_id": "2026-08-02T11:03:37.847Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -107446,11 +107446,11 @@
       "pages_crawled": 0,
       "probes_run": 0,
       "status": "error",
-      "scanned_at": "2026-08-02T11:00:46.397Z",
+      "scanned_at": "2026-08-02T11:03:37.847Z",
       "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
     },
     {
-      "run_id": "2026-08-02T11:01:06.956Z",
+      "run_id": "2026-08-02T11:03:58.417Z",
       "url": "https://juice-shop-staging.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -107680,7 +107680,7 @@
       "pages_crawled": 6,
       "probes_run": 477,
       "status": "ok",
-      "scanned_at": "2026-08-02T11:01:06.956Z"
+      "scanned_at": "2026-08-02T11:03:58.417Z"
     }
   ]
 }
