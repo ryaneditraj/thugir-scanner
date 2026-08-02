@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T04:12:02.223Z",
+  "updated_at": "2026-08-02T05:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3298,
-  "total_findings": 45998,
+  "total_sites_scanned": 3300,
+  "total_findings": 46066,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2242,
-  "discovery_findings": 39602,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-02T04:12:02.223Z",
+  "discovery_findings": 39636,
+  "improvements_shipped": 1158,
+  "last_run": "2026-08-02T05:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,48 +48,38 @@
           ]
         }
       },
-      "note": "primary juice-shop.herokuapp.com healthy 6/6 (33 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (34 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 1183,
-      "focus": "firing-range CORS origin-validation bypass labs + css_style_font_value; prior run shipped textarea/style/form tag oracles",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 342,
+      "focus": "firing-range tags/tag area|input|button route-specific tag injection oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — primary Heroku dyno healthy",
-      "public-firing-range.appspot.com/reflected/parameter/textarea_attribute_value: 104→111 findings — textarea-attribute-value live+route oracles shipped (prior run)",
-      "public-firing-range.appspot.com/reflected/parameter/style_attribute_value: 104→111 findings — style-attribute-value live+route oracles shipped (prior run)",
-      "public-firing-range.appspot.com/tags/tag/form: 104→111 findings — form tag injection live+route oracles shipped (prior run)",
-      "public-firing-range.appspot.com/cors/alloworigin/allowOriginStartsWith: 106 findings — generic firing-range oracles only; no CORS startsWith-bypass route-specific live oracle",
-      "public-firing-range.appspot.com/cors/alloworigin/allowOriginEndsWith: 106 findings — generic firing-range oracles only; no CORS endsWith-bypass route-specific live oracle",
-      "public-firing-range.appspot.com/cors/alloworigin/allowOriginRegexDot: 106 findings — generic firing-range oracles only; no CORS regex-dot-bypass route-specific live oracle",
-      "public-firing-range.appspot.com/cors/alloworigin/allowOriginProtocolDowngrade: 106 findings — generic firing-range oracles only; no CORS protocol-downgrade route-specific live oracle",
-      "public-firing-range.appspot.com/reflected/parameter/css_style_font_value?q=a: 108 findings — generic firing-range oracles only; no CSS font-family route-specific live oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/eval: 105 findings — generic firing-range oracles only; no sessionStorage-eval route-specific live oracle",
-      "public-firing-range.appspot.com/address/location.hash/setTimeout: 106 findings — generic firing-range oracles only; no setTimeout route-specific live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/tags/tag/area: 97→114 findings — area tag injection live+route oracles shipped",
+      "public-firing-range.appspot.com/tags/tag/input: 94→114 findings — input tag injection live+route oracles shipped",
+      "public-firing-range.appspot.com/tags/tag/button: 94→114 findings — button tag injection live+route oracles shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "public-firing-range cors/alloworigin/allowOriginStartsWith|allowOriginEndsWith|allowOriginRegexDot|allowOriginProtocolDowngrade: generic firing-range oracles only — no CORS validation-bypass route-specific live oracles",
-      "public-firing-range reflected/parameter/css_style_font_value: generic firing-range oracles only — no CSS font-family route-specific live oracle",
-      "public-firing-range dom/toxicdom/sessionStorage/function/eval: generic firing-range oracles only — no sessionStorage-eval route-specific live oracle",
-      "public-firing-range address/location.hash/setTimeout: generic firing-range oracles only — no setTimeout route-specific live oracle",
-      "public-firing-range tags/tag/area|frame|source|input|button|select: route-specific tag injection oracles absent"
+      "public-firing-range reflected/parameter/css_style_font_value|javascript_eval|tag_name|javascript_comment|quoted_onclick: generic firing-range oracles only — no route-specific live oracles",
+      "public-firing-range reflected/contentsniffing/callback: generic firing-range oracles only — no JSONP callback route-specific live oracle",
+      "public-firing-range tags/tag/frame|source|select: route-specific tag injection oracles absent (frame lab returns Invalid input)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
-    "public-firing-range.appspot.com/cors/alloworigin/allowOriginStartsWith": 106,
-    "public-firing-range.appspot.com/cors/alloworigin/allowOriginEndsWith": 106,
-    "public-firing-range.appspot.com/cors/alloworigin/allowOriginRegexDot": 106,
-    "public-firing-range.appspot.com/cors/alloworigin/allowOriginProtocolDowngrade": 106,
-    "public-firing-range.appspot.com/reflected/parameter/css_style_font_value?q=a": 108,
+    "juice-shop.herokuapp.com": 34,
+    "public-firing-range.appspot.com/tags/tag/area?q=a": 114,
+    "public-firing-range.appspot.com/tags/tag/input?q=a": 114,
+    "public-firing-range.appspot.com/tags/tag/button?q=a": 114,
+    "public-firing-range.appspot.com/tags/tag/form?q=a": 111,
     "public-firing-range.appspot.com/reflected/parameter/textarea_attribute_value?q=a": 111,
-    "public-firing-range.appspot.com/reflected/parameter/style_attribute_value?q=a": 111,
-    "public-firing-range.appspot.com/tags/tag/form?q=a": 111
+    "public-firing-range.appspot.com/reflected/parameter/style_attribute_value?q=a": 111
   }
 }

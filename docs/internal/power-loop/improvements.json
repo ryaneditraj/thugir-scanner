@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-area-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/area?q=<area> reflects <area> tag; public-firing-range.appspot.com/tags/tag/area findings 97→114 (+area live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-input-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/input?q=<input> reflects <input> tag; public-firing-range.appspot.com/tags/tag/input findings 94→114 (+input live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-button-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/button?q=<button> reflects <button></button>; public-firing-range.appspot.com/tags/tag/button findings 94→114 (+button live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-parameter-textarea-attribute-value-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/textarea_attribute_value?q=<script>alert(1)</script> reflects attribute='<script>alert(1)</script>' in <textarea>; public-firing-range.appspot.com/reflected/parameter/textarea_attribute_value findings 104→111 (+textarea-attribute-value live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
