@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-form-submission-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/formSubmission/eval form.onsubmit copies userInput to eval(payload); eventtriggering/eval route scan findings 117→130 (+eval live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-form-submission-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/formSubmission/documentWrite form.onsubmit copies userInput to document.write(payload); documentWrite route scan findings 120→130 (+documentwrite live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/document/formSubmission/eval location.hash → window.status → eval(retrieved_payload); dompropagation/eval route scan findings 117→130 (+propagation-eval live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-cors-allow-origin-starts-with-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowOriginStartsWith Origin https://public-firing-range.appspot.com.evil.com reflected with Access-Control-Allow-Credentials true; allowOriginStartsWith route scan findings 106→127 (+starts-with live+route oracles); benchmark juice-shop 33 findings 6/6 maintained"
