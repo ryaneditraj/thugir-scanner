@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T07:05:46.889Z",
+  "updated_at": "2026-08-02T08:03:17.184Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml",
+      "source": "google/firing-range — document.referrer sink to innerHTML DOM XSS (/dom/toxicdom/document/referrer/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite",
+      "source": "google/firing-range — document.referrer sink to document.write DOM XSS (/dom/toxicdom/document/referrer/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml",
+      "source": "google/firing-range — window.name sink to innerHTML DOM XSS (/dom/toxicdom/window/name/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/window/name/documentWrite",
+      "source": "google/firing-range — window.name sink to document.write DOM XSS (/dom/toxicdom/window/name/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/documentWrite",
+      "source": "google/firing-range — sessionStorage property sink to document.write DOM XSS (/dom/toxicdom/sessionStorage/property/documentWrite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_quoted?q=a",
       "source": "google/firing-range — server-side escapeHtml quoted-attribute XSS sink (/escape/serverside/escapeHtml/attribute_quoted)",
