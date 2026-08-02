@@ -40128,6 +40128,12 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<base src=x>",
     bodyRe: /<base\s+src\s*=\s*["']?x["']?\s*>/i,
     label: "BASE tag injection"
+  },
+  {
+    path: "/tags/tag/label",
+    q: "<label for=x>",
+    bodyRe: /<label\s+for\s*=\s*["']?x["']?\s*>/i,
+    label: "LABEL tag injection"
   }
 ] as const;
 
@@ -40379,6 +40385,77 @@ const firingRangeTagsTagDivStyleRouteLiveOracle = firingRangeTagsAttrRouteLiveOr
   FIRING_RANGE_TAGS_TAG_DIV_STYLE,
   firingRangeTagsTagDivStyleLiveOracle
 );
+
+const FIRING_RANGE_TAGS_TAG_A_STYLE: FiringRangeTagsAttrTarget = {
+  path: "/tags/tag/a/style",
+  q: "<a style=background:red>",
+  bodyRe: /<a\s+style\s*=\s*["']?background:red["']?\s*>/i,
+  label: "A STYLE attribute injection",
+  routeRe: /\/tags\/tag\/a\/style\b/i
+};
+
+const firingRangeTagsTagAStyleLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsAttrInjection(ctx, FIRING_RANGE_TAGS_TAG_A_STYLE);
+};
+
+const firingRangeTagsTagAStyleRouteLiveOracle = firingRangeTagsAttrRouteLiveOracle(
+  FIRING_RANGE_TAGS_TAG_A_STYLE,
+  firingRangeTagsTagAStyleLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_LABEL = {
+  path: "/tags/tag/label",
+  q: "<label for=x>",
+  bodyRe: /<label\s+for\s*=\s*["']?x["']?\s*>/i,
+  label: "LABEL tag injection"
+} as const;
+
+const firingRangeTagsTagLabelLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_LABEL);
+};
+
+const firingRangeTagsTagLabelRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "label",
+  "LABEL tag injection",
+  firingRangeTagsTagLabelLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_ANY = {
+  path: "/tags/tag",
+  q: "<a>",
+  bodyRe: /<a><\/a>/i,
+  label: "any-tag injection"
+} as const;
+
+const firingRangeTagsTagAnyLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_ANY);
+};
+
+const firingRangeTagsTagAnyRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname.replace(/\/$/, "") || "/";
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/tags/tag") return NEGATIVE;
+  const result = await firingRangeTagsTagAnyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /tags/tag route scan — q parameter allows any-tag injection"
+    }
+  };
+};
 
 const FIRING_RANGE_ADDRESS_HASH_INNERHTML_PATH = "/address/location.hash/innerHtml";
 
@@ -55116,6 +55193,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsTagScriptSrcRouteLiveOracle,
   firingRangeTagsTagDivStyleLiveOracle,
   firingRangeTagsTagDivStyleRouteLiveOracle,
+  firingRangeTagsTagAStyleLiveOracle,
+  firingRangeTagsTagAStyleRouteLiveOracle,
+  firingRangeTagsTagLabelLiveOracle,
+  firingRangeTagsTagLabelRouteLiveOracle,
+  firingRangeTagsTagAnyLiveOracle,
+  firingRangeTagsTagAnyRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
   firingRangeAddressLocationEvalLiveOracle,
