@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T13:26:00.000Z",
+  "updated_at": "2026-08-02T14:11:44.299Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2739,
-  "total_findings": 27602,
+  "total_sites_scanned": 2748,
+  "total_findings": 28681,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 23576,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-02T13:26:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 24624,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-02T14:11:44.299Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 450,
+      "probes_run": 477,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,42 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (31 findings); no fallback needed"
+      "note": "Primary juice-shop.herokuapp.com error → staging fallback 6/6 (31 findings pages=6 probes=477; gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 1026,
-      "focus": "firing-range document.cookie unset sinks + external localStorage array/Function + dompropagation window.name formSubmission; queue drain localStorage/function/innerHtml + postMessage/complexMessage + escape/serverside/escapeHtml/body",
+      "findings": 1048,
+      "focus": "firing-range document.cookie unset documentWrite + cookie_set innerHtml/documentWrite + eventtriggering document eval/innerHtml; queue drain javascripturi + postMessage improper origin validation",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range document/cookie/eval: 128 findings — generic firing-range DOM sink oracles",
-      "public-firing-range dompropagation/window/formSubmission/eval: 129 findings — window.name DOM propagation eval sink",
-      "public-firing-range external/localStorage/array/function: 128 findings — external-script localStorage Function constructor sink",
-      "public-firing-range escape/serverside/escapeHtml/body: 130 findings — server-side HTML-escape XSS oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
+      "public-firing-range document/cookie/documentWrite: 131 findings — cookie-unset document.write DOM sink",
+      "public-firing-range document/cookie_set/innerHtml: 132 findings — cookie-set innerHTML DOM sink",
+      "public-firing-range eventtriggering/document/eval: 132 findings — event-triggered eval DOM sink",
+      "public-firing-range eventtriggering/document/innerHtml: 132 findings — event-triggered innerHTML DOM sink",
+      "public-firing-range javascripturi: 132 findings — javascript: URI DOM sink oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range document/cookie and dompropagation/window routes: generic firing-range oracles only — no route-specific live oracles",
-      "firing-range routes dominate queue drain — high finding count (128-130) but low novel signal per URL",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but scans still hub at 2-3 findings without route context",
+      "public-firing-range cookie/cookie_set and eventtriggering/document routes: generic firing-range oracles only — no route-specific live oracles",
+      "firing-range routes dominate queue drain — high finding count (129-132) but low novel signal per URL",
+      "chimera.atlascrew.dev API routes (diagnostics/ping, energy-utilities) return 404 — portal root live but vuln-api endpoints offline",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 31,
-    "public-firing-range.appspot.com/dom/toxicdom/document/cookie/eval": 128,
-    "public-firing-range.appspot.com/dom/toxicdom/document/cookie/innerHtml": 128,
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/function": 128,
-    "public-firing-range.appspot.com/dom/dompropagation/window/formSubmission/eval": 129,
-    "public-firing-range.appspot.com/dom/dompropagation/window/formSubmission/documentWrite": 129,
-    "public-firing-range.appspot.com/escape/serverside/escapeHtml/body": 130,
-    "public-firing-range.appspot.com/escape/js/html_escape": 133,
-    "public-firing-range.appspot.com/escape/js/encodeURIComponent": 133,
-    "public-firing-range.appspot.com/escape/js/escape": 133
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/dom/toxicdom/document/cookie/documentWrite": 131,
+    "public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/innerHtml": 132,
+    "public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/documentWrite": 131,
+    "public-firing-range.appspot.com/dom/eventtriggering/document/eval": 132,
+    "public-firing-range.appspot.com/dom/eventtriggering/document/innerHtml": 132,
+    "public-firing-range.appspot.com/dom/javascripturi": 132,
+    "public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison": 129,
+    "public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithRegExp": 129
   }
 }
