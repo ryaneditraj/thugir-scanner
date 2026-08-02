@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-param-code-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/param.code.value returns paramCodeElement.value=payload from location.search.substr(1); param.code.value route scan findings 37→101 (+param-code live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-param-src-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/param.src.value returns paramSrcElement.value=payload from location.search.substr(1); param.src.value route scan findings 37→101 (+param-src live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-svg-a-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/svg.a returns anchor.setAttributeNS(xlink:href,payload) from location.search.substr(1); svg.a route scan findings 37→101 (+svg-a live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-object-data-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/object.data returns objectElement.data=payload from location.search.substr(1); object.data route scan fires object-data live+route oracles; benchmark juice-shop-staging 26 findings 6/6 maintained"
