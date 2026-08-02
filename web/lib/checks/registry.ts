@@ -40070,6 +40070,76 @@ const firingRangeReflectedParameterIframeAttributeValueRouteLiveOracle: Rule = a
   };
 };
 
+const firingRangeReflectedParameterTextareaAttributeValueLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/parameter/textarea_attribute_value", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_IFRAME_ATTR_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/attribute\s*=\s*['"]<script>alert\(1\)<\/script>['"]/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/textarea_attribute_value?q= reflects attacker input into textarea attribute value — reflected attribute-sink XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedParameterTextareaAttributeValueRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/textarea_attribute_value\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedParameterTextareaAttributeValueLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/textarea_attribute_value route scan — q parameter reflected into textarea attribute without validation"
+    }
+  };
+};
+
+const firingRangeReflectedParameterStyleAttributeValueLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/parameter/style_attribute_value", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_IFRAME_ATTR_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/attribute\s*=\s*['"]<script>alert\(1\)<\/script>['"]/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/style_attribute_value?q= reflects attacker input into style attribute value — reflected attribute-sink XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedParameterStyleAttributeValueRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/style_attribute_value\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedParameterStyleAttributeValueLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/style_attribute_value route scan — q parameter reflected into style attribute without validation"
+    }
+  };
+};
+
 const FIRING_RANGE_REFLECTED_IFRAME_SRCDOC_PROBE = "thugirFrSrcdocProbe";
 
 const firingRangeReflectedIframeSrcdocLiveOracle: Rule = async (ctx) => {
@@ -40183,6 +40253,12 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<textarea>",
     bodyRe: /<textarea><\/textarea>/i,
     label: "TEXTAREA tag injection"
+  },
+  {
+    path: "/tags/tag/form",
+    q: "<form>",
+    bodyRe: /<form><\/form>/i,
+    label: "FORM tag injection"
   }
 ] as const;
 
@@ -40547,6 +40623,24 @@ const firingRangeTagsTagTextareaRouteLiveOracle = firingRangeTagsTagRouteLiveOra
   "textarea",
   "TEXTAREA tag injection",
   firingRangeTagsTagTextareaLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_FORM = {
+  path: "/tags/tag/form",
+  q: "<form>",
+  bodyRe: /<form><\/form>/i,
+  label: "FORM tag injection"
+} as const;
+
+const firingRangeTagsTagFormLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_FORM);
+};
+
+const firingRangeTagsTagFormRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "form",
+  "FORM tag injection",
+  firingRangeTagsTagFormLiveOracle
 );
 
 const FIRING_RANGE_ADDRESS_HASH_INNERHTML_PATH = "/address/location.hash/innerHtml";
@@ -55273,6 +55367,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedIframeSrcdocRouteLiveOracle,
   firingRangeReflectedParameterIframeAttributeValueLiveOracle,
   firingRangeReflectedParameterIframeAttributeValueRouteLiveOracle,
+  firingRangeReflectedParameterTextareaAttributeValueLiveOracle,
+  firingRangeReflectedParameterTextareaAttributeValueRouteLiveOracle,
+  firingRangeReflectedParameterStyleAttributeValueLiveOracle,
+  firingRangeReflectedParameterStyleAttributeValueRouteLiveOracle,
   firingRangeTagsInjectionLiveOracle,
   firingRangeTagsInjectionRouteLiveOracle,
   firingRangeTagsTagObjectLiveOracle,
@@ -55297,6 +55395,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsTagOptionRouteLiveOracle,
   firingRangeTagsTagTextareaLiveOracle,
   firingRangeTagsTagTextareaRouteLiveOracle,
+  firingRangeTagsTagFormLiveOracle,
+  firingRangeTagsTagFormRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
   firingRangeAddressLocationEvalLiveOracle,
