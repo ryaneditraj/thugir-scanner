@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-html-escape-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/js/html_escape?q= reflects into eval('thugirFrJsHtmlEscapeProbe'.replace(/</g — naive html entity replace before eval(); html_escape route scan findings 126→133 (+html-escape live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-encodeuricomponent-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/js/encodeURIComponent?q= reflects into eval(encodeURIComponent('thugirFrJsEncodeUriProbe')); encodeURIComponent route scan findings 126→133 (+encodeuricomponent live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-escape-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/js/escape?q= reflects into eval(escape('thugirFrJsEscapeProbe')); escape route scan findings 126→133 (+escape live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-form-submission-eval-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/formSubmission/eval form.onsubmit copies userInput to eval(payload); eventtriggering/eval route scan findings 117→130 (+eval live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
@@ -16534,6 +16552,36 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-admin-login-sqli-live-oracle",
       "shipped_at": "2026-07-26T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-html-escape-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-html-escape-route-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-encodeuricomponent-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-encodeuricomponent-route-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-escape-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-escape-route-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
     }
   ],
   "shipped_log": [

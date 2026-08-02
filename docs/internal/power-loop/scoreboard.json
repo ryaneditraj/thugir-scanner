@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T12:17:01.459Z",
+  "updated_at": "2026-08-02T13:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3371,
-  "total_findings": 53523,
-  "critical_findings": 112,
+  "total_sites_scanned": 2730,
+  "total_findings": 26545,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2282,
-  "discovery_findings": 45814,
-  "improvements_shipped": 1158,
-  "last_run": "2026-08-02T12:17:01.459Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22550,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-02T13:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 31,
@@ -48,39 +48,42 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 Heroku cold start; staging fallback 6/6 (31 findings)"
+      "note": "Primary Heroku 503; staging fallback 6/6 (31 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 1000,
-      "focus": "firing-range sessionStorage function/documentWrite + external sessionStorage function/array sinks; queue drain escape/js/html_escape + encodeURIComponent + escape",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 399,
+      "focus": "escape/js html_escape + encodeURIComponent + escape route-specific client-side encoding bypass oracles",
+      "improvements_shipped_this_run": 6
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "juice-shop.herokuapp.com: primary oracle 503 — staging fallback used",
-      "public-firing-range sessionStorage/function/documentWrite: 124 findings — generic firing-range DOM sink oracles",
-      "public-firing-range external/sessionStorage/function/eval: 125 findings — external-script sessionStorage eval sink",
-      "public-firing-range escape/js/html_escape: 126 findings — JS HTML-escape XSS oracle"
+      "public-firing-range.appspot.com/escape/js/html_escape: 126→133 findings — escape-js-html-escape live+route oracles shipped",
+      "public-firing-range.appspot.com/escape/js/encodeURIComponent: 126→133 findings — escape-js-encodeuricomponent live+route oracles shipped",
+      "public-firing-range.appspot.com/escape/js/escape: 126→133 findings — escape-js-escape live+route oracles shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary oracle intermittently 503 — rely on staging/escape fallbacks for recall",
-      "public-firing-range sessionStorage/external routes: generic firing-range oracles only — no route-specific live oracles",
-      "firing-range routes dominate queue drain — high finding count (124-126) but low novel signal per URL"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but scans still hub at 2-3 findings without route context",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent without OTP login",
+      "dom/toxicdom/external/sessionStorage/function/*: route-specific eval/innerHtml oracles still absent (125-finding hubs)",
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent when scanning route URL without signup flow"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/documentWrite": 124,
-    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/function/eval": 125,
-    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/function/innerHtml": 124,
-    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/eval": 125,
-    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/function/documentWrite": 124,
-    "public-firing-range.appspot.com/escape/js/html_escape": 126,
-    "public-firing-range.appspot.com/escape/js/encodeURIComponent": 126
+    "public-firing-range.appspot.com/escape/js/html_escape": 133,
+    "public-firing-range.appspot.com/escape/js/encodeURIComponent": 133,
+    "public-firing-range.appspot.com/escape/js/escape": 133,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18,
+    "wrongsecrets.herokuapp.com/challenge/2": 8,
+    "ssrf.vulnlab.dev/basic": 3
   }
 }
