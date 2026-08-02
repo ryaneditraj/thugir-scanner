@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T20:24:57.591Z",
+  "updated_at": "2026-08-02T21:03:57.145Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/video?q=a",
+      "source": "google/firing-range — tag-restricted VIDEO XSS (/tags/tag/video)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/audio?q=a",
+      "source": "google/firing-range — tag-restricted AUDIO XSS (/tags/tag/audio)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/applet?q=a",
+      "source": "google/firing-range — tag-restricted APPLET XSS (/tags/tag/applet)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/canvas?q=a",
+      "source": "google/firing-range — tag-restricted CANVAS XSS (/tags/tag/canvas)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/setInterval",
+      "source": "google/firing-range — location.hash to setInterval DOM XSS sink (/address/location.hash/setInterval)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://testphp.vulnweb.com/listproducts.php?cat=1",
       "source": "Acunetix testphp.vulnweb.com — UNION-based SQLi oracle GET /listproducts.php?cat= (vulnweb PHP lab)",
