@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T15:05:00.000Z",
+  "updated_at": "2026-08-02T16:05:38.020Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/document.location",
+      "source": "google/firing-range — location.hash to document.location DOM XSS sink (/urldom/location/hash/document.location)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/form.action",
+      "source": "google/firing-range — location.hash to form.action DOM XSS sink (/urldom/location/hash/form.action)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/property/eval",
+      "source": "google/firing-range — localStorage property sink to eval() DOM XSS (/dom/toxicdom/localStorage/property/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/property/innerHtml",
+      "source": "google/firing-range — localStorage property sink to innerHTML DOM XSS (/dom/toxicdom/localStorage/property/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/eval",
+      "source": "google/firing-range — sessionStorage property sink to eval() DOM XSS (/dom/toxicdom/sessionStorage/property/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/eval",
       "source": "google/firing-range — document inputTyping sink to eval() DOM XSS (/dom/toxicdom/document/inputTyping/eval)",
