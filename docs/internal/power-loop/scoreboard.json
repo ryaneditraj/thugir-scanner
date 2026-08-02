@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T02:00:00.000Z",
+  "updated_at": "2026-08-02T03:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3278,
-  "total_findings": 44249,
+  "total_sites_scanned": 3281,
+  "total_findings": 44283,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2232,
-  "discovery_findings": 37887,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-02T02:00:00.000Z",
+  "discovery_findings": 37921,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-02T03:00:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 477,
+      "probes_run": 486,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,37 @@
           ]
         }
       },
-      "note": "juice-shop.herokuapp.com 6/6 (33 findings); no benchmark misses"
+      "note": "juice-shop.herokuapp.com 6/6 (34 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "focus": "firing-range tags/tag label + a/style attribute + any-tag XSS oracles",
+      "focus": "firing-range tags/tag option + textarea tag injection + reflected iframe attribute value XSS oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no category gaps",
-      "public-firing-range.appspot.com/tags/tag/label?q=a: 97→105 — label tag injection live+route oracles shipped",
-      "public-firing-range.appspot.com/tags/tag/a/style?q=a: 100→104 — a-style attribute injection live+route oracles shipped",
-      "public-firing-range.appspot.com/tags/tag?q=a: 88→104 — any-tag injection live+route oracles shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no category gaps",
+      "public-firing-range.appspot.com/tags/tag/option?q=a: 97→108 — option tag injection live+route oracles shipped",
+      "public-firing-range.appspot.com/tags/tag/textarea?q=a: 97→108 — textarea tag injection live+route oracles shipped",
+      "public-firing-range.appspot.com/reflected/parameter/iframe_attribute_value?q=a: 101→108 — iframe attribute value reflected XSS live+route oracles shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range tags/tag/option|area|frame|source|form|input|button|textarea|select: tag-restricted route oracles absent",
+      "public-firing-range tags/tag/area|frame|source|form|input|button|select: tag-restricted route oracles absent",
       "public-firing-range tags/expression: CSS expression filter bypass oracle absent",
-      "public-firing-range reflected/parameter/iframe_attribute_value|textarea_attribute_value|style_attribute_value: route-specific attribute-sink live oracles absent"
+      "public-firing-range reflected/parameter/textarea_attribute_value|style_attribute_value: route-specific attribute-sink live oracles absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
+    "juice-shop.herokuapp.com": 34,
+    "public-firing-range.appspot.com/tags/tag/option?q=a": 108,
+    "public-firing-range.appspot.com/tags/tag/textarea?q=a": 108,
+    "public-firing-range.appspot.com/reflected/parameter/iframe_attribute_value?q=a": 108,
     "public-firing-range.appspot.com/tags/tag/label?q=a": 105,
     "public-firing-range.appspot.com/tags/tag/a/style?q=a": 104,
     "public-firing-range.appspot.com/tags/tag?q=a": 104,
-    "public-firing-range.appspot.com/urldom/location/search/param.code.value": 101,
-    "public-firing-range.appspot.com/reflected/parameter/iframe_attribute_value?q=a": 101,
-    "serverless.fail": 3
+    "public-firing-range.appspot.com/urldom/location/search/param.code.value": 101
   }
 }
