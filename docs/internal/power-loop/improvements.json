@@ -2,6 +2,762 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-video-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/video?q=%3Cvideo%20src%3Dx%3E reflects <video src=\"x\"></video>; route scan findings 152→160 (+firing-range-tags-tag-video-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-audio-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/audio?q=%3Caudio%20src%3Dx%3E reflects <audio src=\"x\"></audio>; route scan findings 152→160 (+firing-range-tags-tag-audio-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-canvas-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/canvas?q=%3Ccanvas%3E reflects <canvas></canvas>; route scan findings 152→160 (+firing-range-tags-tag-canvas-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-form-submission-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/formSubmission/innerHtml returns form.onsubmit→div.innerHTML=payload; route scan findings 140→155 (+firing-range-toxicdom-form-submission-innerhtml-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-form-submission-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/formSubmission/documentWrite returns form.onsubmit→document.write(payload); route scan findings 140→154 (+firing-range-toxicdom-form-submission-documentwrite-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-formsubmission-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/window/formSubmission/documentWrite propagates location.hash via window.status to eval(retrieved_payload); route scan findings 129→155 (+firing-range-dom-propagation-window-formsubmission-documentwrite-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-div-style-expression-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/div?q=<div> returns <div></div>; /tags/tag/style?q=<style> returns <style></style>; /tags/expression?q=<script> returns <script></script>; route scans 147→153 (+firing-range-tags-injection-route-live-oracle); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-status-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/window/innerHtml/innerHtml and /eval/eval propagate location.hash via window.status to eval(retrieved_payload); route scans 147→153 (+status-eval live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-form-submission-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/formSubmission/eval passes form input to eval() on submit with sync eval(payload) after appendChild(form); route scan 147→152 (+toxicdom-form-submission-eval live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/inputTyping/eval returns keyup/change handler passing e.target.value to eval(payload); inputTyping/eval route scan findings 143→150 (+firing-range-dom-inputtyping-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/inputTyping/documentWrite returns keyup/change handler passing e.target.value to document.write(payload); inputTyping/documentWrite route scan findings 143→150 (+firing-range-dom-inputtyping-documentwrite-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-meta-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/meta?q=%3Cmeta%3E reflects <meta> tag in response body; tags/tag/meta route scan findings 144→152 (+firing-range-tags-tag-meta-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/property/innerHtml returns sessionStorage.badValue passed to div.innerHTML=payload; sessionStorage/property/innerHtml route scan findings 139→146 (+firing-range-dom-sessionstorage-property-innerhtml-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/inputTyping/innerHtml returns keyup/change handler passing e.target.value to innerHTML; inputTyping/innerHtml route scan findings +firing-range-dom-inputtyping-innerhtml-live-oracle + route (147 total); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-jsoncallback-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/jsoncallback?callback=thugirJsonCallbackProbe returns thugirJsonCallbackProbe({'foobar':'foo'}); reflected/jsoncallback route scan +firing-range-reflected-jsoncallback-live-oracle + route (148 total); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/property/eval returns localStorage.badValue passed to eval(payload); localStorage/property/eval route scan findings 137→144 (+firing-range-dom-localstorage-property-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/property/innerHtml returns localStorage.badValue passed to div.innerHTML=payload; localStorage/property/innerHtml route scan findings 137→144 (+firing-range-dom-localstorage-property-innerhtml-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/property/eval returns sessionStorage.badValue passed to eval(payload); sessionStorage/property/eval route scan findings 137→144 (+firing-range-dom-sessionstorage-property-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-set-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie_set/innerHtml returns lookupCookie(badValue) passed to div.innerHTML=payload; cookie_set/innerHtml route scan findings 128→142 (+firing-range-dom-cookie-set-innerhtml-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-set-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie_set/documentWrite returns lookupCookie(badValue) passed to document.write(payload); cookie_set/documentWrite route scan findings 128→141 (+firing-range-dom-cookie-set-documentwrite-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-documentwrite-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/window/documentWrite/eval propagates location.hash via window.status to eval(retrieved_payload); documentWrite/eval route scan findings 129→142 (+firing-range-dom-propagation-window-documentwrite-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie/documentWrite returns Toxic DOM page with lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') passed to document.write(payload); cookie/documentWrite route scan findings 131→138 (+firing-range-dom-cookie-documentwrite-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-improper-origin-partial-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison registers message listener with msg.origin.includes('www.google.com') then eval(msg.data); route scan findings 129→136 (+improper-origin-partial live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-improper-origin-regexp-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/improperOriginValidationWithRegExp registers message listener with unanchored originRegExp match then eval(msg.data); route scan findings 129→136 (+improper-origin-regexp live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie/eval returns Toxic DOM page with lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') passed to eval(payload); cookie/eval route scan findings 128→134 (+firing-range-dom-cookie-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie/innerHtml returns Toxic DOM page with lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') passed to div.innerHTML=payload; cookie/innerHtml route scan findings 128→134 (+firing-range-dom-cookie-innerhtml-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/window/formSubmission/eval propagates location.hash via window.status to eval(retrieved_payload); window/formSubmission/eval route scan findings 129→134 (+firing-range-dom-propagation-window-eval-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-html-escape-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/js/html_escape?q= reflects into eval('thugirFrJsHtmlEscapeProbe'.replace(/</g — naive html entity replace before eval(); html_escape route scan findings 126→133 (+html-escape live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-encodeuricomponent-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/js/encodeURIComponent?q= reflects into eval(encodeURIComponent('thugirFrJsEncodeUriProbe')); encodeURIComponent route scan findings 126→133 (+encodeuricomponent live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-escape-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/js/escape?q= reflects into eval(escape('thugirFrJsEscapeProbe')); escape route scan findings 126→133 (+escape live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-form-submission-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/formSubmission/eval form.onsubmit copies userInput to eval(payload); eventtriggering/eval route scan findings 117→130 (+eval live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-form-submission-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/formSubmission/documentWrite form.onsubmit copies userInput to document.write(payload); documentWrite route scan findings 120→130 (+documentwrite live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/document/formSubmission/eval location.hash → window.status → eval(retrieved_payload); dompropagation/eval route scan findings 117→130 (+propagation-eval live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-starts-with-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowOriginStartsWith Origin https://public-firing-range.appspot.com.evil.com reflected with Access-Control-Allow-Credentials true; allowOriginStartsWith route scan findings 106→127 (+starts-with live+route oracles); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-ends-with-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowOriginEndsWith Origin https://evilpublic-firing-range.appspot.com reflected with credentials; allowOriginEndsWith route scan findings 106→127 (+ends-with live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-regex-dot-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowOriginRegexDot Origin https://public-firing-rangeXappspot.com reflected with credentials (unescaped dot regex bypass); allowOriginRegexDot route scan findings 106→127 (+regex-dot live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/window/name/documentWrite var payload=window.name → document.write(payload); window/name/documentWrite route scan findings 116→123 (+window-name-documentwrite live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/window/name/documentWrite confirms window.name → document.write() toxic DOM sink; findings 116→123; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/property/documentWrite sessionStorage.badValue → document.write(payload); sessionStorage/property/documentWrite route scan findings 115→122 (+sessionstorage-property-documentwrite live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/sessionStorage/property/documentWrite confirms sessionStorage.badValue → document.write() toxic DOM sink; findings 115→122; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/property/documentWrite localStorage.badValue → document.write(payload); localStorage/property/documentWrite route scan findings 0→123 (+localstorage-property-documentwrite live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/localStorage/property/documentWrite confirms localStorage.badValue → document.write() toxic DOM sink; findings 123 with route-specific oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/referrer/innerHtml unescape(document.referrer) → div.innerHTML=payload; referrer/innerHtml route scan findings 116→120 (+referrer-innerhtml live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-innerhtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/document/referrer/innerHtml confirms document.referrer → innerHTML toxic DOM sink; findings 116→120; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/referrer/documentWrite unescape(document.referrer) → document.write(payload); referrer/documentWrite route scan findings 116→120 (+referrer-documentwrite live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-referrer-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/document/referrer/documentWrite confirms document.referrer → document.write() toxic DOM sink; findings 116→120; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/window/name/innerHtml var payload=window.name → div.innerHTML=payload; window.name/innerHtml route scan findings 116→120 (+window-name-innerhtml live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-innerhtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/window/name/innerHtml confirms window.name → innerHTML toxic DOM sink; findings 116→120; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-prototype-pollution-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PWN-041 CVE-2019-10744 POST /search/filters lodash _.merge() docs on /vulnerabilities; pwnshop.ctfsecurity.com/api/settings/search-filters findings 26→34 (+client-side-pwnshop-prototype-pollution-oracle); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /search/filters constructor.prototype.thugirProbePP=polluted merged into filters JSON via lodash _.merge(); live oracle fires after OTP session; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/settings/search-filters confirms POST /search/filters unsafe lodash merge (PWN-041); findings 26→34 with route-specific slug; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-body-non2xx-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/403?q=thugirFrBodyNon2xxProbe returns <body>thugirFrBodyNon2xxProbe</body> with HTTP 403; body/403 route scan findings 110→119 (+body-non2xx live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-replace-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/replace page passes location.hash to location.replace(payload); hash/replace route scan findings 109→118 (+replace live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-function-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/function page passes location.hash to new Function(payload); hash/function route scan findings 109→118 (+function live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-head-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/encodeUrl/head?q=thugirFrEscapeHeadProbe returns <head>thugirFrEscapeHeadProbe</head>; encodeUrl/head route scan findings 112→115 (+escape-serverside-head live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-noscript-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/noscript?q=thugirFrNoscriptProbe returns <noscript>thugirFrNoscriptProbe</noscript>; noscript route scan findings 113→117 (+reflected-parameter-noscript live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/select?q=<select> → <select></select>; GET /tags/tag/source?q=<source> → <source>; tags/tag/select route scan fires firing-range-tags-injection-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-area-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/area?q=<area> reflects <area> tag; public-firing-range.appspot.com/tags/tag/area findings 97→114 (+area live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-input-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/input?q=<input> reflects <input> tag; public-firing-range.appspot.com/tags/tag/input findings 94→114 (+input live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-button-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/button?q=<button> reflects <button></button>; public-firing-range.appspot.com/tags/tag/button findings 94→114 (+button live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-textarea-attribute-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/textarea_attribute_value?q=<script>alert(1)</script> reflects attribute='<script>alert(1)</script>' in <textarea>; public-firing-range.appspot.com/reflected/parameter/textarea_attribute_value findings 104→111 (+textarea-attribute-value live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-style-attribute-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/style_attribute_value?q=<script>alert(1)</script> reflects attribute='<script>alert(1)</script>' in <style>; public-firing-range.appspot.com/reflected/parameter/style_attribute_value findings 104→111 (+style-attribute-value live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-form-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/form?q=<form> reflects <form></form>; public-firing-range.appspot.com/tags/tag/form findings 104→111 (+form live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-option-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/option?q=<option> reflects <option></option>; public-firing-range.appspot.com/tags/tag/option findings 97→108 (+option live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-textarea-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/textarea?q=<textarea> reflects <textarea></textarea>; public-firing-range.appspot.com/tags/tag/textarea findings 97→108 (+textarea live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-iframe-attribute-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/iframe_attribute_value?q=<script>alert(1)</script> reflects attribute='<script>alert(1)</script>'; public-firing-range.appspot.com/reflected/parameter/iframe_attribute_value findings 101→108 (+iframe-attribute-value live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-label-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/label?q=<label for=x> reflects <label for=\"x\"></label>; public-firing-range.appspot.com/tags/tag/label findings 97→105 (+label live+route oracles); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-a-style-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/a/style?q=<a style=background:red> reflects <a style=\"background:red\"></a>; public-firing-range.appspot.com/tags/tag/a/style findings 100→104 (+a-style live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-any-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag?q=<a> reflects <a></a> without tag-name restriction; public-firing-range.appspot.com/tags/tag findings 88→104 (+any-tag live+route oracles); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-param-code-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/param.code.value returns paramCodeElement.value=payload from location.search.substr(1); param.code.value route scan findings 37→101 (+param-code live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-param-src-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/param.src.value returns paramSrcElement.value=payload from location.search.substr(1); param.src.value route scan findings 37→101 (+param-src live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-svg-a-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/svg.a returns anchor.setAttributeNS(xlink:href,payload) from location.search.substr(1); svg.a route scan findings 37→101 (+svg-a live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-object-data-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/object.data returns objectElement.data=payload from location.search.substr(1); object.data route scan fires object-data live+route oracles; benchmark juice-shop-staging 26 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-embed-src-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/embed.src returns embedElement.src=payload from location.search.substr(1); embed.src route scan fires embed-src live+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-link-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/link.href returns linkElement.href=payload from location.search.substr(1); link.href route scan fires link-href live+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-object-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/object?q=%3Cobject%20src=x%3E returns <object src=\"x\"></object>; object route scan findings 88→93 (+object live+route + tags-injection-route); benchmark juice-shop 11 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-embed-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/embed?q=%3Cembed%20src=x%3E returns <embed src=\"x\">; embed route scan findings 88→93 (+embed live+route + tags-injection-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-svg-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/svg?q=%3Csvg%20src=x%3E returns <svg src=\"x\"></svg>; svg route scan findings 88→93 (+svg live+route + tags-injection-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-a-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/a/href?q=%3Ca%20href=javascript:alert(1)%3E returns <a href=\"javascript:alert(1)\"></a>; a/href route scan findings 88→94 (+a-href live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-script-src-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/script/src?q=%3Cscript%20src=//evil.example/x.js%3E returns <script src=\"//evil.example/x.js\"></script>; script/src route scan findings 88→94 (+script-src live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-div-style-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/div/style?q=%3Cdiv%20style=background:red%3E returns <div style=\"background:red\"></div>; div/style route scan findings 88→94 (+div-style live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-preload-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_preload_missing returns strict-transport-security: max-age=63072000; includeSubDomains (no preload); hsts_preload_missing route scan findings 82→89 (+preload-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-null-origin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowNullOrigin Origin:null returns access-control-allow-origin: null with allow-credentials: true; allowNullOrigin route scan findings 82→89 (+null-origin live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-insecure-scheme-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /cors/alloworigin/allowInsecureScheme Origin:http://public-firing-range.appspot.com returns ACAO matching HTTP origin with credentials on HTTPS; allowInsecureScheme route scan findings 82→89 (+insecure-scheme live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-max-age-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_max_age_missing returns strict-transport-security: includeSubDomains; preload (no max-age); hsts_max_age_missing route scan findings 83→86 (+max-age-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-includesubdomains-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_includesubdomains_missing returns strict-transport-security: max-age=63072000; preload (no includeSubDomains); hsts_includesubdomains_missing route scan findings 83→86 (+includesubdomains-missing live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-javascripturi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/javascripturi.html returns <a href=\"javascript:location.href=location.href\">; javascripturi.html route scan findings 78→86 (+javascripturi live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_missing returns HTTPS 200 without Strict-Transport-Security header; hsts_missing route scan findings 78→83 (+hsts-missing live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-max-age-low-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /stricttransportsecurity/hsts_max_age_too_low returns strict-transport-security: max-age=1337; hsts_max_age_too_low route scan findings 78→83 (+max-age-low live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-third-party-sri-missing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: third_party_scripts_without_subresource_integrity.html has <script src=\"//nonexistent.google\"> without integrity; static SRI route scan findings 78→83 (+SRI-missing live+route); dynamically_added route scan 78→83 (+SRI-dynamic live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-body-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/escapeHtml/body?q=thugirFrEscapeBodyProbe returns <body>thugirFrEscapeBodyProbe</body> despite escapeHtml; escapeHtml/body route scan findings 72→79 (+live+route oracles); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-json-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/json?q=thugirFrParameterJsonProbe returns {\"parameter\":\"thugirFrParameterJsonProbe\"} with text/html content-type; parameter/json route scan findings 73→80 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/documentWrite returns postMessage handler with JSON.parse(msg.data) → document.write(); documentWrite route scan findings 69→76 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-comment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body_comment?q=thugirFrBodyCommentProbe returns <!-- thugirFrBodyCommentProbe --> in body; body_comment route scan findings 71→78 (+live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_assignment?q=thugirFrJsAssignProbe returns var foo=thugirFrJsAssignProbe; js_assignment route scan findings 71→77 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-tagname-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/escapeHtml/tagname?q=thugirFrEscapeTagnameProbe returns <thugirFrEscapeTagnameProbe> tag injection; tagname route scan findings 71→76 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-any-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_any_script?q=<ScRiPt>thugirFrAnyScriptProbe</ScRiPt> reflects mixed-case script tag unescaped; blocks_any_script route scan findings 61→74 (+live+route oracles); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-attr-unquoted-blocks-dq-sq-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote?q=thugirFrDqSqProbe onmouseover=alert(1) x= reflects unquoted attribute event handler; blocks_doublequotesinglequote route scan findings 61→75 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-space-dq-slash-eq-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_space_doublequote_slash_equals?q=<img src=x onerror=thugirFrCharsetProbe> reflects img tag unescaped; blocks_space_doublequote_slash_equals route scan findings 61→74 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-quoted-string-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_quoted_string?q=thugirFrJsQuotedProbe returns var foo=\"thugirFrJsQuotedProbe\"; js_quoted_string route scan findings 64→71 (+firing-range-reflected-js-quoted-string-live-oracle + route); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-singlequoted-string-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_singlequoted_string?q=thugirFrJsSingleQuotedProbe returns var foo='thugirFrJsSingleQuotedProbe'; js_singlequoted_string route scan findings 64→71 (+firing-range-reflected-js-singlequoted-string-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-slashquoted-string-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_slashquoted_string?q=thugirFrJsSlashQuotedProbe returns var foo=/thugirFrJsSlashQuotedProbe/; js_slashquoted_string route scan findings 64→71 (+firing-range-reflected-js-slashquoted-string-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-lowercase-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_lowercase_script?q=<ScRiPt>thugirFrLcScriptProbe</ScRiPt> reflects mixed-case script tag unescaped; blocks_lowercase_script route scan findings 61→68 (+firing-range-reflected-body-blocks-lowercase-script-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-uppercase-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/blocks_uppercase_script?q=<script>thugirFrUcScriptProbe</script> reflects lowercase script tag unescaped; blocks_uppercase_script route scan findings 61→68 (+firing-range-reflected-body-blocks-uppercase-script-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/js_eval?q=thugirFrJsEvalProbe returns eval(\"thugirFrJsEvalProbe\") in body; js_eval route scan findings 61→68 (+firing-range-reflected-js-eval-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-badscriptimport-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /badscriptimport/ documents localhost/private-network/typosquatting imports; probe /remoteinclude/parameter/script?q=http://127.0.0.2/localhost_import.js returns <script src=\"http://127.0.0.2/localhost_import.js\">; badscriptimport route scan findings 48→67 (+firing-range-badscriptimport-live-oracle + route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-vulnerablelibraries-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerablelibraries/jquery.html loads jquery-1.8.1.js with attribute-selector XSS gadget (ticket/11290); vulnerablelibraries route scan findings 48→67 (+firing-range-vulnerablelibraries-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reverseclickjacking-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reverseclickjacking/singlepage/ParameterInQuery/InCallback/?q=urc_button.click reflects callback=urc_button.click in JSONP script src; reverseclickjacking route scan findings 48→67 (+firing-range-reverseclickjacking-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-my-pastes-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { pastes(public: false) { id title content owner { name } } } returns private pastes (555-555-1337, Testing Testing) without auth; pentest-ground.com:5013/my_pastes findings 11→15 (+dvga-my-pastes-idor-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-import-paste-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mutation importPaste(host:127.0.0.1,port:1,path:/,scheme:http) returns data.importPaste without auth error; pentest-ground.com:5013/import_paste findings 11→15 (+dvga-import-paste-ssrf-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-create-paste-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mutation createPaste stores <img src=x onerror=canary> unescaped in content field; pentest-ground.com:5013/create_paste findings 11→15 (+dvga-create-paste-stored-xss-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdomscripts/sessionStorage/property/documentWrite returns sessionStorage.badValue → document.write(payload) sync+async; sessionStorage/documentWrite route scan findings 53→60 (+firing-range-dom-sessionstorage-documentwrite-live-oracle + route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-leakedcookie-httponly-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /leakedcookie/leakedcookie Set-Cookie HttpOnly value echoed in HTML body; leakedcookie route scan findings 48→64 (+firing-range-leakedcookie-httponly-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-mixedcontent-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /mixedcontent/ HTTPS page loads <script src=\"http://public-firing-range.appspot.com/mixedcontent/script.js\">; mixedcontent route scan findings 48→64 (+firing-range-mixedcontent-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/innerHtml addEventListener('message') JSON.parse(msg.data) → div.innerHTML = content.html; postMessage/innerHtml route scan findings 54→56 (+firing-range-dom-postmessage-innerhtml-live-oracle + route); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-cookie-parse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_cookie_parse/1.6.0 $parse(lookupCookie(irrelevantAngularCookie))({}) in VulnerableController; angular_cookie_parse route scan findings 43→58 (+firing-range-angular-cookie-parse-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-form-parse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_form_parse/1.6.0 ng-submit calls $parse(expression)({}) on user form input; angular_form_parse route scan findings 43→58 (+firing-range-angular-form-parse-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/function/innerHtml returns sessionStorage.getItem('badValue') assigned to div.innerHTML; sessionStorage route scan findings 47→54 (+firing-range-dom-sessionstorage-innerhtml-live-oracle + route); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/postMessage/eval addEventListener('message') passes msg.data to eval(); postMessage/eval route scan findings 54 (+firing-range-dom-postmessage-eval-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body/1.2.0?q=thugirFrAngularProbe reflects {{thugirFrAngularProbe}} into ng-app interpolation; angular_body route scan findings 43→55 (+firing-range-angular-body-xss-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-url-object-param-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/url/object_param?q= reflects into <param name=\"src\" value=\"...\">; object_param route scan findings 46→53 (+firing-range-reflected-url-object-param-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-contentsniffing-json-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/contentsniffing/json?q= returns application/json body {\"parameter\":\"...\"} without nosniff; contentsniffing/json route scan findings 45→52 (+firing-range-reflected-contentsniffing-json-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location/innerHtml passes window.location to divEl.innerHTML; address/location/innerHtml route scan findings 43→52 (+firing-range-address-location-innerhtml-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-area-href-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/hash/area.href returns document.location.hash.substr(1) assigned to area.href; area.href route scan findings 43→50 (+firing-range-urldom-location-hash-area-href-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-remoteinclude-parameter-script-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /remoteinclude/parameter/script?q= reflects query param into script.src; remoteinclude/parameter/script route scan findings 43→49 (+firing-range-remoteinclude-parameter-script-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location/eval returns var payload=window.location; eval(payload); address/location/eval route scan findings 43→49 (+firing-range-address-location-eval-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-a-href-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/a.href returns document.location.search.substr(1) assigned to anchor.href; a.href route scan findings 34→46 (+firing-range-urldom-location-search-a-href-live-oracle + route); benchmark juice-shop 34 findings 6/6 maintained"
@@ -15958,6 +16714,36 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-admin-login-sqli-live-oracle",
       "shipped_at": "2026-07-26T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-html-escape-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-html-escape-route-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-encodeuricomponent-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-encodeuricomponent-route-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-escape-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-js-escape-route-live-oracle",
+      "shipped_at": "2026-08-02T13:10:00.000Z"
     }
   ],
   "shipped_log": [
@@ -16795,6 +17581,266 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-urldom-location-search-iframe-src-live-oracle",
       "shipped_at": "2026-08-01T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-hash-area-href-live-oracle",
+      "shipped_at": "2026-08-01T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-remoteinclude-parameter-script-live-oracle",
+      "shipped_at": "2026-08-01T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-eval-live-oracle",
+      "shipped_at": "2026-08-01T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-postmessage-innerhtml-live-oracle",
+      "shipped_at": "2026-08-01T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-cookie-parse-live-oracle",
+      "shipped_at": "2026-08-01T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-form-parse-live-oracle",
+      "shipped_at": "2026-08-01T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-documentwrite-live-oracle",
+      "shipped_at": "2026-08-01T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-leakedcookie-httponly-live-oracle",
+      "shipped_at": "2026-08-01T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-mixedcontent-live-oracle",
+      "shipped_at": "2026-08-01T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-my-pastes-idor-live-oracle",
+      "shipped_at": "2026-08-01T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-import-paste-ssrf-live-oracle",
+      "shipped_at": "2026-08-01T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "dvga-create-paste-stored-xss-live-oracle",
+      "shipped_at": "2026-08-01T10:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-lowercase-script-live-oracle",
+      "shipped_at": "2026-08-01T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-blocks-uppercase-script-live-oracle",
+      "shipped_at": "2026-08-01T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-eval-live-oracle",
+      "shipped_at": "2026-08-01T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-body-comment-live-oracle",
+      "shipped_at": "2026-08-01T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-js-assignment-live-oracle",
+      "shipped_at": "2026-08-01T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-tagname-live-oracle",
+      "shipped_at": "2026-08-01T15:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-missing-live-oracle",
+      "shipped_at": "2026-08-01T17:12:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-hsts-max-age-low-live-oracle",
+      "shipped_at": "2026-08-01T17:12:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-third-party-sri-missing-live-oracle",
+      "shipped_at": "2026-08-01T17:12:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-third-party-sri-dynamic-live-oracle",
+      "shipped_at": "2026-08-01T17:12:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-object-live-oracle",
+      "shipped_at": "2026-08-01T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-embed-live-oracle",
+      "shipped_at": "2026-08-01T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-svg-live-oracle",
+      "shipped_at": "2026-08-01T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-object-data-live-oracle",
+      "shipped_at": "2026-08-02T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-embed-src-live-oracle",
+      "shipped_at": "2026-08-02T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-link-href-live-oracle",
+      "shipped_at": "2026-08-02T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-prototype-pollution-oracle",
+      "shipped_at": "2026-08-02T08:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-live-oracle",
+      "shipped_at": "2026-08-02T08:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-prototype-pollution-search-filters-route-live-oracle",
+      "shipped_at": "2026-08-02T08:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-eval-live-oracle",
+      "shipped_at": "2026-08-02T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-eval-route-live-oracle",
+      "shipped_at": "2026-08-02T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-innerhtml-live-oracle",
+      "shipped_at": "2026-08-02T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-cookie-innerhtml-route-live-oracle",
+      "shipped_at": "2026-08-02T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-eval-live-oracle",
+      "shipped_at": "2026-08-02T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-eval-route-live-oracle",
+      "shipped_at": "2026-08-02T14:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-starts-with-live-oracle",
+      "shipped_at": "2026-08-02T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-ends-with-live-oracle",
+      "shipped_at": "2026-08-02T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-cors-allow-origin-regex-dot-live-oracle",
+      "shipped_at": "2026-08-02T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-eval-live-oracle",
+      "shipped_at": "2026-08-02T17:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-innerhtml-live-oracle",
+      "shipped_at": "2026-08-02T17:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-eval-live-oracle",
+      "shipped_at": "2026-08-02T17:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
+      "shipped_at": "2026-08-02T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-inputtyping-innerhtml-live-oracle",
+      "shipped_at": "2026-08-02T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-jsoncallback-live-oracle",
+      "shipped_at": "2026-08-02T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-div-style-expression-injection",
+      "shipped_at": "2026-08-02T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-status-eval-live-oracle",
+      "shipped_at": "2026-08-02T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-form-submission-eval-live-oracle",
+      "shipped_at": "2026-08-02T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-video-live-oracle",
+      "shipped_at": "2026-08-02T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-audio-live-oracle",
+      "shipped_at": "2026-08-02T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-canvas-live-oracle",
+      "shipped_at": "2026-08-02T22:10:00.000Z"
     }
   ]
 }

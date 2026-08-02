@@ -862,6 +862,630 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-sessionstorage-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/function/innerHtml returns a page that reads sessionStorage.getItem('badValue') and passes it to innerHTML — Firing Range toxic DOM sessionStorage XSS training oracle.",
+    impactOneline:
+      "DOM XSS via sessionStorage lets attackers persist payloads for the browser tab session that execute when written to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from sessionStorage.",
+        "Treat storage as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our page reads sessionStorage and passes it to innerHTML. Show how to remove storage-backed DOM XSS sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage innerHTML route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage routes, the response contains innerHTML(sessionStorage.getItem('badValue')) — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM XSS sinks that write sessionStorage-backed payloads to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on sessionStorage-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage route uses innerHTML on sessionStorage values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/external/sessionStorage/property/documentWrite loads a script that reads sessionStorage.badValue and passes it to document.write() — Firing Range toxic DOM sessionStorage document.write XSS training oracle.",
+    impactOneline:
+      "DOM XSS via sessionStorage lets attackers persist payloads for the browser tab session that execute when written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from sessionStorage.",
+        "Treat storage as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our page reads sessionStorage and passes it to document.write(). Show how to remove storage-backed DOM XSS sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage document.write route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/external/sessionStorage routes, the external script passes sessionStorage.badValue to document.write() — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM XSS sinks that write sessionStorage-backed payloads via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionStorageDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on sessionStorage-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/external/sessionStorage route uses document.write on sessionStorage values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-leakedcookie-httponly-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Google Firing Range HttpOnly cookie leak oracle",
+    description:
+      "GET /leakedcookie/leakedcookie sets an HttpOnly cookie in Set-Cookie then echoes the cookie value in the HTML body — Firing Range httpOnly cookie disclosure training oracle.",
+    impactOneline:
+      "Leaking HttpOnly cookie values in page bodies defeats the HttpOnly protection and enables session theft via XSS or cache poisoning.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeLeakedcookieHttponlyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never echo HttpOnly cookie values in HTML responses — Firing Range is an intentional disclosure testbed.",
+      steps: [
+        "Keep session identifiers out of response bodies and client-side JavaScript.",
+        "Audit server templates for cookie value reflection.",
+        "Use server-side session storage instead of echoing tokens."
+      ]
+    },
+    fixPrompt:
+      "Our page sets HttpOnly cookies but leaks their values in the HTML body. Show how to stop cookie disclosure.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-leakedcookie-httponly-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Google Firing Range /leakedcookie HttpOnly cookie leak route oracle",
+    description:
+      "When scanning /leakedcookie routes, the response sets HttpOnly cookies and leaks their values in the body — route-specific cookie disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HttpOnly session cookies are not reflected in HTML bodies.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeLeakedcookieHttponlyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove cookie value reflection from /leakedcookie handlers.",
+      steps: [
+        "Audit all Set-Cookie usage for downstream body reflection.",
+        "Keep session identifiers server-side only.",
+        "Add response review for sensitive header leakage."
+      ]
+    },
+    fixPrompt:
+      "Our /leakedcookie route leaks HttpOnly cookie values in HTML. Show route-specific cookie disclosure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-mixedcontent-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range mixed content misconfiguration oracle",
+    description:
+      "GET /mixedcontent/ serves an HTTPS page that loads an active HTTP script — Firing Range mixed content training oracle.",
+    impactOneline:
+      "Mixed HTTP scripts on HTTPS pages can be tampered with in transit and enable man-in-the-middle code injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeMixedContentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Load all active content over HTTPS — Firing Range is an intentional mixed-content testbed.",
+      steps: [
+        "Upgrade script, stylesheet, and iframe sources to HTTPS.",
+        "Use Content-Security-Policy upgrade-insecure-requests.",
+        "Block mixed active content at the CDN or reverse proxy."
+      ]
+    },
+    fixPrompt:
+      "Our HTTPS page loads HTTP scripts. Show how to eliminate mixed content and enforce upgrade-insecure-requests.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-mixedcontent-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /mixedcontent route mixed content oracle",
+    description:
+      "When scanning /mixedcontent routes, the HTTPS page includes active HTTP script sources — route-specific mixed content misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HTTPS pages do not load active content over plain HTTP.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeMixedContentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove HTTP script sources from /mixedcontent handlers.",
+      steps: [
+        "Serve all scripts over HTTPS.",
+        "Add CSP upgrade-insecure-requests on HTTPS pages.",
+        "Audit templates for protocol-relative or hardcoded http:// assets."
+      ]
+    },
+    fixPrompt:
+      "Our /mixedcontent route loads HTTP scripts on HTTPS. Show route-specific mixed content remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-badscriptimport-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range bad JavaScript import oracle",
+    description:
+      "GET /badscriptimport/ documents script inclusions from localhost, private-network IPs, and typosquatting domains — confirmed via 127.0.0.2 localhost_import.js script.src probe.",
+    impactOneline:
+      "Importing scripts from localhost, RFC1918 addresses, or typosquatting domains enables supply-chain and internal-network pivot attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeBadscriptimportLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Only load JavaScript from trusted, owner-controlled HTTPS origins.",
+      steps: [
+        "Block script imports from localhost and private-network addresses.",
+        "Use Subresource Integrity (SRI) for third-party scripts.",
+        "Validate CDN and package URLs against an allowlist."
+      ]
+    },
+    fixPrompt:
+      "Our app imports JavaScript from untrusted or internal-network sources. Show how to restrict script origins and add SRI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-badscriptimport-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /badscriptimport route bad JavaScript import oracle",
+    description:
+      "When scanning /badscriptimport routes, the testbed documents and demonstrates script imports from localhost, private-network, and typosquatting domains.",
+    impactOneline:
+      "Route-specific scans should flag script tags sourcing JavaScript from non-owner-controlled or internal-network origins.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeBadscriptimportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove script imports from localhost, private-network, and typosquatting domains.",
+      steps: [
+        "Audit all script src attributes for untrusted origins.",
+        "Use CSP script-src to restrict allowed script origins.",
+        "Host all JavaScript on owner-controlled HTTPS domains."
+      ]
+    },
+    fixPrompt:
+      "Our /badscriptimport route loads scripts from untrusted sources. Show route-specific script origin remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-vulnerablelibraries-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range vulnerable JavaScript library oracle",
+    description:
+      "GET /vulnerablelibraries/jquery.html loads jQuery 1.8.1 with an attribute-selector XSS gadget (bugs.jquery.com/ticket/11290) — known-vulnerable library inclusion oracle.",
+    impactOneline:
+      "Outdated JavaScript libraries with known CVEs enable XSS and other client-side attacks via library-specific gadgets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeVulnerablelibrariesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade jQuery and other client libraries to patched versions.",
+      steps: [
+        "Run npm audit or Snyk to identify vulnerable library versions.",
+        "Upgrade jQuery to 3.7+ and remove deprecated selector patterns.",
+        "Pin dependencies and enable automated dependency scanning in CI."
+      ]
+    },
+    fixPrompt:
+      "Our app includes jQuery 1.8.1 with known XSS gadgets. Show how to upgrade and audit client-side library versions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-vulnerablelibraries-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /vulnerablelibraries route known-vulnerable library oracle",
+    description:
+      "When scanning /vulnerablelibraries routes, the testbed includes pages with outdated JavaScript libraries and exploitable gadgets.",
+    impactOneline:
+      "Route-specific scans should detect pages loading known-vulnerable JavaScript library versions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeVulnerablelibrariesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or upgrade vulnerable library versions on /vulnerablelibraries routes.",
+      steps: [
+        "Inventory all client-side library versions.",
+        "Upgrade to patched releases and test for breaking changes.",
+        "Add dependency scanning to CI/CD pipeline."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerablelibraries route loads outdated JS libraries. Show route-specific library upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reverseclickjacking-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reverse clickjacking / SOME oracle",
+    description:
+      "GET /reverseclickjacking/singlepage/ParameterInQuery/InCallback/ reflects user input into JSONP callback=urc_button.click — Universal Reverse Clickjacking / Same Origin Method Execution oracle.",
+    impactOneline:
+      "Controllable JSONP callback parameters enable cross-origin method execution, letting attackers trigger clicks and form submissions on victim pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReverseclickjackingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate JSONP callback parameters against a strict allowlist of function names.",
+      steps: [
+        "Never reflect user input directly into JSONP callback parameters.",
+        "Use a fixed callback name or validate against /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.",
+        "Prefer CORS with credentials over JSONP for cross-origin data access."
+      ]
+    },
+    fixPrompt:
+      "Our JSONP endpoint reflects user input into the callback parameter. Show safe JSONP callback validation to prevent reverse clickjacking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reverseclickjacking-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reverseclickjacking route SOME oracle",
+    description:
+      "When scanning /reverseclickjacking routes, JSONP callback parameters are controllable to execute DOM methods like element.click — route-specific reverse clickjacking oracle.",
+    impactOneline:
+      "Route-specific scans should detect JSONP endpoints where callback parameters enable Same Origin Method Execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReverseclickjackingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict JSONP callback parameters on /reverseclickjacking routes.",
+      steps: [
+        "Allowlist valid callback function names.",
+        "Remove parameter pollution vectors in JSONP URL construction.",
+        "Migrate from JSONP to CORS-based APIs."
+      ]
+    },
+    fixPrompt:
+      "Our /reverseclickjacking route has a controllable JSONP callback. Show route-specific SOME/reverse clickjacking remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage eval DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/eval registers a message listener that evals msg.data — Firing Range postMessage code-execution DOM XSS training oracle.",
+    impactOneline:
+      "postMessage handlers that eval untrusted message data enable arbitrary script execution from cross-origin iframes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval postMessage data — validate origin and parse safely.",
+      steps: [
+        "Remove eval() from postMessage handlers.",
+        "Validate event.origin before processing messages.",
+        "Use JSON.parse with schema validation instead of eval."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler evals msg.data. Show safe postMessage handling without eval.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage routes, the response contains a message listener that evals msg.data — route-specific postMessage code-execution oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not eval untrusted cross-window payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on postMessage payloads in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all message event listeners for eval and Function constructors.",
+        "Validate message origin before processing.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage route evals message data. Show route-specific postMessage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS body interpolation XSS oracle",
+    description:
+      "GET /angular/angular_body reflects the q query parameter into an AngularJS {{}} interpolation template — Firing Range server-side Angular template injection training oracle.",
+    impactOneline:
+      "User input reflected into AngularJS interpolation is evaluated as an expression, enabling XSS and sandbox escape.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into AngularJS templates — encode or use one-time binding.",
+      steps: [
+        "Escape {{ and }} in server-side template generation.",
+        "Use ng-bind instead of interpolation for dynamic data.",
+        "Upgrade from AngularJS and avoid mixing server/client templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body route reflects user input into {{}} interpolation. Show AngularJS SSTI/XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body route XSS oracle",
+    description:
+      "When scanning /angular/angular_body routes, the q parameter is reflected into AngularJS {{}} interpolation — route-specific Angular template injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input is not embedded in AngularJS expression templates.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove user-input reflection into AngularJS interpolation on /angular routes.",
+      steps: [
+        "Escape template delimiters server-side.",
+        "Use ng-bind for dynamic values.",
+        "Audit all server-generated Angular templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body route reflects query parameters into Angular interpolation. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage innerHTML DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/innerHtml registers a message listener that JSON.parses msg.data and writes content.html to innerHTML — Firing Range postMessage DOM XSS training oracle.",
+    impactOneline:
+      "postMessage handlers that assign parsed message data to innerHTML enable DOM XSS from cross-origin iframes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign postMessage data to innerHTML — validate origin and sanitize.",
+      steps: [
+        "Remove innerHTML assignments from postMessage handlers.",
+        "Validate event.origin before processing messages.",
+        "Use textContent or DOMPurify for message payload rendering."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler writes JSON-parsed msg.data to innerHTML. Show safe postMessage handling without innerHTML sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage innerHTML route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage routes, the response contains a message listener that writes JSON-parsed data to innerHTML — route-specific postMessage DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not write untrusted cross-window payloads to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on postMessage payloads in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all message event listeners for innerHTML assignments.",
+        "Validate message origin before processing.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage route writes message data to innerHTML. Show route-specific postMessage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-cookie-parse-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS $parse(cookie) injection oracle",
+    description:
+      "GET /angular/angular_cookie_parse passes a cookie value to AngularJS $parse() — Firing Range Angular expression injection training oracle.",
+    impactOneline:
+      "Passing attacker-controlled cookie values to $parse() enables AngularJS sandbox escape and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularCookieParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to $parse() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove $parse() calls on untrusted cookie data.",
+        "Treat cookies as opaque strings, not Angular expressions.",
+        "Upgrade from AngularJS and avoid expression evaluation on user input."
+      ]
+    },
+    fixPrompt:
+      "Our Angular app passes cookie values to $parse(). Show AngularJS expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-cookie-parse-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_cookie_parse route XSS oracle",
+    description:
+      "When scanning /angular/angular_cookie_parse routes, cookie values are passed to $parse() — route-specific Angular expression injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie data is not evaluated as AngularJS expressions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularCookieParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove $parse() on cookie values in /angular/angular_cookie_parse handlers.",
+      steps: [
+        "Audit all $parse usage for untrusted input sources.",
+        "Use static expressions instead of dynamic cookie values.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_cookie_parse route passes cookies to $parse(). Show route-specific Angular expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-form-parse-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS $parse(form) injection oracle",
+    description:
+      "GET /angular/angular_form_parse passes user form input to AngularJS $parse() on submit — Firing Range Angular expression injection training oracle.",
+    impactOneline:
+      "Evaluating user-controlled form input via $parse() enables AngularJS sandbox escape and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularFormParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user form input to $parse() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove $parse() calls on user-controlled form fields.",
+        "Use static Angular expressions and bind to validated data models.",
+        "Upgrade from AngularJS and avoid dynamic expression evaluation."
+      ]
+    },
+    fixPrompt:
+      "Our Angular form passes user input to $parse() on submit. Show AngularJS expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-form-parse-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_form_parse route XSS oracle",
+    description:
+      "When scanning /angular/angular_form_parse routes, form input is passed to $parse() on submit — route-specific Angular expression injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user form input is not evaluated as AngularJS expressions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularFormParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove $parse() on form input in /angular/angular_form_parse handlers.",
+      steps: [
+        "Audit all $parse usage for user-controlled sources.",
+        "Validate and sanitize form input before any expression evaluation.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_form_parse route passes form input to $parse(). Show route-specific Angular expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-meta-redirect-live-oracle",
     platform: "generic",
     category: "Open redirect",
@@ -1122,6 +1746,578 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-body-blocks-lowercase-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range lowercase script filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_lowercase_script?q= reflects mixed-case <ScRiPt> tags unescaped — Firing Range script-case filter bypass training oracle.",
+    impactOneline:
+      "Case-sensitive script filters are bypassed with mixed-case tags, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksLowercaseScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and block script tags case-insensitively before reflecting user input.",
+      steps: [
+        "Strip or encode <script> tags regardless of character case.",
+        "Use a strict HTML sanitizer for all reflected body content.",
+        "Deploy CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_lowercase_script route allows mixed-case script tag bypass. Show case-insensitive filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-lowercase-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range lowercase script filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_lowercase_script, mixed-case <ScRiPt> tags bypass lowercase-only filters — route-specific script-case bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script filters cannot be bypassed with mixed-case tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksLowercaseScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply case-insensitive script tag filtering on this route.",
+      steps: [
+        "Normalize input to lowercase before applying script blocklists.",
+        "HTML-encode reflected body content.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_lowercase_script route allows mixed-case script bypass. Show route-specific filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-uppercase-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range uppercase SCRIPT filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_uppercase_script?q= reflects lowercase <script> tags unescaped — Firing Range uppercase SCRIPT filter bypass training oracle.",
+    impactOneline:
+      "Uppercase-only SCRIPT filters are bypassed with lowercase script tags, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksUppercaseScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and block script tags case-insensitively before reflecting user input.",
+      steps: [
+        "Strip or encode <script> tags regardless of character case.",
+        "Use a strict HTML sanitizer for all reflected body content.",
+        "Deploy CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_uppercase_script route allows lowercase script tag bypass. Show case-insensitive filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-uppercase-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range uppercase SCRIPT filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_uppercase_script, lowercase <script> tags bypass uppercase-only filters — route-specific script-case bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm uppercase SCRIPT filters cannot be bypassed with lowercase tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksUppercaseScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply case-insensitive script tag filtering on this route.",
+      steps: [
+        "Normalize input to lowercase before applying script blocklists.",
+        "HTML-encode reflected body content.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_uppercase_script route allows lowercase script bypass. Show route-specific filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-any-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range case-insensitive script filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_any_script?q= reflects mixed-case <ScRiPt> tags unescaped — Firing Range case-insensitive script filter bypass training oracle.",
+    impactOneline:
+      "Case-insensitive script filters are bypassed with mixed-case tags, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksAnyScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and block script tags case-insensitively before reflecting user input.",
+      steps: [
+        "Strip or encode <script> tags regardless of character case.",
+        "Use a strict HTML sanitizer for all reflected body content.",
+        "Deploy CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_any_script route allows mixed-case script tag bypass. Show case-insensitive filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-any-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range case-insensitive script filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_any_script, mixed-case <ScRiPt> tags bypass case-insensitive filters — route-specific script-case bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm case-insensitive script filters cannot be bypassed with mixed-case tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksAnyScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply case-insensitive script tag filtering on this route.",
+      steps: [
+        "Normalize input to lowercase before applying script blocklists.",
+        "HTML-encode reflected body content.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_any_script route allows mixed-case script bypass. Show route-specific filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-attr-unquoted-blocks-dq-sq-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range unquoted attribute quote-filter bypass oracle",
+    description:
+      "GET /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote?q= reflects unquoted attribute with event handler — Firing Range double/single-quote filter bypass training oracle.",
+    impactOneline:
+      "Quote filters on unquoted attributes are bypassed via event handlers without quotes, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedAttrUnquotedBlocksDqSqLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Always quote attribute values and block event-handler injection.",
+      steps: [
+        "Wrap all reflected attribute values in double quotes.",
+        "Strip or encode event-handler attribute names (on*).",
+        "Use a strict HTML sanitizer for reflected attribute contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote route allows event-handler injection without quotes. Show quote-filter bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-attr-unquoted-blocks-dq-sq-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range unquoted attribute quote-filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote, unquoted attribute event handlers bypass quote filters — route-specific attribute XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm quote filters cannot be bypassed in unquoted attribute contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedAttrUnquotedBlocksDqSqRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Quote attribute values and block event handlers on this route.",
+      steps: [
+        "Always quote reflected attribute values.",
+        "Block on* event-handler attributes in reflected output.",
+        "Use CSP to restrict inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_doublequotesinglequote route allows unquoted attribute event-handler bypass. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-space-dq-slash-eq-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range charset-block filter bypass oracle",
+    description:
+      "GET /reflected/parameter/body/blocks_space_doublequote_slash_equals?q= reflects <img> tags unescaped — Firing Range space/quote/slash/equals charset filter bypass training oracle.",
+    impactOneline:
+      "Charset blocklists omitting spaces or equals allow <img> tag injection, enabling reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksSpaceDqSlashEqLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use comprehensive HTML sanitization instead of character blocklists.",
+      steps: [
+        "Replace charset blocklists with a strict HTML allowlist sanitizer.",
+        "Encode all reflected body content by default.",
+        "Deploy CSP img-src and script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/blocks_space_doublequote_slash_equals route allows <img> tag bypass. Show charset-block filter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-blocks-space-dq-slash-eq-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range charset-block filter bypass route oracle",
+    description:
+      "When scanning /reflected/parameter/body/blocks_space_doublequote_slash_equals, <img> tags bypass space/quote/slash/equals charset filters — route-specific body XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm charset blocklists cannot be bypassed with unblocked characters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyBlocksSpaceDqSlashEqRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace charset blocklists with HTML sanitization on this route.",
+      steps: [
+        "Use an allowlist HTML sanitizer for reflected body content.",
+        "Encode reflected output by default.",
+        "Use CSP to block inline event handlers."
+      ]
+    },
+    fixPrompt:
+      "Our blocks_space_doublequote_slash_equals route allows <img> charset-block bypass. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS eval sink oracle",
+    description:
+      "GET /reflected/parameter/js_eval?q= reflects attacker input into eval() — Firing Range reflected JavaScript eval sink training oracle.",
+    impactOneline:
+      "Reflected eval() sinks let attackers execute arbitrary JavaScript in victim browsers via crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to eval() or similar dynamic code execution sinks.",
+      steps: [
+        "Remove eval() and replace with safe JSON parsing or allowlisted callbacks.",
+        "HTML-encode or reject reflected values before embedding in script blocks.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_eval route reflects q into eval(). Show eval sink remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_eval route oracle",
+    description:
+      "When scanning /reflected/parameter/js_eval, the q query parameter is reflected into eval() without sanitization — route-specific JS eval sink oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot reach eval() sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Eliminate eval() sinks on /reflected/parameter/js_eval.",
+      steps: [
+        "Remove eval() and use safe data handling instead.",
+        "Encode reflected values before script embedding.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_eval route reflects q into eval(). Show route-specific eval sink remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-comment-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected HTML comment context oracle",
+    description:
+      "GET /reflected/parameter/body_comment?q= reflects attacker input unescaped into an HTML comment — Firing Range comment-context XSS training oracle.",
+    impactOneline:
+      "Reflected HTML comment contexts let attackers break out with --> and inject arbitrary markup or script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyCommentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into HTML comments without encoding.",
+      steps: [
+        "HTML-encode reflected values before embedding in comment contexts.",
+        "Avoid reflecting user input into HTML comments entirely.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body_comment route reflects q into an HTML comment. Show comment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-body-comment-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/body_comment route oracle",
+    description:
+      "When scanning /reflected/parameter/body_comment, the q query parameter is reflected unescaped into an HTML comment — route-specific comment-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of HTML comment contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedBodyCommentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode reflected values before embedding in HTML comments on this route.",
+      steps: [
+        "HTML-encode all reflected comment content.",
+        "Avoid reflecting user input into HTML comments.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body_comment route reflects q into an HTML comment. Show route-specific comment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-assignment-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS unquoted assignment oracle",
+    description:
+      "GET /reflected/parameter/js_assignment?q= reflects attacker input into an unquoted JavaScript assignment — Firing Range reflected JS assignment-context XSS training oracle.",
+    impactOneline:
+      "Reflected unquoted JS assignments let attackers inject arbitrary expressions or statements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into unquoted JavaScript assignment contexts.",
+      steps: [
+        "Quote and JSON-encode all values embedded in script blocks.",
+        "Avoid reflecting user input directly into JavaScript assignments.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_assignment route reflects q into an unquoted JS assignment. Show JS assignment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_assignment route oracle",
+    description:
+      "When scanning /reflected/parameter/js_assignment, the q query parameter is reflected into an unquoted JS assignment without sanitization — route-specific JS assignment-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot reach unquoted JS assignment sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Quote and encode reflected values before JS assignment embedding on this route.",
+      steps: [
+        "Use JSON.stringify() for all values in script blocks.",
+        "Avoid unquoted JS assignment reflection.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_assignment route reflects q into an unquoted JS assignment. Show route-specific assignment-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-quoted-string-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS double-quoted string oracle",
+    description:
+      "GET /reflected/parameter/js_quoted_string?q= reflects attacker input into a double-quoted JavaScript string literal — Firing Range reflected JS string-context XSS training oracle.",
+    impactOneline:
+      "Reflected double-quoted JS strings let attackers break out with \"; and execute arbitrary script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsQuotedStringLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode or escape reflected values before embedding in double-quoted JS strings.",
+      steps: [
+        "Use JSON.stringify() for all values embedded in script blocks.",
+        "Avoid reflecting user input directly into JavaScript string literals.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_quoted_string route reflects q into a double-quoted JS string. Show JS string-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-quoted-string-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_quoted_string route oracle",
+    description:
+      "When scanning /reflected/parameter/js_quoted_string, the q query parameter is reflected into a double-quoted JavaScript string without sanitization — route-specific JS string-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of double-quoted JS string literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsQuotedStringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode reflected values on /reflected/parameter/js_quoted_string.",
+      steps: [
+        "Use JSON.stringify() for all embedded script values.",
+        "Reject or encode quotes and backslashes in reflected input.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_quoted_string route reflects q into a double-quoted JS string. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-singlequoted-string-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS single-quoted string oracle",
+    description:
+      "GET /reflected/parameter/js_singlequoted_string?q= reflects attacker input into a single-quoted JavaScript string literal — Firing Range reflected JS string-context XSS training oracle.",
+    impactOneline:
+      "Reflected single-quoted JS strings let attackers break out with '; and execute arbitrary script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSinglequotedStringLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode or escape reflected values before embedding in single-quoted JS strings.",
+      steps: [
+        "Use JSON.stringify() for all values embedded in script blocks.",
+        "Avoid reflecting user input directly into JavaScript string literals.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_singlequoted_string route reflects q into a single-quoted JS string. Show JS string-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-singlequoted-string-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_singlequoted_string route oracle",
+    description:
+      "When scanning /reflected/parameter/js_singlequoted_string, the q query parameter is reflected into a single-quoted JavaScript string without sanitization — route-specific JS string-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of single-quoted JS string literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSinglequotedStringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JSON-encode reflected values on /reflected/parameter/js_singlequoted_string.",
+      steps: [
+        "Use JSON.stringify() for all embedded script values.",
+        "Reject or encode quotes and backslashes in reflected input.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_singlequoted_string route reflects q into a single-quoted JS string. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-slashquoted-string-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JS slash-quoted regex oracle",
+    description:
+      "GET /reflected/parameter/js_slashquoted_string?q= reflects attacker input into a slash-quoted JavaScript regex literal — Firing Range reflected JS regex-context XSS training oracle.",
+    impactOneline:
+      "Reflected slash-quoted JS regex literals let attackers break out with /; and execute arbitrary script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSlashquotedStringLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into JavaScript regex literals.",
+      steps: [
+        "Avoid embedding user input in /regex/ literals.",
+        "Use safe string handling and JSON encoding for script values.",
+        "Use CSP script-src restrictions to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_slashquoted_string route reflects q into a slash-quoted JS regex. Show JS regex-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-js-slashquoted-string-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/js_slashquoted_string route oracle",
+    description:
+      "When scanning /reflected/parameter/js_slashquoted_string, the q query parameter is reflected into a slash-quoted JavaScript regex literal without sanitization — route-specific JS regex-context XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input cannot break out of slash-quoted JS regex literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsSlashquotedStringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Eliminate regex-literal reflection on /reflected/parameter/js_slashquoted_string.",
+      steps: [
+        "Do not embed user input in /regex/ literals.",
+        "Use JSON.stringify() for safe script embedding.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/js_slashquoted_string route reflects q into a slash-quoted JS regex. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-url-href-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -1330,6 +2526,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-reflected-url-object-param-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected URL object param src XSS oracle",
+    description:
+      "GET /reflected/url/object_param?q= reflects attacker-controlled URLs into object param src attributes — Firing Range reflected DOM XSS training oracle.",
+    impactOneline:
+      "Reflected object param src values let attackers load arbitrary Flash/plugin content when victims visit crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlObjectParamLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block attacker-controlled URLs in reflected object param src attributes.",
+      steps: [
+        "Allowlist safe object param sources (same-origin paths or trusted hosts).",
+        "Reject or encode user input before inserting into object param attributes.",
+        "Use CSP object-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/object_param?q= reflects into object param src without validation. Show object param XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-url-object-param-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/url/object_param route XSS oracle",
+    description:
+      "When scanning /reflected/url/object_param, the q query parameter is reflected into object param src without validation — route-specific reflected DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm object param src attributes cannot load attacker-controlled URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedUrlObjectParamRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate object param src sources on /reflected/url/object_param before emitting object tags.",
+      steps: [
+        "Reject external URLs in q parameter values.",
+        "Use relative paths or allowlisted hosts for object param targets.",
+        "Add CSP to block dangerous object embeds."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/url/object_param route reflects q into object param src. Show route-specific object param XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-contentsniffing-json-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range MIME content-sniffing JSON XSS oracle",
+    description:
+      "GET /reflected/contentsniffing/json?q= reflects attacker input in an application/json response without X-Content-Type-Options nosniff — Firing Range content-sniffing XSS training oracle.",
+    impactOneline:
+      "Reflected JSON bodies without nosniff can be interpreted as HTML by legacy browsers when attackers inject script markup.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedContentsniffingJsonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set X-Content-Type-Options: nosniff and encode reflected JSON values.",
+      steps: [
+        "Add X-Content-Type-Options: nosniff on all API responses.",
+        "JSON-encode user input before embedding in response bodies.",
+        "Use Content-Type: application/json with charset=utf-8 consistently."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/contentsniffing/json reflects q into JSON without nosniff. Show MIME content-sniffing XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-contentsniffing-json-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/contentsniffing/json route XSS oracle",
+    description:
+      "When scanning /reflected/contentsniffing/json, the q parameter is reflected unescaped in application/json without nosniff — route-specific content-sniffing XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm JSON endpoints cannot be sniffed as HTML with reflected attacker input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedContentsniffingJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add nosniff and encode reflected values on /reflected/contentsniffing/json.",
+      steps: [
+        "Set X-Content-Type-Options: nosniff on this endpoint.",
+        "Escape special characters in JSON string values.",
+        "Audit other JSON endpoints for the same pattern."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/contentsniffing/json route reflects q into JSON without nosniff. Show route-specific content-sniffing XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-cookie-set-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -1378,6 +2678,266 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/toxicdom/document/cookie_set/eval route uses eval on cookie values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM cookie_set innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie_set/innerHtml returns a page that reads document.cookie badValue and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Cookie values passed to innerHTML enable DOM XSS when attackers can set the badValue cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/innerHtml uses innerHTML on cookie values. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie_set/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie_set/innerHtml, cookie badValue is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not assigned to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/innerHtml route uses innerHTML on cookie values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM cookie_set document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie_set/documentWrite returns a page that reads document.cookie badValue and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Cookie values passed to document.write() enable DOM XSS when attackers can set the badValue cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/documentWrite uses document.write on cookie values. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie_set/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie_set/documentWrite, cookie badValue is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/documentWrite route uses document.write on cookie values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM unset cookie eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie/eval returns a page that reads document.cookie via lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Unset cookie lookups passed to eval() enable DOM XSS when attackers can set the target cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/eval uses eval on unset cookie lookups. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie/eval, unset cookie lookup is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not executed via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/eval route uses eval on unset cookie lookups. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM unset cookie innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie/innerHtml returns a page that reads document.cookie via lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Unset cookie lookups passed to innerHTML enable DOM XSS when attackers can set the target cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/innerHtml uses innerHTML on unset cookie lookups. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie/innerHtml, unset cookie lookup is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not assigned to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/innerHtml route uses innerHTML on unset cookie lookups. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM unset cookie document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie/documentWrite returns a page that reads document.cookie via lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Unset cookie lookups passed to document.write() enable DOM XSS when attackers can set the target cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/documentWrite uses document.write on unset cookie lookups. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie/documentWrite, unset cookie lookup is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/documentWrite route uses document.write on unset cookie lookups. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -1486,6 +3046,734 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-referrer-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM document.referrer innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/referrer/innerHtml returns a page that unescapes document.referrer and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "document.referrer values passed to innerHTML enable DOM XSS when attackers can set the Referer header.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass document.referrer to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from document.referrer.",
+        "Treat referrer data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/innerHtml uses innerHTML on document.referrer. Show toxic DOM referrer XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-referrer-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/referrer/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/referrer/innerHtml, document.referrer is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm referrer-backed values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on document.referrer in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.referrer reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/innerHtml route uses innerHTML on document.referrer. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-referrer-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM document.referrer document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/referrer/documentWrite returns a page that unescapes document.referrer and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "document.referrer values passed to document.write() enable DOM XSS when attackers can set the Referer header.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass document.referrer to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from document.referrer.",
+        "Treat referrer data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/documentWrite uses document.write on document.referrer. Show toxic DOM referrer XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-referrer-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/referrer/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/referrer/documentWrite, document.referrer is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm referrer-backed values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomReferrerDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on document.referrer in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.referrer reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/referrer/documentWrite route uses document.write on document.referrer. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM window.name innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/window/name/innerHtml returns a page that reads window.name and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "window.name values passed to innerHTML enable DOM XSS when attackers can set window.name via navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.name to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from window.name.",
+        "Treat window.name as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/innerHtml uses innerHTML on window.name. Show toxic DOM window.name XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/window/name/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/window/name/innerHtml, window.name is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm window.name values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on window.name in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all window.name reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/innerHtml route uses innerHTML on window.name. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM window.name document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/window/name/documentWrite returns a page that reads window.name and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "window.name values passed to document.write() enable DOM XSS when attackers can set window.name via navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.name to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from window.name.",
+        "Treat window.name as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/documentWrite uses document.write on window.name. Show toxic DOM window.name XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-window-name-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/window/name/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/window/name/documentWrite, window.name is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm window.name values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomWindowNameDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on window.name in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all window.name reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/window/name/documentWrite route uses document.write on window.name. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage property document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/property/documentWrite returns a page that reads sessionStorage.badValue and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage property values passed to document.write() enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/documentWrite uses document.write on sessionStorage.badValue. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/property/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/property/documentWrite, sessionStorage.badValue is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage property values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/documentWrite route uses document.write on sessionStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage property document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/property/documentWrite returns a page that reads localStorage.badValue and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "localStorage property values passed to document.write() enable DOM XSS when attackers can poison localStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from localStorage.",
+        "Treat localStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/documentWrite uses document.write on localStorage.badValue. Show toxic DOM localStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/property/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/property/documentWrite, localStorage.badValue is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage property values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on localStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/documentWrite route uses document.write on localStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage property eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/property/eval returns a page that reads localStorage.badValue and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "localStorage property values passed to eval() enable DOM XSS when attackers can poison localStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from localStorage.",
+        "Treat localStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/eval uses eval on localStorage.badValue. Show toxic DOM localStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/property/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/property/eval, localStorage.badValue is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage property values are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on localStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/eval route uses eval on localStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage property innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/property/innerHtml returns a page that reads localStorage.badValue and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "localStorage property values passed to innerHTML enable DOM XSS when attackers can poison localStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from localStorage.",
+        "Treat localStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/innerHtml uses innerHTML on localStorage.badValue. Show toxic DOM localStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/property/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/property/innerHtml, localStorage.badValue is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage property values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on localStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/innerHtml route uses innerHTML on localStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage property eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/property/eval returns a page that reads sessionStorage.badValue and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage property values passed to eval() enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/eval uses eval on sessionStorage.badValue. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/property/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/property/eval, sessionStorage.badValue is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage property values are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/eval route uses eval on sessionStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage property innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/property/innerHtml returns a page that reads sessionStorage.badValue and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage property values passed to innerHTML enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/innerHtml uses innerHTML on sessionStorage.badValue. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/property/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/property/innerHtml, sessionStorage.badValue is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage property values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/innerHtml route uses innerHTML on sessionStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM inputTyping innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/inputTyping/innerHtml returns a page that copies input keystrokes into innerHTML on keyup/change — Firing Range inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to innerHTML enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from input keyup/change handlers.",
+        "Treat user input as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/innerHtml uses innerHTML on input keystrokes. Show inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/inputTyping/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/inputTyping/innerHtml, input keystrokes are passed to innerHTML without sanitization — route-specific inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on inputTyping handlers in /dom/toxicdom routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/innerHtml route uses innerHTML on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM inputTyping eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/inputTyping/eval returns a page that copies input keystrokes into eval() on keyup/change — Firing Range inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to eval() enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from input keyup/change handlers.",
+        "Treat user input as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/eval uses eval() on input keystrokes. Show inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/inputTyping/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/inputTyping/eval, input keystrokes are passed to eval() without sanitization — route-specific inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on inputTyping handlers in /dom/toxicdom routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous code execution sinks.",
+        "Encode or sanitize before any dynamic evaluation.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/eval route uses eval() on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM inputTyping document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/inputTyping/documentWrite returns a page that copies input keystrokes into document.write() on keyup/change — Firing Range inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to document.write() enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() calls on values from input keyup/change handlers.",
+        "Treat user input as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/documentWrite uses document.write on input keystrokes. Show inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/inputTyping/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/inputTyping/documentWrite, input keystrokes are passed to document.write() without sanitization — route-specific inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not passed to document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write() sinks on inputTyping handlers in /dom/toxicdom routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/documentWrite route uses document.write on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-jsoncallback-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JSONP callback XSS oracle",
+    description:
+      "GET /reflected/jsoncallback?callback= reflects the attacker-controlled callback name into a JSONP script wrapper — Firing Range content-sniffing XSS training oracle.",
+    impactOneline:
+      "Unvalidated JSONP callback names enable reflected XSS when responses are interpreted as script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsoncallbackLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist callback names on /reflected/jsoncallback before emitting JSONP wrappers.",
+      steps: [
+        "Reject callback values outside a strict alphanumeric allowlist.",
+        "Migrate JSONP endpoints to authenticated JSON APIs.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/jsoncallback?callback= reflects the callback parameter into JSONP output. Show JSONP XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-jsoncallback-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/jsoncallback route XSS oracle",
+    description:
+      "When scanning /reflected/jsoncallback, the callback query parameter is reflected into executable JSONP wrapper without validation — route-specific JSONP reflection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm JSONP callback parameters cannot inject arbitrary function names.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedJsoncallbackRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist callback names on /reflected/jsoncallback route handlers.",
+      steps: [
+        "Reject callback values outside a strict alphanumeric allowlist.",
+        "Migrate JSONP endpoints to authenticated JSON APIs.",
+        "Add CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/jsoncallback route reflects callback into JSONP output. Show route-specific JSONP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -1586,6 +3874,266 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cors/alloworigin/dynamicAllowOrigin route reflects arbitrary Origin. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-null-origin-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS null-origin oracle",
+    description:
+      "POST /cors/alloworigin/allowNullOrigin reflects Origin: null with Access-Control-Allow-Credentials: true — Firing Range CORS null-origin misconfiguration training oracle.",
+    impactOneline:
+      "Allowing null Origin with credentials enables sandboxed iframe and data: URL attackers to read authenticated responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowNullOriginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never allow Origin: null with Access-Control-Allow-Credentials.",
+      steps: [
+        "Reject null Origin requests on credentialed endpoints.",
+        "Use a strict allowlist instead of reflecting Origin headers.",
+        "Disable Access-Control-Allow-Credentials unless strictly required."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowNullOrigin allows null Origin with credentials. Show CORS null-origin remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-null-origin-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowNullOrigin route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowNullOrigin, POST requests allow Origin: null with credentials — route-specific CORS null-origin misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm null Origin is not permitted with credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowNullOriginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block null Origin on /cors/alloworigin/allowNullOrigin route handlers.",
+      steps: [
+        "Reject Origin: null on credentialed CORS endpoints.",
+        "Allowlist trusted origins only.",
+        "Audit CORS middleware for null-origin reflection."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowNullOrigin route allows null Origin with credentials. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-insecure-scheme-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS insecure-scheme oracle",
+    description:
+      "POST /cors/alloworigin/allowInsecureScheme allows HTTP-scheme Origin on HTTPS resource with Access-Control-Allow-Credentials: true — Firing Range CORS insecure-scheme misconfiguration training oracle.",
+    impactOneline:
+      "Permitting HTTP origins on HTTPS resources with credentials enables MITM attackers to read authenticated API responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowInsecureSchemeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never allow HTTP-scheme origins on HTTPS resources with credentials.",
+      steps: [
+        "Require HTTPS origins when serving over HTTPS.",
+        "Reject origins whose scheme does not match the resource scheme.",
+        "Disable Access-Control-Allow-Credentials on public endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowInsecureScheme allows HTTP Origin on HTTPS with credentials. Show CORS insecure-scheme remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-insecure-scheme-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowInsecureScheme route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowInsecureScheme, POST requests allow HTTP-scheme Origin on HTTPS with credentials — route-specific CORS insecure-scheme misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HTTP origins are not permitted on HTTPS resources with credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowInsecureSchemeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block HTTP-scheme origins on HTTPS /cors/alloworigin/allowInsecureScheme handlers.",
+      steps: [
+        "Match allowed Origin scheme to the resource scheme.",
+        "Redirect all HTTP traffic to HTTPS before enabling CORS.",
+        "Audit CORS configuration for scheme-downgrade allowances."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowInsecureScheme route allows HTTP Origin on HTTPS. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-starts-with-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS startsWith bypass oracle",
+    description:
+      "POST /cors/alloworigin/allowOriginStartsWith allows attacker Origin when host starts with allowed prefix (e.g. public-firing-range.appspot.com.evil.com) with Access-Control-Allow-Credentials: true — Firing Range CORS startsWith bypass training oracle.",
+    impactOneline:
+      "Naive startsWith origin checks let attackers register domains that prefix-match a trusted host and steal credentialed responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginStartsWithLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use exact origin allowlists — never startsWith/endsWith/regex without anchoring.",
+      steps: [
+        "Compare full Origin URLs against a strict allowlist.",
+        "Disable Access-Control-Allow-Credentials unless strictly required.",
+        "Reject subdomain-squatting patterns like trusted.example.evil.com."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginStartsWith uses a startsWith origin check bypassable via subdomain prefix. Show CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-starts-with-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowOriginStartsWith route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowOriginStartsWith, POST requests allow attacker Origin via startsWith bypass with credentials — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm startsWith origin checks cannot be bypassed with prefix domains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginStartsWithRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace startsWith checks with exact origin matching on this route.",
+      steps: [
+        "Allowlist full Origin URLs only.",
+        "Disable credentials on public CORS endpoints.",
+        "Audit CORS middleware for prefix-matching bypasses."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginStartsWith route uses bypassable startsWith origin checks. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-ends-with-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS endsWith bypass oracle",
+    description:
+      "POST /cors/alloworigin/allowOriginEndsWith allows attacker Origin when host ends with allowed suffix (e.g. evilpublic-firing-range.appspot.com) with Access-Control-Allow-Credentials: true — Firing Range CORS endsWith bypass training oracle.",
+    impactOneline:
+      "Naive endsWith origin checks let attackers register domains that suffix-match a trusted host and steal credentialed responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginEndsWithLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use exact origin allowlists — never endsWith checks without full URL validation.",
+      steps: [
+        "Compare full Origin URLs against a strict allowlist.",
+        "Disable Access-Control-Allow-Credentials unless strictly required.",
+        "Reject suffix-squatting patterns like eviltrusted.example.com."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginEndsWith uses an endsWith origin check bypassable via suffix domains. Show CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-ends-with-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowOriginEndsWith route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowOriginEndsWith, POST requests allow attacker Origin via endsWith bypass with credentials — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm endsWith origin checks cannot be bypassed with suffix domains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginEndsWithRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Replace endsWith checks with exact origin matching on this route.",
+      steps: [
+        "Allowlist full Origin URLs only.",
+        "Disable credentials on public CORS endpoints.",
+        "Audit CORS middleware for suffix-matching bypasses."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginEndsWith route uses bypassable endsWith origin checks. Show route-specific CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-regex-dot-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range CORS regex dot bypass oracle",
+    description:
+      "POST /cors/alloworigin/allowOriginRegexDot allows attacker Origin when unescaped dot regex matches (e.g. public-firing-rangeXappspot.com) with Access-Control-Allow-Credentials: true — Firing Range CORS regex bypass training oracle.",
+    impactOneline:
+      "Unescaped dots in CORS origin regexes match any character, letting attackers register lookalike domains and steal credentialed responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginRegexDotLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape regex metacharacters or use exact origin allowlists instead of regex.",
+      steps: [
+        "Escape dots and other regex metacharacters in origin patterns.",
+        "Prefer exact string matching over regex for CORS allowlists.",
+        "Disable Access-Control-Allow-Credentials unless strictly required."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginRegexDot uses an unescaped dot regex bypassable via lookalike domains. Show CORS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-cors-allow-origin-regex-dot-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Google Firing Range /cors/alloworigin/allowOriginRegexDot route CORS oracle",
+    description:
+      "When scanning /cors/alloworigin/allowOriginRegexDot, POST requests allow attacker Origin via unescaped dot regex bypass with credentials — route-specific CORS misconfiguration oracle.",
+    impactOneline:
+      "Route-specific scans should confirm regex origin checks escape metacharacters and cannot be bypassed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeCorsAllowOriginRegexDotRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix regex escaping or replace with exact origin matching on this route.",
+      steps: [
+        "Escape dots in origin regex patterns.",
+        "Allowlist full Origin URLs instead of regex.",
+        "Audit CORS middleware for regex bypass vectors."
+      ]
+    },
+    fixPrompt:
+      "Our /cors/alloworigin/allowOriginRegexDot route uses bypassable regex origin checks. Show route-specific CORS remediation.",
     version: 1,
     enabled: true
   },
@@ -1694,6 +4242,630 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-escape-serverside-tagname-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml tagname injection oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/tagname?q= reflects attacker input into an HTML tag name despite escapeHtml — Firing Range server-side tagname injection XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in tagname contexts enables reflected XSS via attacker-controlled element names.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideTagnameLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml is insufficient for tagname contexts — validate tag names against an allowlist.",
+      steps: [
+        "Allowlist permitted HTML tag names before reflection.",
+        "Use context-aware encoding for all HTML reflection contexts.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/tagname bypasses escapeHtml in tagname context. Show server-side tagname injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-tagname-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/tagname route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/tagname, q parameter reflects unescaped into attacker-controlled HTML tag name — route-specific server-side tagname injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml output is safe in tagname contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideTagnameRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist tag names and apply context-aware escaping on this route.",
+      steps: [
+        "Validate tag names against an allowlist.",
+        "Audit escapeHtml usage for tagname contexts.",
+        "Add output encoding tests for each reflection context."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/tagname route bypasses escapeHtml in tagname context. Show route-specific tagname injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-body-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml body-sink oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/body or /encodeUrl/body?q= reflects attacker input into the HTML body despite escapeHtml/encodeUrl — Firing Range server-side body-sink escape bypass XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in body contexts enables reflected XSS even when escapeHtml or encodeUrl is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideBodyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml/encodeUrl is insufficient for HTML body text contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Apply context-aware encoding for all HTML body reflection contexts.",
+        "Avoid reflecting raw user input inside body elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/body bypasses escapeHtml in body context. Show server-side body-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-body-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/body route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/body or /encodeUrl/body, q parameter reflects unescaped into HTML body — route-specific server-side body-sink escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml/encodeUrl output is safe in body text contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideBodyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix body-sink escaping on /escape/serverside escapeHtml/encodeUrl body routes.",
+      steps: [
+        "Audit escapeHtml/encodeUrl usage for body text contexts.",
+        "Encode user input for HTML body reflection points.",
+        "Add output encoding tests for body-sink contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/body route bypasses escapeHtml in body context. Show route-specific body-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-head-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml head-sink oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/head or /encodeUrl/head?q= reflects attacker input into the HTML <head> despite escapeHtml/encodeUrl — Firing Range server-side head-sink escape bypass XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in head contexts enables reflected XSS even when escapeHtml or encodeUrl is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideHeadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml/encodeUrl is insufficient for HTML head text contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Apply context-aware encoding for all HTML head reflection contexts.",
+        "Avoid reflecting raw user input inside head elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/head bypasses escapeHtml in head context. Show server-side head-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-head-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/head route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/head or /encodeUrl/head, q parameter reflects unescaped into HTML head — route-specific server-side head-sink escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml/encodeUrl output is safe in head text contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideHeadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix head-sink escaping on /escape/serverside escapeHtml/encodeUrl head routes.",
+      steps: [
+        "Audit escapeHtml/encodeUrl usage for head text contexts.",
+        "Encode user input for HTML head reflection points.",
+        "Add output encoding tests for head-sink contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/head route bypasses escapeHtml in head context. Show route-specific head-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-html-escape-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range client-side html_escape eval XSS oracle",
+    description:
+      "GET /escape/js/html_escape?q= reflects attacker input into eval() after naive &lt;/&amp;/&gt; string replace — Firing Range client-side html_escape bypass XSS training oracle.",
+    impactOneline:
+      "Naive HTML entity replacement before eval() leaves quote-breakout XSS when user input is embedded in JavaScript string literals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsHtmlEscapeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval() user-controlled strings; html entity replace is not JS escaping — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on reflected user input.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/html_escape reflects q into eval() after naive html entity replace. Show client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-html-escape-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/js/html_escape route XSS oracle",
+    description:
+      "When scanning /escape/js/html_escape, q parameter reflects into eval() after naive html entity replace — route-specific client-side html_escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm html entity replace does not safely embed user input in eval() contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsHtmlEscapeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval() reflection on /escape/js/html_escape route.",
+      steps: [
+        "Remove eval() on reflected user input for this route.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add route-specific output encoding tests."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/html_escape route reflects q into eval() after naive html replace. Show route-specific client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-encodeuricomponent-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range client-side encodeURIComponent eval XSS oracle",
+    description:
+      "GET /escape/js/encodeURIComponent?q= reflects attacker input into eval(encodeURIComponent()) — Firing Range client-side encodeURIComponent bypass XSS training oracle.",
+    impactOneline:
+      "encodeURIComponent does not escape JavaScript string delimiters; eval(encodeURIComponent(userInput)) enables quote-breakout XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEncodeUriLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "encodeURIComponent is not JavaScript escaping — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Never eval() user-controlled strings.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/encodeURIComponent reflects q into eval(encodeURIComponent()). Show client-side encodeURIComponent bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-encodeuricomponent-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/js/encodeURIComponent route XSS oracle",
+    description:
+      "When scanning /escape/js/encodeURIComponent, q parameter reflects into eval(encodeURIComponent()) — route-specific client-side encodeURIComponent bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm encodeURIComponent does not safely embed user input in eval() contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEncodeUriRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval() reflection on /escape/js/encodeURIComponent route.",
+      steps: [
+        "Remove eval() on reflected user input for this route.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add route-specific output encoding tests."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/encodeURIComponent route reflects q into eval(encodeURIComponent()). Show route-specific client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-escape-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range client-side escape() eval XSS oracle",
+    description:
+      "GET /escape/js/escape?q= reflects attacker input into eval(escape()) — Firing Range client-side escape() bypass XSS training oracle.",
+    impactOneline:
+      "Legacy escape() does not escape quotes or @; eval(escape(userInput)) enables quote-breakout XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEscapeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escape() is deprecated and not JavaScript escaping — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Never eval() user-controlled strings.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/escape reflects q into eval(escape()). Show client-side escape() bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-js-escape-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/js/escape route XSS oracle",
+    description:
+      "When scanning /escape/js/escape, q parameter reflects into eval(escape()) — route-specific client-side escape() bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escape() does not safely embed user input in eval() contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeJsEscapeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval() reflection on /escape/js/escape route.",
+      steps: [
+        "Remove eval() on reflected user input for this route.",
+        "Use JSON.stringify for safe JavaScript string embedding.",
+        "Add route-specific output encoding tests."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/js/escape route reflects q into eval(escape()). Show route-specific client-side escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-noscript-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected noscript parameter oracle",
+    description:
+      "GET /reflected/parameter/noscript?q= reflects attacker input into a <noscript> element without encoding — Firing Range noscript-context reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped reflection inside noscript elements enables reflected XSS in browsers with JavaScript disabled or via parser quirks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterNoscriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before reflecting into noscript elements.",
+      steps: [
+        "HTML-encode all user input reflected into noscript contexts.",
+        "Avoid reflecting raw user input inside noscript elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/noscript reflects q into noscript element. Show noscript-context reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-noscript-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/noscript route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/noscript, q parameter reflects unescaped into noscript element — route-specific noscript-context reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm noscript reflection cannot inject attacker-controlled markup.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterNoscriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix noscript-context encoding on /reflected/parameter/noscript route.",
+      steps: [
+        "Encode user input for noscript reflection points.",
+        "Audit noscript output contexts for dangerous reflection.",
+        "Add output encoding tests for noscript routes."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/noscript route reflects q into noscript. Show route-specific noscript-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-body-non2xx-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected body non-2xx status oracle",
+    description:
+      "GET /reflected/parameter/body/403, /body/404, or /body/500?q= reflects attacker input into the HTML body even when the response status is 403, 404, or 500 — Firing Range reflected XSS despite error-status training oracle.",
+    impactOneline:
+      "Scanners that skip non-2xx responses miss reflected XSS when error pages echo user input unescaped.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterBodyNon2xxLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input on error pages and avoid reflecting raw query parameters in body contexts.",
+      steps: [
+        "HTML-encode all user input reflected into body elements on error responses.",
+        "Scan error and redirect responses for reflected XSS, not only HTTP 200 pages.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/* routes reflect q into body on 403/404/500 responses. Show error-page reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-body-non2xx-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/body/* non-2xx route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/body/403, /body/404, or /body/500, q parameter reflects unescaped into body despite non-2xx HTTP status — route-specific error-page reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm error responses do not echo attacker-controlled markup in body contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterBodyNon2xxRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix body reflection on /reflected/parameter/body/* error-status routes.",
+      steps: [
+        "Encode user input for body reflection on 403/404/500 handlers.",
+        "Audit error-page templates for dangerous reflection.",
+        "Add output encoding tests for non-2xx routes."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/body/* routes reflect q into body on error responses. Show route-specific error-page XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-json-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected JSON parameter oracle",
+    description:
+      "GET /reflected/parameter/json?q= reflects attacker input in a JSON body served with text/html content-type — Firing Range reflected JSON parameter XSS training oracle.",
+    impactOneline:
+      "JSON responses served as HTML with unescaped reflection enable content-type confusion XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterJsonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serve JSON with application/json content-type and encode reflected values.",
+      steps: [
+        "Set Content-Type: application/json for JSON API responses.",
+        "Encode user input before embedding in JSON string values.",
+        "Add X-Content-Type-Options: nosniff as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/json reflects q into JSON served as text/html. Show reflected JSON parameter XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-json-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/json route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/json, q parameter is reflected unescaped in JSON body with text/html content-type — route-specific reflected JSON parameter XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm JSON parameter reflection cannot enable XSS via content-type confusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix content-type and encoding on /reflected/parameter/json route.",
+      steps: [
+        "Serve JSON responses with application/json content-type.",
+        "Encode reflected parameter values in JSON strings.",
+        "Add nosniff header to prevent MIME sniffing."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/json route reflects q into JSON with text/html content-type. Show route-specific JSON parameter XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage document.write oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/documentWrite loads a script that parses msg.data via JSON.parse and passes content to document.write() — Firing Range postMessage document.write DOM XSS training oracle.",
+    impactOneline:
+      "postMessage handlers that write untrusted message data via document.write enable DOM XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate postMessage origin and avoid document.write with untrusted data.",
+      steps: [
+        "Validate event.origin against an allowlist before processing messages.",
+        "Never pass message data to document.write or other dangerous sinks.",
+        "Use safe DOM APIs with strict input validation."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/documentWrite passes msg.data to document.write. Show postMessage document.write DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage/documentWrite, postMessage handler writes untrusted msg.data via document.write — route-specific postMessage document.write DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not sink untrusted data to document.write.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix postMessage origin validation and remove document.write sink on this route.",
+      steps: [
+        "Add event.origin validation to the postMessage handler.",
+        "Replace document.write with safe DOM manipulation.",
+        "Audit all postMessage handlers for dangerous sinks."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/documentWrite route sinks msg.data to document.write. Show route-specific postMessage document.write remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-partial-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage partial origin validation eval oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison registers a message listener that checks msg.origin.includes('www.google.com') then evals msg.data — Firing Range weak postMessage origin validation DOM XSS training oracle.",
+    impactOneline:
+      "Partial string origin checks (includes/substring) on postMessage enable origin bypass and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginPartialLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strict origin equality checks — never includes() or substring matching for postMessage.",
+      steps: [
+        "Replace partial origin checks with event.origin === expectedOrigin.",
+        "Remove eval() from postMessage handlers.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler uses origin.includes() then eval(msg.data). Show safe postMessage origin validation without partial string matching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-partial-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison, postMessage handler uses partial origin.includes() check then eval(msg.data) — route-specific weak origin validation oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not use bypassable partial origin checks before eval sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginPartialRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix weak origin validation on this postMessage route.",
+      steps: [
+        "Replace origin.includes() with strict equality against an allowlist.",
+        "Remove eval() from the message handler.",
+        "Audit all postMessage listeners for similar bypass patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison route uses partial origin validation then eval. Show route-specific postMessage origin bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-regexp-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage regex origin validation eval oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/improperOriginValidationWithRegExp registers a message listener that matches msg.origin against an unanchored RegExp then evals msg.data — Firing Range weak postMessage origin validation DOM XSS training oracle.",
+    impactOneline:
+      "Unanchored regex origin checks on postMessage enable origin bypass and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginRegexpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strict origin equality checks — never unanchored regex matching for postMessage.",
+      steps: [
+        "Replace regex origin checks with event.origin === expectedOrigin.",
+        "Remove eval() from postMessage handlers.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler uses origin.match(RegExp) then eval(msg.data). Show safe postMessage origin validation without regex bypass.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-regexp-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage/improperOriginValidationWithRegExp route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage/improperOriginValidationWithRegExp, postMessage handler uses unanchored origin RegExp then eval(msg.data) — route-specific weak origin validation oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not use bypassable regex origin checks before eval sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginRegexpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix weak regex origin validation on this postMessage route.",
+      steps: [
+        "Replace origin.match() with strict equality against an allowlist.",
+        "Remove eval() from the message handler.",
+        "Audit all postMessage listeners for similar bypass patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/improperOriginValidationWithRegExp route uses regex origin validation then eval. Show route-specific postMessage origin bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-iframe-srcdoc-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -1752,7 +4924,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range HTML tag injection oracle",
     description:
-      "GET /tags/tag/img, /script, /iframe, or /body/onload?q= accepts attacker-controlled HTML tags and reflects them into the response — Firing Range tag injection XSS training oracle.",
+      "GET /tags/tag/img, /script, /iframe, /body/onload, /area, /input, /button, /select, /source, or /form?q= accepts attacker-controlled HTML tags and reflects them into the response — Firing Range tag injection XSS training oracle.",
     impactOneline:
       "Insufficient tag filtering allows attacker-controlled HTML elements to be injected.",
     detectorKind: "rule_ref",
@@ -1794,6 +4966,1150 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /tags/tag/img route allows tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-object-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range OBJECT tag injection oracle",
+    description:
+      "GET /tags/tag/object?q= accepts attacker-controlled <object> tags and reflects them into the response — Firing Range OBJECT tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient OBJECT tag filtering allows attacker-controlled object elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagObjectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode OBJECT tag injection in /tags/tag/object routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/object route accepts OBJECT tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-object-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/object route XSS oracle",
+    description:
+      "When scanning /tags/tag/object, q parameter injects attacker-controlled <object> tags — route-specific OBJECT tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm OBJECT tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagObjectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix OBJECT tag filtering on /tags/tag/object route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/object.",
+        "Add output encoding tests for OBJECT tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/object route allows OBJECT tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-embed-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range EMBED tag injection oracle",
+    description:
+      "GET /tags/tag/embed?q= accepts attacker-controlled <embed> tags and reflects them into the response — Firing Range EMBED tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient EMBED tag filtering allows attacker-controlled embed elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagEmbedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode EMBED tag injection in /tags/tag/embed routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/embed route accepts EMBED tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-embed-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/embed route XSS oracle",
+    description:
+      "When scanning /tags/tag/embed, q parameter injects attacker-controlled <embed> tags — route-specific EMBED tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm EMBED tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagEmbedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix EMBED tag filtering on /tags/tag/embed route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/embed.",
+        "Add output encoding tests for EMBED tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/embed route allows EMBED tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-svg-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range SVG tag injection oracle",
+    description:
+      "GET /tags/tag/svg?q= accepts attacker-controlled <svg> tags and reflects them into the response — Firing Range SVG tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient SVG tag filtering allows attacker-controlled svg elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagSvgLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode SVG tag injection in /tags/tag/svg routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/svg route accepts SVG tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-svg-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/svg route XSS oracle",
+    description:
+      "When scanning /tags/tag/svg, q parameter injects attacker-controlled <svg> tags — route-specific SVG tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm SVG tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagSvgRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix SVG tag filtering on /tags/tag/svg route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/svg.",
+        "Add output encoding tests for SVG tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/svg route allows SVG tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-video-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range VIDEO tag injection oracle",
+    description:
+      "GET /tags/tag/video?q= accepts attacker-controlled <video> tags and reflects them into the response — Firing Range VIDEO tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient VIDEO tag filtering allows attacker-controlled video elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagVideoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode VIDEO tag injection in /tags/tag/video routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/video route accepts VIDEO tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-video-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/video route XSS oracle",
+    description:
+      "When scanning /tags/tag/video, q parameter injects attacker-controlled <video> tags — route-specific VIDEO tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm VIDEO tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagVideoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix VIDEO tag filtering on /tags/tag/video route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/video.",
+        "Add output encoding tests for VIDEO tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/video route allows VIDEO tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-audio-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AUDIO tag injection oracle",
+    description:
+      "GET /tags/tag/audio?q= accepts attacker-controlled <audio> tags and reflects them into the response — Firing Range AUDIO tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient AUDIO tag filtering allows attacker-controlled audio elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAudioLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode AUDIO tag injection in /tags/tag/audio routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/audio route accepts AUDIO tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-audio-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/audio route XSS oracle",
+    description:
+      "When scanning /tags/tag/audio, q parameter injects attacker-controlled <audio> tags — route-specific AUDIO tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm AUDIO tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAudioRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix AUDIO tag filtering on /tags/tag/audio route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/audio.",
+        "Add output encoding tests for AUDIO tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/audio route allows AUDIO tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-canvas-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range CANVAS tag injection oracle",
+    description:
+      "GET /tags/tag/canvas?q= accepts attacker-controlled <canvas> tags and reflects them into the response — Firing Range CANVAS tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient CANVAS tag filtering allows attacker-controlled canvas elements to be injected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagCanvasLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode CANVAS tag injection in /tags/tag/canvas routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/canvas route accepts CANVAS tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-canvas-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/canvas route XSS oracle",
+    description:
+      "When scanning /tags/tag/canvas, q parameter injects attacker-controlled <canvas> tags — route-specific CANVAS tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm CANVAS tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagCanvasRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix CANVAS tag filtering on /tags/tag/canvas route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/canvas.",
+        "Add output encoding tests for CANVAS tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/canvas route allows CANVAS tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-a-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range A HREF attribute injection oracle",
+    description:
+      "GET /tags/tag/a/href?q= accepts attacker-controlled href attributes on anchor tags and reflects them into the response — Firing Range attribute-restricted XSS training oracle.",
+    impactOneline:
+      "Insufficient href attribute filtering allows javascript: URIs and other dangerous anchor href values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode href attribute injection in /tags/tag/a/href routes.",
+      steps: [
+        "Reject javascript: and data: schemes in href attributes.",
+        "Use strict allow-lists for permitted URL schemes.",
+        "Add CSP as defense-in-depth against attribute injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/a/href route accepts href attribute injection via q parameter. Show attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-a-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/a/href route XSS oracle",
+    description:
+      "When scanning /tags/tag/a/href, q parameter injects attacker-controlled href attributes — route-specific A HREF attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm href attribute injection cannot create exploitable anchors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix href attribute filtering on /tags/tag/a/href route.",
+      steps: [
+        "Encode or reject dangerous href values in q parameter.",
+        "Audit attribute injection contexts on /tags/tag/a/href.",
+        "Add output encoding tests for href attribute injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/a/href route allows href attribute injection via q. Show route-specific attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-script-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range SCRIPT SRC attribute injection oracle",
+    description:
+      "GET /tags/tag/script/src?q= accepts attacker-controlled src attributes on script tags and reflects them into the response — Firing Range attribute-restricted XSS training oracle.",
+    impactOneline:
+      "Insufficient src attribute filtering allows attacker-controlled external script URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagScriptSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode src attribute injection in /tags/tag/script/src routes.",
+      steps: [
+        "Reject protocol-relative and external script URLs in src attributes.",
+        "Use strict allow-lists for permitted script origins.",
+        "Add CSP script-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/script/src route accepts src attribute injection via q parameter. Show attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-script-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/script/src route XSS oracle",
+    description:
+      "When scanning /tags/tag/script/src, q parameter injects attacker-controlled src attributes — route-specific SCRIPT SRC attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm src attribute injection cannot load external scripts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagScriptSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix src attribute filtering on /tags/tag/script/src route.",
+      steps: [
+        "Encode or reject external script URLs in q parameter.",
+        "Audit attribute injection contexts on /tags/tag/script/src.",
+        "Add output encoding tests for src attribute injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/script/src route allows src attribute injection via q. Show route-specific attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-div-style-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DIV STYLE attribute injection oracle",
+    description:
+      "GET /tags/tag/div/style?q= accepts attacker-controlled style attributes on div tags and reflects them into the response — Firing Range attribute-restricted XSS training oracle.",
+    impactOneline:
+      "Insufficient style attribute filtering allows attacker-controlled CSS that may enable XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagDivStyleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode style attribute injection in /tags/tag/div/style routes.",
+      steps: [
+        "Reject expression(), url(javascript:), and other dangerous CSS in style attributes.",
+        "Use strict allow-lists for permitted CSS properties.",
+        "Add CSP style-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/div/style route accepts style attribute injection via q parameter. Show attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-div-style-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/div/style route XSS oracle",
+    description:
+      "When scanning /tags/tag/div/style, q parameter injects attacker-controlled style attributes — route-specific DIV STYLE attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm style attribute injection cannot create exploitable CSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagDivStyleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix style attribute filtering on /tags/tag/div/style route.",
+      steps: [
+        "Encode or reject dangerous CSS in q parameter.",
+        "Audit attribute injection contexts on /tags/tag/div/style.",
+        "Add output encoding tests for style attribute injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/div/style route allows style attribute injection via q. Show route-specific attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-a-style-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range A STYLE attribute injection oracle",
+    description:
+      "GET /tags/tag/a/style?q= accepts attacker-controlled style attributes on anchor tags and reflects them into the response — Firing Range attribute-restricted XSS training oracle.",
+    impactOneline:
+      "Insufficient style attribute filtering allows attacker-controlled CSS on anchor elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAStyleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode style attribute injection in /tags/tag/a/style routes.",
+      steps: [
+        "Reject dangerous CSS properties and values in style attributes.",
+        "Use strict allow-lists for permitted style properties.",
+        "Add CSP as defense-in-depth against attribute injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/a/style route accepts style attribute injection via q parameter. Show attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-a-style-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/a/style route XSS oracle",
+    description:
+      "When scanning /tags/tag/a/style, q parameter injects attacker-controlled style attributes — route-specific A STYLE attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm style attribute injection cannot create exploitable CSS on anchors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAStyleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix style attribute filtering on /tags/tag/a/style route.",
+      steps: [
+        "Encode or reject dangerous CSS in q parameter.",
+        "Audit attribute injection contexts on /tags/tag/a/style.",
+        "Add output encoding tests for style attribute injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/a/style route allows style attribute injection via q. Show route-specific attribute-restricted XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-label-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range LABEL tag injection oracle",
+    description:
+      "GET /tags/tag/label?q= accepts attacker-controlled <label> tags with for attributes and reflects them into the response — Firing Range LABEL tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient LABEL tag filtering allows attacker-controlled label elements with arbitrary for attributes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagLabelLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode LABEL tag injection in /tags/tag/label routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/label route accepts LABEL tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-label-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/label route XSS oracle",
+    description:
+      "When scanning /tags/tag/label, q parameter injects attacker-controlled <label> tags — route-specific LABEL tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm LABEL tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagLabelRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix LABEL tag filtering on /tags/tag/label route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/label.",
+        "Add output encoding tests for LABEL tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/label route allows LABEL tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-any-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range any-tag injection oracle",
+    description:
+      "GET /tags/tag?q= accepts attacker-controlled HTML tags without tag-name restriction and reflects them into the response — Firing Range any-tag injection XSS training oracle.",
+    impactOneline:
+      "Unrestricted tag injection allows arbitrary HTML elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAnyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode any-tag injection in /tags/tag routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag route accepts any HTML tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-any-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag route XSS oracle",
+    description:
+      "When scanning /tags/tag, q parameter injects attacker-controlled HTML tags without tag-name restriction — route-specific any-tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm unrestricted tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAnyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix tag filtering on /tags/tag route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag.",
+        "Add output encoding tests for any-tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag route allows any-tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-option-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range OPTION tag injection oracle",
+    description:
+      "GET /tags/tag/option?q= accepts attacker-controlled <option> tags and reflects them into the response — Firing Range OPTION tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient OPTION tag filtering allows attacker-controlled option elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagOptionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode OPTION tag injection in /tags/tag/option routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/option route accepts OPTION tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-option-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/option route XSS oracle",
+    description:
+      "When scanning /tags/tag/option, q parameter injects attacker-controlled <option> tags — route-specific OPTION tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm OPTION tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagOptionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix OPTION tag filtering on /tags/tag/option route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/option.",
+        "Add output encoding tests for OPTION tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/option route allows OPTION tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-textarea-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range TEXTAREA tag injection oracle",
+    description:
+      "GET /tags/tag/textarea?q= accepts attacker-controlled <textarea> tags and reflects them into the response — Firing Range TEXTAREA tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient TEXTAREA tag filtering allows attacker-controlled textarea elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagTextareaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode TEXTAREA tag injection in /tags/tag/textarea routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/textarea route accepts TEXTAREA tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-textarea-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/textarea route XSS oracle",
+    description:
+      "When scanning /tags/tag/textarea, q parameter injects attacker-controlled <textarea> tags — route-specific TEXTAREA tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm TEXTAREA tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagTextareaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix TEXTAREA tag filtering on /tags/tag/textarea route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/textarea.",
+        "Add output encoding tests for TEXTAREA tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/textarea route allows TEXTAREA tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-iframe-attribute-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range iframe attribute value reflected XSS oracle",
+    description:
+      "GET /reflected/parameter/iframe_attribute_value?q= reflects attacker input into an iframe attribute value — Firing Range attribute-sink reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped user input in iframe attribute values enables reflected XSS when attackers control the q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterIframeAttributeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject user input reflected into iframe attribute values.",
+      steps: [
+        "HTML-encode all user input before inserting into attribute values.",
+        "Use strict Content-Security-Policy to mitigate XSS impact.",
+        "Add output encoding tests for attribute-sink reflection contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/iframe_attribute_value route reflects q into iframe attribute values. Show attribute-sink reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-iframe-attribute-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/iframe_attribute_value route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/iframe_attribute_value, q parameter is reflected into iframe attribute without validation — route-specific attribute-sink reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm iframe attribute values cannot contain unescaped attacker-controlled script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterIframeAttributeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix attribute value encoding on /reflected/parameter/iframe_attribute_value route.",
+      steps: [
+        "Encode or reject script tags in q parameter before attribute insertion.",
+        "Audit all attribute-sink reflection contexts on this route.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/iframe_attribute_value route reflects q into iframe attributes. Show route-specific attribute-sink XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-textarea-attribute-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range textarea attribute value reflected XSS oracle",
+    description:
+      "GET /reflected/parameter/textarea_attribute_value?q= reflects attacker input into a textarea attribute value — Firing Range attribute-sink reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped user input in textarea attribute values enables reflected XSS when attackers control the q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterTextareaAttributeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject user input reflected into textarea attribute values.",
+      steps: [
+        "HTML-encode all user input before inserting into attribute values.",
+        "Use strict Content-Security-Policy to mitigate XSS impact.",
+        "Add output encoding tests for attribute-sink reflection contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/textarea_attribute_value route reflects q into textarea attribute values. Show attribute-sink reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-textarea-attribute-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/textarea_attribute_value route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/textarea_attribute_value, q parameter is reflected into textarea attribute without validation — route-specific attribute-sink reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm textarea attribute values cannot contain unescaped attacker-controlled script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterTextareaAttributeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix attribute value encoding on /reflected/parameter/textarea_attribute_value route.",
+      steps: [
+        "Encode or reject script tags in q parameter before attribute insertion.",
+        "Audit all attribute-sink reflection contexts on this route.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/textarea_attribute_value route reflects q into textarea attributes. Show route-specific attribute-sink XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-style-attribute-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range style attribute value reflected XSS oracle",
+    description:
+      "GET /reflected/parameter/style_attribute_value?q= reflects attacker input into a style attribute value — Firing Range attribute-sink reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped user input in style attribute values enables reflected XSS when attackers control the q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterStyleAttributeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject user input reflected into style attribute values.",
+      steps: [
+        "HTML-encode all user input before inserting into attribute values.",
+        "Use strict Content-Security-Policy to mitigate XSS impact.",
+        "Add output encoding tests for attribute-sink reflection contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/style_attribute_value route reflects q into style attribute values. Show attribute-sink reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-style-attribute-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/style_attribute_value route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/style_attribute_value, q parameter is reflected into style attribute without validation — route-specific attribute-sink reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm style attribute values cannot contain unescaped attacker-controlled script.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterStyleAttributeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix attribute value encoding on /reflected/parameter/style_attribute_value route.",
+      steps: [
+        "Encode or reject script tags in q parameter before attribute insertion.",
+        "Audit all attribute-sink reflection contexts on this route.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/style_attribute_value route reflects q into style attributes. Show route-specific attribute-sink XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-form-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range FORM tag injection oracle",
+    description:
+      "GET /tags/tag/form?q= accepts attacker-controlled <form> tags and reflects them into the response — Firing Range FORM tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient FORM tag filtering allows attacker-controlled form elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagFormLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode FORM tag injection in /tags/tag/form routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/form route accepts FORM tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-form-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/form route XSS oracle",
+    description:
+      "When scanning /tags/tag/form, q parameter injects attacker-controlled <form> tags — route-specific FORM tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm FORM tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagFormRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix FORM tag filtering on /tags/tag/form route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/form.",
+        "Add output encoding tests for FORM tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/form route allows FORM tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-area-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AREA tag injection oracle",
+    description:
+      "GET /tags/tag/area?q= accepts attacker-controlled <area> tags and reflects them into the response — Firing Range AREA tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient AREA tag filtering allows attacker-controlled area elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAreaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode AREA tag injection in /tags/tag/area routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/area route accepts AREA tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-area-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/area route XSS oracle",
+    description:
+      "When scanning /tags/tag/area, q parameter injects attacker-controlled <area> tags — route-specific AREA tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm AREA tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAreaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix AREA tag filtering on /tags/tag/area route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/area.",
+        "Add output encoding tests for AREA tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/area route allows AREA tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-input-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range INPUT tag injection oracle",
+    description:
+      "GET /tags/tag/input?q= accepts attacker-controlled <input> tags and reflects them into the response — Firing Range INPUT tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient INPUT tag filtering allows attacker-controlled input elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagInputLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode INPUT tag injection in /tags/tag/input routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/input route accepts INPUT tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-input-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/input route XSS oracle",
+    description:
+      "When scanning /tags/tag/input, q parameter injects attacker-controlled <input> tags — route-specific INPUT tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm INPUT tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagInputRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix INPUT tag filtering on /tags/tag/input route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/input.",
+        "Add output encoding tests for INPUT tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/input route allows INPUT tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-button-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range BUTTON tag injection oracle",
+    description:
+      "GET /tags/tag/button?q= accepts attacker-controlled <button> tags and reflects them into the response — Firing Range BUTTON tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient BUTTON tag filtering allows attacker-controlled button elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagButtonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode BUTTON tag injection in /tags/tag/button routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/button route accepts BUTTON tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-button-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/button route XSS oracle",
+    description:
+      "When scanning /tags/tag/button, q parameter injects attacker-controlled <button> tags — route-specific BUTTON tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm BUTTON tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagButtonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix BUTTON tag filtering on /tags/tag/button route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/button.",
+        "Add output encoding tests for BUTTON tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/button route allows BUTTON tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-meta-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range META tag injection oracle",
+    description:
+      "GET /tags/tag/meta?q= accepts attacker-controlled <meta> tags and reflects them into the response — Firing Range META tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient META tag filtering allows attacker-controlled meta elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagMetaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode META tag injection in /tags/tag/meta routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/meta route accepts META tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-meta-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/meta route XSS oracle",
+    description:
+      "When scanning /tags/tag/meta, q parameter injects attacker-controlled <meta> tags — route-specific META tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm META tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagMetaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix META tag filtering on /tags/tag/meta route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/meta.",
+        "Add output encoding tests for META tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/meta route allows META tag injection via q. Show route-specific tag injection XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -1902,6 +6218,526 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-form-submission-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range form-submission eval DOM XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/formSubmission/eval returns a Toxic DOM page where form.onsubmit copies userInput into eval() — Firing Range event-triggered DOM XSS training oracle.",
+    impactOneline:
+      "Form submit handlers that pass user input to eval() enable DOM XSS on user interaction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to eval() on submit — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() assignments on form field values.",
+        "Use safe DOM APIs instead of dynamic code execution.",
+        "Add CSP as defense-in-depth against DOM XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/eval assigns form input to eval(). Show event-triggered DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/.../eval route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/formSubmission/eval, form submit passes userInput to eval() — route-specific event-triggered DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form submissions do not pass user input to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval sinks on form submission in /dom/eventtriggering routes.",
+      steps: [
+        "Audit form onsubmit handlers for eval() and Function() sinks.",
+        "Encode user input before any DOM manipulation.",
+        "Add output encoding tests for form-triggered XSS routes."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/eval route passes form input to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range form-submission document.write DOM XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/formSubmission/documentWrite returns a Toxic DOM page where form.onsubmit copies userInput into document.write — Firing Range event-triggered DOM XSS training oracle.",
+    impactOneline:
+      "Form submit handlers that assign user input to document.write enable DOM XSS on user interaction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to document.write on submit — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write assignments on form field values.",
+        "Use textContent or safe DOM APIs for user-supplied text.",
+        "Add CSP as defense-in-depth against DOM XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/documentWrite assigns form input to document.write. Show event-triggered DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/.../documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/formSubmission/documentWrite, form submit passes userInput to document.write — route-specific event-triggered DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form submissions do not write user input via document.write.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix document.write sinks on form submission in /dom/eventtriggering routes.",
+      steps: [
+        "Audit form onsubmit handlers for document.write sinks.",
+        "Encode user input before DOM insertion.",
+        "Add output encoding tests for form-triggered XSS routes."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/documentWrite route passes form input to document.write. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DOM propagation eval XSS oracle",
+    description:
+      "GET /dom/dompropagation/document/formSubmission/eval propagates location.hash via window.status into eval() — Firing Range DOM propagation XSS training oracle.",
+    impactOneline:
+      "DOM property propagation chains that end in eval() enable XSS when attackers control the source value.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Break propagation chains that pass untrusted data to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Audit DOM property writes and reads for dangerous sink chains.",
+        "Never pass propagated values to eval() or document.write.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation route propagates location.hash via window.status into eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/.../eval route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/document/formSubmission/eval, location.hash propagates via window.status to eval() — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM property propagation does not reach eval() sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval sinks in DOM propagation chains on /dom/dompropagation routes.",
+      steps: [
+        "Audit window.status and similar property propagation for dangerous sinks.",
+        "Sanitize values before DOM property round-trips.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/document/formSubmission/eval route propagates location.hash to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DOM propagation window eval XSS oracle",
+    description:
+      "GET /dom/dompropagation/window/formSubmission/eval propagates location.hash via window.status into eval() — Firing Range DOM propagation XSS training oracle.",
+    impactOneline:
+      "DOM property propagation chains via window.status that end in eval() enable XSS when attackers control location.hash.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Break propagation chains that pass untrusted data to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Audit DOM property writes and reads for dangerous sink chains.",
+        "Never pass propagated values to eval() or document.write.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/formSubmission/eval propagates location.hash via window.status into eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/window/.../eval route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/window/formSubmission/eval, location.hash propagates via window.status to eval() — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM property propagation does not reach eval() sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval sinks in DOM propagation chains on /dom/dompropagation/window routes.",
+      steps: [
+        "Audit window.status and similar property propagation for dangerous sinks.",
+        "Sanitize values before DOM property round-trips.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/formSubmission/eval route propagates location.hash to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-documentwrite-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DOM propagation window.documentWrite eval XSS oracle",
+    description:
+      "GET /dom/dompropagation/window/documentWrite/eval returns a page that writes location.hash to window.status and passes the retrieved value to eval() — Firing Range DOM propagation XSS training oracle.",
+    impactOneline:
+      "DOM property propagation from location.hash to window.status enables eval-based XSS when attackers control the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowDocumentwriteEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never propagate URL fragments through DOM properties to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values read back from window.status or other DOM properties.",
+        "Treat location.hash as untrusted and avoid round-tripping through DOM sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/documentWrite/eval propagates location.hash via window.status to eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-documentwrite-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/window/documentWrite/eval route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/window/documentWrite/eval, location.hash is propagated via window.status to eval() without sanitization — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments are not propagated through DOM properties to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on DOM-propagated values in /dom/dompropagation/window handlers.",
+      steps: [
+        "Audit location.hash reads that write to window.status or similar DOM properties.",
+        "Encode or sanitize before any dangerous sink.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/documentWrite/eval route propagates location.hash via window.status to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-status-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range dompropagation window.status eval DOM XSS oracle",
+    description:
+      "GET /dom/dompropagation/window/* routes propagate location.hash via window.status into eval(retrieved_payload) — Firing Range DOM propagation window.status eval XSS training oracle.",
+    impactOneline:
+      "location.hash values propagated through window.status to eval() enable DOM XSS when attackers control the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowStatusEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never propagate location.hash through DOM properties to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval sinks on values read from window.status or similar DOM properties.",
+        "Encode or sanitize URL fragments before propagation.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window routes propagate location.hash via window.status to eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-status-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/window route status-eval XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/window/* routes, location.hash propagates via window.status to eval() — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments are not propagated through window.status to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowStatusEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on DOM-propagated values in /dom/dompropagation/window handlers.",
+      steps: [
+        "Audit location.hash reads that write to window.status.",
+        "Encode or sanitize before any dangerous sink.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window route propagates location.hash via window.status to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxicdom formSubmission eval DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/formSubmission/eval passes form input to eval() on submit — Firing Range toxicdom formSubmission eval XSS training oracle.",
+    impactOneline:
+      "Form input passed to eval() on submit enables DOM XSS when attackers can control the userInput field.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval sinks on form submission handlers.",
+        "Encode or sanitize user input before any dangerous sink.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/eval passes form input to eval(). Show toxicdom formSubmission eval XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/formSubmission/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/formSubmission/eval, form input is passed to eval() on submit — route-specific toxicdom formSubmission eval XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form input cannot reach eval() on submit.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on form submission in /dom/toxicdom handlers.",
+      steps: [
+        "Audit form.onsubmit handlers for eval sinks.",
+        "Encode or sanitize user input before dangerous sinks.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/eval route passes form input to eval(). Show route-specific toxicdom XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxicdom formSubmission innerHTML DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/formSubmission/innerHtml passes form input to innerHTML on submit — Firing Range toxicdom formSubmission innerHTML XSS training oracle.",
+    impactOneline:
+      "Form input passed to innerHTML on submit enables DOM XSS when attackers can control the userInput field.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML sinks on form submission handlers.",
+        "Encode or sanitize user input before any dangerous sink.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/innerHtml passes form input to innerHTML. Show toxicdom formSubmission innerHTML XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/formSubmission/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/formSubmission/innerHtml, form input is passed to innerHTML on submit — route-specific toxicdom formSubmission innerHTML XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form input cannot reach innerHTML on submit.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on form submission in /dom/toxicdom handlers.",
+      steps: [
+        "Audit form.onsubmit handlers for innerHTML sinks.",
+        "Encode or sanitize user input before dangerous sinks.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/innerHtml route passes form input to innerHTML. Show route-specific toxicdom XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxicdom formSubmission document.write DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/formSubmission/documentWrite passes form input to document.write on submit — Firing Range toxicdom formSubmission document.write XSS training oracle.",
+    impactOneline:
+      "Form input passed to document.write on submit enables DOM XSS when attackers can control the userInput field.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to document.write — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write sinks on form submission handlers.",
+        "Encode or sanitize user input before any dangerous sink.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/documentWrite passes form input to document.write. Show toxicdom formSubmission document.write XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/formSubmission/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/formSubmission/documentWrite, form input is passed to document.write on submit — route-specific toxicdom formSubmission document.write XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form input cannot reach document.write on submit.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on form submission in /dom/toxicdom handlers.",
+      steps: [
+        "Audit form.onsubmit handlers for document.write sinks.",
+        "Encode or sanitize user input before dangerous sinks.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/documentWrite route passes form input to document.write. Show route-specific toxicdom XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-formsubmission-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DOM propagation window formSubmission documentWrite XSS oracle",
+    description:
+      "GET /dom/dompropagation/window/formSubmission/documentWrite propagates location.hash via window.status into eval() — Firing Range DOM propagation XSS training oracle.",
+    impactOneline:
+      "DOM property propagation chains via window.status that end in eval() enable XSS when attackers control location.hash.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowFormSubmissionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Break propagation chains that pass untrusted data to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Audit DOM property writes and reads for dangerous sink chains.",
+        "Never pass propagated values to eval() or document.write.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/formSubmission/documentWrite propagates location.hash via window.status into eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-formsubmission-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/window/formSubmission/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/window/formSubmission/documentWrite, location.hash propagates via window.status to eval() — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM property propagation does not reach eval() sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowFormSubmissionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval sinks in DOM propagation chains on /dom/dompropagation/window/formSubmission routes.",
+      steps: [
+        "Audit window.status and similar property propagation for dangerous sinks.",
+        "Sanitize values before DOM property round-trips.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/formSubmission/documentWrite route propagates location.hash to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-remoteinclude-script-hash-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -1950,6 +6786,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /remoteinclude/script_hash.html route seeds script.src from location.hash. Show route-specific remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-parameter-script-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range remote-include parameter script DOM XSS oracle",
+    description:
+      "GET /remoteinclude/parameter/script?q= reflects the query parameter into script.src — Firing Range remote-include parameter DOM XSS training oracle.",
+    impactOneline:
+      "URL query parameters used as script.src enable attacker-controlled remote script inclusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeParameterScriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never seed script.src from URL query parameters — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic script.src assignments from query parameters.",
+        "Allow-list remote script origins.",
+        "Use CSP script-src to block attacker-controlled script loads."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/parameter/script loads script.src from a query parameter. Show remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-parameter-script-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /remoteinclude/parameter/script route XSS oracle",
+    description:
+      "When scanning /remoteinclude/parameter/script, the q query parameter seeds attacker-controlled script.src — route-specific remote-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm query parameters cannot load arbitrary remote scripts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeParameterScriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix script.src seeding from query parameters on /remoteinclude routes.",
+      steps: [
+        "Audit query parameter reads for script inclusion sinks.",
+        "Allow-list script origins.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/parameter/script route seeds script.src from a query parameter. Show route-specific remote-include DOM XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -2786,6 +7674,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-hash-area-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.hash area.href DOM XSS oracle",
+    description:
+      "GET /urldom/location/hash/area.href reads document.location.hash.substr(1) and assigns it to area.href — Firing Range area.href DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values assigned to area.href enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashAreaHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to area.href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove area.href assignments on values from window.location.hash.",
+        "Allow-list link targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/area.href uses area.href on location.hash. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-hash-area-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/hash/area.href route XSS oracle",
+    description:
+      "When scanning /urldom/location/hash/area.href, location.hash is assigned to area.href without sanitization — route-specific area.href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot set arbitrary area hrefs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationHashAreaHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove area.href sinks on location.hash in /urldom handlers.",
+      steps: [
+        "Audit all window.location.hash reads for link navigation sinks.",
+        "Allow-list link targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/hash/area.href route assigns location.hash to area.href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-assign-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2838,6 +7778,214 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-address-location-hash-replace-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash replace DOM XSS oracle",
+    description:
+      "GET /address/location.hash/replace returns a page that reads window.location.hash.substr(1) and passes it to location.replace() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to location.replace() enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashReplaceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to location.replace() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove location.replace() calls on values from window.location.hash.",
+        "Allow-list navigation targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/replace uses location.replace on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-replace-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/replace route XSS oracle",
+    description:
+      "When scanning /address/location.hash/replace, location.hash is passed to location.replace() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values cannot trigger arbitrary navigation via replace().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashReplaceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove location.replace sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for navigation sinks.",
+        "Allow-list navigation targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/replace route uses location.replace on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-function-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location.hash Function constructor DOM XSS oracle",
+    description:
+      "GET /address/location.hash/function returns a page that reads window.location.hash.substr(1) and passes it to new Function() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values passed to new Function() enable DOM XSS when attackers can set the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashFunctionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash to new Function() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove new Function() and eval() on values from window.location.hash.",
+        "Treat URL fragments as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/function uses new Function on location.hash. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-hash-function-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location.hash/function route XSS oracle",
+    description:
+      "When scanning /address/location.hash/function, location.hash is passed to new Function() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.hash values are not executed via the Function constructor.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationHashFunctionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Function-constructor sinks on location.hash in /address handlers.",
+      steps: [
+        "Audit all window.location.hash reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location.hash/function route uses new Function on location.hash. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location eval DOM XSS oracle",
+    description:
+      "GET /address/location/eval returns a page that assigns window.location to payload and passes it to eval() — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "window.location values passed to eval() enable DOM XSS when attackers can influence the address bar.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.location to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from window.location.",
+        "Treat location data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/eval uses eval on window.location. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location/eval route XSS oracle",
+    description:
+      "When scanning /address/location/eval, window.location is passed to eval() without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location-backed values are not executed via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on window.location in /address handlers.",
+      steps: [
+        "Audit all window.location reads for code execution sinks.",
+        "Replace eval with safe DOM APIs.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/eval route passes window.location to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range address location innerHTML DOM XSS oracle",
+    description:
+      "GET /address/location/innerHtml returns a page that assigns window.location to payload and passes it to divEl.innerHTML — Firing Range address-based DOM XSS training oracle.",
+    impactOneline:
+      "window.location values assigned to innerHTML enable DOM XSS when attackers can influence the address bar.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.location to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from window.location.",
+        "Treat location data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/innerHtml uses innerHTML on window.location. Show address-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-address-location-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /address/location/innerHtml route XSS oracle",
+    description:
+      "When scanning /address/location/innerHtml, window.location is assigned to innerHTML without sanitization — route-specific address-based DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location-backed values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAddressLocationInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on window.location in /address handlers.",
+      steps: [
+        "Audit all window.location reads for dangerous DOM sinks.",
+        "Replace innerHTML with textContent or safe DOM APIs.",
+        "Add CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /address/location/innerHtml route passes window.location to innerHTML. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-urldom-location-search-form-action-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -2886,6 +8034,318 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /urldom/location/search/form.action route assigns location.search to form.action. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-object-data-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search object.data DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/object.data reads document.location.search.substr(1) and assigns it to object.data — Firing Range object.data DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to object.data enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchObjectDataLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to object.data — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove object.data assignments on values from window.location.search.",
+        "Allow-list object data origins in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/object.data uses object.data on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-object-data-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/object.data route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/object.data, location.search is assigned to object.data without sanitization — route-specific object.data DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot load arbitrary object data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchObjectDataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove object.data sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for object inclusion sinks.",
+        "Allow-list object data origins.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/object.data route assigns location.search to object.data. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-embed-src-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search embed.src DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/embed.src reads document.location.search.substr(1) and assigns it to embed.src — Firing Range embed.src DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to embed.src enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchEmbedSrcLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to embed.src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove embed.src assignments on values from window.location.search.",
+        "Allow-list embed origins in production applications.",
+        "Use CSP default-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/embed.src uses embed.src on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-embed-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/embed.src route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/embed.src, location.search is assigned to embed.src without sanitization — route-specific embed.src DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot load arbitrary embed content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchEmbedSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove embed.src sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for embed inclusion sinks.",
+        "Allow-list embed origins.",
+        "Add CSP default-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/embed.src route assigns location.search to embed.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-link-href-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search link.href DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/link.href reads document.location.search.substr(1) and assigns it to link.href — Firing Range link.href DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to link.href enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchLinkHrefLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to link.href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove link.href assignments on values from window.location.search.",
+        "Allow-list stylesheet/import targets in production applications.",
+        "Use CSP style-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/link.href uses link.href on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-link-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/link.href route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/link.href, location.search is assigned to link.href without sanitization — route-specific link.href DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot set arbitrary link hrefs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchLinkHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove link.href sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for link import sinks.",
+        "Allow-list link targets.",
+        "Add CSP style-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/link.href route assigns location.search to link.href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-code-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search param.code.value DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/param.code.value reads document.location.search.substr(1) and assigns it to Flash param code — Firing Range param.code.value DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to Flash param code enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamCodeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to Flash param code — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove Flash param code assignments on values from window.location.search.",
+        "Allow-list Flash object parameters in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.code.value uses Flash param code on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-code-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/param.code.value route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/param.code.value, location.search is assigned to Flash param code without sanitization — route-specific param.code.value DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot seed arbitrary Flash param code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamCodeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Flash param code sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for Flash object parameter sinks.",
+        "Allow-list Flash object parameters.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.code.value route assigns location.search to Flash param code. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-src-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search param.src.value DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/param.src.value reads document.location.search.substr(1) and assigns it to Flash param src — Firing Range param.src.value DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to Flash param src enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamSrcValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to Flash param src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove Flash param src assignments on values from window.location.search.",
+        "Allow-list Flash object parameters in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.src.value uses Flash param src on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-src-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/param.src.value route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/param.src.value, location.search is assigned to Flash param src without sanitization — route-specific param.src.value DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot seed arbitrary Flash param src.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamSrcValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Flash param src sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for Flash object parameter sinks.",
+        "Allow-list Flash object parameters.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.src.value route assigns location.search to Flash param src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-svg-a-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search svg.a DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/svg.a reads document.location.search.substr(1) and assigns it to SVG xlink:href — Firing Range svg.a DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to SVG xlink:href enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchSvgALiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to SVG xlink:href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove SVG xlink:href assignments on values from window.location.search.",
+        "Allow-list SVG link targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/svg.a uses SVG xlink:href on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-svg-a-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/svg.a route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/svg.a, location.search is assigned to SVG xlink:href without sanitization — route-specific svg.a DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot set arbitrary SVG xlink:href.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchSvgARouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove SVG xlink:href sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for SVG link navigation sinks.",
+        "Allow-list SVG link targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/svg.a route assigns location.search to SVG xlink:href. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -3042,6 +8502,422 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /urldom/location/hash/script.src.partial_query route concatenates location.hash into JSONP script.src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_missing serves HTTPS without a Strict-Transport-Security response header — Firing Range HSTS misconfiguration training oracle.",
+    impactOneline:
+      "Missing HSTS lets browsers accept downgrade attacks and cookie delivery over cleartext HTTP.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Send Strict-Transport-Security on all HTTPS responses.",
+      steps: [
+        "Set Strict-Transport-Security with max-age of at least one year.",
+        "Include includeSubDomains when all subdomains support HTTPS.",
+        "Consider preload for apex domains with stable HTTPS."
+      ]
+    },
+    fixPrompt:
+      "Our HTTPS responses omit Strict-Transport-Security on /stricttransportsecurity/hsts_missing. Show HSTS header remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_missing route HSTS oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_missing, the HTTPS response omits Strict-Transport-Security — route-specific HSTS missing training oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HSTS headers on strict-transport-security lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Send Strict-Transport-Security on route-specific HTTPS lab responses.",
+      steps: [
+        "Configure HSTS at the edge for all HTTPS routes.",
+        "Use max-age of at least 31536000 seconds.",
+        "Validate lab routes inherit production HSTS policy."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_missing route scan shows missing HSTS. Show route-specific HSTS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-max-age-low-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS max-age too low oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_max_age_too_low returns Strict-Transport-Security with max-age below one year — Firing Range weak HSTS duration training oracle.",
+    impactOneline:
+      "Short HSTS max-age windows expire quickly and weaken downgrade protection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeLowLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use HSTS max-age of at least one year (31536000 seconds).",
+      steps: [
+        "Increase max-age to 31536000 or higher on HTTPS responses.",
+        "Pair with includeSubDomains when subdomains are HTTPS-ready.",
+        "Monitor certificate renewal before shortening max-age."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_too_low sets HSTS max-age below recommended minimum. Show HSTS max-age remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-max-age-low-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_max_age_too_low route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_max_age_too_low, Strict-Transport-Security max-age is below one year — route-specific weak HSTS duration oracle.",
+    impactOneline:
+      "Route-specific scans should flag undersized HSTS max-age values on lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeLowRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Raise HSTS max-age on route-specific HTTPS responses.",
+      steps: [
+        "Set max-age to at least 31536000 seconds.",
+        "Avoid per-route HSTS overrides that weaken policy.",
+        "Document HSTS policy in security configuration."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_too_low route scan shows weak HSTS max-age. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-max-age-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS max-age missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_max_age_missing returns Strict-Transport-Security without a max-age directive — Firing Range incomplete HSTS training oracle.",
+    impactOneline:
+      "HSTS without max-age provides no browser enforcement window for HTTPS-only access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Always include max-age in Strict-Transport-Security headers.",
+      steps: [
+        "Set max-age to at least 31536000 seconds on all HTTPS responses.",
+        "Pair with includeSubDomains and preload when appropriate.",
+        "Validate HSTS syntax with security header scanners."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_missing omits HSTS max-age. Show complete HSTS header remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-max-age-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_max_age_missing route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_max_age_missing, Strict-Transport-Security lacks max-age — route-specific incomplete HSTS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm HSTS max-age on strict-transport-security lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsMaxAgeMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Include max-age on route-specific HSTS responses.",
+      steps: [
+        "Configure max-age of at least one year on all HTTPS routes.",
+        "Avoid HSTS directives without max-age on any production path.",
+        "Audit edge configuration for partial HSTS policies."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_max_age_missing route scan shows HSTS without max-age. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-includesubdomains-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS includeSubDomains missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_includesubdomains_missing returns HSTS without includeSubDomains — Firing Range incomplete HSTS training oracle.",
+    impactOneline:
+      "HSTS without includeSubDomains leaves subdomains vulnerable to SSL stripping attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsIncludesubdomainsMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add includeSubDomains when all subdomains support HTTPS.",
+      steps: [
+        "Verify every subdomain serves valid HTTPS before enabling includeSubDomains.",
+        "Set Strict-Transport-Security: max-age=31536000; includeSubDomains.",
+        "Consider preload for apex domains with stable HTTPS coverage."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_includesubdomains_missing omits includeSubDomains. Show HSTS subdomain coverage remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-includesubdomains-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_includesubdomains_missing route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_includesubdomains_missing, HSTS omits includeSubDomains — route-specific incomplete HSTS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm includeSubDomains on strict-transport-security lab pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsIncludesubdomainsMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enable includeSubDomains on route-specific HSTS when subdomains are HTTPS-ready.",
+      steps: [
+        "Audit subdomain HTTPS coverage before adding includeSubDomains.",
+        "Apply consistent HSTS policy across apex and subdomains.",
+        "Test with HSTS preload submission tools when eligible."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_includesubdomains_missing route scan shows HSTS without includeSubDomains. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-preload-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range HSTS preload missing oracle",
+    description:
+      "GET /stricttransportsecurity/hsts_preload_missing returns HSTS with max-age and includeSubDomains but without preload — Firing Range incomplete HSTS training oracle.",
+    impactOneline:
+      "HSTS without preload leaves the domain off browser preload lists, delaying HTTPS enforcement for first visits.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsPreloadMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add preload directive when HSTS policy is stable and all subdomains support HTTPS.",
+      steps: [
+        "Verify max-age of at least 31536000 and includeSubDomains are set.",
+        "Submit eligible domains to the HSTS preload list.",
+        "Set Strict-Transport-Security: max-age=31536000; includeSubDomains; preload."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_preload_missing omits HSTS preload. Show HSTS preload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-hsts-preload-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range /hsts_preload_missing route oracle",
+    description:
+      "When scanning /stricttransportsecurity/hsts_preload_missing, HSTS omits preload directive — route-specific incomplete HSTS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm preload on strict-transport-security lab pages eligible for preload.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeHstsPreloadMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enable preload on route-specific HSTS when policy is production-ready.",
+      steps: [
+        "Confirm all subdomains serve valid HTTPS before adding preload.",
+        "Add preload directive to Strict-Transport-Security header.",
+        "Submit to hstspreload.org when requirements are met."
+      ]
+    },
+    fixPrompt:
+      "Our /stricttransportsecurity/hsts_preload_missing route scan shows HSTS without preload. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-javascripturi-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range javascript: URI DOM sink oracle",
+    description:
+      "GET /dom/javascripturi.html exposes an anchor with javascript: URI href assigning location.href — Firing Range javascript:-URI DOM XSS training oracle.",
+    impactOneline:
+      "javascript: URI sinks enable DOM XSS via implicit document write behavior when user input reaches href attributes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomJavascripturiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block javascript: URIs in user-controlled href and navigation sinks.",
+      steps: [
+        "Allow-list safe URL schemes (https:, mailto:) for dynamic href values.",
+        "Use Content-Security-Policy script-src to restrict inline script execution.",
+        "Sanitize or encode user input before assigning to location.href or anchor href."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/javascripturi.html uses javascript: URI in href with location.href sink. Show javascript:-URI DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-javascripturi-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /javascripturi.html route oracle",
+    description:
+      "When scanning /dom/javascripturi.html, anchor href uses javascript: URI with location.href assignment — route-specific javascript:-URI DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should flag javascript: URI sinks in DOM navigation handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomJavascripturiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove javascript: URI sinks from route-specific DOM navigation code.",
+      steps: [
+        "Replace javascript: href values with safe event handlers bound via addEventListener.",
+        "Validate URL schemes before navigation assignments.",
+        "Add CSP to block unsafe inline script execution paths."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/javascripturi.html route scan shows javascript: URI href sink. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-missing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range third-party script missing SRI oracle",
+    description:
+      "GET /insecurethirdpartyscripts/third_party_scripts_without_subresource_integrity.html loads a protocol-relative external script without an integrity attribute — Firing Range missing subresource integrity training oracle.",
+    impactOneline:
+      "Third-party scripts without SRI cannot detect CDN or supply-chain tampering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriMissingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add subresource integrity hashes to third-party script tags.",
+      steps: [
+        "Generate SRI hashes for each external script URL.",
+        "Add integrity and crossorigin attributes on script tags.",
+        "Prefer self-hosted or first-party script bundles when SRI is impractical."
+      ]
+    },
+    fixPrompt:
+      "Our third_party_scripts_without_subresource_integrity.html loads external script without integrity. Show SRI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-missing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range missing SRI route oracle",
+    description:
+      "When scanning third_party_scripts_without_subresource_integrity.html, external script tags lack integrity attributes — route-specific missing SRI training oracle.",
+    impactOneline:
+      "Route-specific scans should confirm subresource integrity on third-party script labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriMissingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add integrity attributes on route-specific third-party script tags.",
+      steps: [
+        "Hash external script contents and add integrity attributes.",
+        "Use crossorigin when loading cross-origin scripts with SRI.",
+        "Monitor third-party script versions for hash updates."
+      ]
+    },
+    fixPrompt:
+      "Our third_party_scripts_without_subresource_integrity.html route scan lacks SRI. Show route-specific SRI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-dynamic-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range dynamically injected script missing SRI oracle",
+    description:
+      "GET third_party_scripts_without_subresource_integrity_dynamically_added.html injects a protocol-relative script via createElement without integrity — Firing Range dynamic missing SRI training oracle.",
+    impactOneline:
+      "Dynamically injected third-party scripts without SRI are vulnerable to supply-chain substitution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriDynamicLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set integrity on dynamically created script elements.",
+      steps: [
+        "Compute SRI hashes before assigning script.src dynamically.",
+        "Set integrity and crossorigin on createElement script nodes.",
+        "Prefer module bundlers that emit integrity metadata for runtime injection."
+      ]
+    },
+    fixPrompt:
+      "Our dynamically_added SRI lab injects script via createElement without integrity. Show dynamic SRI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-third-party-sri-dynamic-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Google Firing Range dynamic SRI route oracle",
+    description:
+      "When scanning third_party_scripts_without_subresource_integrity_dynamically_added.html, createElement script injection lacks integrity — route-specific dynamic missing SRI oracle.",
+    impactOneline:
+      "Route-specific scans should flag dynamically injected scripts missing subresource integrity.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeThirdPartySriDynamicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply SRI to dynamically injected scripts on route-specific pages.",
+      steps: [
+        "Set integrity when assigning script.src in JavaScript.",
+        "Use trusted script loaders that verify hashes before execution.",
+        "Audit all createElement('script') call sites for SRI coverage."
+      ]
+    },
+    fixPrompt:
+      "Our dynamically_added SRI route scan injects script without integrity. Show route-specific dynamic SRI remediation.",
     version: 1,
     enabled: true
   },
@@ -11361,6 +17237,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /download?file= endpoint is vulnerable to path traversal via path.join(). Show how to canonicalize paths and block ../ escapes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-pwnshop-prototype-pollution-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop lodash prototype pollution oracle (PWN-041)",
+    description:
+      "Pwnshop documents POST /search/filters passing user-supplied JSON to lodash _.merge() (4.17.4, CVE-2019-10744) with no sanitization — __proto__ keys poison Object.prototype.",
+    impactOneline:
+      "Vulnerable lodash merge on search filter preferences lets attackers pollute prototypes and alter authorization logic process-wide.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopPrototypePollutionOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade lodash and freeze prototypes — Pwnshop PWN-041 is intentional lab software.",
+      steps: [
+        "Upgrade lodash to >=4.17.12 and avoid recursive merge on untrusted objects.",
+        "Use Object.freeze(Object.prototype) or null-prototype objects for options parsing.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /search/filters endpoint passes user JSON to lodash _.merge() enabling __proto__ pollution. Show safe object merging and lodash upgrade.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-prototype-pollution-search-filters-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop search filters prototype pollution live oracle (PWN-041)",
+    description:
+      "POST /search/filters merges constructor.prototype keys via lodash _.merge() — polluted properties appear in the saved filters JSON response.",
+    impactOneline:
+      "Live confirmation that lodash merge on search preferences accepts __proto__ and poisons every plain object in the Node process.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopPrototypePollutionSearchFiltersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade lodash and sanitize merge inputs — Pwnshop PWN-041 is intentional lab software.",
+      steps: [
+        "Upgrade lodash to >=4.17.12 and reject __proto__ and constructor keys in merge sources.",
+        "Use Object.freeze(Object.prototype) where feasible.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /search/filters accepts __proto__ and pollutes Object.prototype via lodash merge. Show merge hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-prototype-pollution-search-filters-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop search-filters prototype pollution route live oracle (PWN-041)",
+    description:
+      "When scanning /search/filters or /api/settings/search-filters, live POST __proto__ pollutes Object.prototype via lodash _.merge() and GET confirms injected property — route-specific oracle.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop search filter preferences endpoint is vulnerable to prototype pollution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopPrototypePollutionSearchFiltersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade lodash and sanitize merge inputs on search-filters routes.",
+      steps: [
+        "Upgrade lodash to >=4.17.12 and reject __proto__ keys in merge sources.",
+        "Use Object.freeze(Object.prototype) where feasible.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /search/filters route scan confirms __proto__ pollution via lodash merge. Show route-specific merge hardening.",
     version: 1,
     enabled: true
   },
@@ -32051,6 +38005,162 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA /graphql route scan confirms pastes filter SQLi. Show route-specific parameterized query hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-my-pastes-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "DVGA private pastes BOLA/IDOR live oracle",
+    description:
+      "POST /graphql { pastes(public: false) } on DVGA returns other users' private pastes (title, content, owner) without authentication.",
+    impactOneline:
+      "Unauthenticated GraphQL queries expose private paste data — classic broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaMyPastesIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-user authorization on pastes queries; never return private records without session checks.",
+      steps: [
+        "Require authentication before querying pastes(public: false).",
+        "Filter results to the authenticated user's owner ID.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql pastes(public:false) query returns private pastes without auth. Show per-user authorization in GraphQL resolvers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-my-pastes-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "DVGA /my_pastes BOLA route live oracle",
+    description:
+      "When scanning /my_pastes on DVGA hosts, unauthenticated pastes(public:false) query returns private paste gallery data — route-specific IDOR oracle.",
+    impactOneline:
+      "Route scans on DVGA private-pastes pages confirm broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaMyPastesIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate private paste queries on /my_pastes routes.",
+      steps: [
+        "Require session before returning private pastes.",
+        "Scope GraphQL pastes resolver to the authenticated owner.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /my_pastes route scan confirms private pastes are readable without auth. Show route-specific BOLA hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-import-paste-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "DVGA importPaste SSRF live oracle",
+    description:
+      "POST /graphql importPaste(host,port,path,scheme) mutation on DVGA fetches attacker-controlled URLs without authentication.",
+    impactOneline:
+      "Unauthenticated SSRF via paste import lets attackers probe internal networks and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaImportPasteSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or strictly validate server-side fetch in importPaste; require authentication.",
+      steps: [
+        "Denylist private IP ranges and link-local metadata URLs.",
+        "Require authentication before importPaste mutations.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA importPaste mutation performs unauthenticated server-side fetches. Show SSRF validation and auth-gating for GraphQL mutations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-import-paste-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "DVGA /import_paste SSRF route live oracle",
+    description:
+      "When scanning /import_paste on DVGA hosts, importPaste mutation accepts attacker-controlled host/port/path — route-specific SSRF oracle.",
+    impactOneline:
+      "Route scans on DVGA import pages confirm server-side request forgery via paste import.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaImportPasteSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate and validate URL fetches on /import_paste routes.",
+      steps: [
+        "Block private/metadata targets in importPaste resolver.",
+        "Require authentication for paste import mutations.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /import_paste route scan confirms SSRF via importPaste. Show route-specific SSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-create-paste-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVGA createPaste stored XSS live oracle",
+    description:
+      "POST /graphql createPaste mutation on DVGA stores unsanitized HTML/script tags in paste content without encoding.",
+    impactOneline:
+      "Stored XSS in paste content can compromise any user viewing public or private pastes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaCreatePasteStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode paste content on write; use CSP to mitigate stored XSS.",
+      steps: [
+        "HTML-encode or sanitize content before persisting pastes.",
+        "Serve user content with strict Content-Security-Policy.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA createPaste mutation stores raw HTML in paste content. Show output encoding and CSP for stored XSS prevention.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-create-paste-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVGA /create_paste stored XSS route live oracle",
+    description:
+      "When scanning /create_paste on DVGA hosts, createPaste accepts unsanitized HTML in the content field — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route scans on DVGA create-paste pages confirm stored XSS via unsanitized content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaCreatePasteStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize paste content on /create_paste write paths.",
+      steps: [
+        "Encode HTML entities in paste content before storage.",
+        "Validate and strip script-bearing tags at the GraphQL layer.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /create_paste route scan confirms stored XSS. Show route-specific content sanitization.",
     version: 1,
     enabled: true
   },

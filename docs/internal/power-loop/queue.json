@@ -1,29 +1,859 @@
 {
-  "updated_at": "2026-08-02T23:05:00.000Z",
+  "updated_at": "2026-08-02T23:10:00.000Z",
   "discovery_urls": [
     {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/eval",
-      "source": "google/firing-range — postMessage handler missing origin check → eval() DOM XSS sink",
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml",
+      "source": "google/firing-range — DOM propagation stored payload → innerHTML sink (/dom/dompropagation/window/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite",
+      "source": "google/firing-range — localStorage function sink to document.write DOM XSS (/dom/toxicdom/localStorage/function/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/array/innerHtml",
+      "source": "google/firing-range — localStorage array sink to innerHTML DOM XSS (/dom/toxicdom/localStorage/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/array/documentWrite",
+      "source": "google/firing-range — localStorage array sink to document.write DOM XSS (/dom/toxicdom/localStorage/array/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/documentWrite",
+      "source": "google/firing-range — external script localStorage function to document.write DOM XSS (/dom/toxicdom/external/localStorage/function/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/innerHtml",
+      "source": "google/firing-range — external script localStorage array to innerHTML DOM XSS (/dom/toxicdom/external/localStorage/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/video?q=a",
+      "source": "google/firing-range — tag-restricted VIDEO XSS (/tags/tag/video)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/audio?q=a",
+      "source": "google/firing-range — tag-restricted AUDIO XSS (/tags/tag/audio)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/applet?q=a",
+      "source": "google/firing-range — tag-restricted APPLET XSS (/tags/tag/applet)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/canvas?q=a",
+      "source": "google/firing-range — tag-restricted CANVAS XSS (/tags/tag/canvas)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/setInterval",
+      "source": "google/firing-range — location.hash to setInterval DOM XSS sink (/address/location.hash/setInterval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/listproducts.php?cat=1",
+      "source": "Acunetix testphp.vulnweb.com — UNION-based SQLi oracle GET /listproducts.php?cat= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/artists.php?artist=1",
+      "source": "Acunetix testphp.vulnweb.com — UNION-based SQLi oracle GET /artists.php?artist= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/userinfo.php",
+      "source": "Acunetix testphp.vulnweb.com — auth-bypass SQLi oracle POST /userinfo.php (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/search.php?test=query",
+      "source": "Acunetix testphp.vulnweb.com — error-based SQLi oracle GET /search.php?test= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/AJAX/infoartist.php?id=1",
+      "source": "Acunetix testphp.vulnweb.com — AJAX error-based SQLi oracle GET /AJAX/infoartist.php?id= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml/innerHtml",
+      "source": "google/firing-range — DOM propagation window.name innerHTML sink to innerHTML DOM XSS (/dom/dompropagation/window/innerHtml/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml/documentWrite",
+      "source": "google/firing-range — DOM propagation window.name innerHTML sink to document.write DOM XSS (/dom/dompropagation/window/innerHtml/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/documentWrite/documentWrite",
+      "source": "google/firing-range — DOM propagation window.name documentWrite sink to document.write DOM XSS (/dom/dompropagation/window/documentWrite/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/eval/eval",
+      "source": "google/firing-range — DOM propagation window.name eval sink to eval() DOM XSS (/dom/dompropagation/window/eval/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/eval/innerHtml",
+      "source": "google/firing-range — DOM propagation window.name eval sink to innerHTML DOM XSS (/dom/dompropagation/window/eval/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/innerHtml",
+      "source": "google/firing-range — sessionStorage property sink to innerHTML DOM XSS (/dom/toxicdom/sessionStorage/property/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml/eval",
+      "source": "google/firing-range — DOM propagation window.name innerHTML sink to eval() DOM XSS (/dom/dompropagation/window/innerHtml/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/documentWrite/innerHtml",
+      "source": "google/firing-range — DOM propagation window.name documentWrite sink to innerHTML DOM XSS (/dom/dompropagation/window/documentWrite/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/formSubmission/innerHtml",
+      "source": "google/firing-range — document formSubmission sink to innerHTML DOM XSS (/dom/toxicdom/document/formSubmission/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/formSubmission/documentWrite",
+      "source": "google/firing-range — document formSubmission sink to document.write DOM XSS (/dom/toxicdom/document/formSubmission/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/document.location",
+      "source": "google/firing-range — location.hash to document.location DOM XSS sink (/urldom/location/hash/document.location)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/form.action",
+      "source": "google/firing-range — location.hash to form.action DOM XSS sink (/urldom/location/hash/form.action)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/property/eval",
+      "source": "google/firing-range — localStorage property sink to eval() DOM XSS (/dom/toxicdom/localStorage/property/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/property/innerHtml",
+      "source": "google/firing-range — localStorage property sink to innerHTML DOM XSS (/dom/toxicdom/localStorage/property/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/eval",
+      "source": "google/firing-range — sessionStorage property sink to eval() DOM XSS (/dom/toxicdom/sessionStorage/property/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/eval",
+      "source": "google/firing-range — document inputTyping sink to eval() DOM XSS (/dom/toxicdom/document/inputTyping/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/innerHtml",
+      "source": "google/firing-range — document inputTyping sink to innerHTML DOM XSS (/dom/toxicdom/document/inputTyping/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/documentWrite",
+      "source": "google/firing-range — document inputTyping sink to document.write DOM XSS (/dom/toxicdom/document/inputTyping/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/formSubmission/eval",
+      "source": "google/firing-range — document formSubmission sink to eval() DOM XSS (/dom/toxicdom/document/formSubmission/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/jsoncallback?callback=foo",
+      "source": "google/firing-range — JSONP callback content-sniffing XSS (/reflected/jsoncallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/documentWrite",
+      "source": "google/firing-range — document.cookie (unset) sink to document.write DOM XSS (/dom/toxicdom/document/cookie/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/innerHtml",
+      "source": "google/firing-range — document.cookie (set) sink to innerHTML DOM XSS (/dom/toxicdom/document/cookie_set/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/documentWrite",
+      "source": "google/firing-range — document.cookie (set) sink to document.write DOM XSS (/dom/toxicdom/document/cookie_set/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/eval",
+      "source": "google/firing-range — event-triggered document sink to eval() DOM XSS (/dom/eventtriggering/document/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/innerHtml",
+      "source": "google/firing-range — event-triggered document sink to innerHTML DOM XSS (/dom/eventtriggering/document/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/eval",
+      "source": "google/firing-range — document.cookie (unset) sink to eval() DOM XSS (/dom/toxicdom/document/cookie/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/innerHtml",
+      "source": "google/firing-range — document.cookie (unset) sink to innerHTML DOM XSS (/dom/toxicdom/document/cookie/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/function",
+      "source": "google/firing-range — external script localStorage array to Function() DOM XSS (/dom/toxicdom/external/localStorage/array/function)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/formSubmission/eval",
+      "source": "google/firing-range — DOM propagation window.name form submission sink to eval() DOM XSS (/dom/dompropagation/window/formSubmission/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/formSubmission/documentWrite",
+      "source": "google/firing-range — DOM propagation window.name form submission sink to document.write DOM XSS (/dom/dompropagation/window/formSubmission/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/documentWrite",
+      "source": "google/firing-range — sessionStorage function sink to document.write DOM XSS (/dom/toxicdom/sessionStorage/function/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/function/eval",
+      "source": "google/firing-range — external script sessionStorage function to eval() DOM XSS (/dom/toxicdom/external/sessionStorage/function/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/function/innerHtml",
+      "source": "google/firing-range — external script sessionStorage function to innerHTML DOM XSS (/dom/toxicdom/external/sessionStorage/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/eval",
+      "source": "google/firing-range — external script sessionStorage array to eval() DOM XSS (/dom/toxicdom/external/sessionStorage/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/function/documentWrite",
+      "source": "google/firing-range — external script sessionStorage function to document.write DOM XSS (/dom/toxicdom/external/sessionStorage/function/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/formSubmission/documentWrite",
+      "source": "google/firing-range — DOM propagation form submission sink to document.write DOM XSS (/dom/dompropagation/document/formSubmission/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/formSubmission/innerHtml",
+      "source": "google/firing-range — DOM propagation form submission sink to innerHTML DOM XSS (/dom/dompropagation/document/formSubmission/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/array/eval",
+      "source": "google/firing-range — localStorage array sink to eval() DOM XSS (/dom/toxicdom/localStorage/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/documentWrite",
+      "source": "google/firing-range — external script localStorage property to document.write DOM XSS (/dom/toxicdom/external/localStorage/property/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/eval",
+      "source": "google/firing-range — external script localStorage array to eval() DOM XSS (/dom/toxicdom/external/localStorage/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/eval",
+      "source": "google/firing-range — event-triggered form submission sink to eval() DOM XSS (/dom/eventtriggering/document/formSubmission/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/formSubmission/documentWrite",
+      "source": "google/firing-range — event-triggered form submission sink to document.write DOM XSS (/dom/eventtriggering/document/formSubmission/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/property/documentWrite",
+      "source": "google/firing-range — localStorage property sink to document.write DOM XSS (/dom/toxicdom/localStorage/property/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/eval",
+      "source": "google/firing-range — sessionStorage array sink to eval() DOM XSS (/dom/toxicdom/sessionStorage/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/formSubmission/eval",
+      "source": "google/firing-range — DOM propagation form submission sink to eval() DOM XSS (/dom/dompropagation/document/formSubmission/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml",
+      "source": "google/firing-range — document.referrer sink to innerHTML DOM XSS (/dom/toxicdom/document/referrer/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite",
+      "source": "google/firing-range — document.referrer sink to document.write DOM XSS (/dom/toxicdom/document/referrer/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml",
+      "source": "google/firing-range — window.name sink to innerHTML DOM XSS (/dom/toxicdom/window/name/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/window/name/documentWrite",
+      "source": "google/firing-range — window.name sink to document.write DOM XSS (/dom/toxicdom/window/name/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/documentWrite",
+      "source": "google/firing-range — sessionStorage property sink to document.write DOM XSS (/dom/toxicdom/sessionStorage/property/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_quoted?q=a",
+      "source": "google/firing-range — server-side escapeHtml quoted-attribute XSS sink (/escape/serverside/escapeHtml/attribute_quoted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_quoted?q=a",
+      "source": "google/firing-range — server-side encodeUrl quoted-attribute XSS sink (/escape/serverside/encodeUrl/attribute_quoted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/iframe?q=a",
+      "source": "google/firing-range — reflected parameter into iframe body sink (/reflected/parameter/body/iframe)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/remoteinclude/parameter/object_raw?q=https://example.com",
+      "source": "google/firing-range — remote raw object inclusion via URL parameter (/remoteinclude/parameter/object_raw)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/weak_id/",
+      "source": "Pentest-Ground DVWA — weak ID / IDOR lab module (pentest-ground.com README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/head?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into HTML head sink (/escape/serverside/encodeUrl/head)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/title?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into HTML title sink (/escape/serverside/encodeUrl/title)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/head?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into HTML head sink (/escape/serverside/escapeHtml/head)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/title?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into HTML title sink (/escape/serverside/escapeHtml/title)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/range.createContextualFragment",
+      "source": "google/firing-range — location.hash to range.createContextualFragment DOM XSS sink (/address/location.hash/range.createContextualFragment)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/403?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 403 status (/reflected/parameter/body/403)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/404?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 404 status (/reflected/parameter/body/404)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/500?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 500 status (/reflected/parameter/body/500)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/replace",
+      "source": "google/firing-range — location.hash to String.replace DOM XSS sink (/address/location.hash/replace)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/function",
+      "source": "google/firing-range — location.hash to Function constructor DOM XSS sink (/address/location.hash/function)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginStartsWith",
+      "source": "google/firing-range — CORS origin.startsWith bypass misconfig (/cors/alloworigin/allowOriginStartsWith)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginEndsWith",
+      "source": "google/firing-range — CORS origin.endsWith bypass misconfig (/cors/alloworigin/allowOriginEndsWith)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginRegexDot",
+      "source": "google/firing-range — CORS origin.match dot-regex bypass misconfig (/cors/alloworigin/allowOriginRegexDot)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginProtocolDowngrade",
+      "source": "google/firing-range — CORS HTTP origin allowed on HTTPS resource (/cors/alloworigin/allowOriginProtocolDowngrade)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/css_style_font_value?q=a",
+      "source": "google/firing-range — reflected XSS CSS font-family style value sink (/reflected/parameter/css_style_font_value)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/javascript_eval?q=a",
+      "source": "google/firing-range — reflected XSS parameter piped into eval() JS sink (/reflected/parameter/javascript_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/tag_name?q=a",
+      "source": "google/firing-range — reflected XSS parameter used as HTML tag name (/reflected/parameter/tag_name)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/javascript_comment?q=a",
+      "source": "google/firing-range — reflected XSS parameter in JS comment block (/reflected/parameter/javascript_comment)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/quoted_onclick?q=a",
+      "source": "google/firing-range — reflected XSS double-quoted onclick event handler sink (/reflected/parameter/quoted_onclick)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/callback?q=a",
+      "source": "google/firing-range — MIME content-sniffing XSS via hidden JSONP callback param (/reflected/contentsniffing/callback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/iframe_attribute_value?q=a",
+      "source": "google/firing-range — reflected XSS iframe attribute value sink (/reflected/parameter/iframe_attribute_value)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/textarea_attribute_value?q=a",
+      "source": "google/firing-range — reflected XSS textarea attribute value sink (/reflected/parameter/textarea_attribute_value)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/style_attribute_value?q=a",
+      "source": "google/firing-range — reflected XSS style attribute value sink (/reflected/parameter/style_attribute_value)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/eval",
+      "source": "google/firing-range — sessionStorage function sink to eval() DOM XSS (/dom/toxicdom/sessionStorage/function/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/address/location.hash/setTimeout",
+      "source": "google/firing-range — location.hash to setTimeout DOM XSS sink (/address/location.hash/setTimeout)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/label?q=a",
+      "source": "google/firing-range — tag-restricted LABEL XSS (/tags/tag/label)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/option?q=a",
+      "source": "google/firing-range — tag-restricted OPTION XSS (/tags/tag/option)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/area?q=a",
+      "source": "google/firing-range — tag-restricted AREA XSS (/tags/tag/area)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/frame?q=a",
+      "source": "google/firing-range — tag-restricted FRAME XSS (/tags/tag/frame)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/source?q=a",
+      "source": "google/firing-range — tag-restricted SOURCE XSS (/tags/tag/source)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/form?q=a",
+      "source": "google/firing-range — tag-restricted FORM XSS (/tags/tag/form)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/input?q=a",
+      "source": "google/firing-range — tag-restricted INPUT XSS (/tags/tag/input)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/button?q=a",
+      "source": "google/firing-range — tag-restricted BUTTON XSS (/tags/tag/button)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/textarea?q=a",
+      "source": "google/firing-range — tag-restricted TEXTAREA XSS (/tags/tag/textarea)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/select?q=a",
+      "source": "google/firing-range — tag-restricted SELECT XSS (/tags/tag/select)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/object.data?q=//example.org",
+      "source": "google/firing-range — location.search to object.data DOM XSS sink (/urldom/location/search/object.data)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/embed.src?q=//example.org",
+      "source": "google/firing-range — location.search to embed.src DOM XSS sink (/urldom/location/search/embed.src)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/link.href?q=//example.org",
+      "source": "google/firing-range — location.search to link.href DOM XSS sink (/urldom/location/search/link.href)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/search/base.href?q=//example.org",
+      "source": "google/firing-range — location.search to base.href DOM XSS sink (/urldom/location/search/base.href)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval",
+      "source": "google/firing-range — localStorage function sink to eval() DOM XSS (/dom/toxicdom/localStorage/function/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag?q=a",
+      "source": "google/firing-range — any-tag XSS filter bypass (/tags/tag)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/a/href?q=a",
+      "source": "google/firing-range — attribute-restricted A HREF XSS (/tags/tag/a/href)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/a/style?q=a",
+      "source": "google/firing-range — attribute-restricted A STYLE XSS (/tags/tag/a/style)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/div/style?q=a",
+      "source": "google/firing-range — attribute-restricted DIV STYLE XSS (/tags/tag/div/style)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/script/src?q=a",
+      "source": "google/firing-range — attribute-restricted SCRIPT SRC XSS (/tags/tag/script/src)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/object?q=a",
+      "source": "google/firing-range — tag-restricted OBJECT XSS (/tags/tag/object)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/embed?q=a",
+      "source": "google/firing-range — tag-restricted EMBED XSS (/tags/tag/embed)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/svg?q=a",
+      "source": "google/firing-range — tag-restricted SVG XSS (/tags/tag/svg)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/link?q=a",
+      "source": "google/firing-range — tag-restricted LINK XSS (/tags/tag/link)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/base?q=a",
+      "source": "google/firing-range — tag-restricted BASE XSS (/tags/tag/base)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/meta?q=a",
+      "source": "google/firing-range — tag-restricted META redirect XSS (/tags/tag/meta)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/div?q=a",
+      "source": "google/firing-range — tag-restricted DIV XSS (/tags/tag/div)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/style?q=a",
+      "source": "google/firing-range — tag-restricted STYLE XSS (/tags/tag/style)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/expression?q=a",
+      "source": "google/firing-range — CSS expression filter bypass tag XSS (/tags/expression)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/multiline?q=a",
+      "source": "google/firing-range — multiline tag regex bypass XSS (/tags/multiline)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/stricttransportsecurity/hsts_max_age_missing",
+      "source": "google/firing-range — HSTS header missing max-age directive (/stricttransportsecurity/hsts_max_age_missing)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/stricttransportsecurity/hsts_includesubdomains_missing",
+      "source": "google/firing-range — HSTS header missing includeSubDomains (/stricttransportsecurity/hsts_includesubdomains_missing)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/stricttransportsecurity/hsts_preload_missing",
+      "source": "google/firing-range — HSTS header missing preload directive (/stricttransportsecurity/hsts_preload_missing)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowNullOrigin",
+      "source": "google/firing-range — CORS allows null origin with credentials (/cors/alloworigin/allowNullOrigin)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowInsecureScheme",
+      "source": "google/firing-range — CORS allows HTTP origin on HTTPS resource (/cors/alloworigin/allowInsecureScheme)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/javascripturi",
+      "source": "google/firing-range — DOM XSS via javascript: URI sinks (/dom/javascripturi)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/invalidframingconfig",
+      "source": "google/firing-range — invalid X-Frame-Options / clickjacking framing misconfig lab (/invalidframingconfig)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/remoteinclude/object_hash",
+      "source": "google/firing-range — remote object inclusion via URL fragment hash (/remoteinclude/object_hash)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reverseclickjacking/universalreverseclickjacking_actiononly",
+      "source": "google/firing-range — universal reverse clickjacking action-only variant (/reverseclickjacking/universalreverseclickjacking_actiononly)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/vulnerablelibraries/jquery",
+      "source": "google/firing-range — known-vulnerable jQuery 1.8.1 inclusion testbed (/vulnerablelibraries/jquery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/function/innerHtml",
+      "source": "google/firing-range — localStorage function sink to innerHTML DOM XSS (/dom/toxicdom/localStorage/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/complexMessageDocumentWriteEval",
+      "source": "google/firing-range — postMessage complex message documentWrite+eval route (/dom/toxicdom/postMessage/complexMessageDocumentWriteEval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison",
+      "source": "google/firing-range — postMessage weak origin check (partial string match) (/dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithRegExp",
+      "source": "google/firing-range — postMessage weak origin check (insecure RegExp) (/dom/toxicdom/postMessage/improperOriginValidationWithRegExp)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/401?q=a",
+      "source": "google/firing-range — reflected XSS in BODY with HTTP 401 status (/reflected/parameter/body/401)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/body?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into HTML body sink (/escape/serverside/escapeHtml/body)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/body?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into HTML body sink (/escape/serverside/encodeUrl/body)",
       "auth": "public_demo"
     },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/innerHtml",
-      "source": "google/firing-range — postMessage handler missing origin check → innerHTML DOM XSS sink",
+      "source": "google/firing-range — postMessage handler missing origin check sinks to innerHTML (/dom/toxicdom/postMessage/innerHtml)",
       "auth": "public_demo"
     },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/documentWrite",
-      "source": "google/firing-range — postMessage handler missing origin check → document.write DOM XSS sink",
+      "source": "google/firing-range — postMessage handler missing origin check sinks to document.write (/dom/toxicdom/postMessage/documentWrite)",
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/json?q=a",
-      "source": "google/firing-range — MIME content-sniffing JSON reflected XSS (/reflected/contentsniffing/json)",
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/json?q=a",
+      "source": "google/firing-range — reflected XSS via JSON parameter with JSON content-type (/reflected/parameter/json)",
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml",
-      "source": "google/firing-range — DOM propagation stored payload → innerHTML sink (/dom/dompropagation/window/innerHtml)",
+      "url": "https://public-firing-range.appspot.com/escape/js/html_escape?q=a",
+      "source": "google/firing-range — client-side html_escape() bypass XSS oracle (/escape/js/html_escape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/js/encodeURIComponent?q=a",
+      "source": "google/firing-range — client-side encodeURIComponent() bypass XSS oracle (/escape/js/encodeURIComponent)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/js/escape?q=a",
+      "source": "google/firing-range — client-side escape() bypass XSS oracle (/escape/js/escape)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/tagname?q=a",
+      "source": "google/firing-range — server-side escapeHtml tagname injection sink (/escape/serverside/escapeHtml/tagname)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/attribute_unquoted?q=a",
+      "source": "google/firing-range — server-side encodeUrl unquoted attribute XSS sink (/escape/serverside/encodeUrl/attribute_unquoted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_quoted_string?q=a",
+      "source": "google/firing-range — reflected XSS parameter in double-quoted JS string assignment (/reflected/parameter/js_quoted_string)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_singlequoted_string?q=a",
+      "source": "google/firing-range — reflected XSS parameter in single-quoted JS string assignment (/reflected/parameter/js_singlequoted_string)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_slashquoted_string?q=a",
+      "source": "google/firing-range — reflected XSS parameter in slash-quoted JS string assignment (/reflected/parameter/js_slashquoted_string)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/object/data?q=a",
+      "source": "google/firing-range — reflected XSS via OBJECT data URL sink (/reflected/url/object/data)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/param/src?q=a",
+      "source": "google/firing-range — reflected XSS via OBJECT PARAM src URL sink (/reflected/url/param/src)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_lowercase_script?q=a",
+      "source": "google/firing-range — reflected XSS body sink with lowercase 'script' filter bypass (/reflected/parameter/body/blocks_lowercase_script)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_uppercase_script?q=a",
+      "source": "google/firing-range — reflected XSS body sink with uppercase 'SCRIPT' filter bypass (/reflected/parameter/body/blocks_uppercase_script)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_any_script?q=a",
+      "source": "google/firing-range — reflected XSS body sink with case-insensitive 'script' filter bypass (/reflected/parameter/body/blocks_any_script)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote?q=a",
+      "source": "google/firing-range — reflected XSS unquoted attribute with quote-filter bypass (/reflected/parameter/attribute_unquoted/blocks_doublequotesinglequote)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/blocks_space_doublequote_slash_equals?q=a",
+      "source": "google/firing-range — reflected XSS body sink with space/dquote/slash/equals filter bypass (/reflected/parameter/body/blocks_space_doublequote_slash_equals)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_eval?q=a",
+      "source": "google/firing-range — reflected XSS parameter piped into eval() JS sink (/reflected/parameter/js_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_assignment?q=a",
+      "source": "google/firing-range — reflected XSS unquoted JS assignment sink (/reflected/parameter/js_assignment)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/js_comment?q=a",
+      "source": "google/firing-range — reflected XSS parameter inside JS comment block (/reflected/parameter/js_comment)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/attribute_name?q=a",
+      "source": "google/firing-range — reflected XSS parameter used as HTML attribute name (/reflected/parameter/attribute_name)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/form",
+      "source": "google/firing-range — POST-only reflected XSS form trigger (/reflected/parameter/form)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/badscriptimport/",
+      "source": "google/firing-range — bad JavaScript import from typosquatting/private-network domains (/badscriptimport/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/leakedcookie/",
+      "source": "google/firing-range — httpOnly cookie leaked to JavaScript (/leakedcookie/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/vulnerablelibraries/",
+      "source": "google/firing-range — known-vulnerable JS library inclusion testbed (/vulnerablelibraries/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/mixedcontent/",
+      "source": "google/firing-range — mixed HTTP/HTTPS content misconfiguration lab (/mixedcontent/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reverseclickjacking/",
+      "source": "google/firing-range — reverse clickjacking UI-redress testbed (/reverseclickjacking/)",
       "auth": "public_demo"
     },
     {
@@ -12999,6 +13829,182 @@
       "url": "https://pentest-fauxbank.vercel.app/api/users",
       "source": "pentest-fauxbank — user enumeration / BOLA oracle GET /api/users (Vercel OSS banking lab)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/js?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into JS eval sink (/escape/serverside/escapeHtml/js)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/js?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into JS eval sink (/escape/serverside/encodeUrl/js)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/eval?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into eval() sink (/escape/serverside/escapeHtml/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/encodeUrl/eval?q=a",
+      "source": "google/firing-range — server-side encodeUrl bypass into eval() sink (/escape/serverside/encodeUrl/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/search?q=test",
+      "source": "chethan-vinayak/vulnshop — SQLi product search oracle GET /search?q= (Vercel OSS deploy README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/url/object_param?q=a",
+      "source": "google/firing-range — reflected URL param echoed in OBJECT PARAM src attribute (/reflected/url/object_param)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/contentsniffing/json?q=a",
+      "source": "google/firing-range — MIME content-sniffing XSS via JSON body with HTML content-type (/reflected/contentsniffing/json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml",
+      "source": "google/firing-range — sessionStorage function sink to innerHTML DOM XSS (/dom/toxicdom/sessionStorage/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/postMessage/eval",
+      "source": "google/firing-range — postMessage handler missing origin check sinks to eval (/dom/toxicdom/postMessage/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/documentWrite",
+      "source": "google/firing-range — external script sessionStorage property to document.write DOM XSS",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/register",
+      "source": "apisec-inc/urban-VAmPI production — mass-assignment admin oracle POST /users/v1/register (Railway README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/_debug",
+      "source": "apisec-inc/urban-VAmPI production — excessive data exposure debug oracle GET /users/v1/_debug (Railway README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo2.testfire.net/search.jsp",
+      "source": "HCL AltoroJ demo2.testfire.net — reflected XSS/SQLi search oracle (ZAP testfire benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo2.testfire.net/bank/customize.jsp",
+      "source": "HCL AltoroJ demo2.testfire.net — reflected XSS customize oracle (ZAP AltoroJ benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo2.testfire.net/doLogin",
+      "source": "HCL AltoroJ demo2.testfire.net — SQLi login oracle POST /doLogin (ZAP AltoroJ benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/graphiql",
+      "source": "dolevf/DVGA on Pentest Ground — GraphiQL introspection interface (port 5013 public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/my_pastes",
+      "source": "dolevf/DVGA on Pentest Ground — private pastes IDOR/BOLA oracle GET /my_pastes",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/import_paste",
+      "source": "dolevf/DVGA on Pentest Ground — SSRF via paste import oracle (/import_paste)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/upload_paste",
+      "source": "dolevf/DVGA on Pentest Ground — stored XSS / file upload oracle (/upload_paste)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/create_paste",
+      "source": "dolevf/DVGA on Pentest Ground — stored XSS / log injection oracle (/create_paste)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/comments?comment=test",
+      "source": "zahidoverflow/damn-vulnerable-web-university — reflected/stored XSS oracle GET /api/comments (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/search?q=test",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi search oracle GET /api/search (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/redirect?url=https://example.com",
+      "source": "zahidoverflow/damn-vulnerable-web-university — open redirect oracle GET /api/redirect (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/messages/1",
+      "source": "MRMcyber/vaultapp — private message IDOR oracle GET /api/messages/:id (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/notes/1",
+      "source": "MRMcyber/vaultapp — private note IDOR oracle GET /api/notes/:id (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/authbypass/",
+      "source": "DVWA on Pentest Ground — authentication bypass oracle GET /vulnerabilities/authbypass (public port 4280 demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Products?q=test",
+      "source": "Escape.tech Juice Shop demo — product search/SQLi oracle GET /api/Products?q= (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/feedback",
+      "source": "chethan-vinayak/vulnshop — feedback file-upload / stored-XSS oracle POST /feedback (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/wallet",
+      "source": "chethan-vinayak/vulnshop — wallet top-up business-logic oracle (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/users",
+      "source": "chethan-vinayak/vulnshop — excessive data exposure oracle GET /api/users (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/products/1/reviews",
+      "source": "Escape.tech Juice Shop demo — product reviews BOLA oracle GET /rest/products/:id/reviews (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/docs/",
+      "source": "Invicti/Acunetix rest.vulnweb.com — Swagger/OpenAPI docs surface for JWT/Basic/OAuth2 API vuln training (vulnweb.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testasp.vulnweb.com/ShowForum.asp?id=0",
+      "source": "Acunetix Acuforum — classic ASP SQLi forum oracle GET /ShowForum.asp?id= (testasp.vulnweb.com IIS/ASP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testaspnet.vulnweb.com/Comments.aspx?id=1",
+      "source": "Acunetix Acublog — ASP.NET IDOR/comments oracle GET /Comments.aspx?id= (testaspnet.vulnweb.com lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testasp.vulnweb.com/login.asp",
+      "source": "Acunetix Acuforum — ASP authentication bypass / SQLi login oracle POST /login.asp (testasp.vulnweb.com lab)",
+      "auth": "public_demo"
     }
-  ]
+  ],
+  "discovery_urls_added": 15
 }
