@@ -3618,6 +3618,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-inputtyping-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM inputTyping eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/inputTyping/eval returns a page that copies input keystrokes into eval() on keyup/change — Firing Range inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to eval() enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from input keyup/change handlers.",
+        "Treat user input as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/eval uses eval() on input keystrokes. Show inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/inputTyping/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/inputTyping/eval, input keystrokes are passed to eval() without sanitization — route-specific inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on inputTyping handlers in /dom/toxicdom routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous code execution sinks.",
+        "Encode or sanitize before any dynamic evaluation.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/eval route uses eval() on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM inputTyping document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/inputTyping/documentWrite returns a page that copies input keystrokes into document.write() on keyup/change — Firing Range inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to document.write() enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() calls on values from input keyup/change handlers.",
+        "Treat user input as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/documentWrite uses document.write on input keystrokes. Show inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-inputtyping-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/inputTyping/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/inputTyping/documentWrite, input keystrokes are passed to document.write() without sanitization — route-specific inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not passed to document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomInputtypingDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write() sinks on inputTyping handlers in /dom/toxicdom routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/inputTyping/documentWrite route uses document.write on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-jsoncallback-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -5798,6 +5902,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /tags/tag/button route allows BUTTON tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-meta-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range META tag injection oracle",
+    description:
+      "GET /tags/tag/meta?q= accepts attacker-controlled <meta> tags and reflects them into the response — Firing Range META tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient META tag filtering allows attacker-controlled meta elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagMetaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode META tag injection in /tags/tag/meta routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/meta route accepts META tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-meta-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/meta route XSS oracle",
+    description:
+      "When scanning /tags/tag/meta, q parameter injects attacker-controlled <meta> tags — route-specific META tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm META tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagMetaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix META tag filtering on /tags/tag/meta route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/meta.",
+        "Add output encoding tests for META tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/meta route allows META tag injection via q. Show route-specific tag injection XSS remediation.",
     version: 1,
     enabled: true
   },
