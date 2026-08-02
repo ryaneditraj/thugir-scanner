@@ -2,6 +2,42 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/window/name/documentWrite var payload=window.name → document.write(payload); window/name/documentWrite route scan findings 116→123 (+window-name-documentwrite live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-window-name-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/window/name/documentWrite confirms window.name → document.write() toxic DOM sink; findings 116→123; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/property/documentWrite sessionStorage.badValue → document.write(payload); sessionStorage/property/documentWrite route scan findings 115→122 (+sessionstorage-property-documentwrite live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-property-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/sessionStorage/property/documentWrite confirms sessionStorage.badValue → document.write() toxic DOM sink; findings 115→122; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/property/documentWrite localStorage.badValue → document.write(payload); localStorage/property/documentWrite route scan findings 0→123 (+localstorage-property-documentwrite live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-property-documentwrite-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /dom/toxicdom/localStorage/property/documentWrite confirms localStorage.badValue → document.write() toxic DOM sink; findings 123 with route-specific oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-referrer-innerhtml-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/referrer/innerHtml unescape(document.referrer) → div.innerHTML=payload; referrer/innerHtml route scan findings 116→120 (+referrer-innerhtml live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
