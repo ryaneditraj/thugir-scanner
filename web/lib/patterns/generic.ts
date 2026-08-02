@@ -2682,6 +2682,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-cookie-set-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM cookie_set innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie_set/innerHtml returns a page that reads document.cookie badValue and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Cookie values passed to innerHTML enable DOM XSS when attackers can set the badValue cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/innerHtml uses innerHTML on cookie values. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie_set/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie_set/innerHtml, cookie badValue is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not assigned to innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/innerHtml route uses innerHTML on cookie values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM cookie_set document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie_set/documentWrite returns a page that reads document.cookie badValue and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Cookie values passed to document.write() enable DOM XSS when attackers can set the badValue cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/documentWrite uses document.write on cookie values. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-set-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie_set/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie_set/documentWrite, cookie badValue is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieSetDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie_set/documentWrite route uses document.write on cookie values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-cookie-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -5694,6 +5798,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/dompropagation/window/formSubmission/eval route propagates location.hash to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-documentwrite-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DOM propagation window.documentWrite eval XSS oracle",
+    description:
+      "GET /dom/dompropagation/window/documentWrite/eval returns a page that writes location.hash to window.status and passes the retrieved value to eval() — Firing Range DOM propagation XSS training oracle.",
+    impactOneline:
+      "DOM property propagation from location.hash to window.status enables eval-based XSS when attackers control the URL fragment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowDocumentwriteEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never propagate URL fragments through DOM properties to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values read back from window.status or other DOM properties.",
+        "Treat location.hash as untrusted and avoid round-tripping through DOM sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/documentWrite/eval propagates location.hash via window.status to eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-documentwrite-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/window/documentWrite/eval route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/window/documentWrite/eval, location.hash is propagated via window.status to eval() without sanitization — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments are not propagated through DOM properties to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on DOM-propagated values in /dom/dompropagation/window handlers.",
+      steps: [
+        "Audit location.hash reads that write to window.status or similar DOM properties.",
+        "Encode or sanitize before any dangerous sink.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/documentWrite/eval route propagates location.hash via window.status to eval(). Show route-specific DOM propagation XSS remediation.",
     version: 1,
     enabled: true
   },

@@ -960,6 +960,10 @@ const DEEP_RULES = new Set<string>([
   "firingRangeReflectedContentsniffingJsonRouteLiveOracle",
   "firingRangeDomCookieSetEvalLiveOracle",
   "firingRangeDomCookieSetEvalRouteLiveOracle",
+  "firingRangeDomCookieSetInnerhtmlLiveOracle",
+  "firingRangeDomCookieSetInnerhtmlRouteLiveOracle",
+  "firingRangeDomCookieSetDocumentwriteLiveOracle",
+  "firingRangeDomCookieSetDocumentwriteRouteLiveOracle",
   "firingRangeDomCookieEvalLiveOracle",
   "firingRangeDomCookieEvalRouteLiveOracle",
   "firingRangeDomCookieInnerhtmlLiveOracle",
@@ -1066,6 +1070,8 @@ const DEEP_RULES = new Set<string>([
   "firingRangeDomPropagationEvalRouteLiveOracle",
   "firingRangeDomPropagationWindowEvalLiveOracle",
   "firingRangeDomPropagationWindowEvalRouteLiveOracle",
+  "firingRangeDomPropagationWindowDocumentwriteEvalLiveOracle",
+  "firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle",
   "firingRangeRemoteIncludeScriptHashLiveOracle",
   "firingRangeRemoteIncludeScriptHashRouteLiveOracle",
   "firingRangeRemoteIncludeParameterScriptLiveOracle",
@@ -4164,9 +4170,12 @@ function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
     "/reflected/url/script_src",
     "/reflected/url/object_data",
     "/dom/toxicdom/document/cookie_set/eval",
+    "/dom/toxicdom/document/cookie_set/innerHtml",
+    "/dom/toxicdom/document/cookie_set/documentWrite",
     "/dom/toxicdom/document/cookie/eval",
     "/dom/toxicdom/document/cookie/innerHtml",
     "/dom/dompropagation/window/formSubmission/eval",
+    "/dom/dompropagation/window/documentWrite/eval",
     "/dom/toxicdom/window/name/eval"
   ]) {
     try {

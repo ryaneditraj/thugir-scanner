@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T15:02:15.879Z",
-  "total": 1515,
-  "uniqueSlugs": 1510,
+  "generatedAt": "2026-08-02T16:10:52.718Z",
+  "total": 1521,
+  "uniqueSlugs": 1516,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1497,
+    "generic": 1503,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1430,
+    "deep": 1436,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 404,
+    "Cross-site scripting": 410,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -868,8 +868,12 @@
     "firing-range-dom-cookie-eval-route-live-oracle",
     "firing-range-dom-cookie-innerhtml-live-oracle",
     "firing-range-dom-cookie-innerhtml-route-live-oracle",
+    "firing-range-dom-cookie-set-documentwrite-live-oracle",
+    "firing-range-dom-cookie-set-documentwrite-route-live-oracle",
     "firing-range-dom-cookie-set-eval-live-oracle",
     "firing-range-dom-cookie-set-eval-route-live-oracle",
+    "firing-range-dom-cookie-set-innerhtml-live-oracle",
+    "firing-range-dom-cookie-set-innerhtml-route-live-oracle",
     "firing-range-dom-form-submission-documentwrite-live-oracle",
     "firing-range-dom-form-submission-documentwrite-route-live-oracle",
     "firing-range-dom-form-submission-eval-live-oracle",
@@ -894,6 +898,8 @@
     "firing-range-dom-postmessage-innerhtml-route-live-oracle",
     "firing-range-dom-propagation-eval-live-oracle",
     "firing-range-dom-propagation-eval-route-live-oracle",
+    "firing-range-dom-propagation-window-documentwrite-eval-live-oracle",
+    "firing-range-dom-propagation-window-documentwrite-eval-route-live-oracle",
     "firing-range-dom-propagation-window-eval-live-oracle",
     "firing-range-dom-propagation-window-eval-route-live-oracle",
     "firing-range-dom-referrer-documentwrite-live-oracle",
