@@ -27,11 +27,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/innerHtml",
-      "source": "google/firing-range — external script localStorage property to innerHTML DOM XSS (/dom/toxicdom/external/localStorage/property/innerHtml)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/eval",
       "source": "google/firing-range — document.cookie (unset) sink to eval() DOM XSS (/dom/toxicdom/document/cookie/eval)",
       "auth": "public_demo"
