@@ -38189,6 +38189,103 @@ const firingRangeDomPostMessageDocumentwriteRouteLiveOracle: Rule = async (ctx) 
   };
 };
 
+async function probeFiringRangePostMessageWeakOriginEval(
+  ctx: RuleContext,
+  probePath: string,
+  originCheckRe: RegExp,
+  label: string
+): Promise<RuleResult> {
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasWeakOriginEval =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /addEventListener\s*\(\s*['"]message['"]/i.test(body) &&
+    originCheckRe.test(body) &&
+    /eval\s*\(\s*msg\.data\s*\)/i.test(body);
+  if (!hasWeakOriginEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: `Google Firing Range ${probePath} uses ${label} then eval(msg.data) — weak postMessage origin validation DOM XSS oracle`
+    }
+  };
+}
+
+const FIRING_RANGE_POSTMESSAGE_IMPROPER_ORIGIN_PARTIAL_PATH =
+  "/dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison";
+
+const firingRangeDomPostMessageImproperOriginPartialLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangePostMessageWeakOriginEval(
+    ctx,
+    FIRING_RANGE_POSTMESSAGE_IMPROPER_ORIGIN_PARTIAL_PATH,
+    /msg\.origin\.includes\s*\(\s*['"]www\.google\.com['"]\s*\)/i,
+    "partial string origin check (includes)"
+  );
+};
+
+const firingRangeDomPostMessageImproperOriginPartialRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/dom\/toxicdom\/postMessage\/improperOriginValidationWithPartialStringComparison\b/i.test(
+      pageUrl
+    )
+  ) {
+    return NEGATIVE;
+  }
+  const result = await firingRangeDomPostMessageImproperOriginPartialLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison route scan — partial origin.includes() check then eval(msg.data)"
+    }
+  };
+};
+
+const FIRING_RANGE_POSTMESSAGE_IMPROPER_ORIGIN_REGEXP_PATH =
+  "/dom/toxicdom/postMessage/improperOriginValidationWithRegExp";
+
+const firingRangeDomPostMessageImproperOriginRegexpLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangePostMessageWeakOriginEval(
+    ctx,
+    FIRING_RANGE_POSTMESSAGE_IMPROPER_ORIGIN_REGEXP_PATH,
+    /msg\.origin\.match\s*\(\s*originRegExp\s*\)/i,
+    "regex origin check (unanchored)"
+  );
+};
+
+const firingRangeDomPostMessageImproperOriginRegexpRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/dom\/toxicdom\/postMessage\/improperOriginValidationWithRegExp\b/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const result = await firingRangeDomPostMessageImproperOriginRegexpLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/postMessage/improperOriginValidationWithRegExp route scan — unanchored origin RegExp then eval(msg.data)"
+    }
+  };
+};
+
 const FIRING_RANGE_POSTMESSAGE_INNERHTML_PATH = "/dom/toxicdom/postMessage/innerHtml";
 
 const firingRangeDomPostMessageInnerHtmlLiveOracle: Rule = async (ctx) => {
@@ -39656,6 +39753,33 @@ const firingRangeDomCookieInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/document/cookie/innerHtml route scan — unset cookie lookup passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const firingRangeDomCookieDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/document/cookie/documentWrite",
+    FIRING_RANGE_DOM_COOKIE_UNSET_SOURCE_RE,
+    "document.cookie (unset lookup)"
+  );
+};
+
+const firingRangeDomCookieDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/cookie\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomCookieDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/cookie/documentWrite route scan — unset cookie lookup passed to document.write() without sanitization"
     }
   };
 };
@@ -56529,6 +56653,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomCookieEvalRouteLiveOracle,
   firingRangeDomCookieInnerhtmlLiveOracle,
   firingRangeDomCookieInnerhtmlRouteLiveOracle,
+  firingRangeDomCookieDocumentwriteLiveOracle,
+  firingRangeDomCookieDocumentwriteRouteLiveOracle,
   firingRangeDomWindowNameEvalLiveOracle,
   firingRangeDomWindowNameEvalRouteLiveOracle,
   firingRangeDomReferrerEvalLiveOracle,
@@ -56583,6 +56709,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeReflectedParameterJsonRouteLiveOracle,
   firingRangeDomPostMessageDocumentwriteLiveOracle,
   firingRangeDomPostMessageDocumentwriteRouteLiveOracle,
+  firingRangeDomPostMessageImproperOriginPartialLiveOracle,
+  firingRangeDomPostMessageImproperOriginPartialRouteLiveOracle,
+  firingRangeDomPostMessageImproperOriginRegexpLiveOracle,
+  firingRangeDomPostMessageImproperOriginRegexpRouteLiveOracle,
   firingRangeReflectedIframeSrcdocLiveOracle,
   firingRangeReflectedIframeSrcdocRouteLiveOracle,
   firingRangeReflectedParameterIframeAttributeValueLiveOracle,

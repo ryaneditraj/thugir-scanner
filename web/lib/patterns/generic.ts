@@ -2786,6 +2786,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-cookie-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM unset cookie document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/cookie/documentWrite returns a page that reads document.cookie via lookupCookie('ThisCookieIsTotallyRandomAndCantPossiblyBeSet') and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "Unset cookie lookups passed to document.write() enable DOM XSS when attackers can set the target cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass cookie values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from document.cookie.",
+        "Treat cookies as untrusted text and render with safe DOM APIs.",
+        "Use CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/documentWrite uses document.write on unset cookie lookups. Show toxic DOM cookie XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-cookie-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/cookie/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie/documentWrite, unset cookie lookup is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm cookie-backed values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomCookieDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on cookie-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all document.cookie reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/cookie/documentWrite route uses document.write on unset cookie lookups. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-window-name-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4186,6 +4238,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/toxicdom/postMessage/documentWrite route sinks msg.data to document.write. Show route-specific postMessage document.write remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-partial-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage partial origin validation eval oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison registers a message listener that checks msg.origin.includes('www.google.com') then evals msg.data — Firing Range weak postMessage origin validation DOM XSS training oracle.",
+    impactOneline:
+      "Partial string origin checks (includes/substring) on postMessage enable origin bypass and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginPartialLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strict origin equality checks — never includes() or substring matching for postMessage.",
+      steps: [
+        "Replace partial origin checks with event.origin === expectedOrigin.",
+        "Remove eval() from postMessage handlers.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler uses origin.includes() then eval(msg.data). Show safe postMessage origin validation without partial string matching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-partial-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison, postMessage handler uses partial origin.includes() check then eval(msg.data) — route-specific weak origin validation oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not use bypassable partial origin checks before eval sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginPartialRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix weak origin validation on this postMessage route.",
+      steps: [
+        "Replace origin.includes() with strict equality against an allowlist.",
+        "Remove eval() from the message handler.",
+        "Audit all postMessage listeners for similar bypass patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison route uses partial origin validation then eval. Show route-specific postMessage origin bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-regexp-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage regex origin validation eval oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/improperOriginValidationWithRegExp registers a message listener that matches msg.origin against an unanchored RegExp then evals msg.data — Firing Range weak postMessage origin validation DOM XSS training oracle.",
+    impactOneline:
+      "Unanchored regex origin checks on postMessage enable origin bypass and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginRegexpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use strict origin equality checks — never unanchored regex matching for postMessage.",
+      steps: [
+        "Replace regex origin checks with event.origin === expectedOrigin.",
+        "Remove eval() from postMessage handlers.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler uses origin.match(RegExp) then eval(msg.data). Show safe postMessage origin validation without regex bypass.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-improper-origin-regexp-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage/improperOriginValidationWithRegExp route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage/improperOriginValidationWithRegExp, postMessage handler uses unanchored origin RegExp then eval(msg.data) — route-specific weak origin validation oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not use bypassable regex origin checks before eval sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageImproperOriginRegexpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix weak regex origin validation on this postMessage route.",
+      steps: [
+        "Replace origin.match() with strict equality against an allowlist.",
+        "Remove eval() from the message handler.",
+        "Audit all postMessage listeners for similar bypass patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/improperOriginValidationWithRegExp route uses regex origin validation then eval. Show route-specific postMessage origin bypass remediation.",
     version: 1,
     enabled: true
   },
