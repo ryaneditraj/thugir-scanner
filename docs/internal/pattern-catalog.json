@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T17:02:20.229Z",
-  "total": 1527,
-  "uniqueSlugs": 1522,
+  "generatedAt": "2026-08-02T18:04:28.186Z",
+  "total": 1533,
+  "uniqueSlugs": 1528,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1509,
+    "generic": 1515,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1442,
+    "deep": 1448,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 416,
+    "Cross-site scripting": 422,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -880,6 +880,8 @@
     "firing-range-dom-form-submission-eval-route-live-oracle",
     "firing-range-dom-form-submission-innerhtml-live-oracle",
     "firing-range-dom-form-submission-innerhtml-route-live-oracle",
+    "firing-range-dom-inputtyping-innerhtml-live-oracle",
+    "firing-range-dom-inputtyping-innerhtml-route-live-oracle",
     "firing-range-dom-javascripturi-live-oracle",
     "firing-range-dom-javascripturi-route-live-oracle",
     "firing-range-dom-localstorage-property-documentwrite-live-oracle",
@@ -920,6 +922,8 @@
     "firing-range-dom-sessionstorage-property-documentwrite-route-live-oracle",
     "firing-range-dom-sessionstorage-property-eval-live-oracle",
     "firing-range-dom-sessionstorage-property-eval-route-live-oracle",
+    "firing-range-dom-sessionstorage-property-innerhtml-live-oracle",
+    "firing-range-dom-sessionstorage-property-innerhtml-route-live-oracle",
     "firing-range-dom-window-name-documentwrite-live-oracle",
     "firing-range-dom-window-name-documentwrite-route-live-oracle",
     "firing-range-dom-window-name-eval-live-oracle",
@@ -988,6 +992,8 @@
     "firing-range-reflected-js-singlequoted-string-route-live-oracle",
     "firing-range-reflected-js-slashquoted-string-live-oracle",
     "firing-range-reflected-js-slashquoted-string-route-live-oracle",
+    "firing-range-reflected-jsoncallback-live-oracle",
+    "firing-range-reflected-jsoncallback-route-live-oracle",
     "firing-range-reflected-param-live-oracle",
     "firing-range-reflected-param-route-live-oracle",
     "firing-range-reflected-parameter-body-non2xx-live-oracle",
