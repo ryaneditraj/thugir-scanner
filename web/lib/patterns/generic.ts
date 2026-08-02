@@ -5178,6 +5178,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-urldom-location-search-param-code-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search param.code.value DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/param.code.value reads document.location.search.substr(1) and assigns it to Flash param code — Firing Range param.code.value DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to Flash param code enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamCodeValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to Flash param code — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove Flash param code assignments on values from window.location.search.",
+        "Allow-list Flash object parameters in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.code.value uses Flash param code on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-code-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/param.code.value route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/param.code.value, location.search is assigned to Flash param code without sanitization — route-specific param.code.value DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot seed arbitrary Flash param code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamCodeValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Flash param code sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for Flash object parameter sinks.",
+        "Allow-list Flash object parameters.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.code.value route assigns location.search to Flash param code. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-src-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search param.src.value DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/param.src.value reads document.location.search.substr(1) and assigns it to Flash param src — Firing Range param.src.value DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to Flash param src enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamSrcValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to Flash param src — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove Flash param src assignments on values from window.location.search.",
+        "Allow-list Flash object parameters in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.src.value uses Flash param src on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-src-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/param.src.value route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/param.src.value, location.search is assigned to Flash param src without sanitization — route-specific param.src.value DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot seed arbitrary Flash param src.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamSrcValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Flash param src sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for Flash object parameter sinks.",
+        "Allow-list Flash object parameters.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.src.value route assigns location.search to Flash param src. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-svg-a-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search svg.a DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/svg.a reads document.location.search.substr(1) and assigns it to SVG xlink:href — Firing Range svg.a DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to SVG xlink:href enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchSvgALiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to SVG xlink:href — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove SVG xlink:href assignments on values from window.location.search.",
+        "Allow-list SVG link targets in production applications.",
+        "Use CSP navigate-to restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/svg.a uses SVG xlink:href on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-svg-a-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/svg.a route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/svg.a, location.search is assigned to SVG xlink:href without sanitization — route-specific svg.a DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot set arbitrary SVG xlink:href.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchSvgARouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove SVG xlink:href sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for SVG link navigation sinks.",
+        "Allow-list SVG link targets.",
+        "Add CSP navigate-to restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/svg.a route assigns location.search to SVG xlink:href. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-urldom-location-hash-script-src-partial-domain-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
