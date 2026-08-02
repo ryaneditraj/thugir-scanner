@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T18:04:28.186Z",
-  "total": 1533,
-  "uniqueSlugs": 1528,
+  "generatedAt": "2026-08-02T19:02:11.759Z",
+  "total": 1539,
+  "uniqueSlugs": 1534,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1515,
+    "generic": 1521,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1448,
+    "deep": 1454,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 422,
+    "Cross-site scripting": 428,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -880,6 +880,10 @@
     "firing-range-dom-form-submission-eval-route-live-oracle",
     "firing-range-dom-form-submission-innerhtml-live-oracle",
     "firing-range-dom-form-submission-innerhtml-route-live-oracle",
+    "firing-range-dom-inputtyping-documentwrite-live-oracle",
+    "firing-range-dom-inputtyping-documentwrite-route-live-oracle",
+    "firing-range-dom-inputtyping-eval-live-oracle",
+    "firing-range-dom-inputtyping-eval-route-live-oracle",
     "firing-range-dom-inputtyping-innerhtml-live-oracle",
     "firing-range-dom-inputtyping-innerhtml-route-live-oracle",
     "firing-range-dom-javascripturi-live-oracle",
@@ -1046,6 +1050,8 @@
     "firing-range-tags-tag-input-route-live-oracle",
     "firing-range-tags-tag-label-live-oracle",
     "firing-range-tags-tag-label-route-live-oracle",
+    "firing-range-tags-tag-meta-live-oracle",
+    "firing-range-tags-tag-meta-route-live-oracle",
     "firing-range-tags-tag-object-live-oracle",
     "firing-range-tags-tag-object-route-live-oracle",
     "firing-range-tags-tag-option-live-oracle",
