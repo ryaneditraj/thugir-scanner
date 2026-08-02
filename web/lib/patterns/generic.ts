@@ -4190,6 +4190,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-tags-tag-area-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AREA tag injection oracle",
+    description:
+      "GET /tags/tag/area?q= accepts attacker-controlled <area> tags and reflects them into the response — Firing Range AREA tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient AREA tag filtering allows attacker-controlled area elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAreaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode AREA tag injection in /tags/tag/area routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/area route accepts AREA tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-area-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/area route XSS oracle",
+    description:
+      "When scanning /tags/tag/area, q parameter injects attacker-controlled <area> tags — route-specific AREA tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm AREA tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagAreaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix AREA tag filtering on /tags/tag/area route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/area.",
+        "Add output encoding tests for AREA tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/area route allows AREA tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-input-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range INPUT tag injection oracle",
+    description:
+      "GET /tags/tag/input?q= accepts attacker-controlled <input> tags and reflects them into the response — Firing Range INPUT tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient INPUT tag filtering allows attacker-controlled input elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagInputLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode INPUT tag injection in /tags/tag/input routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/input route accepts INPUT tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-input-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/input route XSS oracle",
+    description:
+      "When scanning /tags/tag/input, q parameter injects attacker-controlled <input> tags — route-specific INPUT tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm INPUT tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagInputRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix INPUT tag filtering on /tags/tag/input route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/input.",
+        "Add output encoding tests for INPUT tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/input route allows INPUT tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-button-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range BUTTON tag injection oracle",
+    description:
+      "GET /tags/tag/button?q= accepts attacker-controlled <button> tags and reflects them into the response — Firing Range BUTTON tag injection XSS training oracle.",
+    impactOneline:
+      "Insufficient BUTTON tag filtering allows attacker-controlled button elements to be reflected into the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagButtonLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block or encode BUTTON tag injection in /tags/tag/button routes.",
+      steps: [
+        "Reject or encode angle brackets in user input.",
+        "Use strict allow-lists for permitted HTML tags.",
+        "Add CSP as defense-in-depth against tag injection XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/button route accepts BUTTON tag injection via q parameter. Show tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-tags-tag-button-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /tags/tag/button route XSS oracle",
+    description:
+      "When scanning /tags/tag/button, q parameter injects attacker-controlled <button> tags — route-specific BUTTON tag injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm BUTTON tag injection cannot create exploitable HTML elements.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeTagsTagButtonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix BUTTON tag filtering on /tags/tag/button route.",
+      steps: [
+        "Encode or reject HTML tags in q parameter.",
+        "Audit tag injection contexts on /tags/tag/button.",
+        "Add output encoding tests for BUTTON tag injection."
+      ]
+    },
+    fixPrompt:
+      "Our /tags/tag/button route allows BUTTON tag injection via q. Show route-specific tag injection XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

@@ -40259,6 +40259,24 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<form>",
     bodyRe: /<form><\/form>/i,
     label: "FORM tag injection"
+  },
+  {
+    path: "/tags/tag/area",
+    q: "<area>",
+    bodyRe: /<area\s*>/i,
+    label: "AREA tag injection"
+  },
+  {
+    path: "/tags/tag/input",
+    q: "<input>",
+    bodyRe: /<input\s*>/i,
+    label: "INPUT tag injection"
+  },
+  {
+    path: "/tags/tag/button",
+    q: "<button>",
+    bodyRe: /<button><\/button>/i,
+    label: "BUTTON tag injection"
   }
 ] as const;
 
@@ -40641,6 +40659,60 @@ const firingRangeTagsTagFormRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
   "form",
   "FORM tag injection",
   firingRangeTagsTagFormLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_AREA = {
+  path: "/tags/tag/area",
+  q: "<area>",
+  bodyRe: /<area\s*>/i,
+  label: "AREA tag injection"
+} as const;
+
+const firingRangeTagsTagAreaLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_AREA);
+};
+
+const firingRangeTagsTagAreaRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "area",
+  "AREA tag injection",
+  firingRangeTagsTagAreaLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_INPUT = {
+  path: "/tags/tag/input",
+  q: "<input>",
+  bodyRe: /<input\s*>/i,
+  label: "INPUT tag injection"
+} as const;
+
+const firingRangeTagsTagInputLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_INPUT);
+};
+
+const firingRangeTagsTagInputRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "input",
+  "INPUT tag injection",
+  firingRangeTagsTagInputLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_BUTTON = {
+  path: "/tags/tag/button",
+  q: "<button>",
+  bodyRe: /<button><\/button>/i,
+  label: "BUTTON tag injection"
+} as const;
+
+const firingRangeTagsTagButtonLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_BUTTON);
+};
+
+const firingRangeTagsTagButtonRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "button",
+  "BUTTON tag injection",
+  firingRangeTagsTagButtonLiveOracle
 );
 
 const FIRING_RANGE_ADDRESS_HASH_INNERHTML_PATH = "/address/location.hash/innerHtml";
@@ -55397,6 +55469,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsTagTextareaRouteLiveOracle,
   firingRangeTagsTagFormLiveOracle,
   firingRangeTagsTagFormRouteLiveOracle,
+  firingRangeTagsTagAreaLiveOracle,
+  firingRangeTagsTagAreaRouteLiveOracle,
+  firingRangeTagsTagInputLiveOracle,
+  firingRangeTagsTagInputRouteLiveOracle,
+  firingRangeTagsTagButtonLiveOracle,
+  firingRangeTagsTagButtonRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
   firingRangeAddressLocationEvalLiveOracle,
