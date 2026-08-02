@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T08:20:00.000Z",
+  "updated_at": "2026-08-02T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3335,
-  "total_findings": 49601,
+  "total_sites_scanned": 3336,
+  "total_findings": 49635,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2262,
   "discovery_findings": 43022,
   "improvements_shipped": 1158,
-  "last_run": "2026-08-02T08:20:00.000Z",
+  "last_run": "2026-08-02T09:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 34,
@@ -53,28 +53,31 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 34,
-      "focus": "pwnshop PWN-041 prototype pollution search-filters lodash merge oracle",
+      "urls_scanned": 3,
+      "findings": 360,
+      "focus": "firing-range toxic DOM referrer innerHTML/document.write + window.name innerHTML route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/api/settings/search-filters: 26→34 findings — PWN-041 prototype pollution oracles shipped (client + live + route)",
+      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml: 116→120 findings — referrer-innerhtml route oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite: 116→120 findings — referrer-documentwrite route oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml: 116→120 findings — window-name-innerhtml route oracle shipped",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnshop.vercel.app Railway backend unreachable — wallet/cmd-injection/XXE live oracles blocked",
+      "encodeUrl/title + createContextualFragment templates unavailable on live Firing Range host",
+      "window.name/documentWrite + sessionStorage/property/documentWrite route oracles still absent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 34,
+    "public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml": 120,
+    "public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite": 120,
+    "public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml": 120,
     "pwnshop.ctfsecurity.com/api/settings/search-filters": 34,
-    "public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml": 116,
-    "public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite": 116,
-    "public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml": 116,
     "pwnshop.ctfsecurity.com/apply-coupon": 29,
     "ssrf.vulnlab.dev/basic": 15
   }
