@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T03:02:10.511Z",
+  "updated_at": "2026-08-02T04:05:10.577Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginStartsWith",
+      "source": "google/firing-range — CORS origin.startsWith bypass misconfig (/cors/alloworigin/allowOriginStartsWith)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginEndsWith",
+      "source": "google/firing-range — CORS origin.endsWith bypass misconfig (/cors/alloworigin/allowOriginEndsWith)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginRegexDot",
+      "source": "google/firing-range — CORS origin.match dot-regex bypass misconfig (/cors/alloworigin/allowOriginRegexDot)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/cors/alloworigin/allowOriginProtocolDowngrade",
+      "source": "google/firing-range — CORS HTTP origin allowed on HTTPS resource (/cors/alloworigin/allowOriginProtocolDowngrade)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/css_style_font_value?q=a",
+      "source": "google/firing-range — reflected XSS CSS font-family style value sink (/reflected/parameter/css_style_font_value)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/reflected/parameter/javascript_eval?q=a",
       "source": "google/firing-range — reflected XSS parameter piped into eval() JS sink (/reflected/parameter/javascript_eval)",
