@@ -3202,6 +3202,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-escape-serverside-head-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml head-sink oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/head or /encodeUrl/head?q= reflects attacker input into the HTML <head> despite escapeHtml/encodeUrl — Firing Range server-side head-sink escape bypass XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in head contexts enables reflected XSS even when escapeHtml or encodeUrl is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideHeadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml/encodeUrl is insufficient for HTML head text contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Apply context-aware encoding for all HTML head reflection contexts.",
+        "Avoid reflecting raw user input inside head elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/head bypasses escapeHtml in head context. Show server-side head-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-head-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/head route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/head or /encodeUrl/head, q parameter reflects unescaped into HTML head — route-specific server-side head-sink escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml/encodeUrl output is safe in head text contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideHeadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix head-sink escaping on /escape/serverside escapeHtml/encodeUrl head routes.",
+      steps: [
+        "Audit escapeHtml/encodeUrl usage for head text contexts.",
+        "Encode user input for HTML head reflection points.",
+        "Add output encoding tests for head-sink contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/head route bypasses escapeHtml in head context. Show route-specific head-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-noscript-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range reflected noscript parameter oracle",
+    description:
+      "GET /reflected/parameter/noscript?q= reflects attacker input into a <noscript> element without encoding — Firing Range noscript-context reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped reflection inside noscript elements enables reflected XSS in browsers with JavaScript disabled or via parser quirks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterNoscriptLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before reflecting into noscript elements.",
+      steps: [
+        "HTML-encode all user input reflected into noscript contexts.",
+        "Avoid reflecting raw user input inside noscript elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/noscript reflects q into noscript element. Show noscript-context reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-reflected-parameter-noscript-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /reflected/parameter/noscript route XSS oracle",
+    description:
+      "When scanning /reflected/parameter/noscript, q parameter reflects unescaped into noscript element — route-specific noscript-context reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm noscript reflection cannot inject attacker-controlled markup.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeReflectedParameterNoscriptRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix noscript-context encoding on /reflected/parameter/noscript route.",
+      steps: [
+        "Encode user input for noscript reflection points.",
+        "Audit noscript output contexts for dangerous reflection.",
+        "Add output encoding tests for noscript routes."
+      ]
+    },
+    fixPrompt:
+      "Our /reflected/parameter/noscript route reflects q into noscript. Show route-specific noscript-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-parameter-json-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -3364,7 +3468,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range HTML tag injection oracle",
     description:
-      "GET /tags/tag/img, /script, /iframe, or /body/onload?q= accepts attacker-controlled HTML tags and reflects them into the response — Firing Range tag injection XSS training oracle.",
+      "GET /tags/tag/img, /script, /iframe, /body/onload, /area, /input, /button, /select, /source, or /form?q= accepts attacker-controlled HTML tags and reflects them into the response — Firing Range tag injection XSS training oracle.",
     impactOneline:
       "Insufficient tag filtering allows attacker-controlled HTML elements to be injected.",
     detectorKind: "rule_ref",

@@ -38602,6 +38602,11 @@ const FIRING_RANGE_REFLECTED_PARAM_PATHS = [
     path: "/reflected/parameter/attribute_script",
     bodyRe: /<script[^>]+thugirFrReflectedProbe/i,
     label: "script src attribute"
+  },
+  {
+    path: "/reflected/parameter/noscript",
+    bodyRe: /<noscript>\s*thugirFrReflectedProbe\s*<\/noscript>/i,
+    label: "noscript element text"
   }
 ] as const;
 
@@ -40033,6 +40038,129 @@ const firingRangeEscapeServersideTagnameRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_ESCAPE_HEAD_PROBE = "thugirFrEscapeHeadProbe";
+const FIRING_RANGE_ESCAPE_HEAD_PATHS = [
+  {
+    path: "/escape/serverside/escapeHtml/head",
+    encoding: "escapeHtml"
+  },
+  {
+    path: "/escape/serverside/encodeUrl/head",
+    encoding: "encodeUrl"
+  }
+] as const;
+
+async function probeFiringRangeEscapeHead(
+  ctx: RuleContext,
+  target: (typeof FIRING_RANGE_ESCAPE_HEAD_PATHS)[number]
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_ESCAPE_HEAD_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const headRe = new RegExp(
+    `<head>\\s*${FIRING_RANGE_ESCAPE_HEAD_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*</head>`,
+    "i"
+  );
+  if (!headRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      encoding: target.encoding,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker input into HTML <head> despite ${target.encoding} — server-side head-sink escape bypass XSS oracle`
+    }
+  };
+}
+
+const firingRangeEscapeServersideHeadLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_ESCAPE_HEAD_PATHS];
+  if (/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/head\b/i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p.path));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const target of paths) {
+    const result = await probeFiringRangeEscapeHead(ctx, target);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeEscapeServersideHeadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/head\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const target = FIRING_RANGE_ESCAPE_HEAD_PATHS.find((p) => pathname.startsWith(p.path));
+  if (!target) return NEGATIVE;
+  const result = await probeFiringRangeEscapeHead(ctx, target);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${target.path} route scan — ${target.encoding} bypass allows head-sink XSS`
+    }
+  };
+};
+
+const FIRING_RANGE_REFLECTED_NOSCRIPT_PROBE = "thugirFrNoscriptProbe";
+
+const firingRangeReflectedParameterNoscriptLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/parameter/noscript", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_NOSCRIPT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const noscriptRe = new RegExp(
+    `<noscript>\\s*${FIRING_RANGE_REFLECTED_NOSCRIPT_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*</noscript>`,
+    "i"
+  );
+  if (!noscriptRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/noscript?q= reflects attacker input into <noscript> element — reflected noscript-context XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedParameterNoscriptRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/noscript\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedParameterNoscriptLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/noscript route scan — q parameter reflected into noscript element without validation"
+    }
+  };
+};
+
 const FIRING_RANGE_REFLECTED_IFRAME_ATTR_PROBE = "<script>alert(1)</script>";
 
 const firingRangeReflectedParameterIframeAttributeValueLiveOracle: Rule = async (ctx) => {
@@ -40277,6 +40405,18 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<button>",
     bodyRe: /<button><\/button>/i,
     label: "BUTTON tag injection"
+  },
+  {
+    path: "/tags/tag/select",
+    q: "<select>",
+    bodyRe: /<select><\/select>/i,
+    label: "SELECT tag injection"
+  },
+  {
+    path: "/tags/tag/source",
+    q: "<source>",
+    bodyRe: /<source\s*>/i,
+    label: "SOURCE tag injection"
   }
 ] as const;
 
@@ -55429,8 +55569,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeEscapeServersideCssStyleRouteLiveOracle,
   firingRangeEscapeServersideBodyLiveOracle,
   firingRangeEscapeServersideBodyRouteLiveOracle,
+  firingRangeEscapeServersideHeadLiveOracle,
+  firingRangeEscapeServersideHeadRouteLiveOracle,
   firingRangeEscapeServersideTagnameLiveOracle,
   firingRangeEscapeServersideTagnameRouteLiveOracle,
+  firingRangeReflectedParameterNoscriptLiveOracle,
+  firingRangeReflectedParameterNoscriptRouteLiveOracle,
   firingRangeReflectedParameterJsonLiveOracle,
   firingRangeReflectedParameterJsonRouteLiveOracle,
   firingRangeDomPostMessageDocumentwriteLiveOracle,
