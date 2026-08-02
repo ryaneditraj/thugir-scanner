@@ -13699,6 +13699,31 @@
       "url": "https://vaultapp-omega.vercel.app/api/notes/1",
       "source": "MRMcyber/vaultapp — private note IDOR oracle GET /api/notes/:id (Vercel OSS deploy)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/authbypass/",
+      "source": "DVWA on Pentest Ground — authentication bypass oracle GET /vulnerabilities/authbypass (public port 4280 demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Products?q=test",
+      "source": "Escape.tech Juice Shop demo — product search/SQLi oracle GET /api/Products?q= (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/feedback",
+      "source": "chethan-vinayak/vulnshop — feedback file-upload / stored-XSS oracle POST /feedback (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/wallet",
+      "source": "chethan-vinayak/vulnshop — wallet top-up business-logic oracle (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/users",
+      "source": "chethan-vinayak/vulnshop — excessive data exposure oracle GET /api/users (Vercel OSS deploy)",
+      "auth": "oss_deploy"
     }
   ]
 }
