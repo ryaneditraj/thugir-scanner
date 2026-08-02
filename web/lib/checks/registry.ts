@@ -41472,6 +41472,137 @@ const firingRangeDomFormSubmissionInnerHtmlRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const FIRING_RANGE_DOM_FORM_SUBMISSION_EVAL_PATH =
+  "/dom/eventtriggering/document/formSubmission/eval";
+
+const firingRangeDomFormSubmissionEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_DOM_FORM_SUBMISSION_EVAL_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasFormEval =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /form\.onsubmit\s*=/i.test(body) &&
+    /getElementById\s*\(\s*['"]userInput['"]\s*\)/i.test(body) &&
+    /eval\s*\(\s*payload\s*\)/i.test(body) &&
+    !/window\.status\s*=\s*payload/i.test(body);
+  if (!hasFormEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/eventtriggering/document/formSubmission/eval assigns form input to eval() on submit — event-triggered DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeDomFormSubmissionEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/eventtriggering\/document\/formSubmission\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomFormSubmissionEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/eventtriggering/document/formSubmission/eval route scan — form submit passes user input to eval()"
+    }
+  };
+};
+
+const FIRING_RANGE_DOM_FORM_SUBMISSION_DOCUMENTWRITE_PATH =
+  "/dom/eventtriggering/document/formSubmission/documentWrite";
+
+const firingRangeDomFormSubmissionDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_DOM_FORM_SUBMISSION_DOCUMENTWRITE_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasFormDocumentWrite =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /form\.onsubmit\s*=/i.test(body) &&
+    /getElementById\s*\(\s*['"]userInput['"]\s*\)/i.test(body) &&
+    /document\.write\s*\(\s*payload\s*\)/i.test(body) &&
+    !/window\.status\s*=\s*payload/i.test(body);
+  if (!hasFormDocumentWrite) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/eventtriggering/document/formSubmission/documentWrite assigns form input to document.write on submit — event-triggered DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeDomFormSubmissionDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/eventtriggering\/document\/formSubmission\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomFormSubmissionDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/eventtriggering/document/formSubmission/documentWrite route scan — form submit passes user input to document.write"
+    }
+  };
+};
+
+const FIRING_RANGE_DOM_PROPAGATION_EVAL_PATH =
+  "/dom/dompropagation/document/formSubmission/eval";
+
+const firingRangeDomPropagationEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_DOM_PROPAGATION_EVAL_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasPropagationEval =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /window\.status\s*=\s*payload/i.test(body) &&
+    /eval\s*\(\s*retrieved_payload\s*\)/i.test(body);
+  if (!hasPropagationEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/dompropagation/document/formSubmission/eval propagates location.hash via window.status into eval() — DOM propagation XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeDomPropagationEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/dompropagation\/document\/formSubmission\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomPropagationEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/dompropagation/document/formSubmission/eval route scan — location.hash propagates via window.status to eval()"
+    }
+  };
+};
+
 const FIRING_RANGE_URLDOM_HASH_FETCH_PATH = "/urldom/location/hash/fetch";
 
 const firingRangeUrldomLocationHashFetchLiveOracle: Rule = async (ctx) => {
@@ -56265,6 +56396,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeAddressLocationInnerHtmlRouteLiveOracle,
   firingRangeDomFormSubmissionInnerHtmlLiveOracle,
   firingRangeDomFormSubmissionInnerHtmlRouteLiveOracle,
+  firingRangeDomFormSubmissionEvalLiveOracle,
+  firingRangeDomFormSubmissionEvalRouteLiveOracle,
+  firingRangeDomFormSubmissionDocumentwriteLiveOracle,
+  firingRangeDomFormSubmissionDocumentwriteRouteLiveOracle,
+  firingRangeDomPropagationEvalLiveOracle,
+  firingRangeDomPropagationEvalRouteLiveOracle,
   firingRangeRemoteIncludeScriptHashLiveOracle,
   firingRangeRemoteIncludeScriptHashRouteLiveOracle,
   firingRangeRemoteIncludeParameterScriptLiveOracle,
