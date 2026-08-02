@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T08:12:21.447Z",
+  "updated_at": "2026-08-02T08:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2262,
   "discovery_findings": 43022,
-  "improvements_shipped": 1155,
-  "last_run": "2026-08-02T08:12:21.447Z",
+  "improvements_shipped": 1158,
+  "last_run": "2026-08-02T08:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,44 +48,34 @@
           ]
         }
       },
-      "note": "juice-shop.herokuapp.com primary healthy 6/6 (33 findings); no benchmark misses"
+      "note": "juice-shop.herokuapp.com 6/6 (34 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 931,
-      "focus": "firing-range toxicdom referrer/window.name/sessionStorage DOM sinks + queue drain attribute_quoted/iframe",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 34,
+      "focus": "pwnshop PWN-041 prototype pollution search-filters lodash merge oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml: 116 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite: 116 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml: 116 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/window/name/documentWrite: 116 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/documentWrite: 115 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_quoted: 117 findings — generic firing-range oracles only",
-      "public-firing-range.appspot.com/reflected/parameter/body/iframe: 118 findings — generic firing-range oracles only"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/api/settings/search-filters: 26→34 findings — PWN-041 prototype pollution oracles shipped (client + live + route)",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml: generic firing-range oracles only — no referrer→innerHTML route-specific live oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite: generic firing-range oracles only — no referrer→document.write route-specific live oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml: generic firing-range oracles only — no window.name→innerHTML route-specific live oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/window/name/documentWrite: generic firing-range oracles only — no window.name→document.write route-specific live oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/documentWrite: generic firing-range oracles only — no sessionStorage property→document.write route-specific live oracle"
+      "vulnshop.vercel.app Railway backend unreachable — wallet/cmd-injection/XXE live oracles blocked",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
+    "juice-shop.herokuapp.com": 34,
+    "pwnshop.ctfsecurity.com/api/settings/search-filters": 34,
     "public-firing-range.appspot.com/dom/toxicdom/document/referrer/innerHtml": 116,
     "public-firing-range.appspot.com/dom/toxicdom/document/referrer/documentWrite": 116,
     "public-firing-range.appspot.com/dom/toxicdom/window/name/innerHtml": 116,
-    "public-firing-range.appspot.com/dom/toxicdom/window/name/documentWrite": 116,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/documentWrite": 115,
-    "public-firing-range.appspot.com/reflected/parameter/body/iframe?q=a": 118,
-    "public-firing-range.appspot.com/escape/serverside/escapeHtml/attribute_quoted?q=a": 117
+    "pwnshop.ctfsecurity.com/apply-coupon": 29,
+    "ssrf.vulnlab.dev/basic": 15
   }
 }

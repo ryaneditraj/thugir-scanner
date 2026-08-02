@@ -15109,6 +15109,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-prototype-pollution-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop lodash prototype pollution oracle (PWN-041)",
+    description:
+      "Pwnshop documents POST /search/filters passing user-supplied JSON to lodash _.merge() (4.17.4, CVE-2019-10744) with no sanitization — __proto__ keys poison Object.prototype.",
+    impactOneline:
+      "Vulnerable lodash merge on search filter preferences lets attackers pollute prototypes and alter authorization logic process-wide.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopPrototypePollutionOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade lodash and freeze prototypes — Pwnshop PWN-041 is intentional lab software.",
+      steps: [
+        "Upgrade lodash to >=4.17.12 and avoid recursive merge on untrusted objects.",
+        "Use Object.freeze(Object.prototype) or null-prototype objects for options parsing.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /search/filters endpoint passes user JSON to lodash _.merge() enabling __proto__ pollution. Show safe object merging and lodash upgrade.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-prototype-pollution-search-filters-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop search filters prototype pollution live oracle (PWN-041)",
+    description:
+      "POST /search/filters merges constructor.prototype keys via lodash _.merge() — polluted properties appear in the saved filters JSON response.",
+    impactOneline:
+      "Live confirmation that lodash merge on search preferences accepts __proto__ and poisons every plain object in the Node process.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopPrototypePollutionSearchFiltersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade lodash and sanitize merge inputs — Pwnshop PWN-041 is intentional lab software.",
+      steps: [
+        "Upgrade lodash to >=4.17.12 and reject __proto__ and constructor keys in merge sources.",
+        "Use Object.freeze(Object.prototype) where feasible.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /search/filters accepts __proto__ and pollutes Object.prototype via lodash merge. Show merge hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-prototype-pollution-search-filters-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop search-filters prototype pollution route live oracle (PWN-041)",
+    description:
+      "When scanning /search/filters or /api/settings/search-filters, live POST __proto__ pollutes Object.prototype via lodash _.merge() and GET confirms injected property — route-specific oracle.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop search filter preferences endpoint is vulnerable to prototype pollution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopPrototypePollutionSearchFiltersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade lodash and sanitize merge inputs on search-filters routes.",
+      steps: [
+        "Upgrade lodash to >=4.17.12 and reject __proto__ keys in merge sources.",
+        "Use Object.freeze(Object.prototype) where feasible.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /search/filters route scan confirms __proto__ pollution via lodash merge. Show route-specific merge hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-debug-info-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",

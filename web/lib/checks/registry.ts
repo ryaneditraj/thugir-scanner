@@ -27618,6 +27618,77 @@ const clientSidePwnshopPathTraversalOracle: Rule = async (ctx) =>
     "Pwnshop GET /download?file= joins user input via path.join() without resolved-path validation (PWN-038)"
   );
 
+const PWNSHOP_PP_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-041 prototype pollution registry ID", re: /PWN-041/i },
+  { label: "Lodash merge CVE-2019-10744", re: /CVE-2019-10744|lodash@4\.17\.4/i },
+  { label: "POST /search/filters endpoint", re: /POST \/search\/filters|\/search\/filters/i },
+  {
+    label: "__proto__ pollution payload docs",
+    re: /__proto__[\s\S]{0,120}(?:isAdmin|lodash|merge)/i
+  },
+  {
+    label: "Prototype Pollution lodash title",
+    re: /Prototype Pollution[\s\S]{0,80}(?:lodash|Lodash)/i
+  }
+];
+
+const clientSidePwnshopPrototypePollutionOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/search\/filters|\/api\/settings\/search-filters/i,
+    PWNSHOP_PP_MARKERS,
+    "Pwnshop POST /search/filters passes user JSON to lodash _.merge() without sanitization — prototype pollution via __proto__ (PWN-041)"
+  );
+
+const PWNSHOP_PP_PROBE_KEY = "thugirProbePP";
+
+const pwnshopPrototypePollutionSearchFiltersLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const filtersUrl = new URL("/search/filters", ctx.origin).toString();
+  const pollutePayload = JSON.stringify({
+    constructor: { prototype: { [PWNSHOP_PP_PROBE_KEY]: "polluted" } }
+  });
+  const postDoc = await ctx.probe.get(filtersUrl, {
+    method: "POST",
+    body: pollutePayload,
+    headers: { "Content-Type": "application/json", Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(PWNSHOP_PP_PROBE_KEY).test(postDoc.body)) return NEGATIVE;
+  if (!/polluted/i.test(postDoc.body)) return NEGATIVE;
+  if (!/constructor[\s\S]{0,120}prototype/i.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: filtersUrl,
+      snippet: postDoc.body.slice(0, 240).trim(),
+      note: "Pwnshop POST /search/filters merges constructor.prototype via lodash _.merge() — polluted key appears in saved filters JSON (PWN-041)"
+    }
+  };
+};
+
+const pwnshopPrototypePollutionSearchFiltersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\/filters|\/api\/settings\/search-filters/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopPrototypePollutionSearchFiltersLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop search-filters route scan — POST /search/filters __proto__ pollutes Object.prototype via lodash _.merge() (PWN-041)"
+    }
+  };
+};
+
 function isPwnshopHost(ctx: RuleContext): boolean {
   return /pwnshop|ctfsecurity\.com/i.test(ctx.origin);
 }
@@ -55105,6 +55176,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopEvidence,
   clientSidePwnshopSstiOracle,
   clientSidePwnshopPathTraversalOracle,
+  clientSidePwnshopPrototypePollutionOracle,
   pwnshopDebugInfoLiveOracle,
   pwnshopEventsAuditLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
@@ -55129,6 +55201,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopDownloadPathTraversalLiveOracle,
   pwnshopSellerPreviewSstiRouteLiveOracle,
   pwnshopDownloadPathTraversalRouteLiveOracle,
+  pwnshopPrototypePollutionSearchFiltersLiveOracle,
+  pwnshopPrototypePollutionSearchFiltersRouteLiveOracle,
   pwnshopAvatarUrlSsrfLiveOracle,
   pwnshopAvatarUrlSsrfRouteLiveOracle,
   pwnshopOrderIdorLiveOracle,
