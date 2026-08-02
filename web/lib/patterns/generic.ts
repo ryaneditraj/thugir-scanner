@@ -6426,6 +6426,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-toxicdom-form-submission-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxicdom formSubmission innerHTML DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/formSubmission/innerHtml passes form input to innerHTML on submit — Firing Range toxicdom formSubmission innerHTML XSS training oracle.",
+    impactOneline:
+      "Form input passed to innerHTML on submit enables DOM XSS when attackers can control the userInput field.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionInnerHtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML sinks on form submission handlers.",
+        "Encode or sanitize user input before any dangerous sink.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/innerHtml passes form input to innerHTML. Show toxicdom formSubmission innerHTML XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/formSubmission/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/formSubmission/innerHtml, form input is passed to innerHTML on submit — route-specific toxicdom formSubmission innerHTML XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form input cannot reach innerHTML on submit.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionInnerHtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on form submission in /dom/toxicdom handlers.",
+      steps: [
+        "Audit form.onsubmit handlers for innerHTML sinks.",
+        "Encode or sanitize user input before dangerous sinks.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/innerHtml route passes form input to innerHTML. Show route-specific toxicdom XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxicdom formSubmission document.write DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/document/formSubmission/documentWrite passes form input to document.write on submit — Firing Range toxicdom formSubmission document.write XSS training oracle.",
+    impactOneline:
+      "Form input passed to document.write on submit enables DOM XSS when attackers can control the userInput field.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to document.write — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write sinks on form submission handlers.",
+        "Encode or sanitize user input before any dangerous sink.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/documentWrite passes form input to document.write. Show toxicdom formSubmission document.write XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-form-submission-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/document/formSubmission/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/formSubmission/documentWrite, form input is passed to document.write on submit — route-specific toxicdom formSubmission document.write XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form input cannot reach document.write on submit.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeToxicdomFormSubmissionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on form submission in /dom/toxicdom handlers.",
+      steps: [
+        "Audit form.onsubmit handlers for document.write sinks.",
+        "Encode or sanitize user input before dangerous sinks.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/document/formSubmission/documentWrite route passes form input to document.write. Show route-specific toxicdom XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-formsubmission-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DOM propagation window formSubmission documentWrite XSS oracle",
+    description:
+      "GET /dom/dompropagation/window/formSubmission/documentWrite propagates location.hash via window.status into eval() — Firing Range DOM propagation XSS training oracle.",
+    impactOneline:
+      "DOM property propagation chains via window.status that end in eval() enable XSS when attackers control location.hash.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowFormSubmissionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Break propagation chains that pass untrusted data to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Audit DOM property writes and reads for dangerous sink chains.",
+        "Never pass propagated values to eval() or document.write.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/formSubmission/documentWrite propagates location.hash via window.status into eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-window-formsubmission-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/window/formSubmission/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/window/formSubmission/documentWrite, location.hash propagates via window.status to eval() — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM property propagation does not reach eval() sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationWindowFormSubmissionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval sinks in DOM propagation chains on /dom/dompropagation/window/formSubmission routes.",
+      steps: [
+        "Audit window.status and similar property propagation for dangerous sinks.",
+        "Sanitize values before DOM property round-trips.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/window/formSubmission/documentWrite route propagates location.hash to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-remoteinclude-script-hash-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

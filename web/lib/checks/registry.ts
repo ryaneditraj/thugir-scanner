@@ -42473,6 +42473,142 @@ const firingRangeToxicdomFormSubmissionEvalRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const FIRING_RANGE_TOXICDOM_FORM_SUBMISSION_INNERHTML_PATH =
+  "/dom/toxicdom/document/formSubmission/innerHtml";
+
+const firingRangeToxicdomFormSubmissionInnerHtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_TOXICDOM_FORM_SUBMISSION_INNERHTML_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasToxicdomFormInnerHtml =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /form\.onsubmit\s*=/i.test(body) &&
+    /getElementById\s*\(\s*['"]userInput['"]\s*\)/i.test(body) &&
+    /appendChild\s*\(\s*form\s*\)[\s\S]{0,200}\.innerHTML\s*=\s*payload/i.test(body) &&
+    /function\s+trigger\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasToxicdomFormInnerHtml) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/toxicdom/document/formSubmission/innerHtml assigns form input to innerHTML — toxicdom formSubmission innerHTML DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeToxicdomFormSubmissionInnerHtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/formSubmission\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeToxicdomFormSubmissionInnerHtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/formSubmission/innerHtml route scan — form input passed to innerHTML on submit"
+    }
+  };
+};
+
+const FIRING_RANGE_TOXICDOM_FORM_SUBMISSION_DOCUMENTWRITE_PATH =
+  "/dom/toxicdom/document/formSubmission/documentWrite";
+
+const firingRangeToxicdomFormSubmissionDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_TOXICDOM_FORM_SUBMISSION_DOCUMENTWRITE_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasToxicdomFormDocumentwrite =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /form\.onsubmit\s*=/i.test(body) &&
+    /getElementById\s*\(\s*['"]userInput['"]\s*\)/i.test(body) &&
+    /appendChild\s*\(\s*form\s*\)[\s\S]{0,48}document\.write\s*\(\s*payload\s*\)/i.test(body) &&
+    /function\s+trigger\s*\(\s*payload\s*\)/i.test(body);
+  if (!hasToxicdomFormDocumentwrite) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/toxicdom/document/formSubmission/documentWrite assigns form input to document.write — toxicdom formSubmission document.write DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeToxicdomFormSubmissionDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/document\/formSubmission\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeToxicdomFormSubmissionDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/document/formSubmission/documentWrite route scan — form input passed to document.write on submit"
+    }
+  };
+};
+
+const FIRING_RANGE_DOM_PROPAGATION_WINDOW_FORM_SUBMISSION_DOCUMENTWRITE_PATH =
+  "/dom/dompropagation/window/formSubmission/documentWrite";
+
+const firingRangeDomPropagationWindowFormSubmissionDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(
+    FIRING_RANGE_DOM_PROPAGATION_WINDOW_FORM_SUBMISSION_DOCUMENTWRITE_PATH,
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 6144, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasPropagationEval =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /window\.status\s*=\s*payload/i.test(body) &&
+    /eval\s*\(\s*retrieved_payload\s*\)/i.test(body);
+  if (!hasPropagationEval) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /dom/dompropagation/window/formSubmission/documentWrite propagates location.hash via window.status into eval() — DOM propagation XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeDomPropagationWindowFormSubmissionDocumentwriteRouteLiveOracle: Rule = async (
+  ctx
+) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/dompropagation\/window\/formSubmission\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomPropagationWindowFormSubmissionDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/dompropagation/window/formSubmission/documentWrite route scan — location.hash propagates via window.status to eval()"
+    }
+  };
+};
+
 const FIRING_RANGE_URLDOM_HASH_FETCH_PATH = "/urldom/location/hash/fetch";
 
 const firingRangeUrldomLocationHashFetchLiveOracle: Rule = async (ctx) => {
@@ -57318,6 +57454,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomPropagationWindowStatusEvalRouteLiveOracle,
   firingRangeToxicdomFormSubmissionEvalLiveOracle,
   firingRangeToxicdomFormSubmissionEvalRouteLiveOracle,
+  firingRangeToxicdomFormSubmissionInnerHtmlLiveOracle,
+  firingRangeToxicdomFormSubmissionInnerHtmlRouteLiveOracle,
+  firingRangeToxicdomFormSubmissionDocumentwriteLiveOracle,
+  firingRangeToxicdomFormSubmissionDocumentwriteRouteLiveOracle,
+  firingRangeDomPropagationWindowFormSubmissionDocumentwriteLiveOracle,
+  firingRangeDomPropagationWindowFormSubmissionDocumentwriteRouteLiveOracle,
   firingRangeRemoteIncludeScriptHashLiveOracle,
   firingRangeRemoteIncludeScriptHashRouteLiveOracle,
   firingRangeRemoteIncludeParameterScriptLiveOracle,
