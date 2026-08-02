@@ -17826,6 +17826,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-toxicdom-form-submission-eval-live-oracle",
       "shipped_at": "2026-08-02T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-video-live-oracle",
+      "shipped_at": "2026-08-02T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-audio-live-oracle",
+      "shipped_at": "2026-08-02T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-canvas-live-oracle",
+      "shipped_at": "2026-08-02T22:10:00.000Z"
     }
   ]
 }
