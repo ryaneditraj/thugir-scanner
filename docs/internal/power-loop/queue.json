@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-01T23:05:00.000Z",
+  "updated_at": "2026-08-02T00:45:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/form?q=a",
+      "source": "google/firing-range — tag-restricted FORM XSS (/tags/tag/form)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/input?q=a",
+      "source": "google/firing-range — tag-restricted INPUT XSS (/tags/tag/input)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/button?q=a",
+      "source": "google/firing-range — tag-restricted BUTTON XSS (/tags/tag/button)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/textarea?q=a",
+      "source": "google/firing-range — tag-restricted TEXTAREA XSS (/tags/tag/textarea)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/tags/tag/select?q=a",
+      "source": "google/firing-range — tag-restricted SELECT XSS (/tags/tag/select)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/urldom/location/search/object.data?q=//example.org",
       "source": "google/firing-range — location.search to object.data DOM XSS sink (/urldom/location/search/object.data)",
