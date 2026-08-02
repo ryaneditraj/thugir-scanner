@@ -67,14 +67,17 @@
       "public-firing-range.appspot.com/cors/alloworigin/allowOriginEndsWith: 106 findings — generic firing-range oracles only; no CORS endsWith-bypass route-specific live oracle",
       "public-firing-range.appspot.com/cors/alloworigin/allowOriginRegexDot: 106 findings — generic firing-range oracles only; no CORS regex-dot-bypass route-specific live oracle",
       "public-firing-range.appspot.com/cors/alloworigin/allowOriginProtocolDowngrade: 106 findings — generic firing-range oracles only; no CORS protocol-downgrade route-specific live oracle",
-      "public-firing-range.appspot.com/reflected/parameter/css_style_font_value?q=a: 108 findings — generic firing-range oracles only; no CSS font-family route-specific live oracle"
+      "public-firing-range.appspot.com/reflected/parameter/css_style_font_value?q=a: 108 findings — generic firing-range oracles only; no CSS font-family route-specific live oracle",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/eval: 105 findings — generic firing-range oracles only; no sessionStorage-eval route-specific live oracle",
+      "public-firing-range.appspot.com/address/location.hash/setTimeout: 106 findings — generic firing-range oracles only; no setTimeout route-specific live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "public-firing-range cors/alloworigin/allowOriginStartsWith|allowOriginEndsWith|allowOriginRegexDot|allowOriginProtocolDowngrade: generic firing-range oracles only — no CORS validation-bypass route-specific live oracles",
       "public-firing-range reflected/parameter/css_style_font_value: generic firing-range oracles only — no CSS font-family route-specific live oracle",
-      "public-firing-range reflected/parameter/javascript_eval|tag_name|javascript_comment|quoted_onclick: generic firing-range oracles only — no route-specific live oracles",
+      "public-firing-range dom/toxicdom/sessionStorage/function/eval: generic firing-range oracles only — no sessionStorage-eval route-specific live oracle",
+      "public-firing-range address/location.hash/setTimeout: generic firing-range oracles only — no setTimeout route-specific live oracle",
       "public-firing-range tags/tag/area|frame|source|input|button|select: route-specific tag injection oracles absent"
     ]
   },
