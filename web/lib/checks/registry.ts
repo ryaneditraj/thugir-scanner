@@ -40033,6 +40033,43 @@ const firingRangeEscapeServersideTagnameRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_REFLECTED_IFRAME_ATTR_PROBE = "<script>alert(1)</script>";
+
+const firingRangeReflectedParameterIframeAttributeValueLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/reflected/parameter/iframe_attribute_value", ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REFLECTED_IFRAME_ATTR_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/attribute\s*=\s*['"]<script>alert\(1\)<\/script>['"]/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Google Firing Range GET /reflected/parameter/iframe_attribute_value?q= reflects attacker input into iframe attribute value — reflected attribute-sink XSS training oracle"
+    }
+  };
+};
+
+const firingRangeReflectedParameterIframeAttributeValueRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/reflected\/parameter\/iframe_attribute_value\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeReflectedParameterIframeAttributeValueLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /reflected/parameter/iframe_attribute_value route scan — q parameter reflected into iframe attribute without validation"
+    }
+  };
+};
+
 const FIRING_RANGE_REFLECTED_IFRAME_SRCDOC_PROBE = "thugirFrSrcdocProbe";
 
 const firingRangeReflectedIframeSrcdocLiveOracle: Rule = async (ctx) => {
@@ -40134,6 +40171,18 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<label for=x>",
     bodyRe: /<label\s+for\s*=\s*["']?x["']?\s*>/i,
     label: "LABEL tag injection"
+  },
+  {
+    path: "/tags/tag/option",
+    q: "<option>",
+    bodyRe: /<option><\/option>/i,
+    label: "OPTION tag injection"
+  },
+  {
+    path: "/tags/tag/textarea",
+    q: "<textarea>",
+    bodyRe: /<textarea><\/textarea>/i,
+    label: "TEXTAREA tag injection"
   }
 ] as const;
 
@@ -40463,6 +40512,42 @@ const firingRangeTagsTagAnyRouteLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const FIRING_RANGE_TAGS_TAG_OPTION = {
+  path: "/tags/tag/option",
+  q: "<option>",
+  bodyRe: /<option><\/option>/i,
+  label: "OPTION tag injection"
+} as const;
+
+const firingRangeTagsTagOptionLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_OPTION);
+};
+
+const firingRangeTagsTagOptionRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "option",
+  "OPTION tag injection",
+  firingRangeTagsTagOptionLiveOracle
+);
+
+const FIRING_RANGE_TAGS_TAG_TEXTAREA = {
+  path: "/tags/tag/textarea",
+  q: "<textarea>",
+  bodyRe: /<textarea><\/textarea>/i,
+  label: "TEXTAREA tag injection"
+} as const;
+
+const firingRangeTagsTagTextareaLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeTagsInjection(ctx, FIRING_RANGE_TAGS_TAG_TEXTAREA);
+};
+
+const firingRangeTagsTagTextareaRouteLiveOracle = firingRangeTagsTagRouteLiveOracle(
+  "textarea",
+  "TEXTAREA tag injection",
+  firingRangeTagsTagTextareaLiveOracle
+);
 
 const FIRING_RANGE_ADDRESS_HASH_INNERHTML_PATH = "/address/location.hash/innerHtml";
 
@@ -55186,6 +55271,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomPostMessageDocumentwriteRouteLiveOracle,
   firingRangeReflectedIframeSrcdocLiveOracle,
   firingRangeReflectedIframeSrcdocRouteLiveOracle,
+  firingRangeReflectedParameterIframeAttributeValueLiveOracle,
+  firingRangeReflectedParameterIframeAttributeValueRouteLiveOracle,
   firingRangeTagsInjectionLiveOracle,
   firingRangeTagsInjectionRouteLiveOracle,
   firingRangeTagsTagObjectLiveOracle,
@@ -55206,6 +55293,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeTagsTagLabelRouteLiveOracle,
   firingRangeTagsTagAnyLiveOracle,
   firingRangeTagsTagAnyRouteLiveOracle,
+  firingRangeTagsTagOptionLiveOracle,
+  firingRangeTagsTagOptionRouteLiveOracle,
+  firingRangeTagsTagTextareaLiveOracle,
+  firingRangeTagsTagTextareaRouteLiveOracle,
   firingRangeAddressLocationHashInnerHtmlLiveOracle,
   firingRangeAddressLocationHashInnerHtmlRouteLiveOracle,
   firingRangeAddressLocationEvalLiveOracle,
