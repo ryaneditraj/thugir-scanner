@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T19:04:19.226Z",
+  "updated_at": "2026-08-02T20:24:57.591Z",
   "discovery_urls": [
+    {
+      "url": "http://testphp.vulnweb.com/listproducts.php?cat=1",
+      "source": "Acunetix testphp.vulnweb.com — UNION-based SQLi oracle GET /listproducts.php?cat= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/artists.php?artist=1",
+      "source": "Acunetix testphp.vulnweb.com — UNION-based SQLi oracle GET /artists.php?artist= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/userinfo.php",
+      "source": "Acunetix testphp.vulnweb.com — auth-bypass SQLi oracle POST /userinfo.php (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/search.php?test=query",
+      "source": "Acunetix testphp.vulnweb.com — error-based SQLi oracle GET /search.php?test= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/AJAX/infoartist.php?id=1",
+      "source": "Acunetix testphp.vulnweb.com — AJAX error-based SQLi oracle GET /AJAX/infoartist.php?id= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/innerHtml/innerHtml",
       "source": "google/firing-range — DOM propagation window.name innerHTML sink to innerHTML DOM XSS (/dom/dompropagation/window/innerHtml/innerHtml)",
@@ -13926,5 +13951,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 10
+  "discovery_urls_added": 15
 }
