@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T12:13:51.917Z",
-  "total": 1497,
-  "uniqueSlugs": 1492,
+  "generatedAt": "2026-08-02T13:17:39.190Z",
+  "total": 1503,
+  "uniqueSlugs": 1498,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1479,
+    "generic": 1485,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1412,
+    "deep": 1418,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 386,
+    "Cross-site scripting": 392,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -902,6 +902,12 @@
     "firing-range-dom-window-name-eval-route-live-oracle",
     "firing-range-dom-window-name-innerhtml-live-oracle",
     "firing-range-dom-window-name-innerhtml-route-live-oracle",
+    "firing-range-escape-js-encodeuricomponent-live-oracle",
+    "firing-range-escape-js-encodeuricomponent-route-live-oracle",
+    "firing-range-escape-js-escape-live-oracle",
+    "firing-range-escape-js-escape-route-live-oracle",
+    "firing-range-escape-js-html-escape-live-oracle",
+    "firing-range-escape-js-html-escape-route-live-oracle",
     "firing-range-escape-serverside-attribute-unquoted-live-oracle",
     "firing-range-escape-serverside-attribute-unquoted-route-live-oracle",
     "firing-range-escape-serverside-body-live-oracle",
