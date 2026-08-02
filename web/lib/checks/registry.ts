@@ -39942,7 +39942,25 @@ const firingRangeAddressLocationInnerHtmlRouteLiveOracle: Rule = async (ctx) => 
 const FIRING_RANGE_CORS_DYNAMIC_ORIGIN_PATH = "/cors/alloworigin/dynamicAllowOrigin";
 const FIRING_RANGE_CORS_ALLOW_NULL_ORIGIN_PATH = "/cors/alloworigin/allowNullOrigin";
 const FIRING_RANGE_CORS_ALLOW_INSECURE_SCHEME_PATH = "/cors/alloworigin/allowInsecureScheme";
+const FIRING_RANGE_CORS_ALLOW_ORIGIN_STARTS_WITH_PATH = "/cors/alloworigin/allowOriginStartsWith";
+const FIRING_RANGE_CORS_ALLOW_ORIGIN_ENDS_WITH_PATH = "/cors/alloworigin/allowOriginEndsWith";
+const FIRING_RANGE_CORS_ALLOW_ORIGIN_REGEX_DOT_PATH = "/cors/alloworigin/allowOriginRegexDot";
 const FIRING_RANGE_CORS_PROBE_ORIGIN = "https://evil-cors-probe.example";
+
+function firingRangeCorsStartsWithBypassOrigin(ctx: RuleContext): string {
+  return `https://${new URL(ctx.origin).host}.evil.com`;
+}
+
+function firingRangeCorsEndsWithBypassOrigin(ctx: RuleContext): string {
+  return `https://evil${new URL(ctx.origin).host}`;
+}
+
+function firingRangeCorsRegexDotBypassOrigin(ctx: RuleContext): string {
+  const host = new URL(ctx.origin).host;
+  const dot = host.indexOf(".");
+  const bypassHost = dot >= 0 ? `${host.slice(0, dot)}X${host.slice(dot + 1)}` : `${host}X`;
+  return `https://${bypassHost}`;
+}
 
 const firingRangeCorsDynamicAllowOriginLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
@@ -40070,6 +40088,162 @@ const firingRangeCorsAllowInsecureSchemeRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /cors/alloworigin/allowInsecureScheme route scan — HTTP Origin allowed on HTTPS resource with credentials"
+    }
+  };
+};
+
+const firingRangeCorsAllowOriginStartsWithLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const bypassOrigin = firingRangeCorsStartsWithBypassOrigin(ctx);
+  const url = new URL(FIRING_RANGE_CORS_ALLOW_ORIGIN_STARTS_WITH_PATH, ctx.origin).toString();
+  const blocked = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: FIRING_RANGE_CORS_PROBE_ORIGIN }
+  });
+  const blockedAcao = (blocked.headers["access-control-allow-origin"] || "").trim();
+  if (blockedAcao === FIRING_RANGE_CORS_PROBE_ORIGIN) return NEGATIVE;
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: bypassOrigin }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== bypassOrigin) return NEGATIVE;
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!creds) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      note: "Google Firing Range /cors/alloworigin/allowOriginStartsWith allows attacker Origin via naive startsWith prefix check with credentials — CORS bypass oracle"
+    }
+  };
+};
+
+const firingRangeCorsAllowOriginStartsWithRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cors\/alloworigin\/allowOriginStartsWith\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeCorsAllowOriginStartsWithLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /cors/alloworigin/allowOriginStartsWith route scan — startsWith CORS bypass with credentials"
+    }
+  };
+};
+
+const firingRangeCorsAllowOriginEndsWithLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const bypassOrigin = firingRangeCorsEndsWithBypassOrigin(ctx);
+  const url = new URL(FIRING_RANGE_CORS_ALLOW_ORIGIN_ENDS_WITH_PATH, ctx.origin).toString();
+  const blocked = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: FIRING_RANGE_CORS_PROBE_ORIGIN }
+  });
+  const blockedAcao = (blocked.headers["access-control-allow-origin"] || "").trim();
+  if (blockedAcao === FIRING_RANGE_CORS_PROBE_ORIGIN) return NEGATIVE;
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: bypassOrigin }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== bypassOrigin) return NEGATIVE;
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!creds) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      note: "Google Firing Range /cors/alloworigin/allowOriginEndsWith allows attacker Origin via naive endsWith suffix check with credentials — CORS bypass oracle"
+    }
+  };
+};
+
+const firingRangeCorsAllowOriginEndsWithRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cors\/alloworigin\/allowOriginEndsWith\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeCorsAllowOriginEndsWithLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /cors/alloworigin/allowOriginEndsWith route scan — endsWith CORS bypass with credentials"
+    }
+  };
+};
+
+const firingRangeCorsAllowOriginRegexDotLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const bypassOrigin = firingRangeCorsRegexDotBypassOrigin(ctx);
+  const url = new URL(FIRING_RANGE_CORS_ALLOW_ORIGIN_REGEX_DOT_PATH, ctx.origin).toString();
+  const blocked = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: FIRING_RANGE_CORS_PROBE_ORIGIN }
+  });
+  const blockedAcao = (blocked.headers["access-control-allow-origin"] || "").trim();
+  if (blockedAcao === FIRING_RANGE_CORS_PROBE_ORIGIN) return NEGATIVE;
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    maxBytes: 512,
+    timeoutMs: 8000,
+    headers: { Origin: bypassOrigin }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  if (acao !== bypassOrigin) return NEGATIVE;
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (!creds) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      note: "Google Firing Range /cors/alloworigin/allowOriginRegexDot allows attacker Origin via unescaped dot regex with credentials — CORS bypass oracle"
+    }
+  };
+};
+
+const firingRangeCorsAllowOriginRegexDotRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cors\/alloworigin\/allowOriginRegexDot\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeCorsAllowOriginRegexDotLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /cors/alloworigin/allowOriginRegexDot route scan — regex dot CORS bypass with credentials"
     }
   };
 };
@@ -56019,6 +56193,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeCorsAllowNullOriginRouteLiveOracle,
   firingRangeCorsAllowInsecureSchemeLiveOracle,
   firingRangeCorsAllowInsecureSchemeRouteLiveOracle,
+  firingRangeCorsAllowOriginStartsWithLiveOracle,
+  firingRangeCorsAllowOriginStartsWithRouteLiveOracle,
+  firingRangeCorsAllowOriginEndsWithLiveOracle,
+  firingRangeCorsAllowOriginEndsWithRouteLiveOracle,
+  firingRangeCorsAllowOriginRegexDotLiveOracle,
+  firingRangeCorsAllowOriginRegexDotRouteLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   firingRangeEscapeServersideCssStyleLiveOracle,
