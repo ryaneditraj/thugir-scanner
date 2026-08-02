@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-02T12:05:34.834Z",
+  "updated_at": "2026-08-02T13:12:30.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/eval",
+      "source": "google/firing-range — document.cookie (unset) sink to eval() DOM XSS (/dom/toxicdom/document/cookie/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/innerHtml",
+      "source": "google/firing-range — document.cookie (unset) sink to innerHTML DOM XSS (/dom/toxicdom/document/cookie/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/function",
+      "source": "google/firing-range — external script localStorage array to Function() DOM XSS (/dom/toxicdom/external/localStorage/array/function)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/formSubmission/eval",
+      "source": "google/firing-range — DOM propagation window.name form submission sink to eval() DOM XSS (/dom/dompropagation/window/formSubmission/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/window/formSubmission/documentWrite",
+      "source": "google/firing-range — DOM propagation window.name form submission sink to document.write DOM XSS (/dom/dompropagation/window/formSubmission/documentWrite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/documentWrite",
       "source": "google/firing-range — sessionStorage function sink to document.write DOM XSS (/dom/toxicdom/sessionStorage/function/documentWrite)",
