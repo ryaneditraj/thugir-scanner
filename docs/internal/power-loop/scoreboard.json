@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T00:15:00.000Z",
+  "updated_at": "2026-08-02T00:46:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2723,
-  "total_findings": 26534,
-  "critical_findings": 55,
+  "total_sites_scanned": 3259,
+  "total_findings": 42568,
+  "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22487,
+  "discovery_urls_added": 2222,
+  "discovery_findings": 36269,
   "improvements_shipped": 1164,
-  "last_run": "2026-08-02T00:15:00.000Z",
+  "last_run": "2026-08-02T00:46:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 26,
+      "oracle_findings": 30,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 441,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,33 +48,45 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (26 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "firing-range urldom/search object.data + embed.src + link.href route-specific live oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 754,
+      "focus": "firing-range tags/tag form|input|button|textarea|select tag-restricted XSS routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (26 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/urldom/location/search/object.data: route scan fires object-data live+route oracles (was generic-only)",
-      "public-firing-range.appspot.com/urldom/location/search/embed.src: route scan fires embed-src live+route oracles",
-      "public-firing-range.appspot.com/urldom/location/search/link.href: route scan fires link-href live+route oracles"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no category gaps",
+      "public-firing-range.appspot.com/tags/tag/form?q=a: 94 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/tags/tag/input?q=a: 94 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/tags/tag/button?q=a: 94 findings — generic firing-range oracles only",
+      "public-firing-range.appspot.com/urldom/location/search/input.formaction: 95 findings — input-formaction-route live oracle fires",
+      "public-firing-range.appspot.com/urldom/location/search/form.action: 95 findings — generic firing-range oracles only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "public-firing-range tags/tag/form|input|button|textarea|select: tag-restricted FORM/INPUT/BUTTON/TEXTAREA/SELECT route oracles absent",
+      "public-firing-range urldom/location/search/form.action: route-specific form.action search-sink live oracle absent",
       "firing-range urldom/search/base.href: route-specific live oracle still absent",
-      "ssrf.vulnlab.dev/*: additional route-specific SSRF live oracles may remain",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle absent without OTP session",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle absent when scanning route URL without signup flow"
+      "serverless.fail: generic misconfig/SSTI only — no serverless-specific oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 26,
+    "juice-shop-staging.herokuapp.com": 30,
+    "public-firing-range.appspot.com/tags/tag/form?q=a": 94,
+    "public-firing-range.appspot.com/tags/tag/input?q=a": 94,
+    "public-firing-range.appspot.com/tags/tag/button?q=a": 94,
+    "public-firing-range.appspot.com/tags/tag/textarea?q=a": 94,
+    "public-firing-range.appspot.com/tags/tag/select?q=a": 94,
+    "public-firing-range.appspot.com/urldom/location/search/input.formaction?q=//example.org": 95,
+    "public-firing-range.appspot.com/urldom/location/search/form.action?q=//example.org": 95,
     "public-firing-range.appspot.com/urldom/location/search/object.data": 98,
     "public-firing-range.appspot.com/urldom/location/search/embed.src": 98,
-    "public-firing-range.appspot.com/urldom/location/search/link.href": 98
+    "public-firing-range.appspot.com/urldom/location/search/link.href": 98,
+    "serverless.fail": 3
   }
 }
