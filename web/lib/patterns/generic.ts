@@ -5074,6 +5074,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-form-submission-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range form-submission eval DOM XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/formSubmission/eval returns a Toxic DOM page where form.onsubmit copies userInput into eval() — Firing Range event-triggered DOM XSS training oracle.",
+    impactOneline:
+      "Form submit handlers that pass user input to eval() enable DOM XSS on user interaction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to eval() on submit — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() assignments on form field values.",
+        "Use safe DOM APIs instead of dynamic code execution.",
+        "Add CSP as defense-in-depth against DOM XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/eval assigns form input to eval(). Show event-triggered DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/.../eval route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/formSubmission/eval, form submit passes userInput to eval() — route-specific event-triggered DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form submissions do not pass user input to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval sinks on form submission in /dom/eventtriggering routes.",
+      steps: [
+        "Audit form onsubmit handlers for eval() and Function() sinks.",
+        "Encode user input before any DOM manipulation.",
+        "Add output encoding tests for form-triggered XSS routes."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/eval route passes form input to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range form-submission document.write DOM XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/formSubmission/documentWrite returns a Toxic DOM page where form.onsubmit copies userInput into document.write — Firing Range event-triggered DOM XSS training oracle.",
+    impactOneline:
+      "Form submit handlers that assign user input to document.write enable DOM XSS on user interaction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass form input to document.write on submit — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write assignments on form field values.",
+        "Use textContent or safe DOM APIs for user-supplied text.",
+        "Add CSP as defense-in-depth against DOM XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/documentWrite assigns form input to document.write. Show event-triggered DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-form-submission-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/.../documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/formSubmission/documentWrite, form submit passes userInput to document.write — route-specific event-triggered DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm form submissions do not write user input via document.write.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomFormSubmissionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix document.write sinks on form submission in /dom/eventtriggering routes.",
+      steps: [
+        "Audit form onsubmit handlers for document.write sinks.",
+        "Encode user input before DOM insertion.",
+        "Add output encoding tests for form-triggered XSS routes."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/formSubmission/documentWrite route passes form input to document.write. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range DOM propagation eval XSS oracle",
+    description:
+      "GET /dom/dompropagation/document/formSubmission/eval propagates location.hash via window.status into eval() — Firing Range DOM propagation XSS training oracle.",
+    impactOneline:
+      "DOM property propagation chains that end in eval() enable XSS when attackers control the source value.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Break propagation chains that pass untrusted data to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Audit DOM property writes and reads for dangerous sink chains.",
+        "Never pass propagated values to eval() or document.write.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation route propagates location.hash via window.status into eval(). Show DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/.../eval route XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/document/formSubmission/eval, location.hash propagates via window.status to eval() — route-specific DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM property propagation does not reach eval() sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix eval sinks in DOM propagation chains on /dom/dompropagation routes.",
+      steps: [
+        "Audit window.status and similar property propagation for dangerous sinks.",
+        "Sanitize values before DOM property round-trips.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/document/formSubmission/eval route propagates location.hash to eval(). Show route-specific DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-remoteinclude-script-hash-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
