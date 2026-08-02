@@ -1,6 +1,36 @@
 {
-  "updated_at": "2026-08-02T13:12:30.000Z",
+  "updated_at": "2026-08-02T14:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/documentWrite",
+      "source": "google/firing-range — document.cookie (unset) sink to document.write DOM XSS (/dom/toxicdom/document/cookie/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/innerHtml",
+      "source": "google/firing-range — document.cookie (set) sink to innerHTML DOM XSS (/dom/toxicdom/document/cookie_set/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/documentWrite",
+      "source": "google/firing-range — document.cookie (set) sink to document.write DOM XSS (/dom/toxicdom/document/cookie_set/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/eval",
+      "source": "google/firing-range — event-triggered document sink to eval() DOM XSS (/dom/eventtriggering/document/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/innerHtml",
+      "source": "google/firing-range — event-triggered document sink to innerHTML DOM XSS (/dom/eventtriggering/document/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/innerHtml",
+      "source": "google/firing-range — external script localStorage property to innerHTML DOM XSS (/dom/toxicdom/external/localStorage/property/innerHtml)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/eval",
       "source": "google/firing-range — document.cookie (unset) sink to eval() DOM XSS (/dom/toxicdom/document/cookie/eval)",
