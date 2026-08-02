@@ -40054,6 +40054,87 @@ const firingRangeDomLocalstoragePropertyDocumentwriteRouteLiveOracle: Rule = asy
   };
 };
 
+const firingRangeDomLocalstoragePropertyEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/localStorage/property/eval",
+    /localStorage\.badValue/i,
+    "localStorage.badValue"
+  );
+};
+
+const firingRangeDomLocalstoragePropertyEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/property\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalstoragePropertyEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/property/eval route scan — localStorage.badValue passed to eval() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomLocalstoragePropertyInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomInnerHtml(
+    ctx,
+    "/dom/toxicdom/localStorage/property/innerHtml",
+    /localStorage\.badValue/i,
+    "localStorage.badValue"
+  );
+};
+
+const firingRangeDomLocalstoragePropertyInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/property\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalstoragePropertyInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/property/innerHtml route scan — localStorage.badValue passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const firingRangeDomSessionstoragePropertyEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/sessionStorage/property/eval",
+    /sessionStorage\.badValue/i,
+    "sessionStorage.badValue"
+  );
+};
+
+const firingRangeDomSessionstoragePropertyEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/sessionStorage\/property\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomSessionstoragePropertyEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/sessionStorage/property/eval route scan — sessionStorage.badValue passed to eval() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_ADDRESS_HASH_EVAL_PATH = "/address/location.hash/eval";
 
 const firingRangeAddressLocationHashEvalLiveOracle: Rule = async (ctx) => {
@@ -56772,6 +56853,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomSessionstoragePropertyDocumentwriteRouteLiveOracle,
   firingRangeDomLocalstoragePropertyDocumentwriteLiveOracle,
   firingRangeDomLocalstoragePropertyDocumentwriteRouteLiveOracle,
+  firingRangeDomLocalstoragePropertyEvalLiveOracle,
+  firingRangeDomLocalstoragePropertyEvalRouteLiveOracle,
+  firingRangeDomLocalstoragePropertyInnerhtmlLiveOracle,
+  firingRangeDomLocalstoragePropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomSessionstoragePropertyEvalLiveOracle,
+  firingRangeDomSessionstoragePropertyEvalRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,
   firingRangeAddressLocationHashEvalRouteLiveOracle,
   firingRangeCorsDynamicAllowOriginLiveOracle,

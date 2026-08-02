@@ -3358,6 +3358,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-localstorage-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage property eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/property/eval returns a page that reads localStorage.badValue and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "localStorage property values passed to eval() enable DOM XSS when attackers can poison localStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from localStorage.",
+        "Treat localStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/eval uses eval on localStorage.badValue. Show toxic DOM localStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/property/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/property/eval, localStorage.badValue is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage property values are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on localStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/eval route uses eval on localStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage property innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/property/innerHtml returns a page that reads localStorage.badValue and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "localStorage property values passed to innerHTML enable DOM XSS when attackers can poison localStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from localStorage.",
+        "Treat localStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/innerHtml uses innerHTML on localStorage.badValue. Show toxic DOM localStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-property-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/property/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/property/innerHtml, localStorage.badValue is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage property values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstoragePropertyInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on localStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/property/innerHtml route uses innerHTML on localStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage property eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/property/eval returns a page that reads sessionStorage.badValue and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage property values passed to eval() enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/eval uses eval on sessionStorage.badValue. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/property/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/property/eval, sessionStorage.badValue is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage property values are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstoragePropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/property/eval route uses eval on sessionStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-address-location-hash-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
