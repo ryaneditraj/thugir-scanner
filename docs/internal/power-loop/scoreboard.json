@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T15:10:38.244Z",
+  "updated_at": "2026-08-02T16:10:47.080Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2758,
-  "total_findings": 29800,
+  "total_sites_scanned": 2767,
+  "total_findings": 30931,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 25701,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-02T15:10:38.244Z",
+  "discovery_urls_added": 1976,
+  "discovery_findings": 26801,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-02T16:10:47.080Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 35,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 477,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,41 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (35 findings pages=6 probes=486; gap=[])"
+      "note": "Primary juice-shop.herokuapp.com error → staging fallback 6/6 (31 findings pages=6 probes=477; gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 410,
-      "focus": "firing-range cookie/documentWrite + postMessage improper origin partial/regexp validation",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 1100,
+      "focus": "firing-range urldom location.hash document.location + form.action + localStorage/sessionStorage property eval/innerHtml sinks",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (35 findings) — no benchmark misses",
-      "public-firing-range document/cookie/documentWrite: 131→138 findings — route-specific unset-cookie document.write oracle shipped",
-      "public-firing-range postMessage/improperOriginValidationWithPartialStringComparison: 129→136 findings — weak origin.includes() + eval oracle shipped",
-      "public-firing-range postMessage/improperOriginValidationWithRegExp: 129→136 findings — unanchored origin RegExp + eval oracle shipped"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
+      "public-firing-range urldom/location/hash/document.location: 139 findings — generic firing-range DOM sink oracles",
+      "public-firing-range urldom/location/hash/form.action: 139 findings — generic firing-range DOM sink oracles",
+      "public-firing-range dom/toxicdom/localStorage/property/eval: 137 findings — generic firing-range DOM sink oracles",
+      "public-firing-range dom/toxicdom/localStorage/property/innerHtml: 137 findings — generic firing-range DOM sink oracles",
+      "public-firing-range dom/toxicdom/sessionStorage/property/eval: 137 findings — generic firing-range DOM sink oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range cookie_set/innerHtml + cookie_set/documentWrite: route-specific oracles still absent",
-      "public-firing-range document/inputTyping routes: generic firing-range oracles only — no inputTyping route-specific live oracles",
-      "encodeUrl/title + createContextualFragment Firing Range templates 404 on live host",
-      "dompropagation/window/formSubmission/documentWrite serves eval template on live host",
+      "public-firing-range urldom/location/hash/document.location + form.action: generic firing-range oracles only — no route-specific live oracles",
+      "public-firing-range localStorage/sessionStorage property sinks: generic firing-range oracles only — no property-route-specific live oracles",
+      "address/location.hash/innerhtml returns 400 on live host (innerHtml variant works)",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 35,
-    "public-firing-range.appspot.com/dom/toxicdom/document/cookie/documentWrite": 138,
-    "public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithPartialStringComparison": 136,
-    "public-firing-range.appspot.com/dom/toxicdom/postMessage/improperOriginValidationWithRegExp": 136,
-    "public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/eval": 134,
-    "public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/innerHtml": 134,
-    "public-firing-range.appspot.com/reflected/jsoncallback": 135,
-    "public-firing-range.appspot.com/reverseclickjacking/universalreverseclickjacking_actiononly": 136
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/urldom/location/hash/document.location": 139,
+    "public-firing-range.appspot.com/urldom/location/hash/form.action": 139,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/property/eval": 137,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/property/innerHtml": 137,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/eval": 137,
+    "public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/eval": 137,
+    "public-firing-range.appspot.com/dom/toxicdom/document/inputTyping/innerHtml": 137
   }
 }
