@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-div-style-expression-injection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/div?q=<div> returns <div></div>; /tags/tag/style?q=<style> returns <style></style>; /tags/expression?q=<script> returns <script></script>; route scans 147→153 (+firing-range-tags-injection-route-live-oracle); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-status-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/dompropagation/window/innerHtml/innerHtml and /eval/eval propagate location.hash via window.status to eval(retrieved_payload); route scans 147→153 (+status-eval live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-form-submission-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/formSubmission/eval passes form input to eval() on submit with sync eval(payload) after appendChild(form); route scan 147→152 (+toxicdom-form-submission-eval live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-inputtyping-eval-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/inputTyping/eval returns keyup/change handler passing e.target.value to eval(payload); inputTyping/eval route scan findings 143→150 (+firing-range-dom-inputtyping-eval-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
@@ -17757,6 +17775,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-jsoncallback-live-oracle",
       "shipped_at": "2026-08-02T18:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-div-style-expression-injection",
+      "shipped_at": "2026-08-02T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-propagation-window-status-eval-live-oracle",
+      "shipped_at": "2026-08-02T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-form-submission-eval-live-oracle",
+      "shipped_at": "2026-08-02T20:10:00.000Z"
     }
   ]
 }
