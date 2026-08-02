@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2139,
   "discovery_findings": 28063,
-  "improvements_shipped": 1161,
+  "improvements_shipped": 1164,
   "last_run": "2026-08-02T22:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 30,
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 477,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,38 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (30 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (31 findings on staging fallback); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 770,
-      "focus": "firing-range localStorage function/array + external localStorage function/array documentWrite/innerHtml sinks",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 480,
+      "focus": "firing-range tags/tag/{video,audio,canvas} route-specific tag injection oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite: 154 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/innerHtml: 154 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/documentWrite: 154 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/documentWrite: 154 findings — generic firing-range DOM sink oracles",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/innerHtml: 154 findings — generic firing-range DOM sink oracles"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/tags/tag/video: 152→160 findings — VIDEO tag injection live+route oracles shipped",
+      "public-firing-range.appspot.com/tags/tag/audio: 152→160 findings — AUDIO tag injection live+route oracles shipped",
+      "public-firing-range.appspot.com/tags/tag/canvas: 152→160 findings — CANVAS tag injection live+route oracles shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "testphp.vulnweb.com unreachable from cloud agent — SQLi route oracles blocked at network layer",
-      "public-firing-range localStorage function/array + external localStorage routes: generic firing-range oracles only — no route-specific localStorage-sink live oracles"
+      "encodeUrl/title returns 404 on Firing Range — template removed upstream",
+      "address/location.hash/setInterval returns CANNOT FIND THAT TEMPLATE — upstream removed",
+      "tags/tag/applet: route-specific tag injection oracle still absent",
+      "testphp.vulnweb.com unreachable from cloud agent — SQLi route oracles blocked at network layer"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 30,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite": 154,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/innerHtml": 154,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/documentWrite": 154,
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/documentWrite": 154,
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/innerHtml": 154
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/tags/tag/video": 160,
+    "public-firing-range.appspot.com/tags/tag/audio": 160,
+    "public-firing-range.appspot.com/tags/tag/canvas": 160,
+    "public-firing-range.appspot.com/tags/tag/object": 152,
+    "public-firing-range.appspot.com/tags/tag/embed": 152,
+    "public-firing-range.appspot.com/tags/tag/svg": 152
   }
 }
