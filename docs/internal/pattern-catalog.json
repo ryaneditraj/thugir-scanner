@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-02T06:22:29.804Z",
-  "total": 1464,
-  "uniqueSlugs": 1459,
+  "generatedAt": "2026-08-02T07:14:40.456Z",
+  "total": 1470,
+  "uniqueSlugs": 1465,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1446,
+    "generic": 1452,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1379,
+    "deep": 1385,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 135,
     "Broken authentication": 89,
     "Injection": 241,
-    "Cross-site scripting": 362,
+    "Cross-site scripting": 368,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -833,8 +833,12 @@
     "firing-range-address-location-hash-documentwrite-route-live-oracle",
     "firing-range-address-location-hash-eval-live-oracle",
     "firing-range-address-location-hash-eval-route-live-oracle",
+    "firing-range-address-location-hash-function-live-oracle",
+    "firing-range-address-location-hash-function-route-live-oracle",
     "firing-range-address-location-hash-innerhtml-live-oracle",
     "firing-range-address-location-hash-innerhtml-route-live-oracle",
+    "firing-range-address-location-hash-replace-live-oracle",
+    "firing-range-address-location-hash-replace-route-live-oracle",
     "firing-range-address-location-innerhtml-live-oracle",
     "firing-range-address-location-innerhtml-route-live-oracle",
     "firing-range-angular-body-xss-live-oracle",
@@ -931,6 +935,8 @@
     "firing-range-reflected-js-slashquoted-string-route-live-oracle",
     "firing-range-reflected-param-live-oracle",
     "firing-range-reflected-param-route-live-oracle",
+    "firing-range-reflected-parameter-body-non2xx-live-oracle",
+    "firing-range-reflected-parameter-body-non2xx-route-live-oracle",
     "firing-range-reflected-parameter-iframe-attribute-value-live-oracle",
     "firing-range-reflected-parameter-iframe-attribute-value-route-live-oracle",
     "firing-range-reflected-parameter-json-live-oracle",

@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-body-non2xx-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/403?q=thugirFrBodyNon2xxProbe returns <body>thugirFrBodyNon2xxProbe</body> with HTTP 403; body/403 route scan findings 110→119 (+body-non2xx live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-replace-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/replace page passes location.hash to location.replace(payload); hash/replace route scan findings 109→118 (+replace live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-address-location-hash-function-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /address/location.hash/function page passes location.hash to new Function(payload); hash/function route scan findings 109→118 (+function live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-escape-serverside-head-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/encodeUrl/head?q=thugirFrEscapeHeadProbe returns <head>thugirFrEscapeHeadProbe</head>; encodeUrl/head route scan findings 112→115 (+escape-serverside-head live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
