@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T00:16:04.814Z",
-  "total": 1561,
-  "uniqueSlugs": 1556,
+  "generatedAt": "2026-08-03T01:10:43.619Z",
+  "total": 1567,
+  "uniqueSlugs": 1562,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1543,
+    "generic": 1549,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1476,
+    "deep": 1482,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 450,
+    "Cross-site scripting": 456,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -874,6 +874,8 @@
     "firing-range-dom-cookie-set-eval-route-live-oracle",
     "firing-range-dom-cookie-set-innerhtml-live-oracle",
     "firing-range-dom-cookie-set-innerhtml-route-live-oracle",
+    "firing-range-dom-external-sessionstorage-function-eval-live-oracle",
+    "firing-range-dom-external-sessionstorage-function-eval-route-live-oracle",
     "firing-range-dom-form-submission-documentwrite-live-oracle",
     "firing-range-dom-form-submission-documentwrite-route-live-oracle",
     "firing-range-dom-form-submission-eval-live-oracle",
@@ -1029,6 +1031,10 @@
     "firing-range-reflected-url-object-param-route-live-oracle",
     "firing-range-reflected-url-script-src-live-oracle",
     "firing-range-reflected-url-script-src-route-live-oracle",
+    "firing-range-remoteinclude-object-hash-live-oracle",
+    "firing-range-remoteinclude-object-hash-route-live-oracle",
+    "firing-range-remoteinclude-parameter-object-raw-live-oracle",
+    "firing-range-remoteinclude-parameter-object-raw-route-live-oracle",
     "firing-range-remoteinclude-parameter-script-live-oracle",
     "firing-range-remoteinclude-parameter-script-route-live-oracle",
     "firing-range-remoteinclude-script-hash-live-oracle",

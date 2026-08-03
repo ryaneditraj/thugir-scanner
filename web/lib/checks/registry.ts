@@ -38026,7 +38026,7 @@ const firingRangeDomExternalSessionStorageFunctionEvalLiveOracle: Rule = async (
   if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
   const script = scriptDoc.body;
   const hasEvalSink =
-    /sessionStorage\.badValue/i.test(script) &&
+    /sessionStorage\.(?:getItem\s*\(\s*['"]badValue['"]\s*\)|badValue)/i.test(script) &&
     /eval\s*\(\s*payload\s*\)/i.test(script);
   if (!hasEvalSink) return NEGATIVE;
   const hasExternalPage =
