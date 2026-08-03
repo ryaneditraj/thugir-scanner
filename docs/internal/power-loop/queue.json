@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T21:02:00.000Z",
+  "updated_at": "2026-08-03T22:10:00.000Z",
   "discovery_urls": [
     {
       "url": "https://securityweb-iota.vercel.app/api/sqli-vulnerable",
@@ -14483,6 +14483,31 @@
     {
       "url": "https://public-firing-range.appspot.com/mixedcontent/",
       "source": "google/firing-range — mixed content passive/active oracle index (/mixedcontent/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?category=gin",
+      "source": "PortSwigger ginandjuice.shop — UNION SQLi oracle on /catalog category parameter (pentest-2026-ginandjuice / ZAP testapp docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/order/details?orderId=0254809",
+      "source": "PortSwigger ginandjuice.shop — IDOR oracle GET /order/details?orderId= (carlos order history disclosure)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/innerHtml",
+      "source": "google/firing-range — sessionStorage array to innerHTML DOM XSS sink (/dom/toxicdom/sessionStorage/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/documentWrite",
+      "source": "google/firing-range — sessionStorage array to document.write DOM XSS sink (/dom/toxicdom/sessionStorage/array/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval",
+      "source": "google/firing-range — sessionStorage function to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval)",
       "auth": "public_demo"
     }
   ]
