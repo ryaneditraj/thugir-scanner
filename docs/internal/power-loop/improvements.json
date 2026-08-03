@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-object-function-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/object/function/documentWrite loads toxicdomscripts sessionStorage/object/function/documentWrite script-include document.write sink; route scan findings 203→210 (+sessionstorage-object-function-documentwrite live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-object-array-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/object/array/innerHtml loads toxicdomscripts sessionStorage/object/array/innerHtml script-include innerHTML sink; route scan findings 203→210 (+sessionstorage-object-array-innerhtml live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-function-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/object/function/documentWrite loads toxicdomscripts object/function/documentWrite script-include document.write sink; route scan findings 198→211 (+localstorage-object-function-documentwrite live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-localstorage-array-innerhtml-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/array/innerHtml passes localStorage['badValue'] to div.innerHTML sync+async trigger; public-firing-range.appspot.com/dom/toxicdom/localStorage/array/innerHtml findings 154→208; benchmark juice-shop-staging 32 findings 6/6 maintained"
@@ -18309,6 +18327,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-postmessage-complex-message-documentwrite-eval-oracle",
       "shipped_at": "2026-08-03T19:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-object-function-documentwrite-live-oracle",
+      "shipped_at": "2026-08-03T20:45:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-object-array-innerhtml-live-oracle",
+      "shipped_at": "2026-08-03T20:45:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-function-documentwrite-live-oracle",
+      "shipped_at": "2026-08-03T20:45:00.000Z"
     }
   ]
 }
