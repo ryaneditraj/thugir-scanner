@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-storage-parse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_storage_parse/1.6.0 returns $parse(localStorage.getItem(irrelevantKey))({}); public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0 findings 163→167 (+angular-storage-parse live+route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-post-message-parse-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_post_message_parse/1.6.0 returns addEventListener('message') + $parse(msg.data)({}); public-firing-range.appspot.com/angular/angular_post_message_parse/1.6.0 findings 163→167 (+angular-post-message-parse live+route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-function-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/function/documentWrite returns localStorage.getItem('badValue') → document.write(payload); public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite findings 162→166 (+localstorage-function-documentwrite live+route); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-remoteinclude-parameter-object-raw-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /remoteinclude/parameter/object_raw?q=https://thugir-remoteinclude-probe.example/object.html reflects <object data=\"...\">; route scan findings 117→163 (+object-raw live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
@@ -17895,6 +17913,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-tags-tag-canvas-live-oracle",
       "shipped_at": "2026-08-02T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-storage-parse-live-oracle",
+      "shipped_at": "2026-08-03T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-post-message-parse-live-oracle",
+      "shipped_at": "2026-08-03T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-localstorage-function-documentwrite-live-oracle",
+      "shipped_at": "2026-08-03T02:10:00.000Z"
     }
   ]
 }

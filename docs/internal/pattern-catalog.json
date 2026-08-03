@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T01:10:43.619Z",
-  "total": 1567,
-  "uniqueSlugs": 1562,
+  "generatedAt": "2026-08-03T02:12:36.272Z",
+  "total": 1573,
+  "uniqueSlugs": 1568,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1549,
+    "generic": 1555,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1482,
+    "deep": 1488,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 456,
+    "Cross-site scripting": 462,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -848,6 +848,10 @@
     "firing-range-angular-cookie-parse-route-live-oracle",
     "firing-range-angular-form-parse-live-oracle",
     "firing-range-angular-form-parse-route-live-oracle",
+    "firing-range-angular-post-message-parse-live-oracle",
+    "firing-range-angular-post-message-parse-route-live-oracle",
+    "firing-range-angular-storage-parse-live-oracle",
+    "firing-range-angular-storage-parse-route-live-oracle",
     "firing-range-badscriptimport-live-oracle",
     "firing-range-badscriptimport-route-live-oracle",
     "firing-range-cors-allow-insecure-scheme-live-oracle",
@@ -892,6 +896,8 @@
     "firing-range-dom-javascripturi-route-live-oracle",
     "firing-range-dom-js-html-sanitize-eval-live-oracle",
     "firing-range-dom-js-html-sanitize-eval-route-live-oracle",
+    "firing-range-dom-localstorage-function-documentwrite-live-oracle",
+    "firing-range-dom-localstorage-function-documentwrite-route-live-oracle",
     "firing-range-dom-localstorage-property-documentwrite-live-oracle",
     "firing-range-dom-localstorage-property-documentwrite-route-live-oracle",
     "firing-range-dom-localstorage-property-eval-live-oracle",
