@@ -966,6 +966,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-external-sessionstorage-function-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM external sessionStorage eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/external/sessionStorage/function/eval loads a script that reads sessionStorage.badValue and passes it to eval() — Firing Range toxic DOM external sessionStorage eval XSS training oracle.",
+    impactOneline:
+      "DOM XSS via sessionStorage lets attackers persist payloads for the browser tab session that execute when passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomExternalSessionStorageFunctionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from sessionStorage.",
+        "Treat storage as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our external sessionStorage script passes values to eval(). Show how to remove storage-backed DOM XSS sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-external-sessionstorage-function-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM external sessionStorage eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/external/sessionStorage/function/eval, the external script passes sessionStorage.badValue to eval() — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm DOM XSS sinks that evaluate sessionStorage-backed payloads via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomExternalSessionStorageFunctionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on sessionStorage-backed values in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/external/sessionStorage/function/eval route uses eval on sessionStorage values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-leakedcookie-httponly-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -6916,6 +6968,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /remoteinclude/parameter/script route seeds script.src from a query parameter. Show route-specific remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-parameter-object-raw-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range remote-include parameter object DOM XSS oracle",
+    description:
+      "GET /remoteinclude/parameter/object_raw?q= reflects the query parameter into object.data — Firing Range remote-include parameter object DOM XSS training oracle.",
+    impactOneline:
+      "URL query parameters used as object.data enable attacker-controlled remote object inclusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeParameterObjectRawLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never seed object.data from URL query parameters — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic object.data assignments from query parameters.",
+        "Allow-list remote object origins.",
+        "Use CSP object-src to block attacker-controlled object loads."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/parameter/object_raw loads object.data from a query parameter. Show remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-parameter-object-raw-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /remoteinclude/parameter/object_raw route XSS oracle",
+    description:
+      "When scanning /remoteinclude/parameter/object_raw, the q query parameter seeds attacker-controlled object.data — route-specific remote-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm query parameters cannot load arbitrary remote objects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeParameterObjectRawRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix object.data seeding from query parameters on /remoteinclude routes.",
+      steps: [
+        "Audit query parameter reads for object inclusion sinks.",
+        "Allow-list object origins.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/parameter/object_raw route seeds object.data from a query parameter. Show route-specific remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-object-hash-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range remote-include object hash DOM XSS oracle",
+    description:
+      "GET /remoteinclude/object_hash.html reads location.hash.substr(1) and sets object.data to the fragment — Firing Range remote-include hash-fragment object DOM XSS training oracle.",
+    impactOneline:
+      "location.hash values used as object.data enable attacker-controlled remote object inclusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeObjectHashLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never seed object.data from location.hash — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove dynamic object.data assignments from URL fragments.",
+        "Allow-list remote object origins.",
+        "Use CSP object-src to block attacker-controlled object loads."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/object_hash.html loads object.data from location.hash. Show remote-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-remoteinclude-object-hash-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /remoteinclude/object_hash.html route XSS oracle",
+    description:
+      "When scanning /remoteinclude/object_hash.html, location.hash seeds attacker-controlled object.data — route-specific remote-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments cannot load arbitrary remote objects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeRemoteIncludeObjectHashRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix object.data seeding from location.hash on /remoteinclude routes.",
+      steps: [
+        "Audit location.hash reads for object inclusion sinks.",
+        "Allow-list object origins.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /remoteinclude/object_hash.html route seeds object.data from location.hash. Show route-specific remote-include DOM XSS remediation.",
     version: 1,
     enabled: true
   },
