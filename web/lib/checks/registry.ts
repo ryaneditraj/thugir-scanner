@@ -40497,6 +40497,18 @@ const FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_ROUTES = [
     sourceRe: /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i,
     label: "localStorage badValue",
     routeRe: /\/dom\/toxicdom\/localStorage\/function\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/sessionStorage/property/js_html_sanitize_eval",
+    sourceRe: /sessionStorage\.badValue/i,
+    label: "sessionStorage property badValue",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/property\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/localStorage/array/js_html_sanitize_eval",
+    sourceRe: /localStorage\s*\[\s*['"]badValue['"]\s*\]/i,
+    label: "localStorage array badValue",
+    routeRe: /\/dom\/toxicdom\/localStorage\/array\/js_html_sanitize_eval\b/i
   }
 ] as const;
 
@@ -43350,8 +43362,15 @@ const FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS = [
 const FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_WINDOW_STATUS_EVAL_PATHS = [
   "/dom/dompropagation/document/window/innerHtml",
   "/dom/dompropagation/document/window/eval",
-  "/dom/dompropagation/document/window/documentWrite"
+  "/dom/dompropagation/document/window/documentWrite",
+  "/dom/dompropagation/document/innerHtml/eval",
+  "/dom/dompropagation/document/innerHtml/innerHtml",
+  "/dom/dompropagation/document/innerHtml/documentWrite",
+  "/dom/dompropagation/document/eval/eval"
 ] as const;
+
+const FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_STATUS_EVAL_ROUTE_RE =
+  /\/dom\/dompropagation\/document\/(?:window|innerHtml|eval)\//i;
 
 async function probeFiringRangeDomPropagationWindowStatusEval(
   ctx: RuleContext,
@@ -43429,7 +43448,7 @@ const firingRangeDomPropagationDocumentWindowStatusEvalLiveOracle: Rule = async 
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let paths = [...FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_WINDOW_STATUS_EVAL_PATHS];
-  if (/\/dom\/dompropagation\/document\/window\//i.test(pageUrl)) {
+  if (FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_STATUS_EVAL_ROUTE_RE.test(pageUrl)) {
     try {
       const pathname = new URL(pageUrl).pathname;
       const matched = paths.filter((p) => pathname.startsWith(p));
@@ -43448,7 +43467,7 @@ const firingRangeDomPropagationDocumentWindowStatusEvalLiveOracle: Rule = async 
 const firingRangeDomPropagationDocumentWindowStatusEvalRouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/dom\/dompropagation\/document\/window\//i.test(pageUrl)) return NEGATIVE;
+  if (!FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_STATUS_EVAL_ROUTE_RE.test(pageUrl)) return NEGATIVE;
   let pathname = "";
   try {
     pathname = new URL(pageUrl).pathname;
