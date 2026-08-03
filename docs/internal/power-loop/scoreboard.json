@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T06:12:35.905Z",
+  "updated_at": "2026-08-03T06:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2166,
   "discovery_findings": 32085,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-03T06:12:35.905Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-03T06:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (34 findings); secret-resend slug still absent"
+      "note": "Primary Heroku 503 — staging fallback 6/6 recall (31 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 1034,
-      "focus": "firing-range toxicdom include/*/js_html_sanitize_eval sanitizer-bypass sinks + sessionStorage/include/function/eval queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "firing-range toxicdom sessionStorage/include/property/documentWrite + sessionStorage/include/array/innerHtml + localStorage/include/function/eval script-include oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "firing-range/dom/toxicdom/sessionStorage/include/function/js_html_sanitize_eval: 172 findings — generic firing-range hub oracles only (no route-specific script-include js_html_sanitize_eval sanitizer-bypass live oracle)",
-      "firing-range/dom/toxicdom/sessionStorage/include/property/js_html_sanitize_eval: 172 findings — generic firing-range hub oracles only (no route-specific script-include js_html_sanitize_eval sanitizer-bypass live oracle)",
-      "firing-range/dom/toxicdom/sessionStorage/include/array/js_html_sanitize_eval: 172 findings — generic firing-range hub oracles only (no route-specific script-include js_html_sanitize_eval sanitizer-bypass live oracle)",
-      "firing-range/dom/toxicdom/localStorage/include/function/js_html_sanitize_eval: 173 findings — generic firing-range hub oracles only (no route-specific script-include js_html_sanitize_eval sanitizer-bypass live oracle)",
-      "firing-range/dom/toxicdom/localStorage/include/property/js_html_sanitize_eval: 173 findings — generic firing-range hub oracles only (no route-specific script-include js_html_sanitize_eval sanitizer-bypass live oracle)",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/eval: 172 findings — generic hub oracles (queue drain)",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — primary Heroku 503, no category gaps",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/documentWrite: 172→176 — toxicdom-sessionstorage-include-property-documentwrite shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/innerHtml: 172→176 — toxicdom-sessionstorage-include-array-innerhtml shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/eval: 172→177 — toxicdom-localstorage-include-function-eval shipped",
+      "firing-range/dom/toxicdom/sessionStorage/include/function/js_html_sanitize_eval: 172 findings — generic hub oracles only (no route-specific script-include js_html_sanitize_eval sanitizer-bypass live oracle)",
       "testphp.vulnweb.com/listproducts.php + artists.php: scan errors — vulnweb unreachable from cloud egress"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "firing-range toxicdom */include/*/js_html_sanitize_eval routes: generic hub oracles only — no route-specific script-include sanitizer-bypass live oracles",
+      "firing-range toxicdom sessionStorage/include/array/documentWrite and localStorage/include/array/documentWrite routes still lack route-specific oracles",
       "localStorage/include/array/js_html_sanitize_eval route still not queued",
       "testphp.vulnweb.com unreachable from cloud agent egress"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
+    "juice-shop-staging.herokuapp.com": 31,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/eval": 177,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/documentWrite": 176,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/innerHtml": 176,
     "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/js_html_sanitize_eval": 172,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/js_html_sanitize_eval": 172,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/js_html_sanitize_eval": 172,
     "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/js_html_sanitize_eval": 173,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/property/js_html_sanitize_eval": 173,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/eval": 172,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 39,
     "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
