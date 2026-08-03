@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T20:02:00.000Z",
+  "updated_at": "2026-08-03T21:02:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://securityweb-iota.vercel.app/api/sqli-vulnerable",
+      "source": "DaniSam-STU/security-lab — SQLi API route on securityweb-iota Vercel deploy (alternate seclab host)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securityweb-iota.vercel.app/api/users-vulnerable/1",
+      "source": "DaniSam-STU/security-lab — IDOR users API GET /api/users-vulnerable/:id (securityweb-iota Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/transactions/1",
+      "source": "MRMcyber/vaultapp — transaction history IDOR oracle GET /api/transactions/:id (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/innerHtml",
+      "source": "google/firing-range — external script sessionStorage property to innerHTML DOM XSS (/dom/toxicdom/external/sessionStorage/property/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/innerHtml",
+      "source": "google/firing-range — external script sessionStorage array to innerHTML DOM XSS (/dom/toxicdom/external/sessionStorage/array/innerHtml)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://testphp.vulnweb.com/showimage.php",
       "source": "Acunetix testphp.vulnweb.com — LFI/SSRF oracle GET /showimage.php?file= (vulnweb PHP lab)",
