@@ -43356,21 +43356,27 @@ const FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS = [
   "/dom/dompropagation/window/innerHtml/documentWrite",
   "/dom/dompropagation/window/documentWrite/innerHtml",
   "/dom/dompropagation/window/documentWrite/documentWrite",
-  "/dom/dompropagation/window/eval/innerHtml"
+  "/dom/dompropagation/window/eval/innerHtml",
+  "/dom/dompropagation/window/formSubmission/innerHtml"
 ] as const;
 
 const FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_WINDOW_STATUS_EVAL_PATHS = [
   "/dom/dompropagation/document/window/innerHtml",
   "/dom/dompropagation/document/window/eval",
   "/dom/dompropagation/document/window/documentWrite",
+  "/dom/dompropagation/document/window/documentWrite/eval",
   "/dom/dompropagation/document/innerHtml/eval",
   "/dom/dompropagation/document/innerHtml/innerHtml",
   "/dom/dompropagation/document/innerHtml/documentWrite",
-  "/dom/dompropagation/document/eval/eval"
+  "/dom/dompropagation/document/eval/eval",
+  "/dom/dompropagation/document/eval/innerHtml",
+  "/dom/dompropagation/document/eval/documentWrite",
+  "/dom/dompropagation/document/formSubmission/innerHtml",
+  "/dom/dompropagation/document/formSubmission/documentWrite"
 ] as const;
 
 const FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_STATUS_EVAL_ROUTE_RE =
-  /\/dom\/dompropagation\/document\/(?:window|innerHtml|eval)\//i;
+  /\/dom\/dompropagation\/document\/(?:window|innerHtml|eval|formSubmission)\//i;
 
 async function probeFiringRangeDomPropagationWindowStatusEval(
   ctx: RuleContext,
