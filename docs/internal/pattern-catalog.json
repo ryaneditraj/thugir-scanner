@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T11:05:29.033Z",
-  "total": 1609,
-  "uniqueSlugs": 1604,
+  "generatedAt": "2026-08-03T12:05:32.458Z",
+  "total": 1615,
+  "uniqueSlugs": 1610,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1591,
+    "generic": 1597,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1524,
+    "deep": 1530,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 498,
+    "Cross-site scripting": 504,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -842,6 +842,12 @@
     "firing-range-address-location-hash-replace-route-live-oracle",
     "firing-range-address-location-innerhtml-live-oracle",
     "firing-range-address-location-innerhtml-route-live-oracle",
+    "firing-range-angular-body-alt-symbols-live-oracle",
+    "firing-range-angular-body-alt-symbols-route-live-oracle",
+    "firing-range-angular-body-attribute-ng-live-oracle",
+    "firing-range-angular-body-attribute-ng-route-live-oracle",
+    "firing-range-angular-body-attribute-non-ng-raw-live-oracle",
+    "firing-range-angular-body-attribute-non-ng-raw-route-live-oracle",
     "firing-range-angular-body-xss-live-oracle",
     "firing-range-angular-body-xss-route-live-oracle",
     "firing-range-angular-cookie-parse-live-oracle",
