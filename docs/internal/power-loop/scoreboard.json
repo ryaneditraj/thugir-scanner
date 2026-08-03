@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T21:07:14.387Z",
+  "updated_at": "2026-08-03T22:12:15.290Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2736,
-  "total_findings": 27654,
+  "total_sites_scanned": 2741,
+  "total_findings": 28714,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 23577,
+  "discovery_urls_added": 1961,
+  "discovery_findings": 24683,
   "improvements_shipped": 1164,
-  "last_run": "2026-08-03T21:07:14.387Z",
+  "last_run": "2026-08-03T22:12:15.290Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 32,
@@ -48,44 +48,46 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 — staging fallback 32 findings, 6/6 recall maintained"
+      "note": "Primary juice-shop.herokuapp.com 503 — staging fallback 32 findings, stable 6/6 recall"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 5,
-      "findings": 423,
-      "focus": "securityweb-iota API oracles + vaultapp transactions IDOR + firing-range external sessionStorage property/array innerHtml sinks",
-      "improvements_shipped_this_run": 3,
+      "findings": 1060,
+      "focus": "ginandjuice category SQLi + order IDOR oracles queued; queue drain fired-range postMessage/address/urldom DOM XSS hubs",
+      "improvements_shipped_this_run": 0,
+      "urls_queued_not_scanned_this_run": [
+        "https://ginandjuice.shop/catalog?category=gin",
+        "https://ginandjuice.shop/order/details?orderId=0254809",
+        "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/innerHtml",
+        "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/documentWrite",
+        "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval"
+      ]
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — primary Heroku oracle 503",
-      "securityweb-iota.vercel.app/api/sqli-vulnerable: 2 findings — reflexion-escalated-ssti (no route-specific SQLi live oracle)",
-      "securityweb-iota.vercel.app/api/users-vulnerable/1: 2 findings — reflexion-escalated-ssti (no route-specific IDOR live oracle)",
-      "vaultapp-omega.vercel.app/api/transactions/1: 7 findings — client-side-vaultapp-lab-evidence + dangerous-html-sinks (no transaction IDOR live oracle)",
-      "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/innerHtml: 206 findings — generic firing-range hub oracles only",
-      "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/innerHtml: 206 findings — generic firing-range hub oracles only",
-      "testphp.vulnweb.com/showimage.php: unreachable — host down from cloud agent (LFI/SSRF oracle queued)",
-      "testphp.vulnweb.com/redir.php: unreachable — open-redirect oracle queued but host unreachable",
-      "testphp.vulnweb.com/guestbook.php: unreachable — stored-XSS oracle queued but host unreachable"
+      "public-firing-range.appspot.com/dom/toxicdom/postMessage/eval: 210 findings — generic firing-range hub oracles",
+      "public-firing-range.appspot.com/address/location/eval: 212 findings — location-sourced eval() DOM XSS hub",
+      "public-firing-range.appspot.com/urldom/location/search/a.xlink-href?//example.org: 213 findings — urldom location.search xlink-href hub",
+      "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_query#firing-range: 213 findings — partial_query script.src hub",
+      "public-firing-range.appspot.com/urldom/location/search/button.formaction?//example.org: 212 findings — button.formaction urldom hub",
+      "testphp.vulnweb.com/showimage.php|redir.php|guestbook.php: unreachable from cloud agent (host down)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "testphp.vulnweb.com unreachable from cloud environment — showimage/redir/guestbook oracles blocked",
-      "securityweb-iota.vercel.app/api/*: route-specific SQLi/IDOR live oracles absent (generic SSTI reflexion only)",
-      "vaultapp-omega.vercel.app/api/transactions/:id: transaction IDOR live oracle absent (lab-evidence + generic misconfig hub)",
-      "public-firing-range external/sessionStorage/property|array/innerHtml: generic hub oracles only — no route-specific external script sessionStorage sink live oracles",
+      "ginandjuice.shop/catalog?category= and order/details?orderId= queued but not yet scanned (behind 2760+ pending queue entries)",
+      "sessionStorage array/function sanitizer-bypass routes queued — need route-specific live oracles vs generic hub findings",
+      "testphp.vulnweb.com unreachable from cloud environment",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
-    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/innerHtml": 206,
-    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/innerHtml": 206,
-    "vaultapp-omega.vercel.app/api/transactions/1": 7,
-    "securityweb-iota.vercel.app/api/sqli-vulnerable": 2,
-    "securityweb-iota.vercel.app/api/users-vulnerable/1": 2,
-    "php.testinvicti.com": 8,
-    "vulnapi.testinvicti.com": 7
+    "public-firing-range.appspot.com/urldom/location/search/a.xlink-href?//example.org": 213,
+    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_query#firing-range": 213,
+    "public-firing-range.appspot.com/address/location/eval": 212,
+    "public-firing-range.appspot.com/urldom/location/search/button.formaction?//example.org": 212,
+    "public-firing-range.appspot.com/dom/toxicdom/postMessage/eval": 210
   }
 }
