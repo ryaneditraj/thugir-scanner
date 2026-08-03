@@ -39306,6 +39306,84 @@ const firingRangeAngularBodyAltSymbolsRouteLiveOracle = makeFiringRangeAngularRo
   "Google Firing Range /angular/angular_body_alt_symbols route scan — q parameter reflected into custom [[ ]] interpolation without escaping"
 );
 
+const FIRING_RANGE_ANGULAR_BODY_ALT_SYMBOLS_RAW_DEFAULT =
+  "/angular/angular_body_alt_symbols_raw/1.4.0";
+const FIRING_RANGE_ANGULAR_BODY_RAW_ESCAPED_ALT_SYMBOLS_DEFAULT =
+  "/angular/angular_body_raw_escaped_alt_symbols/1.4.0";
+
+async function firingRangeAngularAltSymbolsBracketOracle(
+  ctx: RuleContext,
+  routePrefix: string,
+  defaultPath: string,
+  detectReflection: (body: string) => boolean,
+  note: string
+): Promise<RuleResult> {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePath = firingRangeAngularVersionPath(pageUrl, routePrefix, defaultPath);
+  const probeUrl = new URL(probePath, ctx.origin);
+  const bracketProbe = `[[${FIRING_RANGE_ANGULAR_BODY_PROBE}]]`;
+  probeUrl.searchParams.set("q", bracketProbe);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAngularSink =
+    /ng-app/i.test(body) &&
+    /angular(?:js)?\.js/i.test(body) &&
+    /startSymbol\s*\(\s*'\[\['\s*\)/i.test(body) &&
+    detectReflection(body);
+  if (!hasAngularSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 220).trim(),
+      note
+    }
+  };
+}
+
+const firingRangeAngularBodyAltSymbolsRawLiveOracle: Rule = async (ctx) =>
+  firingRangeAngularAltSymbolsBracketOracle(
+    ctx,
+    "/angular/angular_body_alt_symbols_raw",
+    FIRING_RANGE_ANGULAR_BODY_ALT_SYMBOLS_RAW_DEFAULT,
+    (body) => {
+      const probe = FIRING_RANGE_ANGULAR_BODY_PROBE;
+      return (
+        new RegExp(`\\[\\[${probe}\\]\\]`).test(body) &&
+        !new RegExp(`\\[\\[\\[\\[${probe}\\]\\]\\]\\]`).test(body) &&
+        !new RegExp(`\\\\\\[\\\\\\[${probe}\\\\\\]\\\\\\]`).test(body)
+      );
+    },
+    "Google Firing Range /angular/angular_body_alt_symbols_raw reflects q into custom [[ ]] delimiters without server-side wrapping — AngularJS template injection oracle"
+  );
+
+const firingRangeAngularBodyAltSymbolsRawRouteLiveOracle = makeFiringRangeAngularRouteOracle(
+  /\/angular\/angular_body_alt_symbols_raw\//i,
+  firingRangeAngularBodyAltSymbolsRawLiveOracle,
+  "Google Firing Range /angular/angular_body_alt_symbols_raw route scan — q parameter reflected into custom [[ ]] delimiters without server-side wrapping"
+);
+
+const firingRangeAngularBodyRawEscapedAltSymbolsLiveOracle: Rule = async (ctx) =>
+  firingRangeAngularAltSymbolsBracketOracle(
+    ctx,
+    "/angular/angular_body_raw_escaped_alt_symbols",
+    FIRING_RANGE_ANGULAR_BODY_RAW_ESCAPED_ALT_SYMBOLS_DEFAULT,
+    (body) => {
+      const probe = FIRING_RANGE_ANGULAR_BODY_PROBE;
+      return new RegExp(`\\\\\\[\\\\\\[${probe}\\\\\\]\\\\\\]`).test(body);
+    },
+    "Google Firing Range /angular/angular_body_raw_escaped_alt_symbols backslash-escapes custom [[ ]] delimiters in reflected output — AngularJS bypass oracle"
+  );
+
+const firingRangeAngularBodyRawEscapedAltSymbolsRouteLiveOracle = makeFiringRangeAngularRouteOracle(
+  /\/angular\/angular_body_raw_escaped_alt_symbols\//i,
+  firingRangeAngularBodyRawEscapedAltSymbolsLiveOracle,
+  "Google Firing Range /angular/angular_body_raw_escaped_alt_symbols route scan — backslash-escaped custom delimiter reflection bypasses server-side escaping"
+);
+
 const FIRING_RANGE_ANGULAR_BODY_RAW_ESCAPED_DEFAULT = "/angular/angular_body_raw_escaped/1.4.0";
 const FIRING_RANGE_ANGULAR_BODY_RAW_POST_DEFAULT = "/angular/angular_body_raw_post/1.6.0";
 
@@ -41473,6 +41551,33 @@ const firingRangeDomEventtriggeringInputtypingInnerhtmlRouteLiveOracle: Rule = a
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/eventtriggering/document/inputTyping/innerHtml route scan — input keystrokes passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const firingRangeDomEventtriggeringInputtypingDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeInputTypingSink(
+    ctx,
+    "/dom/eventtriggering/document/inputTyping/documentWrite",
+    /document\.write\s*\(\s*payload\s*\)/i,
+    "document.write()"
+  );
+};
+
+const firingRangeDomEventtriggeringInputtypingDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/eventtriggering\/document\/inputTyping\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomEventtriggeringInputtypingDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/eventtriggering/document/inputTyping/documentWrite route scan — input keystrokes passed to document.write() without sanitization"
     }
   };
 };
@@ -58827,6 +58932,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeAngularBodyAttributeNonNgRawRouteLiveOracle,
   firingRangeAngularBodyAltSymbolsLiveOracle,
   firingRangeAngularBodyAltSymbolsRouteLiveOracle,
+  firingRangeAngularBodyAltSymbolsRawLiveOracle,
+  firingRangeAngularBodyAltSymbolsRawRouteLiveOracle,
+  firingRangeAngularBodyRawEscapedAltSymbolsLiveOracle,
+  firingRangeAngularBodyRawEscapedAltSymbolsRouteLiveOracle,
   firingRangeAngularBodyRawEscapedLiveOracle,
   firingRangeAngularBodyRawEscapedRouteLiveOracle,
   firingRangeAngularBodyRawPostLiveOracle,
@@ -58929,6 +59038,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomEventtriggeringInputtypingEvalRouteLiveOracle,
   firingRangeDomEventtriggeringInputtypingInnerhtmlLiveOracle,
   firingRangeDomEventtriggeringInputtypingInnerhtmlRouteLiveOracle,
+  firingRangeDomEventtriggeringInputtypingDocumentwriteLiveOracle,
+  firingRangeDomEventtriggeringInputtypingDocumentwriteRouteLiveOracle,
   firingRangeReflectedJsoncallbackLiveOracle,
   firingRangeReflectedJsoncallbackRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,

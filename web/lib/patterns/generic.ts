@@ -2266,6 +2266,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-angular-body-alt-symbols-raw-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS custom delimiter raw reflection XSS oracle",
+    description:
+      "GET /angular/angular_body_alt_symbols_raw reflects the q query parameter into custom [[ ]] interpolation delimiters without server-side wrapping — Firing Range AngularJS template injection training oracle.",
+    impactOneline:
+      "User input reflected directly into custom interpolation delimiters enables expression injection without delimiter wrapping.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAltSymbolsRawLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into AngularJS templates, even with custom delimiters.",
+      steps: [
+        "Escape custom delimiter pairs in server-side template generation.",
+        "Use ng-bind instead of interpolation for dynamic data.",
+        "Avoid mixing server-side reflection with client-side Angular templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_alt_symbols_raw route reflects user input into [[ ]] delimiters without wrapping. Show custom-delimiter AngularJS SSTI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-alt-symbols-raw-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body_alt_symbols_raw route XSS oracle",
+    description:
+      "When scanning /angular/angular_body_alt_symbols_raw routes, the q parameter is reflected into custom [[ ]] delimiters without server-side wrapping — route-specific Angular template injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input is not embedded in custom AngularJS interpolation delimiters without escaping.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAltSymbolsRawRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove user-input reflection into custom AngularJS delimiters on /angular routes.",
+      steps: [
+        "Escape [[ and ]] in server-side templates.",
+        "Use ng-bind for dynamic values.",
+        "Audit all custom $interpolateProvider configurations."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_alt_symbols_raw route reflects query parameters into [[ ]] delimiters. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-raw-escaped-alt-symbols-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS backslash-escaped custom delimiter XSS oracle",
+    description:
+      "GET /angular/angular_body_raw_escaped_alt_symbols backslash-escapes custom [[ ]] delimiters in reflected output — Firing Range AngularJS bypass training oracle.",
+    impactOneline:
+      "Backslash-escaping custom interpolation delimiters does not prevent expression injection when Angular still processes the template.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyRawEscapedAltSymbolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into AngularJS templates — backslash escaping is insufficient.",
+      steps: [
+        "HTML-encode all user-controlled output in server templates.",
+        "Use ng-bind instead of interpolation for dynamic data.",
+        "Avoid server-side reflection into Angular template bodies."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_raw_escaped_alt_symbols route backslash-escapes custom delimiters but still reflects user input. Show AngularJS bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-raw-escaped-alt-symbols-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body_raw_escaped_alt_symbols route XSS oracle",
+    description:
+      "When scanning /angular/angular_body_raw_escaped_alt_symbols routes, backslash-escaped custom delimiter reflection still enables template injection — route-specific Angular bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm backslash-escaped custom delimiter reflection does not bypass AngularJS protections.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyRawEscapedAltSymbolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove user-input reflection into custom AngularJS delimiters on /angular routes.",
+      steps: [
+        "Encode reflected output before writing to HTML.",
+        "Use ng-bind for dynamic values.",
+        "Audit all custom $interpolateProvider configurations."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_raw_escaped_alt_symbols route backslash-escapes custom delimiters. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-angular-body-raw-escaped-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -5174,6 +5278,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/eventtriggering/document/inputTyping/innerHtml route uses innerHTML on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-inputtyping-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range eventtriggering inputTyping document.write XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/inputTyping/documentWrite returns a page that copies input keystrokes into document.write() on keyup/change — Firing Range event-triggered inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to document.write() via event handlers enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringInputtypingDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from input keyup/change handlers.",
+        "Treat user input as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/inputTyping/documentWrite uses document.write on input keystrokes. Show eventtriggering inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-inputtyping-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/document/inputTyping/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/inputTyping/documentWrite, input keystrokes are passed to document.write() without sanitization — route-specific eventtriggering inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not passed to document.write() via event handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringInputtypingDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write() sinks on inputTyping handlers in /dom/eventtriggering routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/inputTyping/documentWrite route uses document.write on input keystrokes. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
