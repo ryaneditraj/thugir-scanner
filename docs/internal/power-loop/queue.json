@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T19:03:42.093Z",
+  "updated_at": "2026-08-03T20:02:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://testphp.vulnweb.com/showimage.php",
+      "source": "Acunetix testphp.vulnweb.com — LFI/SSRF oracle GET /showimage.php?file= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/redir.php",
+      "source": "Acunetix testphp.vulnweb.com — open redirect oracle GET /redir.php?URL= (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/guestbook.php",
+      "source": "Acunetix testphp.vulnweb.com — stored XSS oracle POST /guestbook.php name/message (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://php.testinvicti.com/",
+      "source": "Invicti testinvicti.com — intentionally vulnerable PHP demo (Windows/Apache/PHP/MySQL training site)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vulnapi.testinvicti.com/",
+      "source": "Invicti testinvicti.com — OWASP API Top 10 vulnerable API demo with Swagger (vulnapi.testinvicti.com)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/documentWrite",
       "source": "google/firing-range — toxic DOM sessionStorage object Function document.write XSS sink (/dom/toxicdom/sessionStorage/object/function/documentWrite)",
