@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T20:08:00.000Z",
+  "updated_at": "2026-08-03T20:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2730,
-  "total_findings": 27199,
+  "total_sites_scanned": 2735,
+  "total_findings": 28208,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 23154,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-03T20:08:00.000Z",
+  "discovery_findings": 24155,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-03T20:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
@@ -52,36 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 647,
-      "focus": "Invicti testinvicti.com PHP + vulnapi API demos; testphp.vulnweb.com route oracles unreachable; firing-range queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 631,
+      "focus": "toxicdom sessionStorage object + localStorage object documentWrite route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — primary Heroku oracle 503",
-      "php.testinvicti.com: 8 findings — sql-error-disclosure + command-injection-form-probe + phpinfo-exposed + client-side-invicti-practice-site-evidence",
-      "vulnapi.testinvicti.com: 7 findings — idor-sequential-ids + vibe-openapi-docs-exposed + client-side-invicti-practice-site-evidence",
-      "testphp.vulnweb.com/showimage.php: unreachable — host down from cloud agent (LFI/SSRF oracle queued)",
-      "testphp.vulnweb.com/redir.php: unreachable — open-redirect oracle queued but host unreachable",
-      "testphp.vulnweb.com/guestbook.php: unreachable — stored-XSS oracle queued but host unreachable"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "sessionStorage/object/function/documentWrite: 203→210 findings — sessionstorage-object-function-documentwrite route oracle shipped",
+      "sessionStorage/object/array/innerHtml: 203→210 findings — sessionstorage-object-array-innerhtml route oracle shipped",
+      "localStorage/object/function/documentWrite: 198→211 findings — localstorage-object-function-documentwrite route oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "testphp.vulnweb.com unreachable from cloud environment — showimage/redir/guestbook oracles blocked",
-      "php.testinvicti.com: route-specific SQLi/XSS/LFI live oracles absent (generic misconfig+injection hub only)",
-      "vulnapi.testinvicti.com: Bearer-token BOLA/API auth-bypass live oracles absent (Swagger exposed, IDOR generic only)",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "juice-shop.herokuapp.com primary oracle intermittently errors — staging fallback required",
+      "remaining sessionStorage object property/eval/array-documentWrite routes: live+route oracles added in registry but not yet pattern-catalogged as top-3 this run",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent",
+      "escape/serverside/escapeHtml/href: template not found on firing-range (400) — cannot ship oracle",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/documentWrite": 210,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/innerHtml": 210,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/function/documentWrite": 211,
     "juice-shop-staging.herokuapp.com": 32,
     "php.testinvicti.com": 8,
     "vulnapi.testinvicti.com": 7,
-    "public-firing-range.appspot.com/flashinjection": 212,
-    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain": 210,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pentest-fauxbank.vercel.app/admin": 13
+    "public-firing-range.appspot.com/flashinjection": 212
   }
 }
