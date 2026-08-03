@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T22:10:00.000Z",
+  "updated_at": "2026-08-03T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval",
+      "source": "google/firing-range — toxic DOM sessionStorage object Function eval() XSS sink (/dom/toxicdom/sessionStorage/object/function/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/eval",
+      "source": "google/firing-range — toxic DOM sessionStorage object Array eval() XSS sink (/dom/toxicdom/sessionStorage/object/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/property/eval",
+      "source": "google/firing-range — toxic DOM sessionStorage object Property eval() XSS sink (/dom/toxicdom/sessionStorage/object/property/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/js_html_sanitize_eval",
+      "source": "google/firing-range — sessionStorage array to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/array/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/eval",
+      "source": "google/firing-range — external script sessionStorage property to eval() DOM XSS (/dom/toxicdom/external/sessionStorage/property/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://securityweb-iota.vercel.app/api/sqli-vulnerable",
       "source": "DaniSam-STU/security-lab — SQLi API route on securityweb-iota Vercel deploy (alternate seclab host)",
