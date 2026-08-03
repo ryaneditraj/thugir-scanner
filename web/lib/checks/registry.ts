@@ -38225,6 +38225,33 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
     sinkRe: /\.innerHTML\s*=\s*payload/i,
     label: "localStorage object property to innerHTML",
     routeRe: /\/dom\/toxicdom\/localStorage\/object\/(?:property\/)?innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/object/property/eval",
+    scriptPath: "/dom/toxicdomscripts/object/property/eval",
+    scriptSrcRe: /object\/property\/eval/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "localStorage object property to eval()",
+    routeRe: /\/dom\/toxicdom\/localStorage\/object\/(?:property\/)?eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/object/function/eval",
+    scriptPath: "/dom/toxicdomscripts/object/function/eval",
+    scriptSrcRe: /object\/function\/eval/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "localStorage object function to eval()",
+    routeRe: /\/dom\/toxicdom\/localStorage\/object\/function\/eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/object/array/eval",
+    scriptPath: "/dom/toxicdomscripts/object/array/eval",
+    scriptSrcRe: /object\/array\/eval/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "localStorage object array to eval()",
+    routeRe: /\/dom\/toxicdom\/localStorage\/object\/array\/eval\b/i
   }
 ] as const;
 
@@ -38640,6 +38667,81 @@ const firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlRouteLiveOracle: 
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/localStorage/object/property/innerHtml route scan — script-include localStorage object property to innerHTML sink"
+    }
+  };
+};
+
+const firingRangeDomToxicdomLocalstorageObjectPropertyEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomExternalInclude(
+    ctx,
+    FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[14]
+  );
+};
+
+const firingRangeDomToxicdomLocalstorageObjectPropertyEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[14].routeRe.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomToxicdomLocalstorageObjectPropertyEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/object/property/eval route scan — script-include localStorage object property to eval() sink"
+    }
+  };
+};
+
+const firingRangeDomToxicdomLocalstorageObjectFunctionEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomExternalInclude(
+    ctx,
+    FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[15]
+  );
+};
+
+const firingRangeDomToxicdomLocalstorageObjectFunctionEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[15].routeRe.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomToxicdomLocalstorageObjectFunctionEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/object/function/eval route scan — script-include localStorage object function to eval() sink"
+    }
+  };
+};
+
+const firingRangeDomToxicdomLocalstorageObjectArrayEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomExternalInclude(
+    ctx,
+    FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[16]
+  );
+};
+
+const firingRangeDomToxicdomLocalstorageObjectArrayEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[16].routeRe.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomToxicdomLocalstorageObjectArrayEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/object/array/eval route scan — script-include localStorage object array to eval() sink"
     }
   };
 };
@@ -42462,11 +42564,22 @@ const firingRangeEscapeServersideTagnameRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const FIRING_RANGE_ESCAPE_TEXTAREA_PROBE = "thugirFrEscapeTextareaProbe";
-const FIRING_RANGE_ESCAPE_TEXTAREA_PATH = "/escape/serverside/escapeHtml/textarea";
+const FIRING_RANGE_ESCAPE_TEXTAREA_PATHS = [
+  {
+    path: "/escape/serverside/escapeHtml/textarea",
+    encoding: "escapeHtml"
+  },
+  {
+    path: "/escape/serverside/encodeUrl/textarea",
+    encoding: "encodeUrl"
+  }
+] as const;
 
-const firingRangeEscapeServersideTextareaLiveOracle: Rule = async (ctx) => {
-  if (!isFiringRangeHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL(FIRING_RANGE_ESCAPE_TEXTAREA_PATH, ctx.origin);
+async function probeFiringRangeEscapeTextarea(
+  ctx: RuleContext,
+  target: (typeof FIRING_RANGE_ESCAPE_TEXTAREA_PATHS)[number]
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
   probeUrl.searchParams.set("q", FIRING_RANGE_ESCAPE_TEXTAREA_PROBE);
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -42480,17 +42593,46 @@ const firingRangeEscapeServersideTextareaLiveOracle: Rule = async (ctx) => {
     confidence: 0.92,
     evidence: {
       url: probeUrl.toString(),
+      encoding: target.encoding,
       snippet: doc.body.slice(0, 200).trim(),
-      note: "Google Firing Range /escape/serverside/escapeHtml/textarea reflects q into <textarea> body despite escapeHtml — server-side textarea-sink escape bypass XSS oracle"
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker input into <textarea> despite ${target.encoding} — server-side textarea-sink escape bypass XSS oracle`
     }
   };
+}
+
+const firingRangeEscapeServersideTextareaLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_ESCAPE_TEXTAREA_PATHS];
+  if (/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/textarea\b/i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p.path));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const target of paths) {
+    const result = await probeFiringRangeEscapeTextarea(ctx, target);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
 };
 
 const firingRangeEscapeServersideTextareaRouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/escape\/serverside\/escapeHtml\/textarea\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await firingRangeEscapeServersideTextareaLiveOracle(ctx);
+  if (!/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/textarea\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const target = FIRING_RANGE_ESCAPE_TEXTAREA_PATHS.find((p) => pathname.startsWith(p.path));
+  if (!target) return NEGATIVE;
+  const result = await probeFiringRangeEscapeTextarea(ctx, target);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -42498,17 +42640,28 @@ const firingRangeEscapeServersideTextareaRouteLiveOracle: Rule = async (ctx) => 
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Google Firing Range /escape/serverside/escapeHtml/textarea route scan — escapeHtml bypass allows textarea-sink XSS"
+      note: `Google Firing Range ${target.path} route scan — ${target.encoding} bypass allows textarea-sink XSS`
     }
   };
 };
 
 const FIRING_RANGE_ESCAPE_JS_EVAL_PROBE = "thugirFrEscapeJsEvalProbe";
-const FIRING_RANGE_ESCAPE_JS_EVAL_PATH = "/escape/serverside/escapeHtml/js_eval";
+const FIRING_RANGE_ESCAPE_JS_EVAL_PATHS = [
+  {
+    path: "/escape/serverside/escapeHtml/js_eval",
+    encoding: "escapeHtml"
+  },
+  {
+    path: "/escape/serverside/encodeUrl/js_eval",
+    encoding: "encodeUrl"
+  }
+] as const;
 
-const firingRangeEscapeServersideJsEvalLiveOracle: Rule = async (ctx) => {
-  if (!isFiringRangeHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL(FIRING_RANGE_ESCAPE_JS_EVAL_PATH, ctx.origin);
+async function probeFiringRangeEscapeJsEval(
+  ctx: RuleContext,
+  target: (typeof FIRING_RANGE_ESCAPE_JS_EVAL_PATHS)[number]
+): Promise<RuleResult> {
+  const probeUrl = new URL(target.path, ctx.origin);
   probeUrl.searchParams.set("q", FIRING_RANGE_ESCAPE_JS_EVAL_PROBE);
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 2048, timeoutMs: 8000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -42522,17 +42675,46 @@ const firingRangeEscapeServersideJsEvalLiveOracle: Rule = async (ctx) => {
     confidence: 0.92,
     evidence: {
       url: probeUrl.toString(),
+      encoding: target.encoding,
       snippet: doc.body.slice(0, 200).trim(),
-      note: "Google Firing Range /escape/serverside/escapeHtml/js_eval reflects q into <script> body despite escapeHtml — server-side script-sink escape bypass XSS oracle"
+      note: `Google Firing Range GET ${target.path}?q= reflects attacker input into <script> body despite ${target.encoding} — server-side script-sink escape bypass XSS oracle`
     }
   };
+}
+
+const firingRangeEscapeServersideJsEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_ESCAPE_JS_EVAL_PATHS];
+  if (/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/js_eval\b/i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p.path));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const target of paths) {
+    const result = await probeFiringRangeEscapeJsEval(ctx, target);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
 };
 
 const firingRangeEscapeServersideJsEvalRouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/escape\/serverside\/escapeHtml\/js_eval\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await firingRangeEscapeServersideJsEvalLiveOracle(ctx);
+  if (!/\/escape\/serverside\/(?:escapeHtml|encodeUrl)\/js_eval\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const target = FIRING_RANGE_ESCAPE_JS_EVAL_PATHS.find((p) => pathname.startsWith(p.path));
+  if (!target) return NEGATIVE;
+  const result = await probeFiringRangeEscapeJsEval(ctx, target);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -42540,7 +42722,7 @@ const firingRangeEscapeServersideJsEvalRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Google Firing Range /escape/serverside/escapeHtml/js_eval route scan — escapeHtml bypass allows script-sink XSS"
+      note: `Google Firing Range ${target.path} route scan — ${target.encoding} bypass allows script-sink XSS`
     }
   };
 };
@@ -59151,6 +59333,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomToxicdomLocalstorageIncludeArrayDocumentwriteRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlLiveOracle,
   firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectPropertyEvalLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectPropertyEvalRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectFunctionEvalLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectFunctionEvalRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectArrayEvalLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectArrayEvalRouteLiveOracle,
   firingRangeLeakedcookieHttponlyLiveOracle,
   firingRangeLeakedcookieHttponlyRouteLiveOracle,
   firingRangeMixedContentLiveOracle,
