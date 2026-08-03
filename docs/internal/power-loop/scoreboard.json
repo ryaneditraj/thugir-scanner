@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T04:15:00.000Z",
+  "updated_at": "2026-08-03T05:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3137,
-  "total_findings": 36420,
-  "critical_findings": 103,
+  "total_sites_scanned": 2723,
+  "total_findings": 26542,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2156,
-  "discovery_findings": 29686,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-03T04:15:00.000Z",
+  "discovery_urls_added": 1951,
+  "discovery_findings": 22487,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-03T05:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 477,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (34 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (34 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 513,
-      "focus": "sessionStorage script-include innerHTML, documentWrite, Function() live oracles",
+      "urls_scanned": 1,
+      "findings": 34,
+      "focus": "pwnshop OTP session cache + firing-range toxicdom localStorage array innerHtml/eval oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/innerHtml: 161→171 — toxicdom-sessionstorage-include-function-innerhtml oracle shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/documentWrite: →171 — toxicdom-sessionstorage-include-function-documentwrite oracle shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/function: →171 — toxicdom-sessionstorage-include-array-function oracle shipped"
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 12→39 findings — OTP session cache enables avatar-svg-xss + wallet-topup live oracles",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/innerHtml: 171→174 — toxicdom-localstorage-include-array-innerhtml shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/eval: 171→174 — toxicdom-localstorage-include-array-eval shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/dom/eventtriggering/window/eval: event-triggered eval oracle blocked (Firing Range template error Got 1 expected 2)",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/documentWrite: script-include sessionStorage document.write array oracle still absent",
-      "vulnerable-web-site.vercel.app/sqli: route-specific SQLi oracle absent (auth-gated login shell)"
+      "firing-range toxicdom sessionStorage/include/array/documentWrite and localStorage/include/array/documentWrite routes still lack route-specific oracles",
+      "firing-range toxicdom sessionStorage/include/function/eval route oracle still absent",
+      "ssrf.vulnlab.dev blind OOB oracle may need out-of-band callback infrastructure"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 34,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/innerHtml": 171,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/documentWrite": 171,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/function": 171,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/function": 169,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/eval": 168,
-    "public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0": 167
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 39,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/innerHtml": 174,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/eval": 174,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 35,
+    "wrongsecrets.herokuapp.com/challenge/challenge-2": 10,
+    "ssrf.vulnlab.dev/basic": 15
   }
 }

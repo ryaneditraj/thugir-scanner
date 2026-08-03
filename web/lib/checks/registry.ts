@@ -28083,12 +28083,15 @@ async function pwnshopOtpFromMailInbox(
   return null;
 }
 
-async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | null> {
+/** One OTP session per scan — many Pwnshop live oracles share ctx.probe and must not race separate registrations. */
+const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>();
+
+async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < 3; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
-    await pwnshopSleep(attempt === 0 ? 900 : 1500);
+    await pwnshopSleep(attempt === 0 ? 900 : attempt === 1 ? 1500 : 2200);
     const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
     if (!inboxToken) continue;
     const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
@@ -28110,6 +28113,14 @@ async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | nul
     return pwnshopSessionCookieFromDoc(verifyDoc) ?? cookie;
   }
   return null;
+}
+
+async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | null> {
+  const cached = pwnshopOtpSessionByProbe.get(ctx.probe);
+  if (cached) return cached;
+  const promise = pwnshopCompleteOtpSessionUncached(ctx);
+  pwnshopOtpSessionByProbe.set(ctx.probe, promise);
+  return promise;
 }
 
 const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
@@ -38142,6 +38153,24 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
     sinkRe: /(?:new\s+)?Function\s*\(\s*payload\s*\)/i,
     label: "sessionStorage array source to Function()",
     routeRe: /\/dom\/toxicdom\/sessionStorage\/include\/array\/function\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/include/array/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/include/array/innerHtml",
+    scriptSrcRe: /include\/array\/innerHtml/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /\.innerHTML\s*=\s*payload/i,
+    label: "localStorage array source to innerHTML",
+    routeRe: /\/dom\/toxicdom\/localStorage\/include\/array\/innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/include/array/eval",
+    scriptPath: "/dom/toxicdomscripts/include/array/eval",
+    scriptSrcRe: /include\/array\/eval/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "localStorage array source to eval()",
+    routeRe: /\/dom\/toxicdom\/localStorage\/include\/array\/eval\b/i
   }
 ] as const;
 
@@ -38335,6 +38364,56 @@ const firingRangeDomToxicdomSessionstorageIncludeArrayFunctionRouteLiveOracle: R
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/sessionStorage/include/array/function route scan — script-include sessionStorage array to Function() sink"
+    }
+  };
+};
+
+const firingRangeDomToxicdomLocalstorageIncludeArrayInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomExternalInclude(
+    ctx,
+    FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[6]
+  );
+};
+
+const firingRangeDomToxicdomLocalstorageIncludeArrayInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[6].routeRe.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomToxicdomLocalstorageIncludeArrayInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/include/array/innerHtml route scan — script-include localStorage array to innerHTML sink"
+    }
+  };
+};
+
+const firingRangeDomToxicdomLocalstorageIncludeArrayEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomExternalInclude(
+    ctx,
+    FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[7]
+  );
+};
+
+const firingRangeDomToxicdomLocalstorageIncludeArrayEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[7].routeRe.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomToxicdomLocalstorageIncludeArrayEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/include/array/eval route scan — script-include localStorage array to eval() sink"
     }
   };
 };
@@ -58051,6 +58130,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomToxicdomSessionstorageIncludeFunctionDocumentwriteRouteLiveOracle,
   firingRangeDomToxicdomSessionstorageIncludeArrayFunctionLiveOracle,
   firingRangeDomToxicdomSessionstorageIncludeArrayFunctionRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludeArrayInnerhtmlLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludeArrayInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludeArrayEvalLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludeArrayEvalRouteLiveOracle,
   firingRangeLeakedcookieHttponlyLiveOracle,
   firingRangeLeakedcookieHttponlyRouteLiveOracle,
   firingRangeMixedContentLiveOracle,
