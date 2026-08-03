@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T07:05:00.000Z",
+  "updated_at": "2026-08-03T08:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/window/documentWrite",
+      "source": "google/firing-range — DOM propagation document window.name sink to document.write DOM XSS (/dom/dompropagation/document/window/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/innerHtml/eval",
+      "source": "google/firing-range — DOM propagation document innerHTML sink to eval() DOM XSS (/dom/dompropagation/document/innerHtml/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/innerHtml/innerHtml",
+      "source": "google/firing-range — DOM propagation document innerHTML sink to innerHTML DOM XSS (/dom/dompropagation/document/innerHtml/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/innerHtml/documentWrite",
+      "source": "google/firing-range — DOM propagation document innerHTML sink to document.write DOM XSS (/dom/dompropagation/document/innerHtml/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/dompropagation/document/eval/eval",
+      "source": "google/firing-range — DOM propagation document eval sink to eval() DOM XSS (/dom/dompropagation/document/eval/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/js_html_sanitize_eval",
       "source": "google/firing-range — localStorage array source via script include to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/localStorage/include/array/js_html_sanitize_eval)",
