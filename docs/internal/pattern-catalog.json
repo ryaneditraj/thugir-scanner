@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T18:21:32.642Z",
-  "total": 1651,
-  "uniqueSlugs": 1646,
+  "generatedAt": "2026-08-03T19:06:00.379Z",
+  "total": 1657,
+  "uniqueSlugs": 1652,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1633,
+    "generic": 1639,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1566,
+    "deep": 1572,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 540,
+    "Cross-site scripting": 546,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -924,6 +924,8 @@
     "firing-range-dom-js-html-sanitize-eval-route-live-oracle",
     "firing-range-dom-localstorage-array-eval-live-oracle",
     "firing-range-dom-localstorage-array-eval-route-live-oracle",
+    "firing-range-dom-localstorage-array-innerhtml-live-oracle",
+    "firing-range-dom-localstorage-array-innerhtml-route-live-oracle",
     "firing-range-dom-localstorage-function-documentwrite-live-oracle",
     "firing-range-dom-localstorage-function-documentwrite-route-live-oracle",
     "firing-range-dom-localstorage-property-documentwrite-live-oracle",
@@ -934,6 +936,8 @@
     "firing-range-dom-localstorage-property-innerhtml-route-live-oracle",
     "firing-range-dom-localstorage-xss-live-oracle",
     "firing-range-dom-localstorage-xss-route-live-oracle",
+    "firing-range-dom-postmessage-complex-message-documentwrite-eval-live-oracle",
+    "firing-range-dom-postmessage-complex-message-documentwrite-eval-route-live-oracle",
     "firing-range-dom-postmessage-documentwrite-live-oracle",
     "firing-range-dom-postmessage-documentwrite-route-live-oracle",
     "firing-range-dom-postmessage-eval-live-oracle",
@@ -965,6 +969,8 @@
     "firing-range-dom-referrer-innerhtml-route-live-oracle",
     "firing-range-dom-sessionstorage-array-eval-live-oracle",
     "firing-range-dom-sessionstorage-array-eval-route-live-oracle",
+    "firing-range-dom-sessionstorage-array-innerhtml-live-oracle",
+    "firing-range-dom-sessionstorage-array-innerhtml-route-live-oracle",
     "firing-range-dom-sessionstorage-documentwrite-live-oracle",
     "firing-range-dom-sessionstorage-documentwrite-route-live-oracle",
     "firing-range-dom-sessionstorage-innerhtml-live-oracle",

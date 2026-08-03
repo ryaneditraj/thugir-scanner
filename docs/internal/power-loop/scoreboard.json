@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T18:14:00.000Z",
+  "updated_at": "2026-08-03T19:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2813,
-  "total_findings": 40274,
+  "total_sites_scanned": 2725,
+  "total_findings": 26544,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2880,
-  "discovery_findings": 46819,
+  "discovery_urls_added": 1951,
+  "discovery_findings": 22523,
   "improvements_shipped": 1164,
-  "last_run": "2026-08-03T18:14:00.000Z",
+  "last_run": "2026-08-03T19:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 485,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (34 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (32 findings on staging fallback)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 1629,
-      "focus": "toxicdom localStorage object property documentWrite + function/array innerHtml script-include sinks",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 621,
+      "focus": "Firing Range toxicdom array innerHTML + postMessage complexMessageDocumentWriteEval route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/object/property/documentWrite: 198→205 findings — property documentWrite live+route oracles shipped",
-      "public-firing-range.appspot.com/object/function/innerHtml: 195→205 findings — function innerHtml live+route oracles shipped",
-      "public-firing-range.appspot.com/object/array/innerHtml: 195→205 findings — array innerHtml live+route oracles shipped",
-      "public-firing-range address/location.hash/assign: 203 findings — address hash assign DOM sink route oracle",
-      "public-firing-range flashinjection/: 206 findings — firing-range-flashinjection-live-oracle shipped (JSONP callback XSS)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/innerHtml: 154→208 findings — localStorage array innerHTML route oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/innerHtml: 207 findings — sessionStorage array innerHTML route oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/postMessage/complexMessageDocumentWriteEval: 206 findings — postMessage action-dispatch eval+document.write route oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "testhtml5.vulnweb.com/redir + rest.vulnweb.com/api/users queued but not yet scanned (queue drains from head)",
-      "toxicdom object function/array documentWrite + sessionStorage object sinks still unshipped"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
     ]
   },
   "discovery_highlights": {
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/property/documentWrite": 205,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/function/innerHtml": 205,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/array/innerHtml": 205,
-    "juice-shop.herokuapp.com": 34,
-    "public-firing-range.appspot.com/flashinjection/": 206,
-    "public-firing-range.appspot.com/address/location.hash/assign": 203
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/innerHtml": 208,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/innerHtml": 207,
+    "public-firing-range.appspot.com/dom/toxicdom/postMessage/complexMessageDocumentWriteEval": 206,
+    "juice-shop-staging.herokuapp.com": 32,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18
   }
 }
