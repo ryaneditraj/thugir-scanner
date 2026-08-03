@@ -18000,6 +18000,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-localstorage-function-documentwrite-live-oracle",
       "shipped_at": "2026-08-03T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-include-property-documentwrite-live-oracle",
+      "shipped_at": "2026-08-03T06:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-include-array-innerhtml-live-oracle",
+      "shipped_at": "2026-08-03T06:20:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-include-function-eval-live-oracle",
+      "shipped_at": "2026-08-03T06:20:00.000Z"
     }
   ]
 }
