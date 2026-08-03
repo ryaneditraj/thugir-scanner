@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2860,
   "discovery_findings": 42250,
-  "improvements_shipped": 1161,
+  "improvements_shipped": 1164,
   "last_run": "2026-08-03T14:12:42.419Z",
   "last_run_summary": {
     "hour_utc": "14",
@@ -55,18 +55,17 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 1524,
-      "focus": "eventtriggering/window innerHtml+documentWrite + angular 1.2.11/1.2.12 + toxicdom localStorage object innerHtml + queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "alt_symbols_raw + raw_escaped_alt_symbols + eventtriggering inputTyping/documentWrite route oracles + queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (34 findings) — no benchmark misses; +chatbot-route + jwt-alg-none-accepted vs staging",
-      "public-firing-range eventtriggering/window/innerHtml: 190 findings — generic firing-range hub oracles only",
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (34 findings) — no benchmark misses",
+      "public-firing-range angular_body_alt_symbols_raw/1.4.0: 190→194 findings — alt-symbols-raw live+route oracles shipped",
+      "public-firing-range angular_body_raw_escaped_alt_symbols/1.4.0: 190→194 findings — raw-escaped-alt-symbols live+route oracles shipped",
+      "public-firing-range dom/eventtriggering/document/inputTyping/documentWrite: 190→194 findings — eventtriggering-documentwrite live+route oracles shipped",
+      "public-firing-range eventtriggering/window/innerHtml: 190 findings — generic hub oracles only, no window eventtriggering route oracle",
       "public-firing-range eventtriggering/window/documentWrite: 190 findings — generic hub oracles only, no window eventtriggering documentWrite route oracle",
-      "public-firing-range angular_body/1.2.11: 191 findings — angular-body-xss-route live oracle fires",
-      "public-firing-range angular_body/1.2.12: 191 findings — angular-body-xss-route live oracle fires",
-      "public-firing-range toxicdom/localStorage/object/innerHtml: 189 findings — generic hub oracles only, no localStorage object innerHtml route oracle",
-      "public-firing-range address/location/innerHtml: 191 findings — address-location-innerhtml route oracle fires",
-      "public-firing-range urldom/location/search/location.assign: 191 findings — urldom open-redirect route oracle fires"
+      "public-firing-range toxicdom/localStorage/object/innerHtml: 189 findings — generic hub oracles only, no localStorage object innerHtml route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -74,19 +73,19 @@
       "primary juice-shop.herokuapp.com + staging both Heroku 503 — escape.tech fallback required for reliable 6/6 recall",
       "public-firing-range dom/eventtriggering/window/innerHtml + documentWrite: no route-specific window eventtriggering sink live oracles",
       "public-firing-range toxicdom/localStorage/object/innerHtml: no route-specific localStorage object property innerHTML live oracle",
-      "angular_body 1.2.11/1.2.12 share generic angular-body-xss-route oracle — version-specific interpolation bypass oracles still absent"
+      "angular_body version routes 1.2.10/1.2.20 share generic angular-body-xss-route oracle — version-specific interpolation bypass oracles still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.demo.escape.tech": 34,
+    "public-firing-range.appspot.com/angular/angular_body_alt_symbols_raw/1.4.0?q=test": 194,
+    "public-firing-range.appspot.com/angular/angular_body_raw_escaped_alt_symbols/1.4.0?q=test": 194,
+    "public-firing-range.appspot.com/dom/eventtriggering/document/inputTyping/documentWrite": 194,
     "public-firing-range.appspot.com/dom/eventtriggering/window/innerHtml": 190,
     "public-firing-range.appspot.com/dom/eventtriggering/window/documentWrite": 190,
     "public-firing-range.appspot.com/angular/angular_body/1.2.11?q=test": 191,
     "public-firing-range.appspot.com/angular/angular_body/1.2.12?q=test": 191,
     "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/innerHtml": 189,
-    "public-firing-range.appspot.com/address/location/innerHtml": 191,
-    "public-firing-range.appspot.com/urldom/location/search/location.assign?//example.org": 191,
-    "public-firing-range.appspot.com/angular/angular_body/1.2.10?q=test": 191,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

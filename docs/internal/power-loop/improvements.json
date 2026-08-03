@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-alt-symbols-raw-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_alt_symbols_raw/1.4.0?q=[[probe]] reflects into custom [[ ]] delimiters without server-side wrapping; route scan 190→194 (+alt-symbols-raw live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-raw-escaped-alt-symbols-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_raw_escaped_alt_symbols/1.4.0?q=[[probe]] backslash-escapes custom [[ ]] delimiters (\\[\\[probe\\]\\]); route scan 190→194 (+raw-escaped-alt-symbols live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-eventtriggering-inputtyping-documentwrite-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/inputTyping/documentWrite passes input keystrokes to document.write() on keyup/change; route scan 190→194 (+eventtriggering-documentwrite live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-eventtriggering-inputtyping-innerhtml-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/inputTyping/innerHtml passes input keystrokes to innerHTML on keyup/change; route scan 184→191 findings (+inputtyping-innerhtml live+route); benchmark juice-shop-staging 30 findings 6/6 maintained"
