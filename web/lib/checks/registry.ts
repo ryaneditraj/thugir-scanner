@@ -38282,7 +38282,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/property/innerHtml",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/property/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/object/property/innerHtml",
     scriptSrcRe: /object\/property\/innerHtml/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /\.innerHTML\s*=\s*payload/i,
@@ -38291,7 +38291,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/property/eval",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/property/eval",
+    scriptPath: "/dom/toxicdomscripts/object/property/eval",
     scriptSrcRe: /object\/property\/eval/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /eval\s*\(\s*payload\s*\)/i,
@@ -38300,7 +38300,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/property/documentWrite",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/property/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/object/property/documentWrite",
     scriptSrcRe: /object\/property\/documentWrite/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
@@ -38309,7 +38309,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/function/eval",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/function/eval",
+    scriptPath: "/dom/toxicdomscripts/object/function/eval",
     scriptSrcRe: /object\/function\/eval/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /eval\s*\(\s*payload\s*\)/i,
@@ -38318,7 +38318,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/function/innerHtml",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/function/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/object/function/innerHtml",
     scriptSrcRe: /object\/function\/innerHtml/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /\.innerHTML\s*=\s*payload/i,
@@ -38327,7 +38327,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/function/documentWrite",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/function/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/object/function/documentWrite",
     scriptSrcRe: /object\/function\/documentWrite/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
@@ -38336,7 +38336,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/array/eval",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/array/eval",
+    scriptPath: "/dom/toxicdomscripts/object/array/eval",
     scriptSrcRe: /object\/array\/eval/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /eval\s*\(\s*payload\s*\)/i,
@@ -38345,7 +38345,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/array/innerHtml",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/array/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/object/array/innerHtml",
     scriptSrcRe: /object\/array\/innerHtml/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /\.innerHTML\s*=\s*payload/i,
@@ -38354,7 +38354,7 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   },
   {
     htmlPath: "/dom/toxicdom/sessionStorage/object/array/documentWrite",
-    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/array/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/object/array/documentWrite",
     scriptSrcRe: /object\/array\/documentWrite/i,
     sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     sinkRe: /document\.write\s*\(\s*payload\s*\)/i,

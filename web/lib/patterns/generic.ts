@@ -6168,6 +6168,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-toxicdom-sessionstorage-object-property-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage object property innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/object/property/innerHtml loads an external script that passes sessionStorage object property values to innerHTML — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "sessionStorage object property values passed to innerHTML via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomSessionstorageObjectPropertyInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from sessionStorage object properties.",
+        "Treat sessionStorage data as untrusted and render with textContent.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/object/property/innerHtml external script passes sessionStorage to innerHTML. Show toxic DOM sessionStorage object XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-sessionstorage-object-property-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/object/property/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/object/property/innerHtml, sessionStorage object property values reach innerHTML via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage object properties are not passed to innerHTML via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomSessionstorageObjectPropertyInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on sessionStorage object properties in /dom/toxicdom/sessionStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/object/property/innerHtml route passes sessionStorage object property to innerHTML. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-sessionstorage-object-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage object property eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/object/property/eval loads an external script that passes sessionStorage object property values to eval() — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "sessionStorage object property values passed to eval() via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomSessionstorageObjectPropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from sessionStorage object properties.",
+        "Treat sessionStorage data as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/object/property/eval external script passes sessionStorage to eval(). Show toxic DOM sessionStorage object eval XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-sessionstorage-object-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/object/property/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/object/property/eval, sessionStorage object property values reach eval() via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage object properties are not passed to eval() via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomSessionstorageObjectPropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on sessionStorage object properties in /dom/toxicdom/sessionStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous eval() sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/object/property/eval route passes sessionStorage object property to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-array-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage object array document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/object/array/documentWrite loads an external script that passes localStorage object array values to document.write() — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "localStorage object array values passed to document.write() via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() calls on values from localStorage object arrays.",
+        "Treat localStorage data as untrusted and render with textContent.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/array/documentWrite external script passes localStorage to document.write(). Show toxic DOM localStorage object XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-array-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/object/array/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/object/array/documentWrite, localStorage object array values reach document.write() via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage object arrays are not passed to document.write() via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write() sinks on localStorage object arrays in /dom/toxicdom/localStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous document.write() sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/array/documentWrite route passes localStorage object array to document.write(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-jsoncallback-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
