@@ -5438,6 +5438,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-eventtriggering-window-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range eventtriggering window.name eval XSS oracle",
+    description:
+      "GET /dom/eventtriggering/window/name/eval returns a page that reads window.name and passes it to eval() via deferredPayload — Firing Range event-triggered window.name DOM XSS training oracle.",
+    impactOneline:
+      "window.name values passed to eval() via event-triggered deferredPayload enable DOM XSS when attackers can set window.name via navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringWindowEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.name to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from window.name in event handlers.",
+        "Treat window.name as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/window/name/eval uses eval() on window.name via deferredPayload. Show eventtriggering window.name DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-window-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/window/name/eval route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/window/name/eval (or /window/eval alias), window.name is passed to eval() via deferredPayload without sanitization — route-specific eventtriggering window.name DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm window.name is not passed to eval() via event-triggered handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringWindowEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on window.name in /dom/eventtriggering/window routes.",
+      steps: [
+        "Audit deferredPayload and setTimeout trigger handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/window/name/eval route uses eval() on window.name via deferredPayload. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-toxicdom-localstorage-object-property-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -6162,6 +6214,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /escape/serverside/escapeHtml/head route bypasses escapeHtml in head context. Show route-specific head-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-textarea-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml textarea-sink oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/textarea?q= reflects attacker input into <textarea> body despite escapeHtml — Firing Range server-side textarea-sink escape bypass XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in textarea contexts enables reflected XSS even when escapeHtml is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideTextareaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml is insufficient for textarea text contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Apply context-aware encoding for all textarea reflection contexts.",
+        "Avoid reflecting raw user input inside textarea elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/textarea bypasses escapeHtml in textarea context. Show server-side textarea-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-textarea-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/textarea route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/textarea, q parameter reflects unescaped into <textarea> body — route-specific server-side textarea-sink escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml output is safe in textarea text contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideTextareaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix textarea-sink escaping on /escape/serverside/escapeHtml/textarea route.",
+      steps: [
+        "Audit escapeHtml usage for textarea text contexts.",
+        "Encode user input for textarea reflection points.",
+        "Add output encoding tests for textarea-sink contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/textarea route bypasses escapeHtml in textarea context. Show route-specific textarea-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-js-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range server-side escapeHtml script-sink oracle",
+    description:
+      "GET /escape/serverside/escapeHtml/js_eval?q= reflects attacker input into <script> body despite escapeHtml — Firing Range server-side script-sink escape bypass XSS training oracle.",
+    impactOneline:
+      "Incomplete HTML escaping in script contexts enables reflected XSS even when escapeHtml is applied.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideJsEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "escapeHtml is insufficient for script text contexts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Apply context-aware encoding for all script reflection contexts.",
+        "Avoid reflecting raw user input inside script elements.",
+        "Add CSP as defense-in-depth against reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/js_eval bypasses escapeHtml in script context. Show server-side script-sink escape bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-escape-serverside-js-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /escape/serverside/escapeHtml/js_eval route XSS oracle",
+    description:
+      "When scanning /escape/serverside/escapeHtml/js_eval, q parameter reflects unescaped into <script> body — route-specific server-side script-sink escape bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm escapeHtml output is safe in script text contexts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeEscapeServersideJsEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fix script-sink escaping on /escape/serverside/escapeHtml/js_eval route.",
+      steps: [
+        "Audit escapeHtml usage for script text contexts.",
+        "Encode user input for script reflection points.",
+        "Add output encoding tests for script-sink contexts."
+      ]
+    },
+    fixPrompt:
+      "Our /escape/serverside/escapeHtml/js_eval route bypasses escapeHtml in script context. Show route-specific script-sink escape bypass remediation.",
     version: 1,
     enabled: true
   },
