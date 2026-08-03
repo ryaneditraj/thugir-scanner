@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T02:12:00.000Z",
+  "updated_at": "2026-08-03T03:10:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3131,
-  "total_findings": 36344,
-  "critical_findings": 103,
+  "total_sites_scanned": 2730,
+  "total_findings": 27692,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2156,
-  "discovery_findings": 29643,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-03T02:12:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 23638,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-03T03:10:30.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (34 findings); no benchmark misses"
+      "note": "Primary juice-shop.herokuapp.com healthy 6/6 (33 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 1797,
-      "focus": "Firing Range angular_storage_parse + angular_post_message_parse + localStorage/function/documentWrite live oracles; toxicdom script-include sink queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 1151,
+      "focus": "firing-range toxicdom */include/* script-include storage sinks (sessionStorage/localStorage array+function → documentWrite/innerHtml/Function) + drained localStorage/include/array/eval + sessionStorage/include/function/eval",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0: 163→167 findings — angular-storage-parse live+route oracles shipped",
-      "public-firing-range.appspot.com/angular/angular_post_message_parse/1.6.0: 163→167 findings — angular-post-message-parse live+route oracles shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite: 162→166 findings — localstorage-function-documentwrite live+route oracles shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/function: 162 findings — generic firing-range hub oracles only",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/innerHtml: 162 findings — generic firing-range hub oracles only",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/eval: 161 findings — generic firing-range hub oracles only"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "firing-range sessionStorage/include/function/documentWrite: 164 findings — generic firing-range hub oracles only",
+      "firing-range sessionStorage/include/array/function: 164 findings — generic firing-range hub oracles only",
+      "firing-range localStorage/include/array/documentWrite: 165 findings — generic firing-range hub oracles only",
+      "firing-range localStorage/include/array/innerHtml: 165 findings — generic firing-range hub oracles only",
+      "firing-range sessionStorage/include/array/documentWrite: 164 findings — generic firing-range hub oracles only",
+      "testphp.vulnweb.com/listproducts.php?cat=1: unreachable from cloud agent egress (scan error)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/function: route-specific script-include localStorage Function() sink oracle absent",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/innerHtml: route-specific script-include localStorage innerHTML sink oracle absent",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/eval: route-specific script-include sessionStorage eval sink oracle absent",
-      "public-firing-range.appspot.com/dom/eventtriggering/window/eval: event-triggered eval oracle still absent (Firing Range returns sink count error)"
+      "public-firing-range toxicdom/*/include/* sinks: generic firing-range hub oracles only — no route-specific script-include storage sink live oracles",
+      "testphp.vulnweb.com unreachable from cloud agent egress"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
-    "public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0": 167,
-    "public-firing-range.appspot.com/angular/angular_post_message_parse/1.6.0": 167,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite": 166,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/function": 162,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/innerHtml": 162,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/eval": 161,
+    "juice-shop.herokuapp.com": 33,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/documentWrite": 165,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/innerHtml": 165,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/documentWrite": 164,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/function": 164,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/documentWrite": 164,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
