@@ -2526,6 +2526,60 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-postmessage-complex-message-documentwrite-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range postMessage complex action documentWrite+eval DOM XSS oracle",
+    description:
+      "GET /dom/toxicdom/postMessage/complexMessageDocumentWriteEval registers a message listener that dispatches msg.data.action to eval(payload) and document.write(html) — Firing Range multi-action postMessage DOM XSS training oracle.",
+    impactOneline:
+      "postMessage handlers that eval payloads or document.write HTML from cross-window messages enable DOM XSS without origin validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPostMessageComplexMessageDocumentwriteEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval or document.write postMessage payloads — validate origin and use safe APIs.",
+      steps: [
+        "Remove eval() and document.write() from postMessage action handlers.",
+        "Validate event.origin before processing messages.",
+        "Use a strict allowlist of message actions and sanitize all payload fields."
+      ]
+    },
+    fixPrompt:
+      "Our postMessage handler dispatches msg.data.action to eval(payload) and document.write(html). Show safe postMessage handling without code-execution sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-postmessage-complex-message-documentwrite-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/postMessage/complexMessageDocumentWriteEval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/postMessage/complexMessageDocumentWriteEval, the response contains an action-dispatched postMessage handler that evals payload and document.writes html — route-specific postMessage DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage handlers do not eval or document.write untrusted cross-window payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: {
+      rule: "firingRangeDomPostMessageComplexMessageDocumentwriteEvalRouteLiveOracle"
+    },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval/document.write sinks on postMessage action payloads in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all message event listeners for eval and document.write assignments.",
+        "Validate message origin before processing.",
+        "Use CSP script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/postMessage/complexMessageDocumentWriteEval route evals and document.writes message payloads. Show route-specific postMessage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-angular-cookie-parse-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4866,6 +4920,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-localstorage-array-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage array innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/array/innerHtml returns a page that reads localStorage['badValue'] and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "localStorage array-index values passed to innerHTML enable DOM XSS when attackers can poison localStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstorageArrayInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from localStorage.",
+        "Treat localStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/array/innerHtml uses innerHTML on localStorage['badValue']. Show toxic DOM localStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-array-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/array/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/array/innerHtml, localStorage['badValue'] is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage array-index values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstorageArrayInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on localStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/array/innerHtml route uses innerHTML on localStorage['badValue']. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-sessionstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -5018,6 +5124,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/toxicdom/sessionStorage/array/eval route uses eval on sessionStorage['badValue']. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-array-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage array innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/array/innerHtml returns a page that reads sessionStorage['badValue'] and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage array-index values passed to innerHTML enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageArrayInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/array/innerHtml uses innerHTML on sessionStorage['badValue']. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-array-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/array/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/array/innerHtml, sessionStorage['badValue'] is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage array-index values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageArrayInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/array/innerHtml route uses innerHTML on sessionStorage['badValue']. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
