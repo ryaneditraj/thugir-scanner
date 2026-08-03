@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-remoteinclude-parameter-object-raw-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /remoteinclude/parameter/object_raw?q=https://thugir-remoteinclude-probe.example/object.html reflects <object data=\"...\">; route scan findings 117→163 (+object-raw live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-remoteinclude-object-hash-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /remoteinclude/object_hash.html returns object.data=target from location.hash.substr(1); route scan findings 163 with +object-hash live+route oracles; benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-external-sessionstorage-function-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdomscripts/sessionStorage/function/eval returns eval(payload) on sessionStorage.getItem('badValue'); route scan findings 125→163 (+external-sessionstorage-eval live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-tags-tag-applet",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/applet?q=<applet> reflects <applet></applet>; route scan findings include +firing-range-tags-injection-route-live-oracle; benchmark juice-shop 33 findings 6/6 maintained"
