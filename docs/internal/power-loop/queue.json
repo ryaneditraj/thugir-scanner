@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T04:05:00.000Z",
+  "updated_at": "2026-08-03T05:02:17.675Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/documentWrite",
+      "source": "google/firing-range — sessionStorage property source via script include to document.write sink (/dom/toxicdom/sessionStorage/include/property/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/innerHtml",
+      "source": "google/firing-range — sessionStorage array source via script include to innerHTML sink (/dom/toxicdom/sessionStorage/include/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/eval",
+      "source": "google/firing-range — localStorage function source via script include to eval() sink (/dom/toxicdom/localStorage/include/function/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/property/js_html_sanitize_eval",
+      "source": "google/firing-range — sessionStorage property source to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/property/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/array/js_html_sanitize_eval",
+      "source": "google/firing-range — localStorage array source to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/localStorage/array/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/property/eval",
       "source": "google/firing-range — localStorage property source via script include to eval() sink (/dom/toxicdom/localStorage/include/property/eval)",
