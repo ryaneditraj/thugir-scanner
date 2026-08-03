@@ -38216,6 +38216,15 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
     sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
     label: "localStorage array source to document.write",
     routeRe: /\/dom\/toxicdom\/localStorage\/include\/array\/documentWrite\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/object/property/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/object/property/innerHtml",
+    scriptSrcRe: /object\/property\/innerHtml/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /\.innerHTML\s*=\s*payload/i,
+    label: "localStorage object property to innerHTML",
+    routeRe: /\/dom\/toxicdom\/localStorage\/object\/(?:property\/)?innerHtml\b/i
   }
 ] as const;
 
@@ -38606,6 +38615,31 @@ const firingRangeDomToxicdomLocalstorageIncludeArrayDocumentwriteRouteLiveOracle
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/localStorage/include/array/documentWrite route scan — script-include localStorage array to document.write sink"
+    }
+  };
+};
+
+const firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomExternalInclude(
+    ctx,
+    FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[13]
+  );
+};
+
+const firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[13].routeRe.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/object/property/innerHtml route scan — script-include localStorage object property to innerHTML sink"
     }
   };
 };
@@ -41578,6 +41612,97 @@ const firingRangeDomEventtriggeringInputtypingDocumentwriteRouteLiveOracle: Rule
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/eventtriggering/document/inputTyping/documentWrite route scan — input keystrokes passed to document.write() without sanitization"
+    }
+  };
+};
+
+async function probeFiringRangeEventtriggeringWindowSink(
+  ctx: RuleContext,
+  probePath: string,
+  sinkRe: RegExp,
+  sinkLabel: string
+): Promise<RuleResult> {
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasEventtriggeringWindow =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    /var\s+payload\s*=\s*window\.name/i.test(body) &&
+    /function\s+deferredPayload\s*\(/i.test(body) &&
+    sinkRe.test(body);
+  if (!hasEventtriggeringWindow) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(body) ? 0.93 : 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${probePath} passes window.name to ${sinkLabel} via event-triggered deferredPayload — eventtriggering window.name DOM XSS sink oracle`
+    }
+  };
+}
+
+const FIRING_RANGE_EVENTTRIGGERING_WINDOW_INNERHTML_CANONICAL =
+  "/dom/eventtriggering/window/name/innerHtml";
+const FIRING_RANGE_EVENTTRIGGERING_WINDOW_INNERHTML_ROUTE_RE =
+  /\/dom\/eventtriggering\/window\/(?:name\/)?innerHtml\b/i;
+
+const firingRangeDomEventtriggeringWindowInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeEventtriggeringWindowSink(
+    ctx,
+    FIRING_RANGE_EVENTTRIGGERING_WINDOW_INNERHTML_CANONICAL,
+    /\.innerHTML\s*=\s*payload/i,
+    "innerHTML"
+  );
+};
+
+const firingRangeDomEventtriggeringWindowInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_EVENTTRIGGERING_WINDOW_INNERHTML_ROUTE_RE.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomEventtriggeringWindowInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/eventtriggering/window/name/innerHtml route scan — window.name passed to innerHTML via deferredPayload without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_EVENTTRIGGERING_WINDOW_DOCUMENTWRITE_CANONICAL =
+  "/dom/eventtriggering/window/name/documentWrite";
+const FIRING_RANGE_EVENTTRIGGERING_WINDOW_DOCUMENTWRITE_ROUTE_RE =
+  /\/dom\/eventtriggering\/window\/(?:name\/)?documentWrite\b/i;
+
+const firingRangeDomEventtriggeringWindowDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeEventtriggeringWindowSink(
+    ctx,
+    FIRING_RANGE_EVENTTRIGGERING_WINDOW_DOCUMENTWRITE_CANONICAL,
+    /document\.write\s*\(\s*payload\s*\)/i,
+    "document.write()"
+  );
+};
+
+const firingRangeDomEventtriggeringWindowDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_EVENTTRIGGERING_WINDOW_DOCUMENTWRITE_ROUTE_RE.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomEventtriggeringWindowDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/eventtriggering/window/name/documentWrite route scan — window.name passed to document.write() via deferredPayload without sanitization"
     }
   };
 };
@@ -58908,6 +59033,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomToxicdomSessionstorageIncludeArrayDocumentwriteRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayDocumentwriteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayDocumentwriteRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlRouteLiveOracle,
   firingRangeLeakedcookieHttponlyLiveOracle,
   firingRangeLeakedcookieHttponlyRouteLiveOracle,
   firingRangeMixedContentLiveOracle,
@@ -59040,6 +59167,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomEventtriggeringInputtypingInnerhtmlRouteLiveOracle,
   firingRangeDomEventtriggeringInputtypingDocumentwriteLiveOracle,
   firingRangeDomEventtriggeringInputtypingDocumentwriteRouteLiveOracle,
+  firingRangeDomEventtriggeringWindowInnerhtmlLiveOracle,
+  firingRangeDomEventtriggeringWindowInnerhtmlRouteLiveOracle,
+  firingRangeDomEventtriggeringWindowDocumentwriteLiveOracle,
+  firingRangeDomEventtriggeringWindowDocumentwriteRouteLiveOracle,
   firingRangeReflectedJsoncallbackLiveOracle,
   firingRangeReflectedJsoncallbackRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,
