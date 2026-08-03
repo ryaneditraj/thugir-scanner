@@ -5334,6 +5334,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-eventtriggering-window-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range eventtriggering window.name innerHTML XSS oracle",
+    description:
+      "GET /dom/eventtriggering/window/name/innerHtml returns a page that reads window.name and passes it to innerHTML via deferredPayload — Firing Range event-triggered window.name DOM XSS training oracle.",
+    impactOneline:
+      "window.name values passed to innerHTML via event-triggered deferredPayload enable DOM XSS when attackers can set window.name via navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringWindowInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.name to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from window.name in event handlers.",
+        "Treat window.name as untrusted text and render with textContent.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/window/name/innerHtml uses innerHTML on window.name via deferredPayload. Show eventtriggering window.name DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-window-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/window/name/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/window/name/innerHtml (or /window/innerHtml alias), window.name is passed to innerHTML via deferredPayload without sanitization — route-specific eventtriggering window.name DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm window.name is not passed to innerHTML via event-triggered handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringWindowInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on window.name in /dom/eventtriggering/window routes.",
+      steps: [
+        "Audit deferredPayload and setTimeout trigger handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/window/name/innerHtml route uses innerHTML on window.name via deferredPayload. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-window-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range eventtriggering window.name document.write XSS oracle",
+    description:
+      "GET /dom/eventtriggering/window/name/documentWrite returns a page that reads window.name and passes it to document.write() via deferredPayload — Firing Range event-triggered window.name DOM XSS training oracle.",
+    impactOneline:
+      "window.name values passed to document.write() via event-triggered deferredPayload enable DOM XSS when attackers can set window.name via navigation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringWindowDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass window.name to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from window.name in event handlers.",
+        "Treat window.name as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/window/name/documentWrite uses document.write on window.name via deferredPayload. Show eventtriggering window.name DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-window-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/window/name/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/window/name/documentWrite (or /window/documentWrite alias), window.name is passed to document.write() via deferredPayload without sanitization — route-specific eventtriggering window.name DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm window.name is not passed to document.write() via event-triggered handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringWindowDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write() sinks on window.name in /dom/eventtriggering/window routes.",
+      steps: [
+        "Audit deferredPayload and setTimeout trigger handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/window/name/documentWrite route uses document.write on window.name via deferredPayload. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-property-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage object property innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/object/property/innerHtml loads an external script that passes localStorage object property values to innerHTML — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "localStorage object property values passed to innerHTML via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from localStorage object properties.",
+        "Treat localStorage data as untrusted and render with textContent.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/property/innerHtml external script passes localStorage to innerHTML. Show toxic DOM localStorage object XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-property-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/object/property/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/object/property/innerHtml (or /object/innerHtml alias), localStorage object property values reach innerHTML via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage object properties are not passed to innerHTML via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectPropertyInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on localStorage object properties in /dom/toxicdom/localStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/property/innerHtml route passes localStorage object property to innerHTML. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-jsoncallback-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
