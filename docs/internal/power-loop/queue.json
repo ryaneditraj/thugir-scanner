@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T17:05:48.753Z",
+  "updated_at": "2026-08-03T19:03:42.093Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/documentWrite",
+      "source": "google/firing-range — toxic DOM sessionStorage object Function document.write XSS sink (/dom/toxicdom/sessionStorage/object/function/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/innerHtml",
+      "source": "google/firing-range — toxic DOM sessionStorage object Array innerHTML XSS sink (/dom/toxicdom/sessionStorage/object/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/documentWrite",
+      "source": "google/firing-range — toxic DOM sessionStorage object Array document.write XSS sink (/dom/toxicdom/sessionStorage/object/array/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/property/innerHtml",
+      "source": "google/firing-range — toxic DOM sessionStorage object Property innerHTML XSS sink (/dom/toxicdom/sessionStorage/object/property/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/property/documentWrite",
+      "source": "google/firing-range — toxic DOM sessionStorage object Property document.write XSS sink (/dom/toxicdom/sessionStorage/object/property/documentWrite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/object/property/innerHtml",
       "source": "google/firing-range — toxic DOM localStorage object Property innerHTML XSS sink (/dom/toxicdom/localStorage/object/property/innerHtml)",
