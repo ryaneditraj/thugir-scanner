@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T22:32:09.407Z",
-  "total": 1669,
-  "uniqueSlugs": 1664,
+  "generatedAt": "2026-08-03T23:12:41.624Z",
+  "total": 1675,
+  "uniqueSlugs": 1670,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1651,
+    "generic": 1657,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1584,
+    "deep": 1590,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 558,
+    "Cross-site scripting": 564,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -1185,10 +1185,16 @@
     "firing-range-toxicdom-sessionstorage-include-function-innerhtml-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-property-documentwrite-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-property-documentwrite-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-object-array-documentwrite-live-oracle",
+    "firing-range-toxicdom-sessionstorage-object-array-documentwrite-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-object-array-eval-live-oracle",
+    "firing-range-toxicdom-sessionstorage-object-array-eval-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-array-innerhtml-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-array-innerhtml-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-function-documentwrite-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-function-documentwrite-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-object-property-documentwrite-live-oracle",
+    "firing-range-toxicdom-sessionstorage-object-property-documentwrite-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-property-eval-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-property-eval-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-property-innerhtml-live-oracle",
