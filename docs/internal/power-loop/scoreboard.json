@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T21:02:37.777Z",
+  "updated_at": "2026-08-03T21:07:14.387Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2731,
-  "total_findings": 27231,
+  "total_sites_scanned": 2736,
+  "total_findings": 27654,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 23154,
+  "discovery_findings": 23577,
   "improvements_shipped": 1161,
-  "last_run": "2026-08-03T21:02:37.777Z",
+  "last_run": "2026-08-03T21:07:14.387Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 32,
@@ -53,15 +53,18 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 647,
-      "focus": "Invicti testinvicti.com PHP + vulnapi API demos; testphp.vulnweb.com route oracles unreachable; firing-range queue drain",
+      "urls_scanned": 5,
+      "findings": 423,
+      "focus": "securityweb-iota API oracles + vaultapp transactions IDOR + firing-range external sessionStorage property/array innerHtml sinks",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — primary Heroku oracle 503",
-      "php.testinvicti.com: 8 findings — sql-error-disclosure + command-injection-form-probe + phpinfo-exposed + client-side-invicti-practice-site-evidence",
-      "vulnapi.testinvicti.com: 7 findings — idor-sequential-ids + vibe-openapi-docs-exposed + client-side-invicti-practice-site-evidence",
+      "securityweb-iota.vercel.app/api/sqli-vulnerable: 2 findings — reflexion-escalated-ssti (no route-specific SQLi live oracle)",
+      "securityweb-iota.vercel.app/api/users-vulnerable/1: 2 findings — reflexion-escalated-ssti (no route-specific IDOR live oracle)",
+      "vaultapp-omega.vercel.app/api/transactions/1: 7 findings — client-side-vaultapp-lab-evidence + dangerous-html-sinks (no transaction IDOR live oracle)",
+      "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/innerHtml: 206 findings — generic firing-range hub oracles only",
+      "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/innerHtml: 206 findings — generic firing-range hub oracles only",
       "testphp.vulnweb.com/showimage.php: unreachable — host down from cloud agent (LFI/SSRF oracle queued)",
       "testphp.vulnweb.com/redir.php: unreachable — open-redirect oracle queued but host unreachable",
       "testphp.vulnweb.com/guestbook.php: unreachable — stored-XSS oracle queued but host unreachable"
@@ -69,19 +72,20 @@
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "testphp.vulnweb.com unreachable from cloud environment — showimage/redir/guestbook oracles blocked",
-      "php.testinvicti.com: route-specific SQLi/XSS/LFI live oracles absent (generic misconfig+injection hub only)",
-      "vulnapi.testinvicti.com: Bearer-token BOLA/API auth-bypass live oracles absent (Swagger exposed, IDOR generic only)",
+      "securityweb-iota.vercel.app/api/*: route-specific SQLi/IDOR live oracles absent (generic SSTI reflexion only)",
+      "vaultapp-omega.vercel.app/api/transactions/:id: transaction IDOR live oracle absent (lab-evidence + generic misconfig hub)",
+      "public-firing-range external/sessionStorage/property|array/innerHtml: generic hub oracles only — no route-specific external script sessionStorage sink live oracles",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
+    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/property/innerHtml": 206,
+    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/innerHtml": 206,
+    "vaultapp-omega.vercel.app/api/transactions/1": 7,
+    "securityweb-iota.vercel.app/api/sqli-vulnerable": 2,
+    "securityweb-iota.vercel.app/api/users-vulnerable/1": 2,
     "php.testinvicti.com": 8,
-    "vulnapi.testinvicti.com": 7,
-    "public-firing-range.appspot.com/flashinjection": 212,
-    "public-firing-range.appspot.com/urldom/location/hash/script.src.partial_domain": 210,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pentest-fauxbank.vercel.app/admin": 13
+    "vulnapi.testinvicti.com": 7
   }
 }
