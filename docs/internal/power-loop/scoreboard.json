@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T14:03:51.566Z",
+  "updated_at": "2026-08-03T14:12:42.419Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2769,
-  "total_findings": 32482,
+  "total_sites_scanned": 2777,
+  "total_findings": 34006,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2855,
-  "discovery_findings": 40726,
+  "discovery_urls_added": 2860,
+  "discovery_findings": 42250,
   "improvements_shipped": 1161,
-  "last_run": "2026-08-03T14:03:51.566Z",
+  "last_run": "2026-08-03T14:12:42.419Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 31,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 477,
+      "probes_run": 480,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +48,45 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (31 findings pages=6 probes=477); secret-resend slug still absent"
+      "note": "Primary + staging Heroku both 503; escape.tech fallback 6/6 (34 findings pages=6 probes=480); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 1342,
-      "focus": "AngularJS 1.2.10/1.2.20 version sinks + alt_symbols_raw + raw_escaped_alt_symbols + eventtriggering inputTyping/documentWrite + queue drain",
+      "findings": 1524,
+      "focus": "eventtriggering/window innerHtml+documentWrite + angular 1.2.11/1.2.12 + toxicdom localStorage object innerHtml + queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range angular_body/1.2.10: 191 findings — angular-body-xss-route live oracle fires",
-      "public-firing-range angular_body/1.2.20: 191 findings — angular-body-xss-route live oracle fires",
-      "public-firing-range angular_body_alt_symbols_raw/1.4.0: 190 findings — generic hub oracles only, no alt_symbols_raw route oracle",
-      "public-firing-range angular_body_raw_escaped_alt_symbols/1.4.0: 190 findings — generic hub oracles only, no escaped-alt-symbol route oracle",
-      "public-firing-range dom/eventtriggering/document/inputTyping/documentWrite: 190 findings — generic inputtyping oracles only, no eventtriggering documentWrite route oracle",
-      "vulnerable-web-site.vercel.app/sqli: 5 findings — limited sqli lab coverage"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (34 findings) — no benchmark misses; +chatbot-route + jwt-alg-none-accepted vs staging",
+      "public-firing-range eventtriggering/window/innerHtml: 190 findings — generic firing-range hub oracles only",
+      "public-firing-range eventtriggering/window/documentWrite: 190 findings — generic hub oracles only, no window eventtriggering documentWrite route oracle",
+      "public-firing-range angular_body/1.2.11: 191 findings — angular-body-xss-route live oracle fires",
+      "public-firing-range angular_body/1.2.12: 191 findings — angular-body-xss-route live oracle fires",
+      "public-firing-range toxicdom/localStorage/object/innerHtml: 189 findings — generic hub oracles only, no localStorage object innerHtml route oracle",
+      "public-firing-range address/location/innerHtml: 191 findings — address-location-innerhtml route oracle fires",
+      "public-firing-range urldom/location/search/location.assign: 191 findings — urldom open-redirect route oracle fires"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "primary juice-shop.herokuapp.com Heroku dyno intermittent — staging fallback required for reliable 6/6 recall",
-      "public-firing-range angular_body_alt_symbols_raw + angular_body_raw_escaped_alt_symbols: no route-specific custom-symbol injection live oracles",
-      "public-firing-range dom/eventtriggering/document/inputTyping/documentWrite: no route-specific eventtriggering document.write sink live oracle",
-      "angular_body version routes 1.2.10/1.2.20 share generic angular-body-xss-route oracle — version-specific interpolation bypass oracles still absent"
+      "primary juice-shop.herokuapp.com + staging both Heroku 503 — escape.tech fallback required for reliable 6/6 recall",
+      "public-firing-range dom/eventtriggering/window/innerHtml + documentWrite: no route-specific window eventtriggering sink live oracles",
+      "public-firing-range toxicdom/localStorage/object/innerHtml: no route-specific localStorage object property innerHTML live oracle",
+      "angular_body 1.2.11/1.2.12 share generic angular-body-xss-route oracle — version-specific interpolation bypass oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 31,
+    "juice-shop.demo.escape.tech": 34,
+    "public-firing-range.appspot.com/dom/eventtriggering/window/innerHtml": 190,
+    "public-firing-range.appspot.com/dom/eventtriggering/window/documentWrite": 190,
+    "public-firing-range.appspot.com/angular/angular_body/1.2.11?q=test": 191,
+    "public-firing-range.appspot.com/angular/angular_body/1.2.12?q=test": 191,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/innerHtml": 189,
+    "public-firing-range.appspot.com/address/location/innerHtml": 191,
+    "public-firing-range.appspot.com/urldom/location/search/location.assign?//example.org": 191,
     "public-firing-range.appspot.com/angular/angular_body/1.2.10?q=test": 191,
-    "public-firing-range.appspot.com/angular/angular_body/1.2.20?q=test": 191,
-    "public-firing-range.appspot.com/angular/angular_body_alt_symbols_raw/1.4.0?q=test": 190,
-    "public-firing-range.appspot.com/angular/angular_body_raw_escaped_alt_symbols/1.4.0?q=test": 190,
-    "public-firing-range.appspot.com/dom/eventtriggering/document/inputTyping/documentWrite": 190,
-    "public-firing-range.appspot.com/dom/eventtriggering/document/inputTyping/innerHtml": 191,
-    "public-firing-range.appspot.com/angular/angular_body_raw_escaped/1.4.0": 191,
-    "public-firing-range.appspot.com/reflected/parameter/noscript?q=a": 193,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
