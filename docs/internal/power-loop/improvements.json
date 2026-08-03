@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-tags-tag-applet",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/applet?q=<applet> reflects <applet></applet>; route scan findings include +firing-range-tags-injection-route-live-oracle; benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-js-html-sanitize-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/document/cookie/js_html_sanitize_eval returns eval(payload.replace(/</g,'&lt;')...) on cookie lookup; route scan findings 157→160 (+js-html-sanitize live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-urldom-location-search-param-movie-value-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /urldom/location/search/param.movie.value returns paramMovieElement.value=payload from location.search; route scan findings include +param-movie live+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-tags-tag-video-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tags/tag/video?q=%3Cvideo%20src%3Dx%3E reflects <video src=\"x\"></video>; route scan findings 152→160 (+firing-range-tags-tag-video-live-oracle + route); benchmark juice-shop-staging 31 findings 6/6 maintained"
