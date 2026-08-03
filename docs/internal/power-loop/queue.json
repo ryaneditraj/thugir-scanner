@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T10:16:45.020Z",
+  "updated_at": "2026-08-03T11:05:39.477Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body_attribute_non_ng_raw/1.4.0?q=test",
+      "source": "google/firing-range — AngularJS server-side injection into regular attribute (angular_body_attribute_non_ng_raw/1.4.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body_attribute_ng/1.4.0?q=test",
+      "source": "google/firing-range — AngularJS server-side injection into ng-attribute (angular_body_attribute_ng/1.4.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body_raw_escaped/1.4.0?q=test",
+      "source": "google/firing-range — AngularJS body reflection with backslash-escaped but HTML-entity-unescaped symbols (angular_body_raw_escaped/1.4.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body_raw_post/1.6.0",
+      "source": "google/firing-range — AngularJS POST body reflection without symbol escaping (angular_body_raw_post/1.6.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body_alt_symbols/1.4.0?q=test",
+      "source": "google/firing-range — AngularJS interpolation with custom [[ ]] symbols (angular_body_alt_symbols/1.4.0)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0",
       "source": "google/firing-range — AngularJS $parse injection via localStorage value (angular_storage_parse/1.6.0)",
