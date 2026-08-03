@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T03:14:45.794Z",
-  "total": 1579,
-  "uniqueSlugs": 1574,
+  "generatedAt": "2026-08-03T04:14:09.532Z",
+  "total": 1585,
+  "uniqueSlugs": 1580,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1561,
+    "generic": 1567,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1494,
+    "deep": 1500,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 468,
+    "Cross-site scripting": 474,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -1103,6 +1103,12 @@
     "firing-range-toxicdom-localstorage-include-function-innerhtml-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-array-eval-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-array-eval-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-array-function-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-array-function-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-function-documentwrite-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-function-documentwrite-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-function-innerhtml-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-function-innerhtml-route-live-oracle",
     "firing-range-urldom-location-hash-area-href-live-oracle",
     "firing-range-urldom-location-hash-area-href-route-live-oracle",
     "firing-range-urldom-location-hash-base-href-live-oracle",
