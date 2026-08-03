@@ -1122,6 +1122,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-toxicdom-localstorage-include-array-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include array innerHTML oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/include/array/innerHtml loads an external script that passes localStorage array data to innerHTML — Firing Range script-include localStorage innerHTML DOM XSS training oracle.",
+    impactOneline:
+      "Script-include toxic DOM sinks that assign storage-backed arrays to innerHTML enable attacker-controlled HTML injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludeArrayInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass storage values to innerHTML via script includes — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from localStorage/sessionStorage.",
+        "Avoid dynamic script includes that read storage into dangerous sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/array/innerHtml route loads a script that passes localStorage to innerHTML. Show script-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-array-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include array innerHTML route oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/include/array/innerHtml, an external script-include passes localStorage array data to innerHTML — route-specific script-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script-include routes cannot inject HTML via storage-backed innerHTML sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludeArrayInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on script-include localStorage array routes.",
+      steps: [
+        "Audit external script includes for storage reads into innerHTML.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/array/innerHtml route uses innerHTML on localStorage via script include. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-array-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include array eval oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/include/array/eval loads an external script that passes localStorage array data to eval() — Firing Range script-include localStorage eval DOM XSS training oracle.",
+    impactOneline:
+      "Script-include toxic DOM sinks that pass storage-backed arrays to eval() enable attacker-controlled code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludeArrayEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass storage values to eval() via script includes — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from localStorage/sessionStorage.",
+        "Avoid dynamic script includes that read storage into dangerous sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/array/eval route loads a script that passes localStorage to eval(). Show script-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-array-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include array eval route oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/include/array/eval, an external script-include passes localStorage array data to eval() — route-specific script-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script-include routes cannot execute storage-backed payloads via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludeArrayEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on script-include localStorage array routes.",
+      steps: [
+        "Audit external script includes for storage reads into eval().",
+        "Encode or sanitize before code execution.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/array/eval route uses eval on localStorage via script include. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-toxicdom-localstorage-include-function-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
