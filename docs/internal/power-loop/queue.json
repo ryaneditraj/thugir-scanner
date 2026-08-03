@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T15:06:05.992Z",
+  "updated_at": "2026-08-03T16:04:48.944Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/object/function/innerHtml",
+      "source": "google/firing-range — toxic DOM localStorage object Function innerHTML XSS sink (/dom/toxicdom/localStorage/object/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/object/array/innerHtml",
+      "source": "google/firing-range — toxic DOM localStorage object Array innerHTML XSS sink (/dom/toxicdom/localStorage/object/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/object/function/eval",
+      "source": "google/firing-range — toxic DOM localStorage object Function eval XSS sink (/dom/toxicdom/localStorage/object/function/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/object/array/eval",
+      "source": "google/firing-range — toxic DOM localStorage object Array eval XSS sink (/dom/toxicdom/localStorage/object/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/object/property/eval",
+      "source": "google/firing-range — toxic DOM localStorage object Property eval XSS sink (/dom/toxicdom/localStorage/object/property/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/textarea?q=a",
       "source": "google/firing-range — server-side escapeHtml bypass into TEXTAREA CDATA sink (/escape/serverside/escapeHtml/textarea)",
