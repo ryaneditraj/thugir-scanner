@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T05:02:17.675Z",
+  "updated_at": "2026-08-03T06:05:48.872Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/js_html_sanitize_eval",
+      "source": "google/firing-range — sessionStorage function source via script include to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/include/function/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/js_html_sanitize_eval",
+      "source": "google/firing-range — sessionStorage property source via script include to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/include/property/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/js_html_sanitize_eval",
+      "source": "google/firing-range — sessionStorage array source via script include to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/include/array/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/js_html_sanitize_eval",
+      "source": "google/firing-range — localStorage function source via script include to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/localStorage/include/function/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/property/js_html_sanitize_eval",
+      "source": "google/firing-range — localStorage property source via script include to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/localStorage/include/property/js_html_sanitize_eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/documentWrite",
       "source": "google/firing-range — sessionStorage property source via script include to document.write sink (/dom/toxicdom/sessionStorage/include/property/documentWrite)",
