@@ -4450,6 +4450,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-localstorage-array-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage array eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/array/eval returns a page that reads localStorage['badValue'] and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "localStorage array-index values passed to eval() enable DOM XSS when attackers can poison localStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstorageArrayEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from localStorage.",
+        "Treat localStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/array/eval uses eval on localStorage['badValue']. Show toxic DOM localStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-array-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/array/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/array/eval, localStorage['badValue'] is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage array-index values are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalstorageArrayEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on localStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all localStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/array/eval route uses eval on localStorage['badValue']. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-sessionstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4550,6 +4602,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/toxicdom/sessionStorage/property/innerHtml route uses innerHTML on sessionStorage.badValue. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-array-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage array eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/array/eval returns a page that reads sessionStorage['badValue'] and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage array-index values passed to eval() enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageArrayEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/array/eval uses eval on sessionStorage['badValue']. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-array-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/array/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/array/eval, sessionStorage['badValue'] is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage array-index values are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageArrayEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/array/eval route uses eval on sessionStorage['badValue']. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -4706,6 +4810,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/toxicdom/document/inputTyping/documentWrite route uses document.write on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-inputtyping-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range eventtriggering inputTyping eval XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/inputTyping/eval returns a page that copies input keystrokes into eval() on keyup/change — Firing Range event-triggered inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to eval() via event handlers enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringInputtypingEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from input keyup/change handlers.",
+        "Treat user input as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/inputTyping/eval uses eval() on input keystrokes. Show eventtriggering inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-inputtyping-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/document/inputTyping/eval route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/inputTyping/eval, input keystrokes are passed to eval() without sanitization — route-specific eventtriggering inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not passed to eval() via event handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringInputtypingEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on inputTyping handlers in /dom/eventtriggering routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/inputTyping/eval route uses eval() on input keystrokes. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
