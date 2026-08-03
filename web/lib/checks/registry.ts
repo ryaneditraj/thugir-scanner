@@ -37879,6 +37879,33 @@ const firingRangeDomLocalStorageXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const firingRangeDomLocalStorageFunctionDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/localStorage/function/documentWrite",
+    /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i,
+    "localStorage badValue"
+  );
+};
+
+const firingRangeDomLocalStorageFunctionDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/function\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalStorageFunctionDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/function/documentWrite route scan — localStorage badValue passed to document.write() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_SESSIONSTORAGE_INNERHTML_PATH =
   "/dom/toxicdom/sessionStorage/function/innerHtml";
 
@@ -38509,6 +38536,99 @@ const firingRangeAngularFormParseRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /angular/angular_form_parse route scan — user-controlled expression passed to $parse() on form submit"
+    }
+  };
+};
+
+const FIRING_RANGE_ANGULAR_STORAGE_PARSE_DEFAULT = "/angular/angular_storage_parse/1.6.0";
+const FIRING_RANGE_ANGULAR_POST_MESSAGE_PARSE_DEFAULT = "/angular/angular_post_message_parse/1.6.0";
+
+const firingRangeAngularStorageParseLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePath = firingRangeAngularVersionPath(
+    pageUrl,
+    "/angular/angular_storage_parse",
+    FIRING_RANGE_ANGULAR_STORAGE_PARSE_DEFAULT
+  );
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAngularStorageParse =
+    /<title>\s*Angular localStorage Parse\s*<\/title>/i.test(body) &&
+    /\$parse\s*\(\s*localStorage\.getItem\s*\(/i.test(body) &&
+    /VulnerableController/i.test(body);
+  if (!hasAngularStorageParse) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /angular/angular_storage_parse passes localStorage value to $parse() — AngularJS expression injection oracle"
+    }
+  };
+};
+
+const firingRangeAngularStorageParseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/angular\/angular_storage_parse\//i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAngularStorageParseLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /angular/angular_storage_parse route scan — localStorage value passed to $parse() without validation"
+    }
+  };
+};
+
+const firingRangeAngularPostMessageParseLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePath = firingRangeAngularVersionPath(
+    pageUrl,
+    "/angular/angular_post_message_parse",
+    FIRING_RANGE_ANGULAR_POST_MESSAGE_PARSE_DEFAULT
+  );
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAngularPostMessageParse =
+    /<title>\s*Angular postMessage Parse\s*<\/title>/i.test(body) &&
+    /addEventListener\s*\(\s*['"]message['"]/i.test(body) &&
+    /\$parse\s*\(\s*msg\.data\s*\)/i.test(body);
+  if (!hasAngularPostMessageParse) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /angular/angular_post_message_parse passes postMessage data to $parse() — AngularJS expression injection oracle"
+    }
+  };
+};
+
+const firingRangeAngularPostMessageParseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/angular\/angular_post_message_parse\//i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeAngularPostMessageParseLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /angular/angular_post_message_parse route scan — postMessage data passed to $parse() without origin validation"
     }
   };
 };
@@ -57660,6 +57780,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreAuthTotpBypassRouteLiveOracle,
   firingRangeDomLocalStorageXssLiveOracle,
   firingRangeDomLocalStorageXssRouteLiveOracle,
+  firingRangeDomLocalStorageFunctionDocumentwriteLiveOracle,
+  firingRangeDomLocalStorageFunctionDocumentwriteRouteLiveOracle,
   firingRangeDomSessionStorageInnerHtmlLiveOracle,
   firingRangeDomSessionStorageInnerHtmlRouteLiveOracle,
   firingRangeDomSessionStorageDocumentwriteLiveOracle,
@@ -57678,6 +57800,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeAngularCookieParseRouteLiveOracle,
   firingRangeAngularFormParseLiveOracle,
   firingRangeAngularFormParseRouteLiveOracle,
+  firingRangeAngularStorageParseLiveOracle,
+  firingRangeAngularStorageParseRouteLiveOracle,
+  firingRangeAngularPostMessageParseLiveOracle,
+  firingRangeAngularPostMessageParseRouteLiveOracle,
   firingRangeAngularBodyXssLiveOracle,
   firingRangeAngularBodyXssRouteLiveOracle,
   firingRangeMetaRedirectLiveOracle,

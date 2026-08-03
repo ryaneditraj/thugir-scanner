@@ -862,6 +862,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-localstorage-function-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/function/documentWrite reads localStorage.getItem('badValue') and passes it to document.write() — Firing Range toxic DOM localStorage document.write XSS training oracle.",
+    impactOneline:
+      "DOM XSS via localStorage document.write lets attackers persist payloads that execute on every page load in the victim browser.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalStorageFunctionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from localStorage/sessionStorage.",
+        "Treat storage as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/function/documentWrite uses document.write on localStorage values. Show toxic DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-localstorage-function-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/function/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/function/documentWrite, localStorage badValue is passed to document.write() — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomLocalStorageFunctionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write() on localStorage values in /dom/toxicdom/localStorage/function/documentWrite handlers.",
+      steps: [
+        "Audit all document.write usage for storage-backed sources.",
+        "Use textContent or safe DOM APIs instead of document.write.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/function/documentWrite route uses document.write on localStorage values. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-sessionstorage-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -1534,6 +1586,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /angular/angular_form_parse route passes form input to $parse(). Show route-specific Angular expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-storage-parse-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS $parse(localStorage) injection oracle",
+    description:
+      "GET /angular/angular_storage_parse passes a localStorage value to AngularJS $parse() — Firing Range Angular expression injection training oracle.",
+    impactOneline:
+      "Passing attacker-controlled localStorage values to $parse() enables AngularJS sandbox escape and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularStorageParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to $parse() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove $parse() calls on untrusted localStorage data.",
+        "Treat storage values as opaque strings, not Angular expressions.",
+        "Upgrade from AngularJS and avoid expression evaluation on user input."
+      ]
+    },
+    fixPrompt:
+      "Our Angular app passes localStorage values to $parse(). Show AngularJS expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-storage-parse-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_storage_parse route XSS oracle",
+    description:
+      "When scanning /angular/angular_storage_parse routes, localStorage values are passed to $parse() — route-specific Angular expression injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage data is not evaluated as AngularJS expressions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularStorageParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove $parse() on localStorage values in /angular/angular_storage_parse handlers.",
+      steps: [
+        "Audit all $parse usage for storage-backed input sources.",
+        "Use static expressions instead of dynamic storage values.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_storage_parse route passes localStorage to $parse(). Show route-specific Angular expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-post-message-parse-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS $parse(postMessage) injection oracle",
+    description:
+      "GET /angular/angular_post_message_parse passes postMessage data to AngularJS $parse() — Firing Range Angular expression injection training oracle.",
+    impactOneline:
+      "Passing attacker-controlled postMessage data to $parse() enables AngularJS sandbox escape and arbitrary script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularPostMessageParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass postMessage data to $parse() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove $parse() calls on untrusted postMessage payloads.",
+        "Validate message origin before processing postMessage events.",
+        "Upgrade from AngularJS and avoid expression evaluation on cross-origin messages."
+      ]
+    },
+    fixPrompt:
+      "Our Angular app passes postMessage data to $parse(). Show AngularJS expression injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-post-message-parse-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_post_message_parse route XSS oracle",
+    description:
+      "When scanning /angular/angular_post_message_parse routes, postMessage data is passed to $parse() — route-specific Angular expression injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm postMessage payloads are not evaluated as AngularJS expressions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularPostMessageParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove $parse() on postMessage data in /angular/angular_post_message_parse handlers.",
+      steps: [
+        "Validate message origin before any $parse usage.",
+        "Use static expressions instead of dynamic message data.",
+        "Add CSP as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_post_message_parse route passes postMessage data to $parse(). Show route-specific Angular expression injection remediation.",
     version: 1,
     enabled: true
   },
