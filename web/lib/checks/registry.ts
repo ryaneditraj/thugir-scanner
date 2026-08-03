@@ -41030,6 +41030,33 @@ const firingRangeDomLocalstoragePropertyInnerhtmlRouteLiveOracle: Rule = async (
   };
 };
 
+const firingRangeDomLocalstorageArrayEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/localStorage/array/eval",
+    /localStorage\s*\[\s*['"]badValue['"]\s*\]/i,
+    "localStorage['badValue']"
+  );
+};
+
+const firingRangeDomLocalstorageArrayEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/array\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalstorageArrayEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/array/eval route scan — localStorage['badValue'] passed to eval() without sanitization"
+    }
+  };
+};
+
 const firingRangeDomSessionstoragePropertyEvalLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   return probeFiringRangeToxicdomEval(
@@ -41080,6 +41107,33 @@ const firingRangeDomSessionstoragePropertyInnerhtmlRouteLiveOracle: Rule = async
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/sessionStorage/property/innerHtml route scan — sessionStorage.badValue passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const firingRangeDomSessionstorageArrayEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/sessionStorage/array/eval",
+    /sessionStorage\s*\[\s*['"]badValue['"]\s*\]/i,
+    "sessionStorage['badValue']"
+  );
+};
+
+const firingRangeDomSessionstorageArrayEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/sessionStorage\/array\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomSessionstorageArrayEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/sessionStorage/array/eval route scan — sessionStorage['badValue'] passed to eval() without sanitization"
     }
   };
 };
@@ -41188,6 +41242,33 @@ const firingRangeDomInputtypingDocumentwriteRouteLiveOracle: Rule = async (ctx) 
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/document/inputTyping/documentWrite route scan — input keystrokes passed to document.write() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomEventtriggeringInputtypingEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeInputTypingSink(
+    ctx,
+    "/dom/eventtriggering/document/inputTyping/eval",
+    /eval\s*\(\s*payload\s*\)/i,
+    "eval()"
+  );
+};
+
+const firingRangeDomEventtriggeringInputtypingEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/eventtriggering\/document\/inputTyping\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomEventtriggeringInputtypingEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/eventtriggering/document/inputTyping/eval route scan — input keystrokes passed to eval() without sanitization"
     }
   };
 };
@@ -58616,16 +58697,22 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomLocalstoragePropertyEvalRouteLiveOracle,
   firingRangeDomLocalstoragePropertyInnerhtmlLiveOracle,
   firingRangeDomLocalstoragePropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomLocalstorageArrayEvalLiveOracle,
+  firingRangeDomLocalstorageArrayEvalRouteLiveOracle,
   firingRangeDomSessionstoragePropertyEvalLiveOracle,
   firingRangeDomSessionstoragePropertyEvalRouteLiveOracle,
   firingRangeDomSessionstoragePropertyInnerhtmlLiveOracle,
   firingRangeDomSessionstoragePropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomSessionstorageArrayEvalLiveOracle,
+  firingRangeDomSessionstorageArrayEvalRouteLiveOracle,
   firingRangeDomInputtypingInnerhtmlLiveOracle,
   firingRangeDomInputtypingInnerhtmlRouteLiveOracle,
   firingRangeDomInputtypingEvalLiveOracle,
   firingRangeDomInputtypingEvalRouteLiveOracle,
   firingRangeDomInputtypingDocumentwriteLiveOracle,
   firingRangeDomInputtypingDocumentwriteRouteLiveOracle,
+  firingRangeDomEventtriggeringInputtypingEvalLiveOracle,
+  firingRangeDomEventtriggeringInputtypingEvalRouteLiveOracle,
   firingRangeReflectedJsoncallbackLiveOracle,
   firingRangeReflectedJsoncallbackRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,
