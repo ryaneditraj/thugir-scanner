@@ -39306,6 +39306,72 @@ const firingRangeAngularBodyAltSymbolsRouteLiveOracle = makeFiringRangeAngularRo
   "Google Firing Range /angular/angular_body_alt_symbols route scan — q parameter reflected into custom [[ ]] interpolation without escaping"
 );
 
+const FIRING_RANGE_ANGULAR_BODY_RAW_ESCAPED_DEFAULT = "/angular/angular_body_raw_escaped/1.4.0";
+const FIRING_RANGE_ANGULAR_BODY_RAW_POST_DEFAULT = "/angular/angular_body_raw_post/1.6.0";
+
+function firingRangeAngularRawBodyReflection(body: string, probe: string): boolean {
+  return (
+    new RegExp(`<div>\\s*${probe}\\s*</div>`, "i").test(body) &&
+    !new RegExp(`\\{\\{${probe}\\}\\}`).test(body)
+  );
+}
+
+const firingRangeAngularBodyRawEscapedLiveOracle: Rule = async (ctx) =>
+  firingRangeAngularQueryReflectionOracle(
+    ctx,
+    "/angular/angular_body_raw_escaped",
+    FIRING_RANGE_ANGULAR_BODY_RAW_ESCAPED_DEFAULT,
+    firingRangeAngularRawBodyReflection,
+    "Google Firing Range /angular/angular_body_raw_escaped reflects q into raw HTML body without escaping — server-side XSS oracle"
+  );
+
+const firingRangeAngularBodyRawEscapedRouteLiveOracle = makeFiringRangeAngularRouteOracle(
+  /\/angular\/angular_body_raw_escaped\//i,
+  firingRangeAngularBodyRawEscapedLiveOracle,
+  "Google Firing Range /angular/angular_body_raw_escaped route scan — q parameter reflected into raw HTML without escaping"
+);
+
+const firingRangeAngularBodyRawPostLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePath = firingRangeAngularVersionPath(
+    pageUrl,
+    "/angular/angular_body_raw_post",
+    FIRING_RANGE_ANGULAR_BODY_RAW_POST_DEFAULT
+  );
+  const url = new URL(probePath, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: `q=${encodeURIComponent(FIRING_RANGE_ANGULAR_BODY_PROBE)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAngularRawPost =
+    /ng-app/i.test(body) &&
+    /angular(?:js)?\.js/i.test(body) &&
+    /<form[^>]+method\s*=\s*["']post["']/i.test(body) &&
+    firingRangeAngularRawBodyReflection(body, FIRING_RANGE_ANGULAR_BODY_PROBE);
+  if (!hasAngularRawPost) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 220).trim(),
+      note: "Google Firing Range /angular/angular_body_raw_post reflects POST q into raw HTML body without escaping — server-side XSS oracle"
+    }
+  };
+};
+
+const firingRangeAngularBodyRawPostRouteLiveOracle = makeFiringRangeAngularRouteOracle(
+  /\/angular\/angular_body_raw_post\//i,
+  firingRangeAngularBodyRawPostLiveOracle,
+  "Google Firing Range /angular/angular_body_raw_post route scan — POST q parameter reflected into raw HTML without escaping"
+);
+
 function firingRangeMetaRefreshTarget(body: string): string | null {
   const m = body.match(
     /<meta[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*content\s*=\s*["']0;\s*([^"']+)/i
@@ -41380,6 +41446,33 @@ const firingRangeDomEventtriggeringInputtypingEvalRouteLiveOracle: Rule = async 
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/eventtriggering/document/inputTyping/eval route scan — input keystrokes passed to eval() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomEventtriggeringInputtypingInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeInputTypingSink(
+    ctx,
+    "/dom/eventtriggering/document/inputTyping/innerHtml",
+    /\.innerHTML\s*=\s*payload/i,
+    "innerHTML"
+  );
+};
+
+const firingRangeDomEventtriggeringInputtypingInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/eventtriggering\/document\/inputTyping\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomEventtriggeringInputtypingInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/eventtriggering/document/inputTyping/innerHtml route scan — input keystrokes passed to innerHTML without sanitization"
     }
   };
 };
@@ -58734,6 +58827,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeAngularBodyAttributeNonNgRawRouteLiveOracle,
   firingRangeAngularBodyAltSymbolsLiveOracle,
   firingRangeAngularBodyAltSymbolsRouteLiveOracle,
+  firingRangeAngularBodyRawEscapedLiveOracle,
+  firingRangeAngularBodyRawEscapedRouteLiveOracle,
+  firingRangeAngularBodyRawPostLiveOracle,
+  firingRangeAngularBodyRawPostRouteLiveOracle,
   firingRangeMetaRedirectLiveOracle,
   firingRangeMetaRedirectRouteLiveOracle,
   firingRangeUrldomSinkLiveOracle,
@@ -58830,6 +58927,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomInputtypingDocumentwriteRouteLiveOracle,
   firingRangeDomEventtriggeringInputtypingEvalLiveOracle,
   firingRangeDomEventtriggeringInputtypingEvalRouteLiveOracle,
+  firingRangeDomEventtriggeringInputtypingInnerhtmlLiveOracle,
+  firingRangeDomEventtriggeringInputtypingInnerhtmlRouteLiveOracle,
   firingRangeReflectedJsoncallbackLiveOracle,
   firingRangeReflectedJsoncallbackRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,

@@ -2266,6 +2266,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-angular-body-raw-escaped-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS raw body escaped XSS oracle",
+    description:
+      "GET /angular/angular_body_raw_escaped reflects the q query parameter into raw HTML without Angular interpolation — Firing Range server-side XSS training oracle.",
+    impactOneline:
+      "User input reflected into raw HTML enables XSS even when Angular is loaded on the page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyRawEscapedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before writing to HTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "HTML-encode all user-controlled output in server templates.",
+        "Never reflect query parameters into raw HTML blocks.",
+        "Use Angular bindings with proper escaping instead of server-side reflection."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_raw_escaped route reflects user input into raw HTML. Show server-side XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-raw-escaped-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body_raw_escaped route XSS oracle",
+    description:
+      "When scanning /angular/angular_body_raw_escaped routes, the q parameter is reflected into raw HTML without escaping — route-specific server-side XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm query parameters are not reflected into raw HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyRawEscapedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode reflected output in /angular/angular_body_raw_escaped handlers.",
+      steps: [
+        "Audit all server templates for unescaped user input.",
+        "Use context-appropriate output encoding.",
+        "Add regression tests for reflected XSS on Angular routes."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_raw_escaped route reflects query parameters into raw HTML. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-raw-post-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS raw body POST XSS oracle",
+    description:
+      "POST /angular/angular_body_raw_post reflects the q form field into raw HTML without escaping — Firing Range server-side POST XSS training oracle.",
+    impactOneline:
+      "POST body fields reflected into raw HTML enable stored/reflected XSS on form submission.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyRawPostLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode POST parameters before writing to HTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "HTML-encode all user-controlled POST fields in server templates.",
+        "Never reflect form input into raw HTML blocks.",
+        "Validate and sanitize all POST parameters server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_raw_post route reflects POST q into raw HTML. Show server-side POST XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-raw-post-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body_raw_post route XSS oracle",
+    description:
+      "When scanning /angular/angular_body_raw_post routes, POST q is reflected into raw HTML without escaping — route-specific server-side POST XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm POST form fields are not reflected into raw HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyRawPostRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode reflected POST output in /angular/angular_body_raw_post handlers.",
+      steps: [
+        "Audit form handlers for unescaped POST field reflection.",
+        "Use context-appropriate output encoding on all form fields.",
+        "Add regression tests for POST-based reflected XSS."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_raw_post route reflects POST q into raw HTML. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-postmessage-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -5018,6 +5122,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/eventtriggering/document/inputTyping/eval route uses eval() on input keystrokes. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-inputtyping-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range eventtriggering inputTyping innerHTML XSS oracle",
+    description:
+      "GET /dom/eventtriggering/document/inputTyping/innerHtml returns a page that copies input keystrokes into innerHTML on keyup/change — Firing Range event-triggered inputTyping DOM XSS training oracle.",
+    impactOneline:
+      "Input keystrokes passed to innerHTML via event handlers enable DOM XSS when attackers can type into monitored fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringInputtypingInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass input field values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML on values from input keyup/change handlers.",
+        "Treat user input as untrusted text and render with textContent.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/inputTyping/innerHtml uses innerHTML on input keystrokes. Show eventtriggering inputTyping DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-eventtriggering-inputtyping-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/document/inputTyping/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/document/inputTyping/innerHtml, input keystrokes are passed to innerHTML without sanitization — route-specific eventtriggering inputTyping DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm input keystrokes are not passed to innerHTML via event handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringInputtypingInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on inputTyping handlers in /dom/eventtriggering routes.",
+      steps: [
+        "Audit all input keyup/change handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/document/inputTyping/innerHtml route uses innerHTML on input keystrokes. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
