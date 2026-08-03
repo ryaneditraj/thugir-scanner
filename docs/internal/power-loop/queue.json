@@ -14384,6 +14384,31 @@
       "url": "http://testasp.vulnweb.com/login.asp",
       "source": "Acunetix Acuforum — ASP authentication bypass / SQLi login oracle POST /login.asp (testasp.vulnweb.com lab)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://testhtml5.vulnweb.com/static/views/redir.html",
+      "source": "Acunetix testhtml5 — DOM XSS window.location hash redirect sink source (/#/redir?url= javascript: URI oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/api/users/",
+      "source": "Invicti rest.vulnweb.com — unauthenticated users API enumeration oracle GET /api/users/ (vulnweb REST lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/filtered/attribute_quoted?q=a",
+      "source": "google/firing-range — filtered reflected XSS attribute quoted sink (/reflected/filtered/attribute_quoted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/filtered/attribute_doublequoted?q=a",
+      "source": "google/firing-range — filtered reflected XSS attribute double-quoted sink (/reflected/filtered/attribute_doublequoted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/mixedcontent/",
+      "source": "google/firing-range — mixed content passive/active oracle index (/mixedcontent/)",
+      "auth": "public_demo"
     }
   ]
 }
