@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T12:17:46.117Z",
+  "updated_at": "2026-08-03T13:12:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2755,
-  "total_findings": 30982,
+  "total_sites_scanned": 2759,
+  "total_findings": 31075,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2850,
-  "discovery_findings": 39321,
+  "discovery_findings": 39384,
   "improvements_shipped": 1164,
-  "last_run": "2026-08-03T12:17:46.117Z",
+  "last_run": "2026-08-03T13:12:30.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 31,
+      "oracle_findings": 30,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,46 +48,39 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (31 findings pages=6 probes=477); secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (30 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 1479,
-      "focus": "AngularJS version-specific interpolation sinks (1.1.5, 1.2.18, 1.2.19, 1.2.24) + eventtriggering inputTyping/innerHtml + queue drain (angular_cookie_parse, angular_form_parse, remoteinclude/script)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 573,
+      "focus": "eventtriggering inputTyping innerHTML + angular_body_raw_escaped POST raw HTML reflection oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "public-firing-range angular_body/1.1.5: 185 findings — generic firing-range hub oracles only, no route-specific Angular 1.1.5 interpolation live oracle",
-      "public-firing-range angular_body/1.2.18: 185 findings — generic hub oracles only, no version-specific interpolation live oracle",
-      "public-firing-range angular_body/1.2.19: 185 findings — generic hub oracles only, no version-specific interpolation live oracle",
-      "public-firing-range angular_body/1.2.24: 185 findings — generic hub oracles only, no version-specific interpolation live oracle",
-      "public-firing-range dom/eventtriggering/document/inputTyping/innerHtml: 184 findings — generic hub oracles only, no inputTyping innerHTML sink live oracle",
-      "public-firing-range angular_cookie_parse/1.6.0: 185 findings — route-specific $parse cookie injection oracle present",
-      "public-firing-range angular_form_parse/1.6.0: 185 findings — route-specific $parse form injection oracle present"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
+      "public-firing-range dom/eventtriggering/document/inputTyping/innerHtml: 184→191 findings — eventtriggering-inputtyping-innerhtml live+route oracles shipped",
+      "public-firing-range angular_body_raw_escaped/1.4.0: 181→191 findings — angular-body-raw-escaped live+route oracles shipped",
+      "public-firing-range angular_body_raw_post/1.6.0: 181→191 findings — angular-body-raw-post live+route oracles shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "public-firing-range angular_body/* version routes: generic firing-range hub oracles only — no route-specific AngularJS server-side interpolation live oracles",
-      "public-firing-range dom/eventtriggering/document/inputTyping/innerHtml: generic hub oracles only — no route-specific typing-event innerHTML sink live oracle",
       "primary juice-shop.herokuapp.com Heroku dyno intermittent — staging fallback required for reliable 6/6 recall",
-      "angular_body_raw_escaped and angular_body_raw_post Firing Range routes still lack route-specific oracles (shipped this hour on sibling routes)",
-      "testphp.vulnweb.com unreachable from cloud agent egress"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles present but low finding counts on basic routes",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 31,
+    "juice-shop-staging.herokuapp.com": 30,
+    "public-firing-range.appspot.com/dom/eventtriggering/document/inputTyping/innerHtml": 191,
+    "public-firing-range.appspot.com/angular/angular_body_raw_escaped/1.4.0": 191,
+    "public-firing-range.appspot.com/angular/angular_body_raw_post/1.6.0": 191,
     "public-firing-range.appspot.com/angular/angular_body/1.1.5?q=test": 185,
     "public-firing-range.appspot.com/angular/angular_body/1.2.18?q=test": 185,
-    "public-firing-range.appspot.com/angular/angular_body/1.2.19?q=test": 185,
     "public-firing-range.appspot.com/angular/angular_body/1.2.24?q=test": 185,
-    "public-firing-range.appspot.com/dom/eventtriggering/document/inputTyping/innerHtml": 184,
-    "public-firing-range.appspot.com/angular/angular_cookie_parse/1.6.0": 185,
-    "public-firing-range.appspot.com/angular/angular_form_parse/1.6.0": 185,
-    "public-firing-range.appspot.com/remoteinclude/parameter/script?q=https://google.com": 185,
     "public-firing-range.appspot.com/angular/angular_body_attribute_ng/1.4.0": 188,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
