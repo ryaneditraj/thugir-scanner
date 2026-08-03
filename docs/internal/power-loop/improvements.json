@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-eventtriggering-inputtyping-innerhtml-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/document/inputTyping/innerHtml passes input keystrokes to innerHTML on keyup/change; route scan 184→191 findings (+inputtyping-innerhtml live+route); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-raw-escaped-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_raw_escaped/1.4.0?q= reflects into raw HTML div without Angular interpolation; route scan 181→191 findings (+raw-escaped live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-raw-post-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /angular/angular_body_raw_post/1.6.0 q= reflects into raw HTML div without escaping; route scan 181→191 findings (+raw-post live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-angular-body-attribute-ng-route-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_attribute_ng/1.4.0?q= reflects into ng-class directive; route scan 181→188 findings (+attribute-ng live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
