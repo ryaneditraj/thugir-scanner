@@ -38219,9 +38219,19 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   }
 ] as const;
 
+type FiringRangeToxicdomExternalIncludeRoute = {
+  htmlPath: string;
+  scriptPath: string;
+  scriptSrcRe: RegExp;
+  sourceRe: RegExp;
+  sinkRe: RegExp;
+  label: string;
+  routeRe: RegExp;
+};
+
 async function probeFiringRangeToxicdomExternalInclude(
   ctx: RuleContext,
-  route: (typeof FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES)[number]
+  route: FiringRangeToxicdomExternalIncludeRoute
 ): Promise<RuleResult> {
   const htmlUrl = new URL(route.htmlPath, ctx.origin).toString();
   const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
