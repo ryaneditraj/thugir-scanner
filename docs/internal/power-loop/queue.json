@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T01:05:00.000Z",
+  "updated_at": "2026-08-03T02:03:47.532Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/function",
+      "source": "google/firing-range — localStorage array source via script include to Function() sink (/dom/toxicdom/localStorage/include/array/function)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/innerHtml",
+      "source": "google/firing-range — localStorage function source via script include to innerHTML sink (/dom/toxicdom/localStorage/include/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/array/eval",
+      "source": "google/firing-range — sessionStorage array source via script include to eval() sink (/dom/toxicdom/sessionStorage/include/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/innerHtml",
+      "source": "google/firing-range — sessionStorage function source via script include to innerHTML sink (/dom/toxicdom/sessionStorage/include/function/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/function/documentWrite",
+      "source": "google/firing-range — localStorage function source via script include to document.write sink (/dom/toxicdom/localStorage/include/function/documentWrite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0",
       "source": "google/firing-range — AngularJS $parse injection via localStorage value (angular_storage_parse/1.6.0)",
