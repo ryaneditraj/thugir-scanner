@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T14:04:31.104Z",
+  "updated_at": "2026-08-03T15:06:05.992Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/textarea?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into TEXTAREA CDATA sink (/escape/serverside/escapeHtml/textarea)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/js_eval?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into JS eval() context sink (/escape/serverside/escapeHtml/js_eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/escape/serverside/escapeHtml/href?q=a",
+      "source": "google/firing-range — server-side escapeHtml bypass into href attribute sink (/escape/serverside/escapeHtml/href)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/fetch#//example.org",
+      "source": "google/firing-range — location.hash to fetch() external resource DOM XSS sink (/urldom/location/hash/fetch)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/urldom/location/hash/embed.src#//example.org",
+      "source": "google/firing-range — location.hash to embed.src resource URI DOM XSS sink (/urldom/location/hash/embed.src)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/eventtriggering/window/innerHtml",
       "source": "google/firing-range — window event-triggered innerHTML DOM XSS sink (eventtriggering/window/innerHtml)",
