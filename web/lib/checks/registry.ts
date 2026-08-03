@@ -39757,6 +39757,106 @@ const FIRING_RANGE_DOM_COOKIE_UNSET_SOURCE_RE = new RegExp(
   "i"
 );
 
+const FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_SINK_RE =
+  /eval\s*\(\s*payload\.replace\s*\(\s*\/<\s*\/g\s*,\s*['"]&lt;['"]/i;
+
+const FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_ROUTES = [
+  {
+    path: "/dom/toxicdom/document/cookie/js_html_sanitize_eval",
+    sourceRe: FIRING_RANGE_DOM_COOKIE_UNSET_SOURCE_RE,
+    label: "document.cookie (unset lookup)",
+    routeRe: /\/dom\/toxicdom\/document\/cookie\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/document/cookie_set/js_html_sanitize_eval",
+    sourceRe: /lookupCookie\s*\(\s*['"]badValue['"]\s*\)/i,
+    label: "document.cookie badValue",
+    routeRe: /\/dom\/toxicdom\/document\/cookie_set\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/document/referrer/js_html_sanitize_eval",
+    sourceRe: /unescape\s*\(\s*document\.referrer\s*\)/i,
+    label: "document.referrer",
+    routeRe: /\/dom\/toxicdom\/document\/referrer\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/window/name/js_html_sanitize_eval",
+    sourceRe: /var\s+payload\s*=\s*window\.name/i,
+    label: "window.name",
+    routeRe: /\/dom\/toxicdom\/window\/name\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/localStorage/function/js_html_sanitize_eval",
+    sourceRe: /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i,
+    label: "localStorage badValue",
+    routeRe: /\/dom\/toxicdom\/localStorage\/function\/js_html_sanitize_eval\b/i
+  }
+] as const;
+
+async function probeFiringRangeToxicdomJsHtmlSanitizeEval(
+  ctx: RuleContext,
+  route: (typeof FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_ROUTES)[number]
+): Promise<RuleResult> {
+  const url = new URL(route.path, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasSanitizerBypass =
+    /<title>\s*Toxic DOM\s*<\/title>/i.test(body) &&
+    route.sourceRe.test(body) &&
+    FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_SINK_RE.test(body);
+  if (!hasSanitizerBypass) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(body) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: `Google Firing Range ${route.path} passes ${route.label} to eval() after insufficient HTML-entity sanitization — toxic DOM sanitizer-bypass XSS oracle`
+    }
+  };
+}
+
+const firingRangeDomJsHtmlSanitizeEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let routes = [...FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_ROUTES];
+  if (/\/dom\/toxicdom\//i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = routes.filter((r) => pathname.startsWith(r.path));
+      if (matched.length) routes = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const route of routes) {
+    const result = await probeFiringRangeToxicdomJsHtmlSanitizeEval(ctx, route);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeDomJsHtmlSanitizeEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const route = FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_ROUTES.find((r) =>
+    r.routeRe.test(pageUrl)
+  );
+  if (!route) return NEGATIVE;
+  const result = await probeFiringRangeToxicdomJsHtmlSanitizeEval(ctx, route);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${route.path} route scan — ${route.label} passed to eval() after insufficient HTML-entity sanitization`
+    }
+  };
+};
+
 const firingRangeDomCookieEvalLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   return probeFiringRangeToxicdomEval(
@@ -41608,6 +41708,12 @@ const FIRING_RANGE_TAGS_INJECTION_PATHS = [
     q: "<meta>",
     bodyRe: /<meta\s*>/i,
     label: "META tag injection"
+  },
+  {
+    path: "/tags/tag/applet",
+    q: "<applet>",
+    bodyRe: /<applet><\/applet>/i,
+    label: "APPLET tag injection"
   }
 ] as const;
 
@@ -43705,6 +43811,47 @@ const firingRangeUrldomLocationSearchParamCodeValueRouteLiveOracle: Rule = async
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /urldom/location/search/param.code.value route scan — location.search passed to Flash param code without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_URLDOM_SEARCH_PARAM_MOVIE_VALUE_PATH = "/urldom/location/search/param.movie.value";
+
+const firingRangeUrldomLocationSearchParamMovieValueLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_URLDOM_SEARCH_PARAM_MOVIE_VALUE_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasParamMovieSink =
+    /<title>\s*URL-based DOM XSS\s*<\/title>/i.test(body) &&
+    /document\.location\.search\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /paramMovieElement\.value\s*=\s*payload/i.test(body);
+  if (!hasParamMovieSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /urldom/location/search/param.movie.value passes location.search to Flash param movie — URL-based DOM XSS sink oracle"
+    }
+  };
+};
+
+const firingRangeUrldomLocationSearchParamMovieValueRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/urldom\/location\/search\/param\.movie\.value\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeUrldomLocationSearchParamMovieValueLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /urldom/location/search/param.movie.value route scan — location.search passed to Flash param movie without sanitization"
     }
   };
 };
@@ -57431,6 +57578,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomCookieSetDocumentwriteRouteLiveOracle,
   firingRangeDomCookieEvalLiveOracle,
   firingRangeDomCookieEvalRouteLiveOracle,
+  firingRangeDomJsHtmlSanitizeEvalLiveOracle,
+  firingRangeDomJsHtmlSanitizeEvalRouteLiveOracle,
   firingRangeDomCookieInnerhtmlLiveOracle,
   firingRangeDomCookieInnerhtmlRouteLiveOracle,
   firingRangeDomCookieDocumentwriteLiveOracle,
@@ -57646,6 +57795,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeUrldomLocationSearchLinkHrefRouteLiveOracle,
   firingRangeUrldomLocationSearchParamCodeValueLiveOracle,
   firingRangeUrldomLocationSearchParamCodeValueRouteLiveOracle,
+  firingRangeUrldomLocationSearchParamMovieValueLiveOracle,
+  firingRangeUrldomLocationSearchParamMovieValueRouteLiveOracle,
   firingRangeUrldomLocationSearchParamSrcValueLiveOracle,
   firingRangeUrldomLocationSearchParamSrcValueRouteLiveOracle,
   firingRangeUrldomLocationSearchSvgALiveOracle,

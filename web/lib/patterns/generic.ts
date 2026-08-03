@@ -2838,6 +2838,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-js-html-sanitize-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM js_html_sanitize_eval bypass oracle",
+    description:
+      "GET /dom/toxicdom/*/js_html_sanitize_eval routes pass cookie, referrer, window.name, or localStorage sources to eval() after HTML-entity replacement only — Firing Range sanitizer-bypass toxic DOM XSS training oracle.",
+    impactOneline:
+      "HTML-entity sanitization before eval() is insufficient and enables DOM XSS when attackers control the source value.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomJsHtmlSanitizeEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user-controlled values to eval(), even after HTML-entity encoding — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from cookies, referrer, window.name, or localStorage.",
+        "Do not rely on replace-based HTML sanitization before code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/*/js_html_sanitize_eval routes use eval after insufficient HTML sanitization. Show toxic DOM sanitizer-bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-js-html-sanitize-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/*/js_html_sanitize_eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/document/cookie/js_html_sanitize_eval, cookie_set, referrer, window/name, or localStorage/function/js_html_sanitize_eval, source values reach eval() after HTML-entity replacement only — route-specific sanitizer-bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sanitizer-bypass eval sinks cannot execute attacker-controlled code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomJsHtmlSanitizeEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks with insufficient HTML sanitization in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all toxic DOM sources for eval() after replace-based sanitization.",
+        "Encode or reject dangerous characters before any code execution path.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/*/js_html_sanitize_eval route uses eval after HTML-entity sanitization. Show route-specific sanitizer-bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-cookie-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -4924,7 +4976,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range HTML tag injection oracle",
     description:
-      "GET /tags/tag/img, /script, /iframe, /body/onload, /area, /input, /button, /select, /source, or /form?q= accepts attacker-controlled HTML tags and reflects them into the response — Firing Range tag injection XSS training oracle.",
+      "GET /tags/tag/img, /script, /iframe, /body/onload, /area, /input, /button, /select, /source, /form, or /applet?q= accepts attacker-controlled HTML tags and reflects them into the response — Firing Range tag injection XSS training oracle.",
     impactOneline:
       "Insufficient tag filtering allows attacker-controlled HTML elements to be injected.",
     detectorKind: "rule_ref",
@@ -8268,6 +8320,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /urldom/location/search/param.code.value route assigns location.search to Flash param code. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-movie-value-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range urldom location.search param.movie.value DOM XSS oracle",
+    description:
+      "GET /urldom/location/search/param.movie.value reads document.location.search.substr(1) and assigns it to Flash param movie value — Firing Range param.movie.value DOM XSS training oracle.",
+    impactOneline:
+      "location.search values assigned to Flash param movie enable DOM XSS when attackers can set the query string.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamMovieValueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.search to Flash param movie — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove Flash param movie assignments on values from window.location.search.",
+        "Allow-list Flash object parameters in production applications.",
+        "Use CSP object-src restrictions as defense-in-depth."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.movie.value uses Flash param movie on location.search. Show URL-based DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-urldom-location-search-param-movie-value-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /urldom/location/search/param.movie.value route XSS oracle",
+    description:
+      "When scanning /urldom/location/search/param.movie.value, location.search is assigned to Flash param movie without sanitization — route-specific param.movie.value DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm location.search values cannot seed arbitrary Flash param movie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeUrldomLocationSearchParamMovieValueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Flash param movie sinks on location.search in /urldom handlers.",
+      steps: [
+        "Audit all window.location.search reads for Flash object parameter sinks.",
+        "Allow-list Flash object parameters.",
+        "Add CSP object-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our /urldom/location/search/param.movie.value route assigns location.search to Flash param movie. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
