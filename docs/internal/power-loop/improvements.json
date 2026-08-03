@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-property-documentwrite-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/object/property/documentWrite loads toxicdomscripts object/property/documentWrite script-include document.write sink; route scan 198→205 (+property documentWrite live+route); benchmark juice-shop.herokuapp.com 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-function-innerhtml-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/object/function/innerHtml loads toxicdomscripts object/function/innerHtml script-include innerHTML sink; route scan 195→205 (+function innerHtml live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-array-innerhtml-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/object/array/innerHtml loads toxicdomscripts object/array/innerHtml script-include innerHTML sink; route scan 195→205 (+array innerHtml live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-escape-serverside-encodeurl-textarea-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/encodeUrl/textarea?q= reflects probe into <textarea> body despite encodeUrl; route scan 193→203 (+encodeUrl textarea live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
