@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-eventtriggering-window-innerhtml-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/window/name/innerHtml passes window.name to innerHTML via deferredPayload + setTimeout trigger; route scan window/innerHtml alias 190→197 (+eventtriggering-window-innerhtml live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-eventtriggering-window-documentwrite-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/window/name/documentWrite passes window.name to document.write() via deferredPayload; route scan window/documentWrite alias 190→197 (+eventtriggering-window-documentwrite live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-property-innerhtml-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/object/property/innerHtml loads toxicdomscripts/object/property/innerHtml external script-include localStorage object property to innerHTML sink; route scan object/innerHtml alias 189→196 (+object-property-innerhtml live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-angular-body-alt-symbols-raw-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_alt_symbols_raw/1.4.0?q=[[probe]] reflects into custom [[ ]] delimiters without server-side wrapping; route scan 190→194 (+alt-symbols-raw live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
