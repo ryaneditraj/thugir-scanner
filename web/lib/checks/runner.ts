@@ -1120,6 +1120,8 @@ const DEEP_RULES = new Set<string>([
   "firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle",
   "firingRangeDomPropagationWindowStatusEvalLiveOracle",
   "firingRangeDomPropagationWindowStatusEvalRouteLiveOracle",
+  "firingRangeDomPropagationDocumentWindowStatusEvalLiveOracle",
+  "firingRangeDomPropagationDocumentWindowStatusEvalRouteLiveOracle",
   "firingRangeDomPropagationWindowInnerHtmlBaseRouteLiveOracle",
   "firingRangeToxicdomFormSubmissionEvalLiveOracle",
   "firingRangeToxicdomFormSubmissionEvalRouteLiveOracle",
@@ -4259,6 +4261,11 @@ function extractFiringRangeCrawlSeeds(html: string, origin: string): string[] {
     "/dom/toxicdom/document/formSubmission/innerHtml",
     "/dom/toxicdom/document/formSubmission/documentWrite",
     "/dom/dompropagation/window/documentWrite/eval",
+    "/dom/dompropagation/window/eval/documentWrite",
+    "/dom/dompropagation/document/window/innerHtml",
+    "/dom/dompropagation/document/window/eval",
+    "/dom/dompropagation/document/window/documentWrite",
+    "/dom/toxicdom/localStorage/include/array/js_html_sanitize_eval",
     "/dom/toxicdom/window/name/eval"
   ]) {
     try {

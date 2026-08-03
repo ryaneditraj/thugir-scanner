@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T07:18:53.231Z",
-  "total": 1601,
-  "uniqueSlugs": 1596,
+  "generatedAt": "2026-08-03T08:21:26.438Z",
+  "total": 1603,
+  "uniqueSlugs": 1598,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1583,
+    "generic": 1585,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1516,
+    "deep": 1518,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 490,
+    "Cross-site scripting": 492,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -916,6 +916,8 @@
     "firing-range-dom-postmessage-improper-origin-regexp-route-live-oracle",
     "firing-range-dom-postmessage-innerhtml-live-oracle",
     "firing-range-dom-postmessage-innerhtml-route-live-oracle",
+    "firing-range-dom-propagation-document-window-status-eval-live-oracle",
+    "firing-range-dom-propagation-document-window-status-eval-route-live-oracle",
     "firing-range-dom-propagation-eval-live-oracle",
     "firing-range-dom-propagation-eval-route-live-oracle",
     "firing-range-dom-propagation-window-documentwrite-eval-live-oracle",

@@ -38241,24 +38241,36 @@ async function probeFiringRangeToxicdomExternalInclude(
     route.scriptSrcRe.test(htmlDoc.body);
   if (!hasExternalPage) return NEGATIVE;
 
-  const scriptUrl = new URL(route.scriptPath, ctx.origin).toString();
-  const scriptDoc = await ctx.probe.get(scriptUrl, {
-    maxBytes: 4096,
-    timeoutMs: 15000,
-    headers: { Referer: htmlUrl }
-  });
-  if (scriptDoc.status >= 200 && scriptDoc.status < 400) {
-    const script = scriptDoc.body;
-    if (route.sourceRe.test(script) && route.sinkRe.test(script)) {
-      return {
-        fired: true,
-        confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
-        evidence: {
-          url: scriptUrl,
-          snippet: script.slice(0, 220).trim(),
-          note: `Google Firing Range external script-include passes ${route.label} — toxic DOM script-include XSS oracle`
-        }
-      };
+  const scriptCandidates = new Set<string>();
+  scriptCandidates.add(new URL(route.scriptPath, ctx.origin).toString());
+  const htmlScriptSrc = htmlDoc.body.match(/<script[^>]+src=["']([^"']+)["']/i)?.[1];
+  if (htmlScriptSrc) {
+    try {
+      scriptCandidates.add(new URL(htmlScriptSrc, htmlUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+
+  for (const scriptUrl of scriptCandidates) {
+    const scriptDoc = await ctx.probe.get(scriptUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Referer: htmlUrl }
+    });
+    if (scriptDoc.status >= 200 && scriptDoc.status < 400) {
+      const script = scriptDoc.body;
+      if (route.sourceRe.test(script) && route.sinkRe.test(script)) {
+        return {
+          fired: true,
+          confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+          evidence: {
+            url: scriptUrl,
+            snippet: script.slice(0, 220).trim(),
+            note: `Google Firing Range external script-include passes ${route.label} — toxic DOM script-include XSS oracle`
+          }
+        };
+      }
     }
   }
 
@@ -43327,11 +43339,18 @@ const FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS = [
   "/dom/dompropagation/window/innerHtml",
   "/dom/dompropagation/window/innerHtml/innerHtml",
   "/dom/dompropagation/window/eval/eval",
+  "/dom/dompropagation/window/eval/documentWrite",
   "/dom/dompropagation/window/innerHtml/eval",
   "/dom/dompropagation/window/innerHtml/documentWrite",
   "/dom/dompropagation/window/documentWrite/innerHtml",
   "/dom/dompropagation/window/documentWrite/documentWrite",
   "/dom/dompropagation/window/eval/innerHtml"
+] as const;
+
+const FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_WINDOW_STATUS_EVAL_PATHS = [
+  "/dom/dompropagation/document/window/innerHtml",
+  "/dom/dompropagation/document/window/eval",
+  "/dom/dompropagation/document/window/documentWrite"
 ] as const;
 
 async function probeFiringRangeDomPropagationWindowStatusEval(
@@ -43390,6 +43409,53 @@ const firingRangeDomPropagationWindowStatusEvalRouteLiveOracle: Rule = async (ct
     return NEGATIVE;
   }
   const path = FIRING_RANGE_DOM_PROPAGATION_WINDOW_STATUS_EVAL_PATHS.find((p) =>
+    pathname.startsWith(p)
+  );
+  if (!path) return NEGATIVE;
+  const result = await probeFiringRangeDomPropagationWindowStatusEval(ctx, path);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Google Firing Range ${path} route scan — location.hash propagates via window.status to eval()`
+    }
+  };
+};
+
+const firingRangeDomPropagationDocumentWindowStatusEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let paths = [...FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_WINDOW_STATUS_EVAL_PATHS];
+  if (/\/dom\/dompropagation\/document\/window\//i.test(pageUrl)) {
+    try {
+      const pathname = new URL(pageUrl).pathname;
+      const matched = paths.filter((p) => pathname.startsWith(p));
+      if (matched.length) paths = matched;
+    } catch {
+      /* ignore */
+    }
+  }
+  for (const path of paths) {
+    const result = await probeFiringRangeDomPropagationWindowStatusEval(ctx, path);
+    if (result.fired) return result;
+  }
+  return NEGATIVE;
+};
+
+const firingRangeDomPropagationDocumentWindowStatusEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/dompropagation\/document\/window\//i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const path = FIRING_RANGE_DOM_PROPAGATION_DOCUMENT_WINDOW_STATUS_EVAL_PATHS.find((p) =>
     pathname.startsWith(p)
   );
   if (!path) return NEGATIVE;
@@ -58647,6 +58713,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomPropagationWindowDocumentwriteEvalRouteLiveOracle,
   firingRangeDomPropagationWindowStatusEvalLiveOracle,
   firingRangeDomPropagationWindowStatusEvalRouteLiveOracle,
+  firingRangeDomPropagationDocumentWindowStatusEvalLiveOracle,
+  firingRangeDomPropagationDocumentWindowStatusEvalRouteLiveOracle,
   firingRangeDomPropagationWindowInnerHtmlBaseRouteLiveOracle,
   firingRangeToxicdomFormSubmissionEvalLiveOracle,
   firingRangeToxicdomFormSubmissionEvalRouteLiveOracle,

@@ -7518,6 +7518,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-propagation-document-window-status-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range dompropagation document.window status-eval DOM XSS oracle",
+    description:
+      "GET /dom/dompropagation/document/window/* routes propagate location.hash via window.status into eval(retrieved_payload) — Firing Range document-side DOM propagation window.status eval XSS training oracle.",
+    impactOneline:
+      "location.hash values propagated through window.status to eval() on document/window routes enable DOM XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationDocumentWindowStatusEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never propagate location.hash through window.status to eval() on document/window handlers — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval sinks on values read from window.status.",
+        "Encode or sanitize URL fragments before propagation.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/document/window routes propagate location.hash via window.status to eval(). Show document-side DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-propagation-document-window-status-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/dompropagation/document/window route status-eval XSS oracle",
+    description:
+      "When scanning /dom/dompropagation/document/window/innerHtml, eval, or documentWrite, location.hash propagates via window.status to eval() — route-specific document-side DOM propagation XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm URL fragments are not propagated through window.status to eval() on document/window routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomPropagationDocumentWindowStatusEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on DOM-propagated values in /dom/dompropagation/document/window handlers.",
+      steps: [
+        "Audit location.hash reads that write to window.status.",
+        "Encode or sanitize before any dangerous sink.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/dompropagation/document/window route propagates location.hash via window.status to eval(). Show route-specific document-side DOM propagation XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-propagation-window-innerhtml-base-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
