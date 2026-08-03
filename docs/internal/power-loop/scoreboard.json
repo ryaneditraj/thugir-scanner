@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T16:13:00.000Z",
+  "updated_at": "2026-08-03T17:19:25.131Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2795,
-  "total_findings": 37186,
+  "total_sites_scanned": 2804,
+  "total_findings": 38612,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2870,
-  "discovery_findings": 43817,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-03T16:13:00.000Z",
+  "discovery_urls_added": 2875,
+  "discovery_findings": 45210,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-03T17:19:25.131Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,41 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 (34 findings); no benchmark misses"
+      "note": "Primary Heroku healthy 6/6 (33 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 600,
-      "focus": "eventtriggering window/name eval + escapeHtml textarea + escapeHtml js_eval route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 1393,
+      "focus": "toxicdom localStorage object property/function/array documentWrite+innerHtml + sessionStorage object function innerHtml",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "public-firing-range eventtriggering/window/eval: 163→200 — eventtriggering-window-eval live+route oracles shipped (canonical window/name/eval deferredPayload eval sink)",
-      "public-firing-range escape/serverside/escapeHtml/textarea: 193→200 — escape-serverside-textarea live+route oracles shipped (escapeHtml bypass in textarea body context)",
-      "public-firing-range escape/serverside/escapeHtml/js_eval: 193→200 — escape-serverside-js-eval live+route oracles shipped (escapeHtml bypass in script body context)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "public-firing-range toxicdom/localStorage/object/property/innerHtml: 199 findings — generic firing-range hub oracles only, no route-specific object property innerHTML live oracle",
+      "public-firing-range toxicdom/localStorage/object/property/documentWrite: 198 findings — generic hub oracles only, no route-specific object property document.write live oracle",
+      "public-firing-range toxicdom/localStorage/object/function/documentWrite: 198 findings — generic hub oracles only, no route-specific object function document.write live oracle",
+      "public-firing-range toxicdom/localStorage/object/array/documentWrite: 198 findings — generic hub oracles only, no route-specific object array document.write live oracle",
+      "public-firing-range toxicdom/sessionStorage/object/function/innerHtml: 197 findings — generic hub oracles only, no route-specific sessionStorage object function innerHTML live oracle",
+      "serverless.fail/: 3 findings — unprotected-webhook-endpoint only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "public-firing-range eventtriggering/window/eval alias returns Missing sink error — canonical /window/name/eval route oracle covers live host",
-      "public-firing-range escape/serverside/escapeHtml/href: template absent on live host (CANNOT FIND THAT TEMPLATE)",
-      "public-firing-range escape/serverside/escapeHtml/{encodeUrl variants}: encodeUrl textarea/js_eval route oracles still absent",
-      "public-firing-range toxicdom/localStorage/object/{function,array}/innerHtml: toxicdomscripts templates absent on live host",
-      "public-firing-range toxicdom/localStorage/object/{function,array,property}/eval: no route-specific object eval live oracles (195-finding hubs)"
+      "public-firing-range toxicdom/localStorage/object/{property,function,array}/{innerHtml,documentWrite}: no route-specific object sink live oracles (197-199 finding hubs)",
+      "public-firing-range toxicdom/sessionStorage/object/function/innerHtml: no route-specific sessionStorage object function innerHTML live oracle",
+      "public-firing-range urldom/location/search/{iframe.src,a.href}: generic firing-range hub oracles only — no route-specific location.search sink live oracles",
+      "serverless.fail/: no route-specific serverless misconfiguration live oracles beyond generic webhook finding"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
-    "public-firing-range.appspot.com/dom/eventtriggering/window/eval": 200,
-    "public-firing-range.appspot.com/escape/serverside/escapeHtml/textarea?q=a": 200,
-    "public-firing-range.appspot.com/escape/serverside/escapeHtml/js_eval?q=a": 200,
-    "public-firing-range.appspot.com/dom/eventtriggering/window/innerHtml": 197,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/function/innerHtml": 195,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop.herokuapp.com": 33,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/property/innerHtml": 199,
+    "public-firing-range.appspot.com/urldom/location/search/iframe.src?q=//example.org": 200,
+    "public-firing-range.appspot.com/urldom/location/search/a.href?q=//example.org": 200,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/object/property/documentWrite": 198,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/innerHtml": 197,
+    "serverless.fail": 3
   }
 }
