@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-attribute-ng-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_attribute_ng/1.4.0?q= reflects into ng-class directive; route scan 181→188 findings (+attribute-ng live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-attribute-non-ng-raw-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_attribute_non_ng_raw/1.4.0?q= reflects into plain class attribute; route scan 181→188 findings (+attribute-non-ng-raw live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-angular-body-alt-symbols-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angular/angular_body_alt_symbols/1.4.0?q= reflects into custom [[ ]] interpolation delimiters; route scan 181→188 findings (+alt-symbols live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-localstorage-array-eval-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/array/eval passes localStorage['badValue'] to eval(payload); route scan 0→184 findings (+localstorage-array-eval live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
