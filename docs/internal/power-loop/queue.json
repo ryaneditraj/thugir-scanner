@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T11:05:39.477Z",
+  "updated_at": "2026-08-03T12:04:25.888Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body/1.1.5?q=test",
+      "source": "google/firing-range — AngularJS 1.1.5 vanilla interpolation XSS sink (angular_body/1.1.5)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body/1.2.18?q=test",
+      "source": "google/firing-range — AngularJS 1.2.18 vanilla interpolation XSS sink (angular_body/1.2.18)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body/1.2.19?q=test",
+      "source": "google/firing-range — AngularJS 1.2.19 vanilla interpolation XSS sink (angular_body/1.2.19)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_body/1.2.24?q=test",
+      "source": "google/firing-range — AngularJS 1.2.24 vanilla interpolation XSS sink (angular_body/1.2.24)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/document/inputTyping/innerHtml",
+      "source": "google/firing-range — typing-event inputTyping sink to innerHTML DOM XSS (eventtriggering/document/inputTyping/innerHtml)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/angular/angular_body_attribute_non_ng_raw/1.4.0?q=test",
       "source": "google/firing-range — AngularJS server-side injection into regular attribute (angular_body_attribute_non_ng_raw/1.4.0)",
