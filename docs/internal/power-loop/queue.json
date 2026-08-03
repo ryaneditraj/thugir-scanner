@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T00:03:21.698Z",
+  "updated_at": "2026-08-03T01:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0",
+      "source": "google/firing-range — AngularJS $parse injection via localStorage value (angular_storage_parse/1.6.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/angular/angular_post_message_parse/1.6.0",
+      "source": "google/firing-range — AngularJS $parse injection via postMessage value (angular_post_message_parse/1.6.0)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/window/eval",
+      "source": "google/firing-range — event-triggered window.name sink to eval() DOM XSS (/dom/eventtriggering/window/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/localStorage/include/array/eval",
+      "source": "google/firing-range — localStorage array source via script include to eval() sink (/dom/toxicdom/localStorage/include/array/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/eval",
+      "source": "google/firing-range — sessionStorage function source via script include to eval() sink (/dom/toxicdom/sessionStorage/include/function/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie/js_html_sanitize_eval",
       "source": "google/firing-range — document.cookie source to js_html_sanitize_eval sink DOM XSS bypass (/dom/toxicdom/document/cookie/js_html_sanitize_eval)",
