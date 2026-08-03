@@ -38279,6 +38279,105 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
     sinkRe: /\.innerHTML\s*=\s*payload/i,
     label: "localStorage object array to innerHTML",
     routeRe: /\/dom\/toxicdom\/localStorage\/object\/array\/innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/property/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/property/innerHtml",
+    scriptSrcRe: /object\/property\/innerHtml/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /\.innerHTML\s*=\s*payload/i,
+    label: "sessionStorage object property to innerHTML",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/(?:property\/)?innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/property/eval",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/property/eval",
+    scriptSrcRe: /object\/property\/eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage object property to eval()",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/(?:property\/)?eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/property/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/property/documentWrite",
+    scriptSrcRe: /object\/property\/documentWrite/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage object property to document.write",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/(?:property\/)?documentWrite\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/function/eval",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/function/eval",
+    scriptSrcRe: /object\/function\/eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage object function to eval()",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/function\/eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/function/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/function/innerHtml",
+    scriptSrcRe: /object\/function\/innerHtml/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /\.innerHTML\s*=\s*payload/i,
+    label: "sessionStorage object function to innerHTML",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/function\/innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/function/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/function/documentWrite",
+    scriptSrcRe: /object\/function\/documentWrite/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage object function to document.write",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/function\/documentWrite\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/array/eval",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/array/eval",
+    scriptSrcRe: /object\/array\/eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage object array to eval()",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/array\/eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/array/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/array/innerHtml",
+    scriptSrcRe: /object\/array\/innerHtml/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /\.innerHTML\s*=\s*payload/i,
+    label: "sessionStorage object array to innerHTML",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/array\/innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/array/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/sessionStorage/object/array/documentWrite",
+    scriptSrcRe: /object\/array\/documentWrite/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage object array to document.write",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/array\/documentWrite\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/object/function/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/object/function/documentWrite",
+    scriptSrcRe: /object\/function\/documentWrite/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
+    label: "localStorage object function to document.write",
+    routeRe: /\/dom\/toxicdom\/localStorage\/object\/function\/documentWrite\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/object/array/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/object/array/documentWrite",
+    scriptSrcRe: /object\/array\/documentWrite/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
+    label: "localStorage object array to document.write",
+    routeRe: /\/dom\/toxicdom\/localStorage\/object\/array\/documentWrite\b/i
   }
 ] as const;
 
@@ -38847,6 +38946,114 @@ const firingRangeDomToxicdomLocalstorageObjectArrayInnerhtmlRouteLiveOracle: Rul
     }
   };
 };
+
+function makeFiringRangeToxicdomExternalIncludeLiveOracle(index: number): Rule {
+  return async (ctx) => {
+    if (!isFiringRangeHost(ctx)) return NEGATIVE;
+    return probeFiringRangeToxicdomExternalInclude(ctx, FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[index]);
+  };
+}
+
+function makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+  index: number,
+  routeNote: string
+): Rule {
+  const liveOracle = makeFiringRangeToxicdomExternalIncludeLiveOracle(index);
+  return async (ctx) => {
+    if (!isFiringRangeHost(ctx)) return NEGATIVE;
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+    if (!FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES[index].routeRe.test(pageUrl)) return NEGATIVE;
+    const result = await liveOracle(ctx);
+    if (!result.fired) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: routeNote
+      }
+    };
+  };
+}
+
+const firingRangeDomToxicdomSessionstorageObjectPropertyInnerhtmlLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(20);
+const firingRangeDomToxicdomSessionstorageObjectPropertyInnerhtmlRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    20,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/property/innerHtml route scan — script-include sessionStorage object property to innerHTML sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectPropertyEvalLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(21);
+const firingRangeDomToxicdomSessionstorageObjectPropertyEvalRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    21,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/property/eval route scan — script-include sessionStorage object property to eval() sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectPropertyDocumentwriteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(22);
+const firingRangeDomToxicdomSessionstorageObjectPropertyDocumentwriteRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    22,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/property/documentWrite route scan — script-include sessionStorage object property to document.write sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectFunctionEvalLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(23);
+const firingRangeDomToxicdomSessionstorageObjectFunctionEvalRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    23,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/function/eval route scan — script-include sessionStorage object function to eval() sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectFunctionInnerhtmlLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(24);
+const firingRangeDomToxicdomSessionstorageObjectFunctionInnerhtmlRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    24,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/function/innerHtml route scan — script-include sessionStorage object function to innerHTML sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectFunctionDocumentwriteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(25);
+const firingRangeDomToxicdomSessionstorageObjectFunctionDocumentwriteRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    25,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/function/documentWrite route scan — script-include sessionStorage object function to document.write sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectArrayEvalLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(26);
+const firingRangeDomToxicdomSessionstorageObjectArrayEvalRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    26,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/array/eval route scan — script-include sessionStorage object array to eval() sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectArrayInnerhtmlLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(27);
+const firingRangeDomToxicdomSessionstorageObjectArrayInnerhtmlRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    27,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/array/innerHtml route scan — script-include sessionStorage object array to innerHTML sink"
+  );
+const firingRangeDomToxicdomSessionstorageObjectArrayDocumentwriteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(28);
+const firingRangeDomToxicdomSessionstorageObjectArrayDocumentwriteRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    28,
+    "Google Firing Range /dom/toxicdom/sessionStorage/object/array/documentWrite route scan — script-include sessionStorage object array to document.write sink"
+  );
+const firingRangeDomToxicdomLocalstorageObjectFunctionDocumentwriteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(29);
+const firingRangeDomToxicdomLocalstorageObjectFunctionDocumentwriteRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    29,
+    "Google Firing Range /dom/toxicdom/localStorage/object/function/documentWrite route scan — script-include localStorage object function to document.write sink"
+  );
+const firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(30);
+const firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    30,
+    "Google Firing Range /dom/toxicdom/localStorage/object/array/documentWrite route scan — script-include localStorage object array to document.write sink"
+  );
 
 const FIRING_RANGE_LEAKEDCOOKIE_PATH = "/leakedcookie/leakedcookie";
 
@@ -59563,6 +59770,28 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomToxicdomLocalstorageObjectFunctionInnerhtmlRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageObjectArrayInnerhtmlLiveOracle,
   firingRangeDomToxicdomLocalstorageObjectArrayInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectPropertyInnerhtmlLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectPropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectPropertyEvalLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectPropertyEvalRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectPropertyDocumentwriteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectPropertyDocumentwriteRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectFunctionEvalLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectFunctionEvalRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectFunctionInnerhtmlLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectFunctionInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectFunctionDocumentwriteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectFunctionDocumentwriteRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectArrayEvalLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectArrayEvalRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectArrayInnerhtmlLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectArrayInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectArrayDocumentwriteLiveOracle,
+  firingRangeDomToxicdomSessionstorageObjectArrayDocumentwriteRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectFunctionDocumentwriteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectFunctionDocumentwriteRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteLiveOracle,
+  firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteRouteLiveOracle,
   firingRangeLeakedcookieHttponlyLiveOracle,
   firingRangeLeakedcookieHttponlyRouteLiveOracle,
   firingRangeMixedContentLiveOracle,
