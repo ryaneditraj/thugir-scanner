@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T15:03:43.036Z",
-  "total": 1633,
-  "uniqueSlugs": 1628,
+  "generatedAt": "2026-08-03T16:14:22.255Z",
+  "total": 1639,
+  "uniqueSlugs": 1634,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1615,
+    "generic": 1621,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1548,
+    "deep": 1554,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 522,
+    "Cross-site scripting": 528,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -900,6 +900,8 @@
     "firing-range-dom-eventtriggering-inputtyping-innerhtml-route-live-oracle",
     "firing-range-dom-eventtriggering-window-documentwrite-live-oracle",
     "firing-range-dom-eventtriggering-window-documentwrite-route-live-oracle",
+    "firing-range-dom-eventtriggering-window-eval-live-oracle",
+    "firing-range-dom-eventtriggering-window-eval-route-live-oracle",
     "firing-range-dom-eventtriggering-window-innerhtml-live-oracle",
     "firing-range-dom-eventtriggering-window-innerhtml-route-live-oracle",
     "firing-range-dom-external-sessionstorage-function-eval-live-oracle",
@@ -993,8 +995,12 @@
     "firing-range-escape-serverside-css-style-route-live-oracle",
     "firing-range-escape-serverside-head-live-oracle",
     "firing-range-escape-serverside-head-route-live-oracle",
+    "firing-range-escape-serverside-js-eval-live-oracle",
+    "firing-range-escape-serverside-js-eval-route-live-oracle",
     "firing-range-escape-serverside-tagname-live-oracle",
     "firing-range-escape-serverside-tagname-route-live-oracle",
+    "firing-range-escape-serverside-textarea-live-oracle",
+    "firing-range-escape-serverside-textarea-route-live-oracle",
     "firing-range-flashinjection-live-oracle",
     "firing-range-flashinjection-route-live-oracle",
     "firing-range-hsts-includesubdomains-missing-live-oracle",
