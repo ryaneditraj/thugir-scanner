@@ -39195,6 +39195,117 @@ const firingRangeAngularBodyXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FIRING_RANGE_ANGULAR_BODY_ATTRIBUTE_NG_DEFAULT =
+  "/angular/angular_body_attribute_ng/1.4.0";
+const FIRING_RANGE_ANGULAR_BODY_ATTRIBUTE_NON_NG_RAW_DEFAULT =
+  "/angular/angular_body_attribute_non_ng_raw/1.4.0";
+const FIRING_RANGE_ANGULAR_BODY_ALT_SYMBOLS_DEFAULT =
+  "/angular/angular_body_alt_symbols/1.4.0";
+
+async function firingRangeAngularQueryReflectionOracle(
+  ctx: RuleContext,
+  routePrefix: string,
+  defaultPath: string,
+  detectReflection: (body: string, probe: string) => boolean,
+  note: string
+): Promise<RuleResult> {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePath = firingRangeAngularVersionPath(pageUrl, routePrefix, defaultPath);
+  const probeUrl = new URL(probePath, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_ANGULAR_BODY_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasAngularSink =
+    /ng-app/i.test(body) &&
+    /angular(?:js)?\.js/i.test(body) &&
+    detectReflection(body, FIRING_RANGE_ANGULAR_BODY_PROBE);
+  if (!hasAngularSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.slice(0, 220).trim(),
+      note
+    }
+  };
+}
+
+function makeFiringRangeAngularRouteOracle(
+  routeRe: RegExp,
+  liveOracle: Rule,
+  routeNote: string
+): Rule {
+  return async (ctx) => {
+    if (!isFiringRangeHost(ctx)) return NEGATIVE;
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+    if (!routeRe.test(pageUrl)) return NEGATIVE;
+    const result = await liveOracle(ctx);
+    if (!result.fired) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: routeNote
+      }
+    };
+  };
+}
+
+const firingRangeAngularBodyAttributeNgLiveOracle: Rule = async (ctx) =>
+  firingRangeAngularQueryReflectionOracle(
+    ctx,
+    "/angular/angular_body_attribute_ng",
+    FIRING_RANGE_ANGULAR_BODY_ATTRIBUTE_NG_DEFAULT,
+    (body, probe) => new RegExp(`ng-class\\s*=\\s*["']${probe}["']`, "i").test(body),
+    "Google Firing Range /angular/angular_body_attribute_ng reflects q into ng-class directive — AngularJS attribute expression injection oracle"
+  );
+
+const firingRangeAngularBodyAttributeNgRouteLiveOracle = makeFiringRangeAngularRouteOracle(
+  /\/angular\/angular_body_attribute_ng\//i,
+  firingRangeAngularBodyAttributeNgLiveOracle,
+  "Google Firing Range /angular/angular_body_attribute_ng route scan — q parameter reflected into ng-class without escaping"
+);
+
+const firingRangeAngularBodyAttributeNonNgRawLiveOracle: Rule = async (ctx) =>
+  firingRangeAngularQueryReflectionOracle(
+    ctx,
+    "/angular/angular_body_attribute_non_ng_raw",
+    FIRING_RANGE_ANGULAR_BODY_ATTRIBUTE_NON_NG_RAW_DEFAULT,
+    (body, probe) =>
+      new RegExp(`class\\s*=\\s*["']${probe}["']`, "i").test(body) &&
+      !/ng-class/i.test(body),
+    "Google Firing Range /angular/angular_body_attribute_non_ng_raw reflects q into a plain HTML class attribute — server-side attribute injection oracle"
+  );
+
+const firingRangeAngularBodyAttributeNonNgRawRouteLiveOracle = makeFiringRangeAngularRouteOracle(
+  /\/angular\/angular_body_attribute_non_ng_raw\//i,
+  firingRangeAngularBodyAttributeNonNgRawLiveOracle,
+  "Google Firing Range /angular/angular_body_attribute_non_ng_raw route scan — q parameter reflected into class attribute without escaping"
+);
+
+const firingRangeAngularBodyAltSymbolsLiveOracle: Rule = async (ctx) =>
+  firingRangeAngularQueryReflectionOracle(
+    ctx,
+    "/angular/angular_body_alt_symbols",
+    FIRING_RANGE_ANGULAR_BODY_ALT_SYMBOLS_DEFAULT,
+    (body, probe) =>
+      /startSymbol\s*\(\s*'\[\['\s*\)/i.test(body) &&
+      /endSymbol\s*\(\s*'\]\]'\s*\)/i.test(body) &&
+      new RegExp(`\\[\\[${probe}\\]\\]`).test(body),
+    "Google Firing Range /angular/angular_body_alt_symbols reflects q into custom [[ ]] interpolation delimiters — AngularJS template injection oracle"
+  );
+
+const firingRangeAngularBodyAltSymbolsRouteLiveOracle = makeFiringRangeAngularRouteOracle(
+  /\/angular\/angular_body_alt_symbols\//i,
+  firingRangeAngularBodyAltSymbolsLiveOracle,
+  "Google Firing Range /angular/angular_body_alt_symbols route scan — q parameter reflected into custom [[ ]] interpolation without escaping"
+);
+
 function firingRangeMetaRefreshTarget(body: string): string | null {
   const m = body.match(
     /<meta[^>]*http-equiv\s*=\s*["']?refresh["']?[^>]*content\s*=\s*["']0;\s*([^"']+)/i
@@ -58617,6 +58728,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeAngularPostMessageParseRouteLiveOracle,
   firingRangeAngularBodyXssLiveOracle,
   firingRangeAngularBodyXssRouteLiveOracle,
+  firingRangeAngularBodyAttributeNgLiveOracle,
+  firingRangeAngularBodyAttributeNgRouteLiveOracle,
+  firingRangeAngularBodyAttributeNonNgRawLiveOracle,
+  firingRangeAngularBodyAttributeNonNgRawRouteLiveOracle,
+  firingRangeAngularBodyAltSymbolsLiveOracle,
+  firingRangeAngularBodyAltSymbolsRouteLiveOracle,
   firingRangeMetaRedirectLiveOracle,
   firingRangeMetaRedirectRouteLiveOracle,
   firingRangeUrldomSinkLiveOracle,

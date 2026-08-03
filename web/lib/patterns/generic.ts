@@ -2110,6 +2110,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-angular-body-attribute-ng-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS ng-class attribute XSS oracle",
+    description:
+      "GET /angular/angular_body_attribute_ng reflects the q query parameter into an ng-class directive — Firing Range AngularJS attribute expression injection training oracle.",
+    impactOneline:
+      "User input reflected into ng-class is evaluated as an AngularJS expression, enabling XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAttributeNgLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into AngularJS directive attributes — encode or use static classes.",
+      steps: [
+        "Escape quotes and expression delimiters in server-side template generation.",
+        "Use ng-class with object/map syntax instead of string interpolation.",
+        "Upgrade from AngularJS and avoid mixing server/client templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_attribute_ng route reflects user input into ng-class. Show AngularJS attribute injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-attribute-ng-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body_attribute_ng route XSS oracle",
+    description:
+      "When scanning /angular/angular_body_attribute_ng routes, the q parameter is reflected into ng-class — route-specific Angular attribute expression injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input is not embedded in AngularJS directive attributes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAttributeNgRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove user-input reflection into ng-class on /angular routes.",
+      steps: [
+        "Escape attribute values server-side.",
+        "Use ng-class object syntax for dynamic classes.",
+        "Audit all server-generated Angular templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_attribute_ng route reflects query parameters into ng-class. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-attribute-non-ng-raw-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS plain attribute XSS oracle",
+    description:
+      "GET /angular/angular_body_attribute_non_ng_raw reflects the q query parameter into a plain HTML class attribute on an AngularJS page — Firing Range server-side attribute injection training oracle.",
+    impactOneline:
+      "User input reflected into HTML attributes on AngularJS pages can break out and enable XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAttributeNonNgRawLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before embedding in HTML attributes on AngularJS pages.",
+      steps: [
+        "HTML-encode quotes and angle brackets in reflected attribute values.",
+        "Use ng-bind-attr or one-time binding for dynamic attributes.",
+        "Avoid server-side reflection into client-rendered templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_attribute_non_ng_raw route reflects user input into a class attribute. Show attribute injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-attribute-non-ng-raw-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body_attribute_non_ng_raw route XSS oracle",
+    description:
+      "When scanning /angular/angular_body_attribute_non_ng_raw routes, the q parameter is reflected into a plain class attribute — route-specific Angular attribute injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input is not embedded unescaped in HTML attributes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAttributeNonNgRawRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove user-input reflection into HTML attributes on /angular routes.",
+      steps: [
+        "HTML-encode reflected attribute values.",
+        "Use Angular binding for dynamic attributes.",
+        "Audit server-side template generation."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_attribute_non_ng_raw route reflects query parameters into class attributes. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-alt-symbols-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range AngularJS custom delimiter XSS oracle",
+    description:
+      "GET /angular/angular_body_alt_symbols reflects the q query parameter into custom [[ ]] interpolation delimiters — Firing Range AngularJS template injection training oracle.",
+    impactOneline:
+      "Custom interpolation symbols do not prevent expression injection when user input is reflected into templates.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAltSymbolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into AngularJS templates, even with custom delimiters.",
+      steps: [
+        "Escape custom delimiter pairs in server-side template generation.",
+        "Use ng-bind instead of interpolation for dynamic data.",
+        "Avoid mixing server-side reflection with client-side Angular templates."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_alt_symbols route reflects user input into [[ ]] interpolation. Show custom-delimiter AngularJS SSTI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-angular-body-alt-symbols-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /angular/angular_body_alt_symbols route XSS oracle",
+    description:
+      "When scanning /angular/angular_body_alt_symbols routes, the q parameter is reflected into custom [[ ]] interpolation — route-specific Angular template injection oracle.",
+    impactOneline:
+      "Route-specific scans should confirm user input is not embedded in custom AngularJS interpolation delimiters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeAngularBodyAltSymbolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove user-input reflection into custom AngularJS delimiters on /angular routes.",
+      steps: [
+        "Escape [[ and ]] in server-side templates.",
+        "Use ng-bind for dynamic values.",
+        "Audit all custom $interpolateProvider configurations."
+      ]
+    },
+    fixPrompt:
+      "Our /angular/angular_body_alt_symbols route reflects query parameters into [[ ]] interpolation. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-postmessage-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
