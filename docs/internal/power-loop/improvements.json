@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-include-array-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/include/array/documentWrite + script src /dom/toxicdomscripts/include/array/documentWrite; route scan findings 170→179 (+array-documentwrite live+route); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-include-array-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/include/array/documentWrite + script src /dom/toxicdomscripts/include/array/documentWrite; route scan findings 168→180 (+array-documentwrite live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-include-js-html-sanitize-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/include/function/js_html_sanitize_eval + script src /dom/toxicdomscripts/include/function/js_html_sanitize_eval; route scan findings 172→179 (+include-js-html-sanitize-eval live+route); localStorage/include/array/js_html_sanitize_eval 173→180; benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-toxicdom-sessionstorage-include-property-documentwrite-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/include/property/documentWrite + script src /dom/toxicdomscripts/sessionStorage/include/property/documentWrite; route scan findings 172→176 (+property-documentwrite live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
