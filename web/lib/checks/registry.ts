@@ -37996,6 +37996,71 @@ const firingRangeDomSessionStorageDocumentwriteRouteLiveOracle: Rule = async (ct
   };
 };
 
+const FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_FUNCTION_EVAL_HTML_PATH =
+  "/dom/toxicdom/external/sessionStorage/function/eval";
+const FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_FUNCTION_EVAL_SCRIPT_PATH =
+  "/dom/toxicdomscripts/sessionStorage/function/eval";
+
+const firingRangeDomExternalSessionStorageFunctionEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_FUNCTION_EVAL_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/sessionStorage\/function\/eval\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_FUNCTION_EVAL_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasEvalSink =
+    /sessionStorage\.badValue/i.test(script) &&
+    /eval\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasEvalSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /sessionStorage\/function\/eval/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external sessionStorage script passes sessionStorage.badValue to eval() — toxic DOM sessionStorage eval XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalSessionStorageFunctionEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/sessionStorage\/function\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalSessionStorageFunctionEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/sessionStorage/function/eval route scan — sessionStorage payload passed to eval() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_LEAKEDCOOKIE_PATH = "/leakedcookie/leakedcookie";
 
 const firingRangeLeakedcookieHttponlyLiveOracle: Rule = async (ctx) => {
@@ -44554,6 +44619,93 @@ const firingRangeRemoteIncludeParameterScriptRouteLiveOracle: Rule = async (ctx)
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /remoteinclude/parameter/script route scan — query parameter seeds attacker-controlled script.src"
+    }
+  };
+};
+
+const FIRING_RANGE_REMOTEINCLUDE_PARAMETER_OBJECT_RAW_PATH = "/remoteinclude/parameter/object_raw";
+const FIRING_RANGE_REMOTEINCLUDE_OBJECT_PROBE = "https://thugir-remoteinclude-probe.example/object.html";
+
+const firingRangeRemoteIncludeParameterObjectRawLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(FIRING_RANGE_REMOTEINCLUDE_PARAMETER_OBJECT_RAW_PATH, ctx.origin);
+  probeUrl.searchParams.set("q", FIRING_RANGE_REMOTEINCLUDE_OBJECT_PROBE);
+  const url = probeUrl.toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasQueryObjectData =
+    /<title>\s*Remote include - URL seeded from query parameter\s*<\/title>/i.test(body) &&
+    new RegExp(
+      `<object\\s+data\\s*=\\s*["']?${FIRING_RANGE_REMOTEINCLUDE_OBJECT_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']?\\s*>`,
+      "i"
+    ).test(body);
+  if (!hasQueryObjectData) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /remoteinclude/parameter/object_raw reflects query parameter into object.data — remote-include parameter DOM XSS oracle"
+    }
+  };
+};
+
+const firingRangeRemoteIncludeParameterObjectRawRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/remoteinclude\/parameter\/object_raw\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeRemoteIncludeParameterObjectRawLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /remoteinclude/parameter/object_raw route scan — query parameter seeds attacker-controlled object.data"
+    }
+  };
+};
+
+const FIRING_RANGE_REMOTEINCLUDE_OBJECT_HASH_PATH = "/remoteinclude/object_hash.html";
+
+const firingRangeRemoteIncludeObjectHashLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const url = new URL(FIRING_RANGE_REMOTEINCLUDE_OBJECT_HASH_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 8000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const hasHashObjectData =
+    /<title>\s*Remote include - URL seeded from the fragment\s*<\/title>/i.test(body) &&
+    /location\.hash\.substr\s*\(\s*1\s*\)/i.test(body) &&
+    /object\.data\s*=\s*target/i.test(body);
+  if (!hasHashObjectData) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 200).trim(),
+      note: "Google Firing Range /remoteinclude/object_hash.html loads object.data from location.hash — remote-include hash-fragment DOM XSS oracle"
+    }
+  };
+};
+
+const firingRangeRemoteIncludeObjectHashRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/remoteinclude\/object_hash\.html\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeRemoteIncludeObjectHashLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /remoteinclude/object_hash.html route scan — location.hash seeds attacker-controlled object.data"
     }
   };
 };
@@ -57512,6 +57664,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomSessionStorageInnerHtmlRouteLiveOracle,
   firingRangeDomSessionStorageDocumentwriteLiveOracle,
   firingRangeDomSessionStorageDocumentwriteRouteLiveOracle,
+  firingRangeDomExternalSessionStorageFunctionEvalLiveOracle,
+  firingRangeDomExternalSessionStorageFunctionEvalRouteLiveOracle,
   firingRangeLeakedcookieHttponlyLiveOracle,
   firingRangeLeakedcookieHttponlyRouteLiveOracle,
   firingRangeMixedContentLiveOracle,
@@ -57739,6 +57893,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeRemoteIncludeScriptHashRouteLiveOracle,
   firingRangeRemoteIncludeParameterScriptLiveOracle,
   firingRangeRemoteIncludeParameterScriptRouteLiveOracle,
+  firingRangeRemoteIncludeParameterObjectRawLiveOracle,
+  firingRangeRemoteIncludeParameterObjectRawRouteLiveOracle,
+  firingRangeRemoteIncludeObjectHashLiveOracle,
+  firingRangeRemoteIncludeObjectHashRouteLiveOracle,
   firingRangeBadscriptimportLiveOracle,
   firingRangeBadscriptimportRouteLiveOracle,
   firingRangeVulnerablelibrariesLiveOracle,
