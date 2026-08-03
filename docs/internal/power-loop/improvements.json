@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-encodeurl-textarea-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/encodeUrl/textarea?q= reflects probe into <textarea> body despite encodeUrl; route scan 193→203 (+encodeUrl textarea live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-encodeurl-js-eval-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /escape/serverside/encodeUrl/js_eval?q= reflects probe into <script> body despite encodeUrl; route scan 193→203 (+encodeUrl js_eval live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-eval-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/object/{property,function,array}/eval loads toxicdomscripts object eval sink; route scans 195→202 (+object property/function/array eval live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-eventtriggering-window-eval-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/eventtriggering/window/name/eval passes window.name to eval() via deferredPayload + setTimeout trigger; route scan window/eval alias 163→200 (+eventtriggering-window-eval live+route); benchmark juice-shop.herokuapp.com 34 findings 6/6 maintained"
@@ -18225,6 +18243,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-escape-serverside-js-eval-oracle",
       "shipped_at": "2026-08-03T16:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-encodeurl-textarea-oracle",
+      "shipped_at": "2026-08-03T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-escape-serverside-encodeurl-js-eval-oracle",
+      "shipped_at": "2026-08-03T17:10:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-object-eval-oracle",
+      "shipped_at": "2026-08-03T17:10:00.000Z"
     }
   ]
 }

@@ -5542,6 +5542,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-toxicdom-localstorage-object-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage object property eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/object/property/eval loads an external script that passes localStorage object property values to eval() — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "localStorage object property values passed to eval() via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectPropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from localStorage object properties.",
+        "Treat localStorage data as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/property/eval external script passes localStorage to eval(). Show toxic DOM localStorage object eval XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/object/property/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/object/property/eval (or /object/eval alias), localStorage object property values reach eval() via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage object properties are not passed to eval() via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectPropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on localStorage object properties in /dom/toxicdom/localStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous eval() sinks.",
+        "Avoid dynamic code execution on untrusted storage data.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/property/eval route passes localStorage object property to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-function-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage object function eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/object/function/eval loads an external script that passes localStorage object function values to eval() — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "localStorage object function values passed to eval() via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectFunctionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from localStorage object functions.",
+        "Treat localStorage data as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/function/eval external script passes localStorage to eval(). Show toxic DOM localStorage object eval XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-function-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/object/function/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/object/function/eval, localStorage object function values reach eval() via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage object functions are not passed to eval() via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectFunctionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on localStorage object functions in /dom/toxicdom/localStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous eval() sinks.",
+        "Avoid dynamic code execution on untrusted storage data.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/function/eval route passes localStorage object function to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-array-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage object array eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/object/array/eval loads an external script that passes localStorage object array values to eval() — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "localStorage object array values passed to eval() via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectArrayEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from localStorage object arrays.",
+        "Treat localStorage data as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/array/eval external script passes localStorage to eval(). Show toxic DOM localStorage object eval XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-object-array-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/localStorage/object/array/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/object/array/eval, localStorage object array values reach eval() via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm localStorage object arrays are not passed to eval() via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageObjectArrayEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on localStorage object arrays in /dom/toxicdom/localStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous eval() sinks.",
+        "Avoid dynamic code execution on untrusted storage data.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/object/array/eval route passes localStorage object array to eval(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-reflected-jsoncallback-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -6222,16 +6378,16 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Cross-site scripting",
     severityDefault: "high",
-    title: "Google Firing Range server-side escapeHtml textarea-sink oracle",
+    title: "Google Firing Range server-side escapeHtml/encodeUrl textarea-sink oracle",
     description:
-      "GET /escape/serverside/escapeHtml/textarea?q= reflects attacker input into <textarea> body despite escapeHtml — Firing Range server-side textarea-sink escape bypass XSS training oracle.",
+      "GET /escape/serverside/escapeHtml/textarea or /encodeUrl/textarea?q= reflects attacker input into <textarea> body despite escapeHtml/encodeUrl — Firing Range server-side textarea-sink escape bypass XSS training oracle.",
     impactOneline:
-      "Incomplete HTML escaping in textarea contexts enables reflected XSS even when escapeHtml is applied.",
+      "Incomplete HTML escaping in textarea contexts enables reflected XSS even when escapeHtml or encodeUrl is applied.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "firingRangeEscapeServersideTextareaLiveOracle" },
     tierRequired: "deep",
     remediation: {
-      summary: "escapeHtml is insufficient for textarea text contexts — Firing Range is an intentional XSS testbed.",
+      summary: "escapeHtml/encodeUrl is insufficient for textarea text contexts — Firing Range is an intentional XSS testbed.",
       steps: [
         "Apply context-aware encoding for all textarea reflection contexts.",
         "Avoid reflecting raw user input inside textarea elements.",
@@ -6248,9 +6404,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Cross-site scripting",
     severityDefault: "high",
-    title: "Google Firing Range /escape/serverside/escapeHtml/textarea route XSS oracle",
+    title: "Google Firing Range /escape/serverside escapeHtml/encodeUrl textarea route XSS oracle",
     description:
-      "When scanning /escape/serverside/escapeHtml/textarea, q parameter reflects unescaped into <textarea> body — route-specific server-side textarea-sink escape bypass oracle.",
+      "When scanning /escape/serverside/escapeHtml/textarea or /encodeUrl/textarea, q parameter reflects unescaped into <textarea> body — route-specific server-side textarea-sink escape bypass oracle.",
     impactOneline:
       "Route-specific scans should confirm escapeHtml output is safe in textarea text contexts.",
     detectorKind: "rule_ref",
@@ -6274,16 +6430,16 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Cross-site scripting",
     severityDefault: "high",
-    title: "Google Firing Range server-side escapeHtml script-sink oracle",
+    title: "Google Firing Range server-side escapeHtml/encodeUrl script-sink oracle",
     description:
-      "GET /escape/serverside/escapeHtml/js_eval?q= reflects attacker input into <script> body despite escapeHtml — Firing Range server-side script-sink escape bypass XSS training oracle.",
+      "GET /escape/serverside/escapeHtml/js_eval or /encodeUrl/js_eval?q= reflects attacker input into <script> body despite escapeHtml/encodeUrl — Firing Range server-side script-sink escape bypass XSS training oracle.",
     impactOneline:
-      "Incomplete HTML escaping in script contexts enables reflected XSS even when escapeHtml is applied.",
+      "Incomplete HTML escaping in script contexts enables reflected XSS even when escapeHtml or encodeUrl is applied.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "firingRangeEscapeServersideJsEvalLiveOracle" },
     tierRequired: "deep",
     remediation: {
-      summary: "escapeHtml is insufficient for script text contexts — Firing Range is an intentional XSS testbed.",
+      summary: "escapeHtml/encodeUrl is insufficient for script text contexts — Firing Range is an intentional XSS testbed.",
       steps: [
         "Apply context-aware encoding for all script reflection contexts.",
         "Avoid reflecting raw user input inside script elements.",
@@ -6300,9 +6456,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Cross-site scripting",
     severityDefault: "high",
-    title: "Google Firing Range /escape/serverside/escapeHtml/js_eval route XSS oracle",
+    title: "Google Firing Range /escape/serverside escapeHtml/encodeUrl js_eval route XSS oracle",
     description:
-      "When scanning /escape/serverside/escapeHtml/js_eval, q parameter reflects unescaped into <script> body — route-specific server-side script-sink escape bypass oracle.",
+      "When scanning /escape/serverside/escapeHtml/js_eval or /encodeUrl/js_eval, q parameter reflects unescaped into <script> body — route-specific server-side script-sink escape bypass oracle.",
     impactOneline:
       "Route-specific scans should confirm escapeHtml output is safe in script text contexts.",
     detectorKind: "rule_ref",
