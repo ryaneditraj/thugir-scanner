@@ -28850,7 +28850,7 @@ const brokencrystalsHomeDomXssLiveOracle: Rule = async (ctx) => {
   if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
   const maptitleIframe =
     /get\(["']maptitle["']\)/.test(bundleDoc.body) &&
-    /mapTitle[\s\S]{0,240}outerHTML[\s\S]{0,240}<iframe/i.test(bundleDoc.body);
+    /outerHTML[\s\S]{0,400}<iframe[\s\S]{0,200}mapTitle/i.test(bundleDoc.body);
   const searchReflection =
     /dangerous-html/i.test(bundleDoc.body) &&
     /decodeURIComponent\(window\.location\.search\)/.test(bundleDoc.body);
