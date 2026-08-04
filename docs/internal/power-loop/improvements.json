@@ -2,6 +2,30 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-external-localstorage-function-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdomscripts/localStorage/function/eval passes localStorage.getItem('badValue') to eval(payload) sync+async trigger; public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/eval findings 219→227 (+function-eval live+route oracles); benchmark juice-shop-staging 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-info-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /debug/info returns sessionSecret + CHAT_OVERRIDE_TOKEN + dbConfig JSON without auth; pwnshop.ctfsecurity.com/debug/info findings 37→39 (+debug-info-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-events-audit-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/events returns {\"count\":N,\"logs\":[{\"action\":...,\"detail\":...}]} without auth; pwnshop.ctfsecurity.com/api/v1/events route scan adds pwnshop-events-audit-route-live-oracle alongside live oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-email-race-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /my-account/change-email returns HTTP 404 on public ginandjuice.shop scanner demo (no email form/CSRF) — PortSwigger race-condition lab not deployed on this host; parallel POST oracle not portable"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-sessionstorage-array-documentwrite-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/array/documentWrite passes sessionStorage['badValue'] to document.write(payload) sync+async trigger; public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/documentWrite findings 0→225 (+live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
