@@ -2245,9 +2245,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsMassAssignmentLiveOracle",
   "brokencrystalsMassAssignmentPutLiveOracle",
   "brokencrystalsAdminpermissionRouteLiveOracle",
-  "brokencrystalsChatLiveOracle",
-  "brokencrystalsChatRouteLiveOracle",
-  "brokencrystalsChatQueryRouteLiveOracle",
+  "brokencrystalsProcessNumbersLiveOracle",
+  "brokencrystalsProcessNumbersRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
   "brokencrystalsFileLfiRouteLiveOracle",
   "brokencrystalsFileRawLfiRouteLiveOracle",
@@ -9302,6 +9301,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-photo-bfla")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-process-numbers")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;

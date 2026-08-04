@@ -29515,80 +29515,54 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "brokencrystals-chat-live-oracle",
+    slug: "brokencrystals-process-numbers-live-oracle",
     platform: "generic",
-    category: "Cross-site scripting",
-    severityDefault: "high",
-    title: "Broken Crystals LLM chat insecure output handling live oracle",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals process_numbers server-side JS injection live oracle",
     description:
-      "POST /api/chat/query reflects attacker-controlled <script> tags in LLM-generated output without sanitization — the Broken Crystals insecure output handling oracle.",
+      "POST /api/process_numbers evaluates processing_expression JavaScript server-side (7*7 returns 49) — the Broken Crystals server-side code injection oracle.",
     impactOneline:
-      "Unsanitized LLM output can inject HTML/script into chat UIs, enabling stored or reflected XSS when responses are rendered.",
+      "User-controlled processing_expression is evaluated as JavaScript on the server, enabling remote code execution.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "brokencrystalsChatLiveOracle" },
+    detectorConfig: { rule: "brokencrystalsProcessNumbersLiveOracle" },
     tierRequired: "deep",
     remediation: {
-      summary: "Sanitize LLM output before rendering and enforce output encoding — Broken Crystals is intentional lab software.",
+      summary: "Never eval() user-supplied expressions — Broken Crystals is intentional lab software.",
       steps: [
-        "Encode or sanitize all LLM-generated HTML before inserting into the DOM.",
-        "Use a strict Content-Security-Policy on chat pages.",
+        "Replace dynamic expression evaluation with a safe DSL or fixed operation allow-list.",
+        "Sandbox or remove server-side JS evaluation entirely.",
         "Run Broken Crystals only on isolated scanner evaluation infrastructure."
       ]
     },
     fixPrompt:
-      "Our /api/chat/query endpoint reflects script tags in LLM output. Show insecure output handling remediation for AI chat endpoints.",
+      "Our /api/process_numbers endpoint evaluates processing_expression as JavaScript. Show server-side code injection remediation.",
     version: 1,
     enabled: true
   },
   {
-    slug: "brokencrystals-chat-route-live-oracle",
+    slug: "brokencrystals-process-numbers-route-live-oracle",
     platform: "generic",
-    category: "Cross-site scripting",
-    severityDefault: "high",
-    title: "Broken Crystals /chat route insecure output live oracle",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/process_numbers route live oracle",
     description:
-      "When scanning /chat, POST /api/chat/query reflects attacker-controlled script tags in LLM output — route-specific insecure output handling oracle.",
+      "When scanning /api/process_numbers, POST with processing_expression=7*7 returns 49 — route-specific server-side JS injection confirmation.",
     impactOneline:
-      "Route-specific confirmation that the Broken Crystals chat UI is backed by an LLM endpoint that echoes unsanitized HTML.",
+      "Route-specific confirmation that Broken Crystals evaluates attacker-controlled JavaScript expressions server-side.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "brokencrystalsChatRouteLiveOracle" },
+    detectorConfig: { rule: "brokencrystalsProcessNumbersRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
-      summary: "Sanitize LLM output before rendering — Broken Crystals is intentional lab software.",
+      summary: "Never eval() user-supplied expressions — Broken Crystals is intentional lab software.",
       steps: [
-        "Encode or sanitize all LLM-generated HTML before inserting into the DOM.",
-        "Use a strict Content-Security-Policy on chat pages.",
+        "Replace dynamic expression evaluation with a safe DSL or fixed operation allow-list.",
+        "Sandbox or remove server-side JS evaluation entirely.",
         "Run Broken Crystals only on isolated scanner evaluation infrastructure."
       ]
     },
     fixPrompt:
-      "Our /chat route scan confirms the LLM backend reflects script tags. Show route-specific insecure output handling remediation.",
-    version: 1,
-    enabled: true
-  },
-  {
-    slug: "brokencrystals-chat-query-route-live-oracle",
-    platform: "generic",
-    category: "Cross-site scripting",
-    severityDefault: "high",
-    title: "Broken Crystals /api/chat/query route insecure output live oracle",
-    description:
-      "When scanning /api/chat/query, POST with script-tag prompt reflects unsanitized HTML in the response body — route-specific LLM XSS oracle.",
-    impactOneline:
-      "Route-specific confirmation that the chat query API echoes attacker-controlled markup in LLM responses.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "brokencrystalsChatQueryRouteLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "Sanitize LLM output before returning to clients — Broken Crystals is intentional lab software.",
-      steps: [
-        "Encode or sanitize all LLM-generated HTML in API responses.",
-        "Validate chat message content and strip HTML tags server-side.",
-        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
-      ]
-    },
-    fixPrompt:
-      "Our /api/chat/query route scan confirms script reflection in LLM output. Show API-level output sanitization remediation.",
+      "Our /api/process_numbers route scan confirms server-side JS evaluation. Show route-specific code injection remediation.",
     version: 1,
     enabled: true
   },
