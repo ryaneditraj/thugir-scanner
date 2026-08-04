@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog?search= reflects query into trackSearch() document.write('<img src=\"/resources/images/tracker.gif?searchTerms='+query); ginandjuice.shop/blog?search=test findings 19→24 (+blog-search-dom-xss live+route); benchmark juice-shop-staging.herokuapp.com 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-dom-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /blog confirms search query reaches document.write tracker sink without encoding; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-base64-category-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=R2lu passes base64 Gin through to selectedCategory without decode; ginandjuice.shop/catalog?category=Gin findings 17→23 (+base64-category live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-base64-category-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /catalog confirms base64 category values pass through undecoded to client selectedCategory; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-home-url-override-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / with X-Original-URL: /vulnerabilities returns vulnerabilities-path-details oracle table; ginandjuice.shop/ findings 16→20 (+home-url-override live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-home-url-override-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: home route scan confirms X-Original-URL header overrides request path to /vulnerabilities; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-process-numbers-live-oracle",
       "status": "shipped",

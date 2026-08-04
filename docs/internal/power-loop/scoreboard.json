@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T06:08:00.000Z",
+  "updated_at": "2026-08-04T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1992,
   "discovery_findings": 29004,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-04T06:08:00.000Z",
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-04T06:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_error": "juice-shop.herokuapp.com 503 at 06:01 — staging fallback required",
+      "primary_error": "juice-shop.herokuapp.com 503 at scan time — staging fallback",
       "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
@@ -49,55 +49,47 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall on staging (32 findings); primary Heroku dyno 503; secret-resend slug still absent"
+      "note": "Stable 6/6 recall on staging (32 findings); primary Heroku dyno 503; no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 83,
-      "focus": "prompt-injection-demo chat/support + brokencrystals users/update + vaultapp accounts IDOR + vulnbank merchant dashboard",
-      "errors": 3,
-      "error_urls": [
-        "chimera.escape.tech/api/v1/genai/chat",
-        "chimera.escape.tech/api/v1/diagnostics/ping",
-        "chimera.escape.tech/api/v1/banking/transfer"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 67,
+      "focus": "ginandjuice blog DOM XSS + catalog base64 category + home URL override",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — primary 503 at scan time",
-      "prompt-injection-demo.vercel.app/chat: 3 findings — generic misconfig/SSTI hub, no prompt-injection live oracle",
-      "prompt-injection-demo.vercel.app/support: 2 findings — generic hub only, no LLM attack-surface oracle",
-      "brokencrystals.com/api/users/update: 51 findings — site-wide brokencrystals hub, no update_user prototype-pollution route oracle",
-      "vaultapp-omega.vercel.app/api/accounts/1: 7 findings — CORS/XSS sinks present but no accounts IDOR live oracle",
-      "vulnbank.org/api/v1/merchants/dashboard: 20 findings — generic vulnbank hub, no merchant-dashboard BFLA live oracle"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "ginandjuice.shop/blog?search=test: 19→24 findings — ginandjuice-blog-search-dom-xss live+route shipped (trackSearch document.write sink)",
+      "ginandjuice.shop/catalog?category=Gin: 17→23 findings — ginandjuice-catalog-base64-category live+route shipped (R2lu base64 passthrough)",
+      "ginandjuice.shop/: 16→20 findings — ginandjuice-home-url-override live+route shipped (X-Original-URL: /vulnerabilities)",
+      "brokencrystals.com/api/fetch: 52 findings — site-wide SSRF oracles but no /api/fetch route-specific live oracle",
+      "pwnshop.ctfsecurity.com/api/v1/invoices: 22 findings — no invoice-list BOLA live oracle",
+      "ginandjuice.shop/my-account/delete: admin-delete confirmation oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary dyno 503 at 06:01 — staging fallback required",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "prompt-injection-demo.vercel.app: no route-specific prompt-injection / EchoLeak exfiltration live oracles",
-      "brokencrystals.com/api/users/update: prototype-pollution update_user route oracle absent (51-finding generic hub)",
-      "vaultapp-omega.vercel.app/api/accounts/1: account balance IDOR live oracle absent (7-finding hub)",
-      "vulnbank.org/api/v1/merchants/dashboard: merchant BFLA live oracle absent (20-finding hub)",
-      "chimera.escape.tech still unreachable from cloud agent egress (3 queue errors)"
+      "brokencrystals.com/api/fetch: route-specific SSRF fetch oracle absent",
+      "pwnshop.ctfsecurity.com/api/v1/invoices: invoice BOLA live oracle absent",
+      "ginandjuice.shop/my-account/delete: admin-delete confirmation oracle absent despite admin-bypass live oracle",
+      "brokencrystals.com/chat: LLM insecure-output-handling live oracle needs deterministic probe"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
     "juice-shop.herokuapp.com": 33,
-    "brokencrystals.com/api/users/update": 51,
+    "ginandjuice.shop/blog?search=test": 24,
+    "ginandjuice.shop/catalog?category=Gin": 23,
+    "ginandjuice.shop/": 20,
     "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 52,
-    "brokencrystals.com/api/process_numbers": 52,
     "brokencrystals.com/chat": 52,
-    "prompt-injection-demo.vercel.app/chat": 3,
-    "prompt-injection-demo.vercel.app/support": 2,
-    "vaultapp-omega.vercel.app/api/accounts/1": 7,
-    "vulnbank.org/api/v1/merchants/dashboard": 20,
-    "ginandjuice.shop/register": 16,
-    "ginandjuice.shop/forgot-password": 16,
+    "brokencrystals.com/api/users/update": 51,
     "pwnshop.ctfsecurity.com/api/v1/invoices": 22,
-    "chimera.atlascrew.dev/api/v1/admin/execute": 5,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "ginandjuice.shop/my-account/delete?username=carlos": 16,
     "pentest-fauxbank.vercel.app/admin": 13
   }
 }

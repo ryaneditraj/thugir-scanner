@@ -48024,7 +48024,7 @@ const ginAndJuiceBlogSearchDomXssLiveOracle: Rule = async (ctx) => {
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const hasDocumentWriteSink =
     /function\s+trackSearch\s*\(\s*query\s*\)/i.test(doc.body) &&
-    /document\.write\s*\(\s*['"]<img[^'"]*tracker\.gif\?searchTerms=['"]\s*\+\s*query/i.test(
+    /document\.write\s*\(\s*['"]<img[\s\S]{0,120}tracker\.gif\?searchTerms=['"]\s*\+\s*query/i.test(
       doc.body
     );
   if (!hasDocumentWriteSink) return NEGATIVE;
