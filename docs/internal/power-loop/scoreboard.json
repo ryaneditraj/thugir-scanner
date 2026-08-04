@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T20:15:55.613Z",
+  "updated_at": "2026-08-04T20:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2841,
-  "total_findings": 33642,
+  "total_sites_scanned": 2843,
+  "total_findings": 33699,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2017,
-  "discovery_findings": 29577,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-04T20:15:55.613Z",
+  "discovery_findings": 29634,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-04T20:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 recall (32 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 recall (32 findings); heroku direct scan 12 findings 6/6 when live; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 174,
-      "focus": "preview.owasp-juice.shop develop-branch route oracles — /rest/memories + /rest/basket/1 + /api/Memories + /rest/admin/application-configuration + /api/Feedbacks",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 56,
+      "focus": "pwnshop PWN-011 product review stored XSS + ssrf.vulnlab.dev webhook semi-blind SSRF header leak",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/product/1: 37→39 findings — pwnshop-product-review-stored-xss live+route + client-side review oracle shipped (PWN-011)",
+      "ssrf.vulnlab.dev/webhook: 3→17 findings — ssrf-vulnlab-webhook live+route oracle shipped (X-Internal-Flag header leak)",
       "preview.owasp-juice.shop/rest/memories: 35 findings — full juice-shop live-oracle suite on develop preview",
-      "preview.owasp-juice.shop/rest/basket/1: 35 findings — basket BOLA/IDOR oracle on develop preview",
-      "preview.owasp-juice.shop/api/Memories: 35 findings — unauthenticated memories API exposure on develop preview",
-      "preview.owasp-juice.shop/rest/admin/application-configuration: 34 findings — unauth admin config oracle on develop preview",
       "preview.owasp-juice.shop/api/Feedbacks: 35 findings — product feedback BOLA oracle on develop preview"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "testphp.vulnweb.com: unreachable from cloud agent egress (3 queue drain errors)",
-      "pwnshop.ctfsecurity.com/product/1: PWN-011 stored XSS via POST /review oracle still absent without authenticated session",
+      "testphp.vulnweb.com: unreachable from cloud agent egress (queue drain errors)",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-category-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle intermittent (OTP timing)",
+      "xss-game.appspot.com/level7+: frame oracles blocked by cookie gate requiring prior level completion"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
+    "pwnshop.ctfsecurity.com/product/1": 39,
+    "ssrf.vulnlab.dev/webhook": 17,
     "preview.owasp-juice.shop/rest/memories": 35,
-    "preview.owasp-juice.shop/rest/basket/1": 35,
-    "preview.owasp-juice.shop/api/Memories": 35,
-    "preview.owasp-juice.shop/rest/admin/application-configuration": 34,
     "preview.owasp-juice.shop/api/Feedbacks": 35,
-    "preview.owasp-juice.shop/rest/user/login": 33,
-    "pwnshop.ctfsecurity.com/debug/info": 37
+    "pwnshop.ctfsecurity.com/debug/info": 37,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

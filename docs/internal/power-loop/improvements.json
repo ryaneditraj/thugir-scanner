@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-review-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: OTP session + POST /review product_id=1 stores <img onerror=CANARY> rendered via EJS <%- %> on GET /product/1; pwnshop.ctfsecurity.com/product/1 findings 37→39 (+live+route+client-side review oracles); benchmark juice-shop 12 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-webhook-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /webhook/?url=http://127.0.0.1:8089/webhook-callback returns status:200 with X-Internal-Flag: VULNLAB{ssrf-webhook-leaked-via-headers}; ssrf.vulnlab.dev/webhook findings 3→17 (+webhook live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-review-xss-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities PWN-011 POST /review + EJS <%- %> unescaped output docs; pwnshop.ctfsecurity.com/product/1 route scan adds client-side-pwnshop-review-xss-oracle alongside live oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:xss-game.appspot.com",
       "slug": "xss-game-level4-js-string-xss-live-oracle",
       "status": "shipped",
