@@ -2,7 +2,28 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
-      "slug": "ginandjuice-catalog-category-crlf-live-oracle",
+      "slug": "ginandjuice-blog-prototype-pollution-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /blog loads deparam.js + searchLogger.js; __proto__[transport_url] pollutes config.transport_url and searchLogger injects script.src — FINDING-016; ginandjuice.shop/blog findings 16→19 (+prototype-pollution live+route); benchmark juice-shop.herokuapp.com 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-prototype-pollution-dom-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /blog confirms deparam + searchLogger prototype pollution DOM XSS chain — FINDING-016; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/?search=test&back=https://evil-open-redirect-probe.example exposes onclick location = URLSearchParams(location.search).get('back') — FINDING-020; ginandjuice.shop/blog/?search=test findings 16→20 (+blog-search-open-redirect live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /blog confirms unvalidated back param on search results Back to Blog link — FINDING-020; benchmark 6/6 maintained"
+    },
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=thugir%0d%0aSet-Cookie:%20{canary}=1 returns injected Set-Cookie header in response; ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true findings 15→17 (+crlf live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
     },
