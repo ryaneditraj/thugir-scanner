@@ -48015,6 +48015,142 @@ const ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceBlogSearchDomXssLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const canary = `thugirBlogDomXss${Date.now().toString(36)}`;
+  const probeUrl = new URL("/blog", ctx.origin);
+  probeUrl.searchParams.set("search", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasDocumentWriteSink =
+    /function\s+trackSearch\s*\(\s*query\s*\)/i.test(doc.body) &&
+    /document\.write\s*\(\s*['"]<img[^'"]*tracker\.gif\?searchTerms=['"]\s*\+\s*query/i.test(
+      doc.body
+    );
+  if (!hasDocumentWriteSink) return NEGATIVE;
+  const reflectedInput = new RegExp(
+    `name\\s*=\\s*search\\s+value\\s*=\\s*["']${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!reflectedInput.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet:
+        doc.body.match(/document\.write\s*\([^)]*tracker\.gif[^)]*\)/i)?.[0]?.slice(0, 160) ??
+        doc.body.match(new RegExp(`value\\s*=\\s*["']${canary}["']`))?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET /blog?search= reflects the query into trackSearch() which passes it to document.write() for tracker.gif — DOM XSS training oracle"
+    }
+  };
+};
+
+const ginAndJuiceBlogSearchDomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogSearchDomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog route scan — search query reflected into document.write tracker sink without encoding"
+    }
+  };
+};
+
+const ginAndJuiceCatalogBase64CategoryLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const encodedCategory = Buffer.from("Gin", "utf8").toString("base64");
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("category", encodedCategory);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hiddenMatch = doc.body.match(/name\s*=\s*["']category["'][^>]*value\s*=\s*["']([^"']+)["']/i);
+  const selectedMatch = doc.body.match(/const\s+selectedCategory\s*=\s*["']([^"']+)["']/);
+  const encodedValue = hiddenMatch?.[1] ?? selectedMatch?.[1];
+  if (!encodedValue || encodedValue !== encodedCategory) return NEGATIVE;
+  if (encodedValue === "Gin") return NEGATIVE;
+  const hasPlainGinCategory = /"Gin"\s*:\s*"\/catalog\?category=Gin"/i.test(doc.body);
+  if (!hasPlainGinCategory) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      encodedCategory,
+      selectedCategory: encodedValue,
+      snippet: selectedMatch?.[0]?.slice(0, 120) ?? hiddenMatch?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET /catalog?category=R2lu passes base64 category through to selectedCategory without server-side decode — base64-encoded parameter training oracle"
+    }
+  };
+};
+
+const ginAndJuiceCatalogBase64CategoryRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogBase64CategoryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — category filter accepts base64-encoded values without decoding before client-side selection"
+    }
+  };
+};
+
+const ginAndJuiceHomeUrlOverrideLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(homeUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { "X-Original-URL": "/vulnerabilities" }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/id\s*=\s*["']vulnerabilities-content["']/i.test(doc.body)) return NEGATIVE;
+  if (!/vulnerabilities-path-details|VULNERABILITIES/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: homeUrl,
+      header: "X-Original-URL: /vulnerabilities",
+      snippet: doc.body.match(/vulnerabilities-path-details[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop GET / with X-Original-URL: /vulnerabilities returns the vulnerabilities oracle table — request URL override training oracle"
+    }
+  };
+};
+
+const ginAndJuiceHomeUrlOverrideRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/^https?:\/\/[^/]+\/?(?:\?.*)?$/i.test(pageUrl) && !/\/(?:index\.html)?$/i.test(pageUrl))
+    return NEGATIVE;
+  const parsed = new URL(pageUrl);
+  if (parsed.pathname !== "/" && parsed.pathname !== "") return NEGATIVE;
+  const result = await ginAndJuiceHomeUrlOverrideLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop home route scan — X-Original-URL header overrides request path to expose /vulnerabilities oracle content"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -60662,6 +60798,12 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle,
   ginAndJuiceBlogSearchOpenRedirectLiveOracle,
   ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle,
+  ginAndJuiceBlogSearchDomXssLiveOracle,
+  ginAndJuiceBlogSearchDomXssRouteLiveOracle,
+  ginAndJuiceCatalogBase64CategoryLiveOracle,
+  ginAndJuiceCatalogBase64CategoryRouteLiveOracle,
+  ginAndJuiceHomeUrlOverrideLiveOracle,
+  ginAndJuiceHomeUrlOverrideRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
