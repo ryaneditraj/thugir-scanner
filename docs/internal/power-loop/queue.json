@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T18:06:00.000Z",
+  "updated_at": "2026-08-04T19:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://preview.owasp-juice.shop/rest/user/login",
+      "source": "OWASP Juice Shop preview — SQLi/auth-bypass login oracle POST /rest/user/login (preview.owasp-juice.shop develop branch)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Products",
+      "source": "OWASP Juice Shop preview — product catalog exposure oracle GET /api/Products (preview.owasp-juice.shop)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — PWN-018 debug endpoint exposes session secret + DB credentials (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN-005 unauthenticated audit log JSON feed (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level1/frame",
+      "source": "Google XSS Game — reflected XSS level 1 frame oracle (public security training lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://xss-game.appspot.com/level4/frame",
       "source": "Google XSS Game — JS string-context injection level 4 frame oracle (public security training lab)",
