@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-array-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/array/documentWrite passes sessionStorage['badValue'] to document.write(payload) sync+async trigger; public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/documentWrite findings 0→225 (+live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-admin-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/admin/application-configuration returns {\"config\":{\"server\":...,\"application\":{\"name\":\"OWASP Juice Shop\"...}}} without auth; preview.owasp-juice.shop/rest/admin/application-configuration findings 34→36 (+admin-config live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-mail-poll-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PwnMail OTP delivery needs 1.5–4.5s post-login wait; extended pwnshopCompleteOtpSession to 4 register retries + 15 inbox polls with graduated sleeps; pwnshop.ctfsecurity.com/profile/upload-avatar findings 13→40 with pwnshop-avatar-svg-xss + avatar-upload-route oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-product-review-stored-xss-live-oracle",
       "status": "shipped",
