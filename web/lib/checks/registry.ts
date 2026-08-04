@@ -47660,6 +47660,48 @@ const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceCatalogCategoryCrlfLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const canary = `thugirCrlf${Date.now().toString(36)}`;
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("category", `thugir\r\nSet-Cookie: ${canary}=1`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const injected = doc.setCookies.some((c) =>
+    new RegExp(`^${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}=1(?:;|$)`, "i").test(c.trim())
+  );
+  if (!injected) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      setCookie: doc.setCookies
+        .filter((c) => new RegExp(canary, "i").test(c))
+        .map((c) => c.slice(0, 120)),
+      note: "Gin & Juice Shop GET /catalog?category= with CRLF injects attacker-controlled Set-Cookie headers — HTTP response splitting / header injection training oracle (FINDING-023)"
+    }
+  };
+};
+
+const ginAndJuiceCatalogCategoryCrlfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogCategoryCrlfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — category parameter CRLF injects forged Set-Cookie response headers — header injection training oracle (FINDING-023)"
+    }
+  };
+};
+
 function ginAndJuiceCsrfFromLoginPage(body: string): string | null {
   const m = body.match(/name="csrf"\s+value="([^"]+)"/i);
   return m?.[1] ?? null;
@@ -60486,6 +60528,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceBlogPostRouteLiveOracle,
   ginAndJuiceCatalogCategorySqliLiveOracle,
   ginAndJuiceCatalogCategorySqliRouteLiveOracle,
+  ginAndJuiceCatalogCategoryCrlfLiveOracle,
+  ginAndJuiceCatalogCategoryCrlfRouteLiveOracle,
   ginAndJuiceLoginUsernameReflectionLiveOracle,
   ginAndJuiceLoginRouteLiveOracle,
   ginAndJuiceStockXxeLiveOracle,

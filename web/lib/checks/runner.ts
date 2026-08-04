@@ -2074,6 +2074,8 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceBlogPostRouteLiveOracle",
   "ginAndJuiceCatalogCategorySqliLiveOracle",
   "ginAndJuiceCatalogCategorySqliRouteLiveOracle",
+  "ginAndJuiceCatalogCategoryCrlfLiveOracle",
+  "ginAndJuiceCatalogCategoryCrlfRouteLiveOracle",
   "ginAndJuiceLoginUsernameReflectionLiveOracle",
   "ginAndJuiceLoginRouteLiveOracle",
   "ginAndJuiceStockXxeLiveOracle",
