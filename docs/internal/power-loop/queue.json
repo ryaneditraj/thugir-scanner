@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-03T23:05:00.000Z",
+  "updated_at": "2026-08-04T00:05:55.262Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/catalog?category=gin",
+      "source": "PortSwigger ginandjuice.shop — UNION SQLi oracle on /catalog category parameter (pentest-2026-ginandjuice / ZAP testapp docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/order/details?orderId=0254809",
+      "source": "PortSwigger ginandjuice.shop — IDOR oracle GET /order/details?orderId= (carlos order history disclosure)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval",
+      "source": "google/firing-range — document.referrer piped to eval() DOM XSS (/dom/toxicdom/document/referrer/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/eval",
+      "source": "google/firing-range — document.cookie value eval() DOM XSS (/dom/toxicdom/document/cookie_set/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/window/name/eval",
+      "source": "google/firing-range — window.name source to eval() DOM XSS (/dom/toxicdom/window/name/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval",
       "source": "google/firing-range — toxic DOM sessionStorage object Function eval() XSS sink (/dom/toxicdom/sessionStorage/object/function/eval)",
@@ -517,11 +542,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval",
-      "source": "google/firing-range — document.referrer piped to eval() toxicdom sink",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://public-firing-range.appspot.com/address/location.hash/documentwrite",
       "source": "google/firing-range — location.hash piped to document.write() DOM XSS sink",
       "auth": "public_demo"
@@ -614,16 +634,6 @@
     {
       "url": "https://public-firing-range.appspot.com/reflected/url/param_src?q=a",
       "source": "google/firing-range — URL-based XSS parameter assigned to OBJECT PARAM src attribute",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/eval",
-      "source": "google/firing-range — DOM toxicdom cookie value piped to eval() sink",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://public-firing-range.appspot.com/dom/toxicdom/window/name/eval",
-      "source": "google/firing-range — DOM toxicdom window.name piped to eval() sink",
       "auth": "public_demo"
     },
     {
@@ -14508,16 +14518,6 @@
     {
       "url": "https://public-firing-range.appspot.com/mixedcontent/",
       "source": "google/firing-range — mixed content passive/active oracle index (/mixedcontent/)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog?category=gin",
-      "source": "PortSwigger ginandjuice.shop — UNION SQLi oracle on /catalog category parameter (pentest-2026-ginandjuice / ZAP testapp docs)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/order/details?orderId=0254809",
-      "source": "PortSwigger ginandjuice.shop — IDOR oracle GET /order/details?orderId= (carlos order history disclosure)",
       "auth": "public_demo"
     },
     {
