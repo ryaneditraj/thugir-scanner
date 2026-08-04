@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T15:20:00.000Z",
+  "updated_at": "2026-08-04T16:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2789,
-  "total_findings": 32779,
+  "total_sites_scanned": 2792,
+  "total_findings": 32889,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1992,
-  "discovery_findings": 28900,
-  "improvements_shipped": 1165,
-  "last_run": "2026-08-04T15:20:00.000Z",
+  "discovery_findings": 28921,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-04T16:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 31,
@@ -48,39 +48,39 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 → staging fallback; stable 6/6 recall (31 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503 → staging fallback; stable 6/6 recall (31 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 2,
-      "findings": 53,
-      "focus": "ginandjuice credentials disclosure + logout session-regeneration route oracles",
+      "findings": 79,
+      "focus": "brokencrystals homepage DOM XSS + vulnbank /chat route AI oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "ginandjuice.shop/?url=: 15→27 findings — ginandjuice-vulnerabilities-credentials live+route (X-Original-URL /vulnerabilities exposes carlos/hunter2)",
-      "ginandjuice.shop/logout: 14→26 findings — ginandjuice-logout-session-regeneration live+route oracles",
-      "chimera.atlascrew.dev/api/v1/*: rejected — GitHub Pages 404, vuln-api not deployed on public host"
+      "brokencrystals.com/?dummy=thugir-dom-xss-probe: 55→58 findings — brokencrystals-home-dom-xss live+route (maptitle iframe + dangerous-html search reflection)",
+      "vulnbank.org/chat: 20→21 findings — vulnbank-ai-anonymous-chat-route-live-oracle shipped",
+      "teacher_delta empty — nuclei/engine unavailable in cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "ginandjuice.shop/my-account/change-email: race-condition email-claim oracle absent — registration disabled on public deploy",
       "chimera.atlascrew.dev route endpoints: deferred — API paths return GitHub Pages 404 (docs-only host)",
-      "brokencrystals.com/?dummy=: no route-specific DOM XSS live oracle via dummy param",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "testphp.vulnweb.com unreachable from cloud agent egress"
+      "testphp.vulnweb.com unreachable from cloud agent egress",
+      "pwnshop.ctfsecurity.com/api/v1/cart: GET /api/v1/cart returns 404 — cart BOLA oracle deferred"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
+    "brokencrystals.com/?dummy=thugir-dom-xss-probe": 58,
     "ginandjuice.shop/?url=https://evil-open-redirect-probe.example": 27,
     "ginandjuice.shop/logout": 26,
-    "brokencrystals.com/?dummy=thugir-dom-xss-probe": 55,
     "brokencrystals.com/userlogin?logobgcolor=red": 52,
     "pwnshop.ctfsecurity.com/api/v1/cart": 23,
-    "vulnbank.org/chat": 20,
+    "vulnbank.org/chat": 21,
     "chimera.atlascrew.dev/api/v1/auth/forgot-password": 5,
     "pentest-fauxbank.vercel.app/admin": 13
   }
