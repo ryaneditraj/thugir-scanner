@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-update-avatar-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /profile/update-avatar with OTP session fetches avatar_url=https://example.com/ returns ok:true+fetched body; pwnshop.ctfsecurity.com/profile/update-avatar findings 20→36 (+update-avatar-route oracle); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-file-httpbin-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file?path=http://example.com returns Example Domain HTML via probeBrokencrystalsFileSsrf; brokencrystals.com/api/fetch?url= findings 46→58 (+api-file-httpbin + api-fetch-route + ssrf-endpoint-fetch); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-fetch-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/fetch?url= confirms sibling /api/file?path= SSRF when /api/fetch returns 404; brokencrystals.com/api/fetch findings 46→58; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-home-dom-xss-live-oracle",
       "status": "shipped",

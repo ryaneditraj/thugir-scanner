@@ -43235,5 +43235,83 @@ export const genericPatterns: Pattern[] = [
       "Our /books/v1 route scan confirms excessive data exposure — list returns other users' books. Show owner-scoped filtering.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "pwnshop-update-avatar-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Pwnshop update-avatar route SSRF live oracle (PWN-029)",
+    description:
+      "When scanning /profile/update-avatar, POST server-side fetches attacker-controlled avatar_url and returns the fetched response body — route-specific avatar URL SSRF oracle.",
+    impactOneline:
+      "Route scans on /profile/update-avatar confirm live SSRF via server-side avatar URL import.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopUpdateAvatarRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side avatar URL fetches to internal hosts — Pwnshop PWN-029 is intentional lab software.",
+      steps: [
+        "Validate avatar_url hosts against an allowlist before fetch.",
+        "Deny link-local and metadata IP ranges on outbound HTTP clients.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /profile/update-avatar route fetches avatar_url server-side and echoes the response. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-api-file-httpbin-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/file URL SSRF live oracle",
+    description:
+      "GET /api/file?path=https://example.com/ fetches attacker-controlled URLs server-side and returns the response body — the Broken Crystals generic URL SSRF oracle.",
+    impactOneline:
+      "Unvalidated server-side URL fetchers let attackers probe internal services and exfiltrate responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiFileHttpbinSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF on /api/file path parameter — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to internal, link-local, and cloud metadata addresses.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/file?path= endpoint fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-api-fetch-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/fetch route SSRF live oracle",
+    description:
+      "When scanning /api/fetch?url=, sibling GET /api/file?path= fetches external URLs server-side even though /api/fetch returns 404 — route-specific SSRF confirmation oracle.",
+    impactOneline:
+      "Route scans on /api/fetch confirm the Broken Crystals SSRF training surface via the live /api/file fetcher.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiFetchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side URL fetchers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove or restrict /api/file and /api/fetch URL parameters in production.",
+        "Deny link-local and metadata destinations on outbound HTTP clients.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/fetch route scan confirms SSRF via sibling /api/file?path=. Show how to block outbound URL fetchers.",
+    version: 1,
+    enabled: true
   }
 ];
