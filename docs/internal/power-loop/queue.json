@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T17:05:00.000Z",
+  "updated_at": "2026-08-04T18:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://xss-game.appspot.com/level4/frame",
+      "source": "Google XSS Game — JS string-context injection level 4 frame oracle (public security training lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level5/frame",
+      "source": "Google XSS Game — stored XSS via innerHTML level 5 frame oracle (public security training lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level6/frame",
+      "source": "Google XSS Game — DOM-based XSS level 6 frame oracle (public security training lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/captcha",
+      "source": "OWASP Juice Shop demo — captcha bypass oracle GET /rest/captcha (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/product/1",
+      "source": "ctfsec/pwnshop — stored XSS product review entry GET /product/:id (PWN-011 public training deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://demo.owasp-juice.shop/api/snippets",
       "source": "OWASP Juice Shop demo — vulnerable code snippets API GET /api/snippets (official demo.owasp-juice.shop integration docs)",
