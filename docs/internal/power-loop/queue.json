@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T21:15:00.000Z",
+  "updated_at": "2026-08-04T22:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop.demo.escape.tech/ftp",
+      "source": "Escape.tech Juice Shop demo — forgotten-backup /ftp sensitive file disclosure oracle (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/SecurityAnswers",
+      "source": "Escape.tech Juice Shop demo — password-reset security-answer hash disclosure oracle GET /api/SecurityAnswers",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/order-history",
+      "source": "Escape.tech Juice Shop demo — order history BOLA oracle GET /rest/order-history (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/ImageCaptchas",
+      "source": "Escape.tech Juice Shop demo — captcha bypass oracle GET /api/ImageCaptchas (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/PrivacyPolicies",
+      "source": "Escape.tech Juice Shop demo — privacy policy disclosure oracle GET /api/PrivacyPolicies (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://preview.owasp-juice.shop/ftp",
       "source": "OWASP Juice Shop preview — sensitive file disclosure /ftp directory (juice-shop ZAP baseline report #3454)",
