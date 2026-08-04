@@ -926,6 +926,12 @@ const DEEP_RULES = new Set<string>([
   "firingRangeDomToxicdomSessionstorageIncludeArrayInnerhtmlRouteLiveOracle",
   "firingRangeDomToxicdomLocalstorageIncludeFunctionEvalLiveOracle",
   "firingRangeDomToxicdomLocalstorageIncludeFunctionEvalRouteLiveOracle",
+  "firingRangeDomToxicdomLocalstorageIncludePropertyEvalLiveOracle",
+  "firingRangeDomToxicdomLocalstorageIncludePropertyEvalRouteLiveOracle",
+  "firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlLiveOracle",
+  "firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlRouteLiveOracle",
+  "firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteLiveOracle",
+  "firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteRouteLiveOracle",
   "firingRangeDomToxicdomSessionstorageIncludeArrayDocumentwriteLiveOracle",
   "firingRangeDomToxicdomSessionstorageIncludeArrayDocumentwriteRouteLiveOracle",
   "firingRangeDomToxicdomLocalstorageIncludeArrayDocumentwriteLiveOracle",
@@ -2070,6 +2076,8 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceLoginRouteLiveOracle",
   "ginAndJuiceStockXxeLiveOracle",
   "ginAndJuiceStockXxeRouteLiveOracle",
+  "ginAndJuiceOrderDetailsIdorLiveOracle",
+  "ginAndJuiceOrderDetailsIdorRouteLiveOracle",
   "crapi2ShopOrdersAllRouteLiveOracle",
   "crapi2ShopOrdersIdBolaRouteLiveOracle",
   "crapiShopOrdersIdBolaRouteLiveOracle",
@@ -8469,7 +8477,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuicePrioritySeeds =
     /ginandjuice\.shop|Gin & Juice Shop|vulnerability scanner to the test/i.test(home.body) ||
     /ginandjuice\.shop/i.test(home.finalUrl)
-      ? ["/vulnerabilities", "/catalog", "/blog"].map((p) => new URL(p, home.finalUrl).toString())
+      ? ["/vulnerabilities", "/catalog", "/blog", "/order/details?orderId=0254809"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
   const redTigerPrioritySeeds = /redtiger\.labs\.overthewire\.org/i.test(home.finalUrl)
     ? [

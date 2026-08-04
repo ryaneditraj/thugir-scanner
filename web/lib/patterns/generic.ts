@@ -1226,6 +1226,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-toxicdom-localstorage-include-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include property eval oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/include/property/eval loads an external script that passes localStorage property data to eval() — Firing Range script-include localStorage eval DOM XSS training oracle.",
+    impactOneline:
+      "Script-include toxic DOM sinks that pass storage-backed properties to eval() enable attacker-controlled code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludePropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass storage values to eval() via script includes — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from localStorage/sessionStorage.",
+        "Avoid dynamic script includes that read storage into dangerous sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/property/eval route loads a script that passes localStorage to eval(). Show script-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include property eval route oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/include/property/eval, an external script-include passes localStorage property data to eval() — route-specific script-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script-include routes cannot execute storage-backed payloads via eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludePropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on script-include localStorage property routes.",
+      steps: [
+        "Audit external script includes for storage reads into eval().",
+        "Encode or sanitize before code execution.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/property/eval route uses eval on localStorage via script include. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-property-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include property innerHTML oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/include/property/innerHtml loads an external script that passes localStorage property data to innerHTML — Firing Range script-include localStorage DOM XSS training oracle.",
+    impactOneline:
+      "Script-include toxic DOM sinks that pass storage-backed properties to innerHTML enable attacker-controlled markup injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass storage values to innerHTML via script includes — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from localStorage/sessionStorage.",
+        "Avoid dynamic script includes that read storage into dangerous sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/property/innerHtml route loads a script that passes localStorage to innerHTML. Show script-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-property-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include property innerHTML route oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/include/property/innerHtml, an external script-include passes localStorage property data to innerHTML — route-specific script-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script-include routes cannot inject storage-backed payloads via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on script-include localStorage property routes.",
+      steps: [
+        "Audit external script includes for storage reads into innerHTML.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/property/innerHtml route uses innerHTML on localStorage via script include. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-property-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include property document.write oracle",
+    description:
+      "GET /dom/toxicdom/localStorage/include/property/documentWrite loads an external script that passes localStorage property data to document.write() — Firing Range script-include localStorage DOM XSS training oracle.",
+    impactOneline:
+      "Script-include toxic DOM sinks that pass storage-backed properties to document.write() enable attacker-controlled markup injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass storage values to document.write() via script includes — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from localStorage/sessionStorage.",
+        "Avoid dynamic script includes that read storage into dangerous sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/property/documentWrite route loads a script that passes localStorage to document.write(). Show script-include DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-localstorage-include-property-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM localStorage include property document.write route oracle",
+    description:
+      "When scanning /dom/toxicdom/localStorage/include/property/documentWrite, an external script-include passes localStorage property data to document.write() — route-specific script-include DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm script-include routes cannot inject storage-backed payloads via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write() sinks on script-include localStorage property routes.",
+      steps: [
+        "Audit external script includes for storage reads into document.write().",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/localStorage/include/property/documentWrite route uses document.write on localStorage via script include. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-toxicdom-sessionstorage-include-property-documentwrite-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -6476,6 +6632,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /dom/toxicdom/sessionStorage/object/property/documentWrite route passes sessionStorage object property to document.write(). Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-sessionstorage-object-function-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage object function eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/object/function/eval loads an external script that passes sessionStorage object function values to eval() — Firing Range toxic DOM script-include XSS training oracle.",
+    impactOneline:
+      "sessionStorage object function values passed to eval() via external script-include enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomSessionstorageObjectFunctionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() calls on values from sessionStorage object functions.",
+        "Treat sessionStorage data as untrusted and avoid dynamic code execution.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/object/function/eval external script passes sessionStorage to eval(). Show toxic DOM sessionStorage object eval XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-toxicdom-sessionstorage-object-function-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/object/function/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/object/function/eval, sessionStorage object function values reach eval() via external script-include without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage object functions are not passed to eval() via script-include sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomToxicdomSessionstorageObjectFunctionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks on sessionStorage object functions in /dom/toxicdom/sessionStorage/object routes.",
+      steps: [
+        "Audit external script-include handlers for dangerous eval() sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/object/function/eval route passes sessionStorage object function to eval(). Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -41699,6 +41907,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog/product/stock route scan confirms XML entity expansion. Show route-specific XXE remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-order-details-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop order details IDOR live oracle",
+    description:
+      "GET /order/details?orderId= returns full billing address and masked payment card details without authentication — the PortSwigger Gin & Juice order details IDOR training oracle.",
+    impactOneline:
+      "Unauthenticated order lookup exposes customer PII and payment metadata to anyone who can guess or enumerate order IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceOrderDetailsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and ownership checks before returning order details.",
+      steps: [
+        "Bind order lookups to the authenticated user's session.",
+        "Use unpredictable order identifiers instead of sequential IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /order/details?orderId= endpoint returns billing and payment details without auth. Show IDOR remediation for order detail endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-order-details-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /order/details IDOR route live oracle",
+    description:
+      "When scanning /order/details, unauthenticated requests with a valid orderId return another customer's billing address and masked card — route-specific order details IDOR oracle.",
+    impactOneline:
+      "Route-specific confirmation that order detail pages lack authentication and ownership validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceOrderDetailsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and ownership checks on /order/details before returning PII.",
+      steps: [
+        "Bind order lookups to the authenticated user's session.",
+        "Use unpredictable order identifiers instead of sequential IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /order/details route scan confirms unauthenticated order PII disclosure. Show route-specific IDOR remediation.",
     version: 1,
     enabled: true
   },

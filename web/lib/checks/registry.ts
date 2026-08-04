@@ -38405,6 +38405,33 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
     sinkRe: /eval\s*\(\s*payload\s*\)/i,
     label: "sessionStorage function source to eval()",
     routeRe: /\/dom\/toxicdom\/sessionStorage\/include\/function\/eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/include/property/eval",
+    scriptPath: "/dom/toxicdomscripts/include/property/eval",
+    scriptSrcRe: /include\/property\/eval/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "localStorage property source to eval()",
+    routeRe: /\/dom\/toxicdom\/localStorage\/include\/property\/eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/include/property/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/include/property/innerHtml",
+    scriptSrcRe: /include\/property\/innerHtml/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /\.innerHTML\s*=\s*payload/i,
+    label: "localStorage property source to innerHTML",
+    routeRe: /\/dom\/toxicdom\/localStorage\/include\/property\/innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/localStorage/include/property/documentWrite",
+    scriptPath: "/dom/toxicdomscripts/include/property/documentWrite",
+    scriptSrcRe: /include\/property\/documentWrite/i,
+    sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
+    label: "localStorage property source to document.write",
+    routeRe: /\/dom\/toxicdom\/localStorage\/include\/property\/documentWrite\b/i
   }
 ] as const;
 
@@ -39101,6 +39128,27 @@ const firingRangeDomToxicdomSessionstorageIncludeFunctionEvalRouteLiveOracle =
   makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
     33,
     "Google Firing Range /dom/toxicdom/sessionStorage/include/function/eval route scan — script-include sessionStorage function to eval() sink"
+  );
+const firingRangeDomToxicdomLocalstorageIncludePropertyEvalLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(34);
+const firingRangeDomToxicdomLocalstorageIncludePropertyEvalRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    34,
+    "Google Firing Range /dom/toxicdom/localStorage/include/property/eval route scan — script-include localStorage property to eval() sink"
+  );
+const firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(35);
+const firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    35,
+    "Google Firing Range /dom/toxicdom/localStorage/include/property/innerHtml route scan — script-include localStorage property to innerHTML sink"
+  );
+const firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(36);
+const firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    36,
+    "Google Firing Range /dom/toxicdom/localStorage/include/property/documentWrite route scan — script-include localStorage property to document.write sink"
   );
 
 const FIRING_RANGE_LEAKEDCOOKIE_PATH = "/leakedcookie/leakedcookie";
@@ -47628,6 +47676,52 @@ const ginAndJuiceStockXxeRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /catalog/product/stock route scan — XML entity expansion in productId alters stock lookup vs clean baseline — XXE training oracle"
+    }
+  };
+};
+
+const GIN_AND_JUICE_KNOWN_ORDER_IDS = ["0254809"];
+
+const ginAndJuiceOrderDetailsIdorLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  for (const orderId of GIN_AND_JUICE_KNOWN_ORDER_IDS) {
+    const probeUrl = new URL("/order/details", ctx.origin);
+    probeUrl.searchParams.set("orderId", orderId);
+    const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/Order\s+details/i.test(doc.body)) continue;
+    const orderNoMatch = doc.body.match(/Order\s+no:\s*(\d+)/i);
+    if (!orderNoMatch || orderNoMatch[1] !== orderId) continue;
+    if (!/Billing address/i.test(doc.body) || !/Payment Method|Debit card/i.test(doc.body)) continue;
+    const billingMatch = doc.body.match(/Billing address[\s\S]{0,200}?<div>([^<]{3,})<\/div>/i);
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: probeUrl.toString(),
+        orderId,
+        billingName: billingMatch?.[1]?.trim().slice(0, 80),
+        snippet: doc.body.match(/Order\s+no:[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+        note: "Gin & Juice Shop GET /order/details?orderId= returns full order billing and payment details without authentication — order details IDOR training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const ginAndJuiceOrderDetailsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/order\/details/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceOrderDetailsIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /order/details route scan — unauthenticated access to another user's billing address and masked card details via orderId parameter"
     }
   };
 };
@@ -59846,6 +59940,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomToxicdomSessionstorageIncludePropertyInnerhtmlRouteLiveOracle,
   firingRangeDomToxicdomSessionstorageIncludeFunctionEvalLiveOracle,
   firingRangeDomToxicdomSessionstorageIncludeFunctionEvalRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludePropertyEvalLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludePropertyEvalRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludePropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteLiveOracle,
+  firingRangeDomToxicdomLocalstorageIncludePropertyDocumentwriteRouteLiveOracle,
   firingRangeLeakedcookieHttponlyLiveOracle,
   firingRangeLeakedcookieHttponlyRouteLiveOracle,
   firingRangeMixedContentLiveOracle,
@@ -60237,6 +60337,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceLoginRouteLiveOracle,
   ginAndJuiceStockXxeLiveOracle,
   ginAndJuiceStockXxeRouteLiveOracle,
+  ginAndJuiceOrderDetailsIdorLiveOracle,
+  ginAndJuiceOrderDetailsIdorRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
