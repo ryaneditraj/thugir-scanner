@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T08:40:00.000Z",
+  "updated_at": "2026-08-04T09:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login",
+      "source": "atlas-crew/Chimera API-DOCUMENTATION — SQLi + JWT algorithm-confusion login oracle POST /api/v1/auth/login",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts/search?account_number=ACC-1001",
+      "source": "atlas-crew/Chimera vuln-api README — UNION-based SQLi oracle GET /api/v1/banking/accounts/search",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/logs?file=../../../../etc/passwd",
+      "source": "atlas-crew/Chimera vuln-api README — path traversal oracle GET /api/v1/admin/logs",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/token/forge",
+      "source": "atlas-crew/Chimera api-reference — JWT token forgery oracle POST /api/v1/auth/token/forge",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products?from=1970-01-01&to=2099-12-31",
+      "source": "NeuraLegion/brokencrystals — business-constraint bypass via unbounded date-range GET /api/products",
+      "auth": "public_demo"
+    },
     {
       "url": "https://prompt-injection-demo.vercel.app/chat",
       "source": "hanif-rasyidi/prompt-injection-demo — Acme SaaS LLM chat prompt-injection attack surface (AIBC 2026 Vercel deploy)",
