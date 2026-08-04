@@ -17764,6 +17764,23 @@ const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankAiAnonymousChatRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/chat\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankAiAnonymousChatLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /chat route scan — POST /api/ai/chat/anonymous returns mode:anonymous LLM responses without authentication"
+    }
+  };
+};
+
 const vulnbankBoplaRegisterLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const registerUrl = new URL("/register", ctx.origin).toString();
@@ -28817,6 +28834,60 @@ const brokencrystalsUserloginCssInjectionLiveOracle: Rule = async (ctx) => {
       bundleUrl,
       snippet: "searchParams.get(\"logobgcolor\") → logoBgColor → style.cssText = `background-color: ${t}`",
       note: "Broken Crystals /userlogin reads logobgcolor from URL into inline logo background CSS without sanitization — CSS injection oracle"
+    }
+  };
+};
+
+const brokencrystalsHomeDomXssLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = new URL("/", ctx.origin);
+  pageUrl.searchParams.set("thugir", Date.now().toString(36));
+  const pageDoc = await ctx.probe.get(pageUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (pageDoc.status < 200 || pageDoc.status >= 400) return NEGATIVE;
+  const bundleUrl = await brokencrystalsFindIndexBundleUrl(ctx, pageDoc.body, ctx.combined);
+  if (!bundleUrl) return NEGATIVE;
+  const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 1_048_576, timeoutMs: 20000 });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
+  const maptitleIframe =
+    /get\(["']maptitle["']\)/.test(bundleDoc.body) &&
+    /mapTitle[\s\S]{0,240}outerHTML[\s\S]{0,240}<iframe/i.test(bundleDoc.body);
+  const searchReflection =
+    /dangerous-html/i.test(bundleDoc.body) &&
+    /decodeURIComponent\(window\.location\.search\)/.test(bundleDoc.body);
+  if (!maptitleIframe || !searchReflection) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      pageUrl: pageUrl.toString(),
+      bundleUrl,
+      snippet:
+        "searchParams.get('maptitle') → mapTitle iframe outerHTML; decodeURIComponent(window.location.search) → dangerous-html",
+      note: "Broken Crystals homepage reflects maptitle into iframe title attributes and full query string into dangerous-html sinks — DOM XSS via ?maptitle= and arbitrary params like ?__dummy= (README oracle)"
+    }
+  };
+};
+
+const brokencrystalsHomeDomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const parsed = (() => {
+    try {
+      return new URL(pageUrl);
+    } catch {
+      return null;
+    }
+  })();
+  if (!parsed || (parsed.pathname !== "/" && parsed.pathname !== "")) return NEGATIVE;
+  const result = await brokencrystalsHomeDomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals homepage/?dummy= or ?maptitle= route scan — maptitle iframe title injection and dangerous-html search reflection DOM XSS oracle"
     }
   };
 };
@@ -59894,6 +59965,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsUsersSearchRouteLiveOracle,
   brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
+  vulnbankAiAnonymousChatRouteLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankSqliLoginLiveOracle,
   vulnbankMerchantRegisterLiveOracle,
@@ -60085,6 +60157,8 @@ export const RULES: Record<string, Rule> = {
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
+  brokencrystalsHomeDomXssLiveOracle,
+  brokencrystalsHomeDomXssRouteLiveOracle,
   clientSideVulnforgeAcademyEvidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
