@@ -2,6 +2,36 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-vulnerabilities-credentials-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / with X-Original-URL: /vulnerabilities deobfuscates ACCOUNT LOGIN DETAILS carlos/hunter2 and POST /login returns 302 /my-account; ginandjuice.shop/?url= findings 15→27 (+credentials live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-vulnerabilities-credentials-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /?url= confirms X-Original-URL /vulnerabilities credential disclosure with working login; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logout-session-regeneration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /logout returns 302 Location: / and rotates session cookie; ginandjuice.shop/logout findings 14→26 (+logout live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logout-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /logout confirms session cookie rotation on logout redirect; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-banking-transfer-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/banking/transfer and GET /api/v1/banking/accounts return GitHub Pages 404 — vuln-api not deployed on chimera.atlascrew.dev public host (docs-only); deferred until live API reachable"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-subscribe-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/subscribe JSON {email,csrf} returns {\"coupon\":\"9In&JUICE5H0P\",\"email\":\"<canary>\"}; ginandjuice.shop/catalog/subscribe findings 16→27 (+subscribe live+route); benchmark juice-shop-staging 30 findings 6/6 maintained"
