@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T15:04:31.384Z",
+  "updated_at": "2026-08-04T16:03:50.102Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
+      "source": "ctfsec/pwnshop — PWN-029 SSRF avatar URL fetched server-side POST /profile/update-avatar (OSS deploy README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — SSRF oracle GET /api/fetch url param (README public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/invoices",
+      "source": "ctfsec/pwnshop — invoice BOLA / unauthenticated list oracle GET /api/v1/invoices (OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/register?next=https://evil-open-redirect-probe.example",
+      "source": "ctfsec/pwnshop — PWN-017 open redirect via next= on registration (OSS deploy README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login",
+      "source": "atlas-crew/Chimera endpoints-catalog — authentication bypass / SQLi oracle POST /api/v1/auth/login",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/auth/forgot-password",
       "source": "atlas-crew/Chimera endpoints-catalog — password reset / account enumeration oracle POST /api/v1/auth/forgot-password",
