@@ -28495,7 +28495,7 @@ const pwnshopProductReviewStoredXssLiveOracle: Rule = async (ctx) => {
   const canary = `thugirReview${Date.now().toString(36)}`;
   const xssPayload = `<img src=x onerror="${canary}">`;
   const reviewUrl = new URL("/review", ctx.origin).toString();
-  const reviewDoc = await ctx.probe.get(reviewUrl, {
+  const reviewDoc = await fetchDoc(reviewUrl, {
     method: "POST",
     body: `product_id=1&rating=5&comment=${encodeURIComponent(xssPayload)}`,
     headers: {
@@ -28507,7 +28507,7 @@ const pwnshopProductReviewStoredXssLiveOracle: Rule = async (ctx) => {
   });
   if (reviewDoc.status < 200 || reviewDoc.status >= 400) return NEGATIVE;
   const productUrl = new URL("/product/1", ctx.origin).toString();
-  const productDoc = await ctx.probe.get(productUrl, {
+  const productDoc = await fetchDoc(productUrl, {
     maxBytes: 32768,
     timeoutMs: 15000,
     headers: { Cookie: cookie }

@@ -112644,6 +112644,86 @@
       "status": "error",
       "scanned_at": "2026-08-04T20:15:45.538Z",
       "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+    },
+    {
+      "run_id": "2026-08-04T20:05:45.041Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 12,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 463,
+      "status": "ok",
+      "scanned_at": "2026-08-04T20:17:26.027Z"
+    },
+    {
+      "run_id": "2026-08-04T20:24:30.000Z",
+      "url": "https://pwnshop.ctfsecurity.com/product/1",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 39,
+      "findings": [
+        {
+          "slug": "pwnshop-product-review-stored-xss-live-oracle",
+          "title": "Pwnshop stored XSS via product reviews (PWN-011)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "pwnshop-product-review-stored-xss-route-live-oracle",
+          "title": "Pwnshop /product/:id review stored XSS route live oracle (PWN-011)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pwnshop-review-xss-oracle",
+          "title": "Pwnshop product review stored XSS oracle (PWN-011)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Cross-site scripting"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 474,
+      "status": "ok",
+      "scanned_at": "2026-08-04T20:24:30.000Z"
+    },
+    {
+      "run_id": "2026-08-04T20:25:15.000Z",
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /webhook route SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 459,
+      "status": "ok",
+      "scanned_at": "2026-08-04T20:25:15.000Z"
     }
   ]
 }
