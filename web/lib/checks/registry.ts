@@ -47919,6 +47919,102 @@ const ginAndJuiceAdminBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceBlogPrototypePollutionDomXssLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const blogUrl = new URL("/blog", ctx.origin).toString();
+  const doc = await ctx.probe.get(blogUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/deparam\.js/i.test(doc.body) || !/searchLogger\.js/i.test(doc.body)) return NEGATIVE;
+
+  const loggerUrl = new URL("/resources/js/searchLogger.js", ctx.origin).toString();
+  const loggerDoc = await ctx.probe.get(loggerUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (loggerDoc.status < 200 || loggerDoc.status >= 400) return NEGATIVE;
+  const hasTransportUrlSink =
+    /config\.transport_url/i.test(loggerDoc.body) &&
+    /createElement\s*\(\s*['"]script['"]\s*\)/i.test(loggerDoc.body) &&
+    /script\.src\s*=\s*config\.transport_url/i.test(loggerDoc.body);
+  if (!hasTransportUrlSink) return NEGATIVE;
+
+  const deparamUrl = new URL("/resources/js/deparam.js", ctx.origin).toString();
+  const deparamDoc = await ctx.probe.get(deparamUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (deparamDoc.status < 200 || deparamDoc.status >= 400) return NEGATIVE;
+  const deparamVulnerable =
+    /obj\[key\]\s*=\s*val/i.test(deparamDoc.body) &&
+    !/Object\.create\s*\(\s*null\s*\)/i.test(deparamDoc.body);
+  if (!deparamVulnerable) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: blogUrl,
+      deparamUrl,
+      loggerUrl,
+      snippet: loggerDoc.body.match(/transport_url[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop /blog deparam.js parses __proto__[transport_url] into config and searchLogger.js injects script.src=config.transport_url — prototype pollution DOM XSS training oracle (FINDING-016)"
+    }
+  };
+};
+
+const ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogPrototypePollutionDomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog route scan — deparam.js + searchLogger.js chain enables __proto__[transport_url] prototype pollution DOM XSS (FINDING-016)"
+    }
+  };
+};
+
+const ginAndJuiceBlogSearchOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const probeUrl = new URL("/blog/", ctx.origin);
+  probeUrl.searchParams.set("search", "test");
+  probeUrl.searchParams.set("back", `https://${probeHost}/`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasBackHandler =
+    /location\s*=\s*new URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(
+      doc.body
+    );
+  if (!hasBackHandler) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      probeHost,
+      snippet: doc.body.match(/location\s*=\s*new URLSearchParams[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop /blog/?search=&back= assigns location from URLSearchParams back query param without validation — DOM open-redirect training oracle (FINDING-020)"
+    }
+  };
+};
+
+const ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogSearchOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog route scan — search results back link assigns location from unvalidated back query param (FINDING-020)"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -60538,6 +60634,10 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceOrderDetailsIdorRouteLiveOracle,
   ginAndJuiceAdminBypassLiveOracle,
   ginAndJuiceAdminBypassRouteLiveOracle,
+  ginAndJuiceBlogPrototypePollutionDomXssLiveOracle,
+  ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle,
+  ginAndJuiceBlogSearchOpenRedirectLiveOracle,
+  ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,

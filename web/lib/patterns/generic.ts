@@ -42067,6 +42067,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-blog-prototype-pollution-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop blog prototype pollution DOM XSS live oracle",
+    description:
+      "GET /blog loads deparam.js which parses __proto__[transport_url] into config, and searchLogger.js injects script.src=config.transport_url — the PortSwigger Gin & Juice prototype pollution DOM XSS training oracle (FINDING-016).",
+    impactOneline:
+      "Prototype pollution via __proto__ query parameters can escalate to arbitrary script execution through transport_url gadget sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPrototypePollutionDomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse query parameters into null-prototype objects and block __proto__ keys before merging.",
+      steps: [
+        "Use Object.create(null) for parameter parsing dictionaries.",
+        "Reject __proto__, constructor, and prototype keys in deparam-style parsers.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog deparam.js + searchLogger.js chain enables __proto__[transport_url] DOM XSS. Show prototype pollution remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-prototype-pollution-dom-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /blog prototype pollution DOM XSS route live oracle",
+    description:
+      "When scanning /blog, deparam.js parses __proto__[transport_url] and searchLogger.js injects script.src=config.transport_url — route-specific prototype pollution DOM XSS oracle (FINDING-016).",
+    impactOneline:
+      "Route-specific confirmation that blog search logging enables prototype pollution script gadget execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden deparam parsing on /blog and block transport_url script injection sinks.",
+      steps: [
+        "Use null-prototype objects for URL parameter parsing.",
+        "Remove dynamic script.src assignment from searchLogger transport_url.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog route scan confirms deparam + searchLogger prototype pollution DOM XSS. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-search-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop blog search DOM open-redirect live oracle",
+    description:
+      "GET /blog/?search=&back= uses URLSearchParams(location.search).get('back') in a Back to Blog onclick handler to assign location without validation — the PortSwigger Gin & Juice DOM open-redirect training oracle (FINDING-020).",
+    impactOneline:
+      "DOM-based open redirects on blog search results let attackers phish users via trusted ginandjuice.shop links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogSearchOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate back URLs against an allowlist before client-side navigation on blog search results.",
+      steps: [
+        "Reject external hosts in back query parameters on /blog search pages.",
+        "Use relative paths only for in-app back navigation.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/?search=&back= assigns location from URLSearchParams without validation. Show DOM open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-search-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /blog search open-redirect route live oracle",
+    description:
+      "When scanning /blog, the search results Back to Blog link assigns location from an unvalidated back query parameter — route-specific DOM open-redirect oracle (FINDING-020).",
+    impactOneline:
+      "Route-specific scans should confirm blog search back-navigation cannot redirect to external hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate back URLs on /blog search route handlers and client scripts.",
+      steps: [
+        "Allowlist same-origin paths for blog search back navigation.",
+        "Remove raw location assignment from back query parameters.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog route scan uses an unvalidated back param for search result navigation. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-external-localstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
