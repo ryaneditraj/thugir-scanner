@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T16:03:50.102Z",
+  "updated_at": "2026-08-04T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/api/snippets",
+      "source": "OWASP Juice Shop demo — vulnerable code snippets API GET /api/snippets (official demo.owasp-juice.shop integration docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Challenges",
+      "source": "OWASP Juice Shop preview — develop-branch challenge scoreboard API oracle (preview.owasp-juice.shop)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level2/frame",
+      "source": "Google XSS Game — stored XSS level 2 frame oracle (public security training lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level3/frame",
+      "source": "Google XSS Game — DOM XSS level 3 frame oracle (public security training lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/logs?file=../../../../etc/passwd",
+      "source": "atlas-crew/Chimera API-DOCUMENTATION — path traversal oracle GET /api/v1/admin/logs?file= (public vuln-api demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
       "source": "ctfsec/pwnshop — PWN-029 SSRF avatar URL fetched server-side POST /profile/update-avatar (OSS deploy README)",
