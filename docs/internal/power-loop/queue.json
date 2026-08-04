@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T02:04:31.710Z",
+  "updated_at": "2026-08-04T14:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
+      "source": "atlas-crew/Chimera CHM-BANK-001 — business-logic wire transfer manipulation (vulnerability-inventory.md public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
+      "source": "atlas-crew/Chimera CHM-BANK-002 — BOLA/IDOR on banking accounts list (endpoints-catalog.md public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/saas/tenants/1/projects",
+      "source": "atlas-crew/Chimera CHM-SAAS-001 — cross-tenant IDOR on SaaS projects (vulnerability-inventory.md public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration",
+      "source": "atlas-crew/Chimera CHM-ENERGY-001 — SSRF via energy asset calibration endpoint (vulnerability-inventory.md public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/?url=https://evil-open-redirect-probe.example",
+      "source": "PortSwigger ginandjuice.shop — home page URL override / open-redirect oracle via ?url= parameter (pentest-2026-ginandjuice)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true",
       "source": "pentest-2026-ginandjuice FINDING-023 — CRLF Set-Cookie header injection via category parameter (PortSwigger public demo)",
