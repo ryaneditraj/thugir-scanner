@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-include-property-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/include/property/eval returns Toxic DOM External + script src /dom/toxicdomscripts/include/property/eval; route scan findings 167→219 (+sessionstorage-include-property-eval live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-include-property-innerhtml-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/include/property/innerHtml returns Toxic DOM External + script src /dom/toxicdomscripts/include/property/innerHtml; route scan findings 167→219 (+sessionstorage-include-property-innerhtml live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-include-function-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/include/function/eval returns Toxic DOM External + script src /dom/toxicdomscripts/include/function/eval; route scan findings 172→219 (+sessionstorage-include-function-eval live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-toxicdom-sessionstorage-object-property-documentwrite-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/object/property/documentWrite loads toxicdomscripts object/property/documentWrite script-include document.write sink; route scan findings 212→216 (+sessionstorage-object-property-documentwrite live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"

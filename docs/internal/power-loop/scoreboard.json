@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03T23:35:00.000Z",
+  "updated_at": "2026-08-04T00:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2747,
-  "total_findings": 29808,
+  "total_sites_scanned": 2750,
+  "total_findings": 29904,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
-  "discovery_findings": 25746,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-03T23:35:00.000Z",
+  "discovery_findings": 25778,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-04T00:00:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 32,
@@ -54,33 +54,31 @@
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 648,
-      "focus": "Firing Range sessionStorage/object property documentWrite + array eval/documentWrite (rules existed, patterns missing)",
+      "findings": 657,
+      "focus": "Firing Range sessionStorage include property eval/innerHtml + function eval script-include oracles (rules missing from registry array + generic.ts patterns)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/property/documentWrite: 212→216 — sessionstorage-object-property-documentwrite live+route shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/eval: 212→216 — sessionstorage-object-array-eval live+route shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/documentWrite: 212→216 — sessionstorage-object-array-documentwrite live+route shipped",
-      "ginandjuice.shop/catalog?category=1: 13 findings with catalog-category-sqli + search-xss live oracles already present",
-      "testphp.vulnweb.com/showimage.php|redir.php|guestbook.php: unreachable from cloud agent (host down)"
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/eval: 167→219 — sessionstorage-include-property-eval live+route shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/innerHtml: 167→219 — sessionstorage-include-property-innerhtml live+route shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/eval: 172→219 — sessionstorage-include-function-eval live+route shipped",
+      "localStorage include property eval/innerHtml/documentWrite + function documentWrite: still queued (4 routes, 0 route oracles)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "sessionStorage object function eval/innerHtml + array js_html_sanitize_eval + external property eval: rules in registry, patterns still missing in generic.ts",
-      "ginandjuice.shop/order/details?orderId= queued but not yet scanned",
-      "testphp.vulnweb.com unreachable from cloud environment",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "localStorage include property eval/innerHtml/documentWrite + function documentWrite: routes exist, patterns still missing",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles present in generic.ts but not validated this run",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle requires authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/eval": 219,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/property/innerHtml": 219,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/include/function/eval": 219,
     "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/property/documentWrite": 216,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/eval": 216,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/documentWrite": 216,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/property/eval": 213,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/js_html_sanitize_eval": 213,
-    "ginandjuice.shop/catalog?category=1": 13
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/eval": 216
   }
 }
