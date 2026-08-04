@@ -2,6 +2,36 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-subscribe-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/subscribe JSON {email,csrf} returns {\"coupon\":\"9In&JUICE5H0P\",\"email\":\"<canary>\"}; ginandjuice.shop/catalog/subscribe findings 16→27 (+subscribe live+route); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-subscribe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /catalog/subscribe confirms JSON email reflection with coupon; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-product-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /catalog/product?productId=1 stock form POSTs XML to /catalog/product/stock — entity expansion oracle; findings 16→26 (+product-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended /login route oracle to match /my-account + cache-bust login CSRF fetch; ginandjuice.shop/my-account findings 16→22 (+login-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-chat-insecure-output-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/chat returns {\"success\":false,\"error\":{\"message\":\"Not Found\"}} — LLM chat endpoint removed from public brokencrystals.com deploy; deferred"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-admin-delete-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /admin/delete?username=carlos returns Access denied; GET / with X-Original-URL: /admin/delete?username=carlos returns This functionality has been disabled. — FINDING-022; ginandjuice.shop/my-account/delete?username=carlos findings 16→22 (+admin-delete live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
