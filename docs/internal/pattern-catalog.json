@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-04T08:19:56.176Z",
-  "total": 1714,
-  "uniqueSlugs": 1709,
+  "generatedAt": "2026-08-04T15:16:10.298Z",
+  "total": 1718,
+  "uniqueSlugs": 1713,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1696,
+    "generic": 1700,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1629,
+    "deep": 1633,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 5,
     "Server-side request forgery": 47,
-    "Sensitive data exposure": 29,
+    "Sensitive data exposure": 31,
     "AI security": 48,
     "Business logic": 14,
     "Insecure file upload": 2,
@@ -44,7 +44,8 @@
     "Denial of service": 2,
     "Authentication bypass": 2,
     "XSS": 1,
-    "Prompt injection": 2
+    "Prompt injection": 2,
+    "Session management": 2
   },
   "slugs": [
     "agentpwn-attack-route-live-oracle",
@@ -1305,10 +1306,14 @@
     "ginandjuice-home-url-override-route-live-oracle",
     "ginandjuice-login-route-live-oracle",
     "ginandjuice-login-username-reflection-live-oracle",
+    "ginandjuice-logout-route-live-oracle",
+    "ginandjuice-logout-session-regeneration-live-oracle",
     "ginandjuice-order-details-idor-live-oracle",
     "ginandjuice-order-details-idor-route-live-oracle",
     "ginandjuice-stock-xxe-live-oracle",
     "ginandjuice-stock-xxe-route-live-oracle",
+    "ginandjuice-vulnerabilities-credentials-live-oracle",
+    "ginandjuice-vulnerabilities-credentials-route-live-oracle",
     "graphiql-ui-exposed",
     "graphql-endpoint-disclosed-in-docs",
     "graphql-introspection-enabled",

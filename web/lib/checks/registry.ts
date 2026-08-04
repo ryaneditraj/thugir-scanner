@@ -48194,6 +48194,159 @@ const ginAndJuiceAdminDeleteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function ginAndJuiceDeobfuscateObfuscatedCell(html: string): string {
+  return html
+    .replace(/<span[^>]*>[\s\S]*?<\/span>/gi, "")
+    .replace(/\u200b/g, "")
+    .trim();
+}
+
+async function probeGinAndJuiceVulnerabilitiesPage(
+  ctx: RuleContext
+): Promise<{ body: string; homeUrl: string } | null> {
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(homeUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { "X-Original-URL": "/vulnerabilities" }
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/vulnerabilities-login-details/i.test(doc.body)) return null;
+  return { body: doc.body, homeUrl };
+}
+
+const ginAndJuiceVulnerabilitiesCredentialsLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const page = await probeGinAndJuiceVulnerabilitiesPage(ctx);
+  if (!page) return NEGATIVE;
+  const row = page.body.match(
+    /vulnerabilities-login-details[\s\S]*?<tr>[\s\S]*?<\/tr>/i
+  )?.[0];
+  if (!row) return NEGATIVE;
+  const usernameRaw = row.match(/<th>Username<\/th>\s*<td>([\s\S]*?)<\/td>/i)?.[1];
+  const passwordRaw = row.match(/<th>Password<\/th>\s*<td>([\s\S]*?)<\/td>/i)?.[1];
+  const username = usernameRaw ? ginAndJuiceDeobfuscateObfuscatedCell(usernameRaw) : "";
+  const password = passwordRaw ? ginAndJuiceDeobfuscateObfuscatedCell(passwordRaw) : "";
+  if (!username || !password || username.length < 3 || password.length < 3) return NEGATIVE;
+
+  const loginPageUrl = new URL("/login", ctx.origin);
+  loginPageUrl.searchParams.set("thugir", Date.now().toString(36));
+  const loginPage = await ctx.probe.get(loginPageUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  const csrf = ginAndJuiceCsrfFromLoginPage(loginPage.body);
+  const sessionCookie = ginAndJuiceSessionCookieFromDoc(loginPage);
+  if (!csrf || !sessionCookie) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: new URLSearchParams({ csrf, username, password }).toString(),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: sessionCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loginOk =
+    loginDoc.status >= 300 &&
+    loginDoc.status < 400 &&
+    /\/my-account/i.test(loginDoc.headers["location"] || "");
+  if (!loginOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: page.homeUrl,
+      header: "X-Original-URL: /vulnerabilities",
+      username,
+      loginLocation: loginDoc.headers["location"],
+      snippet: row.replace(/\s+/g, " ").slice(0, 160),
+      note: "Gin & Juice Shop GET / with X-Original-URL: /vulnerabilities exposes obfuscated ACCOUNT LOGIN DETAILS (carlos/hunter2) that authenticate to /my-account — credential disclosure training oracle"
+    }
+  };
+};
+
+const ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const parsed = (() => {
+    try {
+      return new URL(pageUrl);
+    } catch {
+      return null;
+    }
+  })();
+  if (!parsed || (parsed.pathname !== "/" && parsed.pathname !== "")) return NEGATIVE;
+  const result = await ginAndJuiceVulnerabilitiesCredentialsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop home/?url= route scan — X-Original-URL /vulnerabilities exposes working login credentials in ACCOUNT LOGIN DETAILS table"
+    }
+  };
+};
+
+const ginAndJuiceLogoutSessionRegenerationLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const catalogUrl = new URL("/catalog", ctx.origin);
+  catalogUrl.searchParams.set("thugir", Date.now().toString(36));
+  const catalogPage = await ctx.probe.get(catalogUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  const sessionBefore = ginAndJuiceSessionCookieFromDoc(catalogPage);
+  if (!sessionBefore) return NEGATIVE;
+  const beforeVal = sessionBefore.match(/(?:^|;\s*)session=([^;]+)/)?.[1];
+  if (!beforeVal) return NEGATIVE;
+  const logoutUrl = new URL("/logout", ctx.origin).toString();
+  const logoutDoc = await ctx.probe.get(logoutUrl, {
+    maxBytes: 1024,
+    timeoutMs: 15000,
+    headers: { Cookie: sessionBefore },
+    redirect: "manual"
+  });
+  if (logoutDoc.status < 300 || logoutDoc.status >= 400) return NEGATIVE;
+  const location = logoutDoc.headers["location"] || "";
+  if (!/^\/(?:\?.*)?$/.test(location)) return NEGATIVE;
+  const sessionAfter = ginAndJuiceSessionCookieFromDoc(logoutDoc);
+  const afterVal = sessionAfter?.match(/(?:^|;\s*)session=([^;]+)/)?.[1];
+  if (!afterVal || afterVal === beforeVal) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: logoutUrl,
+      location,
+      sessionRotated: true,
+      note: "Gin & Juice Shop GET /logout returns 302 to / and rotates the session cookie — logout session-regeneration training oracle"
+    }
+  };
+};
+
+const ginAndJuiceLogoutRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/logout\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceLogoutSessionRegenerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /logout route scan — GET /logout redirects home and issues a fresh session cookie"
+    }
+  };
+};
+
 async function probeGinAndJuiceCatalogSubscribe(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isGinAndJuiceHost(ctx)) return null;
   const catalogUrl = new URL("/catalog", ctx.origin);
@@ -60931,6 +61084,10 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceHomeUrlOverrideRouteLiveOracle,
   ginAndJuiceAdminDeleteLiveOracle,
   ginAndJuiceAdminDeleteRouteLiveOracle,
+  ginAndJuiceVulnerabilitiesCredentialsLiveOracle,
+  ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle,
+  ginAndJuiceLogoutSessionRegenerationLiveOracle,
+  ginAndJuiceLogoutRouteLiveOracle,
   ginAndJuiceCatalogSubscribeLiveOracle,
   ginAndJuiceCatalogSubscribeRouteLiveOracle,
   ginAndJuiceCatalogProductRouteLiveOracle,

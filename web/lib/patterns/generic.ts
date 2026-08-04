@@ -42379,6 +42379,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-vulnerabilities-credentials-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Gin & Juice Shop vulnerabilities credentials live oracle",
+    description:
+      "GET / with X-Original-URL: /vulnerabilities exposes obfuscated ACCOUNT LOGIN DETAILS (carlos/hunter2) that authenticate to /my-account — the PortSwigger Gin & Juice credential disclosure training oracle.",
+    impactOneline:
+      "Hidden credentials exposed via URL override let attackers authenticate as seeded lab users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceVulnerabilitiesCredentialsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed live credentials in training pages and strip URL override headers at the edge.",
+      steps: [
+        "Remove or rotate credentials from /vulnerabilities and similar oracle pages.",
+        "Strip X-Original-URL from untrusted client requests.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities oracle exposes working login credentials via X-Original-URL. Show credential disclosure and header override remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-vulnerabilities-credentials-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Gin & Juice Shop home credentials route live oracle",
+    description:
+      "When scanning ginandjuice.shop/?url=, X-Original-URL: /vulnerabilities exposes working ACCOUNT LOGIN DETAILS — route-specific credential disclosure oracle.",
+    impactOneline:
+      "Home route scans can confirm credential disclosure reachable via request URL override.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove embedded credentials and block URL override headers on public routes.",
+      steps: [
+        "Do not ship live credentials in HTML oracle tables.",
+        "Strip X-Original-URL at the reverse proxy.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our home/?url= route scan confirms credential disclosure via X-Original-URL /vulnerabilities. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-logout-session-regeneration-live-oracle",
+    platform: "generic",
+    category: "Session management",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop logout session regeneration live oracle",
+    description:
+      "GET /logout returns 302 to / and rotates the session cookie instead of explicitly invalidating the prior session — the PortSwigger Gin & Juice logout training oracle.",
+    impactOneline:
+      "Weak logout handling can leave sessions reusable or enable fixation if rotation is predictable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLogoutSessionRegenerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Invalidate server-side sessions on logout and avoid predictable session rotation.",
+      steps: [
+        "Destroy the server-side session record on logout.",
+        "Clear session cookies with Max-Age=0.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /logout endpoint rotates session cookies without explicit invalidation. Show secure logout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-logout-route-live-oracle",
+    platform: "generic",
+    category: "Session management",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /logout route live oracle",
+    description:
+      "When scanning /logout, GET returns 302 to / and issues a fresh session cookie — route-specific logout session-regeneration oracle.",
+    impactOneline:
+      "Route-specific logout scans confirm session rotation behavior on the logout endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLogoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Invalidate sessions on logout rather than only rotating cookies.",
+      steps: [
+        "Destroy server-side session state on logout.",
+        "Clear authentication cookies explicitly.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /logout route scan confirms session cookie rotation. Show route-specific secure logout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-admin-delete-live-oracle",
     platform: "generic",
     category: "Broken access control",
