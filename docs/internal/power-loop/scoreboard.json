@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T02:10:00.000Z",
+  "updated_at": "2026-08-04T02:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1982,
   "discovery_findings": 28759,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-04T02:10:00.000Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-04T02:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -48,44 +48,52 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 — staging fallback 32 findings, stable 6/6 recall"
+      "note": "Stable 6/6 first-pass recall (32 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 84,
-      "focus": "ginandjuice CRLF category + change-email race + logout + pwnshop cart API + vulnbank AI chatbot",
-      "improvements_shipped_this_run": 0
+      "urls_added": 4,
+      "urls_scanned": 4,
+      "findings": 42,
+      "focus": "ginandjuice X-Original-URL admin bypass + Firing Range sessionStorage sanitizer-bypass + external localStorage property eval routes",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "ginandjuice.shop/catalog?category= CRLF probe: 15 findings with category-sqli route oracle — no CRLF Set-Cookie header-injection live oracle (FINDING-023 gap)",
-      "ginandjuice.shop/my-account/change-email: 12 findings — generic ginandjuice hub only, no race-condition email-change live oracle",
-      "ginandjuice.shop/logout: 14 findings — generic hub, no logout/session oracle",
-      "pwnshop.ctfsecurity.com/api/v1/cart: 23 findings — pwnshop hub (debug-info, track-idor, enumeration oracles) — no cart BOLA live oracle",
-      "vulnbank.org/chat: 20 findings — vulnbank hub with client-side evidence — no chatbot prompt-injection live oracle"
+      "ginandjuice.shop/admin: 12→14 findings — ginandjuice-admin-bypass-live-oracle shipped (X-Original-URL: /admin bypasses 403)",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/js_html_sanitize_eval: 219→225 — sessionStorage array/function js_html_sanitize_eval routes added to sanitizer-bypass registry",
+      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/eval: 219→225 — external localStorage property eval live+route oracles shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/documentWrite: 218→225 — documentWrite script-path derivation fixed for array route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "ginandjuice.shop/catalog category CRLF: Set-Cookie header injection oracle absent despite pentest-2026-ginandjuice FINDING-023",
       "ginandjuice.shop/my-account/change-email: race-condition email-claim oracle absent (PortSwigger carlos@ginandjuice.shop admin invite lab)",
-      "pwnshop.ctfsecurity.com/api/v1/cart: cart BOLA / business-logic live oracle absent (23-finding generic hub)",
-      "vulnbank.org/chat: AI chatbot prompt-injection live oracle absent (20-finding hub)",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "testphp.vulnweb.com unreachable from cloud agent egress (3 route oracles errored again)"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent (basic/blocklist/metadata-aws/redirect all 2-3 finding hubs)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
+      "testphp.vulnweb.com unreachable from cloud agent egress"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
+    "ginandjuice.shop/admin": 14,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/js_html_sanitize_eval": 225,
+    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/eval": 225,
+    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/documentWrite": 225,
     "ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true": 15,
     "pwnshop.ctfsecurity.com/api/v1/cart": 23,
     "vulnbank.org/chat": 20,
-    "ginandjuice.shop/logout": 14,
-    "ginandjuice.shop/catalog?category=gin": 13,
     "ginandjuice.shop/order/details?orderId=0254809": 14,
-    "ginandjuice.shop/my-account/change-email": 12,
-    "ginandjuice.shop/blog/post?back=https://evil-open-redirect-probe.example": 12,
-    "ginandjuice.shop/admin": 12
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18,
+    "wrongsecrets.herokuapp.com/challenge/2": 8,
+    "ssrf.vulnlab.dev/basic": 3,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52,
+    "vulnbank.org/api/v2/forgot-password": 19,
+    "pentest-fauxbank.vercel.app/admin": 13
   }
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-04T01:03:20.592Z",
-  "total": 1691,
-  "uniqueSlugs": 1686,
+  "generatedAt": "2026-08-04T02:06:10.293Z",
+  "total": 1695,
+  "uniqueSlugs": 1690,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1673,
+    "generic": 1677,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1606,
+    "deep": 1610,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 315,
+    "Broken access control": 317,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 578,
+    "Cross-site scripting": 580,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -904,6 +904,8 @@
     "firing-range-dom-eventtriggering-window-eval-route-live-oracle",
     "firing-range-dom-eventtriggering-window-innerhtml-live-oracle",
     "firing-range-dom-eventtriggering-window-innerhtml-route-live-oracle",
+    "firing-range-dom-external-localstorage-property-eval-live-oracle",
+    "firing-range-dom-external-localstorage-property-eval-route-live-oracle",
     "firing-range-dom-external-sessionstorage-function-eval-live-oracle",
     "firing-range-dom-external-sessionstorage-function-eval-route-live-oracle",
     "firing-range-dom-form-submission-documentwrite-live-oracle",
@@ -1274,6 +1276,8 @@
     "firing-range-urldom-sink-route-live-oracle",
     "firing-range-vulnerablelibraries-live-oracle",
     "firing-range-vulnerablelibraries-route-live-oracle",
+    "ginandjuice-admin-bypass-live-oracle",
+    "ginandjuice-admin-bypass-route-live-oracle",
     "ginandjuice-blog-post-open-redirect-live-oracle",
     "ginandjuice-blog-post-route-live-oracle",
     "ginandjuice-catalog-category-sqli-live-oracle",
