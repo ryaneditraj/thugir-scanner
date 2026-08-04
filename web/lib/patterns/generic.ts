@@ -41891,7 +41891,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Gin & Juice Shop /login route reflection live oracle",
     description:
-      "When scanning /login, failed POST username is reflected into inline script without escaping — route-specific JavaScript-context XSS oracle.",
+      "When scanning /login or /my-account, failed POST username is reflected into inline script without escaping — route-specific JavaScript-context XSS oracle.",
     impactOneline:
       "Route-specific confirmation that login error pages embed attacker-controlled usernames in script literals.",
     detectorKind: "rule_ref",
@@ -42505,32 +42505,6 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog/product route exposes a stock check form that posts XML to /catalog/product/stock. Show route-specific XXE remediation.",
-    version: 1,
-    enabled: true
-  },
-  {
-    slug: "ginandjuice-my-account-route-live-oracle",
-    platform: "generic",
-    category: "Cross-site scripting",
-    severityDefault: "high",
-    title: "Gin & Juice Shop /my-account login reflection route live oracle",
-    description:
-      "When scanning /my-account, POST /login reflects failed usernames into inline script variables without escaping — route-specific JS-context XSS training oracle.",
-    impactOneline:
-      "Route-specific confirmation that the login flow reflects attacker input into executable JavaScript context.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "ginAndJuiceMyAccountRouteLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "Never reflect user input into inline script blocks — use JSON encoding or separate data attributes.",
-      steps: [
-        "Encode reflected usernames for JavaScript string context or avoid inline scripts entirely.",
-        "Use CSP script-src restrictions to block inline script execution.",
-        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
-      ]
-    },
-    fixPrompt:
-      "Our /my-account route scan confirms login username reflection into inline script. Show route-specific JS-context XSS remediation.",
     version: 1,
     enabled: true
   },

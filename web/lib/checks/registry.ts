@@ -47714,8 +47714,9 @@ function ginAndJuiceSessionCookieFromDoc(doc: { setCookies: string[] }): string 
 
 const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  const loginUrl = new URL("/login", ctx.origin).toString();
-  const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  const loginUrl = new URL("/login", ctx.origin);
+  loginUrl.searchParams.set("thugir", Date.now().toString(36));
+  const loginPage = await ctx.probe.get(loginUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (loginPage.status < 200 || loginPage.status >= 400) return NEGATIVE;
   const csrf = ginAndJuiceCsrfFromLoginPage(loginPage.body);
   const sessionCookie = ginAndJuiceSessionCookieFromDoc(loginPage);
@@ -47726,7 +47727,7 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
     username: canary,
     password: "x"
   }).toString();
-  const doc = await ctx.probe.get(loginUrl, {
+  const doc = await ctx.probe.get(loginUrl.toString(), {
     method: "POST",
     body: postBody,
     headers: {
@@ -47745,7 +47746,7 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: 0.9,
     evidence: {
-      url: loginUrl,
+      url: loginUrl.toString(),
       canary,
       snippet:
         doc.body.match(/var\s+username\s*=[^;]+;/)?.[0]?.slice(0, 160) ??
@@ -47758,7 +47759,7 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:login|my-account)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceLoginUsernameReflectionLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -47767,7 +47768,7 @@ const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Gin & Juice Shop /login route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
+      note: "Gin & Juice Shop /login or /my-account route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
     }
   };
 };
@@ -48195,8 +48196,9 @@ const ginAndJuiceAdminDeleteRouteLiveOracle: Rule = async (ctx) => {
 
 async function probeGinAndJuiceCatalogSubscribe(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isGinAndJuiceHost(ctx)) return null;
-  const catalogUrl = new URL("/catalog", ctx.origin).toString();
-  const catalogPage = await ctx.probe.get(catalogUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  const catalogUrl = new URL("/catalog", ctx.origin);
+  catalogUrl.searchParams.set("thugir", Date.now().toString(36));
+  const catalogPage = await ctx.probe.get(catalogUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (catalogPage.status < 200 || catalogPage.status >= 400) return null;
   const csrf = ginAndJuiceCsrfFromLoginPage(catalogPage.body);
   const sessionCookie = ginAndJuiceSessionCookieFromDoc(catalogPage);
@@ -48270,23 +48272,6 @@ const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /catalog/product route scan — stock check form posts attacker-controlled XML to /catalog/product/stock — XXE training oracle"
-    }
-  };
-};
-
-const ginAndJuiceMyAccountRouteLiveOracle: Rule = async (ctx) => {
-  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/my-account\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await ginAndJuiceLoginUsernameReflectionLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: "Gin & Juice Shop /my-account route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
     }
   };
 };
@@ -60949,7 +60934,6 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogSubscribeLiveOracle,
   ginAndJuiceCatalogSubscribeRouteLiveOracle,
   ginAndJuiceCatalogProductRouteLiveOracle,
-  ginAndJuiceMyAccountRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
