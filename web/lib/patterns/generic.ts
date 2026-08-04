@@ -29515,6 +29515,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-process-numbers-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals process_numbers server-side JS injection live oracle",
+    description:
+      "POST /api/process_numbers evaluates processing_expression JavaScript server-side (7*7 returns 49) — the Broken Crystals server-side code injection oracle.",
+    impactOneline:
+      "User-controlled processing_expression is evaluated as JavaScript on the server, enabling remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProcessNumbersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval() user-supplied expressions — Broken Crystals is intentional lab software.",
+      steps: [
+        "Replace dynamic expression evaluation with a safe DSL or fixed operation allow-list.",
+        "Sandbox or remove server-side JS evaluation entirely.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/process_numbers endpoint evaluates processing_expression as JavaScript. Show server-side code injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-process-numbers-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/process_numbers route live oracle",
+    description:
+      "When scanning /api/process_numbers, POST with processing_expression=7*7 returns 49 — route-specific server-side JS injection confirmation.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals evaluates attacker-controlled JavaScript expressions server-side.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProcessNumbersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval() user-supplied expressions — Broken Crystals is intentional lab software.",
+      steps: [
+        "Replace dynamic expression evaluation with a safe DSL or fixed operation allow-list.",
+        "Sandbox or remove server-side JS evaluation entirely.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/process_numbers route scan confirms server-side JS evaluation. Show route-specific code injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-file-aws-route-live-oracle",
     platform: "generic",
     category: "SSRF",
@@ -41839,7 +41891,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Gin & Juice Shop /login route reflection live oracle",
     description:
-      "When scanning /login, failed POST username is reflected into inline script without escaping — route-specific JavaScript-context XSS oracle.",
+      "When scanning /login or /my-account, failed POST username is reflected into inline script without escaping — route-specific JavaScript-context XSS oracle.",
     impactOneline:
       "Route-specific confirmation that login error pages embed attacker-controlled usernames in script literals.",
     detectorKind: "rule_ref",
@@ -42011,6 +42063,448 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /admin route scan confirms X-Original-URL bypass exposes delete-user functionality. Show route-specific access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-category-crlf-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop catalog category CRLF Set-Cookie injection live oracle",
+    description:
+      "GET /catalog?category= with CRLF in the category value injects attacker-controlled Set-Cookie headers — the PortSwigger Gin & Juice HTTP response splitting training oracle (FINDING-023).",
+    impactOneline:
+      "CRLF injection in response headers enables session fixation, cache poisoning, and HTTP response splitting attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogCategoryCrlfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip CR/LF from user input before writing response headers — Gin & Juice Shop is intentional training software.",
+      steps: [
+        "Reject or encode newline characters in query parameters copied into Set-Cookie.",
+        "Use framework APIs that sanitize header values by default.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog?category= endpoint reflects unsanitized CRLF into Set-Cookie headers. Show HTTP response splitting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-category-crlf-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /catalog category CRLF Set-Cookie route live oracle",
+    description:
+      "When scanning /catalog, CRLF in the category parameter injects forged Set-Cookie headers — route-specific HTTP response splitting / header injection oracle (FINDING-023).",
+    impactOneline:
+      "Route-specific confirmation that catalog category filters are copied unsanitized into response headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogCategoryCrlfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip CR/LF from category values before writing Set-Cookie headers.",
+      steps: [
+        "Reject or encode newline characters in query parameters copied into Set-Cookie.",
+        "Use framework APIs that sanitize header values by default.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog route scan confirms category CRLF injects forged Set-Cookie headers. Show route-specific header injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-prototype-pollution-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop blog prototype pollution DOM XSS live oracle",
+    description:
+      "GET /blog loads deparam.js which parses __proto__[transport_url] into config, and searchLogger.js injects script.src=config.transport_url — the PortSwigger Gin & Juice prototype pollution DOM XSS training oracle (FINDING-016).",
+    impactOneline:
+      "Prototype pollution via __proto__ query parameters can escalate to arbitrary script execution through transport_url gadget sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPrototypePollutionDomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse query parameters into null-prototype objects and block __proto__ keys before merging.",
+      steps: [
+        "Use Object.create(null) for parameter parsing dictionaries.",
+        "Reject __proto__, constructor, and prototype keys in deparam-style parsers.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog deparam.js + searchLogger.js chain enables __proto__[transport_url] DOM XSS. Show prototype pollution remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-prototype-pollution-dom-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /blog prototype pollution DOM XSS route live oracle",
+    description:
+      "When scanning /blog, deparam.js parses __proto__[transport_url] and searchLogger.js injects script.src=config.transport_url — route-specific prototype pollution DOM XSS oracle (FINDING-016).",
+    impactOneline:
+      "Route-specific confirmation that blog search logging enables prototype pollution script gadget execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden deparam parsing on /blog and block transport_url script injection sinks.",
+      steps: [
+        "Use null-prototype objects for URL parameter parsing.",
+        "Remove dynamic script.src assignment from searchLogger transport_url.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog route scan confirms deparam + searchLogger prototype pollution DOM XSS. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-search-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop blog search DOM open-redirect live oracle",
+    description:
+      "GET /blog/?search=&back= uses URLSearchParams(location.search).get('back') in a Back to Blog onclick handler to assign location without validation — the PortSwigger Gin & Juice DOM open-redirect training oracle (FINDING-020).",
+    impactOneline:
+      "DOM-based open redirects on blog search results let attackers phish users via trusted ginandjuice.shop links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogSearchOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate back URLs against an allowlist before client-side navigation on blog search results.",
+      steps: [
+        "Reject external hosts in back query parameters on /blog search pages.",
+        "Use relative paths only for in-app back navigation.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/?search=&back= assigns location from URLSearchParams without validation. Show DOM open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-search-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /blog search open-redirect route live oracle",
+    description:
+      "When scanning /blog, the search results Back to Blog link assigns location from an unvalidated back query parameter — route-specific DOM open-redirect oracle (FINDING-020).",
+    impactOneline:
+      "Route-specific scans should confirm blog search back-navigation cannot redirect to external hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate back URLs on /blog search route handlers and client scripts.",
+      steps: [
+        "Allowlist same-origin paths for blog search back navigation.",
+        "Remove raw location assignment from back query parameters.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog route scan uses an unvalidated back param for search result navigation. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-search-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop blog search DOM XSS live oracle",
+    description:
+      "GET /blog?search= reflects the query into trackSearch() which passes it to document.write() for tracker.gif — the PortSwigger Gin & Juice DOM XSS training oracle.",
+    impactOneline:
+      "DOM XSS via document.write on blog search queries lets attackers execute script in victims' browsers via trusted ginandjuice.shop links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogSearchDomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass URL search parameters to document.write() on blog search pages.",
+      steps: [
+        "Replace document.write tracker calls with safe DOM APIs and encode output.",
+        "Use textContent instead of string concatenation into HTML sinks.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog?search= passes the query to document.write in trackSearch(). Show DOM XSS remediation for blog search tracking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-search-dom-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /blog search DOM XSS route live oracle",
+    description:
+      "When scanning /blog, the search query is reflected into a document.write tracker sink without encoding — route-specific DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm blog search tracking does not pass attacker input to document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogSearchDomXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on /blog search route handlers and client scripts.",
+      steps: [
+        "Audit trackSearch and similar helpers for unsafe HTML sinks.",
+        "Encode or sanitize search parameters before any DOM write.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog route scan confirms search queries reach document.write. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-base64-category-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop catalog base64 category live oracle",
+    description:
+      "GET /catalog?category=R2lu passes base64-encoded category values through to selectedCategory without server-side decode — the PortSwigger Gin & Juice base64 parameter training oracle.",
+    impactOneline:
+      "Accepting base64-encoded parameters without validation can bypass filters and enable injection or logic bugs in category selection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogBase64CategoryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Decode and validate category parameters server-side before rendering client state.",
+      steps: [
+        "Reject or decode base64 category values before passing to client scripts.",
+        "Allowlist valid category names against known product categories.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog?category= accepts base64 values like R2lu without decoding. Show parameter validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-base64-category-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /catalog base64 category route live oracle",
+    description:
+      "When scanning /catalog, base64-encoded category query values are passed to selectedCategory without decoding — route-specific base64 parameter oracle.",
+    impactOneline:
+      "Route-specific scans should confirm category filters reject or decode unexpected base64-encoded values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogBase64CategoryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate category parameters on /catalog route handlers before client rendering.",
+      steps: [
+        "Decode and allowlist category names server-side.",
+        "Do not pass raw query parameters into selectedCategory JavaScript variables.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog route scan confirms base64 category values pass through undecoded. Show route-specific parameter validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-home-url-override-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop home URL override live oracle",
+    description:
+      "GET / with X-Original-URL: /vulnerabilities returns the vulnerabilities oracle table — the PortSwigger Gin & Juice request URL override training oracle.",
+    impactOneline:
+      "Request URL override headers can bypass access controls and route requests to unintended backend handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceHomeUrlOverrideLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore or validate X-Original-URL and similar override headers at the reverse proxy.",
+      steps: [
+        "Strip X-Original-URL from untrusted client requests before they reach the application.",
+        "Use canonical request paths from the server, not override headers.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our app honors X-Original-URL to serve /vulnerabilities from GET /. Show request URL override remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-home-url-override-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop home URL override route live oracle",
+    description:
+      "When scanning the home route, X-Original-URL: /vulnerabilities exposes the vulnerabilities oracle table — route-specific request URL override oracle.",
+    impactOneline:
+      "Route-specific scans should confirm home requests cannot be overridden to internal oracle pages via proxy headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceHomeUrlOverrideRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip override headers on the home route and all public endpoints.",
+      steps: [
+        "Configure reverse proxies to drop X-Original-URL from external requests.",
+        "Audit all routes for header-based path override vulnerabilities.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our home route scan confirms X-Original-URL overrides the request path. Show route-specific URL override remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-admin-delete-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop admin delete X-Original-URL bypass live oracle",
+    description:
+      "GET / with X-Original-URL: /admin/delete?username=carlos bypasses Access denied on /admin/delete and reaches the admin user deletion handler — the PortSwigger Gin & Juice admin deletion training oracle (FINDING-022).",
+    impactOneline:
+      "URL override headers can route privileged delete actions past access controls even when direct admin paths are blocked.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAdminDeleteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-supplied URL override headers and enforce authorization on admin deletion endpoints.",
+      steps: [
+        "Strip or ignore X-Original-URL, X-Rewrite-URL, and similar headers at the edge.",
+        "Enforce authentication and authorization on /admin/delete regardless of how the request was routed.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our admin delete endpoint is reachable via X-Original-URL: /admin/delete?username=carlos on GET /. Show reverse-proxy header bypass remediation for privileged actions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-admin-delete-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/delete admin delete route live oracle",
+    description:
+      "When scanning /my-account/delete, X-Original-URL: /admin/delete?username=carlos bypasses access controls and reaches the admin deletion handler — route-specific FINDING-022 oracle.",
+    impactOneline:
+      "Route-specific confirmation that admin user deletion is reachable via URL override header bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAdminDeleteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip override headers and enforce authorization on admin deletion handlers.",
+      steps: [
+        "Strip or ignore X-Original-URL, X-Rewrite-URL, and similar headers at the edge.",
+        "Enforce authentication and authorization on /admin/delete regardless of how the request was routed.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/delete route scan confirms X-Original-URL bypass reaches admin deletion. Show route-specific access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-subscribe-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop catalog subscribe reflected email live oracle",
+    description:
+      "POST /catalog/subscribe with JSON {email, csrf} echoes the attacker-controlled email in the response alongside a coupon code — the PortSwigger Gin & Juice newsletter subscribe reflected-data training oracle.",
+    impactOneline:
+      "Newsletter subscribe endpoints that reflect unsanitized email values enable reflected XSS when responses are rendered in the DOM.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogSubscribeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject dangerous characters in subscribe API responses before client-side rendering.",
+      steps: [
+        "Never reflect raw user input in JSON fields rendered via innerHTML or document.write.",
+        "Use textContent or strict output encoding for subscribe confirmation UIs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /catalog/subscribe endpoint echoes attacker email in JSON responses. Show reflected XSS remediation for newsletter subscribe APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-subscribe-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /catalog/subscribe route live oracle",
+    description:
+      "When scanning /catalog/subscribe, POST JSON subscribe echoes attacker email with coupon code — route-specific reflected-data oracle.",
+    impactOneline:
+      "Route-specific confirmation that the newsletter subscribe API reflects unsanitized email values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogSubscribeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode subscribe API responses and avoid rendering raw email in the DOM.",
+      steps: [
+        "Never reflect raw user input in JSON fields rendered via innerHTML or document.write.",
+        "Use textContent or strict output encoding for subscribe confirmation UIs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/subscribe route scan confirms email reflection in JSON responses. Show route-specific subscribe XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-product-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /catalog/product stock XXE route live oracle",
+    description:
+      "When scanning /catalog/product, the stock check form posts attacker-controlled XML to /catalog/product/stock — route-specific XXE training oracle.",
+    impactOneline:
+      "Route-specific confirmation that product pages expose client-side XML stock checks vulnerable to entity expansion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogProductRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity processing in XML parsers and validate stock check inputs server-side.",
+      steps: [
+        "Disable DTD and external entity resolution in all XML parsers.",
+        "Reject XML payloads with DOCTYPE declarations at the edge.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/product route exposes a stock check form that posts XML to /catalog/product/stock. Show route-specific XXE remediation.",
     version: 1,
     enabled: true
   },
