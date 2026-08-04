@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T10:08:37.463Z",
+  "updated_at": "2026-08-04T11:14:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/?url=https://evil-open-redirect-probe.example",
+      "source": "PortSwigger ginandjuice.shop vulnerabilities page — request URL override oracle on / root (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/goof/",
+      "source": "OWASP VWAD — Snyk Goof intentionally vulnerable Node.js app registry entry (vwad.owasp.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level2/frame",
+      "source": "Google XSS Game — level 2 stored XSS via postMessage oracle (public CTF demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level3/frame",
+      "source": "Google XSS Game — level 3 DOM XSS via image onerror oracle (public CTF demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level4/frame",
+      "source": "Google XSS Game — level 4 DOM XSS via timer callback oracle (public CTF demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/testimonials/guest",
       "source": "Escape Duck Store vulnerabilities catalog — stored XSS guest testimonial oracle POST /api/v1/testimonials/guest",
