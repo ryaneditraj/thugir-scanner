@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/process_numbers {\"numbers\":[7,7],\"processing_expression\":\"7*7\"} returns 49; brokencrystals.com/api/process_numbers findings 50→52 (+process-numbers live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/process_numbers confirms processing_expression server-side JS eval 7*7=49; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-chat-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/chat/query can reflect <script> in LLM output but probe is non-deterministic across runs — deferred until stable reflection oracle"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-prototype-pollution-dom-xss-live-oracle",
       "status": "shipped",
@@ -18495,9 +18513,14 @@
       "shipped_at": "2026-08-03T23:35:00.000Z"
     },
     {
-      "source": "discovery:public-firing-range.appspot.com",
-      "slug": "firing-range-toxicdom-sessionstorage-object-array-documentwrite-live-oracle",
-      "shipped_at": "2026-08-03T23:35:00.000Z"
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-live-oracle",
+      "shipped_at": "2026-08-04T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-route-live-oracle",
+      "shipped_at": "2026-08-04T05:15:00.000Z"
     }
   ]
 }
