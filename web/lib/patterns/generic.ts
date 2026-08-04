@@ -42015,6 +42015,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-catalog-category-crlf-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop catalog category CRLF Set-Cookie injection live oracle",
+    description:
+      "GET /catalog?category= with CRLF in the category value injects attacker-controlled Set-Cookie headers — the PortSwigger Gin & Juice HTTP response splitting training oracle (FINDING-023).",
+    impactOneline:
+      "CRLF injection in response headers enables session fixation, cache poisoning, and HTTP response splitting attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogCategoryCrlfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip CR/LF from user input before writing response headers — Gin & Juice Shop is intentional training software.",
+      steps: [
+        "Reject or encode newline characters in query parameters copied into Set-Cookie.",
+        "Use framework APIs that sanitize header values by default.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog?category= endpoint reflects unsanitized CRLF into Set-Cookie headers. Show HTTP response splitting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-category-crlf-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /catalog category CRLF Set-Cookie route live oracle",
+    description:
+      "When scanning /catalog, CRLF in the category parameter injects forged Set-Cookie headers — route-specific HTTP response splitting / header injection oracle (FINDING-023).",
+    impactOneline:
+      "Route-specific confirmation that catalog category filters are copied unsanitized into response headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogCategoryCrlfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip CR/LF from category values before writing Set-Cookie headers.",
+      steps: [
+        "Reject or encode newline characters in query parameters copied into Set-Cookie.",
+        "Use framework APIs that sanitize header values by default.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog route scan confirms category CRLF injects forged Set-Cookie headers. Show route-specific header injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-external-localstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
