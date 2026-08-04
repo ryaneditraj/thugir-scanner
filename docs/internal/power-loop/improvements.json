@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-order-details-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /order/details?orderId=0254809 returns Order no 0254809 + Billing address Carlos Montoya + Debit card ****5613 without auth; ginandjuice.shop/order/details findings 11→14 (+order-details-idor live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-localstorage-include-property-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/localStorage/include/property/eval returns Toxic DOM External + script src /dom/toxicdomscripts/include/property/eval; route scan findings 0→224 (+localstorage-include-property eval/innerHtml/documentWrite live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-toxicdom-sessionstorage-object-function-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/object/function/eval loads toxicdomscripts object/function/eval script-include eval() sink; route scan findings 215→223 (+sessionstorage-object-function-eval live+route patterns); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-toxicdom-sessionstorage-include-property-eval-live-oracle",
       "status": "shipped",
