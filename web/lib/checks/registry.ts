@@ -38378,6 +38378,33 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
     sinkRe: /document\.write\s*\(\s*payload\s*\)/i,
     label: "localStorage object array to document.write",
     routeRe: /\/dom\/toxicdom\/localStorage\/object\/array\/documentWrite\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/include/property/eval",
+    scriptPath: "/dom/toxicdomscripts/include/property/eval",
+    scriptSrcRe: /include\/property\/eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage property source to eval()",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/include\/property\/eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/include/property/innerHtml",
+    scriptPath: "/dom/toxicdomscripts/include/property/innerHtml",
+    scriptSrcRe: /include\/property\/innerHtml/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /\.innerHTML\s*=\s*payload/i,
+    label: "sessionStorage property source to innerHTML",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/include\/property\/innerHtml\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/include/function/eval",
+    scriptPath: "/dom/toxicdomscripts/include/function/eval",
+    scriptSrcRe: /include\/function\/eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    sinkRe: /eval\s*\(\s*payload\s*\)/i,
+    label: "sessionStorage function source to eval()",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/include\/function\/eval\b/i
   }
 ] as const;
 
@@ -39053,6 +39080,27 @@ const firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteRouteLiveOracle 
   makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
     30,
     "Google Firing Range /dom/toxicdom/localStorage/object/array/documentWrite route scan — script-include localStorage object array to document.write sink"
+  );
+const firingRangeDomToxicdomSessionstorageIncludePropertyEvalLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(31);
+const firingRangeDomToxicdomSessionstorageIncludePropertyEvalRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    31,
+    "Google Firing Range /dom/toxicdom/sessionStorage/include/property/eval route scan — script-include sessionStorage property to eval() sink"
+  );
+const firingRangeDomToxicdomSessionstorageIncludePropertyInnerhtmlLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(32);
+const firingRangeDomToxicdomSessionstorageIncludePropertyInnerhtmlRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    32,
+    "Google Firing Range /dom/toxicdom/sessionStorage/include/property/innerHtml route scan — script-include sessionStorage property to innerHTML sink"
+  );
+const firingRangeDomToxicdomSessionstorageIncludeFunctionEvalLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeLiveOracle(33);
+const firingRangeDomToxicdomSessionstorageIncludeFunctionEvalRouteLiveOracle =
+  makeFiringRangeToxicdomExternalIncludeRouteLiveOracle(
+    33,
+    "Google Firing Range /dom/toxicdom/sessionStorage/include/function/eval route scan — script-include sessionStorage function to eval() sink"
   );
 
 const FIRING_RANGE_LEAKEDCOOKIE_PATH = "/leakedcookie/leakedcookie";
@@ -59792,6 +59840,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomToxicdomLocalstorageObjectFunctionDocumentwriteRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteLiveOracle,
   firingRangeDomToxicdomLocalstorageObjectArrayDocumentwriteRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageIncludePropertyEvalLiveOracle,
+  firingRangeDomToxicdomSessionstorageIncludePropertyEvalRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageIncludePropertyInnerhtmlLiveOracle,
+  firingRangeDomToxicdomSessionstorageIncludePropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomToxicdomSessionstorageIncludeFunctionEvalLiveOracle,
+  firingRangeDomToxicdomSessionstorageIncludeFunctionEvalRouteLiveOracle,
   firingRangeLeakedcookieHttponlyLiveOracle,
   firingRangeLeakedcookieHttponlyRouteLiveOracle,
   firingRangeMixedContentLiveOracle,
