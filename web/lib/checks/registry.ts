@@ -6372,6 +6372,151 @@ const xssGameLevel3DomXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const xssGameLevel4JsStringXssLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const canary = `thugirXss4${Date.now().toString(36)}`;
+  const probeUrl = new URL("/level4/frame", ctx.origin);
+  probeUrl.searchParams.set("timer", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const onloadRe = new RegExp(
+    `onload\\s*=\\s*["']startTimer\\('${escaped}'\\)["']`,
+    "i"
+  );
+  const messageRe = new RegExp(`Your timer will execute in ${escaped} seconds`, "i");
+  if (!onloadRe.test(doc.body) && !messageRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet:
+        doc.body.match(onloadRe)?.[0]?.slice(0, 160) ??
+        doc.body.match(messageRe)?.[0]?.slice(0, 160),
+      note: "Google XSS game GET /level4/frame?timer= reflects the value inside startTimer('...') on an onload handler — JavaScript string-context XSS training oracle"
+    }
+  };
+};
+
+const xssGameLevel4JsStringXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level4\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel4JsStringXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level4 route scan — timer query parameter flows into startTimer() inside an onload attribute without encoding"
+    }
+  };
+};
+
+const xssGameLevel5JavascriptProtocolXssLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const canary = `thugirXss5${Date.now().toString(36)}`;
+  const signupUrl = new URL("/level5/frame/signup", ctx.origin);
+  signupUrl.searchParams.set("next", canary);
+  const signupDoc = await ctx.probe.get(signupUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (signupDoc.status < 200 || signupDoc.status >= 400) return NEGATIVE;
+  const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const hrefRe = new RegExp(`<a\\s+href\\s*=\\s*["']${escaped}["']`, "i");
+  const signupOk = hrefRe.test(signupDoc.body);
+  const confirmUrl = new URL("/level5/frame/confirm", ctx.origin);
+  confirmUrl.searchParams.set("next", canary);
+  const confirmDoc = await ctx.probe.get(confirmUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  const locationRe = new RegExp(
+    `window\\.location\\s*=\\s*['"]${escaped}['"]`,
+    "i"
+  );
+  const confirmOk =
+    confirmDoc.status >= 200 &&
+    confirmDoc.status < 400 &&
+    locationRe.test(confirmDoc.body);
+  if (!signupOk && !confirmOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: signupOk && confirmOk ? 0.94 : 0.92,
+    evidence: {
+      signupUrl: signupUrl.toString(),
+      confirmUrl: confirmUrl.toString(),
+      canary,
+      snippet: signupOk
+        ? signupDoc.body.match(hrefRe)?.[0]?.slice(0, 160)
+        : confirmDoc.body.match(locationRe)?.[0]?.slice(0, 160),
+      note: signupOk
+        ? "Google XSS game /level5/frame/signup?next= reflects the next parameter unescaped in an <a href> — javascript: protocol XSS training oracle"
+        : "Google XSS game /level5/frame/confirm?next= reflects the next parameter unescaped in window.location — open-redirect / javascript: protocol XSS training oracle"
+    }
+  };
+};
+
+const xssGameLevel5JavascriptProtocolXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level5\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel5JavascriptProtocolXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level5 route scan — next URL parameter is injected into href or window.location without validation"
+    }
+  };
+};
+
+const xssGameLevel6DomScriptSrcXssLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/level6/frame", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasIncludeGadget =
+    /function\s+includeGadget\s*\(\s*url\s*\)/i.test(doc.body) &&
+    /scriptEl\.src\s*=\s*url/i.test(doc.body) &&
+    /url\.match\s*\(\s*\^https?:\/\//i.test(doc.body);
+  const hasHashGadget =
+    /function\s+getGadgetName\s*\(/i.test(doc.body) &&
+    /window\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(doc.body) &&
+    /includeGadget\s*\(\s*getGadgetName\s*\(\s*\)\s*\)/i.test(doc.body);
+  if (!hasIncludeGadget || !hasHashGadget) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        doc.body.match(/includeGadget[\s\S]{0,120}scriptEl\.src\s*=\s*url/i)?.[0]?.slice(0, 160) ??
+        doc.body.match(/getGadgetName[\s\S]{0,80}location\.hash/i)?.[0]?.slice(0, 160),
+      note: "Google XSS game /level6/frame loads location.hash into script.src via includeGadget() with only an http(s) prefix filter — DOM script-src XSS training oracle"
+    }
+  };
+};
+
+const xssGameLevel6DomScriptSrcXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level6\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel6DomScriptSrcXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level6 route scan — location.hash feeds script.src through includeGadget() with a weak http(s) deny filter"
+    }
+  };
+};
+
 // --- Sentinel AI LLM guardrails adversarial test suite (maxwellcalkin.github.io) -----
 const CLIENT_SENTINEL_AI_RES: { label: string; re: RegExp }[] = [
   {
@@ -61425,6 +61570,12 @@ export const RULES: Record<string, Rule> = {
   xssGameLevel2StoredXssRouteLiveOracle,
   xssGameLevel3DomXssLiveOracle,
   xssGameLevel3DomXssRouteLiveOracle,
+  xssGameLevel4JsStringXssLiveOracle,
+  xssGameLevel4JsStringXssRouteLiveOracle,
+  xssGameLevel5JavascriptProtocolXssLiveOracle,
+  xssGameLevel5JavascriptProtocolXssRouteLiveOracle,
+  xssGameLevel6DomScriptSrcXssLiveOracle,
+  xssGameLevel6DomScriptSrcXssRouteLiveOracle,
   clientSideSentinelAiEvidence,
   clientSideNodegoatEvidence,
   nodegoatTutorialA2RouteLiveOracle,
