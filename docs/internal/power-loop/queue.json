@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T06:04:00.000Z",
+  "updated_at": "2026-08-04T08:40:00.000Z",
   "discovery_urls": [
     {
       "url": "https://prompt-injection-demo.vercel.app/chat",
@@ -14708,6 +14708,31 @@
     {
       "url": "https://brokencrystals.com/api/coupons",
       "source": "OWASP Broken Crystals — coupon mass-assignment / business-logic oracle GET /api/coupons (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Coupons",
+      "source": "OWASP Juice Shop demo — coupon manipulation oracle GET /api/Coupons (official demo.owasp-juice.shop README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/ChatBots",
+      "source": "OWASP Juice Shop demo — chatbot LLM proxy oracle GET /api/ChatBots (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/captcha",
+      "source": "OWASP Juice Shop demo — captcha bypass oracle GET /rest/captcha (official demo.owasp-juice.shop companion guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.escape.tech/api/v1/diagnostics/webhook",
+      "source": "Escape.tech Chimera — SSRF webhook tester POST /api/v1/diagnostics/webhook (public demo portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/user/vehicle/2",
+      "source": "OWASP crAPI v2 — API1 BOLA vehicle IDOR oracle GET /identity/api/v2/user/vehicle/:id (APIsec hosted crapi2)",
       "auth": "public_demo"
     }
   ]

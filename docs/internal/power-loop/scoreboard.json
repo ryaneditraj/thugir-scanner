@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T08:10:00.000Z",
+  "updated_at": "2026-08-04T08:50:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2815,
-  "total_findings": 34230,
-  "critical_findings": 57,
+  "total_sites_scanned": 2827,
+  "total_findings": 34272,
+  "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1997,
-  "discovery_findings": 30036,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-04T08:10:00.000Z",
+  "discovery_urls_added": 2002,
+  "discovery_findings": 30020,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-04T08:50:30.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 30,
+      "oracle_findings": 29,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 483,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall on staging fallback (30 findings); no benchmark misses"
+      "note": "Primary Heroku 503/cold-start (8 findings, gap xss+auth_bypass); staging fallback 6/6 recall (29 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "ginandjuice subscribe email reflection + product-route XXE + my-account login-route CSRF cache-bust",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 36,
+      "focus": "demo.owasp-juice.shop/rest/captcha + crapi2 vehicle BOLA; Coupons/ChatBots 503; chimera.escape.tech unreachable",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (30 findings) — no benchmark misses",
-      "ginandjuice.shop/catalog/subscribe: 16→27 findings — subscribe live+route shipped (JSON email reflection + coupon)",
-      "ginandjuice.shop/catalog/product?productId=1: 16→26 findings — catalog-product-route XXE oracle shipped",
-      "ginandjuice.shop/my-account: 16→22 findings — login-route extended for /my-account with CSRF cache-bust fix",
-      "brokencrystals.com/chat: POST /api/chat 404 — insecure-output oracle rejected (endpoint removed)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) after primary Heroku 503",
+      "demo.owasp-juice.shop/rest/captcha: 32 findings — full Juice Shop live-oracle suite when dyno awake",
+      "crapi2.apisec.ai/identity/api/v2/user/vehicle/2: 4 findings — exposed-env-file + misconfig (vehicle BOLA oracle needs auth session)",
+      "demo.owasp-juice.shop/api/Coupons + /api/ChatBots: Heroku 503 — scan blocked",
+      "chimera.escape.tech/api/v1/diagnostics/webhook: host unreachable from cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "juice-shop.herokuapp.com + demo.owasp-juice.shop Heroku 503 during hour — rely on staging fallback",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/chat: LLM insecure-output endpoint 404 on public deploy",
-      "brokencrystals.com/api/fetch: endpoint removed from public demo",
-      "pwnshop.ctfsecurity.com/api/v1/invoices: invoice BOLA API 404 on public deploy",
-      "ginandjuice.shop/register and /forgot-password: routes return 404 on public deploy"
+      "crapi2.apisec.ai/identity/api/v2/user/vehicle/:id — route-specific BOLA live oracle absent without signup JWT",
+      "chimera.escape.tech — entire host unreachable; use chimera.atlascrew.dev queue URLs instead",
+      "demo.owasp-juice.shop/api/Coupons — coupon-manipulation oracle not probed (503 cold start)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 33,
-    "juice-shop-staging.herokuapp.com": 30,
-    "ginandjuice.shop/catalog/subscribe": 27,
-    "ginandjuice.shop/catalog/product?productId=1": 26,
+    "juice-shop-staging.herokuapp.com": 29,
+    "demo.owasp-juice.shop/rest/captcha": 32,
+    "crapi2.apisec.ai/identity/api/v2/user/vehicle/2": 4,
+    "juice-shop.herokuapp.com": 8,
     "ginandjuice.shop/my-account/delete?username=carlos": 22,
-    "ginandjuice.shop/my-account": 22,
-    "ginandjuice.shop/blog?search=test": 24,
-    "brokencrystals.com/chat": 52,
+    "brokencrystals.com/api/coupons": 54,
+    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 52,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pentest-fauxbank.vercel.app/admin": 13
   }
 }
