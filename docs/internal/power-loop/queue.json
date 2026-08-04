@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T20:05:20.196Z",
+  "updated_at": "2026-08-04T21:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://preview.owasp-juice.shop/ftp",
+      "source": "OWASP Juice Shop preview — sensitive file disclosure /ftp directory (juice-shop ZAP baseline report #3454)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/user/whoami",
+      "source": "OWASP Juice Shop preview — JWT whoami broken-access-control oracle GET /rest/user/whoami (preview develop branch)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Cards",
+      "source": "OWASP Juice Shop preview — payment cards BOLA oracle GET /api/Cards (preview.owasp-juice.shop)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Quantitys",
+      "source": "OWASP Juice Shop preview — inventory quantities exposure oracle GET /api/Quantitys (preview develop branch)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/order-history",
+      "source": "OWASP Juice Shop preview — order history BOLA oracle GET /rest/order-history (preview.owasp-juice.shop)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://preview.owasp-juice.shop/rest/memories",
       "source": "OWASP Juice Shop preview — unauthenticated memories IDOR oracle GET /rest/memories (preview.owasp-juice.shop develop branch)",
