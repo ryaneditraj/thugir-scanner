@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T19:05:00.000Z",
+  "updated_at": "2026-08-04T20:05:20.196Z",
   "discovery_urls": [
+    {
+      "url": "https://preview.owasp-juice.shop/rest/memories",
+      "source": "OWASP Juice Shop preview — unauthenticated memories IDOR oracle GET /rest/memories (preview.owasp-juice.shop develop branch)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/basket/1",
+      "source": "OWASP Juice Shop preview — basket BOLA/IDOR oracle GET /rest/basket/1 (preview.owasp-juice.shop develop branch)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Memories",
+      "source": "OWASP Juice Shop preview — unauthenticated memories API oracle GET /api/Memories (preview.owasp-juice.shop)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/admin/application-configuration",
+      "source": "OWASP Juice Shop preview — unauth admin config oracle GET /rest/admin/application-configuration (preview.owasp-juice.shop)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Feedbacks",
+      "source": "OWASP Juice Shop preview — product feedback BOLA oracle GET /api/Feedbacks (preview.owasp-juice.shop develop branch)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://preview.owasp-juice.shop/rest/user/login",
       "source": "OWASP Juice Shop preview — SQLi/auth-bypass login oracle POST /rest/user/login (preview.owasp-juice.shop develop branch)",
