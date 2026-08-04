@@ -42379,6 +42379,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-admin-delete-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop admin delete X-Original-URL bypass live oracle",
+    description:
+      "GET / with X-Original-URL: /admin/delete?username=carlos bypasses Access denied on /admin/delete and reaches the admin user deletion handler — the PortSwigger Gin & Juice admin deletion training oracle (FINDING-022).",
+    impactOneline:
+      "URL override headers can route privileged delete actions past access controls even when direct admin paths are blocked.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAdminDeleteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-supplied URL override headers and enforce authorization on admin deletion endpoints.",
+      steps: [
+        "Strip or ignore X-Original-URL, X-Rewrite-URL, and similar headers at the edge.",
+        "Enforce authentication and authorization on /admin/delete regardless of how the request was routed.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our admin delete endpoint is reachable via X-Original-URL: /admin/delete?username=carlos on GET /. Show reverse-proxy header bypass remediation for privileged actions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-admin-delete-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/delete admin delete route live oracle",
+    description:
+      "When scanning /my-account/delete, X-Original-URL: /admin/delete?username=carlos bypasses access controls and reaches the admin deletion handler — route-specific FINDING-022 oracle.",
+    impactOneline:
+      "Route-specific confirmation that admin user deletion is reachable via URL override header bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAdminDeleteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip override headers and enforce authorization on admin deletion handlers.",
+      steps: [
+        "Strip or ignore X-Original-URL, X-Rewrite-URL, and similar headers at the edge.",
+        "Enforce authentication and authorization on /admin/delete regardless of how the request was routed.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/delete route scan confirms X-Original-URL bypass reaches admin deletion. Show route-specific access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-external-localstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

