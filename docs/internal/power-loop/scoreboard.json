@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T07:20:00.000Z",
+  "updated_at": "2026-08-04T07:40:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2811,
-  "total_findings": 34156,
+  "total_sites_scanned": 2812,
+  "total_findings": 34178,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1997,
-  "discovery_findings": 29962,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-04T07:20:00.000Z",
+  "discovery_findings": 29984,
+  "improvements_shipped": 1169,
+  "last_run": "2026-08-04T07:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
-      "oracle_url": "https://juice-shop.demo.escape.tech",
-      "primary_error": "juice-shop.herokuapp.com + juice-shop-staging.herokuapp.com 503 — Escape.tech fallback",
-      "oracle_findings": 35,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 480,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,45 +48,45 @@
           ]
         }
       },
-      "note": "6/6 recall on Escape.tech oracle (35 findings); Heroku primary+staging dynos unavailable at scan time"
+      "note": "Stable 6/6 recall on primary Heroku (33 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 958,
-      "focus": "vulnweb REST products + firing-range cookie DOM sinks + brokencrystals coupons + angular firing-range queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 22,
+      "focus": "ginandjuice admin-delete X-Original-URL bypass (FINDING-022)",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (35 findings) — no benchmark category misses",
-      "brokencrystals.com/api/coupons: 54 findings — coupon mass-assignment hub (new queue URL)",
-      "public-firing-range cookie/array innerHtml+documentWrite: 224 findings each — DOM XSS sink oracles",
-      "rest.vulnweb.com/api/products/: 4 findings — REST products enumeration oracle",
-      "public-firing-range angular_storage_parse + angular_post_message_parse: 226 findings each (queue drain)",
-      "chimera.escape.tech/* + testphp.vulnweb.com/showimage|redir|guestbook|login.php: unreachable at scan time"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "ginandjuice.shop/my-account/delete?username=carlos: 16→22 findings — ginandjuice-admin-delete live+route shipped (X-Original-URL bypass reaches admin deletion handler)",
+      "brokencrystals.com/api/fetch: endpoint removed (404) — brokencrystals-fetch-route rejected",
+      "pwnshop.ctfsecurity.com/api/v1/invoices: 404 on public deploy — pwnshop-invoices-bola rejected"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com + staging Heroku 503 — Escape.tech fallback required for benchmark oracle",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "testphp.vulnweb.com/login.php unreachable — Acunetix PHP lab intermittently offline",
-      "chimera.escape.tech API routes unreachable — blocks Escape Chimera queue drain",
-      "brokencrystals.com/api/coupons: 54-finding hub without route-specific coupon mass-assignment live oracle"
+      "brokencrystals.com/api/fetch: endpoint removed from public demo — route oracle deferred",
+      "pwnshop.ctfsecurity.com/api/v1/invoices: invoice BOLA API 404 on public deploy",
+      "brokencrystals.com/chat: LLM insecure-output-handling live oracle needs deterministic probe",
+      "ginandjuice.shop/register and /forgot-password: no route-specific live oracles yet"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com": 33,
     "juice-shop.demo.escape.tech": 35,
-    "brokencrystals.com/api/coupons": 54,
-    "public-firing-range.appspot.com/dom/toxicdom/cookie/array/innerHtml": 224,
-    "public-firing-range.appspot.com/dom/toxicdom/cookie/array/documentWrite": 224,
-    "public-firing-range.appspot.com/angular/angular_storage_parse/1.6.0": 226,
-    "public-firing-range.appspot.com/angular/angular_post_message_parse/1.6.0": 226,
-    "rest.vulnweb.com/api/products/": 4,
     "juice-shop-staging.herokuapp.com": 32,
+    "ginandjuice.shop/my-account/delete?username=carlos": 22,
     "ginandjuice.shop/blog?search=test": 24,
+    "ginandjuice.shop/catalog?category=Gin": 23,
+    "ginandjuice.shop/": 20,
+    "brokencrystals.com/api/coupons": 54,
     "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 52,
+    "brokencrystals.com/chat": 52,
+    "pwnshop.ctfsecurity.com/api/v1/invoices": 22,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
     "pentest-fauxbank.vercel.app/admin": 13
   }
 }

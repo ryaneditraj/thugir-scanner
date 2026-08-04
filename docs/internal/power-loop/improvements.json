@@ -2,6 +2,30 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-admin-delete-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin/delete?username=carlos returns Access denied; GET / with X-Original-URL: /admin/delete?username=carlos returns This functionality has been disabled. — FINDING-022; ginandjuice.shop/my-account/delete?username=carlos findings 16→22 (+admin-delete live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-admin-delete-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /my-account/delete confirms X-Original-URL bypass reaches admin deletion handler — FINDING-022; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-fetch-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET/POST /api/fetch returns {\"success\":false,\"error\":{\"message\":\"Not Found\"}} — endpoint removed from brokencrystals.com bundle (no api/fetch in index-BgqCpeGa.js); deferred until endpoint restored"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-invoices-bola-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/invoices returns 404 HTML page on public deploy — invoice list BOLA oracle not reachable without OSS self-host; deferred"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-search-dom-xss-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /blog?search= reflects query into trackSearch() document.write('<img src=\"/resources/images/tracker.gif?searchTerms='+query); ginandjuice.shop/blog?search=test findings 19→24 (+blog-search-dom-xss live+route); benchmark juice-shop-staging.herokuapp.com 32 findings 6/6 maintained"
