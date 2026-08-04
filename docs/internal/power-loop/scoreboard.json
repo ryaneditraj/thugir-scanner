@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T00:14:50.103Z",
+  "updated_at": "2026-08-04T01:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2758,
-  "total_findings": 31226,
+  "total_sites_scanned": 2761,
+  "total_findings": 31683,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 27100,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-04T00:14:50.103Z",
+  "discovery_urls_added": 1972,
+  "discovery_findings": 27557,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-04T01:00:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 32,
@@ -52,38 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 1322,
-      "focus": "ginandjuice category SQLi + order IDOR queue + firing-range referrer/cookie_set/window.name eval routes",
-      "improvements_shipped_this_run": 0
+      "urls_added": 1,
+      "urls_scanned": 3,
+      "findings": 461,
+      "focus": "ginandjuice order IDOR + firing-range localStorage include property + sessionStorage object function eval",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "ginandjuice.shop/catalog?category=gin: 13 findings — ginandjuice-catalog-category-sqli-live-oracle + search-xss + stock-xxe live oracles",
-      "ginandjuice.shop/order/details?orderId=0254809: 11 findings — generic hub only, no route-specific order IDOR live oracle",
-      "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval: 217 findings — firing-range-dom-referrer-eval-route-live-oracle shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/eval: 217 findings — firing-range-dom-cookie-set-eval-route-live-oracle shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/window/name/eval: 217 findings — firing-range-dom-window-name-eval-route-live-oracle shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/{function,array,property}/eval: 215-216 findings — generic hub only, no route-specific object eval live oracles"
+      "ginandjuice.shop/order/details?orderId=0254809: 11→14 findings — ginandjuice-order-details-idor-live-oracle shipped (unauthenticated billing + masked card disclosure)",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/property/eval: 0→224 findings — localstorage-include-property eval/innerHtml/documentWrite live+route oracles shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval: 215→223 findings — sessionstorage-object-function-eval pattern rows shipped (route-specific oracle now fires)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ginandjuice.shop/order/details?orderId=: order IDOR live oracle absent (11-finding hub without route-specific confirmation)",
-      "sessionStorage object function/array/property eval routes: generic firing-range hub oracles only — route-specific eval patterns still missing",
-      "localStorage include property eval/innerHtml/documentWrite + function documentWrite: routes queued, patterns still missing",
+      "localStorage include property innerHtml/documentWrite route-specific oracles may still share generic hub noise on cross-route scans",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
+    "ginandjuice.shop/order/details?orderId=0254809": 14,
     "ginandjuice.shop/catalog?category=gin": 13,
-    "ginandjuice.shop/order/details?orderId=0254809": 11,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/property/eval": 224,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval": 223,
     "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval": 217,
-    "public-firing-range.appspot.com/dom/toxicdom/document/cookie_set/eval": 217,
-    "public-firing-range.appspot.com/dom/toxicdom/window/name/eval": 217,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval": 215,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/eval": 216,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/property/eval": 216
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/eval": 216
   }
 }
