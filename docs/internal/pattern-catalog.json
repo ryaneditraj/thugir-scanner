@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-04T15:16:10.298Z",
-  "total": 1718,
-  "uniqueSlugs": 1713,
+  "generatedAt": "2026-08-04T16:17:50.711Z",
+  "total": 1721,
+  "uniqueSlugs": 1716,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1700,
+    "generic": 1703,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1633,
+    "deep": 1636,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 321,
+    "Broken access control": 322,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 251,
-    "Cross-site scripting": 586,
+    "Cross-site scripting": 588,
     "Open redirect": 11,
     "general": 20,
     "SSRF": 5,
@@ -72,6 +72,8 @@
     "brokencrystals-file-raw-lfi-route-live-oracle",
     "brokencrystals-goto-open-redirect-live-oracle",
     "brokencrystals-hidden-upload-live-oracle",
+    "brokencrystals-home-dom-xss-live-oracle",
+    "brokencrystals-home-dom-xss-route-live-oracle",
     "brokencrystals-jwt-alg-none-live-oracle",
     "brokencrystals-jwt-route-live-oracle",
     "brokencrystals-ldap-injection-live-oracle",
@@ -1659,6 +1661,7 @@
     "vuln-expose-xss-csp-bypass-route-live-oracle",
     "vuln-expose-xss-playground-route-live-oracle",
     "vulnbank-ai-anonymous-chat-live-oracle",
+    "vulnbank-ai-anonymous-chat-route-live-oracle",
     "vulnbank-bill-payments-negative-amount-live-oracle",
     "vulnbank-bopla-register-live-oracle",
     "vulnbank-check-balance-idor-live-oracle",
