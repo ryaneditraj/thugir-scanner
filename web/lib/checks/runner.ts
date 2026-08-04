@@ -1326,6 +1326,8 @@ const DEEP_RULES = new Set<string>([
   "firingRangeDomSessionstorageArrayEvalRouteLiveOracle",
   "firingRangeDomSessionstorageArrayInnerhtmlLiveOracle",
   "firingRangeDomSessionstorageArrayInnerhtmlRouteLiveOracle",
+  "firingRangeDomSessionstorageArrayDocumentwriteLiveOracle",
+  "firingRangeDomSessionstorageArrayDocumentwriteRouteLiveOracle",
   "firingRangeDomInputtypingInnerhtmlLiveOracle",
   "firingRangeDomInputtypingInnerhtmlRouteLiveOracle",
   "firingRangeDomInputtypingEvalLiveOracle",

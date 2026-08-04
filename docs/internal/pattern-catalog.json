@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-04T20:05:39.494Z",
-  "total": 1741,
-  "uniqueSlugs": 1736,
+  "generatedAt": "2026-08-04T21:21:42.923Z",
+  "total": 1745,
+  "uniqueSlugs": 1740,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1723,
+    "generic": 1727,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1656,
+    "deep": 1660,
     "continuous": 0
   },
   "byCategory": {
@@ -25,10 +25,10 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 96,
-    "Security misconfiguration": 141,
+    "Security misconfiguration": 143,
     "Broken authentication": 89,
     "Injection": 251,
-    "Cross-site scripting": 603,
+    "Cross-site scripting": 605,
     "Open redirect": 11,
     "general": 20,
     "SSRF": 7,
@@ -977,6 +977,8 @@
     "firing-range-dom-referrer-eval-route-live-oracle",
     "firing-range-dom-referrer-innerhtml-live-oracle",
     "firing-range-dom-referrer-innerhtml-route-live-oracle",
+    "firing-range-dom-sessionstorage-array-documentwrite-live-oracle",
+    "firing-range-dom-sessionstorage-array-documentwrite-route-live-oracle",
     "firing-range-dom-sessionstorage-array-eval-live-oracle",
     "firing-range-dom-sessionstorage-array-eval-route-live-oracle",
     "firing-range-dom-sessionstorage-array-innerhtml-live-oracle",
@@ -1339,6 +1341,8 @@
     "juice-shop-addresss-bola-route-live-oracle",
     "juice-shop-addresss-id-bola-live-oracle",
     "juice-shop-addresss-id-bola-route-live-oracle",
+    "juice-shop-admin-config-live-oracle",
+    "juice-shop-admin-config-route-live-oracle",
     "juice-shop-basket-idor-live-oracle",
     "juice-shop-basket-idor-route-live-oracle",
     "juice-shop-basket-items-bola-live-oracle",
