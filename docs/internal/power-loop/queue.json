@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T01:04:00.700Z",
+  "updated_at": "2026-08-04T02:04:31.710Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true",
+      "source": "pentest-2026-ginandjuice FINDING-023 — CRLF Set-Cookie header injection via category parameter (PortSwigger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/change-email",
+      "source": "PortSwigger race-conditions lab — email change race to claim carlos@ginandjuice.shop admin invite (ginandjuice.shop public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/logout",
+      "source": "PortSwigger ginandjuice.shop — logout/session termination route (ZAP auth excludePaths oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/cart",
+      "source": "ctfsec/pwnshop — cart BOLA / business-logic oracle GET /api/v1/cart (OSS deploy README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/chat",
+      "source": "Commando-X/vuln-bank — AI banking chatbot prompt-injection entry (vulnbank.org public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/blog/post?back=https://evil-open-redirect-probe.example",
       "source": "PortSwigger ginandjuice.shop — DOM-based open redirect via back parameter chains to javascript: XSS (pentest-2026-ginandjuice FINDING-020)",
