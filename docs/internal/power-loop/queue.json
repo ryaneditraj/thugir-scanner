@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T04:05:00.000Z",
+  "updated_at": "2026-08-04T05:21:09.597Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — SSRF oracle GET /api/fetch url parameter (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/register",
+      "source": "PortSwigger ginandjuice.shop — user registration surface (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/forgot-password",
+      "source": "PortSwigger ginandjuice.shop — password reset / account recovery oracle (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/invoices",
+      "source": "ctfsec/pwnshop — invoice list BOLA oracle GET /api/v1/invoices (OSS deploy README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/delete?username=carlos",
+      "source": "PortSwigger ginandjuice.shop — admin user deletion via X-Original-URL bypass (pentest-2026-ginandjuice FINDING-022)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/chat",
       "source": "NeuraLegion/brokencrystals — LLM insecure output handling oracle POST /chat (public demo)",
