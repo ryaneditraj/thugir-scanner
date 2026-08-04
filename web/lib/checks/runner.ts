@@ -2094,6 +2094,8 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogBase64CategoryRouteLiveOracle",
   "ginAndJuiceHomeUrlOverrideLiveOracle",
   "ginAndJuiceHomeUrlOverrideRouteLiveOracle",
+  "ginAndJuiceAdminDeleteLiveOracle",
+  "ginAndJuiceAdminDeleteRouteLiveOracle",
   "crapi2ShopOrdersAllRouteLiveOracle",
   "crapi2ShopOrdersIdBolaRouteLiveOracle",
   "crapiShopOrdersIdBolaRouteLiveOracle",
