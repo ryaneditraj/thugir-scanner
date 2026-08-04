@@ -18767,6 +18767,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-process-numbers-route-live-oracle",
       "shipped_at": "2026-08-04T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-array-documentwrite-live-oracle",
+      "shipped_at": "2026-08-04T21:35:00.000Z"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-admin-config-live-oracle",
+      "shipped_at": "2026-08-04T21:35:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-mail-poll-reliability",
+      "shipped_at": "2026-08-04T21:35:00.000Z"
     }
   ]
 }

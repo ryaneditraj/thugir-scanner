@@ -1959,6 +1959,8 @@ const DEEP_RULES = new Set<string>([
   "sstiVulnlabSandboxedLiveOracle",
   "sstiVulnlabSandboxedRouteLiveOracle",
   "juiceShopJwtAlgNoneLiveOracle",
+  "juiceShopAdminConfigLiveOracle",
+  "juiceShopAdminConfigRouteLiveOracle",
   "juiceShopLoginSqliLiveOracle",
   "juiceShopLoginRouteLiveOracle",
   "juiceShopChatbotApiLiveOracle",
