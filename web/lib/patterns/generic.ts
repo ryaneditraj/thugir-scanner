@@ -29749,6 +29749,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-home-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals homepage DOM XSS live oracle",
+    description:
+      "Broken Crystals homepage JS bundle reads maptitle into iframe title outerHTML and passes decodeURIComponent(window.location.search) into dangerous-html sinks — enabling DOM XSS via ?maptitle= and arbitrary query params like ?__dummy=.",
+    impactOneline:
+      "DOM XSS via URL parameters on the homepage lets attackers execute scripts in victim browsers through trusted application URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsHomeDomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass raw URL parameters into innerHTML or iframe title attributes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Sanitize or allowlist maptitle values before injecting into iframe title attributes.",
+        "Remove decodeURIComponent(window.location.search) reflection into dangerous-html sinks.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our homepage bundle reflects maptitle and window.location.search into dangerous-html sinks. Show live DOM XSS remediation for URL-driven client-side injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-home-dom-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals homepage DOM XSS route live oracle",
+    description:
+      "When scanning brokencrystals.com/?dummy= or ?maptitle=, the index bundle confirms maptitle iframe title injection and dangerous-html search reflection — route-specific DOM XSS oracle.",
+    impactOneline:
+      "Route-specific homepage scans confirm URL-driven DOM XSS sinks without relying on client-side evidence alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsHomeDomXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize URL parameters before DOM injection on the homepage — Broken Crystals is intentional lab software.",
+      steps: [
+        "Allowlist maptitle values before iframe title injection.",
+        "Stop reflecting raw window.location.search into HTML sinks.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our homepage/?dummy= route scan confirms maptitle and search reflection DOM XSS sinks. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-auth-bypass-api-live-oracle",
     platform: "generic",
     category: "Authentication bypass",
@@ -30187,6 +30239,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/ai/chat/anonymous endpoint accepts unauthenticated LLM chat requests. Show AI endpoint authentication and prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-ai-anonymous-chat-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank /chat unauthenticated AI route live oracle",
+    description:
+      "When scanning vulnbank.org/chat, POST /api/ai/chat/anonymous returns mode:anonymous LLM responses with a no-authentication warning — route-specific AI customer-support oracle.",
+    impactOneline:
+      "Route-specific /chat scans confirm unauthenticated AI banking support is reachable without logging in.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiAnonymousChatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on AI chat routes exposed from /chat — Vuln Bank is intentional training software.",
+      steps: [
+        "Authenticate all AI chat routes and bind sessions to verified customer accounts.",
+        "Apply prompt-injection guardrails and block sensitive data retrieval without authorization.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /chat route scan confirms unauthenticated POST /api/ai/chat/anonymous returns LLM responses. Show route-specific AI endpoint hardening.",
     version: 1,
     enabled: true
   },
