@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-03T23:12:41.624Z",
-  "total": 1675,
-  "uniqueSlugs": 1670,
+  "generatedAt": "2026-08-04T00:04:19.016Z",
+  "total": 1681,
+  "uniqueSlugs": 1676,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1657,
+    "generic": 1663,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1590,
+    "deep": 1596,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 244,
-    "Cross-site scripting": 564,
+    "Cross-site scripting": 570,
     "Open redirect": 9,
     "general": 20,
     "SSRF": 5,
@@ -1181,10 +1181,16 @@
     "firing-range-toxicdom-sessionstorage-include-array-innerhtml-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-function-documentwrite-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-function-documentwrite-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-function-eval-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-function-eval-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-function-innerhtml-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-function-innerhtml-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-property-documentwrite-live-oracle",
     "firing-range-toxicdom-sessionstorage-include-property-documentwrite-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-property-eval-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-property-eval-route-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-property-innerhtml-live-oracle",
+    "firing-range-toxicdom-sessionstorage-include-property-innerhtml-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-array-documentwrite-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-array-documentwrite-route-live-oracle",
     "firing-range-toxicdom-sessionstorage-object-array-eval-live-oracle",
