@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T20:03:57.017Z",
+  "updated_at": "2026-08-04T20:15:55.613Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2836,
-  "total_findings": 33468,
+  "total_sites_scanned": 2841,
+  "total_findings": 33642,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2012,
-  "discovery_findings": 29403,
+  "discovery_urls_added": 2017,
+  "discovery_findings": 29577,
   "improvements_shipped": 1161,
-  "last_run": "2026-08-04T20:03:57.017Z",
+  "last_run": "2026-08-04T20:15:55.613Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 463,
+      "probes_run": 486,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (34 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 recall (32 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 22,
-      "focus": "xss-game.appspot.com level4/5/6 frame oracles — JS string, javascript: protocol, DOM script.src sinks",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 174,
+      "focus": "preview.owasp-juice.shop develop-branch route oracles — /rest/memories + /rest/basket/1 + /api/Memories + /rest/admin/application-configuration + /api/Feedbacks",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
-      "xss-game.appspot.com/level4/frame: 1→7 findings — xss-game-level4-js-string-xss-live-oracle shipped (timer→startTimer onload)",
-      "xss-game.appspot.com/level5/frame: 1→7 findings — xss-game-level5-javascript-protocol-xss-live-oracle shipped (next→href/window.location)",
-      "xss-game.appspot.com/level6/frame: 1→8 findings — xss-game-level6-dom-script-src-xss-live-oracle shipped (hash→script.src includeGadget)",
-      "preview.owasp-juice.shop/rest/user/login: 33 findings — full juice-shop live-oracle suite on develop preview",
-      "pwnshop.ctfsecurity.com/debug/info: 37 findings — pwnshop-debug-info-live-oracle confirmed (PWN-018)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
+      "preview.owasp-juice.shop/rest/memories: 35 findings — full juice-shop live-oracle suite on develop preview",
+      "preview.owasp-juice.shop/rest/basket/1: 35 findings — basket BOLA/IDOR oracle on develop preview",
+      "preview.owasp-juice.shop/api/Memories: 35 findings — unauthenticated memories API exposure on develop preview",
+      "preview.owasp-juice.shop/rest/admin/application-configuration: 34 findings — unauth admin config oracle on develop preview",
+      "preview.owasp-juice.shop/api/Feedbacks: 35 findings — product feedback BOLA oracle on develop preview"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "chimera.atlascrew.dev API routes return GitHub Pages 404 — lab instance offline",
+      "testphp.vulnweb.com: unreachable from cloud agent egress (3 queue drain errors)",
       "pwnshop.ctfsecurity.com/product/1: PWN-011 stored XSS via POST /review oracle still absent without authenticated session",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-category-bypass oracle still absent without authenticated session",
       "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 34,
-    "xss-game.appspot.com/level4/frame": 7,
-    "xss-game.appspot.com/level5/frame": 7,
-    "xss-game.appspot.com/level6/frame": 8,
-    "xss-game.appspot.com/level1/frame": 6,
-    "pwnshop.ctfsecurity.com/debug/info": 37,
+    "juice-shop-staging.herokuapp.com": 32,
+    "preview.owasp-juice.shop/rest/memories": 35,
+    "preview.owasp-juice.shop/rest/basket/1": 35,
+    "preview.owasp-juice.shop/api/Memories": 35,
+    "preview.owasp-juice.shop/rest/admin/application-configuration": 34,
+    "preview.owasp-juice.shop/api/Feedbacks": 35,
     "preview.owasp-juice.shop/rest/user/login": 33,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "pwnshop.ctfsecurity.com/debug/info": 37
   }
 }
