@@ -14684,6 +14684,31 @@
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval",
       "source": "google/firing-range — sessionStorage function to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/login.php",
+      "source": "Acunetix testphp.vulnweb.com — SQLi/auth-bypass login oracle POST /login.php (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/api/products/",
+      "source": "Invicti rest.vulnweb.com — unauthenticated products API enumeration oracle GET /api/products/ (vulnweb REST lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/cookie/array/innerHtml",
+      "source": "google/firing-range — cookie array to innerHTML DOM XSS sink (/dom/toxicdom/cookie/array/innerHtml)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/cookie/array/documentWrite",
+      "source": "google/firing-range — cookie array to document.write DOM XSS sink (/dom/toxicdom/cookie/array/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/coupons",
+      "source": "OWASP Broken Crystals — coupon mass-assignment / business-logic oracle GET /api/coupons (public demo)",
+      "auth": "public_demo"
     }
   ]
 }
