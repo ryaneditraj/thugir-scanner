@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-home-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: index bundle confirms get('maptitle') + outerHTML iframe title injection and decodeURIComponent(window.location.search) → dangerous-html; brokencrystals.com/?dummy=thugir-dom-xss-probe findings 55→58 (+home-dom-xss live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-home-dom-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /?dummy= confirms maptitle iframe + dangerous-html search reflection DOM XSS sinks; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-ai-anonymous-chat-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /chat confirms POST /api/ai/chat/anonymous returns mode:anonymous status:success with no-auth warning; vulnbank.org/chat findings 20→21; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-vulnerabilities-credentials-live-oracle",
       "status": "shipped",
