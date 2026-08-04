@@ -28379,8 +28379,8 @@ async function pwnshopOtpFromMailInbox(
 ): Promise<string | null> {
   const mailUrl = new URL(`/mail/${inboxToken}`, ctx.origin).toString();
   // OTP mail can arrive after login redirect — poll with fetchDoc (bypasses probe cache on retries).
-  for (let attempt = 0; attempt < 12; attempt++) {
-    if (attempt > 0) await pwnshopSleep(1800);
+  for (let attempt = 0; attempt < 15; attempt++) {
+    if (attempt > 0) await pwnshopSleep(attempt < 5 ? 1200 : 1800);
     const doc = await fetchDoc(mailUrl, {
       maxBytes: 65536,
       timeoutMs: 15000,
@@ -28398,10 +28398,11 @@ const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>
 
 async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
-  for (let attempt = 0; attempt < 3; attempt++) {
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500];
+  for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
-    await pwnshopSleep(attempt === 0 ? 900 : attempt === 1 ? 1500 : 2200);
+    await pwnshopSleep(OTP_MAIL_WAITS_MS[attempt]);
     const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
     if (!inboxToken) continue;
     const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
@@ -42597,6 +42598,33 @@ const firingRangeDomSessionstorageArrayInnerhtmlRouteLiveOracle: Rule = async (c
   };
 };
 
+const firingRangeDomSessionstorageArrayDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/sessionStorage/array/documentWrite",
+    /sessionStorage\s*\[\s*['"]badValue['"]\s*\]/i,
+    "sessionStorage['badValue']"
+  );
+};
+
+const firingRangeDomSessionstorageArrayDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/sessionStorage\/array\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomSessionstorageArrayDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/sessionStorage/array/documentWrite route scan — sessionStorage['badValue'] passed to document.write() without sanitization"
+    }
+  };
+};
+
 async function probeFiringRangeInputTypingSink(
   ctx: RuleContext,
   probePath: string,
@@ -50841,6 +50869,46 @@ const sstiVulnlabSandboxedRouteLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: result.confidence,
     evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const juiceShopAdminConfigLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/admin/application-configuration", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const configOk =
+    /"config"\s*:\s*\{/.test(doc.body) &&
+    /"application"\s*:\s*\{/.test(doc.body) &&
+    /"name"\s*:\s*"OWASP Juice Shop"/i.test(doc.body) &&
+    /"server"\s*:\s*\{/.test(doc.body);
+  if (!configOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Juice Shop GET /rest/admin/application-configuration without auth returns full application config JSON — admin configuration disclosure oracle"
+    }
+  };
+};
+
+const juiceShopAdminConfigRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/admin\/application-configuration\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopAdminConfigLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/admin/application-configuration route scan — unauthenticated admin config JSON exposed — route-specific misconfig oracle"
+    }
   };
 };
 
@@ -60877,6 +60945,8 @@ export const RULES: Record<string, Rule> = {
   sstiVulnlabSandboxedLiveOracle,
   sstiVulnlabSandboxedRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
+  juiceShopAdminConfigLiveOracle,
+  juiceShopAdminConfigRouteLiveOracle,
   juiceShopLoginSqliLiveOracle,
   juiceShopLoginRouteLiveOracle,
   juiceShopChatbotApiLiveOracle,
@@ -61320,6 +61390,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomSessionstorageArrayEvalRouteLiveOracle,
   firingRangeDomSessionstorageArrayInnerhtmlLiveOracle,
   firingRangeDomSessionstorageArrayInnerhtmlRouteLiveOracle,
+  firingRangeDomSessionstorageArrayDocumentwriteLiveOracle,
+  firingRangeDomSessionstorageArrayDocumentwriteRouteLiveOracle,
   firingRangeDomInputtypingInnerhtmlLiveOracle,
   firingRangeDomInputtypingInnerhtmlRouteLiveOracle,
   firingRangeDomInputtypingEvalLiveOracle,
