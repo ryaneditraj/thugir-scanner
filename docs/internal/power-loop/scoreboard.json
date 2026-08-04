@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T10:10:00.000Z",
+  "updated_at": "2026-08-04T11:22:53.799Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2840,
-  "total_findings": 34529,
+  "total_sites_scanned": 2846,
+  "total_findings": 34573,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2012,
-  "discovery_findings": 30198,
+  "discovery_urls_added": 2017,
+  "discovery_findings": 30230,
   "improvements_shipped": 1161,
-  "last_run": "2026-08-04T10:10:00.000Z",
+  "last_run": "2026-08-04T11:22:53.799Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 29,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 477,
+      "probes_run": 403,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,41 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 recall (29 findings); reflexion-escalated-ssti added vs prior run"
+      "note": "Primary oracle healthy 6/6 recall (12 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 5,
-      "findings": 93,
-      "focus": "duck-store guest stored-XSS oracle + Chimera healthcare/transactions/insurance SQLi routes + brokencrystals marketplace prototype pollution",
+      "findings": 32,
+      "focus": "ginandjuice home URL-override oracle + OWASP VWAD Goof registry + Google XSS Game levels 2-4",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (29 findings) — primary Heroku dyno 503",
-      "duck-store.escape.tech/api/v1/testimonials/guest: 24 findings — duck-store-testimonials-stored-xss-live-oracle on guest POST route",
-      "brokencrystals.com/api/marketplace: 54 findings — brokencrystals-marketplace-prototype-pollution-live-oracle + route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/healthcare/records: 5-finding generic hub — no second-order SQLi live oracle",
-      "chimera.atlascrew.dev/api/v1/transactions/history: 5-finding hub — no time-based blind SQLi live oracle",
-      "chimera.atlascrew.dev/api/v1/insurance/policies/lookup: 5-finding hub — no blind boolean SQLi live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
+      "ginandjuice.shop/?url=evil-open-redirect-probe.example: 24 findings — ginandjuice-home-url-override-route-live-oracle confirmed",
+      "vwad.owasp.org/app/goof/: 5-finding generic hub — OWASP VWAD registry page without Goof app-specific live oracles",
+      "xss-game.appspot.com/level2/frame: 1 finding — missing-security-headers only, no stored-XSS postMessage live oracle",
+      "xss-game.appspot.com/level3/frame: 1 finding — missing-security-headers only, no DOM-XSS image onerror live oracle",
+      "xss-game.appspot.com/level4/frame: 1 finding — missing-security-headers only, no DOM-XSS timer callback live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "chimera.atlascrew.dev healthcare/records + transactions/history + insurance/policies/lookup: 5-finding route hubs without route-specific SQLi live oracles",
-      "chimera.escape.tech: host unreachable from cloud agent egress (queue drain errors persist)"
+      "xss-game.appspot.com level2-4: route-specific stored/DOM XSS live oracles absent (1-finding header-only hubs)",
+      "vwad.owasp.org/app/goof/: registry landing page — no Snyk Goof app-specific vulnerability oracles",
+      "chimera.escape.tech: host unreachable from cloud agent egress (3 queue drain errors)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 29,
+    "juice-shop.herokuapp.com": 12,
+    "ginandjuice.shop/?url=https://evil-open-redirect-probe.example": 24,
+    "vwad.owasp.org/app/goof/": 5,
+    "xss-game.appspot.com/level2/frame": 1,
+    "xss-game.appspot.com/level3/frame": 1,
+    "xss-game.appspot.com/level4/frame": 1,
     "brokencrystals.com/api/marketplace": 54,
     "duck-store.escape.tech/api/v1/testimonials/guest": 24,
-    "brokencrystals.com/api/products?from=1970-01-01&to=2099-12-31": 55,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pentest-fauxbank.vercel.app/admin": 13,
-    "chimera.atlascrew.dev/api/v1/healthcare/records": 5
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
