@@ -47660,6 +47660,48 @@ const ginAndJuiceCatalogCategorySqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceCatalogCategoryCrlfLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const canary = `thugirCrlf${Date.now().toString(36)}`;
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("category", `thugir\r\nSet-Cookie: ${canary}=1`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const injected = doc.setCookies.some((c) =>
+    new RegExp(`^${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}=1(?:;|$)`, "i").test(c.trim())
+  );
+  if (!injected) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      setCookie: doc.setCookies
+        .filter((c) => new RegExp(canary, "i").test(c))
+        .map((c) => c.slice(0, 120)),
+      note: "Gin & Juice Shop GET /catalog?category= with CRLF injects attacker-controlled Set-Cookie headers — HTTP response splitting / header injection training oracle (FINDING-023)"
+    }
+  };
+};
+
+const ginAndJuiceCatalogCategoryCrlfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogCategoryCrlfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — category parameter CRLF injects forged Set-Cookie response headers — header injection training oracle (FINDING-023)"
+    }
+  };
+};
+
 function ginAndJuiceCsrfFromLoginPage(body: string): string | null {
   const m = body.match(/name="csrf"\s+value="([^"]+)"/i);
   return m?.[1] ?? null;
@@ -47672,8 +47714,9 @@ function ginAndJuiceSessionCookieFromDoc(doc: { setCookies: string[] }): string 
 
 const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  const loginUrl = new URL("/login", ctx.origin).toString();
-  const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  const loginUrl = new URL("/login", ctx.origin);
+  loginUrl.searchParams.set("thugir", Date.now().toString(36));
+  const loginPage = await ctx.probe.get(loginUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (loginPage.status < 200 || loginPage.status >= 400) return NEGATIVE;
   const csrf = ginAndJuiceCsrfFromLoginPage(loginPage.body);
   const sessionCookie = ginAndJuiceSessionCookieFromDoc(loginPage);
@@ -47684,7 +47727,7 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
     username: canary,
     password: "x"
   }).toString();
-  const doc = await ctx.probe.get(loginUrl, {
+  const doc = await ctx.probe.get(loginUrl.toString(), {
     method: "POST",
     body: postBody,
     headers: {
@@ -47703,7 +47746,7 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: 0.9,
     evidence: {
-      url: loginUrl,
+      url: loginUrl.toString(),
       canary,
       snippet:
         doc.body.match(/var\s+username\s*=[^;]+;/)?.[0]?.slice(0, 160) ??
@@ -47716,7 +47759,7 @@ const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:login|my-account)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceLoginUsernameReflectionLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -47725,7 +47768,7 @@ const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Gin & Juice Shop /login route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
+      note: "Gin & Juice Shop /login or /my-account route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
     }
   };
 };
@@ -47873,6 +47916,362 @@ const ginAndJuiceAdminBypassRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /admin route scan — X-Original-URL header bypasses access control and exposes admin delete-user functionality"
+    }
+  };
+};
+
+const ginAndJuiceBlogPrototypePollutionDomXssLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const blogUrl = new URL("/blog", ctx.origin).toString();
+  const doc = await ctx.probe.get(blogUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/deparam\.js/i.test(doc.body) || !/searchLogger\.js/i.test(doc.body)) return NEGATIVE;
+
+  const loggerUrl = new URL("/resources/js/searchLogger.js", ctx.origin).toString();
+  const loggerDoc = await ctx.probe.get(loggerUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (loggerDoc.status < 200 || loggerDoc.status >= 400) return NEGATIVE;
+  const hasTransportUrlSink =
+    /config\.transport_url/i.test(loggerDoc.body) &&
+    /createElement\s*\(\s*['"]script['"]\s*\)/i.test(loggerDoc.body) &&
+    /script\.src\s*=\s*config\.transport_url/i.test(loggerDoc.body);
+  if (!hasTransportUrlSink) return NEGATIVE;
+
+  const deparamUrl = new URL("/resources/js/deparam.js", ctx.origin).toString();
+  const deparamDoc = await ctx.probe.get(deparamUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (deparamDoc.status < 200 || deparamDoc.status >= 400) return NEGATIVE;
+  const deparamVulnerable =
+    /obj\[key\]\s*=\s*val/i.test(deparamDoc.body) &&
+    !/Object\.create\s*\(\s*null\s*\)/i.test(deparamDoc.body);
+  if (!deparamVulnerable) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: blogUrl,
+      deparamUrl,
+      loggerUrl,
+      snippet: loggerDoc.body.match(/transport_url[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop /blog deparam.js parses __proto__[transport_url] into config and searchLogger.js injects script.src=config.transport_url — prototype pollution DOM XSS training oracle (FINDING-016)"
+    }
+  };
+};
+
+const ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogPrototypePollutionDomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog route scan — deparam.js + searchLogger.js chain enables __proto__[transport_url] prototype pollution DOM XSS (FINDING-016)"
+    }
+  };
+};
+
+const ginAndJuiceBlogSearchOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeHost = "evil-open-redirect-probe.example";
+  const probeUrl = new URL("/blog/", ctx.origin);
+  probeUrl.searchParams.set("search", "test");
+  probeUrl.searchParams.set("back", `https://${probeHost}/`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasBackHandler =
+    /location\s*=\s*new URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(
+      doc.body
+    );
+  if (!hasBackHandler) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      probeHost,
+      snippet: doc.body.match(/location\s*=\s*new URLSearchParams[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop /blog/?search=&back= assigns location from URLSearchParams back query param without validation — DOM open-redirect training oracle (FINDING-020)"
+    }
+  };
+};
+
+const ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogSearchOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog route scan — search results back link assigns location from unvalidated back query param (FINDING-020)"
+    }
+  };
+};
+
+const ginAndJuiceBlogSearchDomXssLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const canary = `thugirBlogDomXss${Date.now().toString(36)}`;
+  const probeUrl = new URL("/blog", ctx.origin);
+  probeUrl.searchParams.set("search", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasDocumentWriteSink =
+    /function\s+trackSearch\s*\(\s*query\s*\)/i.test(doc.body) &&
+    /document\.write\s*\(\s*['"]<img[\s\S]{0,120}tracker\.gif\?searchTerms=['"]\s*\+\s*query/i.test(
+      doc.body
+    );
+  if (!hasDocumentWriteSink) return NEGATIVE;
+  const reflectedInput = new RegExp(
+    `name\\s*=\\s*search\\s+value\\s*=\\s*["']${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`,
+    "i"
+  );
+  if (!reflectedInput.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet:
+        doc.body.match(/document\.write\s*\([^)]*tracker\.gif[^)]*\)/i)?.[0]?.slice(0, 160) ??
+        doc.body.match(new RegExp(`value\\s*=\\s*["']${canary}["']`))?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET /blog?search= reflects the query into trackSearch() which passes it to document.write() for tracker.gif — DOM XSS training oracle"
+    }
+  };
+};
+
+const ginAndJuiceBlogSearchDomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogSearchDomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog route scan — search query reflected into document.write tracker sink without encoding"
+    }
+  };
+};
+
+const ginAndJuiceCatalogBase64CategoryLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const encodedCategory = Buffer.from("Gin", "utf8").toString("base64");
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("category", encodedCategory);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hiddenMatch = doc.body.match(/name\s*=\s*["']category["'][^>]*value\s*=\s*["']([^"']+)["']/i);
+  const selectedMatch = doc.body.match(/const\s+selectedCategory\s*=\s*["']([^"']+)["']/);
+  const encodedValue = hiddenMatch?.[1] ?? selectedMatch?.[1];
+  if (!encodedValue || encodedValue !== encodedCategory) return NEGATIVE;
+  if (encodedValue === "Gin") return NEGATIVE;
+  const hasPlainGinCategory = /"Gin"\s*:\s*"\/catalog\?category=Gin"/i.test(doc.body);
+  if (!hasPlainGinCategory) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      encodedCategory,
+      selectedCategory: encodedValue,
+      snippet: selectedMatch?.[0]?.slice(0, 120) ?? hiddenMatch?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET /catalog?category=R2lu passes base64 category through to selectedCategory without server-side decode — base64-encoded parameter training oracle"
+    }
+  };
+};
+
+const ginAndJuiceCatalogBase64CategoryRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogBase64CategoryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — category filter accepts base64-encoded values without decoding before client-side selection"
+    }
+  };
+};
+
+const ginAndJuiceHomeUrlOverrideLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(homeUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { "X-Original-URL": "/vulnerabilities" }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/id\s*=\s*["']vulnerabilities-content["']/i.test(doc.body)) return NEGATIVE;
+  if (!/vulnerabilities-path-details|VULNERABILITIES/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: homeUrl,
+      header: "X-Original-URL: /vulnerabilities",
+      snippet: doc.body.match(/vulnerabilities-path-details[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop GET / with X-Original-URL: /vulnerabilities returns the vulnerabilities oracle table — request URL override training oracle"
+    }
+  };
+};
+
+const ginAndJuiceHomeUrlOverrideRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/^https?:\/\/[^/]+\/?(?:\?.*)?$/i.test(pageUrl) && !/\/(?:index\.html)?$/i.test(pageUrl))
+    return NEGATIVE;
+  const parsed = new URL(pageUrl);
+  if (parsed.pathname !== "/" && parsed.pathname !== "") return NEGATIVE;
+  const result = await ginAndJuiceHomeUrlOverrideLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop home route scan — X-Original-URL header overrides request path to expose /vulnerabilities oracle content"
+    }
+  };
+};
+
+const ginAndJuiceAdminDeleteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const directUrl = new URL("/admin/delete?username=carlos", ctx.origin).toString();
+  const blocked = await ctx.probe.get(directUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (!/Access denied/i.test(blocked.body) && blocked.status !== 403) return NEGATIVE;
+  const bypassUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(bypassUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { "X-Original-URL": "/admin/delete?username=carlos" }
+  });
+  if (!/This functionality has been disabled/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: bypassUrl,
+      header: "X-Original-URL: /admin/delete?username=carlos",
+      directStatus: blocked.status,
+      snippet: doc.body.trim().slice(0, 120),
+      note: "Gin & Juice Shop GET / with X-Original-URL: /admin/delete?username=carlos bypasses Access denied on /admin/delete and reaches the admin deletion handler — FINDING-022 admin delete URL override oracle"
+    }
+  };
+};
+
+const ginAndJuiceAdminDeleteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:my-account\/delete|admin\/delete)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceAdminDeleteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /my-account/delete route scan — X-Original-URL bypass reaches admin user deletion handler (FINDING-022)"
+    }
+  };
+};
+
+async function probeGinAndJuiceCatalogSubscribe(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const catalogUrl = new URL("/catalog", ctx.origin);
+  catalogUrl.searchParams.set("thugir", Date.now().toString(36));
+  const catalogPage = await ctx.probe.get(catalogUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (catalogPage.status < 200 || catalogPage.status >= 400) return null;
+  const csrf = ginAndJuiceCsrfFromLoginPage(catalogPage.body);
+  const sessionCookie = ginAndJuiceSessionCookieFromDoc(catalogPage);
+  if (!csrf || !sessionCookie) return null;
+  const canary = `thugirSub${Date.now().toString(36)}@probe.example`;
+  const subscribeUrl = new URL("/catalog/subscribe", ctx.origin).toString();
+  const postBody = JSON.stringify({ email: canary, csrf });
+  const doc = await ctx.probe.get(subscribeUrl, {
+    method: "POST",
+    body: postBody,
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Cookie: sessionCookie
+    },
+    maxBytes: 1024,
+    timeoutMs: 15000
+  });
+  if (doc.status !== 200) return null;
+  let parsed: { email?: string; coupon?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { email?: string; coupon?: string };
+  } catch {
+    return null;
+  }
+  if (parsed.email !== canary || !parsed.coupon) return null;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: subscribeUrl,
+      canary,
+      coupon: parsed.coupon,
+      snippet: doc.body.slice(0, 120),
+      note: "Gin & Juice Shop POST /catalog/subscribe echoes attacker-controlled email in JSON response with coupon code — newsletter subscribe reflected-data oracle"
+    }
+  };
+}
+
+const ginAndJuiceCatalogSubscribeLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceCatalogSubscribe(ctx);
+  return result ?? NEGATIVE;
+};
+
+const ginAndJuiceCatalogSubscribeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\/subscribe\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeGinAndJuiceCatalogSubscribe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog/subscribe route scan — JSON subscribe endpoint reflects email and returns coupon without sanitization"
+    }
+  };
+};
+
+const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\/product\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceStockXxeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog/product route scan — stock check form posts attacker-controlled XML to /catalog/product/stock — XXE training oracle"
     }
   };
 };
@@ -55815,6 +56214,28 @@ const brokencrystalsMcpRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsProcessNumbersLiveOracle: Rule = async (ctx) => {
+  const result = await probeBrokencrystalsProcessNumbers(ctx);
+  return result ?? NEGATIVE;
+};
+
+const brokencrystalsProcessNumbersRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/process_numbers\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsProcessNumbers(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/process_numbers route scan — processing_expression JavaScript evaluates 7*7 server-side — code injection oracle"
+    }
+  };
+};
+
 const brokencrystalsJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const path = "/api/auth/jwt/rsa/signature/validate";
@@ -59893,6 +60314,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsMcpToolsLiveOracle,
   brokencrystalsMcpRouteLiveOracle,
+  brokencrystalsProcessNumbersLiveOracle,
+  brokencrystalsProcessNumbersRouteLiveOracle,
   brokencrystalsJwtAlgNoneLiveOracle,
   brokencrystalsJwtRouteLiveOracle,
   brokencrystalsDomCsrfFlowLiveOracle,
@@ -60486,6 +60909,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceBlogPostRouteLiveOracle,
   ginAndJuiceCatalogCategorySqliLiveOracle,
   ginAndJuiceCatalogCategorySqliRouteLiveOracle,
+  ginAndJuiceCatalogCategoryCrlfLiveOracle,
+  ginAndJuiceCatalogCategoryCrlfRouteLiveOracle,
   ginAndJuiceLoginUsernameReflectionLiveOracle,
   ginAndJuiceLoginRouteLiveOracle,
   ginAndJuiceStockXxeLiveOracle,
@@ -60494,6 +60919,21 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceOrderDetailsIdorRouteLiveOracle,
   ginAndJuiceAdminBypassLiveOracle,
   ginAndJuiceAdminBypassRouteLiveOracle,
+  ginAndJuiceBlogPrototypePollutionDomXssLiveOracle,
+  ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle,
+  ginAndJuiceBlogSearchOpenRedirectLiveOracle,
+  ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle,
+  ginAndJuiceBlogSearchDomXssLiveOracle,
+  ginAndJuiceBlogSearchDomXssRouteLiveOracle,
+  ginAndJuiceCatalogBase64CategoryLiveOracle,
+  ginAndJuiceCatalogBase64CategoryRouteLiveOracle,
+  ginAndJuiceHomeUrlOverrideLiveOracle,
+  ginAndJuiceHomeUrlOverrideRouteLiveOracle,
+  ginAndJuiceAdminDeleteLiveOracle,
+  ginAndJuiceAdminDeleteRouteLiveOracle,
+  ginAndJuiceCatalogSubscribeLiveOracle,
+  ginAndJuiceCatalogSubscribeRouteLiveOracle,
+  ginAndJuiceCatalogProductRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,

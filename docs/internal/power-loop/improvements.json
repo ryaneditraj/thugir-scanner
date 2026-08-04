@@ -2,6 +2,150 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-subscribe-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/subscribe JSON {email,csrf} returns {\"coupon\":\"9In&JUICE5H0P\",\"email\":\"<canary>\"}; ginandjuice.shop/catalog/subscribe findings 16→27 (+subscribe live+route); benchmark juice-shop-staging 30 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-subscribe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /catalog/subscribe confirms JSON email reflection with coupon; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-product-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /catalog/product?productId=1 stock form POSTs XML to /catalog/product/stock — entity expansion oracle; findings 16→26 (+product-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended /login route oracle to match /my-account + cache-bust login CSRF fetch; ginandjuice.shop/my-account findings 16→22 (+login-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-chat-insecure-output-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/chat returns {\"success\":false,\"error\":{\"message\":\"Not Found\"}} — LLM chat endpoint removed from public brokencrystals.com deploy; deferred"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-admin-delete-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin/delete?username=carlos returns Access denied; GET / with X-Original-URL: /admin/delete?username=carlos returns This functionality has been disabled. — FINDING-022; ginandjuice.shop/my-account/delete?username=carlos findings 16→22 (+admin-delete live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-admin-delete-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /my-account/delete confirms X-Original-URL bypass reaches admin deletion handler — FINDING-022; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-fetch-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET/POST /api/fetch returns {\"success\":false,\"error\":{\"message\":\"Not Found\"}} — endpoint removed from brokencrystals.com bundle (no api/fetch in index-BgqCpeGa.js); deferred until endpoint restored"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-invoices-bola-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/invoices returns 404 HTML page on public deploy — invoice list BOLA oracle not reachable without OSS self-host; deferred"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog?search= reflects query into trackSearch() document.write('<img src=\"/resources/images/tracker.gif?searchTerms='+query); ginandjuice.shop/blog?search=test findings 19→24 (+blog-search-dom-xss live+route); benchmark juice-shop-staging.herokuapp.com 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-dom-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /blog confirms search query reaches document.write tracker sink without encoding; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-base64-category-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=R2lu passes base64 Gin through to selectedCategory without decode; ginandjuice.shop/catalog?category=Gin findings 17→23 (+base64-category live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-base64-category-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /catalog confirms base64 category values pass through undecoded to client selectedCategory; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-home-url-override-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / with X-Original-URL: /vulnerabilities returns vulnerabilities-path-details oracle table; ginandjuice.shop/ findings 16→20 (+home-url-override live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-home-url-override-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: home route scan confirms X-Original-URL header overrides request path to /vulnerabilities; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/process_numbers {\"numbers\":[7,7],\"processing_expression\":\"7*7\"} returns 49; brokencrystals.com/api/process_numbers findings 50→52 (+process-numbers live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/process_numbers confirms processing_expression server-side JS eval 7*7=49; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-chat-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/chat/query can reflect <script> in LLM output but probe is non-deterministic across runs — deferred until stable reflection oracle"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-prototype-pollution-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /blog loads deparam.js + searchLogger.js; __proto__[transport_url] pollutes config.transport_url and searchLogger injects script.src — FINDING-016; ginandjuice.shop/blog findings 16→19 (+prototype-pollution live+route); benchmark juice-shop.herokuapp.com 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-prototype-pollution-dom-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /blog confirms deparam + searchLogger prototype pollution DOM XSS chain — FINDING-016; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/?search=test&back=https://evil-open-redirect-probe.example exposes onclick location = URLSearchParams(location.search).get('back') — FINDING-020; ginandjuice.shop/blog/?search=test findings 16→20 (+blog-search-open-redirect live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-search-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /blog confirms unvalidated back param on search results Back to Blog link — FINDING-020; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-crlf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=thugir%0d%0aSet-Cookie:%20{canary}=1 returns injected Set-Cookie header in response; ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true findings 15→17 (+crlf live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /catalog confirms category CRLF injects forged Set-Cookie — pentest-2026-ginandjuice FINDING-023; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-admin-bypass-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /admin returns 403; GET / with X-Original-URL: /admin returns /admin/delete?username=carlos links; ginandjuice.shop/admin findings 12→14 (+admin-bypass live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"
@@ -18459,9 +18603,14 @@
       "shipped_at": "2026-08-03T23:35:00.000Z"
     },
     {
-      "source": "discovery:public-firing-range.appspot.com",
-      "slug": "firing-range-toxicdom-sessionstorage-object-array-documentwrite-live-oracle",
-      "shipped_at": "2026-08-03T23:35:00.000Z"
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-live-oracle",
+      "shipped_at": "2026-08-04T05:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-process-numbers-route-live-oracle",
+      "shipped_at": "2026-08-04T05:15:00.000Z"
     }
   ]
 }
