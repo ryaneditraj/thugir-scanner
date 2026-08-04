@@ -5492,6 +5492,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-sessionstorage-array-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage array document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/array/documentWrite returns a page that reads sessionStorage['badValue'] and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage array-index values passed to document.write enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageArrayDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to document.write — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write assignments on values from sessionStorage.",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/array/documentWrite uses document.write on sessionStorage['badValue']. Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-array-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/array/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/array/documentWrite, sessionStorage['badValue'] is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage array-index values are not inserted via document.write.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageArrayDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/array/documentWrite route uses document.write on sessionStorage['badValue']. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-inputtyping-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -39989,6 +40041,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /rest/memories route scan exposes cross-user PII via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-admin-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Juice Shop admin application-configuration live oracle",
+    description:
+      "GET /rest/admin/application-configuration without auth returns full application config JSON (server, application, chatBot settings) — Juice Shop admin configuration disclosure oracle.",
+    impactOneline:
+      "Unauthenticated admin config reads expose internal settings, feature flags, and integration details.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopAdminConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication on every configuration endpoint.",
+      steps: [
+        "Return 401 for unauthenticated GET /rest/admin/application-configuration.",
+        "Restrict config reads to authenticated admin roles.",
+        "Audit all admin REST routes for missing authorization middleware."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/admin/application-configuration returns config JSON without auth. Show admin authorization fixes for configuration endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-admin-config-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Juice Shop /rest/admin/application-configuration route live oracle",
+    description:
+      "When scanning /rest/admin/application-configuration, unauthenticated response exposes full OWASP Juice Shop application config — route-specific admin misconfig oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated admin configuration reads on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopAdminConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication on configuration routes.",
+      steps: [
+        "Return 401 for unauthenticated config route access.",
+        "Restrict config reads to authenticated admin roles.",
+        "Audit all admin REST routes for missing authorization middleware."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/admin/application-configuration route scan exposes admin config without auth. Show route-level authorization fixes.",
     version: 1,
     enabled: true
   },
