@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T05:21:09.597Z",
+  "updated_at": "2026-08-04T06:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://prompt-injection-demo.vercel.app/chat",
+      "source": "hanif-rasyidi/prompt-injection-demo — Acme SaaS LLM chat prompt-injection attack surface (AIBC 2026 Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection-demo.vercel.app/support",
+      "source": "hanif-rasyidi/prompt-injection-demo — Acme SaaS support-bot indirect prompt-injection surface (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/update",
+      "source": "NeuraLegion/brokencrystals — prototype pollution via update_user MCP/REST oracle POST /api/users/update (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/accounts/1",
+      "source": "MRMcyber/vaultapp — IDOR account balance oracle GET /api/accounts/:id (vaultapp-omega Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/merchants/dashboard",
+      "source": "Commando-X/vuln-bank — merchant dashboard BFLA oracle GET /api/v1/merchants/dashboard (vulnbank.org public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals — SSRF oracle GET /api/fetch url parameter (public demo)",
