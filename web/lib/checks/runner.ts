@@ -1760,6 +1760,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopPrototypePollutionSearchFiltersRouteLiveOracle",
   "pwnshopAvatarUrlSsrfLiveOracle",
   "pwnshopAvatarUrlSsrfRouteLiveOracle",
+  "pwnshopUpdateAvatarRouteLiveOracle",
   "pwnshopOrderIdorLiveOracle",
   "pwnshopOrderIdorRouteLiveOracle",
   "pwnshopWalletTopupVulnbankLiveOracle",
@@ -2264,6 +2265,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsAdminpermissionRouteLiveOracle",
   "brokencrystalsProcessNumbersLiveOracle",
   "brokencrystalsProcessNumbersRouteLiveOracle",
+  "brokencrystalsApiFileHttpbinSsrfLiveOracle",
+  "brokencrystalsApiFetchRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
   "brokencrystalsFileLfiRouteLiveOracle",
   "brokencrystalsFileRawLfiRouteLiveOracle",
@@ -9320,6 +9323,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-photo-bfla")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-process-numbers")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-api-")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;

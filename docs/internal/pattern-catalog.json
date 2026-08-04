@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-04T16:17:50.711Z",
-  "total": 1721,
-  "uniqueSlugs": 1716,
+  "generatedAt": "2026-08-04T17:36:32.253Z",
+  "total": 1724,
+  "uniqueSlugs": 1719,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1703,
+    "generic": 1706,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1636,
+    "deep": 1639,
     "continuous": 0
   },
   "byCategory": {
@@ -31,8 +31,8 @@
     "Cross-site scripting": 588,
     "Open redirect": 11,
     "general": 20,
-    "SSRF": 5,
-    "Server-side request forgery": 47,
+    "SSRF": 7,
+    "Server-side request forgery": 48,
     "Sensitive data exposure": 31,
     "AI security": 48,
     "Business logic": 14,
@@ -60,6 +60,8 @@
     "bolt-demo-mode-shipped",
     "bolt-public-env-prefix-leak",
     "brokencrystals-adminpermission-route-live-oracle",
+    "brokencrystals-api-fetch-route-live-oracle",
+    "brokencrystals-api-file-httpbin-ssrf-live-oracle",
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
     "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
@@ -1446,6 +1448,7 @@
     "pwnshop-seller-preview-ssti-route-live-oracle",
     "pwnshop-track-idor-live-oracle",
     "pwnshop-track-idor-route-live-oracle",
+    "pwnshop-update-avatar-route-live-oracle",
     "pwnshop-verify-otp-bruteforce-live-oracle",
     "pwnshop-wallet-topup-route-live-oracle",
     "pwnshop-wallet-topup-vulnbank-live-oracle",

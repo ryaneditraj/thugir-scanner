@@ -28551,6 +28551,23 @@ const pwnshopAvatarUrlSsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopUpdateAvatarRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/update-avatar/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopAvatarUrlSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /profile/update-avatar route scan — POST server-side fetches attacker-controlled avatar_url and echoes fetched body (PWN-029)"
+    }
+  };
+};
+
 const pwnshopOrderIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const cookie = await pwnshopCompleteOtpSession(ctx);
@@ -56248,6 +56265,37 @@ const brokencrystalsProductsLatestLimitBypassRouteLiveOracle: Rule = async (ctx)
   };
 };
 
+const brokencrystalsApiFileHttpbinSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const bc = await probeBrokencrystalsFileSsrf(ctx);
+  if (!bc?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: bc.confidence,
+    evidence: {
+      ...bc.evidence,
+      note: "Broken Crystals GET /api/file?path= fetches attacker-controlled URLs server-side and returns the response body — generic URL SSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsApiFetchRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/fetch\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsApiFileHttpbinSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/fetch route scan — /api/fetch 404 but sibling GET /api/file?path= fetches external URLs server-side (README SSRF oracle)"
+    }
+  };
+};
+
 const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -60149,6 +60197,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopPrototypePollutionSearchFiltersRouteLiveOracle,
   pwnshopAvatarUrlSsrfLiveOracle,
   pwnshopAvatarUrlSsrfRouteLiveOracle,
+  pwnshopUpdateAvatarRouteLiveOracle,
   pwnshopOrderIdorLiveOracle,
   pwnshopOrderIdorRouteLiveOracle,
   pwnshopWalletTopupVulnbankLiveOracle,
@@ -60533,6 +60582,8 @@ export const RULES: Record<string, Rule> = {
   clientSideBrokencrystalsPrototypePollutionEvidence,
   clientSideBrokencrystalsDomXssEvidence,
   brokencrystalsGotoOpenRedirectLiveOracle,
+  brokencrystalsApiFileHttpbinSsrfLiveOracle,
+  brokencrystalsApiFetchRouteLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
   brokencrystalsAzureMetadataSsrfLiveOracle,
   brokencrystalsDigitalOceanMetadataSsrfLiveOracle,
