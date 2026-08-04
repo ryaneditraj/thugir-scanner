@@ -48193,6 +48193,104 @@ const ginAndJuiceAdminDeleteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeGinAndJuiceCatalogSubscribe(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const catalogUrl = new URL("/catalog", ctx.origin).toString();
+  const catalogPage = await ctx.probe.get(catalogUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (catalogPage.status < 200 || catalogPage.status >= 400) return null;
+  const csrf = ginAndJuiceCsrfFromLoginPage(catalogPage.body);
+  const sessionCookie = ginAndJuiceSessionCookieFromDoc(catalogPage);
+  if (!csrf || !sessionCookie) return null;
+  const canary = `thugirSub${Date.now().toString(36)}@probe.example`;
+  const subscribeUrl = new URL("/catalog/subscribe", ctx.origin).toString();
+  const postBody = JSON.stringify({ email: canary, csrf });
+  const doc = await ctx.probe.get(subscribeUrl, {
+    method: "POST",
+    body: postBody,
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Cookie: sessionCookie
+    },
+    maxBytes: 1024,
+    timeoutMs: 15000
+  });
+  if (doc.status !== 200) return null;
+  let parsed: { email?: string; coupon?: string };
+  try {
+    parsed = JSON.parse(doc.body) as { email?: string; coupon?: string };
+  } catch {
+    return null;
+  }
+  if (parsed.email !== canary || !parsed.coupon) return null;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: subscribeUrl,
+      canary,
+      coupon: parsed.coupon,
+      snippet: doc.body.slice(0, 120),
+      note: "Gin & Juice Shop POST /catalog/subscribe echoes attacker-controlled email in JSON response with coupon code — newsletter subscribe reflected-data oracle"
+    }
+  };
+}
+
+const ginAndJuiceCatalogSubscribeLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceCatalogSubscribe(ctx);
+  return result ?? NEGATIVE;
+};
+
+const ginAndJuiceCatalogSubscribeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\/subscribe\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeGinAndJuiceCatalogSubscribe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog/subscribe route scan — JSON subscribe endpoint reflects email and returns coupon without sanitization"
+    }
+  };
+};
+
+const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\/product\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceStockXxeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog/product route scan — stock check form posts attacker-controlled XML to /catalog/product/stock — XXE training oracle"
+    }
+  };
+};
+
+const ginAndJuiceMyAccountRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceLoginUsernameReflectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /my-account route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -60848,6 +60946,10 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceHomeUrlOverrideRouteLiveOracle,
   ginAndJuiceAdminDeleteLiveOracle,
   ginAndJuiceAdminDeleteRouteLiveOracle,
+  ginAndJuiceCatalogSubscribeLiveOracle,
+  ginAndJuiceCatalogSubscribeRouteLiveOracle,
+  ginAndJuiceCatalogProductRouteLiveOracle,
+  ginAndJuiceMyAccountRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
