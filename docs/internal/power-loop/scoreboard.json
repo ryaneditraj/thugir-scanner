@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T18:31:00.000Z",
+  "updated_at": "2026-08-04T19:10:34.603Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2820,
-  "total_findings": 33282,
+  "total_sites_scanned": 2835,
+  "total_findings": 33436,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2007,
-  "discovery_findings": 29282,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-04T18:31:00.000Z",
+  "discovery_urls_added": 2012,
+  "discovery_findings": 29403,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-04T19:10:34.603Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 33,
@@ -48,40 +48,44 @@
           ]
         }
       },
-      "note": "Primary heroku ok — 6/6 recall (33 findings); prior 18:20 run used staging fallback (31 findings) when primary 503"
+      "note": "Primary heroku ok — stable 6/6 recall (33 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 89,
-      "focus": "xss-game L1-3 live oracles shipped + L4-6/captcha/pwnshop-product discovery drain",
-      "improvements_shipped_this_run": 3
+      "urls_ok": 5,
+      "urls_error": 3,
+      "findings": 121,
+      "focus": "preview juice-shop login/products + pwnshop debug/events + xss-game L1 discovery drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — primary reachable this run",
-      "xss-game.appspot.com/level1-3/frame: 5-6 findings each — xss-game live+route oracles shipped (prior 18:20 run)",
-      "demo.owasp-juice.shop/rest/captcha: 33 findings — full juice-shop live-oracle suite on captcha REST route",
-      "pwnshop.ctfsecurity.com/product/1: 37 findings — pwnshop hub; no PWN-011 review stored-XSS live oracle",
-      "xss-game.appspot.com/level4-6/frame: 1 finding each — header-only hubs; no route-specific XSS live oracles yet"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "preview.owasp-juice.shop/rest/user/login: 33 findings — full juice-shop live-oracle suite on develop preview",
+      "preview.owasp-juice.shop/api/Products: 33 findings — product catalog exposure on preview instance",
+      "pwnshop.ctfsecurity.com/debug/info: 37 findings — pwnshop-debug-info-live-oracle confirmed (PWN-018 session secret)",
+      "pwnshop.ctfsecurity.com/api/v1/events: 12 findings — pwnshop-events-audit-live-oracle confirmed (PWN-005)",
+      "xss-game.appspot.com/level1/frame: 6 findings — xss-game-level1-reflected-xss live+route oracles (closes L1 gap vs L4-6 header-only hubs)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "xss-game.appspot.com/level4-6/frame: route-specific XSS live oracles absent (missing-security-headers only)",
+      "xss-game.appspot.com/level4-6/frame: route-specific XSS live oracles still absent (missing-security-headers only)",
       "pwnshop.ctfsecurity.com/product/1: PWN-011 stored XSS via POST /review oracle still absent without authenticated session",
-      "demo.owasp-juice.shop/api/snippets: queue drain hung >25min — JSON API endpoint unreachable/non-HTML",
-      "chimera.atlascrew.dev API routes return GitHub Pages 404 — lab instance offline"
+      "testphp.vulnweb.com/*: unreachable from cloud agent egress (3 queue drain errors)",
+      "demo.owasp-juice.shop/api/snippets: prior queue drain hung >25min — JSON API endpoint unreachable/non-HTML"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 33,
+    "pwnshop.ctfsecurity.com/debug/info": 37,
+    "preview.owasp-juice.shop/rest/user/login": 33,
+    "preview.owasp-juice.shop/api/Products": 33,
     "pwnshop.ctfsecurity.com/product/1": 37,
     "demo.owasp-juice.shop/rest/captcha": 33,
     "xss-game.appspot.com/level1/frame": 6,
-    "xss-game.appspot.com/level2/frame": 5,
-    "xss-game.appspot.com/level3/frame": 5,
-    "pwnshop.ctfsecurity.com/profile/update-avatar": 36,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 58
+    "pwnshop.ctfsecurity.com/api/v1/events": 12,
+    "xss-game.appspot.com/level4/frame": 1
   }
 }
