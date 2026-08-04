@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T22:05:00.000Z",
+  "updated_at": "2026-08-04T23:05:02.872Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Products/1",
+      "source": "Escape.tech Juice Shop demo — product API oracle GET /api/Products/:id (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/users",
+      "source": "JuaniVeltri/vuln-expose — SQLi user enumeration API oracle GET /api/users (Vercel OSS README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/comments",
+      "source": "JuaniVeltri/vuln-expose — stored XSS comments API oracle POST /api/comments (Vercel OSS README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/subscriptions?email=test@example.com",
+      "source": "NeuraLegion/brokencrystals — email subscription injection oracle GET /api/subscriptions (public demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/api/Addresss/1",
+      "source": "OWASP Juice Shop demo — address IDOR oracle GET /api/Addresss/:id (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop.demo.escape.tech/ftp",
       "source": "Escape.tech Juice Shop demo — forgotten-backup /ftp sensitive file disclosure oracle (juice-shop.demo.escape.tech)",
