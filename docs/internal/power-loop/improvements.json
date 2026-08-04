@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-admin-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin returns 403; GET / with X-Original-URL: /admin returns /admin/delete?username=carlos links; ginandjuice.shop/admin findings 12→14 (+admin-bypass live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-js-html-sanitize-eval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/array/js_html_sanitize_eval passes sessionStorage['badValue'] to eval() after HTML-entity replace only; route scan findings 219→225 (+js-html-sanitize-eval route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-external-localstorage-property-eval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/external/localStorage/property/eval loads toxicdomscripts/localStorage/property/eval with localStorage.badValue→eval(); route scan findings 219→225 (+external-localstorage-property-eval live+route); external/sessionStorage/array/documentWrite 218→225 via script-path fix; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-order-details-idor-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /order/details?orderId=0254809 returns Order no 0254809 + Billing address Carlos Montoya + Debit card ****5613 without auth; ginandjuice.shop/order/details findings 11→14 (+order-details-idor live+route); benchmark juice-shop-staging 32 findings 6/6 maintained"
