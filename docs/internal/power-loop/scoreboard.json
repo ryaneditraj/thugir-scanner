@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T05:15:00.000Z",
+  "updated_at": "2026-08-04T05:28:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2783,
-  "total_findings": 32764,
+  "total_sites_scanned": 2797,
+  "total_findings": 33048,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1982,
-  "discovery_findings": 28849,
+  "discovery_urls_added": 1987,
+  "discovery_findings": 28981,
   "improvements_shipped": 1163,
-  "last_run": "2026-08-04T05:15:00.000Z",
+  "last_run": "2026-08-04T05:28:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_error": "juice-shop.herokuapp.com 503 at 05:03 — staging fallback; primary recovered 33 findings by 05:15",
+      "oracle_findings": 32,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 477,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,47 +49,53 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (33 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (32 staging / 33 primary); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 52,
-      "focus": "brokencrystals process_numbers server-side JS injection route oracle",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 184,
+      "focus": "brokencrystals /api/fetch SSRF + ginandjuice register/forgot/delete + pwnshop invoices BOLA + queue drain (chat, chimera admin/transfer)",
       "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
-      "brokencrystals.com/api/process_numbers: 50→52 findings — brokencrystals-process-numbers live+route oracles shipped (POST processing_expression 7*7 returns 49)",
-      "brokencrystals.com/chat: LLM insecure-output oracle rejected — non-deterministic reflection across probe runs",
-      "chimera.atlascrew.dev/api/v1/*: 5-finding generic hub — vuln-api API host not exposed on GitHub Pages (405)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — primary 503 at scan time, no category gaps",
+      "brokencrystals.com/api/process_numbers: 50→52 findings — brokencrystals-process-numbers live+route oracles shipped (upstream)",
+      "brokencrystals.com/api/fetch: 52 findings — site-wide SSRF/JWT/LDAP oracles but no /api/fetch route-specific live oracle",
+      "ginandjuice.shop/register: 16 findings — site-wide ginandjuice oracles, no register-specific mass-assignment oracle",
+      "ginandjuice.shop/forgot-password: 16 findings — no password-reset token oracle",
+      "pwnshop.ctfsecurity.com/api/v1/invoices: 22 findings — no invoice-list BOLA live oracle",
+      "ginandjuice.shop/my-account/delete?username=carlos: 16 findings — admin-bypass oracle present but no delete-route confirmation",
+      "brokencrystals.com/chat: 52 findings — LLM insecure-output live oracle still absent/flaky",
+      "chimera.atlascrew.dev/api/v1/admin/execute + banking/transfer: 5-finding generic hubs — no route-specific live oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "juice-shop.herokuapp.com primary dyno 503 at 05:03 — staging fallback required; recovered later",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/chat: LLM insecure-output-handling live oracle needs deterministic probe (reflection flaky)",
-      "chimera.atlascrew.dev route-specific oracles absent — API only on localhost:8080 per docs, GitHub Pages returns 405",
-      "ginandjuice.shop/my-account/change-email: race-condition email-claim oracle absent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon oracles flaky when PwnMail OTP delivery is slow",
-      "ssrf.vulnlab.dev/*: route-specific SSRF oracles present but low finding counts on some routes"
+      "brokencrystals.com/api/fetch: route-specific SSRF fetch oracle absent (52-finding hub with /api/file/* SSRF oracles only)",
+      "ginandjuice.shop/register + forgot-password: route-specific auth oracles absent (16-finding generic hubs)",
+      "ginandjuice.shop/my-account/delete: admin-delete confirmation oracle absent despite admin-bypass live oracle",
+      "pwnshop.ctfsecurity.com/api/v1/invoices: invoice BOLA live oracle absent (22-finding hub)",
+      "brokencrystals.com/chat: LLM insecure-output-handling live oracle needs deterministic probe",
+      "chimera.atlascrew.dev route-specific oracles absent for admin/execute, banking/transfer"
     ]
   },
   "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com": 32,
     "juice-shop.herokuapp.com": 33,
+    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 52,
     "brokencrystals.com/api/process_numbers": 52,
-    "brokencrystals.com/chat": 50,
-    "ginandjuice.shop/blog": 19,
-    "ginandjuice.shop/blog/?search=test&back=https://evil-open-redirect-probe.example": 20,
-    "ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true": 17,
-    "ginandjuice.shop/admin": 14,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/array/js_html_sanitize_eval": 225,
-    "pwnshop.ctfsecurity.com/api/v1/cart": 23,
-    "vulnbank.org/chat": 20,
+    "brokencrystals.com/chat": 52,
+    "ginandjuice.shop/register": 16,
+    "ginandjuice.shop/forgot-password": 16,
+    "ginandjuice.shop/my-account/delete?username=carlos": 16,
+    "pwnshop.ctfsecurity.com/api/v1/invoices": 22,
     "chimera.atlascrew.dev/api/v1/admin/execute": 5,
     "chimera.atlascrew.dev/api/v1/banking/transfer": 5,
-    "ssrf.vulnlab.dev/basic": 15,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52,
+    "ginandjuice.shop/blog": 19,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
     "pentest-fauxbank.vercel.app/admin": 13
