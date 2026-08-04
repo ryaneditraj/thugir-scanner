@@ -6481,7 +6481,7 @@ const xssGameLevel6DomScriptSrcXssLiveOracle: Rule = async (ctx) => {
   const hasIncludeGadget =
     /function\s+includeGadget\s*\(\s*url\s*\)/i.test(doc.body) &&
     /scriptEl\.src\s*=\s*url/i.test(doc.body) &&
-    /url\.match\s*\(\s*\^https?:\/\//i.test(doc.body);
+    /url\.match\s*\(\s*\/\^https\?:\\\/\\\/\//i.test(doc.body);
   const hasHashGadget =
     /function\s+getGadgetName\s*\(/i.test(doc.body) &&
     /window\.location\.hash\.substr\s*\(\s*1\s*\)/i.test(doc.body) &&

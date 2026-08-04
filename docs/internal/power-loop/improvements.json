@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level4-js-string-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level4/frame?timer=CANARY reflects in onload=startTimer(CANARY) and message div; xss-game.appspot.com/level4/frame findings 1→7 (+level4 live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level5-javascript-protocol-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level5/frame/signup?next=CANARY reflects unescaped in <a href>; confirm?next= in window.location; xss-game.appspot.com/level5/frame findings 1→7 (+level5 live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level6-dom-script-src-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /level6/frame includeGadget() assigns location.hash to script.src with weak http(s) filter; xss-game.appspot.com/level6/frame findings 1→8 (+level6 live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
       "slug": "xss-game-level3-dom-xss-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /level3/frame chooseTab() passes unescape(location.hash) into $('#tabContent').html(html); xss-game.appspot.com/level3/frame findings 1→5 (+level3-dom-xss live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
