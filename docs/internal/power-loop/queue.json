@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T09:04:00.000Z",
+  "updated_at": "2026-08-04T10:08:37.463Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/guest",
+      "source": "Escape Duck Store vulnerabilities catalog — stored XSS guest testimonial oracle POST /api/v1/testimonials/guest",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records",
+      "source": "atlas-crew/Chimera vuln-api — second-order SQLi oracle POST /api/v1/healthcare/records (GitHub apps/vuln-api README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/transactions/history?account_id=1",
+      "source": "atlas-crew/Chimera vuln-api — time-based blind SQLi oracle GET /api/v1/transactions/history (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/lookup?policy_number=POL-001",
+      "source": "atlas-crew/Chimera vuln-api — blind boolean SQLi oracle GET /api/v1/insurance/policies/lookup (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/marketplace",
+      "source": "NeuraLegion/brokencrystals — marketplace prototype pollution DOM XSS oracle GET /api/marketplace (public demo README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/auth/login",
       "source": "atlas-crew/Chimera API-DOCUMENTATION — SQLi + JWT algorithm-confusion login oracle POST /api/v1/auth/login",
