@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T17:03:08.744Z",
+  "updated_at": "2026-08-04T17:08:33.855Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2799,
-  "total_findings": 32997,
+  "total_sites_scanned": 2805,
+  "total_findings": 33103,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1997,
-  "discovery_findings": 29056,
+  "discovery_urls_added": 2002,
+  "discovery_findings": 29162,
   "improvements_shipped": 1161,
-  "last_run": "2026-08-04T17:03:08.744Z",
+  "last_run": "2026-08-04T17:08:33.855Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 31,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 480,
+      "probes_run": 477,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 → staging fallback; stable 6/6 recall (31 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com unreachable → staging fallback; stable 6/6 recall (31 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 156,
-      "focus": "pwnshop SSRF avatar + invoice BOLA + register open-redirect; brokencrystals /api/fetch SSRF hub; chimera auth/login + queue drain (forgot-password, wire transfer, claims)",
+      "findings": 106,
+      "focus": "juice-shop snippets API + preview Challenges + XSS Game level2/3 + chimera admin/logs path-traversal + queue drain (payments, brokencrystals ?dummy=)",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (31 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/api/v1/invoices: 38 findings — pwnshop-avatar-url-ssrf-live-oracle (PWN-029) + coupon-bypass + seller-preview SSTI oracles",
-      "brokencrystals.com/api/fetch?url=: 56-finding hub — AWS/Azure/DO metadata SSRF + JWT alg:none + secrets exposure oracles",
-      "pwnshop.ctfsecurity.com/register?next=: 22 findings — pwnshop-open-redirect-register-live-oracle confirmed (PWN-017)",
-      "pwnshop.ctfsecurity.com/profile/update-avatar: 20 findings — debug-info + chat-prompt-injection live oracles; no route-specific SSRF on this entry URL",
-      "chimera.atlascrew.dev/api/v1/*: 5-finding generic hubs — no auth/login/forgot-password/wire-transfer/claims route-specific live oracles"
+      "preview.owasp-juice.shop/api/Challenges: 36 findings — full juice-shop live-oracle suite on develop-branch preview instance",
+      "brokencrystals.com/?dummy=: 58 findings — client-side-brokencrystals-dom-xss-evidence + BFLA/process-numbers oracles; no ?dummy= route-specific live oracle",
+      "chimera.atlascrew.dev/api/v1/admin/logs?file=: 5-finding generic hub — no path-traversal live oracle on admin/logs route",
+      "xss-game.appspot.com/level2-3/frame: 1-finding header-only hubs — no stored/DOM XSS live oracles",
+      "demo.owasp-juice.shop/api/snippets: scan error — snippets API unreachable or non-HTML response"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/fetch: no route-specific /api/fetch SSRF live oracle (56-finding hub; /api/file/* SSRF oracles present)",
-      "pwnshop.ctfsecurity.com/profile/update-avatar: SSRF oracle fires on /api/v1/invoices scan but absent when scanning update-avatar route URL directly",
-      "chimera.atlascrew.dev route endpoints: 5-finding generic hubs — no route-specific auth/forgot-password/wire-transfer/claims/payments live oracles",
+      "chimera.atlascrew.dev/api/v1/admin/logs: path-traversal oracle absent — 5-finding generic hub only",
+      "xss-game level2/3: stored/DOM XSS live oracles absent (header-only findings)",
+      "demo.owasp-juice.shop/api/snippets: unreachable from scanner (JSON API endpoint)",
       "testphp.vulnweb.com unreachable from cloud agent egress"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 31,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 56,
-    "pwnshop.ctfsecurity.com/api/v1/invoices": 38,
-    "pwnshop.ctfsecurity.com/register?next=https://evil-open-redirect-probe.example": 22,
-    "pwnshop.ctfsecurity.com/profile/update-avatar": 20,
-    "brokencrystals.com/?dummy=thugir-dom-xss-probe": 55,
-    "chimera.atlascrew.dev/api/v1/auth/login": 5,
-    "chimera.atlascrew.dev/api/v1/auth/forgot-password": 5
+    "preview.owasp-juice.shop/api/Challenges": 36,
+    "brokencrystals.com/?dummy=thugir-dom-xss-probe": 58,
+    "chimera.atlascrew.dev/api/v1/admin/logs?file=../../../../etc/passwd": 5,
+    "chimera.atlascrew.dev/api/payments/process": 5,
+    "xss-game.appspot.com/level2/frame": 1,
+    "xss-game.appspot.com/level3/frame": 1
   }
 }
