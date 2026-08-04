@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T03:05:00.000Z",
+  "updated_at": "2026-08-04T04:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/chat",
+      "source": "NeuraLegion/brokencrystals — LLM insecure output handling oracle POST /chat (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/execute",
+      "source": "atlas-crew/Chimera — CHM-ADMIN-002 remote command execution oracle POST /api/v1/admin/execute (atlascrew hosted demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
+      "source": "atlas-crew/Chimera — CHM-BANK-001 business logic transfer manipulation oracle POST /api/v1/banking/transfer (atlascrew hosted demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/claims/search?policy_id=1",
+      "source": "atlas-crew/Chimera — ORDER BY SQLi oracle GET /api/v1/claims/search (atlascrew hosted demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/process_numbers",
+      "source": "NeuraLegion/brokencrystals — server-side JS injection oracle POST /api/process_numbers processing_expression (public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/blog?__proto__[transport_url]=data:,alert(1)",
       "source": "pentest-2026-ginandjuice FINDING-016 — DOM XSS via prototype pollution deparam.js + searchLogger.js (PortSwigger public demo)",
