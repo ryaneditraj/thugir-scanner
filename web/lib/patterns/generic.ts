@@ -42431,6 +42431,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-catalog-subscribe-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop catalog subscribe reflected email live oracle",
+    description:
+      "POST /catalog/subscribe with JSON {email, csrf} echoes the attacker-controlled email in the response alongside a coupon code — the PortSwigger Gin & Juice newsletter subscribe reflected-data training oracle.",
+    impactOneline:
+      "Newsletter subscribe endpoints that reflect unsanitized email values enable reflected XSS when responses are rendered in the DOM.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogSubscribeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or reject dangerous characters in subscribe API responses before client-side rendering.",
+      steps: [
+        "Never reflect raw user input in JSON fields rendered via innerHTML or document.write.",
+        "Use textContent or strict output encoding for subscribe confirmation UIs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /catalog/subscribe endpoint echoes attacker email in JSON responses. Show reflected XSS remediation for newsletter subscribe APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-subscribe-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /catalog/subscribe route live oracle",
+    description:
+      "When scanning /catalog/subscribe, POST JSON subscribe echoes attacker email with coupon code — route-specific reflected-data oracle.",
+    impactOneline:
+      "Route-specific confirmation that the newsletter subscribe API reflects unsanitized email values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogSubscribeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode subscribe API responses and avoid rendering raw email in the DOM.",
+      steps: [
+        "Never reflect raw user input in JSON fields rendered via innerHTML or document.write.",
+        "Use textContent or strict output encoding for subscribe confirmation UIs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/subscribe route scan confirms email reflection in JSON responses. Show route-specific subscribe XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-product-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /catalog/product stock XXE route live oracle",
+    description:
+      "When scanning /catalog/product, the stock check form posts attacker-controlled XML to /catalog/product/stock — route-specific XXE training oracle.",
+    impactOneline:
+      "Route-specific confirmation that product pages expose client-side XML stock checks vulnerable to entity expansion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogProductRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity processing in XML parsers and validate stock check inputs server-side.",
+      steps: [
+        "Disable DTD and external entity resolution in all XML parsers.",
+        "Reject XML payloads with DOCTYPE declarations at the edge.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/product route exposes a stock check form that posts XML to /catalog/product/stock. Show route-specific XXE remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-my-account-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account login reflection route live oracle",
+    description:
+      "When scanning /my-account, POST /login reflects failed usernames into inline script variables without escaping — route-specific JS-context XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the login flow reflects attacker input into executable JavaScript context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceMyAccountRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never reflect user input into inline script blocks — use JSON encoding or separate data attributes.",
+      steps: [
+        "Encode reflected usernames for JavaScript string context or avoid inline scripts entirely.",
+        "Use CSP script-src restrictions to block inline script execution.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account route scan confirms login username reflection into inline script. Show route-specific JS-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-external-localstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
