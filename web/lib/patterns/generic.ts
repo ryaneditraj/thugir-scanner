@@ -43313,5 +43313,161 @@ export const genericPatterns: Pattern[] = [
       "Our /api/fetch route scan confirms SSRF via sibling /api/file?path=. Show how to block outbound URL fetchers.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "xss-game-level1-reflected-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 1 reflected XSS live oracle",
+    description:
+      "GET /level1/frame?query= echoes the search term inside <b> tags without HTML encoding — the Google XSS game level 1 reflected XSS training oracle.",
+    impactOneline:
+      "Unescaped query reflection in search results enables reflected cross-site scripting in the level 1 challenge frame.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel1ReflectedXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode user input before embedding in responses — XSS game levels are intentional training software.",
+      steps: [
+        "Encode query parameters before writing them into HTML.",
+        "Use framework templating that escapes output by default.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level1/frame?query= endpoint reflects search terms unescaped inside <b> tags. Show reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level1-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level1 reflected XSS route live oracle",
+    description:
+      "When scanning /level1, the frame search handler echoes query parameters unescaped inside <b> tags — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route-specific confirmation that level 1 search results reflect attacker-controlled HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel1ReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode query parameters on /level1/frame before rendering search results.",
+      steps: [
+        "Encode query parameters before writing them into HTML.",
+        "Use framework templating that escapes output by default.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level1 route scan confirms unescaped query reflection in search results. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level2-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 2 stored XSS live oracle",
+    description:
+      "/level2/frame stores user posts via PostDB and renders messages with innerHTML += without sanitization — the Google XSS game level 2 stored XSS training oracle.",
+    impactOneline:
+      "Client-side post storage rendered via innerHTML enables stored cross-site scripting in the level 2 challenge frame.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel2StoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize stored messages before writing to innerHTML — XSS game levels are intentional training software.",
+      steps: [
+        "Use textContent instead of innerHTML for user-generated content.",
+        "Apply a strict HTML sanitizer if markup is required.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level2/frame PostDB displayPosts() writes posts[i].message via innerHTML +=. Show stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level2-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level2 stored XSS route live oracle",
+    description:
+      "When scanning /level2, PostDB persists posts and displayPosts injects message HTML via innerHTML += — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific confirmation that level 2 post rendering uses an unsafe innerHTML sink.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel2StoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize stored messages before innerHTML rendering on /level2/frame.",
+      steps: [
+        "Use textContent instead of innerHTML for user-generated content.",
+        "Apply a strict HTML sanitizer if markup is required.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level2 route scan confirms PostDB messages reach innerHTML without encoding. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level3-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 3 DOM XSS live oracle",
+    description:
+      "/level3/frame passes unescape(location.hash) into chooseTab() which writes attacker HTML via jQuery .html() — the Google XSS game level 3 DOM XSS training oracle.",
+    impactOneline:
+      "URL fragment data flows into jQuery .html() without sanitization, enabling DOM-based cross-site scripting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel3DomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash into .html() sinks — XSS game levels are intentional training software.",
+      steps: [
+        "Validate hash fragments against an allowlist before DOM updates.",
+        "Use textContent or safe DOM APIs instead of .html() for untrusted data.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level3/frame chooseTab() passes unescape(location.hash) into $('#tabContent').html(). Show DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level3-dom-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level3 DOM XSS route live oracle",
+    description:
+      "When scanning /level3, location.hash unescape flows into jQuery #tabContent.html() — route-specific DOM XSS oracle.",
+    impactOneline:
+      "Route-specific confirmation that level 3 tab rendering uses an unsafe hash-to-html sink chain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel3DomXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block hash fragments from reaching .html() sinks on /level3/frame.",
+      steps: [
+        "Validate hash fragments against an allowlist before DOM updates.",
+        "Use textContent or safe DOM APIs instead of .html() for untrusted data.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level3 route scan confirms location.hash reaches jQuery .html() without sanitization. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
   }
 ];

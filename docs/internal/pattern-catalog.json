@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-04T17:36:32.253Z",
-  "total": 1724,
-  "uniqueSlugs": 1719,
+  "generatedAt": "2026-08-04T18:15:20.251Z",
+  "total": 1730,
+  "uniqueSlugs": 1725,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1706,
+    "generic": 1712,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1639,
+    "deep": 1645,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 141,
     "Broken authentication": 89,
     "Injection": 251,
-    "Cross-site scripting": 588,
+    "Cross-site scripting": 594,
     "Open redirect": 11,
     "general": 20,
     "SSRF": 7,
@@ -1728,6 +1728,12 @@
     "wrongsecrets-challenge-live-oracle",
     "wrongsecrets-challenge-route-live-oracle",
     "xpath-injection-disclosure",
+    "xss-game-level1-reflected-xss-live-oracle",
+    "xss-game-level1-reflected-xss-route-live-oracle",
+    "xss-game-level2-stored-xss-live-oracle",
+    "xss-game-level2-stored-xss-route-live-oracle",
+    "xss-game-level3-dom-xss-live-oracle",
+    "xss-game-level3-dom-xss-route-live-oracle",
     "xss-vulnlab-csp-bypass-jsonp-live-oracle",
     "xss-vulnlab-csp-bypass-jsonp-route-live-oracle",
     "xss-vulnlab-dom-live-oracle",

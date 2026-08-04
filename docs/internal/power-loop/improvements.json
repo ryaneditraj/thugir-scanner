@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level3-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level3/frame chooseTab() passes unescape(location.hash) into $('#tabContent').html(html); xss-game.appspot.com/level3/frame findings 1→5 (+level3-dom-xss live+route); benchmark juice-shop-staging 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level3-dom-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /level3/frame confirms hash fragment reaches jQuery .html() sink without sanitization; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level2-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level2/frame PostDB.save(message) + displayPosts() innerHTML += posts[i].message without encoding; xss-game.appspot.com/level2/frame findings 1→5 (+level2-stored-xss live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level2-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /level2/frame confirms PostDB innerHTML += message sink chain; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level1-reflected-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level1/frame?query={canary} returns Sorry, no results were found for <b>{canary}</b> without HTML encoding; xss-game.appspot.com/level1/frame findings 1→6 (+level1-reflected-xss live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level1-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /level1/frame confirms unescaped query reflection in search results <b> tag; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-update-avatar-route-live-oracle",
       "status": "shipped",

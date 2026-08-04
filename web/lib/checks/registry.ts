@@ -6242,6 +6242,136 @@ const clientSideGoogleXssGameEvidence: Rule = async (ctx) => {
   };
 };
 
+function isXssGameHost(ctx: RuleContext): boolean {
+  return /xss-game\.appspot\.com/i.test(ctx.origin);
+}
+
+const xssGameLevel1ReflectedXssLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const canary = `thugirXss1${Date.now().toString(36)}`;
+  const probeUrl = new URL("/level1/frame", ctx.origin);
+  probeUrl.searchParams.set("query", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const reflected = new RegExp(
+    `Sorry,\\s*no\\s+results\\s+were\\s+found\\s+for\\s+<b>${canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</b>`,
+    "i"
+  );
+  if (!reflected.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.match(reflected)?.[0]?.slice(0, 160),
+      note: "Google XSS game GET /level1/frame?query= reflects the search term inside <b> tags without HTML encoding — reflected XSS training oracle"
+    }
+  };
+};
+
+const xssGameLevel1ReflectedXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level1\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel1ReflectedXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level1 route scan — query parameter echoed unescaped inside <b> tags on the search results page"
+    }
+  };
+};
+
+const xssGameLevel2StoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/level2/frame", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasPostDb =
+    /new\s+PostDB\s*\(/i.test(doc.body) &&
+    /DB\.save\s*\(\s*message/i.test(doc.body) &&
+    /function\s+displayPosts\s*\(/i.test(doc.body);
+  const hasInnerHtmlSink =
+    /containerEl\.innerHTML\s*\+=\s*html/i.test(doc.body) &&
+    /posts\[i\]\.message/i.test(doc.body);
+  if (!hasPostDb || !hasInnerHtmlSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        doc.body.match(/containerEl\.innerHTML\s*\+=\s*html[\s\S]{0,80}posts\[i\]\.message/i)?.[0]?.slice(0, 160) ??
+        doc.body.match(/DB\.save\s*\([^)]+\)[\s\S]{0,60}displayPosts/i)?.[0]?.slice(0, 160),
+      note: "Google XSS game /level2/frame stores user posts via PostDB and renders messages with innerHTML += without sanitization — stored XSS training oracle"
+    }
+  };
+};
+
+const xssGameLevel2StoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level2\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel2StoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level2 route scan — PostDB persists posts and displayPosts injects message HTML via innerHTML += without encoding"
+    }
+  };
+};
+
+const xssGameLevel3DomXssLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/level3/frame", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasChooseTab =
+    /function\s+chooseTab\s*\(\s*num\s*\)/i.test(doc.body) &&
+    /\$\(\s*['"]#tabContent['"]\s*\)\.html\s*\(\s*html\s*\)/i.test(doc.body);
+  const hasHashUnescape =
+    /unescape\s*\(\s*self\.location\.hash\.substr\s*\(\s*1\s*\)\s*\)/i.test(doc.body) ||
+    /chooseTab\s*\(\s*unescape\s*\(\s*self\.location\.hash/i.test(doc.body);
+  if (!hasChooseTab || !hasHashUnescape) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        doc.body.match(/chooseTab[\s\S]{0,120}\$\(\s*['"]#tabContent['"]\s*\)\.html/i)?.[0]?.slice(0, 160) ??
+        doc.body.match(/unescape\s*\(\s*self\.location\.hash[\s\S]{0,80}/i)?.[0]?.slice(0, 160),
+      note: "Google XSS game /level3/frame passes unescape(location.hash) into chooseTab() which writes attacker HTML via jQuery .html() — DOM XSS training oracle"
+    }
+  };
+};
+
+const xssGameLevel3DomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level3\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel3DomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level3 route scan — location.hash unescape flows into jQuery #tabContent.html() without sanitization"
+    }
+  };
+};
+
 // --- Sentinel AI LLM guardrails adversarial test suite (maxwellcalkin.github.io) -----
 const CLIENT_SENTINEL_AI_RES: { label: string; re: RegExp }[] = [
   {
@@ -61289,6 +61419,12 @@ export const RULES: Record<string, Rule> = {
   clientSideUnsecurePwaEvidence,
   clientSidePromptmapEvidence,
   clientSideGoogleXssGameEvidence,
+  xssGameLevel1ReflectedXssLiveOracle,
+  xssGameLevel1ReflectedXssRouteLiveOracle,
+  xssGameLevel2StoredXssLiveOracle,
+  xssGameLevel2StoredXssRouteLiveOracle,
+  xssGameLevel3DomXssLiveOracle,
+  xssGameLevel3DomXssRouteLiveOracle,
   clientSideSentinelAiEvidence,
   clientSideNodegoatEvidence,
   nodegoatTutorialA2RouteLiveOracle,
