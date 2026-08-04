@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T02:04:31.710Z",
+  "updated_at": "2026-08-04T03:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/blog?__proto__[transport_url]=data:,alert(1)",
+      "source": "pentest-2026-ginandjuice FINDING-016 — DOM XSS via prototype pollution deparam.js + searchLogger.js (PortSwigger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog?search=test&back=https://evil-open-redirect-probe.example",
+      "source": "pentest-2026-ginandjuice FINDING-020 — DOM open redirect via back+search params chains to javascript: XSS (PortSwigger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.escape.tech/api/v1/genai/chat",
+      "source": "Escape Chimera — CHM-AI-001 prompt injection oracle POST /api/v1/genai/chat (Escape hosted demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.escape.tech/api/v1/diagnostics/ping",
+      "source": "Escape Chimera — CHM-ADMIN-001 remote command execution oracle POST /api/v1/diagnostics/ping (Escape hosted demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.escape.tech/api/v1/banking/transfer",
+      "source": "Escape Chimera — CHM-BANK-001 business logic transfer manipulation oracle POST /api/v1/banking/transfer (Escape hosted demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true",
       "source": "pentest-2026-ginandjuice FINDING-023 — CRLF Set-Cookie header injection via category parameter (PortSwigger public demo)",
