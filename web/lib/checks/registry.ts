@@ -28032,6 +28032,23 @@ const pwnshopDebugInfoLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopDebugInfoRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/debug\/info\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopDebugInfoLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /debug/info route scan — unauthenticated debug JSON leaks sessionSecret and override tokens (PWN-018)"
+    }
+  };
+};
+
 const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const url = new URL("/api/v1/events", ctx.origin).toString();
@@ -28048,6 +28065,23 @@ const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
       url,
       snippet: doc.body.slice(0, 240).trim(),
       note: "Pwnshop GET /api/v1/events returns unauthenticated audit log entries with action/detail fields (PWN-005)"
+    }
+  };
+};
+
+const pwnshopEventsAuditRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/events\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopEventsAuditLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /api/v1/events route scan — unauthenticated JSON audit log with action/detail fields exposed (PWN-005)"
     }
   };
 };
@@ -38599,6 +38633,71 @@ const firingRangeDomExternalLocalstoragePropertyEvalRouteLiveOracle: Rule = asyn
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/external/localStorage/property/eval route scan — localStorage.badValue passed to eval() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_EVAL_HTML_PATH =
+  "/dom/toxicdom/external/localStorage/function/eval";
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_EVAL_SCRIPT_PATH =
+  "/dom/toxicdomscripts/localStorage/function/eval";
+
+const firingRangeDomExternalLocalstorageFunctionEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_EVAL_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/localStorage\/function\/eval\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_EVAL_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasEvalSink =
+    /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i.test(script) &&
+    /eval\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasEvalSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /localStorage\/function\/eval/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external localStorage script passes localStorage.getItem('badValue') to eval() — toxic DOM external localStorage function eval XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalLocalstorageFunctionEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/localStorage\/function\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalLocalstorageFunctionEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/localStorage/function/eval route scan — localStorage.getItem('badValue') passed to eval() without sanitization"
     }
   };
 };
@@ -60628,7 +60727,9 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopPathTraversalOracle,
   clientSidePwnshopPrototypePollutionOracle,
   pwnshopDebugInfoLiveOracle,
+  pwnshopDebugInfoRouteLiveOracle,
   pwnshopEventsAuditLiveOracle,
+  pwnshopEventsAuditRouteLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
   pwnshopTrackIdorLiveOracle,
@@ -61190,6 +61291,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomExternalSessionStorageFunctionEvalRouteLiveOracle,
   firingRangeDomExternalLocalstoragePropertyEvalLiveOracle,
   firingRangeDomExternalLocalstoragePropertyEvalRouteLiveOracle,
+  firingRangeDomExternalLocalstorageFunctionEvalLiveOracle,
+  firingRangeDomExternalLocalstorageFunctionEvalRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeFunctionInnerhtmlLiveOracle,
