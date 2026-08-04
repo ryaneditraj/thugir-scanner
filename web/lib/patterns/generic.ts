@@ -4484,7 +4484,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range /dom/toxicdom/*/js_html_sanitize_eval route XSS oracle",
     description:
-      "When scanning /dom/toxicdom/document/cookie/js_html_sanitize_eval, cookie_set, referrer, window/name, or localStorage/function/js_html_sanitize_eval, source values reach eval() after HTML-entity replacement only — route-specific sanitizer-bypass oracle.",
+      "When scanning /dom/toxicdom/document/cookie/js_html_sanitize_eval, cookie_set, referrer, window/name, localStorage/function, sessionStorage/array, or sessionStorage/function/js_html_sanitize_eval, source values reach eval() after HTML-entity replacement only — route-specific sanitizer-bypass oracle.",
     impactOneline:
       "Route-specific scans should confirm sanitizer-bypass eval sinks cannot execute attacker-controlled code.",
     detectorKind: "rule_ref",
@@ -4536,7 +4536,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range /dom/toxicdom/*/include/*/js_html_sanitize_eval route XSS oracle",
     description:
-      "When scanning /dom/toxicdom/sessionStorage or localStorage/include/function, property, or array/js_html_sanitize_eval, external script-includes pass storage sources to eval() after HTML-entity replacement only — route-specific script-include sanitizer-bypass oracle.",
+      "When scanning /dom/toxicdom/sessionStorage or localStorage/include/function, property, or array/js_html_sanitize_eval, or sessionStorage/array/function, object/function, object/array, or object/property/js_html_sanitize_eval, external script-includes pass storage sources to eval() after HTML-entity replacement only — route-specific script-include sanitizer-bypass oracle.",
     impactOneline:
       "Route-specific scans should confirm script-include sanitizer-bypass eval sinks cannot execute attacker-controlled code.",
     detectorKind: "rule_ref",
@@ -41959,6 +41959,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /order/details route scan confirms unauthenticated order PII disclosure. Show route-specific IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-admin-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop admin panel X-Original-URL bypass live oracle",
+    description:
+      "GET / with X-Original-URL: /admin bypasses 403 on /admin and returns admin delete-user links — the PortSwigger Gin & Juice access-control bypass training oracle.",
+    impactOneline:
+      "Reverse-proxy URL override headers can bypass front-end access controls and expose privileged admin functionality.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAdminBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-supplied URL override headers at the application layer and enforce authorization on the resolved route.",
+      steps: [
+        "Strip or ignore X-Original-URL, X-Rewrite-URL, and similar headers at the edge.",
+        "Enforce authentication and authorization on /admin regardless of how the request was routed.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our admin panel is reachable via X-Original-URL: /admin on GET /. Show reverse-proxy header bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-admin-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /admin X-Original-URL bypass route live oracle",
+    description:
+      "When scanning /admin, X-Original-URL: /admin on GET / bypasses the 403 and exposes admin delete-user links — route-specific access-control bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that admin endpoints are reachable via URL override header bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAdminBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-supplied URL override headers and enforce authorization on /admin.",
+      steps: [
+        "Strip or ignore X-Original-URL, X-Rewrite-URL, and similar headers at the edge.",
+        "Enforce authentication and authorization on /admin regardless of how the request was routed.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route scan confirms X-Original-URL bypass exposes delete-user functionality. Show route-specific access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-external-localstorage-property-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range external localStorage property eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/external/localStorage/property/eval loads an external script that passes localStorage.badValue to eval() — Firing Range external localStorage eval DOM XSS training oracle.",
+    impactOneline:
+      "External script-includes that pass localStorage values to eval() enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomExternalLocalstoragePropertyEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() via external scripts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from localStorage in external script handlers.",
+        "Treat localStorage as untrusted input in all DOM sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/external/localStorage/property/eval route loads a script that passes localStorage to eval(). Show external-script DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-external-localstorage-property-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/external/localStorage/property/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/external/localStorage/property/eval, an external script-include passes localStorage.badValue to eval() — route-specific external localStorage eval DOM XSS oracle.",
+    impactOneline:
+      "Route-specific confirmation that external localStorage scripts reach eval() without sanitization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomExternalLocalstoragePropertyEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() on localStorage-backed values in external /dom/toxicdom handlers.",
+      steps: [
+        "Audit external script-includes for dangerous sinks on localStorage sources.",
+        "Encode or reject dangerous characters before any code execution path.",
+        "Use CSP to block inline and external script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/external/localStorage/property/eval route uses eval on localStorage via script include. Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
   },

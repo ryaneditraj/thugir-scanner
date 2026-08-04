@@ -37991,20 +37991,19 @@ const firingRangeDomSessionStorageDocumentwriteLiveOracle: Rule = async (ctx) =>
   const htmlUrl = new URL(htmlPath, ctx.origin).toString();
   const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
-  const scriptUrl = new URL(
-    FIRING_RANGE_SESSIONSTORAGE_DOCUMENTWRITE_SCRIPT_PATH,
-    ctx.origin
-  ).toString();
+  const scriptPath = htmlPath.replace(/^\/dom\/toxicdom\/external\//, "/dom/toxicdomscripts/");
+  const scriptUrl = new URL(scriptPath, ctx.origin).toString();
   const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
   const script = scriptDoc.body;
   const hasDocumentWriteSink =
-    /sessionStorage\.badValue/i.test(script) &&
-    /document\.write\s*\(\s*payload\s*\)/i.test(script);
+    /sessionStorage(?:\.(?:getItem\s*\(\s*['"]badValue['"]\s*\)|badValue)|\[\s*['"]badValue['"]\s*\])/i.test(
+      script
+    ) && /document\.write\s*\(\s*payload\s*\)/i.test(script);
   if (!hasDocumentWriteSink) return NEGATIVE;
   const hasExternalPage =
     /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
-    /sessionStorage\/property\/documentWrite/i.test(htmlDoc.body);
+    /sessionStorage\/(?:property|array|function)\/documentWrite/i.test(htmlDoc.body);
   if (!hasExternalPage) return NEGATIVE;
   return {
     fired: true,
@@ -38095,6 +38094,70 @@ const firingRangeDomExternalSessionStorageFunctionEvalRouteLiveOracle: Rule = as
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/external/sessionStorage/function/eval route scan — sessionStorage payload passed to eval() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_EVAL_HTML_PATH =
+  "/dom/toxicdom/external/localStorage/property/eval";
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_EVAL_SCRIPT_PATH =
+  "/dom/toxicdomscripts/localStorage/property/eval";
+
+const firingRangeDomExternalLocalstoragePropertyEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_EVAL_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/localStorage\/property\/eval\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_EVAL_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasEvalSink =
+    /localStorage\.badValue/i.test(script) && /eval\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasEvalSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /localStorage\/property\/eval/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external localStorage script passes localStorage.badValue to eval() — toxic DOM localStorage eval XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalLocalstoragePropertyEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/localStorage\/property\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalLocalstoragePropertyEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/localStorage/property/eval route scan — localStorage.badValue passed to eval() without sanitization"
     }
   };
 };
@@ -41367,6 +41430,18 @@ const FIRING_RANGE_TOXICDOM_JS_HTML_SANITIZE_EVAL_ROUTES = [
     sourceRe: /localStorage\s*\[\s*['"]badValue['"]\s*\]/i,
     label: "localStorage array badValue",
     routeRe: /\/dom\/toxicdom\/localStorage\/array\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/sessionStorage/array/js_html_sanitize_eval",
+    sourceRe: /sessionStorage\s*\[\s*['"]badValue['"]\s*\]/i,
+    label: "sessionStorage array badValue",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/array\/js_html_sanitize_eval\b/i
+  },
+  {
+    path: "/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval",
+    sourceRe: /sessionStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i,
+    label: "sessionStorage getItem badValue",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/function\/js_html_sanitize_eval\b/i
   }
 ] as const;
 
@@ -41484,6 +41559,38 @@ const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_SANITIZE_ROUTES = [
     sourceRe: /localStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
     label: "localStorage array source",
     routeRe: /\/dom\/toxicdom\/localStorage\/include\/array\/js_html_sanitize_eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/array/function/js_html_sanitize_eval",
+    scriptPath: "/dom/toxicdomscripts/array/function/js_html_sanitize_eval",
+    scriptSrcRe: /array\/function\/js_html_sanitize_eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    label: "sessionStorage array function source",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/array\/function\/js_html_sanitize_eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/function/js_html_sanitize_eval",
+    scriptPath: "/dom/toxicdomscripts/object/function/js_html_sanitize_eval",
+    scriptSrcRe: /object\/function\/js_html_sanitize_eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    label: "sessionStorage object function source",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/function\/js_html_sanitize_eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/array/js_html_sanitize_eval",
+    scriptPath: "/dom/toxicdomscripts/object/array/js_html_sanitize_eval",
+    scriptSrcRe: /object\/array\/js_html_sanitize_eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    label: "sessionStorage object array source",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/array\/js_html_sanitize_eval\b/i
+  },
+  {
+    htmlPath: "/dom/toxicdom/sessionStorage/object/property/js_html_sanitize_eval",
+    scriptPath: "/dom/toxicdomscripts/object/property/js_html_sanitize_eval",
+    scriptSrcRe: /object\/property\/js_html_sanitize_eval/i,
+    sourceRe: /sessionStorage(?:\.getItem|\[[^\]]+\]|\.badValue)/i,
+    label: "sessionStorage object property source",
+    routeRe: /\/dom\/toxicdom\/sessionStorage\/object\/property\/js_html_sanitize_eval\b/i
   }
 ] as const;
 
@@ -47722,6 +47829,50 @@ const ginAndJuiceOrderDetailsIdorRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /order/details route scan — unauthenticated access to another user's billing address and masked card details via orderId parameter"
+    }
+  };
+};
+
+const ginAndJuiceAdminBypassLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const adminUrl = new URL("/admin", ctx.origin).toString();
+  const blocked = await ctx.probe.get(adminUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (blocked.status !== 403) return NEGATIVE;
+  const bypassUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(bypassUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { "X-Original-URL": "/admin" }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const deleteLink = doc.body.match(/\/admin\/delete\?username=[^"'<>\s]+/i)?.[0];
+  if (!deleteLink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: bypassUrl,
+      header: "X-Original-URL: /admin",
+      deleteLink,
+      snippet: doc.body.match(/\/admin\/delete[\s\S]{0,80}/i)?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET / with X-Original-URL: /admin bypasses 403 on /admin and returns admin delete-user links — access-control bypass training oracle"
+    }
+  };
+};
+
+const ginAndJuiceAdminBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceAdminBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /admin route scan — X-Original-URL header bypasses access control and exposes admin delete-user functionality"
     }
   };
 };
@@ -59872,6 +60023,8 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomSessionStorageDocumentwriteRouteLiveOracle,
   firingRangeDomExternalSessionStorageFunctionEvalLiveOracle,
   firingRangeDomExternalSessionStorageFunctionEvalRouteLiveOracle,
+  firingRangeDomExternalLocalstoragePropertyEvalLiveOracle,
+  firingRangeDomExternalLocalstoragePropertyEvalRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeFunctionInnerhtmlLiveOracle,
@@ -60339,6 +60492,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceStockXxeRouteLiveOracle,
   ginAndJuiceOrderDetailsIdorLiveOracle,
   ginAndJuiceOrderDetailsIdorRouteLiveOracle,
+  ginAndJuiceAdminBypassLiveOracle,
+  ginAndJuiceAdminBypassRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
