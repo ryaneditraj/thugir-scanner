@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T01:00:00.000Z",
+  "updated_at": "2026-08-04T01:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2761,
-  "total_findings": 31683,
+  "total_sites_scanned": 2766,
+  "total_findings": 32376,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1972,
-  "discovery_findings": 27557,
+  "discovery_urls_added": 1977,
+  "discovery_findings": 28675,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-04T01:00:00.000Z",
+  "last_run": "2026-08-04T01:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -52,31 +52,41 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 1,
-      "urls_scanned": 3,
-      "findings": 461,
-      "focus": "ginandjuice order IDOR + firing-range localStorage include property + sessionStorage object function eval",
+      "urls_added": 6,
+      "urls_scanned": 10,
+      "findings": 1579,
+      "focus": "ginandjuice order IDOR + blog open-redirect + admin bypass + firing-range localStorage include property + external storage eval/documentWrite routes",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
       "ginandjuice.shop/order/details?orderId=0254809: 11→14 findings — ginandjuice-order-details-idor-live-oracle shipped (unauthenticated billing + masked card disclosure)",
+      "ginandjuice.shop/blog/post?back=: 12 findings — ginandjuice-blog-post-route-live-oracle + open-redirect live oracles confirmed",
+      "ginandjuice.shop/admin: 12 findings — generic hub only, no X-Original-URL admin bypass live oracle",
       "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/property/eval: 0→224 findings — localstorage-include-property eval/innerHtml/documentWrite live+route oracles shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval: 215→223 findings — sessionstorage-object-function-eval pattern rows shipped (route-specific oracle now fires)"
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval: 215→223 findings — sessionstorage-object-function-eval route-specific oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/{property,function}/eval + external/sessionStorage/array/documentWrite: 218-219 findings — generic hub only, no route-specific external-script storage oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "ginandjuice.shop/admin: X-Original-URL admin panel bypass oracle absent (12-finding hub without route-specific confirmation)",
+      "firing-range external/localStorage/{property,function}/eval + external/sessionStorage/array/documentWrite: route-specific external-script storage patterns still missing",
       "localStorage include property innerHtml/documentWrite route-specific oracles may still share generic hub noise on cross-route scans",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "testphp.vulnweb.com unreachable from cloud agent egress (showimage.php scan error)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 32,
-    "ginandjuice.shop/order/details?orderId=0254809": 14,
-    "ginandjuice.shop/catalog?category=gin": 13,
     "public-firing-range.appspot.com/dom/toxicdom/localStorage/include/property/eval": 224,
     "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/function/eval": 223,
+    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/eval": 219,
+    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/eval": 219,
+    "public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/documentWrite": 218,
     "public-firing-range.appspot.com/dom/toxicdom/document/referrer/eval": 217,
-    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/object/array/eval": 216
+    "ginandjuice.shop/order/details?orderId=0254809": 14,
+    "ginandjuice.shop/catalog?category=gin": 13,
+    "ginandjuice.shop/blog/post?back=https://evil-open-redirect-probe.example": 12,
+    "ginandjuice.shop/admin": 12
   }
 }

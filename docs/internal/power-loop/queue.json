@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T00:05:55.262Z",
+  "updated_at": "2026-08-04T01:04:00.700Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/blog/post?back=https://evil-open-redirect-probe.example",
+      "source": "PortSwigger ginandjuice.shop — DOM-based open redirect via back parameter chains to javascript: XSS (pentest-2026-ginandjuice FINDING-020)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/admin",
+      "source": "PortSwigger ginandjuice.shop — admin panel access-control bypass via X-Original-URL header (pentest-2026-ginandjuice FINDING-022)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/sessionStorage/array/documentWrite",
+      "source": "google/firing-range — external script sessionStorage array to document.write DOM XSS (/dom/toxicdom/external/sessionStorage/array/documentWrite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/eval",
+      "source": "google/firing-range — external script localStorage property to eval() DOM XSS (/dom/toxicdom/external/localStorage/property/eval)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/eval",
+      "source": "google/firing-range — external script localStorage function to eval() DOM XSS (/dom/toxicdom/external/localStorage/function/eval)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/catalog?category=gin",
       "source": "PortSwigger ginandjuice.shop — UNION SQLi oracle on /catalog category parameter (pentest-2026-ginandjuice / ZAP testapp docs)",
