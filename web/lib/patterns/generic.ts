@@ -20701,6 +20701,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-review-xss-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pwnshop product review stored XSS oracle (PWN-011)",
+    description:
+      "Pwnshop documents POST /review storing comments without sanitization and rendering them with EJS unescaped <%- %> on product pages — the PWN-011 stored XSS training oracle.",
+    impactOneline:
+      "Stored XSS in product reviews executes in every subsequent visitor's browser when comments are rendered without encoding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopReviewXssOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user review HTML before rendering — Pwnshop PWN-011 is intentional lab software.",
+      steps: [
+        "Use <%= %> escaped output instead of <%- %> for review comments.",
+        "Sanitize review HTML with a strict allow-list before storage.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /review endpoint stores unsanitized HTML rendered via EJS <%- %> on product pages. Show stored XSS remediation for review comments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-path-traversal-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -21191,6 +21217,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our POST /profile/upload-avatar endpoint stores SVG with onload XSS. Show avatar upload hardening and content-type validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-review-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pwnshop stored XSS via product reviews (PWN-011)",
+    description:
+      "POST /review stores comment HTML without sanitization and renders via EJS <%- %> on /product/:id — the Pwnshop stored XSS product review oracle.",
+    impactOneline:
+      "Stored XSS in product reviews can hijack sessions of every subsequent product page visitor.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductReviewStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode review HTML before rendering with EJS — Pwnshop PWN-011 is intentional lab software.",
+      steps: [
+        "Use <%= %> escaped output instead of <%- %> for review comments.",
+        "Sanitize review HTML with a strict allow-list before storage.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /review endpoint stores unsanitized HTML rendered on product pages. Show stored XSS remediation for review comments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-review-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pwnshop /product/:id review stored XSS route live oracle (PWN-011)",
+    description:
+      "When scanning /product/:id, POST /review stores unsanitized comment HTML rendered via EJS <%- %> on the product page — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route scans on product pages need live stored XSS confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductReviewStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode review HTML before rendering — Pwnshop PWN-011 is intentional lab software.",
+      steps: [
+        "Use <%= %> escaped output instead of <%- %> for review comments.",
+        "Sanitize review HTML with a strict allow-list before storage.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /product/:id route renders stored review XSS. Show route-specific stored XSS remediation for review comments.",
     version: 1,
     enabled: true
   },
@@ -26077,6 +26155,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /blind route fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-webhook-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "ssrf.vulnlab.dev webhook SSRF live oracle",
+    description:
+      "GET /webhook/?url= POSTs to attacker-controlled URLs and echoes response status plus X-* headers — probing http://127.0.0.1:8089/webhook-callback leaks X-Internal-Flag in echoed headers.",
+    impactOneline:
+      "Semi-blind SSRF via webhook poster leaks internal service metadata through response headers even when bodies are hidden.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabWebhookLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to internal services and strip sensitive response headers — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny RFC1918 and loopback destinations before outbound POST requests.",
+        "Do not echo upstream response headers to the client.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /webhook route POSTs to internal URLs and leaks X-Internal-Flag via echoed headers. Show SSRF egress filtering and header redaction.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-vulnlab-webhook-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "ssrf.vulnlab.dev /webhook route SSRF live oracle",
+    description:
+      "When scanning /webhook, GET /webhook/?url= POSTs to internal http://127.0.0.1:8089/webhook-callback and leaks X-Internal-Flag in echoed response headers — route-specific semi-blind webhook SSRF oracle.",
+    impactOneline:
+      "Route scans on /webhook confirm server-side POST to internal services with sensitive header leakage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabWebhookRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to internal services — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Deny RFC1918 and loopback destinations before outbound POST requests.",
+        "Do not echo upstream response headers to the client.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /webhook route scan confirms internal SSRF with header leakage. Show route-specific SSRF remediation.",
     version: 1,
     enabled: true
   },
