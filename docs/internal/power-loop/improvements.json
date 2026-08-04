@@ -24,6 +24,9 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: route scan /blog confirms unvalidated back param on search results Back to Blog link — FINDING-020; benchmark 6/6 maintained"
     },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-crlf-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=thugir%0d%0aSet-Cookie:%20{canary}=1 returns injected Set-Cookie header in response; ginandjuice.shop/catalog?category=thugir%0d%0ainjected-header:%20true findings 15→17 (+crlf live+route); benchmark juice-shop.herokuapp.com 33 findings 6/6 maintained"
     },
