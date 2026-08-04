@@ -42977,6 +42977,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-external-localstorage-function-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range external localStorage function eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/external/localStorage/function/eval loads an external script that passes localStorage.getItem('badValue') to eval() — Firing Range external localStorage function eval DOM XSS training oracle.",
+    impactOneline:
+      "External script-includes that pass localStorage getter values to eval() enable DOM XSS when storage is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomExternalLocalstorageFunctionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass localStorage values to eval() via external scripts — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() on values from localStorage.getItem() in external script handlers.",
+        "Treat localStorage as untrusted input in all DOM sinks.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/external/localStorage/function/eval route loads a script that passes localStorage.getItem to eval(). Show external-script DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-external-localstorage-function-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/external/localStorage/function/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/external/localStorage/function/eval, an external script-include passes localStorage.getItem('badValue') to eval() — route-specific external localStorage function eval DOM XSS oracle.",
+    impactOneline:
+      "Route-specific confirmation that external localStorage getter scripts reach eval() without sanitization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomExternalLocalstorageFunctionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() on localStorage-backed values in external /dom/toxicdom handlers.",
+      steps: [
+        "Audit external script-includes for dangerous sinks on localStorage sources.",
+        "Encode or reject dangerous characters before any code execution path.",
+        "Use CSP to block inline and external script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/external/localStorage/function/eval route uses eval on localStorage.getItem via script include. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-debug-info-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Pwnshop /debug/info route debug-disclosure live oracle",
+    description:
+      "When scanning /debug/info, GET returns sessionSecret, CHAT_OVERRIDE_TOKEN, and dbConfig without authentication — route-specific PWN-018 debug endpoint oracle.",
+    impactOneline:
+      "Route-specific scans should confirm unauthenticated debug JSON leaks forgeable session secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopDebugInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate debug endpoints — Pwnshop PWN-018 is intentional lab software.",
+      steps: [
+        "Disable /debug/info in production deployments.",
+        "Require admin authentication for any diagnostic endpoints.",
+        "Rotate session secrets if debug endpoints were ever exposed."
+      ]
+    },
+    fixPrompt:
+      "Our /debug/info route returns session secrets without auth. Show route-specific debug endpoint remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-events-audit-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop /api/v1/events audit-log route live oracle",
+    description:
+      "When scanning /api/v1/events, GET returns unauthenticated security audit logs with action and detail fields — route-specific PWN-005 events API oracle.",
+    impactOneline:
+      "Route-specific scans should confirm audit logs are exposed without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopEventsAuditRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before returning audit logs — Pwnshop PWN-005 is intentional lab software.",
+      steps: [
+        "Protect /api/v1/events with admin-only authorization.",
+        "Redact sensitive detail fields from security event logs.",
+        "Run Pwnshop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/events route returns full audit logs without auth. Show route-specific API authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-portal-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
