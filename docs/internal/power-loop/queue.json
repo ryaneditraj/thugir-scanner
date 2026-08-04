@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-04T11:14:00.000Z",
+  "updated_at": "2026-08-04T13:07:19.230Z",
   "discovery_urls": [
+    {
+      "url": "https://xss-game.appspot.com/level5/frame",
+      "source": "Google XSS Game — level 5 DOM XSS via AJAX callback oracle (public CTF demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level6/frame",
+      "source": "Google XSS Game — level 6 dynamic script injection / JSONP callback oracle (public CTF demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level11",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 11 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level12",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 12 (alf.nu series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://escape.alf.nu/level13",
+      "source": "Erling Ellingsen escape.alf.nu — reflected XSS filter-bypass wargame level 13 (alf.nu series)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/?url=https://evil-open-redirect-probe.example",
       "source": "PortSwigger ginandjuice.shop vulnerabilities page — request URL override oracle on / root (public demo)",
