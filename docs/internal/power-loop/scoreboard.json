@@ -16,19 +16,19 @@
     }
   },
   "total_sites_scanned": 3009,
-  "total_findings": 41328,
+  "total_findings": 41330,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2110,
-  "discovery_findings": 36547,
-  "improvements_shipped": 1167,
+  "discovery_findings": 36549,
+  "improvements_shipped": 1170,
   "last_run": "2026-08-05T15:13:07.790Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 35,
+      "oracle_findings": 37,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,44 +48,46 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (35 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (37 findings, +2 from wallet/security-question oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 6,
+      "urls_scanned": 11,
+      "urls_ok": 9,
       "urls_error": 2,
-      "findings": 217,
-      "focus": "juice-shop-staging order-history/Deliverys/ftp/login/accounting-orders route oracles; pwnshop update-avatar SSRF route oracle",
-      "improvements_shipped_this_run": 0
+      "findings": 332,
+      "focus": "juice-shop-staging queued oracle routes (security-question, wallet/balance, chatbot/respond) + order-history/Deliverys/ftp/login route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (35 findings) — primary Heroku 503, staging fallback",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (37 findings) — primary Heroku 503, staging fallback",
+      "juice-shop-staging.herokuapp.com/rest/user/security-question: 35→38 findings — juice-shop-security-question-user live+route oracles shipped",
+      "juice-shop-staging.herokuapp.com/rest/wallet/balance: 35→38 findings — juice-shop-wallet-balance-bola live+route oracles shipped",
+      "juice-shop-staging.herokuapp.com/rest/chatbot/respond: 35→39 findings — juice-shop-chatbot-respond-route oracle shipped (probes /rest/chat SSE)",
       "juice-shop-staging.herokuapp.com/rest/order-history: 36 findings — juice-shop-order-history-bola-live-oracle confirmed",
       "juice-shop-staging.herokuapp.com/api/Deliverys: 36 findings — juice-shop-deliverys-exposure-route-live-oracle confirmed",
-      "juice-shop-staging.herokuapp.com/rest/order-history/orders: 36 findings — accounting all-orders BOLA route oracle confirmed",
-      "juice-shop-staging.herokuapp.com/ftp: 35 findings — forgotten-backup disclosure via FTP null-byte bypass",
-      "juice-shop-staging.herokuapp.com/rest/user/login: 35 findings — juice-shop-login-sqli-live-oracle confirmed",
       "pwnshop.ctfsecurity.com/profile/update-avatar: 39 findings — pwnshop-update-avatar-route-live-oracle (PWN-029 SSRF) + avatar SVG XSS oracles",
-      "vuln-expose.vercel.app/api/users + /api/comments: scan errors (dead deploy)"
+      "juice-shop-staging.herokuapp.com/rest/user/reset-password: WAF blocks POST from cloud agent — reset-password validation-bypass oracle rejected"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vuln-expose.vercel.app unreachable — 2 queue slots wasted on dead Vercel deploy",
-      "juice-shop-staging/rest/user/login: login-sqli oracle fires but route-specific POST confirmation may need dedicated login probe tuning",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
+      "juice-shop-staging /rest/user/reset-password: WAF blocks password-reset probes from cloud agent IPs",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
+      "vuln-expose.vercel.app unreachable — dead deploy wastes queue slots"
     ]
   },
   "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com/rest/chatbot/respond": 39,
+    "pwnshop.ctfsecurity.com/profile/update-avatar": 39,
+    "juice-shop-staging.herokuapp.com/rest/user/security-question?email=morty@juice-sh.op": 38,
+    "juice-shop-staging.herokuapp.com/rest/wallet/balance": 38,
     "juice-shop-staging.herokuapp.com/rest/order-history": 36,
     "juice-shop-staging.herokuapp.com/api/Deliverys": 36,
-    "juice-shop-staging.herokuapp.com/rest/order-history/orders": 36,
-    "pwnshop.ctfsecurity.com/profile/update-avatar": 39,
-    "juice-shop-staging.herokuapp.com/ftp": 35,
-    "juice-shop-staging.herokuapp.com/rest/user/login": 35,
-    "juice-shop-staging.herokuapp.com": 35,
-    "juice-shop.herokuapp.com": 35
+    "juice-shop-staging.herokuapp.com": 37,
+    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 66,
+    "brokencrystals.com/api/users/oidc": 66,
+    "pwnshop.ctfsecurity.com/api/v1/invoices": 37
   }
 }

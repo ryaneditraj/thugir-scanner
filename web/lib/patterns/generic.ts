@@ -41371,6 +41371,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-security-question-user-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Juice Shop user security-question disclosure live oracle",
+    description:
+      "GET /rest/user/security-question?email= returns a user's password-reset security question without authentication — Juice Shop account-recovery disclosure oracle.",
+    impactOneline:
+      "Disclosing per-user security questions enables targeted password-reset attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSecurityQuestionUserLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require a valid reset token before returning security questions.",
+      steps: [
+        "Return 401 for unauthenticated security-question lookups.",
+        "Bind security-question responses to an active password-reset flow.",
+        "Audit Juice Shop /rest/user/security-question for email enumeration leaks."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/user/security-question endpoint exposes password-reset questions without auth. Show account-recovery disclosure fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-security-question-user-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Juice Shop /rest/user/security-question route live oracle",
+    description:
+      "When scanning /rest/user/security-question, unauthenticated access returns a user's password-reset security question — route-specific account-recovery disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated per-user security-question reads on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSecurityQuestionUserRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require a valid reset token before returning security questions.",
+      steps: [
+        "Return 401 for unauthenticated security-question lookups.",
+        "Bind security-question responses to an active password-reset flow.",
+        "Audit Juice Shop /rest/user/security-question for email enumeration leaks."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/user/security-question route scan exposes password-reset questions without auth. Show route-level disclosure detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-wallet-balance-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop wallet balance BOLA live oracle",
+    description:
+      "GET /rest/wallet/balance accepts alg:none JWT with data.id payload and returns wallet balance JSON — Juice Shop wallet BOLA/auth-bypass oracle.",
+    impactOneline:
+      "Forged JWTs can read wallet balances when object-level authorization is missing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopWalletBalanceBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none JWTs and bind wallet balance reads to the authenticated user.",
+      steps: [
+        "Validate JWT algorithm and signature server-side.",
+        "Scope /rest/wallet/balance to the authenticated subject.",
+        "Audit Juice Shop wallet routes for missing object-level checks."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/wallet/balance endpoint returns wallet balance with alg:none JWTs. Show wallet authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-wallet-balance-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop /rest/wallet/balance route live oracle",
+    description:
+      "When scanning /rest/wallet/balance, alg:none JWT access returns wallet balance JSON — route-specific Juice Shop wallet BOLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag cross-user wallet balance reads on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopWalletBalanceBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none JWTs and bind wallet balance reads to the authenticated user.",
+      steps: [
+        "Validate JWT algorithm and signature server-side.",
+        "Scope /rest/wallet/balance to the authenticated subject.",
+        "Audit Juice Shop wallet routes for missing object-level checks."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/wallet/balance route scan confirms alg:none JWT wallet reads. Show route-level wallet BOLA detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-chatbot-respond-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "Juice Shop /rest/chatbot/respond route live oracle",
+    description:
+      "When scanning /rest/chatbot/respond, POST /rest/chat accepts unauthenticated SSE chat messages — route-specific chatbot prompt-injection oracle.",
+    impactOneline:
+      "Route-scoped scans on chatbot respond paths should confirm the LLM proxy is exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopChatbotRespondRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chatbot endpoints and harden LLM system prompts against injection.",
+      steps: [
+        "Require authentication before accepting chat messages.",
+        "Isolate LLM backends from sensitive data and privileged tools.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/chatbot/respond route exposes an unauthenticated /rest/chat LLM proxy. Show chatbot auth hardening and prompt-injection defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-recycles-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",

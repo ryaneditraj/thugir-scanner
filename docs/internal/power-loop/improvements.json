@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-security-question-user-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/user/security-question?email=morty@juice-sh.op returns {\"question\":{\"id\":7,\"question\":\"Name of your favorite pet?\"}} HTTP 200 without auth; juice-shop-staging.herokuapp.com/rest/user/security-question findings 35→38 (+security-question-user live+route oracles); benchmark juice-shop-staging 37 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-wallet-balance-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/wallet/balance with alg:none JWT data.id returns {\"status\":\"success\",\"data\":0} HTTP 200; juice-shop-staging.herokuapp.com/rest/wallet/balance findings 35→38 (+wallet-balance-bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-chatbot-respond-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /rest/chatbot/respond returns 500 Unexpected path but POST /rest/chat accepts unauthenticated SSE (data:{\"error\":\"LLM error...\"} [DONE]); juice-shop-staging.herokuapp.com/rest/chatbot/respond findings 35→39 (+chatbot-respond-route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-config-live-oracle",
       "status": "shipped",
@@ -19166,6 +19184,21 @@
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-track-order-idor-live-oracle",
       "shipped_at": "2026-08-05T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-security-question-user-live-oracle",
+      "shipped_at": "2026-08-05T15:00:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-wallet-balance-bola-live-oracle",
+      "shipped_at": "2026-08-05T15:00:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-chatbot-respond-route-live-oracle",
+      "shipped_at": "2026-08-05T15:00:00.000Z"
     }
   ]
 }
