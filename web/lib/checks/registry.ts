@@ -52945,6 +52945,119 @@ const juiceShopSecurityQuestionsListRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const JUICE_SHOP_SECURITY_QUESTION_PROBE_EMAILS = [
+  "morty@juice-sh.op",
+  "admin@juice-sh.op",
+  "jim@juice-sh.op"
+] as const;
+
+const juiceShopSecurityQuestionUserLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  for (const email of JUICE_SHOP_SECURITY_QUESTION_PROBE_EMAILS) {
+    const url = new URL(
+      `/rest/user/security-question?email=${encodeURIComponent(email)}`,
+      ctx.origin
+    ).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 18000 });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    if (HEROKU_STUB_RE.test(doc.body)) continue;
+    if (!/"question"\s*:\s*(\{|"[^"]+")/.test(doc.body)) continue;
+    if (/unauthorized|invalid email|not found|credentials_required/i.test(doc.body.slice(0, 400)))
+      continue;
+    const questionMatch =
+      doc.body.match(/"question"\s*:\s*"([^"]{4,})"/) ??
+      doc.body.match(/"question"\s*:\s*\{[^}]*"question"\s*:\s*"([^"]{4,})"/);
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        email,
+        sampleQuestion: questionMatch?.[1],
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Juice Shop GET /rest/user/security-question?email= returns password-reset security question without authentication — user security-question disclosure oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const juiceShopSecurityQuestionUserRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/user\/security-question\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopSecurityQuestionUserLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/user/security-question route scan — unauthenticated password-reset security question disclosed — route-specific disclosure oracle"
+    }
+  };
+};
+
+const juiceShopWalletBalanceBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/wallet/balance", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 18000,
+    headers: juiceShopDataIdAuthHeader()
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:/.test(doc.body)) return NEGATIVE;
+  const balanceMatch = doc.body.match(/"data"\s*:\s*(-?\d+(?:\.\d+)?)/);
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url,
+      balance: balanceMatch?.[1],
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Juice Shop GET /rest/wallet/balance accepts alg:none JWT with data.id payload and returns wallet balance — wallet BOLA/auth-bypass oracle"
+    }
+  };
+};
+
+const juiceShopWalletBalanceBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/wallet\/balance\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopWalletBalanceBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/wallet/balance route scan — alg:none JWT returns wallet balance JSON — route-specific wallet BOLA oracle"
+    }
+  };
+};
+
+const juiceShopChatbotRespondRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/chatbot\/respond\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopChatbotApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/chatbot/respond route scan — POST /rest/chat accepts unauthenticated SSE chat messages — route-specific chatbot prompt-injection oracle"
+    }
+  };
+};
+
 const juiceShopRecyclesBolaLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -63352,6 +63465,11 @@ export const RULES: Record<string, Rule> = {
   juiceShopComplaintsBolaRouteLiveOracle,
   juiceShopSecurityQuestionsListLiveOracle,
   juiceShopSecurityQuestionsListRouteLiveOracle,
+  juiceShopSecurityQuestionUserLiveOracle,
+  juiceShopSecurityQuestionUserRouteLiveOracle,
+  juiceShopWalletBalanceBolaLiveOracle,
+  juiceShopWalletBalanceBolaRouteLiveOracle,
+  juiceShopChatbotRespondRouteLiveOracle,
   juiceShopRecyclesBolaLiveOracle,
   juiceShopRecyclesBolaRouteLiveOracle,
   juiceShopCardsBolaLiveOracle,
