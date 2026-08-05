@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T02:03:21.977Z",
+  "updated_at": "2026-08-05T03:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
+      "source": "NeuraLegion/brokencrystals — JWT x5c certificate chain validation oracle GET /api/auth/jwt/x5c/validate (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5u/validate",
+      "source": "NeuraLegion/brokencrystals — JWT X5U rogue certificate validation oracle GET /api/auth/jwt/x5u/validate (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jku/validate",
+      "source": "NeuraLegion/brokencrystals — JWT JKU header validation oracle GET /api/auth/jwt/jku/validate (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/validate",
+      "source": "NeuraLegion/brokencrystals — JWT JWK embedded key validation oracle GET /api/auth/jwt/jwk/validate (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/hmac/validate",
+      "source": "NeuraLegion/brokencrystals — JWT HMAC algorithm confusion validation oracle GET /api/auth/jwt/hmac/validate (Swagger public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
       "source": "NeuraLegion/brokencrystals — JWT X5U rogue certificate oracle POST /api/auth/jwt/x5u/login (Swagger public demo)",
