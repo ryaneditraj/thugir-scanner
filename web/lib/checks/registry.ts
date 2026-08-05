@@ -58294,15 +58294,15 @@ const brokencrystalsSimpleCsrfFlowLiveOracle: Rule = async (ctx) => {
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   const token = doc.body.trim();
   if (!/^[A-Za-z0-9+/=]{32}$/.test(token)) return NEGATIVE;
-  const setCookie = doc.headers["set-cookie"] || "";
-  if (!/_csrf=/i.test(setCookie) || !/httponly/i.test(setCookie)) return NEGATIVE;
+  const csrfCookie = doc.setCookies.find((c) => /^_csrf=/i.test(c));
+  if (!csrfCookie || !/httponly/i.test(csrfCookie)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.93,
     evidence: {
       url,
       token,
-      setCookie: setCookie.slice(0, 120),
+      setCookie: csrfCookie.slice(0, 120),
       snippet: token,
       note: "Broken Crystals GET /api/auth/simple-csrf-flow returns a 32-char CSRF token and sets HttpOnly _csrf cookie without authentication — simple CSRF oracle"
     }

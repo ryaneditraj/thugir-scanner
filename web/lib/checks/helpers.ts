@@ -468,8 +468,12 @@ export function buildAlgNoneJwt(payload: Record<string, unknown>): string {
 }
 
 /** Build an HS256-signed JWT for lab auth-bypass probes (known weak secrets only). */
-export function buildHs256Jwt(payload: Record<string, unknown>, secret: string): string {
-  const header = b64urlJson({ alg: "HS256", typ: "JWT" });
+export function buildHs256Jwt(
+  payload: Record<string, unknown>,
+  secret: string,
+  headerExtra: Record<string, unknown> = {}
+): string {
+  const header = b64urlJson({ alg: "HS256", typ: "JWT", ...headerExtra });
   const body = b64urlJson(payload);
   const data = `${header}.${body}`;
   const sig = createHmac("sha256", secret)
