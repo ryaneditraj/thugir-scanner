@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-save-login-ip-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/saveLoginIp with Authorization + True-Client-IP:203.0.113.42 returns lastLoginIp:203.0.113.42; juice-shop-staging.herokuapp.com/rest/saveLoginIp findings 37→42 (+save-login-ip live+route oracles); benchmark juice-shop-staging 41 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-whoami-unauth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/user/whoami without auth returns HTTP 200 {\"user\":{}}; juice-shop-staging.herokuapp.com/rest/user/whoami findings 37→42 (+whoami-unauth live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-metadata-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/metadata <!ENTITY xxe thugirXxeCanary> expands canary in response; brokencrystals.com/api/metadata findings 67→67 (+metadata-xxe-route oracle alongside xxe-xml-post-probe); benchmark juice-shop-staging 41 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-captcha-bypass-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/captcha/ returns {\"captchaId\":8,\"captcha\":\"3-10*3\",\"answer\":\"-27\"} with answer in plaintext JSON; juice-shop-staging.herokuapp.com/rest/captcha findings 37→40 (+captcha-bypass live+route oracles); benchmark juice-shop.herokuapp.com 41→44 findings 6/6 maintained"
