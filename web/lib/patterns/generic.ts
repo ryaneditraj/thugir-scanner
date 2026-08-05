@@ -30347,6 +30347,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-jku-rogue-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT rogue JKU header injection live oracle",
+    description:
+      "GET /api/auth/jwt/jku/validate fetches the attacker-controlled jku URL from the JWT header and accepts a forged RS256 JWT signed with the rogue private key — the Broken Crystals JKU injection oracle.",
+    impactOneline:
+      "Trusting attacker-supplied jku JWKS URLs lets attackers forge valid JWTs and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJkuRogueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin trusted JWKS URLs and never fetch keys from jku headers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Whitelist allowed JWKS endpoints; reject jku headers pointing at untrusted hosts.",
+        "Use local key stores instead of fetching keys from JWT header URLs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jku/validate endpoint fetches JWKS from the jku header. Show secure JKU JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-jku-rogue-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/jku/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/jku/validate, JWT with rogue jku URL bypasses authentication and returns the protected secret — route-specific JKU injection confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals JKU validation trusts attacker-supplied JWKS URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJkuRogueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin trusted JWKS URLs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Whitelist allowed JWKS endpoints; reject jku headers pointing at untrusted hosts.",
+        "Use local key stores instead of fetching keys from JWT header URLs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jku/validate route scan confirms rogue jku URL bypass. Show secure JKU JWT verification.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-x5u-rogue-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT rogue X5U header injection live oracle",
+    description:
+      "GET /api/auth/jwt/x5u/validate fetches the attacker-controlled x5u URL from the JWT header and accepts a forged RS256 JWT signed with the rogue private key — the Broken Crystals X5U injection oracle.",
+    impactOneline:
+      "Trusting attacker-supplied x5u certificate URLs lets attackers forge valid JWTs and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtX5uRogueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate x5u chains against trusted CAs and never fetch certs from x5u headers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Pin expected certificate chains for JWT verification.",
+        "Reject x5u headers pointing at untrusted hosts.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/x5u/validate endpoint fetches X.509 certs from the x5u header. Show secure X5U JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-x5u-rogue-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/x5u/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/x5u/validate, JWT with rogue x5u URL bypasses authentication and returns the protected secret — route-specific X5U injection confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals X5U validation trusts attacker-supplied certificate URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtX5uRogueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate x5u chains against trusted CAs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Pin expected certificate chains for JWT verification.",
+        "Reject x5u headers pointing at untrusted hosts.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/x5u/validate route scan confirms rogue x5u URL bypass. Show secure X5U JWT verification.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
