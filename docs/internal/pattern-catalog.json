@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T02:02:27.108Z",
-  "total": 1773,
-  "uniqueSlugs": 1768,
+  "generatedAt": "2026-08-05T03:02:11.210Z",
+  "total": 1779,
+  "uniqueSlugs": 1774,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1755,
+    "generic": 1761,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1688,
+    "deep": 1694,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 143,
     "Broken authentication": 89,
     "Injection": 251,
-    "Cross-site scripting": 631,
+    "Cross-site scripting": 637,
     "Open redirect": 11,
     "general": 20,
     "SSRF": 7,
@@ -916,10 +916,16 @@
     "firing-range-dom-external-localstorage-array-documentwrite-route-live-oracle",
     "firing-range-dom-external-localstorage-array-eval-live-oracle",
     "firing-range-dom-external-localstorage-array-eval-route-live-oracle",
+    "firing-range-dom-external-localstorage-array-innerhtml-live-oracle",
+    "firing-range-dom-external-localstorage-array-innerhtml-route-live-oracle",
+    "firing-range-dom-external-localstorage-function-documentwrite-live-oracle",
+    "firing-range-dom-external-localstorage-function-documentwrite-route-live-oracle",
     "firing-range-dom-external-localstorage-function-eval-live-oracle",
     "firing-range-dom-external-localstorage-function-eval-route-live-oracle",
     "firing-range-dom-external-localstorage-function-innerhtml-live-oracle",
     "firing-range-dom-external-localstorage-function-innerhtml-route-live-oracle",
+    "firing-range-dom-external-localstorage-property-documentwrite-live-oracle",
+    "firing-range-dom-external-localstorage-property-documentwrite-route-live-oracle",
     "firing-range-dom-external-localstorage-property-eval-live-oracle",
     "firing-range-dom-external-localstorage-property-eval-route-live-oracle",
     "firing-range-dom-external-localstorage-property-innerhtml-live-oracle",
