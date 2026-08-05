@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-hmac-confusion-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/hmac/validate accepts alg:none JWT and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/hmac/validate findings 5→64 (+hmac-confusion live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jwk-empty-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/jwk/validate accepts JWT with empty jwk:{} header (no kty) and returns secret; brokencrystals.com/api/auth/jwt/jwk/validate findings 27→48 (+jwk-empty live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-x5c-rogue-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/x5c/validate imports attacker PKCS#8 PEM from x5c[0] and accepts forged RS256 JWT; brokencrystals.com/api/auth/jwt/x5c/validate findings 58→67 (+x5c-rogue live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-sessionstorage-function-eval-live-oracle",
       "status": "shipped",
