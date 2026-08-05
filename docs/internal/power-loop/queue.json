@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T00:47:32.165594Z",
+  "updated_at": "2026-08-05T01:05:40.712978Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
+      "source": "NeuraLegion/brokencrystals \u2014 JWT JKU header injection oracle POST /api/auth/jwt/jku/login (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/login",
+      "source": "NeuraLegion/brokencrystals \u2014 JWT JWK embedded key oracle POST /api/auth/jwt/jwk/login (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/login",
+      "source": "NeuraLegion/brokencrystals \u2014 JWT x5c certificate chain oracle POST /api/auth/jwt/x5c/login (Swagger public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/SecurityAnswers",
+      "source": "OWASP Juice Shop preview \u2014 security-answer hash disclosure oracle GET /api/SecurityAnswers (preview.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Wallets",
+      "source": "OWASP Juice Shop preview \u2014 wallet balance BOLA oracle GET /api/Wallets (preview.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
       "source": "NeuraLegion/brokencrystals \u2014 JWT weak HMAC secret oracle POST /api/auth/jwt/weak-key/login (Swagger public demo)",
