@@ -29957,6 +29957,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-metadata-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/metadata XXE route live oracle",
+    description:
+      "When scanning /api/metadata, POST XML with external entity expands the canary in the response body — route-specific XXE oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag XML external entity expansion on Broken Crystals metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMetadataXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Set XML parser options to reject DOCTYPE and external entities.",
+        "Use a schema-validated XML parser with entity expansion disabled.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/metadata route scan confirms POST XML entity expansion. Show route-level XXE remediation for NestJS XML parsers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-jwt-alg-none-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -41185,6 +41211,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /rest/captcha route scan exposes the answer field in JSON. Show route-level captcha validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-save-login-ip-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Juice Shop login IP spoofing live oracle",
+    description:
+      "GET /rest/saveLoginIp reflects the True-Client-IP header into lastLoginIp without sanitization — the Juice Shop HTTP-Header XSS / IP spoofing training oracle.",
+    impactOneline:
+      "Trusting client-supplied IP headers enables IP spoofing and persisted XSS when the value is rendered in admin views.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSaveLoginIpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never trust client IP headers without validation; sanitize all values before storage and display.",
+      steps: [
+        "Derive client IP from the TCP connection or a trusted reverse proxy only.",
+        "Reject or HTML-encode values from True-Client-IP and X-Forwarded-For before persistence.",
+        "Add regression tests for header injection payloads on login IP logging endpoints."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/saveLoginIp reflects True-Client-IP into lastLoginIp unsanitized. Show header validation and output encoding fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-save-login-ip-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Juice Shop /rest/saveLoginIp IP spoofing route live oracle",
+    description:
+      "When scanning /rest/saveLoginIp, True-Client-IP header is reflected into lastLoginIp — route-specific HTTP header injection oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unsanitized True-Client-IP reflection on Juice Shop login IP logging endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSaveLoginIpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never trust client IP headers without validation; sanitize all values before storage and display.",
+      steps: [
+        "Derive client IP from the TCP connection or a trusted reverse proxy only.",
+        "Reject or HTML-encode values from True-Client-IP and X-Forwarded-For before persistence.",
+        "Add regression tests for header injection payloads on login IP logging endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/saveLoginIp route scan reflects True-Client-IP unsanitized. Show route-level header validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-whoami-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Juice Shop unauthenticated whoami live oracle",
+    description:
+      "GET /rest/user/whoami without auth returns HTTP 200 with an empty user object — the Juice Shop session probe oracle.",
+    impactOneline:
+      "Unauthenticated session probes can leak whether a session exists and aid session-fixation reconnaissance.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopWhoamiUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return 401 for unauthenticated whoami requests or omit the endpoint from public routes.",
+      steps: [
+        "Require a valid JWT before returning any user session data.",
+        "Return consistent error responses for missing or invalid tokens.",
+        "Avoid exposing session state via unauthenticated probe endpoints."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/user/whoami returns an empty user object without authentication. Show session endpoint authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-whoami-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Juice Shop /rest/user/whoami unauthenticated route live oracle",
+    description:
+      "When scanning /rest/user/whoami, unauthenticated GET returns empty user object — route-specific session probe oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated session probe endpoints on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopWhoamiUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return 401 for unauthenticated whoami requests or omit the endpoint from public routes.",
+      steps: [
+        "Require a valid JWT before returning any user session data.",
+        "Return consistent error responses for missing or invalid tokens.",
+        "Avoid exposing session state via unauthenticated probe endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/user/whoami route scan returns empty user without auth. Show route-level session authorization fixes.",
     version: 1,
     enabled: true
   },

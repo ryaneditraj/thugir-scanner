@@ -52870,6 +52870,108 @@ const juiceShopCaptchaBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const JUICE_SHOP_SAVE_LOGIN_IP_PROBE = "203.0.113.42";
+
+async function juiceShopProbeLoginToken(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/rest/user/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: "admin@juice-sh.op", password: "admin123" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  if (HEROKU_STUB_RE.test(doc.body)) return null;
+  return doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1] ?? null;
+}
+
+const juiceShopSaveLoginIpLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const token = await juiceShopProbeLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const url = new URL("/rest/saveLoginIp", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "True-Client-IP": JUICE_SHOP_SAVE_LOGIN_IP_PROBE
+    }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!new RegExp(`"lastLoginIp"\\s*:\\s*"${JUICE_SHOP_SAVE_LOGIN_IP_PROBE}"`).test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      probeIp: JUICE_SHOP_SAVE_LOGIN_IP_PROBE,
+      header: "True-Client-IP",
+      snippet: doc.body.slice(0, 150).trim(),
+      note: "Juice Shop GET /rest/saveLoginIp reflects True-Client-IP header into lastLoginIp without sanitization — HTTP header XSS / IP spoofing oracle"
+    }
+  };
+};
+
+const juiceShopSaveLoginIpRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/saveLoginIp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopSaveLoginIpLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/saveLoginIp route scan — True-Client-IP header reflected into lastLoginIp — route-specific HTTP header injection oracle"
+    }
+  };
+};
+
+const juiceShopWhoamiUnauthLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/user/whoami", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (HEROKU_STUB_RE.test(doc.body)) return NEGATIVE;
+  const normalized = doc.body.replace(/\s/g, "");
+  if (!/"user":\{\}/.test(normalized) && !/"user":\{\s*\}/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url,
+      status: doc.status,
+      snippet: doc.body.slice(0, 80).trim(),
+      note: "Juice Shop GET /rest/user/whoami returns empty user object without authentication — unauthenticated session probe oracle"
+    }
+  };
+};
+
+const juiceShopWhoamiUnauthRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/user\/whoami\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopWhoamiUnauthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/user/whoami route scan — empty user object returned without auth — route-specific unauthenticated session probe oracle"
+    }
+  };
+};
+
 const juiceShopProductsReviewsExposureLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -60231,6 +60333,23 @@ async function probeBrokencrystalsMetadataXxe(ctx: RuleContext): Promise<RuleRes
   };
 }
 
+const brokencrystalsMetadataXxeRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/brokencrystals\.com/i.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/metadata\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsMetadataXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/metadata route scan — POST XML entity expansion in response body — route-specific XXE oracle"
+    }
+  };
+};
+
 const xxeXmlPostProbe: Rule = async (ctx) => {
   const bcXxe = await probeBrokencrystalsMetadataXxe(ctx);
   if (bcXxe?.fired) return bcXxe;
@@ -63758,6 +63877,10 @@ export const RULES: Record<string, Rule> = {
   juiceShopJwtAlgNoneRouteLiveOracle,
   juiceShopCaptchaBypassLiveOracle,
   juiceShopCaptchaBypassRouteLiveOracle,
+  juiceShopSaveLoginIpLiveOracle,
+  juiceShopSaveLoginIpRouteLiveOracle,
+  juiceShopWhoamiUnauthLiveOracle,
+  juiceShopWhoamiUnauthRouteLiveOracle,
   juiceShopProductsReviewsExposureLiveOracle,
   juiceShopProductsReviewsExposureRouteLiveOracle,
   juiceShopAdminConfigLiveOracle,
@@ -63959,6 +64082,7 @@ export const RULES: Record<string, Rule> = {
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
   xpathInjectionDisclosure,
+  brokencrystalsMetadataXxeRouteLiveOracle,
   xxeXmlPostProbe,
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,
