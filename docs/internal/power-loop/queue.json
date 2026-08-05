@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T09:06:00.000Z",
+  "updated_at": "2026-08-05T10:06:31.767Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Recycles",
+      "source": "OWASP Juice Shop staging — recycle requests BOLA oracle GET /api/Recycles (juice-shop-staging.herokuapp.com fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/memories",
+      "source": "OWASP Juice Shop staging — unauthenticated memories IDOR oracle GET /rest/memories (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Feedbacks",
+      "source": "OWASP Juice Shop staging — product feedback BOLA oracle GET /api/Feedbacks (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Challenges",
+      "source": "OWASP Juice Shop staging — challenge scoreboard exposure oracle GET /api/Challenges (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/dom/eventtriggering/eval",
+      "source": "Google Firing Range — DOM XSS event-triggering eval sink benchmark (public-firing-range.appspot.com)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/error-demo/database-connection",
       "source": "OWASP WrongSecrets — challenge-58 database connection string exposure oracle GET /error-demo/database-connection (wrongsecrets.herokuapp.com)",
