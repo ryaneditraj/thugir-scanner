@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T08:05:45.954Z",
+  "updated_at": "2026-08-05T09:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/error-demo/database-connection",
+      "source": "OWASP WrongSecrets — challenge-58 database connection string exposure oracle GET /error-demo/database-connection (wrongsecrets.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab",
+      "source": "OWASP FinBot CTF — Dark Lab supply-chain MCP tool-poisoning surface (GenAI-Security-Project/finbot-ctf public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Complaints",
+      "source": "OWASP Juice Shop staging — complaints BOLA oracle GET /api/Complaints (juice-shop-staging.herokuapp.com fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/chatbot",
+      "source": "OWASP Juice Shop staging — chatbot LLM prompt-injection oracle POST /rest/chatbot (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/BasketItems",
+      "source": "OWASP Juice Shop staging — BOLA basket HPP oracle POST /api/BasketItems (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://preview.owasp-juice.shop/api/PrivacyRequests",
       "source": "OWASP Juice Shop preview — GDPR privacy-request BOLA oracle GET/POST /api/PrivacyRequests (preview.owasp-juice.shop develop branch)",
