@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T10:06:31.767Z",
+  "updated_at": "2026-08-05T11:05:15.126Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Cards",
+      "source": "OWASP Juice Shop staging — payment cards BOLA oracle GET /api/Cards (juice-shop-staging.herokuapp.com fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Addresss",
+      "source": "OWASP Juice Shop staging — shipping addresses BOLA oracle GET /api/Addresss (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Quantitys",
+      "source": "OWASP Juice Shop staging — inventory quantities exposure oracle GET /api/Quantitys (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/SecurityAnswers",
+      "source": "OWASP Juice Shop staging — security-answer hash disclosure oracle GET /api/SecurityAnswers (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/track-order",
+      "source": "OWASP Juice Shop staging — order tracking IDOR oracle GET /rest/track-order (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop-staging.herokuapp.com/api/Recycles",
       "source": "OWASP Juice Shop staging — recycle requests BOLA oracle GET /api/Recycles (juice-shop-staging.herokuapp.com fallback)",
