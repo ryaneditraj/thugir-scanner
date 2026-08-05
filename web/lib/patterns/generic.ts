@@ -29723,6 +29723,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-hmac-confusion-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT HMAC confusion live oracle",
+    description:
+      "GET /api/auth/jwt/hmac/validate accepts alg:none JWT in Authorization and returns {\"secret\":\"this is our secret\"} — the Broken Crystals HMAC algorithm-confusion / none-algorithm oracle.",
+    impactOneline:
+      "Accepting alg:none or confused HMAC JWTs lets attackers bypass authentication and read protected secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtHmacConfusionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Reject algorithm confusion between RS256 and HS256 verification paths.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/hmac/validate endpoint accepts alg:none JWTs. Show secure JWT HMAC verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-hmac-confusion-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/hmac/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/hmac/validate, alg:none JWT bypasses HMAC validation and returns the protected secret — route-specific HMAC confusion confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals HMAC JWT validation accepts alg:none tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtHmacConfusionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Reject algorithm confusion between RS256 and HS256 verification paths.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/hmac/validate route scan confirms alg:none JWT bypass. Show secure HMAC JWT verification.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-jwk-empty-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT empty JWK bypass live oracle",
+    description:
+      "GET /api/auth/jwt/jwk/validate accepts a JWT whose header contains an empty jwk object (no kty) and returns {\"secret\":\"this is our secret\"} — the Broken Crystals JWK injection oracle.",
+    impactOneline:
+      "Accepting JWTs with attacker-controlled empty JWK headers lets attackers bypass signature verification.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJwkEmptyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWTs with embedded JWK headers unless kty and key material are validated — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never skip signature verification when jwk.kty is missing.",
+        "Use a trusted key store instead of embedded JWK headers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jwk/validate endpoint accepts JWTs with empty jwk headers. Show secure JWK validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-jwk-empty-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/jwk/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/jwk/validate, JWT with empty jwk header bypasses verification and returns the protected secret — route-specific JWK injection confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals JWK validation skips verification for empty jwk headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJwkEmptyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWTs with embedded JWK headers unless kty is present — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never skip signature verification when jwk.kty is missing.",
+        "Use a trusted key store instead of embedded JWK headers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jwk/validate route scan confirms empty jwk bypass. Show secure JWK validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-x5c-rogue-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT rogue x5c certificate live oracle",
+    description:
+      "GET /api/auth/jwt/x5c/validate imports attacker PKCS#8 PEM from the x5c header and accepts a forged RS256 JWT signed with that key — the Broken Crystals x5c rogue certificate oracle.",
+    impactOneline:
+      "Trusting attacker-supplied x5c certificate material lets attackers forge valid JWTs and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtX5cRogueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate x5c chains against trusted CAs and never import raw PEM from x5c — Broken Crystals is intentional lab software.",
+      steps: [
+        "Extract public keys from X.509 certificates in x5c, not PKCS#8 private keys.",
+        "Pin expected certificate chains for JWT verification.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/x5c/validate endpoint imports PEM from x5c header. Show secure x5c JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-x5c-rogue-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/x5c/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/x5c/validate, JWT with attacker PEM in x5c[0] bypasses authentication and returns the protected secret — route-specific rogue x5c confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals x5c validation trusts attacker-supplied certificate material.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtX5cRogueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate x5c chains against trusted CAs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Extract public keys from X.509 certificates in x5c, not PKCS#8 private keys.",
+        "Pin expected certificate chains for JWT verification.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/x5c/validate route scan confirms rogue x5c PEM bypass. Show secure x5c JWT verification.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
