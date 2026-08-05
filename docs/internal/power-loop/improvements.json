@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-photo-bfla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/users/search/a returned [] — fixed victim lookup to try e/@/user fallbacks; DELETE /api/users/one/{id}/photo?isAdmin=true returns 200 for non-admin JWT; brokencrystals.com/api/users/one/1/photo?isAdmin=true findings 59→67 (+photo-bfla live+route oracles restored); benchmark juice-shop-staging 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-photo-disclosure-by-email-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/one/admin/photo returns HTTP 204 for any authenticated JWT without ownership check; brokencrystals.com/api/users/one/admin/photo findings 14→66 (+photo-disclosure live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:rest.vulnweb.com",
+      "slug": "rest-vulnweb-users-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /basic_authentication/api/users/pgorczany returns user_id+email with Basic auth without per-user authorization; rest.vulnweb.com/api/products/1 findings 4→6 (+users-bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-hmac-confusion-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/hmac/validate accepts alg:none JWT and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/hmac/validate findings 5→64 (+hmac-confusion live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"

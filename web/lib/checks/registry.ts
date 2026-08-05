@@ -27826,13 +27826,13 @@ const restVulnwebUsersBolaLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000
   });
   if (listDoc.status < 200 || listDoc.status >= 300) return NEGATIVE;
-  let users: Array<{ username?: string }>;
+  let victim: string | undefined;
   try {
-    users = JSON.parse(listDoc.body) as Array<{ username?: string }>;
+    const users = JSON.parse(listDoc.body) as Array<{ username?: string }>;
+    victim = users.find((u) => typeof u.username === "string" && u.username.length > 0)?.username;
   } catch {
-    return NEGATIVE;
+    victim = listDoc.body.match(/"username"\s*:\s*"([^"]+)"/)?.[1];
   }
-  const victim = users.find((u) => typeof u.username === "string" && u.username.length > 0)?.username;
   if (!victim) return NEGATIVE;
   const profileUrl = new URL(
     `/basic_authentication/api/users/${encodeURIComponent(victim)}`,

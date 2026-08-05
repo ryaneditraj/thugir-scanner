@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T08:17:32.000Z",
+  "updated_at": "2026-08-05T08:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2943,
-  "total_findings": 39501,
-  "critical_findings": 58,
+  "total_findings": 39577,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2075,
-  "discovery_findings": 35071,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-05T08:17:32.000Z",
+  "discovery_findings": 35147,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-05T08:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -53,37 +53,35 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 168,
-      "focus": "preview juice-shop PrivacyRequests/BasketItems/Addresss BOLA + escape.tech chatbot LLM + vulnbank transactions BOLA + testinvicti JWT API drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 244,
+      "focus": "brokencrystals photo BFLA fix + photo disclosure + rest.vulnweb users BOLA + preview juice-shop BOLA drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (33 findings) — primary 503, no benchmark misses",
+      "brokencrystals.com/api/users/one/1/photo?isAdmin=true: 59→67 findings — photo-bfla oracle restored (search/a→e/@/user victim lookup)",
+      "brokencrystals.com/api/users/one/admin/photo: 14→66 findings — photo-disclosure-by-email live+route oracles shipped",
+      "rest.vulnweb.com/api/products/1: 4→6 findings — rest-vulnweb-users-bola live+route oracles shipped",
       "preview.owasp-juice.shop/api/PrivacyRequests: 36 findings — privacy-requests-bola live oracle confirmed",
       "preview.owasp-juice.shop/api/BasketItems: 36 findings — basket-items-bola live oracle confirmed",
-      "preview.owasp-juice.shop/api/Addresss/1: 37 findings — addresss-id-bola route live oracle confirmed",
-      "juice-shop.demo.escape.tech/rest/chatbot: 35 findings — chatbot LLM prompt-injection oracle on escape.tech demo",
-      "vulnbank.org/api/v1/transactions: 20 findings — transaction history BOLA hub (no route-specific transactions oracle yet)",
-      "rest.testinvicti.com/jwt/api: 4 findings — JWT API surface; route-specific JWT bypass oracle still absent",
-      "demo.owasp-juice.shop/rest/chatbot + /rest/track-order/1: 503 errors — Heroku dyno unavailable"
+      "vulnbank.org/api/v1/transactions: 20 findings — transaction history BOLA hub (no route-specific transactions oracle yet)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com + demo.owasp-juice.shop: primary Heroku 503 at 08 UTC — use staging/preview/escape.tech fallbacks",
+      "juice-shop.herokuapp.com + demo.owasp-juice.shop: primary Heroku 503 — use staging/preview/escape.tech fallbacks",
       "vulnbank.org/api/v1/transactions: 20-finding hub without route-specific transaction-history BOLA live oracle",
-      "rest.testinvicti.com/jwt/api: 4 findings — JWT weak-secret/none-algorithm live oracles absent for Invicti REST lab",
-      "brokencrystals photo routes: high-finding hubs but no route-specific live oracle per ID vs email variant"
+      "rest.testinvicti.com/jwt/api: 4 findings — JWT weak-secret/none-algorithm live oracles absent for Invicti REST lab"
     ]
   },
   "discovery_highlights": {
+    "brokencrystals.com/api/users/one/1/photo": 67,
+    "brokencrystals.com/api/users/one/admin/photo": 66,
     "preview.owasp-juice.shop/api/Addresss/1": 37,
     "preview.owasp-juice.shop/api/PrivacyRequests": 36,
     "preview.owasp-juice.shop/api/BasketItems": 36,
-    "juice-shop.demo.escape.tech/rest/chatbot": 35,
     "juice-shop-staging.herokuapp.com": 33,
-    "vulnbank.org/api/v1/transactions": 20,
-    "rest.testinvicti.com/jwt/api": 4
+    "rest.vulnweb.com/api/products/1": 6
   }
 }
