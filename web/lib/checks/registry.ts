@@ -52813,6 +52813,103 @@ const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const juiceShopJwtAlgNoneRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/user\/authentication-details\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopJwtAlgNoneLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/user/authentication-details route scan — alg:none JWT returns admin credentials — route-specific JWT bypass oracle"
+    }
+  };
+};
+
+const juiceShopCaptchaBypassLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/captcha/", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"captchaId"\s*:\s*\d+/.test(doc.body)) return NEGATIVE;
+  const captchaMatch = doc.body.match(/"captcha"\s*:\s*"([^"]+)"/);
+  const answerMatch = doc.body.match(/"answer"\s*:\s*"([^"]+)"/);
+  if (!captchaMatch || !answerMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      captcha: captchaMatch[1],
+      answer: answerMatch[1],
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Juice Shop GET /rest/captcha/ returns the captcha answer in plaintext JSON — captcha bypass oracle"
+    }
+  };
+};
+
+const juiceShopCaptchaBypassRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/captcha\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopCaptchaBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/captcha route scan — captcha answer returned in API response — route-specific captcha bypass oracle"
+    }
+  };
+};
+
+const juiceShopProductsReviewsExposureLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/products/1/reviews", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
+  const authorEmails = [...doc.body.matchAll(/"author"\s*:\s*"([^"]+@[^"]+)"/g)].map((m) => m[1]);
+  if (authorEmails.length < 1) return NEGATIVE;
+  const uniqueAuthors = new Set(authorEmails);
+  return {
+    fired: true,
+    confidence: uniqueAuthors.size >= 2 ? 0.93 : 0.91,
+    evidence: {
+      url,
+      authorCount: authorEmails.length,
+      sampleAuthors: [...uniqueAuthors].slice(0, 3),
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET /rest/products/:id/reviews without auth returns review author emails — product reviews disclosure oracle"
+    }
+  };
+};
+
+const juiceShopProductsReviewsExposureRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/products\/\d+\/reviews\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopProductsReviewsExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/products/:id/reviews route scan — unauthenticated review author emails exposed — route-specific disclosure oracle"
+    }
+  };
+};
+
 function isJuiceShopChatbotContext(ctx: RuleContext): boolean {
   const corpus = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
   return JUICE_SHOP_HOST_RE.test(corpus) && /\/chatbot\b|#\/chatbot/i.test(corpus);
@@ -63658,6 +63755,11 @@ export const RULES: Record<string, Rule> = {
   sstiVulnlabSandboxedLiveOracle,
   sstiVulnlabSandboxedRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
+  juiceShopJwtAlgNoneRouteLiveOracle,
+  juiceShopCaptchaBypassLiveOracle,
+  juiceShopCaptchaBypassRouteLiveOracle,
+  juiceShopProductsReviewsExposureLiveOracle,
+  juiceShopProductsReviewsExposureRouteLiveOracle,
   juiceShopAdminConfigLiveOracle,
   juiceShopAdminConfigRouteLiveOracle,
   juiceShopLoginSqliLiveOracle,

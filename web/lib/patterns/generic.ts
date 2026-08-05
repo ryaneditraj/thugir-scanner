@@ -41111,6 +41111,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-jwt-alg-none-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Juice Shop /rest/user/authentication-details JWT none-algorithm route live oracle",
+    description:
+      "When scanning /rest/user/authentication-details, alg:none JWT returns admin credentials — route-specific JWT bypass oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag alg:none JWT acceptance on Juice Shop authentication-details endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopJwtAlgNoneRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to a specific algorithm and reject alg:none.",
+      steps: [
+        "Configure your JWT library to allow only HS256/RS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Add a test that rejects unsigned alg:none tokens."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/user/authentication-details route scan accepts alg:none JWTs. Show route-level JWT verification fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-captcha-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Juice Shop captcha bypass live oracle",
+    description:
+      "GET /rest/captcha/ returns the captcha answer in plaintext JSON alongside the challenge — the Juice Shop captcha bypass training oracle.",
+    impactOneline:
+      "Returning captcha answers in API responses lets bots bypass human-verification checks entirely.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopCaptchaBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return captcha answers to the client; validate server-side only.",
+      steps: [
+        "Store captcha answers server-side keyed by captchaId.",
+        "Return only the challenge image or expression to the client.",
+        "Reject login or registration when the submitted answer does not match the server record."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/captcha/ returns the answer field in JSON. Show server-side captcha validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-captcha-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Juice Shop /rest/captcha captcha bypass route live oracle",
+    description:
+      "When scanning /rest/captcha, the API response includes the plaintext answer field — route-specific captcha bypass oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag captcha answers leaked in Juice Shop captcha API responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopCaptchaBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return captcha answers to the client; validate server-side only.",
+      steps: [
+        "Store captcha answers server-side keyed by captchaId.",
+        "Return only the challenge image or expression to the client.",
+        "Reject login or registration when the submitted answer does not match the server record."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/captcha route scan exposes the answer field in JSON. Show route-level captcha validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-products-reviews-exposure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop product reviews disclosure live oracle",
+    description:
+      "GET /rest/products/:id/reviews without auth returns review author emails and messages — Juice Shop product reviews disclosure oracle.",
+    impactOneline:
+      "Unauthenticated product review APIs can leak customer email addresses and review content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopProductsReviewsExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope product review reads to authenticated users and redact author PII.",
+      steps: [
+        "Require authentication before returning review author emails.",
+        "Display only display names or masked identifiers on public product pages.",
+        "Audit NoSQL/Mongo review endpoints for mass-assignment and injection."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/products/:id/reviews exposes author emails without auth. Show authorization fixes for product review APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-products-reviews-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop /rest/products/:id/reviews disclosure route live oracle",
+    description:
+      "When scanning /rest/products/:id/reviews, unauthenticated response lists review author emails — route-specific disclosure oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated review author disclosure on Juice Shop product pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopProductsReviewsExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope product review reads to authenticated users and redact author PII.",
+      steps: [
+        "Require authentication before returning review author emails.",
+        "Display only display names or masked identifiers on public product pages.",
+        "Audit NoSQL/Mongo review endpoints for mass-assignment and injection."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/products/:id/reviews route scan exposes author emails without auth. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-chatbot-api-live-oracle",
     platform: "generic",
     category: "Prompt injection",
