@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-captcha-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/captcha/ returns {\"captchaId\":8,\"captcha\":\"3-10*3\",\"answer\":\"-27\"} with answer in plaintext JSON; juice-shop-staging.herokuapp.com/rest/captcha findings 37→40 (+captcha-bypass live+route oracles); benchmark juice-shop.herokuapp.com 41→44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-products-reviews-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/products/1/reviews returns author emails admin@juice-sh.op and basil@juice-sh.op without auth; juice-shop-staging.herokuapp.com/rest/products/1/reviews findings 38→41 (+reviews-exposure live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-jwt-alg-none-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan on /rest/user/authentication-details fires alg:none JWT bypass with scannedUrl evidence; juice-shop-staging.herokuapp.com/rest/user/authentication-details findings 37→40 (+jwt-alg-none-route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:testasp.vulnweb.com",
       "slug": "testasp-showforum-sqli-live-oracle",
       "status": "shipped",
