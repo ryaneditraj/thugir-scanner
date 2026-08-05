@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T21:35:00.000Z",
+  "updated_at": "2026-08-05T21:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2726,
-  "total_findings": 26561,
+  "total_sites_scanned": 2747,
+  "total_findings": 27338,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22500,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-05T21:35:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22868,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-05T21:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -48,37 +48,39 @@
           ]
         }
       },
-      "note": "Primary herokuapp 503, staging fallback 6/6 (41 findings); no benchmark misses"
+      "note": "Primary herokuapp cold-start error; staging fallback 6/6 (41 findings, 487 probes)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 24,
-      "focus": "nodegoat-websec SSRF + ReDoS tutorial route oracles + /research SSRF marker fallback",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 12,
+      "findings": 368,
+      "focus": "queue drain juice-shop staging/demo escape + nodegoat SSRF; +5 new URLs queued (duck-store testimonials, wrongsecrets/5, rest.vulnweb, staging captcha, ginandjuice postId=7)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "nodegoat-websec.herokuapp.com/tutorial/ssrf: 7→8 findings — nodegoat-tutorial-ssrf-route-live-oracle shipped",
-      "nodegoat-websec.herokuapp.com/tutorial/redos: 7→8 findings — nodegoat-tutorial-redos-route-live-oracle shipped",
-      "nodegoat-websec.herokuapp.com/research: 7→8 findings — nodegoat-research-ssrf-route-live-oracle shipped (tutorial/ssrf marker fallback on session-gated Heroku)",
-      "juice-shop-staging benchmark: 41 findings 6/6 maintained"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (41 findings) — no benchmark category misses",
+      "juice-shop.demo.escape.tech/rest/chatbot/respond: 47 findings — prompt-injection / chatbot oracle hub",
+      "nodegoat-websec.herokuapp.com/tutorial/ssrf: 7 findings — SSRF tutorial surface",
+      "juice-shop.demo.escape.tech/ftp + SecurityAnswers + order-history: 46–47 finding hubs on Escape demo host",
+      "juice-shop.herokuapp.com/rest/basket/1 + wallet/balance: scan errors (primary host degraded)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "nodegoat-websec /research live SSRF probe blocked — public Heroku rejects authenticated sessions; marker oracle via /tutorial/ssrf",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon oracles fire when OTP session succeeds but intermittent on queue drain",
-      "testphp/testhtml5 vulnweb.com HTTP labs unreachable from cloud egress (connection reset)"
+      "5 new discovery URLs queued at tail (2951 pending ahead) — duck-store testimonials, wrongsecrets/5, rest.vulnweb, staging captcha, ginandjuice postId=7 not scanned this run",
+      "juice-shop.herokuapp.com primary oracle degraded — basket/wallet routes error; staging fallback covers benchmark",
+      "vuln-expose.vercel.app/api/users + /api/comments: repeated scan errors (host unreachable)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
-    "nodegoat-websec.herokuapp.com/tutorial/ssrf": 8,
-    "nodegoat-websec.herokuapp.com/tutorial/redos": 8,
-    "nodegoat-websec.herokuapp.com/research": 8,
     "juice-shop-staging.herokuapp.com": 41,
-    "juice-shop-staging.herokuapp.com/rest/saveLoginIp": 42,
-    "brokencrystals.com/api/metadata": 67,
-    "pwnshop.ctfsecurity.com/seller/preview": 38
+    "juice-shop.demo.escape.tech/rest/chatbot/respond": 47,
+    "juice-shop.demo.escape.tech/api/SecurityAnswers": 47,
+    "juice-shop.demo.escape.tech/rest/order-history": 47,
+    "juice-shop.demo.escape.tech/ftp": 46,
+    "juice-shop.demo.escape.tech/api/snippets": 46,
+    "nodegoat-websec.herokuapp.com/tutorial/ssrf": 7,
+    "juice-shop-staging.herokuapp.com/api/snippets": 41
   }
 }
