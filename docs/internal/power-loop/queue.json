@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T06:03:53.390Z",
+  "updated_at": "2026-08-05T06:09:32.118Z",
   "discovery_urls": [
+    {
+      "url": "https://preview.owasp-juice.shop/api/Recycles",
+      "source": "OWASP Juice Shop preview — recycle requests BOLA oracle GET /api/Recycles (preview.owasp-juice.shop develop branch)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/track-order",
+      "source": "OWASP Juice Shop preview — order tracking IDOR oracle GET /rest/track-order (preview.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/api/products/1",
+      "source": "Invicti rest.vulnweb.com — BOLA/IDOR oracle GET /api/products/:id (vulnweb REST lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.testinvicti.com/jwt/api",
+      "source": "Invicti testinvicti.com — JWT API vulnerable REST surface (rest.testinvicti.com/jwt/api OpenAPI docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/track-order/1",
+      "source": "OWASP Juice Shop demo — order tracking IDOR oracle GET /rest/track-order/:id (official demo.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/eval",
       "source": "google/firing-range — direct sessionStorage function to eval() DOM XSS sink (/dom/toxicdom/sessionStorage/function/eval); route-specific oracle gap",
@@ -14958,31 +14983,6 @@
     {
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval",
       "source": "google/firing-range — sessionStorage function to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://preview.owasp-juice.shop/api/Recycles",
-      "source": "OWASP Juice Shop preview — recycle requests BOLA oracle GET /api/Recycles (preview.owasp-juice.shop develop branch)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://preview.owasp-juice.shop/rest/track-order",
-      "source": "OWASP Juice Shop preview — order tracking IDOR oracle GET /rest/track-order (preview.owasp-juice.shop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://rest.vulnweb.com/api/products/1",
-      "source": "Invicti rest.vulnweb.com — BOLA/IDOR oracle GET /api/products/:id (vulnweb REST lab)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://rest.testinvicti.com/jwt/api",
-      "source": "Invicti testinvicti.com — JWT API vulnerable REST surface (rest.testinvicti.com/jwt/api OpenAPI docs)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/rest/track-order/1",
-      "source": "OWASP Juice Shop demo — order tracking IDOR oracle GET /rest/track-order/:id (official demo.owasp-juice.shop)",
       "auth": "public_demo"
     }
   ],
