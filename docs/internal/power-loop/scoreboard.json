@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T03:11:00.000Z",
+  "updated_at": "2026-08-05T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2897,
-  "total_findings": 36566,
+  "total_sites_scanned": 2903,
+  "total_findings": 36982,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2050,
-  "discovery_findings": 32302,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-05T03:11:00.000Z",
+  "discovery_urls_added": 2055,
+  "discovery_findings": 32685,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-05T04:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 32,
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 482,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,38 @@
           ]
         }
       },
-      "note": "Primary Heroku 503 → staging fallback 6/6 (32 findings); no benchmark misses"
+      "note": "Primary Heroku 503 → staging fallback 6/6 (33 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 726,
-      "focus": "Firing Range external toxicdom localStorage property/function documentWrite + array innerHtml oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 383,
+      "focus": "brokencrystals JWT kid-sql/weak-key validate + simple-csrf-flow + users/oidc; Firing Range external localStorage array documentWrite",
+      "errors": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/documentWrite: 235→242 findings — property-documentwrite live+route oracles shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/documentWrite: 235→242 findings — function-documentwrite live+route oracles shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/innerHtml: 235→242 findings — array-innerhtml live+route oracles shipped"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "brokencrystals.com/api/auth/jwt/kid-sql/validate: 58 findings — JWT KID SQL injection validation hub",
+      "brokencrystals.com/api/auth/jwt/weak-key/validate: 12 findings — JWT weak HMAC secret validation hub",
+      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/documentWrite: 242 findings — external array-documentwrite DOM XSS oracle",
+      "brokencrystals.com/api/auth/simple-csrf-flow: 60 findings — CSRF flow oracle",
+      "brokencrystals.com/api/users/oidc: 11 findings — OIDC user lookup oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals JWT validate routes: high-finding hubs but no route-specific live oracles per attack variant (x5c/x5u/jku/jwk/hmac validate)",
+      "brokencrystals JWT validate routes (kid-sql/weak-key/x5c/x5u/jku/jwk/hmac): high-finding hubs but no route-specific live oracles per attack variant",
       "vuln-expose.vercel.app + testphp.vulnweb.com: unreachable from cloud egress (scan errors)"
     ]
   },
   "discovery_highlights": {
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/documentWrite": 242,
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/documentWrite": 242,
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/innerHtml": 242,
+    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/documentWrite": 242,
+    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 58,
+    "brokencrystals.com/api/auth/simple-csrf-flow": 60,
     "brokencrystals.com/api/auth/jwt/x5c/validate": 58,
     "brokencrystals.com/api/auth/jwt/jku/validate": 32,
     "brokencrystals.com/api/auth/jwt/jwk/validate": 27,
-    "juice-shop-staging.herokuapp.com": 32
+    "juice-shop-staging.herokuapp.com": 33
   }
 }
