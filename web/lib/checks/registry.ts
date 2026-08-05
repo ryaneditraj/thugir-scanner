@@ -43,6 +43,8 @@ import {
   isLikelyConvexQueryPath,
   buildAlgNoneJwt,
   buildHs256Jwt,
+  buildJwkEmptyBypassJwt,
+  buildBrokencrystalsX5cRogueJwt,
   looksAuthChallenge,
   looksAuthGatedJson,
   ADMIN_PANEL_PATHS,
@@ -58407,6 +58409,167 @@ const brokencrystalsSimpleCsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsJwtHmacConfusionLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const path = "/api/auth/jwt/hmac/validate";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const algNoneToken = buildAlgNoneJwt({ user: "admin", exp: now + 3600 });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, noneAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: badToken }
+    }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${algNoneToken}` }
+    })
+  ]);
+  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
+  if (!looksAuthGatedJson(noneAuth) || !brokencrystalsJwtValidateSecretOk(noneAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      statusWithAlgNone: noneAuth.status,
+      responseSample: noneAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals GET /api/auth/jwt/hmac/validate accepts alg:none JWT and returns secret — HMAC algorithm-confusion / none-algorithm oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtHmacConfusionRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/hmac\/validate/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtHmacConfusionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/hmac/validate route scan — alg:none JWT bypasses HMAC validation and returns secret"
+    }
+  };
+};
+
+const brokencrystalsJwtJwkEmptyLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const path = "/api/auth/jwt/jwk/validate";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const forgedToken = buildJwkEmptyBypassJwt({ user: "admin", exp: now + 3600 });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, forgedAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: badToken }
+    }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${forgedToken}` }
+    })
+  ]);
+  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      jwkHeader: "{}",
+      statusWithForgedJwt: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals GET /api/auth/jwt/jwk/validate accepts JWT with empty jwk header (no kty) and returns secret — JWK injection oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtJwkEmptyRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/jwk\/validate/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtJwkEmptyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/jwk/validate route scan — empty jwk header bypasses signature verification"
+    }
+  };
+};
+
+const brokencrystalsJwtX5cRogueLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const path = "/api/auth/jwt/x5c/validate";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const forgedToken = buildBrokencrystalsX5cRogueJwt({ user: "admin", exp: now + 3600 });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, forgedAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: badToken }
+    }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${forgedToken}` }
+    })
+  ]);
+  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      x5cHeader: "attacker PKCS#8 PEM embedded in x5c[0]",
+      statusWithForgedJwt: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals GET /api/auth/jwt/x5c/validate imports attacker PEM from x5c header and accepts forged RS256 JWT — rogue x5c certificate oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtX5cRogueRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/x5c\/validate/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtX5cRogueLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/x5c/validate route scan — rogue x5c PEM in JWT header bypasses authentication"
+    }
+  };
+};
+
 const brokencrystalsDomCsrfFlowLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/auth/dom-csrf-flow", ctx.origin).toString();
@@ -62459,6 +62622,12 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsJwtKidSqlRouteLiveOracle,
   brokencrystalsSimpleCsrfFlowLiveOracle,
   brokencrystalsSimpleCsrfRouteLiveOracle,
+  brokencrystalsJwtHmacConfusionLiveOracle,
+  brokencrystalsJwtHmacConfusionRouteLiveOracle,
+  brokencrystalsJwtJwkEmptyLiveOracle,
+  brokencrystalsJwtJwkEmptyRouteLiveOracle,
+  brokencrystalsJwtX5cRogueLiveOracle,
+  brokencrystalsJwtX5cRogueRouteLiveOracle,
   brokencrystalsDomCsrfFlowLiveOracle,
   brokencrystalsDomCsrfRouteLiveOracle,
   brokencrystalsNestedJsonDoSLiveOracle,
