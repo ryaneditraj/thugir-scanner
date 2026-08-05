@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-weak-key-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/weak-key/validate accepts HS256 JWT signed with JWT_SECRET_KEY 1234 and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/weak-key/validate findings 12→62 (+weak-key live+route oracles); benchmark juice-shop 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-kid-sql-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/kid-sql/validate uses unsanitized JWT kid in SQL key lookup; forged kid -1' UNION SELECT '<probeSecret>' -- with HS256 signed token returns secret; brokencrystals.com/api/auth/jwt/kid-sql/validate gains +kid-sql live+route oracles (58 findings maintained); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-simple-csrf-flow-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/simple-csrf-flow returns 32-char token + HttpOnly _csrf cookie without auth; brokencrystals.com/api/auth/simple-csrf-flow findings 60→64 (+simple-csrf live+route oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-localstorage-function-eval-live-oracle",
       "status": "shipped",
@@ -18929,6 +18947,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-external-sessionstorage-array-innerhtml-live-oracle",
       "shipped_at": "2026-08-04T23:35:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-weak-key-live-oracle",
+      "shipped_at": "2026-08-05T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-kid-sql-live-oracle",
+      "shipped_at": "2026-08-05T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-simple-csrf-flow-live-oracle",
+      "shipped_at": "2026-08-05T05:10:00.000Z"
     }
   ]
 }
