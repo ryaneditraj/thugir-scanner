@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-function-eval-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/function/eval returns eval(sessionStorage.getItem('badValue')) sync+async trigger; public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/eval findings 244→248 (+function-eval live+route oracles); benchmark juice-shop-staging 32 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-function-documentwrite-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/function/documentWrite returns document.write(sessionStorage.getItem('badValue')); public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/documentWrite findings 243→247 (+function-documentwrite live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-function-innerhtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /dom/toxicdom/sessionStorage/function/innerHtml returns div.innerHTML=sessionStorage.getItem('badValue'); public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml findings 245→249 (+function-innerhtml live+route oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-weak-key-live-oracle",
       "status": "shipped",
@@ -11876,6 +11894,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-function-innerhtml-route-live-oracle",
+      "shipped_at": "2026-08-05T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-function-documentwrite-live-oracle",
+      "shipped_at": "2026-08-05T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-sessionstorage-function-eval-live-oracle",
+      "shipped_at": "2026-08-05T06:15:00.000Z"
+    },
     {
       "source": "benchmark:juice-shop",
       "slug": "sql-error-disclosure",
