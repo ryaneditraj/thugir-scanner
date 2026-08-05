@@ -29411,6 +29411,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-weak-key-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT weak HMAC secret live oracle",
+    description:
+      "GET /api/auth/jwt/weak-key/validate accepts HS256 JWT signed with the configured weak JWT_SECRET_KEY (1234) and returns {\"secret\":\"this is our secret\"} — the Broken Crystals weak-key brute-force oracle.",
+    impactOneline:
+      "Predictable HMAC JWT secrets let attackers forge valid tokens and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtWeakKeyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random JWT secrets and rotate them — Broken Crystals is intentional lab software.",
+      steps: [
+        "Generate JWT HMAC secrets with at least 256 bits of entropy.",
+        "Reject tokens signed with known weak secrets during verification.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/weak-key/validate endpoint accepts JWTs signed with weak secret 1234. Show secure JWT secret management for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-weak-key-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/weak-key/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/weak-key/validate, HS256 JWT signed with weak JWT_SECRET_KEY bypasses auth and returns the protected secret — route-specific weak HMAC key confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals weak-key JWT validation accepts trivial HMAC secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtWeakKeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random JWT secrets — Broken Crystals is intentional lab software.",
+      steps: [
+        "Generate JWT HMAC secrets with at least 256 bits of entropy.",
+        "Reject tokens signed with known weak secrets during verification.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/weak-key/validate route scan confirms weak HMAC JWT bypass. Show secure JWT secret management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-kid-sql-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT kid SQL injection live oracle",
+    description:
+      "GET /api/auth/jwt/kid-sql/validate uses unsanitized JWT kid header in a SQL key lookup; forged kid UNION SELECT injects attacker-controlled HMAC key and accepts the token — the Broken Crystals KID SQL injection oracle.",
+    impactOneline:
+      "SQL injection in JWT kid key lookup lets attackers forge valid tokens and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtKidSqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize JWT key lookups and allow-list kid values — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate JWT kid header values into SQL queries.",
+        "Use prepared statements or a key-management service for key retrieval.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/kid-sql/validate endpoint builds SQL from JWT kid header. Show secure JWT key retrieval patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-kid-sql-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/kid-sql/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/kid-sql/validate, JWT kid SQL injection forges a valid HMAC signing key and returns the protected secret — route-specific KID SQL injection confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals JWT kid header is vulnerable to SQL injection key forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtKidSqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize JWT key lookups — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate JWT kid header values into SQL queries.",
+        "Use prepared statements or a key-management service for key retrieval.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/kid-sql/validate route scan confirms JWT kid SQL injection. Show secure key retrieval patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-simple-csrf-flow-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Broken Crystals simple CSRF token oracle",
+    description:
+      "GET /api/auth/simple-csrf-flow returns a 32-char CSRF token in the body and sets an HttpOnly _csrf cookie without session authentication — the Broken Crystals simple CSRF oracle.",
+    impactOneline:
+      "Unauthenticated CSRF token issuance lets attackers harvest tokens for cross-site request forgery chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSimpleCsrfFlowLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Issue CSRF tokens only after authenticated sessions — Broken Crystals is intentional lab software.",
+      steps: [
+        "Bind CSRF tokens to server-side session state.",
+        "Validate CSRF tokens on all state-changing requests.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/simple-csrf-flow endpoint issues CSRF tokens without authentication. Show secure CSRF token design.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-simple-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Broken Crystals /api/auth/simple-csrf-flow route live oracle",
+    description:
+      "When scanning /api/auth/simple-csrf-flow, unauthenticated GET returns a CSRF token and HttpOnly _csrf cookie — route-specific simple CSRF confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals exposes CSRF tokens without session validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSimpleCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Issue CSRF tokens only after authenticated sessions — Broken Crystals is intentional lab software.",
+      steps: [
+        "Bind CSRF tokens to server-side session state.",
+        "Validate CSRF tokens on all state-changing requests.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/simple-csrf-flow route scan confirms unauthenticated CSRF token issuance. Show secure CSRF design.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
