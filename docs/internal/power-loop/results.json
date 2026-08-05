@@ -1,21 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-08-03T22:06:11.738Z",
-      "url": "http://testphp.vulnweb.com/showimage.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-08-03T22:06:11.738Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
       "run_id": "2026-08-03T22:06:21.886Z",
       "url": "http://testphp.vulnweb.com/redir.php",
       "auth": "public_demo",
@@ -28,7 +13,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-03T22:06:21.886Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-03T22:06:31.972Z",
@@ -43,7 +28,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-03T22:06:31.972Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-03T22:06:42.052Z",
@@ -7546,7 +7531,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — primary juice-shop.herokuapp.com 503; staging fallback 32 findings, 6/6 recall (pages=6 probes=477)",
+      "benchmark_status": "ok \u2014 primary juice-shop.herokuapp.com 503; staging fallback 32 findings, 6/6 recall (pages=6 probes=477)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -7580,7 +7565,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-03T23:31:17.123Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-03T23:31:37.678Z",
@@ -7836,7 +7821,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T00:03:26.730Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T00:03:47.358Z",
@@ -17466,7 +17451,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T01:01:17.504Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T01:01:35.656Z",
@@ -25652,7 +25637,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T01:11:39.529Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T02:01:23.252Z",
@@ -25668,7 +25653,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T02:01:23.252Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T02:01:43.860Z",
@@ -26586,7 +26571,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T02:08:18.633Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T02:08:28.747Z",
@@ -26601,7 +26586,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T02:08:28.747Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T02:08:38.835Z",
@@ -26616,7 +26601,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T02:08:38.835Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T14:01:57.092Z",
@@ -26632,7 +26617,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T14:01:57.092Z",
-      "error": "We couldn't reach juice-shop.herokuapp.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach juice-shop.herokuapp.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T14:02:19.201Z",
@@ -27200,7 +27185,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T14:05:39.015Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T14:05:49.111Z",
@@ -27215,7 +27200,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T14:05:49.111Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T14:05:59.197Z",
@@ -27230,7 +27215,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T14:05:59.197Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T15:03:30.127Z",
@@ -27246,7 +27231,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T15:03:30.127Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T15:03:50.966Z",
@@ -27487,7 +27472,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T15:12:59.658Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T15:13:09.797Z",
@@ -27502,7 +27487,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T15:13:09.797Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T15:13:19.865Z",
@@ -27517,7 +27502,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T15:13:19.865Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T15:19:30.551Z",
@@ -27533,7 +27518,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T15:19:30.551Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T15:19:51.061Z",
@@ -27782,7 +27767,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T16:00:57.350Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T16:01:17.946Z",
@@ -28294,7 +28279,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -29243,7 +29228,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T17:04:24.272Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T17:04:44.834Z",
@@ -29485,7 +29470,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T17:25:45.071Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T17:26:05.581Z",
@@ -31319,7 +31304,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -31333,7 +31318,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -31617,7 +31602,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T18:08:35.581Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T18:08:54.074Z",
@@ -32154,7 +32139,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T18:15:24.079Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T18:15:44.662Z",
@@ -32403,7 +32388,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T18:16:46.313Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T18:17:06.807Z",
@@ -33820,7 +33805,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T19:10:04.382Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T19:10:14.473Z",
@@ -33835,7 +33820,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T19:10:14.473Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T19:10:24.537Z",
@@ -33850,7 +33835,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T19:10:24.537Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T20:02:37.046Z",
@@ -33866,7 +33851,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T20:02:37.046Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T20:02:57.653Z",
@@ -34114,7 +34099,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop-staging.herokuapp.com",
-      "benchmark_status": "ok — primary juice-shop.herokuapp.com 503; staging fallback 32 findings, 6/6 recall (pages=6 probes=486)",
+      "benchmark_status": "ok \u2014 primary juice-shop.herokuapp.com 503; staging fallback 32 findings, 6/6 recall (pages=6 probes=486)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -35440,7 +35425,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T20:15:25.361Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T20:15:35.461Z",
@@ -35455,7 +35440,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T20:15:35.461Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T20:15:45.538Z",
@@ -35470,7 +35455,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T20:15:45.538Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T20:05:45.041Z",
@@ -35566,7 +35551,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T21:21:57.284Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T21:22:17.794Z",
@@ -35822,7 +35807,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T22:02:42.794Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T22:03:03.392Z",
@@ -37398,7 +37383,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T22:16:27.121Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T22:16:37.180Z",
@@ -37413,7 +37398,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T22:16:37.180Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T22:16:47.238Z",
@@ -37428,7 +37413,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T22:16:47.238Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-04T22:17:19.149Z",
@@ -38744,7 +38729,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-04T23:20:04.824Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-04T23:20:25.380Z",
@@ -39093,7 +39078,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T00:05:35.350Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-05T00:05:55.919Z",
@@ -39342,7 +39327,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T00:21:18.694Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-05T00:21:39.271Z",
@@ -39799,7 +39784,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -39820,7 +39805,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -40129,7 +40114,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -40326,7 +40311,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -40418,7 +40403,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -40510,7 +40495,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -40837,7 +40822,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T00:49:10.929Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T00:49:33.665Z",
@@ -40852,7 +40837,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T00:49:33.665Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T01:03:23.340Z",
@@ -40868,7 +40853,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T01:03:23.340Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-05T01:03:43.889Z",
@@ -41232,7 +41217,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -41246,7 +41231,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -41555,7 +41540,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -41661,7 +41646,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -42381,7 +42366,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T01:09:53.618Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T01:10:16.340Z",
@@ -42396,7 +42381,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T01:10:16.340Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T01:10:38.870Z",
@@ -42527,7 +42512,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -42541,7 +42526,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -43079,7 +43064,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary oracle 34 findings, 6/6 recall (pages=6 probes=487)",
+      "benchmark_status": "ok \u2014 primary oracle 34 findings, 6/6 recall (pages=6 probes=487)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -43228,7 +43213,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -43249,7 +43234,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -43572,7 +43557,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -43783,7 +43768,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -47219,7 +47204,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T02:06:17.419Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T02:06:40.122Z",
@@ -47234,7 +47219,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T02:06:40.122Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T02:07:02.890Z",
@@ -47517,7 +47502,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T03:02:29.788Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-05T03:02:50.318Z",
@@ -47888,7 +47873,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -47909,7 +47894,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -48303,7 +48288,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -48528,7 +48513,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -48771,7 +48756,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T03:04:43.424Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T03:05:06.142Z",
@@ -48786,7 +48771,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T03:05:06.142Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T03:05:28.854Z",
@@ -48801,7 +48786,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T03:05:28.854Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T04:01:23.452Z",
@@ -48817,7 +48802,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T04:01:23.452Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-05T04:01:43.984Z",
@@ -49195,7 +49180,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -49209,7 +49194,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -49525,7 +49510,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -51424,7 +51409,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -51445,7 +51430,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -51761,7 +51746,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -51835,7 +51820,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T04:08:38.978Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T04:09:01.706Z",
@@ -51850,7 +51835,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T04:09:01.706Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T04:09:24.409Z",
@@ -51865,7 +51850,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T04:09:24.409Z",
-      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach testphp.vulnweb.com. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T05:01:40.535Z",
@@ -61038,7 +61023,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T05:14:53.101Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T05:15:15.817Z",
@@ -61053,7 +61038,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T05:15:15.817Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
+      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-05T05:15:38.521Z",
@@ -61098,7 +61083,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-05T06:04:00.795Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-05T06:04:21.326Z",
@@ -61339,6 +61324,279 @@
       "probes_run": 477,
       "status": "ok",
       "scanned_at": "2026-08-05T06:04:21.326Z"
+    },
+    {
+      "run_id": "2026-08-05T07:01:01.332Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 33,
+      "findings": [
+        {
+          "slug": "juice-shop-addresss-bola-live-oracle",
+          "title": "Juice Shop shipping addresses BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-addresss-id-bola-live-oracle",
+          "title": "Juice Shop address-by-ID BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-login-sqli-live-oracle",
+          "title": "Juice Shop login SQL injection live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-users-idor-live-oracle",
+          "title": "Juice Shop user profile IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-items-bola-live-oracle",
+          "title": "Juice Shop basket items BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-questions-list-live-oracle",
+          "title": "Juice Shop security-question catalog live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-recycles-bola-live-oracle",
+          "title": "Juice Shop recycle requests BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-cards-bola-live-oracle",
+          "title": "Juice Shop payment cards BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-idor-live-oracle",
+          "title": "Juice Shop basket IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-memories-bola-live-oracle",
+          "title": "Juice Shop memories BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-admin-config-live-oracle",
+          "title": "Juice Shop admin application-configuration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "juice-shop-quantitys-exposure-live-oracle",
+          "title": "Juice Shop inventory quantities exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-hints-exposure-live-oracle",
+          "title": "Juice Shop challenge hints exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-challenges-disclosure-live-oracle",
+          "title": "Juice Shop challenge scoreboard exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-deliverys-exposure-live-oracle",
+          "title": "Juice Shop delivery methods exposed live oracle",
+          "severity": "low",
+          "confidence": 0.89,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-feedbacks-bola-live-oracle",
+          "title": "Juice Shop product feedback BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-answers-disclosure-live-oracle",
+          "title": "Juice Shop security-answer hashes disclosed live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 446,
+      "status": "ok",
+      "scanned_at": "2026-08-05T07:01:01.332Z"
+    },
+    {
+      "run_id": "2026-08-05T07:09:37.693Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok \u2014 primary oracle 33 findings, 6/6 recall (pages=6 probes=446)",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 07 UTC run: juice-shop primary 6/6 (33 findings). New queue: preview/demo chatbot LLM + complaints BOLA + brokencrystals photo ID/email oracles.",
+      "scanned_at": "2026-08-05T07:09:37.693Z"
     }
   ]
 }
