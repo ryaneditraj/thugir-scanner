@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-oidc-client-secret-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/oidc-client returns {\"clientId\":\"brokencrystals-client\",\"clientSecret\":\"4bfb5df6-...\"} without auth; brokencrystals.com/api/users/oidc findings 11→66 (+oidc-client-secret live+route oracles); benchmark juice-shop 36 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-partner-login-xpath-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/partners/partnerLogin?username=anyuser&password=' or '1'='1 returns multiple <password> elements (Walter White/Jesse Pinkman); brokencrystals.com/api/partners/partnerLogin route scan findings 13→26 (+partner-login-xpath-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-subscriptions-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/subscriptions?email=<canary> echoes email unescaped in response body; brokencrystals.com/api/subscriptions route scan findings 12 with +subscriptions-xss-route-live-oracle; benchmark juice-shop 36 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnapi.testinvicti.com",
       "slug": "vulnapi-users-bola-live-oracle",
       "status": "shipped",

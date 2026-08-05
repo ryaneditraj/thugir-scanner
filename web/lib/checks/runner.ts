@@ -2344,6 +2344,10 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsTestimonialsXssLiveOracle",
   "brokencrystalsSubscriptionsXssLiveOracle",
   "brokencrystalsPartnerLoginXpathLiveOracle",
+  "brokencrystalsPartnerLoginXpathRouteLiveOracle",
+  "brokencrystalsOidcClientSecretLiveOracle",
+  "brokencrystalsOidcClientSecretRouteLiveOracle",
+  "brokencrystalsSubscriptionsXssRouteLiveOracle",
   "brokencrystalsFileRawLfiLiveOracle",
   "brokencrystalsFileLfiLiveOracle",
   "brokencrystalsMassAssignmentLiveOracle",
@@ -9430,6 +9434,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vulnbank\.org/i.test(origin) && p.slug.startsWith("vulnbank-transactions-bola")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-process-numbers")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-api-")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-oidc-client-secret")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;

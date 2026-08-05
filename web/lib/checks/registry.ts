@@ -57729,6 +57729,78 @@ const brokencrystalsPartnerLoginXpathLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsPartnerLoginXpathRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/partnerLogin/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsPartnerLoginXpathLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/partners/partnerLogin route scan — boolean XPATH injection leaks multiple <password> elements in XML response"
+    }
+  };
+};
+
+const brokencrystalsOidcClientSecretLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/auth/oidc-client", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const secretMatch = doc.body.match(/"clientSecret"\s*:\s*"([0-9a-f-]{8,})"/i);
+  if (!secretMatch) return NEGATIVE;
+  if (!/"clientId"\s*:\s*"[^"]+"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      clientId: doc.body.match(/"clientId"\s*:\s*"([^"]+)"/)?.[1],
+      secretRedacted: `${secretMatch[1].slice(0, 8)}...`,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/auth/oidc-client returns OIDC clientSecret in JSON without authentication — OIDC credential disclosure oracle"
+    }
+  };
+};
+
+const brokencrystalsOidcClientSecretRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:users\/oidc|auth\/oidc-client)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsOidcClientSecretLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals OIDC route scan — GET /api/auth/oidc-client exposes clientSecret without authentication"
+    }
+  };
+};
+
+const brokencrystalsSubscriptionsXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/subscriptions\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsSubscriptionsXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/subscriptions route scan — POST echoes email query param unescaped in response body (reflected XSS oracle)"
+    }
+  };
+};
+
 const brokencrystalsFileRawLfiLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const packageUrl = new URL("/api/file/raw", ctx.origin);
@@ -63305,6 +63377,10 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsTestimonialsXssLiveOracle,
   brokencrystalsSubscriptionsXssLiveOracle,
   brokencrystalsPartnerLoginXpathLiveOracle,
+  brokencrystalsPartnerLoginXpathRouteLiveOracle,
+  brokencrystalsOidcClientSecretLiveOracle,
+  brokencrystalsOidcClientSecretRouteLiveOracle,
+  brokencrystalsSubscriptionsXssRouteLiveOracle,
   brokencrystalsFileRawLfiLiveOracle,
   brokencrystalsFileLfiLiveOracle,
   brokencrystalsMassAssignmentLiveOracle,

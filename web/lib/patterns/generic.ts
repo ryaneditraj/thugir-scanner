@@ -30893,6 +30893,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-partner-login-xpath-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/partners/partnerLogin route XPATH oracle",
+    description:
+      "When scanning /api/partners/partnerLogin, boolean XPATH injection (' or '1'='1) returns multiple <password> elements — route-specific credential disclosure oracle.",
+    impactOneline:
+      "XPATH injection in login endpoints lets attackers extract other users' passwords from XML responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsPartnerLoginXpathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize XPATH queries and escape user input — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never concatenate user input into XPATH filter strings.",
+        "Use parameterized XPATH APIs or strict allow-list validation on credentials.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/partners/partnerLogin route scan confirms XPATH injection leaks passwords. Show XPATH hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-oidc-client-secret-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals OIDC client secret disclosure oracle",
+    description:
+      "GET /api/auth/oidc-client returns clientId and clientSecret in JSON without authentication — the Broken Crystals OIDC credential disclosure oracle.",
+    impactOneline:
+      "Exposed OIDC client secrets let attackers impersonate the application to the identity provider.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsOidcClientSecretLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose OIDC client secrets via unauthenticated endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Restrict OIDC configuration endpoints to authenticated administrators.",
+        "Store client secrets in server-side configuration, not API responses.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/oidc-client endpoint returns the OIDC clientSecret without auth. Show OIDC credential protection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-oidc-client-secret-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals OIDC route client secret disclosure oracle",
+    description:
+      "When scanning /api/users/oidc or /api/auth/oidc-client, GET /api/auth/oidc-client returns clientSecret in JSON — route-specific OIDC credential disclosure oracle.",
+    impactOneline:
+      "Exposed OIDC client secrets let attackers impersonate the application to the identity provider.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsOidcClientSecretRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose OIDC client secrets via unauthenticated endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Restrict OIDC configuration endpoints to authenticated administrators.",
+        "Store client secrets in server-side configuration, not API responses.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our OIDC route scan confirms clientSecret is exposed via /api/auth/oidc-client. Show OIDC credential protection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-subscriptions-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /api/subscriptions route reflected XSS oracle",
+    description:
+      "When scanning /api/subscriptions, POST echoes the email query parameter unescaped in the response body — route-specific mailing-list reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS in subscription endpoints can steal session cookies or perform actions as victims.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSubscriptionsXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or validate email parameters in API responses — Broken Crystals is intentional lab software.",
+      steps: [
+        "HTML-encode all user-controlled data echoed in HTTP responses.",
+        "Validate email format server-side and reject unexpected characters.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/subscriptions route echoes the email param unescaped. Show reflected XSS remediation for mailing-list endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-file-raw-lfi-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",
