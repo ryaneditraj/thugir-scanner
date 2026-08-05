@@ -21507,6 +21507,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnapi-users-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti vulnapi.testinvicti.com users BOLA live oracle",
+    description:
+      "GET /api/users/3 with Bearer one (user1) returns the admin account password and isAdmin:true — the Invicti vulnapi OWASP API Top 10 users BOLA oracle.",
+    impactOneline:
+      "Authenticated API clients can read any user's credentials by numeric user ID without per-user authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiUsersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vulnapi.testinvicti.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the bearer token subject matches the requested user ID before returning profile data.",
+        "Never return password fields in API responses.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com API returns admin credentials to user1 via GET /api/users/3. Show BOLA authorization fixes for REST user endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-users-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti vulnapi.testinvicti.com users BOLA route live oracle",
+    description:
+      "When scanning vulnapi.testinvicti.com /api/users routes, Bearer one reads the admin user record at /api/users/3 — route-specific users BOLA oracle.",
+    impactOneline:
+      "Route-specific confirmation that Invicti vulnapi labs expose cross-user credential disclosure without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiUsersBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vulnapi.testinvicti.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the bearer token subject matches the requested user ID before returning profile data.",
+        "Never return password fields in API responses.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com route scan confirms cross-user credential disclosure. Show BOLA remediation for REST user endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-validate-token-stack-disclosure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Invicti vulnapi validateToken stack trace disclosure live oracle",
+    description:
+      "POST /api/validateToken with an invalid JWT returns a JSON error body containing a Node.js jsonwebtoken stack trace — the Invicti vulnapi verbose error disclosure oracle.",
+    impactOneline:
+      "Stack traces in API error responses leak framework paths and aid attackers mapping server-side code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiValidateTokenStackDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic error messages in production APIs — vulnapi.testinvicti.com is intentional lab software.",
+      steps: [
+        "Disable verbose stack traces in API error responses.",
+        "Log detailed errors server-side only.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/validateToken endpoint returns jsonwebtoken stack traces in JSON errors. Show API error-handling hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-validate-token-stack-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Invicti vulnapi validateToken stack trace route live oracle",
+    description:
+      "When scanning /api/validateToken, invalid JWT probes return jsonwebtoken stack traces in JSON — route-specific verbose error disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should flag stack-trace leakage on vulnapi validateToken endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiValidateTokenStackDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic error messages in production APIs — vulnapi.testinvicti.com is intentional lab software.",
+      steps: [
+        "Disable verbose stack traces in API error responses.",
+        "Log detailed errors server-side only.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/validateToken route scan exposes jsonwebtoken stack traces. Show route-specific API error-handling hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-transactions-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -41835,6 +41939,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /api/PrivacyRequests route scan exposes another user's GDPR request via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-track-order-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop track-order IDOR live oracle",
+    description:
+      "GET /rest/track-order/1 returns orderId JSON with status success without authentication — the Juice Shop order-tracking IDOR benchmark oracle.",
+    impactOneline:
+      "Unauthenticated order tracking by sequential ID exposes customer order metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopTrackOrderIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and bind track-order lookups to the order owner.",
+      steps: [
+        "Reject unauthenticated track-order requests.",
+        "Use non-guessable order tokens instead of sequential IDs.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/track-order/1 endpoint returns order data without auth. Show track-order IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-track-order-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop track-order IDOR route live oracle",
+    description:
+      "When scanning /rest/track-order/:id, unauthenticated GET returns orderId JSON — route-specific Juice Shop order-tracking IDOR oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated order tracking on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopTrackOrderIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and bind track-order lookups to the order owner.",
+      steps: [
+        "Reject unauthenticated track-order requests.",
+        "Use non-guessable order tokens instead of sequential IDs.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/track-order route scan exposes order data without auth. Show route-level track-order IDOR fixes.",
     version: 1,
     enabled: true
   },

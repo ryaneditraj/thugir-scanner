@@ -2012,6 +2012,8 @@ const DEEP_RULES = new Set<string>([
   "juiceShopLoginRouteLiveOracle",
   "juiceShopChatbotApiLiveOracle",
   "juiceShopChatbotRouteLiveOracle",
+  "juiceShopTrackOrderIdorLiveOracle",
+  "juiceShopTrackOrderIdorRouteLiveOracle",
   "juiceShopUsersIdorLiveOracle",
   "juiceShopUsersIdorRouteLiveOracle",
   "juiceShopBasketItemsBolaLiveOracle",
@@ -2323,6 +2325,10 @@ const DEEP_RULES = new Set<string>([
   "restVulnwebUsersBolaRouteLiveOracle",
   "restTestinvictiJwtUsersBolaLiveOracle",
   "restTestinvictiJwtUsersBolaRouteLiveOracle",
+  "vulnapiUsersBolaLiveOracle",
+  "vulnapiUsersBolaRouteLiveOracle",
+  "vulnapiValidateTokenStackDisclosureLiveOracle",
+  "vulnapiValidateTokenStackDisclosureRouteLiveOracle",
   "restVulnwebPostsBolaLiveOracle",
   "restVulnwebPostsBolaRouteLiveOracle",
   "testfireLoginSqliLiveOracle",
@@ -9420,6 +9426,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/rest\.vulnweb\.com/i.test(origin) && p.slug.startsWith("rest-vulnweb-users-bola")) return -2;
       if (/rest\.vulnweb\.com/i.test(origin) && p.slug.startsWith("rest-vulnweb-posts-bola")) return -2;
       if (/rest\.testinvicti\.com/i.test(origin) && p.slug.startsWith("rest-testinvicti-jwt-users-bola")) return -2;
+      if (/vulnapi\.testinvicti\.com/i.test(origin) && p.slug.startsWith("vulnapi-")) return -2;
       if (/vulnbank\.org/i.test(origin) && p.slug.startsWith("vulnbank-transactions-bola")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-process-numbers")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-api-")) return -2;
