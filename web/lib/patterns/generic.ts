@@ -21377,6 +21377,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "rest-vulnweb-posts-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti rest.vulnweb.com posts BOLA live oracle",
+    description:
+      "GET /basic_authentication/api/posts/{post_id} returns any user's blog post title and content without ownership check — the Invicti Vulnerable REST API posts BOLA oracle.",
+    impactOneline:
+      "Authenticated API clients can read any user's blog posts by sequential post ID without authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restVulnwebPostsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "rest.vulnweb.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the authenticated subject owns the requested post before returning content.",
+        "Return HTTP 403 for cross-user post access attempts.",
+        "Run rest.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our rest.vulnweb.com API returns any user's blog post via /basic_authentication/api/posts/{post_id}. Show BOLA remediation for REST post endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "rest-vulnweb-posts-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti rest.vulnweb.com posts BOLA route live oracle",
+    description:
+      "When scanning rest.vulnweb.com API routes, GET /basic_authentication/api/posts/{post_id} returns any user's blog post without authorization — route-specific posts BOLA oracle.",
+    impactOneline:
+      "Route-specific confirmation that Invicti REST API labs expose cross-user blog post data without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restVulnwebPostsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "rest.vulnweb.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the authenticated subject owns the requested post before returning content.",
+        "Return HTTP 403 for cross-user post access attempts.",
+        "Run rest.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our rest.vulnweb.com route scan confirms cross-user blog post disclosure. Show BOLA remediation for REST post endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "rest-testinvicti-jwt-users-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti rest.testinvicti.com JWT users BOLA live oracle",
+    description:
+      "GET /jwt/api/users/{username} with the documented demo JWT returns any user's email and profile without per-user authorization — the Invicti testinvicti JWT BOLA oracle.",
+    impactOneline:
+      "JWT-authenticated API clients can enumerate and read any user's profile data by username without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restTestinvictiJwtUsersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "rest.testinvicti.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the JWT subject matches the requested username before returning profile data.",
+        "Return HTTP 403 for cross-user profile access attempts.",
+        "Run rest.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our rest.testinvicti.com JWT API returns any user's profile via /jwt/api/users/{username}. Show BOLA remediation for JWT REST user endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "rest-testinvicti-jwt-users-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti rest.testinvicti.com JWT users BOLA route live oracle",
+    description:
+      "When scanning rest.testinvicti.com JWT API routes, GET /jwt/api/users/{username} returns any user's profile without authorization — route-specific JWT BOLA oracle.",
+    impactOneline:
+      "Route-specific confirmation that Invicti JWT REST API labs expose cross-user profile data without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restTestinvictiJwtUsersBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "rest.testinvicti.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the JWT subject matches the requested username before returning profile data.",
+        "Return HTTP 403 for cross-user profile access attempts.",
+        "Run rest.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our rest.testinvicti.com JWT route scan confirms cross-user profile disclosure. Show BOLA remediation for JWT REST user endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-transactions-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank transaction history BOLA live oracle",
+    description:
+      "GET /api/transactions?account_number={victim} returns another user's full transaction history with any valid JWT — the Vuln Bank transaction-history BOLA oracle.",
+    impactOneline:
+      "Authenticated users can read any account's transaction history by supplying an arbitrary account_number query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankTransactionsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Filter transaction queries to the authenticated user's own account — Vuln Bank is intentional lab software.",
+      steps: [
+        "Bind account_number to the JWT subject server-side; ignore client-supplied account numbers.",
+        "Return HTTP 403 when the requested account does not belong to the caller.",
+        "Run Vuln Bank only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Vuln Bank /api/transactions endpoint returns any account's transaction history via account_number. Show BOLA authorization fixes for banking APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-transactions-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank /api/transactions BOLA route live oracle",
+    description:
+      "When scanning /api/transactions or /api/v1/transactions, authenticated user reads another account's transaction history via account_number — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-specific confirmation that Vuln Bank exposes cross-account transaction history without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankTransactionsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Filter transaction queries to the authenticated user's own account — Vuln Bank is intentional lab software.",
+      steps: [
+        "Bind account_number to the JWT subject server-side; ignore client-supplied account numbers.",
+        "Return HTTP 403 when the requested account does not belong to the caller.",
+        "Run Vuln Bank only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Vuln Bank /api/transactions route scan confirms cross-account transaction disclosure. Show route-level BOLA detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-evidence",
     platform: "generic",
     category: "Broken access control",

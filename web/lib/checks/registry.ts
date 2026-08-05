@@ -18939,6 +18939,66 @@ const vulnbankCheckBalanceIdorLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankTransactionsBolaLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const token = await vulnbankProbeUserToken(ctx);
+  if (!token) return NEGATIVE;
+  const victimAccount = "1234567890";
+  const url = new URL(`/api/transactions?account_number=${victimAccount}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: {
+    account_number?: string;
+    transactions?: Array<{ id?: number; from_account?: string; to_account?: string; amount?: number }>;
+  } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as {
+      account_number?: string;
+      transactions?: Array<{ id?: number; from_account?: string; to_account?: string; amount?: number }>;
+    };
+  } catch {
+    return NEGATIVE;
+  }
+  const transactions = parsed?.transactions;
+  if (!Array.isArray(transactions) || transactions.length === 0) return NEGATIVE;
+  const first = transactions[0];
+  if (!first?.id || !first.from_account || typeof first.amount !== "number") return NEGATIVE;
+  if (String(parsed?.account_number ?? "") !== victimAccount) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      victimAccount,
+      transactionCount: transactions.length,
+      sampleFromAccount: first.from_account,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank GET /api/transactions?account_number={victim} returns another user's transaction history with any valid JWT — transaction-history BOLA oracle"
+    }
+  };
+};
+
+const vulnbankTransactionsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/transactions|\/api\/transactions/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankTransactionsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/transactions route scan — authenticated user reads another account's transaction history via account_number parameter — route-specific BOLA oracle"
+    }
+  };
+};
+
 const brokencrystalsMarketplacePrototypePollutionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = new URL("/marketplace", ctx.origin).toString();
@@ -27873,6 +27933,134 @@ const restVulnwebUsersBolaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Invicti rest.vulnweb.com route scan — GET /basic_authentication/api/users/{username} returns any user's profile without authorization — BOLA oracle"
+    }
+  };
+};
+
+const REST_TESTINVICTI_JWT_AUTH =
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6InNlY3JldC50eHQifQ.eyJ1c2VyIjoidGVzdCJ9.jqBFzyBB68KWiOvEJhcaDgMY0Gea-t0KNnf-fR2Ioyc";
+
+function isRestTestinvictiHost(ctx: RuleContext): boolean {
+  return /rest\.testinvicti\.com/i.test(ctx.origin);
+}
+
+const restTestinvictiJwtUsersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isRestTestinvictiHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/jwt/api/users", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, {
+    headers: { Authorization: REST_TESTINVICTI_JWT_AUTH },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (listDoc.status < 200 || listDoc.status >= 300) return NEGATIVE;
+  let victim: string | undefined;
+  try {
+    const users = JSON.parse(listDoc.body) as Array<{ username?: string }>;
+    victim = users.find((u) => typeof u.username === "string" && u.username.length > 0)?.username;
+  } catch {
+    victim = listDoc.body.match(/"username"\s*:\s*"([^"]+)"/)?.[1];
+  }
+  if (!victim) return NEGATIVE;
+  const profileUrl = new URL(`/jwt/api/users/${encodeURIComponent(victim)}`, ctx.origin).toString();
+  const profileDoc = await ctx.probe.get(profileUrl, {
+    headers: { Authorization: REST_TESTINVICTI_JWT_AUTH },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (profileDoc.status < 200 || profileDoc.status >= 300) return NEGATIVE;
+  if (!/"user_id"\s*:/.test(profileDoc.body) || !/"email"\s*:/.test(profileDoc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      listUrl,
+      profileUrl,
+      username: victim,
+      snippet: profileDoc.body.slice(0, 160).trim(),
+      note: "Invicti rest.testinvicti.com GET /jwt/api/users/{username} returns any user's email and profile without per-user authorization — JWT BOLA oracle"
+    }
+  };
+};
+
+const restTestinvictiJwtUsersBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isRestTestinvictiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jwt\/api/i.test(pageUrl)) return NEGATIVE;
+  const result = await restTestinvictiJwtUsersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti rest.testinvicti.com route scan — GET /jwt/api/users/{username} returns any user's profile without authorization — JWT BOLA oracle"
+    }
+  };
+};
+
+const restVulnwebPostsBolaLiveOracle: Rule = async (ctx) => {
+  if (!isRestVulnwebHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/basic_authentication/api/posts", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, {
+    headers: { Authorization: REST_VULNWEB_BASIC_AUTH },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (listDoc.status < 200 || listDoc.status >= 300) return NEGATIVE;
+  let postId: string | undefined;
+  try {
+    const posts = JSON.parse(listDoc.body) as Array<{ post_id?: string }>;
+    postId = posts.find((p) => typeof p.post_id === "string" && p.post_id !== "1")?.post_id;
+  } catch {
+    postId = listDoc.body.match(/"post_id"\s*:\s*"(\d+)"/)?.[1];
+  }
+  if (!postId) postId = "2";
+  const postUrl = new URL(`/basic_authentication/api/posts/${postId}`, ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    headers: { Authorization: REST_VULNWEB_BASIC_AUTH },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 300) return NEGATIVE;
+  let parsed: { post?: { title?: string; content?: string; user_id?: string } } | null = null;
+  try {
+    parsed = JSON.parse(postDoc.body) as { post?: { title?: string; content?: string; user_id?: string } };
+  } catch {
+    return NEGATIVE;
+  }
+  const post = parsed?.post;
+  if (!post || typeof post !== "object") return NEGATIVE;
+  if (!post.title || !post.content || !post.user_id) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      listUrl,
+      postUrl,
+      postId,
+      userId: post.user_id,
+      snippet: postDoc.body.slice(0, 200).trim(),
+      note: "Invicti rest.vulnweb.com GET /basic_authentication/api/posts/{post_id} returns any user's blog post without ownership check — posts BOLA oracle"
+    }
+  };
+};
+
+const restVulnwebPostsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isRestVulnwebHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\//i.test(pageUrl)) return NEGATIVE;
+  const result = await restVulnwebPostsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti rest.vulnweb.com route scan — GET /basic_authentication/api/posts/{post_id} returns any user's blog post without authorization — posts BOLA oracle"
     }
   };
 };
@@ -62180,6 +62368,8 @@ export const RULES: Record<string, Rule> = {
   vulnbankRequestLoanLiveOracle,
   vulnbankRequestLoanNegativeAmountLiveOracle,
   vulnbankCheckBalanceIdorLiveOracle,
+  vulnbankTransactionsBolaLiveOracle,
+  vulnbankTransactionsBolaRouteLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
   brokencrystalsMarketplaceRouteLiveOracle,
   clientSideDragSecurityFlawsEvidence,
@@ -62318,6 +62508,10 @@ export const RULES: Record<string, Rule> = {
   clientSideRestVulnwebEvidence,
   restVulnwebUsersBolaLiveOracle,
   restVulnwebUsersBolaRouteLiveOracle,
+  restTestinvictiJwtUsersBolaLiveOracle,
+  restTestinvictiJwtUsersBolaRouteLiveOracle,
+  restVulnwebPostsBolaLiveOracle,
+  restVulnwebPostsBolaRouteLiveOracle,
   clientSidePwnshopEvidence,
   clientSidePwnshopSstiOracle,
   clientSidePwnshopReviewXssOracle,

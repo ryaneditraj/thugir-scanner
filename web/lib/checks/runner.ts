@@ -2316,6 +2316,10 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsPhotoDisclosureByEmailRouteLiveOracle",
   "restVulnwebUsersBolaLiveOracle",
   "restVulnwebUsersBolaRouteLiveOracle",
+  "restTestinvictiJwtUsersBolaLiveOracle",
+  "restTestinvictiJwtUsersBolaRouteLiveOracle",
+  "restVulnwebPostsBolaLiveOracle",
+  "restVulnwebPostsBolaRouteLiveOracle",
   "testfireLoginSqliLiveOracle",
   "testfireLoginSqliRouteLiveOracle",
   "euriSecCspDynamicScriptLiveOracle",
@@ -2378,6 +2382,8 @@ const DEEP_RULES = new Set<string>([
   "vulnbankRequestLoanLiveOracle",
   "vulnbankRequestLoanNegativeAmountLiveOracle",
   "vulnbankCheckBalanceIdorLiveOracle",
+  "vulnbankTransactionsBolaLiveOracle",
+  "vulnbankTransactionsBolaRouteLiveOracle",
   "brokencrystalsMarketplacePrototypePollutionLiveOracle",
   "brokencrystalsMarketplaceRouteLiveOracle",
   "exposedApiConfig",
@@ -9407,6 +9413,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-photo-bfla")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-photo-disclosure")) return -2;
       if (/rest\.vulnweb\.com/i.test(origin) && p.slug.startsWith("rest-vulnweb-users-bola")) return -2;
+      if (/rest\.vulnweb\.com/i.test(origin) && p.slug.startsWith("rest-vulnweb-posts-bola")) return -2;
+      if (/rest\.testinvicti\.com/i.test(origin) && p.slug.startsWith("rest-testinvicti-jwt-users-bola")) return -2;
+      if (/vulnbank\.org/i.test(origin) && p.slug.startsWith("vulnbank-transactions-bola")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-process-numbers")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-api-")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
