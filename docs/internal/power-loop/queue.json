@@ -15344,7 +15344,32 @@
       "url": "https://ginandjuice.shop/blog/post?postId=7",
       "source": "PortSwigger Gin & Juice Shop — blog post DOM XSS / open-redirect oracle (postId=7 variant)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/chatbot/respond",
+      "source": "OWASP Juice Shop preview — chatbot LLM proxy oracle POST /rest/chatbot/respond (develop branch prompt-injection surface)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://dvga.lab.pentest-forge.com/graphql",
+      "source": "Pentest Forge DVGA — GraphQL introspection/injection oracle (dvga.lab.pentest-forge.com public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.xplat-demo.threatx.io/graphql",
+      "source": "ThreatX DVGA — GraphQL batching/introspection oracle (dvga.xplat-demo.threatx.io public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/captcha/",
+      "source": "Escape Juice Shop demo — captcha bypass oracle GET /rest/captcha/ (juice-shop.demo.escape.tech)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/wallet/balance",
+      "source": "Escape Juice Shop demo — wallet balance BOLA oracle GET /rest/wallet/balance (auth-bypass / IDOR gap)",
+      "auth": "benchmark"
     }
   ],
-  "discovery_urls_added": 34
+  "discovery_urls_added": 39
 }
