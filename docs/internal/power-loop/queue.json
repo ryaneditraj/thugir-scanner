@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T19:33:02.907Z",
+  "updated_at": "2026-08-05T21:08:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop-staging.herokuapp.com/api/snippets",
@@ -15319,7 +15319,32 @@
       "url": "https://juice-shop-staging.herokuapp.com/rest/user/reset-password",
       "source": "OWASP Juice Shop staging — reset-password validation-bypass oracle POST /rest/user/reset-password (client-side validation bypass)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/guest",
+      "source": "Escape Duck Store — stored XSS testimonials guest POST oracle (duck-store vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/5",
+      "source": "OWASP WrongSecrets Heroku — challenge/5 secrets-management oracle (public benchmark demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rest.vulnweb.com/basic_authentication/api/v1/info",
+      "source": "Acunetix rest.vulnweb.com — basic-auth REST API info oracle GET /basic_authentication/api/v1/info",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/captcha/",
+      "source": "OWASP Juice Shop staging — captcha bypass oracle GET /rest/captcha/ (21 UTC benchmark host)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=7",
+      "source": "PortSwigger Gin & Juice Shop — blog post DOM XSS / open-redirect oracle (postId=7 variant)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 29
+  "discovery_urls_added": 34
 }
