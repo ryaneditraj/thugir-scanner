@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T17:56:03.411859Z",
+  "updated_at": "2026-08-05T18:17:37.241Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3018,
-  "total_findings": 41642,
+  "total_sites_scanned": 3019,
+  "total_findings": 41679,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2120,
   "discovery_findings": 36783,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-05T17:56:03.411859Z",
+  "last_run": "2026-08-05T18:17:37.241Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
@@ -48,9 +48,9 @@
           ]
         }
       },
-      "note": "Primary herokuapp live \u2014 41 findings 6/6 recall; reflexion-escalated-ssti + juice-shop live oracles confirmed"
+      "note": "Primary herokuapp live — 41 findings 6/6 recall; reflexion-escalated-ssti + juice-shop live oracles confirmed"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
@@ -61,15 +61,15 @@
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (41 findings) \u2014 primary herokuapp live, no benchmark misses",
-      "preview.owasp-juice.shop/rest/user/login: 40 findings \u2014 SQLi/auth-bypass login oracle on preview branch",
-      "juice-shop.herokuapp.com route URLs: 5\u00d7503 Heroku cold-start after benchmark (whoami/captcha/saveLoginIp/basket/wallet)",
-      "vuln-expose.vercel.app: dead deploy \u2014 api/users + api/comments unreachable"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (41 findings) — primary herokuapp live, no benchmark misses",
+      "preview.owasp-juice.shop/rest/user/login: 40 findings — SQLi/auth-bypass login oracle on preview branch",
+      "juice-shop.herokuapp.com route URLs: 5×503 Heroku cold-start after benchmark (whoami/captcha/saveLoginIp/basket/wallet)",
+      "vuln-expose.vercel.app: dead deploy — api/users + api/comments unreachable"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "juice-shop.herokuapp.com primary route oracles need staging/preview fallback when dyno sleeps (503)",
-      "vuln-expose.vercel.app: dead deploy \u2014 wastes queue scan slots",
+      "vuln-expose.vercel.app: dead deploy — wastes queue scan slots",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
