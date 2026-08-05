@@ -44445,6 +44445,44 @@ const firingRangeDomEventtriggeringWindowEvalRouteLiveOracle: Rule = async (ctx)
   };
 };
 
+const FIRING_RANGE_EVENTTRIGGERING_EVAL_HUB_ROUTE_RE =
+  /\/dom\/eventtriggering\/eval\/?(?:[#?].*)?$/i;
+
+const firingRangeDomEventtriggeringEvalHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!FIRING_RANGE_EVENTTRIGGERING_EVAL_HUB_ROUTE_RE.test(pageUrl)) return NEGATIVE;
+  const inputTyping = await firingRangeDomEventtriggeringInputtypingEvalLiveOracle(ctx);
+  const windowName = await firingRangeDomEventtriggeringWindowEvalLiveOracle(ctx);
+  const sinks: { path: string; note: string }[] = [];
+  if (inputTyping.fired && inputTyping.evidence?.url) {
+    sinks.push({
+      path: String(inputTyping.evidence.url),
+      note: "inputTyping eval sink"
+    });
+  }
+  if (windowName.fired && windowName.evidence?.url) {
+    sinks.push({
+      path: String(windowName.evidence.url),
+      note: "window.name eval sink"
+    });
+  }
+  if (sinks.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sinks.length >= 2 ? 0.93 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      confirmedSinks: sinks,
+      snippet: String(inputTyping.evidence?.snippet ?? windowName.evidence?.snippet ?? "").slice(
+        0,
+        200
+      ),
+      note: "Google Firing Range /dom/eventtriggering/eval hub route scan — event-triggered eval() DOM XSS sinks confirmed via inputTyping and window.name probes"
+    }
+  };
+};
+
 const FIRING_RANGE_JSONCALLBACK_PROBE = "thugirJsonCallbackProbe";
 
 const firingRangeReflectedJsoncallbackLiveOracle: Rule = async (ctx) => {
@@ -53718,6 +53756,50 @@ const wrongsecretsChallengeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
+
+const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL(WRONGSECRETS_ERROR_DEMO_DB_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/Database connection failed with connection string:/i.test(body) ||
+    !/jdbc:postgresql:\/\//i.test(body) ||
+    !/password=/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl,
+      snippet: body.slice(0, 240).trim(),
+      note: "OWASP WrongSecrets GET /error-demo/database-connection returns JDBC connection string with embedded password in error response — challenge-58 database credential exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/error-demo\/database-connection\b/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const result = await wrongsecretsErrorDemoDatabaseConnectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets /error-demo/database-connection route scan — JDBC connection string with password disclosed in server error response"
+    }
+  };
+};
+
 // --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
 const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -60794,6 +60876,67 @@ const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotDarklabSupplyChain(ctx: RuleContext): Promise<RuleResult | null> {
+  const serversUrl = new URL("/darklab/api/v1/supply-chain/servers", ctx.origin).toString();
+  const doc = await ctx.probe.get(serversUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  let data: {
+    servers?: Array<{
+      server_type?: string;
+      display_name?: string;
+      default_tools?: Array<{ name?: string; description?: string }>;
+    }>;
+  };
+  try {
+    data = JSON.parse(doc.body);
+  } catch {
+    return null;
+  }
+  const servers = data.servers ?? [];
+  if (servers.length < 1) return null;
+  const mcpTools = servers.flatMap((s) => s.default_tools ?? []).filter((t) => t.name);
+  if (mcpTools.length < 1) return null;
+  const toolPoisoning =
+    /indirect prompt injection|tool poisoning|poisoned/i.test(doc.body) ||
+    servers.some((s) => /findrive|finbot/i.test(String(s.server_type ?? s.display_name ?? "")));
+  if (!toolPoisoning && mcpTools.length < 2) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      serversUrl,
+      serverCount: servers.length,
+      toolCount: mcpTools.length,
+      serverTypes: servers.slice(0, 4).map((s) => s.server_type),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "OWASP FinBot Dark Lab public /darklab/api/v1/supply-chain/servers exposes MCP server tool definitions (FinDrive upload_file/get_file) — supply-chain tool-poisoning surface oracle"
+    }
+  };
+}
+
+const finbotDarklabSupplyChainLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabSupplyChain(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabSupplyChainRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabSupplyChain(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /darklab route scan — public /darklab/api/v1/supply-chain/servers exposes MCP tool definitions for agentic supply-chain poisoning labs"
+    }
+  };
+};
+
 function isIstEduHost(ctx: RuleContext): boolean {
   return /ist-edu-bd/i.test(ctx.origin);
 }
@@ -62900,6 +63043,8 @@ export const RULES: Record<string, Rule> = {
   juiceShopPrivacyRequestsBolaRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
+  wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
+  wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,
@@ -63032,6 +63177,8 @@ export const RULES: Record<string, Rule> = {
   finbotCtfSidecarRouteLiveOracle,
   finbotVendorSidecarRouteLiveOracle,
   finbotAdminCopilotRouteLiveOracle,
+  finbotDarklabSupplyChainLiveOracle,
+  finbotDarklabSupplyChainRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
@@ -63381,6 +63528,7 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomEventtriggeringWindowDocumentwriteRouteLiveOracle,
   firingRangeDomEventtriggeringWindowEvalLiveOracle,
   firingRangeDomEventtriggeringWindowEvalRouteLiveOracle,
+  firingRangeDomEventtriggeringEvalHubRouteLiveOracle,
   firingRangeReflectedJsoncallbackLiveOracle,
   firingRangeReflectedJsoncallbackRouteLiveOracle,
   firingRangeAddressLocationHashEvalLiveOracle,

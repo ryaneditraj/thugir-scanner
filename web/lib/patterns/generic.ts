@@ -6636,6 +6636,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-eventtriggering-eval-hub-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/eventtriggering/eval hub route XSS oracle",
+    description:
+      "When scanning /dom/eventtriggering/eval hub, probes inputTyping and window.name eval sinks and confirms event-triggered eval() DOM XSS benchmarks — route-specific Firing Range hub oracle.",
+    impactOneline:
+      "Event-triggered eval() sinks on input keystrokes and window.name enable DOM XSS without direct URL reflection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomEventtriggeringEvalHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval() sinks from event-triggered handlers in /dom/eventtriggering routes.",
+      steps: [
+        "Audit deferredPayload and setTimeout trigger handlers for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/eventtriggering/eval hub routes to eval() sinks via inputTyping and window.name. Show event-triggered DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-toxicdom-localstorage-object-property-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -27929,6 +27955,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-error-demo-database-connection-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "OWASP WrongSecrets database connection error live oracle",
+    description:
+      "GET /error-demo/database-connection returns a JDBC PostgreSQL connection string with embedded password in the server error response — challenge-58 credential exposure oracle.",
+    impactOneline:
+      "Database credentials are disclosed in verbose error messages returned to unauthenticated clients.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsErrorDemoDatabaseConnectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-58 is intentional — never return connection strings or passwords in production error pages.",
+      steps: [
+        "Return generic database error messages to clients.",
+        "Store connection strings only in server-side secret managers.",
+        "Rotate any credentials that appeared in error logs or responses."
+      ]
+    },
+    fixPrompt:
+      "Our /error-demo/database-connection endpoint leaks a JDBC password in the error response. Show how to sanitize database errors in Spring Boot.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-error-demo-database-connection-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "OWASP WrongSecrets database connection error route live oracle",
+    description:
+      "When scanning /error-demo/database-connection, GET confirms JDBC connection string with password in the error body — route-specific WrongSecrets challenge-58 oracle.",
+    impactOneline:
+      "Database credentials are disclosed in verbose error messages returned to unauthenticated clients.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-58 is intentional — never return connection strings or passwords in production error pages.",
+      steps: [
+        "Return generic database error messages to clients.",
+        "Store connection strings only in server-side secret managers.",
+        "Rotate any credentials that appeared in error logs or responses."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets /error-demo/database-connection route leaks JDBC credentials in error output. Show remediation for verbose database error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -33593,6 +33671,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /admin/api/v1/copilot/chat route streams agentic financial copilot capabilities. Show how to protect admin copilot APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-supply-chain-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab MCP supply-chain live oracle",
+    description:
+      "GET /darklab/api/v1/supply-chain/servers returns MCP server tool definitions (FinDrive upload_file/get_file) for agentic supply-chain tool-poisoning labs.",
+    impactOneline:
+      "Unauthenticated MCP server catalogs expose tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSupplyChainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot Dark Lab is intentional agentic AI training — restrict MCP supply-chain APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes /darklab/api/v1/supply-chain/servers with MCP tool definitions. Show how to protect agentic supply-chain APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-supply-chain-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab supply-chain route live oracle",
+    description:
+      "When scanning /darklab, GET /darklab/api/v1/supply-chain/servers confirms MCP tool-poisoning lab surface with FinDrive tool schemas — route-specific Dark Lab oracle.",
+    impactOneline:
+      "Unauthenticated MCP server catalogs expose tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSupplyChainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot Dark Lab is intentional agentic AI training — restrict MCP supply-chain APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /darklab route scan reaches MCP supply-chain tool definitions. Show how to gate agentic tool catalogs behind authentication.",
     version: 1,
     enabled: true
   },
