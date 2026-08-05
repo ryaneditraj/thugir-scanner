@@ -19228,7 +19228,6 @@
       "shipped_at": "2026-08-05T12:20:00.000Z"
     },
     {
-<<<<<<< HEAD
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-security-question-user-live-oracle",
       "shipped_at": "2026-08-05T15:00:00.000Z"
@@ -19242,7 +19241,8 @@
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-chatbot-respond-route-live-oracle",
       "shipped_at": "2026-08-05T15:00:00.000Z"
-=======
+    },
+    {
       "source": "discovery:testasp.vulnweb.com",
       "slug": "testasp-showforum-sqli-live-oracle",
       "shipped_at": "2026-08-05T18:42:00.000Z"
@@ -19256,7 +19256,6 @@
       "source": "discovery:testaspnet.vulnweb.com",
       "slug": "testaspnet-comments-exposure-live-oracle",
       "shipped_at": "2026-08-05T18:42:00.000Z"
->>>>>>> 867e991e (power-loop: log testasp/testaspnet oracle validation + benchmark 6/6)
     }
   ]
 }
