@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T08:19:28.508Z",
-  "total": 1807,
-  "uniqueSlugs": 1802,
+  "generatedAt": "2026-08-05T09:26:05.843Z",
+  "total": 1813,
+  "uniqueSlugs": 1808,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1789,
+    "generic": 1795,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1722,
+    "deep": 1728,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 327,
+    "Broken access control": 333,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1529,6 +1529,10 @@
     "reflexion-escalated-xss",
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",
+    "rest-testinvicti-jwt-users-bola-live-oracle",
+    "rest-testinvicti-jwt-users-bola-route-live-oracle",
+    "rest-vulnweb-posts-bola-live-oracle",
+    "rest-vulnweb-posts-bola-route-live-oracle",
     "rest-vulnweb-users-bola-live-oracle",
     "rest-vulnweb-users-bola-route-live-oracle",
     "robots-sensitive-paths",
@@ -1746,6 +1750,8 @@
     "vulnbank-request-loan-negative-amount-live-oracle",
     "vulnbank-sqli-login-live-oracle",
     "vulnbank-sup3r-secret-admin-live-oracle",
+    "vulnbank-transactions-bola-live-oracle",
+    "vulnbank-transactions-bola-route-live-oracle",
     "vulnbank-transfer-negative-amount-live-oracle",
     "vulnbank-upload-profile-picture-url-route-live-oracle",
     "vulnbank-upload-profile-picture-url-ssrf-live-oracle",

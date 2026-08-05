@@ -18947,7 +18947,7 @@ const vulnbankTransactionsBolaLiveOracle: Rule = async (ctx) => {
   const url = new URL(`/api/transactions?account_number=${victimAccount}`, ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     headers: { Authorization: `Bearer ${token}` },
-    maxBytes: 16384,
+    maxBytes: 65536,
     timeoutMs: 15000
   });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
@@ -18961,7 +18961,28 @@ const vulnbankTransactionsBolaLiveOracle: Rule = async (ctx) => {
       transactions?: Array<{ id?: number; from_account?: string; to_account?: string; amount?: number }>;
     };
   } catch {
-    return NEGATIVE;
+    if (
+      !/"account_number"\s*:\s*"1234567890"/.test(doc.body) ||
+      !/"transactions"\s*:\s*\[/.test(doc.body) ||
+      !/"from_account"\s*:/.test(doc.body)
+    ) {
+      return NEGATIVE;
+    }
+    const idMatch = doc.body.match(/"id"\s*:\s*(\d+)/);
+    const fromMatch = doc.body.match(/"from_account"\s*:\s*"(\d+)"/);
+    const amountMatch = doc.body.match(/"amount"\s*:\s*(-?\d+(?:\.\d+)?)/);
+    if (!idMatch || !fromMatch || !amountMatch) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        victimAccount,
+        sampleFromAccount: fromMatch[1],
+        snippet: doc.body.slice(0, 280).trim(),
+        note: "Vuln Bank GET /api/transactions?account_number={victim} returns another user's transaction history with any valid JWT — transaction-history BOLA oracle (truncated JSON fallback)"
+      }
+    };
   }
   const transactions = parsed?.transactions;
   if (!Array.isArray(transactions) || transactions.length === 0) return NEGATIVE;
