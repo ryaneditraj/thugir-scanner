@@ -19322,6 +19322,16 @@
       "source": "discovery:testaspnet.vulnweb.com",
       "slug": "testaspnet-comments-exposure-live-oracle",
       "shipped_at": "2026-08-05T18:42:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jku-rogue-live-oracle",
+      "shipped_at": "2026-08-05T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-x5u-rogue-live-oracle",
+      "shipped_at": "2026-08-05T22:15:00.000Z"
     }
   ]
 }
