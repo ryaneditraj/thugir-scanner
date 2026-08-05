@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/config returns {\"sql\":\"postgres://bc:bc@postgres:5432/bc\",\"googlemaps\":\"AIzaSy...\",\"awsBucket\":\"https://neuralegion-open-bucket.s3.amazonaws.com\"} without auth; brokencrystals.com/api/config findings 61→69 (+config live+route + exposed-api-config fix); benchmark juice-shop-staging 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-order-history-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/order-history with alg:none JWT data.email=admin@juice-sh.op returns {\"status\":\"success\",\"data\":[{\"orderId\":\"5267-...\",\"email\":\"*dm*n@j**c*-sh.*p\",\"totalPrice\":8.96}]} — broken vowel-mask query; juice-shop.demo.escape.tech/rest/order-history findings 35→37 (+order-history-bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "exposed-api-config-probe-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: exposedApiConfig used ctx.probe.getMany which skipped firing during deep scans despite valid /api/config JSON; switched to sequential ctx.probe.get per path — brokencrystals.com/api/config now fires exposed-api-config alongside brokencrystals-config oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-oidc-client-secret-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/oidc-client returns {\"clientId\":\"brokencrystals-client\",\"clientSecret\":\"4bfb5df6-...\"} without auth; brokencrystals.com/api/users/oidc findings 11→66 (+oidc-client-secret live+route oracles); benchmark juice-shop 36 findings 6/6 maintained"

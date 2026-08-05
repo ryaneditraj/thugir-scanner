@@ -2014,6 +2014,8 @@ const DEEP_RULES = new Set<string>([
   "juiceShopChatbotRouteLiveOracle",
   "juiceShopTrackOrderIdorLiveOracle",
   "juiceShopTrackOrderIdorRouteLiveOracle",
+  "juiceShopOrderHistoryBolaLiveOracle",
+  "juiceShopOrderHistoryBolaRouteLiveOracle",
   "juiceShopUsersIdorLiveOracle",
   "juiceShopUsersIdorRouteLiveOracle",
   "juiceShopBasketItemsBolaLiveOracle",
@@ -2347,6 +2349,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsPartnerLoginXpathRouteLiveOracle",
   "brokencrystalsOidcClientSecretLiveOracle",
   "brokencrystalsOidcClientSecretRouteLiveOracle",
+  "brokencrystalsConfigLiveOracle",
+  "brokencrystalsConfigRouteLiveOracle",
   "brokencrystalsSubscriptionsXssRouteLiveOracle",
   "brokencrystalsFileRawLfiLiveOracle",
   "brokencrystalsFileLfiLiveOracle",
@@ -9421,6 +9425,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && /juice-shop-addresss/.test(p.slug)) return -3;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && p.slug.startsWith("juice-shop-")) return -2;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /order-history/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-order-history")
+      )
+        return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
@@ -9435,6 +9445,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-process-numbers")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-api-")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-oidc-client-secret")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-config")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
