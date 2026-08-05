@@ -39284,6 +39284,200 @@ const firingRangeDomExternalLocalstorageArrayEvalRouteLiveOracle: Rule = async (
   };
 };
 
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_INNERHTML_HTML_PATH =
+  "/dom/toxicdom/external/localStorage/property/innerHtml";
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_INNERHTML_SCRIPT_PATH =
+  "/dom/toxicdomscripts/localStorage/property/innerHtml";
+
+const firingRangeDomExternalLocalstoragePropertyInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_INNERHTML_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/localStorage\/property\/innerHtml\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_INNERHTML_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasInnerHtmlSink =
+    /localStorage\.badValue/i.test(script) && /\.innerHTML\s*=\s*payload/i.test(script);
+  if (!hasInnerHtmlSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /localStorage\/property\/innerHtml/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external localStorage script passes localStorage.badValue to innerHTML — toxic DOM external localStorage property innerHTML XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalLocalstoragePropertyInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/localStorage\/property\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalLocalstoragePropertyInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/localStorage/property/innerHtml route scan — localStorage.badValue passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_INNERHTML_HTML_PATH =
+  "/dom/toxicdom/external/localStorage/function/innerHtml";
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_INNERHTML_SCRIPT_PATH =
+  "/dom/toxicdomscripts/localStorage/function/innerHtml";
+
+const firingRangeDomExternalLocalstorageFunctionInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_INNERHTML_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/localStorage\/function\/innerHtml\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_LOCALSTORAGE_FUNCTION_INNERHTML_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasInnerHtmlSink =
+    /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i.test(script) &&
+    /\.innerHTML\s*=\s*payload/i.test(script);
+  if (!hasInnerHtmlSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /localStorage\/function\/innerHtml/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external localStorage script passes localStorage.getItem('badValue') to innerHTML — toxic DOM external localStorage function innerHTML XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalLocalstorageFunctionInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/localStorage\/function\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalLocalstorageFunctionInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/localStorage/function/innerHtml route scan — localStorage.getItem('badValue') passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_DOCUMENTWRITE_HTML_PATH =
+  "/dom/toxicdom/external/localStorage/array/documentWrite";
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_DOCUMENTWRITE_SCRIPT_PATH =
+  "/dom/toxicdomscripts/localStorage/array/documentWrite";
+
+const firingRangeDomExternalLocalstorageArrayDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_DOCUMENTWRITE_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/localStorage\/array\/documentWrite\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_DOCUMENTWRITE_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasDocumentWriteSink =
+    /localStorage\s*\[\s*['"]badValue['"]\s*\]/i.test(script) &&
+    /document\.write\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasDocumentWriteSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /localStorage\/array\/documentWrite/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external localStorage script passes localStorage['badValue'] to document.write() — toxic DOM external localStorage array document.write XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalLocalstorageArrayDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/localStorage\/array\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalLocalstorageArrayDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/localStorage/array/documentWrite route scan — localStorage['badValue'] passed to document.write() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_TOXICDOM_EXTERNAL_INCLUDE_ROUTES = [
   {
     htmlPath: "/dom/toxicdom/localStorage/include/array/function",
@@ -61893,6 +62087,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomExternalLocalstorageFunctionEvalRouteLiveOracle,
   firingRangeDomExternalLocalstorageArrayEvalLiveOracle,
   firingRangeDomExternalLocalstorageArrayEvalRouteLiveOracle,
+  firingRangeDomExternalLocalstoragePropertyInnerhtmlLiveOracle,
+  firingRangeDomExternalLocalstoragePropertyInnerhtmlRouteLiveOracle,
+  firingRangeDomExternalLocalstorageFunctionInnerhtmlLiveOracle,
+  firingRangeDomExternalLocalstorageFunctionInnerhtmlRouteLiveOracle,
+  firingRangeDomExternalLocalstorageArrayDocumentwriteLiveOracle,
+  firingRangeDomExternalLocalstorageArrayDocumentwriteRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeFunctionInnerhtmlLiveOracle,
