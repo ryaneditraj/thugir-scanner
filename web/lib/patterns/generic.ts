@@ -6012,6 +6012,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "firing-range-dom-sessionstorage-function-eval-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage function eval XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/function/eval returns a page that reads sessionStorage.getItem('badValue') and passes it to eval() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage getter values passed to eval() enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageFunctionEvalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to eval() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove eval() and new Function() on values from sessionStorage.getItem().",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/function/eval uses eval on sessionStorage.getItem('badValue'). Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-function-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/function/eval route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/function/eval, sessionStorage.getItem('badValue') is passed to eval() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage getter values are not passed to eval().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageFunctionEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage.getItem reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/function/eval route uses eval on sessionStorage.getItem. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-function-documentwrite-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage function document.write XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/function/documentWrite returns a page that reads sessionStorage.getItem('badValue') and passes it to document.write() — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage getter values passed to document.write() enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageFunctionDocumentwriteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to document.write() — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove document.write() on values from sessionStorage.getItem().",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/function/documentWrite uses document.write on sessionStorage.getItem('badValue'). Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-function-documentwrite-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/function/documentWrite route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/function/documentWrite, sessionStorage.getItem('badValue') is passed to document.write() without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage getter values are not written via document.write().",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageFunctionDocumentwriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove document.write sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage.getItem reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/function/documentWrite route uses document.write on sessionStorage.getItem. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-function-innerhtml-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range toxic DOM sessionStorage function innerHTML XSS oracle",
+    description:
+      "GET /dom/toxicdom/sessionStorage/function/innerHtml returns a page that reads sessionStorage.getItem('badValue') and passes it to innerHTML — Firing Range toxic DOM XSS training oracle.",
+    impactOneline:
+      "sessionStorage getter values passed to innerHTML enable DOM XSS when attackers can poison sessionStorage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageFunctionInnerhtmlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass sessionStorage values to innerHTML — Firing Range is an intentional XSS testbed.",
+      steps: [
+        "Remove innerHTML assignments on values from sessionStorage.getItem().",
+        "Treat sessionStorage data as untrusted text and render with safe DOM APIs.",
+        "Use CSP script-src restrictions in production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/function/innerHtml uses innerHTML on sessionStorage.getItem('badValue'). Show toxic DOM sessionStorage XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "firing-range-dom-sessionstorage-function-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google Firing Range /dom/toxicdom/sessionStorage/function/innerHtml route XSS oracle",
+    description:
+      "When scanning /dom/toxicdom/sessionStorage/function/innerHtml, sessionStorage.getItem('badValue') is passed to innerHTML without sanitization — route-specific toxic DOM XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm sessionStorage getter values are not inserted via innerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "firingRangeDomSessionstorageFunctionInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove innerHTML sinks on sessionStorage in /dom/toxicdom handlers.",
+      steps: [
+        "Audit all sessionStorage.getItem reads for dangerous DOM sinks.",
+        "Encode or sanitize before DOM insertion.",
+        "Use CSP to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /dom/toxicdom/sessionStorage/function/innerHtml route uses innerHTML on sessionStorage.getItem. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-inputtyping-innerhtml-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
