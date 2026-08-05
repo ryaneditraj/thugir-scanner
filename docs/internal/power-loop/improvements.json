@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/ssrf documents Server-Side Request Forgery + /research req.query.url needle.get walkthrough; nodegoat-websec.herokuapp.com/tutorial/ssrf findings 7→8 (+ssrf-route oracle); benchmark juice-shop-staging 41 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-redos-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial/redos documents ReDoS Regular Expressions DoS + validator.js mitigation guidance; nodegoat-websec.herokuapp.com/tutorial/redos findings 7→8 (+redos-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-research-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /research session-gated on public Heroku — marker fallback via /tutorial/ssrf url+symbol needle.get documentation; nodegoat-websec.herokuapp.com/research findings 7→8 (+research-ssrf-route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-save-login-ip-live-oracle",
       "status": "shipped",
