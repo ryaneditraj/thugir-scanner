@@ -43559,6 +43559,87 @@ const firingRangeDomLocalstorageArrayInnerhtmlRouteLiveOracle: Rule = async (ctx
   };
 };
 
+const firingRangeDomLocalstorageFunctionEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomEval(
+    ctx,
+    "/dom/toxicdom/localStorage/function/eval",
+    /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i,
+    "localStorage.getItem('badValue')"
+  );
+};
+
+const firingRangeDomLocalstorageFunctionEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/function\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalstorageFunctionEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/function/eval route scan — localStorage.getItem('badValue') passed to eval() without sanitization"
+    }
+  };
+};
+
+const firingRangeDomLocalstorageFunctionInnerhtmlLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomInnerHtml(
+    ctx,
+    "/dom/toxicdom/localStorage/function/innerHtml",
+    /localStorage\.getItem\s*\(\s*['"]badValue['"]\s*\)/i,
+    "localStorage.getItem('badValue')"
+  );
+};
+
+const firingRangeDomLocalstorageFunctionInnerhtmlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/function\/innerHtml\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalstorageFunctionInnerhtmlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/function/innerHtml route scan — localStorage.getItem('badValue') passed to innerHTML without sanitization"
+    }
+  };
+};
+
+const firingRangeDomLocalstorageArrayDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  return probeFiringRangeToxicdomDocumentwrite(
+    ctx,
+    "/dom/toxicdom/localStorage/array/documentWrite",
+    /localStorage\s*\[\s*['"]badValue['"]\s*\]/i,
+    "localStorage['badValue']"
+  );
+};
+
+const firingRangeDomLocalstorageArrayDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/localStorage\/array\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomLocalstorageArrayDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/localStorage/array/documentWrite route scan — localStorage['badValue'] passed to document.write() without sanitization"
+    }
+  };
+};
+
 const firingRangeDomSessionstoragePropertyEvalLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   return probeFiringRangeToxicdomEval(
@@ -62485,6 +62566,12 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomLocalstorageArrayEvalRouteLiveOracle,
   firingRangeDomLocalstorageArrayInnerhtmlLiveOracle,
   firingRangeDomLocalstorageArrayInnerhtmlRouteLiveOracle,
+  firingRangeDomLocalstorageFunctionEvalLiveOracle,
+  firingRangeDomLocalstorageFunctionEvalRouteLiveOracle,
+  firingRangeDomLocalstorageFunctionInnerhtmlLiveOracle,
+  firingRangeDomLocalstorageFunctionInnerhtmlRouteLiveOracle,
+  firingRangeDomLocalstorageArrayDocumentwriteLiveOracle,
+  firingRangeDomLocalstorageArrayDocumentwriteRouteLiveOracle,
   firingRangeDomSessionstoragePropertyEvalLiveOracle,
   firingRangeDomSessionstoragePropertyEvalRouteLiveOracle,
   firingRangeDomSessionstoragePropertyInnerhtmlLiveOracle,
