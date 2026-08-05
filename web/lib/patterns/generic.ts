@@ -30971,6 +30971,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-config-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/config credential disclosure oracle",
+    description:
+      "GET /api/config returns postgres:// credentials, Google Maps API keys, and S3 bucket URLs without authentication — the Broken Crystals config disclosure oracle.",
+    impactOneline:
+      "Unauthenticated config endpoints leak database passwords and third-party API keys for lateral movement.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose runtime config with credentials via unauthenticated HTTP endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove /api/config from public routes; serve only non-sensitive public config to browsers.",
+        "Store database URLs and API keys in server-side environment variables only.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/config endpoint returns postgres:// credentials and Google Maps API keys without auth. Lock down the endpoint and rotate exposed secrets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-config-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/config route credential disclosure oracle",
+    description:
+      "When scanning /api/config, GET returns postgres:// connection strings and cloud API keys in JSON — route-specific config disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated Broken Crystals config endpoints leaking credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose runtime config with credentials via unauthenticated HTTP endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove /api/config from public routes; serve only non-sensitive public config to browsers.",
+        "Store database URLs and API keys in server-side environment variables only.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/config route scan confirms database credentials are exposed without auth. Show config endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-subscriptions-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -42095,6 +42147,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /rest/track-order route scan exposes order data without auth. Show route-level track-order IDOR fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-order-history-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop order-history BOLA live oracle",
+    description:
+      "GET /rest/order-history with alg:none JWT returns order records via a broken vowel-mask email query — the Juice Shop order-history BOLA oracle.",
+    impactOneline:
+      "Broken order-history filtering exposes other customers' purchase metadata to authenticated attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopOrderHistoryBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind order-history queries to the authenticated user's exact email and enforce ownership checks.",
+      steps: [
+        "Remove vowel-masking shortcuts from order lookup queries.",
+        "Verify the JWT user id/email owns every returned order record.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/order-history endpoint returns other users' orders via broken email masking. Show order-history BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-order-history-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Juice Shop order-history BOLA route live oracle",
+    description:
+      "When scanning /rest/order-history, alg:none JWT returns orderId and totalPrice JSON via broken email masking — route-specific order-history BOLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag Juice Shop order-history BOLA on preview and demo hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopOrderHistoryBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind order-history queries to the authenticated user's exact email and enforce ownership checks.",
+      steps: [
+        "Remove vowel-masking shortcuts from order lookup queries.",
+        "Verify the JWT user id/email owns every returned order record.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/order-history route scan confirms cross-user order reads. Show route-level order-history BOLA fixes.",
     version: 1,
     enabled: true
   },

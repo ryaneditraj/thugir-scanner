@@ -52713,6 +52713,68 @@ const juiceShopTrackOrderIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const JUICE_SHOP_ORDER_HISTORY_PROBE_EMAILS = ["admin@juice-sh.op", "jim@juice-sh.op"] as const;
+
+function juiceShopOrderHistoryAuthHeader(email: string): Record<string, string> {
+  const now = Math.floor(Date.now() / 1000);
+  return {
+    Authorization: `Bearer ${buildAlgNoneJwt({
+      data: { id: 1, email },
+      iat: now,
+      exp: now + 3600
+    })}`
+  };
+}
+
+const juiceShopOrderHistoryBolaLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const url = new URL("/rest/order-history", ctx.origin).toString();
+  for (const email of JUICE_SHOP_ORDER_HISTORY_PROBE_EMAILS) {
+    const doc = await ctx.probe.get(url, {
+      maxBytes: 16384,
+      headers: juiceShopOrderHistoryAuthHeader(email),
+      timeoutMs: 18000
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (IDOR_AUTH_MARKERS.test(doc.body.slice(0, 500))) continue;
+    if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) continue;
+    if (!/"orderId"/.test(doc.body) || !/"totalPrice"/.test(doc.body)) continue;
+    const orderMatch = doc.body.match(/"orderId"\s*:\s*"([^"]+)"/);
+    const maskedEmail = doc.body.match(/"email"\s*:\s*"([^"]+)"/)?.[1];
+    return {
+      fired: true,
+      confidence: maskedEmail && /\*/.test(maskedEmail) ? 0.93 : 0.91,
+      evidence: {
+        url,
+        authEmail: email,
+        orderId: orderMatch?.[1],
+        maskedEmailInResponse: maskedEmail,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Juice Shop GET /rest/order-history with alg:none JWT returns order records via broken vowel-mask email query — order-history BOLA live oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const juiceShopOrderHistoryBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/order-history/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopOrderHistoryBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/order-history route scan — alg:none JWT reads order history via broken email masking — route-specific BOLA oracle"
+    }
+  };
+};
+
 const juiceShopUsersIdorLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -59568,9 +59630,9 @@ const exposedApiConfig: Rule = async (ctx) => {
   const isBrokencrystals = /brokencrystals\.com/i.test(ctx.origin);
   if (!htmlConfigScript && !isBrokencrystals && discovered.length === 0) return NEGATIVE;
   const paths = [...new Set([...EXPOSED_CONFIG_PATHS, ...discovered])].slice(0, 4);
-  const urls = paths.map((p) => new URL(p, ctx.origin).toString());
-  const docs = await ctx.probe.getMany(urls, { maxBytes: 4096 }, 3);
-  for (const [url, r] of docs) {
+  for (const path of paths) {
+    const url = new URL(path, ctx.origin).toString();
+    const r = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
     if (r.status < 200 || r.status >= 300) continue;
     const ct = r.headers["content-type"] || "";
     if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
@@ -59592,6 +59654,53 @@ const exposedApiConfig: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+function brokencrystalsConfigMarkers(body: string): { label: string; sample: string }[] {
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of SENSITIVE_CONFIG_MARKERS) {
+    const m = body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 80) });
+  }
+  return markers;
+}
+
+const brokencrystalsConfigLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/config", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const ct = doc.headers["content-type"] || "";
+  if (!/json/i.test(ct) && !/^\s*[\[{]/.test(doc.body.trim())) return NEGATIVE;
+  const markers = brokencrystalsConfigMarkers(doc.body);
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      markers: markers.slice(0, 4),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/config returns Postgres connection string and cloud API keys without authentication — config disclosure oracle"
+    }
+  };
+};
+
+const brokencrystalsConfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/config\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsConfigLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/config route scan — unauthenticated JSON exposes postgres:// credentials and Google Maps API key"
+    }
+  };
 };
 
 // --- SQL injection via raw query parameter (brokencrystals.com /api/testimonials/count) ---
@@ -63233,6 +63342,8 @@ export const RULES: Record<string, Rule> = {
   juiceShopChatbotRouteLiveOracle,
   juiceShopTrackOrderIdorLiveOracle,
   juiceShopTrackOrderIdorRouteLiveOracle,
+  juiceShopOrderHistoryBolaLiveOracle,
+  juiceShopOrderHistoryBolaRouteLiveOracle,
   juiceShopUsersIdorLiveOracle,
   juiceShopUsersIdorRouteLiveOracle,
   juiceShopBasketItemsBolaLiveOracle,
@@ -63380,6 +63491,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsPartnerLoginXpathRouteLiveOracle,
   brokencrystalsOidcClientSecretLiveOracle,
   brokencrystalsOidcClientSecretRouteLiveOracle,
+  brokencrystalsConfigLiveOracle,
+  brokencrystalsConfigRouteLiveOracle,
   brokencrystalsSubscriptionsXssRouteLiveOracle,
   brokencrystalsFileRawLfiLiveOracle,
   brokencrystalsFileLfiLiveOracle,

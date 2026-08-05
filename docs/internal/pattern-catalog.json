@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T13:11:24.337Z",
-  "total": 1828,
-  "uniqueSlugs": 1823,
+  "generatedAt": "2026-08-05T14:31:45.769Z",
+  "total": 1832,
+  "uniqueSlugs": 1827,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1810,
+    "generic": 1814,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1743,
+    "deep": 1747,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 337,
+    "Broken access control": 339,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 7,
     "Server-side request forgery": 50,
-    "Sensitive data exposure": 34,
+    "Sensitive data exposure": 36,
     "AI security": 50,
     "Business logic": 14,
     "Insecure file upload": 2,
@@ -64,6 +64,8 @@
     "brokencrystals-api-file-httpbin-ssrf-live-oracle",
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
+    "brokencrystals-config-live-oracle",
+    "brokencrystals-config-route-live-oracle",
     "brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
     "brokencrystals-dom-csrf-flow-live-oracle",
     "brokencrystals-dom-csrf-route-live-oracle",
@@ -1433,6 +1435,8 @@
     "juice-shop-login-sqli-live-oracle",
     "juice-shop-memories-bola-live-oracle",
     "juice-shop-memories-bola-route-live-oracle",
+    "juice-shop-order-history-bola-live-oracle",
+    "juice-shop-order-history-bola-route-live-oracle",
     "juice-shop-privacy-requests-bola-live-oracle",
     "juice-shop-privacy-requests-bola-route-live-oracle",
     "juice-shop-quantitys-exposure-live-oracle",
