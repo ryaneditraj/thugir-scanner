@@ -38961,6 +38961,135 @@ const firingRangeDomExternalSessionStorageFunctionDocumentwriteRouteLiveOracle: 
   };
 };
 
+const FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_ARRAY_DOCUMENTWRITE_HTML_PATH =
+  "/dom/toxicdom/external/sessionStorage/array/documentWrite";
+const FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_ARRAY_DOCUMENTWRITE_SCRIPT_PATH =
+  "/dom/toxicdomscripts/sessionStorage/array/documentWrite";
+
+const firingRangeDomExternalSessionStorageArrayDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_ARRAY_DOCUMENTWRITE_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/sessionStorage\/array\/documentWrite\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_ARRAY_DOCUMENTWRITE_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasDocumentWriteSink =
+    /sessionStorage\s*\[\s*['"]badValue['"]\s*\]/i.test(script) &&
+    /document\.write\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasDocumentWriteSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /sessionStorage\/array\/documentWrite/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external sessionStorage script passes sessionStorage['badValue'] to document.write() — toxic DOM external sessionStorage array document.write XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalSessionStorageArrayDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/sessionStorage\/array\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalSessionStorageArrayDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/sessionStorage/array/documentWrite route scan — sessionStorage['badValue'] passed to document.write() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_PROPERTY_DOCUMENTWRITE_HTML_PATH =
+  "/dom/toxicdom/external/sessionStorage/property/documentWrite";
+const FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_PROPERTY_DOCUMENTWRITE_SCRIPT_PATH =
+  "/dom/toxicdomscripts/sessionStorage/property/documentWrite";
+
+const firingRangeDomExternalSessionStoragePropertyDocumentwriteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_PROPERTY_DOCUMENTWRITE_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/sessionStorage\/property\/documentWrite\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_SESSIONSTORAGE_PROPERTY_DOCUMENTWRITE_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasDocumentWriteSink =
+    /sessionStorage\.badValue/i.test(script) && /document\.write\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasDocumentWriteSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /sessionStorage\/property\/documentWrite/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external sessionStorage script passes sessionStorage.badValue to document.write() — toxic DOM external sessionStorage property document.write XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalSessionStoragePropertyDocumentwriteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/sessionStorage\/property\/documentWrite\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalSessionStoragePropertyDocumentwriteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/sessionStorage/property/documentWrite route scan — sessionStorage.badValue passed to document.write() without sanitization"
+    }
+  };
+};
+
 const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_EVAL_HTML_PATH =
   "/dom/toxicdom/external/localStorage/property/eval";
 const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_PROPERTY_EVAL_SCRIPT_PATH =
@@ -39086,6 +39215,71 @@ const firingRangeDomExternalLocalstorageFunctionEvalRouteLiveOracle: Rule = asyn
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google Firing Range /dom/toxicdom/external/localStorage/function/eval route scan — localStorage.getItem('badValue') passed to eval() without sanitization"
+    }
+  };
+};
+
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_EVAL_HTML_PATH =
+  "/dom/toxicdom/external/localStorage/array/eval";
+const FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_EVAL_SCRIPT_PATH =
+  "/dom/toxicdomscripts/localStorage/array/eval";
+
+const firingRangeDomExternalLocalstorageArrayEvalLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let htmlPath = FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_EVAL_HTML_PATH;
+  if (pageUrl) {
+    try {
+      const parsed = new URL(pageUrl);
+      if (/\/dom\/toxicdom\/external\/localStorage\/array\/eval\b/i.test(parsed.pathname)) {
+        htmlPath = parsed.pathname;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  const htmlUrl = new URL(htmlPath, ctx.origin).toString();
+  const htmlDoc = await ctx.probe.get(htmlUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (htmlDoc.status < 200 || htmlDoc.status >= 400) return NEGATIVE;
+  const scriptUrl = new URL(
+    FIRING_RANGE_EXTERNAL_LOCALSTORAGE_ARRAY_EVAL_SCRIPT_PATH,
+    ctx.origin
+  ).toString();
+  const scriptDoc = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (scriptDoc.status < 200 || scriptDoc.status >= 400) return NEGATIVE;
+  const script = scriptDoc.body;
+  const hasEvalSink =
+    /localStorage\s*\[\s*['"]badValue['"]\s*\]/i.test(script) &&
+    /eval\s*\(\s*payload\s*\)/i.test(script);
+  if (!hasEvalSink) return NEGATIVE;
+  const hasExternalPage =
+    /<title>\s*Toxic DOM External\s*<\/title>/i.test(htmlDoc.body) &&
+    /localStorage\/array\/eval/i.test(htmlDoc.body);
+  if (!hasExternalPage) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /setTimeout\s*\([\s\S]{0,240}trigger\s*\(/i.test(script) ? 0.93 : 0.91,
+    evidence: {
+      url: scriptUrl,
+      snippet: script.slice(0, 220).trim(),
+      note: "Google Firing Range external localStorage script passes localStorage['badValue'] to eval() — toxic DOM external localStorage array eval XSS oracle"
+    }
+  };
+};
+
+const firingRangeDomExternalLocalstorageArrayEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFiringRangeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dom\/toxicdom\/external\/localStorage\/array\/eval\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await firingRangeDomExternalLocalstorageArrayEvalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google Firing Range /dom/toxicdom/external/localStorage/array/eval route scan — localStorage['badValue'] passed to eval() without sanitization"
     }
   };
 };
@@ -61689,10 +61883,16 @@ export const RULES: Record<string, Rule> = {
   firingRangeDomExternalSessionStorageFunctionInnerhtmlRouteLiveOracle,
   firingRangeDomExternalSessionStorageFunctionDocumentwriteLiveOracle,
   firingRangeDomExternalSessionStorageFunctionDocumentwriteRouteLiveOracle,
+  firingRangeDomExternalSessionStorageArrayDocumentwriteLiveOracle,
+  firingRangeDomExternalSessionStorageArrayDocumentwriteRouteLiveOracle,
+  firingRangeDomExternalSessionStoragePropertyDocumentwriteLiveOracle,
+  firingRangeDomExternalSessionStoragePropertyDocumentwriteRouteLiveOracle,
   firingRangeDomExternalLocalstoragePropertyEvalLiveOracle,
   firingRangeDomExternalLocalstoragePropertyEvalRouteLiveOracle,
   firingRangeDomExternalLocalstorageFunctionEvalLiveOracle,
   firingRangeDomExternalLocalstorageFunctionEvalRouteLiveOracle,
+  firingRangeDomExternalLocalstorageArrayEvalLiveOracle,
+  firingRangeDomExternalLocalstorageArrayEvalRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeArrayFunctionRouteLiveOracle,
   firingRangeDomToxicdomLocalstorageIncludeFunctionInnerhtmlLiveOracle,
