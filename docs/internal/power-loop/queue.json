@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T15:05:00.000Z",
+  "updated_at": "2026-08-05T16:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/user/authentication-details",
+      "source": "OWASP Juice Shop staging — JWT alg:none admin-role oracle GET /rest/user/authentication-details (juice-shop-staging.herokuapp.com fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/deluxe-membership",
+      "source": "OWASP Juice Shop staging — deluxe membership status/payment oracle GET /rest/deluxe-membership (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/b2b/v2/orders",
+      "source": "OWASP Juice Shop staging — insecure deserialization oracle POST /b2b/v2/orders orderLinesData (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/products/1/reviews",
+      "source": "OWASP Juice Shop staging — NoSQL product reviews BOLA oracle GET/PUT /rest/products/:id/reviews (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Hints",
+      "source": "OWASP Juice Shop staging — challenge hints exposure oracle GET /api/Hints (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop-staging.herokuapp.com/rest/order-history",
       "source": "OWASP Juice Shop staging — order history BOLA oracle GET /rest/order-history (juice-shop-staging.herokuapp.com fallback)",
