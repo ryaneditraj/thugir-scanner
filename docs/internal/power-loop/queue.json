@@ -15369,7 +15369,32 @@
       "url": "https://juice-shop.demo.escape.tech/rest/wallet/balance",
       "source": "Escape Juice Shop demo — wallet balance BOLA oracle GET /rest/wallet/balance (auth-bypass / IDOR gap)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/injection/",
+      "source": "allaboutapps/owasp-ctf-2025 — SQLi + command injection lab module (UCU OWASP Top 10 CTF public Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/access/",
+      "source": "allaboutapps/owasp-ctf-2025 — broken access control + directory traversal lab (UCU OWASP Top 10 CTF)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/crypto/",
+      "source": "allaboutapps/owasp-ctf-2025 — cryptographic failures lab module (UCU OWASP Top 10 CTF)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/ssrf/",
+      "source": "allaboutapps/owasp-ctf-2025 — SSRF + security misconfiguration lab (UCU OWASP Top 10 CTF)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/register",
+      "source": "MuhaibShamsher/BuggyBuy — open registration / NoSQL injection oracle (Vercel OSS README homepage)",
+      "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 39
+  "discovery_urls_added": 44
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T22:15:00.000Z",
+  "updated_at": "2026-08-05T23:10:40.615Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2754,
-  "total_findings": 27616,
+  "total_sites_scanned": 2760,
+  "total_findings": 27878,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 23105,
-  "improvements_shipped": 1169,
-  "last_run": "2026-08-05T22:15:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 23326,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-05T23:10:40.615Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 41,
@@ -54,31 +54,31 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 375,
-      "focus": "brokencrystals JWT jku/x5u validate route oracles shipped; weak-key/hmac/kid-sql auth hubs + escape Products/1",
-      "improvements_shipped_this_run": 2
+      "findings": 221,
+      "focus": "UCU OWASP CTF injection/access/crypto/ssrf + BuggyBuy register queued; brokencrystals JWT jku/jwk/x5c login hubs + preview Juice Shop SecurityAnswers/Wallets",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (41 findings) — no benchmark category misses",
-      "brokencrystals.com/api/auth/jwt/jku/validate: 9→66 findings — jku-rogue live+route oracles shipped",
-      "brokencrystals.com/api/auth/jwt/x5u/validate: 9→72 findings — x5u-rogue live+route oracles shipped",
-      "brokencrystals.com/api/auth/jwt/weak-key/login: 67 findings — JWT weak-key auth oracle hub",
-      "nodegoat-websec.herokuapp.com/tutorial/ssrf: 7→8 findings — ssrf-route oracle confirmed firing"
+      "brokencrystals.com/api/auth/jwt/jku/login: 69 findings — JWT JKU header auth oracle hub",
+      "brokencrystals.com/api/auth/jwt/x5c/login: 49 findings — JWT x5c certificate chain login oracle",
+      "preview.owasp-juice.shop/api/SecurityAnswers: 44 findings — security-answer hash disclosure oracle",
+      "preview.owasp-juice.shop/api/Wallets: 43 findings — wallet balance BOLA oracle on develop branch"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary oracle degraded — basket/wallet routes 503; staging fallback covers benchmark",
-      "brokencrystals.com/api/chat/query + /api/process_numbers: route-specific SSTI/SSRF live oracles still absent"
+      "juice-shop.herokuapp.com primary + basket/wallet routes 503 — staging fallback covers benchmark",
+      "vuln-expose.vercel.app/api/users unreachable — deploy offline or DNS failure",
+      "ucu-owasp-ctf.vercel.app/* module routes queued but not yet scanned (at queue tail)"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/auth/jwt/x5u/validate": 72,
-    "brokencrystals.com/api/auth/jwt/jku/validate": 66,
-    "brokencrystals.com/api/auth/jwt/weak-key/login": 67,
-    "juice-shop-staging.herokuapp.com": 41,
-    "brokencrystals.com/api/auth/jwt/hmac/login": 48,
-    "juice-shop.demo.escape.tech/rest/chatbot/respond": 47,
-    "nodegoat-websec.herokuapp.com/tutorial/ssrf": 8
+    "brokencrystals.com/api/auth/jwt/jku/login": 69,
+    "brokencrystals.com/api/auth/jwt/x5c/login": 49,
+    "preview.owasp-juice.shop/api/SecurityAnswers": 44,
+    "preview.owasp-juice.shop/api/Wallets": 43,
+    "brokencrystals.com/api/auth/jwt/jwk/login": 16,
+    "juice-shop-staging.herokuapp.com": 41
   }
 }
