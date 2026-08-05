@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T06:03:59.719Z",
-  "total": 1797,
-  "uniqueSlugs": 1792,
+  "generatedAt": "2026-08-05T07:06:19.975Z",
+  "total": 1803,
+  "uniqueSlugs": 1798,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1779,
+    "generic": 1785,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1712,
+    "deep": 1718,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 96,
     "Security misconfiguration": 143,
-    "Broken authentication": 95,
+    "Broken authentication": 101,
     "Injection": 251,
     "Cross-site scripting": 649,
     "Open redirect": 11,
@@ -77,11 +77,17 @@
     "brokencrystals-home-dom-xss-live-oracle",
     "brokencrystals-home-dom-xss-route-live-oracle",
     "brokencrystals-jwt-alg-none-live-oracle",
+    "brokencrystals-jwt-hmac-confusion-live-oracle",
+    "brokencrystals-jwt-hmac-confusion-route-live-oracle",
+    "brokencrystals-jwt-jwk-empty-live-oracle",
+    "brokencrystals-jwt-jwk-empty-route-live-oracle",
     "brokencrystals-jwt-kid-sql-live-oracle",
     "brokencrystals-jwt-kid-sql-route-live-oracle",
     "brokencrystals-jwt-route-live-oracle",
     "brokencrystals-jwt-weak-key-live-oracle",
     "brokencrystals-jwt-weak-key-route-live-oracle",
+    "brokencrystals-jwt-x5c-rogue-live-oracle",
+    "brokencrystals-jwt-x5c-rogue-route-live-oracle",
     "brokencrystals-ldap-injection-live-oracle",
     "brokencrystals-ldap-route-live-oracle",
     "brokencrystals-marketplace-prototype-pollution-live-oracle",
