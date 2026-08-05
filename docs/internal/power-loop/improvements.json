@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jku-rogue-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/jku/validate accepts RS256 JWT with jku header pointing at GitHub jku.json and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/jku/validate findings 9→66 (+jku-rogue live+route oracles); benchmark juice-shop-staging 41 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-x5u-rogue-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/x5u/validate accepts RS256 JWT with x5u header pointing at GitHub x509.crt and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/x5u/validate findings 9→72 (+x5u-rogue live+route oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-tutorial-ssrf-route-live-oracle",
       "status": "shipped",

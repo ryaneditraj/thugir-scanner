@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T22:08:46.441Z",
+  "updated_at": "2026-08-05T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,13 +17,13 @@
   },
   "total_sites_scanned": 2754,
   "total_findings": 27616,
-  "critical_findings": 55,
+  "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1961,
   "discovery_findings": 23105,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-05T22:08:46.441Z",
+  "improvements_shipped": 1169,
+  "last_run": "2026-08-05T22:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -53,34 +53,32 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 237,
-      "focus": "brokencrystals JWT auth oracles + chat/query/process_numbers; juice-shop.demo.escape.tech Products/1; +5 new URLs queued (preview chatbot/respond, dvga graphql x2, escape captcha/wallet)",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 8,
+      "findings": 375,
+      "focus": "brokencrystals JWT jku/x5u validate route oracles shipped; weak-key/hmac/kid-sql auth hubs + escape Products/1",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (41 findings) — no benchmark category misses",
+      "brokencrystals.com/api/auth/jwt/jku/validate: 9→66 findings — jku-rogue live+route oracles shipped",
+      "brokencrystals.com/api/auth/jwt/x5u/validate: 9→72 findings — x5u-rogue live+route oracles shipped",
       "brokencrystals.com/api/auth/jwt/weak-key/login: 67 findings — JWT weak-key auth oracle hub",
-      "brokencrystals.com/api/auth/jwt/hmac/login: 48 findings — HMAC JWT auth oracle",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 37 findings — kid SQL injection JWT oracle",
-      "juice-shop.demo.escape.tech/api/Products/1: 44 findings — product IDOR/BOLA oracle on Escape demo host",
-      "juice-shop.herokuapp.com/rest/basket/1 + wallet/balance: scan errors (primary host degraded)"
+      "nodegoat-websec.herokuapp.com/tutorial/ssrf: 7→8 findings — ssrf-route oracle confirmed firing"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "5 new discovery URLs queued at tail — preview chatbot/respond, dvga.lab.pentest-forge/graphql, dvga.xplat-demo.threatx.io/graphql, escape captcha/wallet not scanned this run",
-      "juice-shop.herokuapp.com primary oracle degraded — basket/wallet routes error; staging fallback covers benchmark",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/chat/query + /api/process_numbers: 20–21 finding hubs without route-specific SSTI/SSRF live oracles"
+      "juice-shop.herokuapp.com primary oracle degraded — basket/wallet routes 503; staging fallback covers benchmark",
+      "brokencrystals.com/api/chat/query + /api/process_numbers: route-specific SSTI/SSRF live oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 41,
+    "brokencrystals.com/api/auth/jwt/x5u/validate": 72,
+    "brokencrystals.com/api/auth/jwt/jku/validate": 66,
     "brokencrystals.com/api/auth/jwt/weak-key/login": 67,
+    "juice-shop-staging.herokuapp.com": 41,
     "brokencrystals.com/api/auth/jwt/hmac/login": 48,
-    "juice-shop.demo.escape.tech/api/Products/1": 44,
-    "brokencrystals.com/api/auth/jwt/kid-sql/login": 37,
-    "brokencrystals.com/api/chat/query": 21,
-    "brokencrystals.com/api/process_numbers": 20
+    "juice-shop.demo.escape.tech/rest/chatbot/respond": 47,
+    "nodegoat-websec.herokuapp.com/tutorial/ssrf": 8
   }
 }
