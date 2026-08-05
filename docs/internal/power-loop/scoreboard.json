@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T02:15:30.000Z",
+  "updated_at": "2026-08-05T03:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2891,
-  "total_findings": 36402,
+  "total_sites_scanned": 2897,
+  "total_findings": 36566,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2045,
-  "discovery_findings": 32171,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-05T02:15:30.000Z",
+  "discovery_urls_added": 2050,
+  "discovery_findings": 32302,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-05T03:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 35,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 33,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 487,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,37 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle 6/6 (35 findings); no benchmark misses"
+      "note": "Primary Heroku 503 → staging fallback 6/6 (33 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 717,
-      "focus": "Firing Range external toxicdom localStorage property/function innerHtml + array documentWrite oracles",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 5,
+      "findings": 131,
+      "focus": "brokencrystals JWT validate oracles (x5c/x5u/jku/jwk/hmac) from Swagger",
+      "errors": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (35 findings) — no benchmark misses",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/innerHtml: 235→239 findings — property-innerhtml live+route oracles shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/innerHtml: 235→239 findings — function-innerhtml live+route oracles shipped",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/documentWrite: 235→239 findings — array-documentwrite live+route oracles shipped",
-      "brokencrystals.com/api/auth/jwt/x5u/login: 59 findings — JWT X5U rogue certificate hub",
-      "demo.owasp-juice.shop/api/Addresss/1: 36 findings — address IDOR live-oracle suite"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
+      "brokencrystals.com/api/auth/jwt/x5c/validate: 58 findings — JWT x5c certificate chain validation hub",
+      "brokencrystals.com/api/auth/jwt/jku/validate: 32 findings — JWT JKU header validation hub",
+      "brokencrystals.com/api/auth/jwt/jwk/validate: 27 findings — JWT JWK embedded key validation hub",
+      "brokencrystals.com/api/auth/jwt/x5u/validate: 9 findings — JWT X5U rogue certificate validation hub",
+      "brokencrystals.com/api/auth/jwt/hmac/validate: 5 findings — JWT HMAC algorithm confusion validation hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "external/localStorage property+function documentWrite + array innerHtml oracles still absent",
-      "brokencrystals.com/api/auth/jwt/x5u/login: 59-finding hub — no route-specific X5U injection live oracle yet",
-      "vuln-expose.vercel.app: unreachable from cloud egress (scan errors)"
+      "brokencrystals JWT validate routes: high-finding hubs but no route-specific live oracles per attack variant (x5c/x5u/jku/jwk/hmac validate)",
+      "vuln-expose.vercel.app + testphp.vulnweb.com: unreachable from cloud egress (scan errors)"
     ]
   },
   "discovery_highlights": {
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/property/innerHtml": 239,
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/function/innerHtml": 239,
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/documentWrite": 239,
-    "brokencrystals.com/api/auth/jwt/x5u/login": 59,
-    "demo.owasp-juice.shop/api/Addresss/1": 36,
-    "juice-shop.herokuapp.com": 35
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 58,
+    "brokencrystals.com/api/auth/jwt/jku/validate": 32,
+    "brokencrystals.com/api/auth/jwt/jwk/validate": 27,
+    "brokencrystals.com/api/auth/jwt/x5u/validate": 9,
+    "brokencrystals.com/api/auth/jwt/hmac/validate": 5,
+    "juice-shop-staging.herokuapp.com": 33
   }
 }
