@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T11:05:15.126Z",
+  "updated_at": "2026-08-05T12:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://juice-shop-staging.herokuapp.com/api/Cards",
@@ -15109,7 +15109,32 @@
       "url": "https://public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval",
       "source": "google/firing-range — sessionStorage function to js_html_sanitize_eval sanitizer-bypass sink (/dom/toxicdom/sessionStorage/function/js_html_sanitize_eval)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/hpp/",
+      "source": "Acunetix testphp.vulnweb.com — HTTP Parameter Pollution oracle (homepage Shop link)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/login.php",
+      "source": "Acunetix testphp.vulnweb.com — SQLi authentication bypass oracle POST /login.php (vulnweb PHP lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testphp.vulnweb.com/secured/phpinfo.php",
+      "source": "Acunetix testphp.vulnweb.com — phpinfo / source-code disclosure oracle GET /secured/phpinfo.php",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://rest.vulnweb.com/basic_authentication/api/v1/info",
+      "source": "Acunetix rest.vulnweb.com — basic-auth REST API info oracle GET /basic_authentication/api/v1/info",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://testhtml5.vulnweb.com/static/views/userinfo.html",
+      "source": "Acunetix testhtml5.vulnweb.com — client-side userinfo / DOM XSS training route (HTML5 vuln lab)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 10
+  "discovery_urls_added": 15
 }
