@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T14:12:00.000Z",
+  "updated_at": "2026-08-05T15:13:07.790Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3002,
-  "total_findings": 41076,
+  "total_sites_scanned": 3009,
+  "total_findings": 41328,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2105,
-  "discovery_findings": 36385,
+  "discovery_urls_added": 2110,
+  "discovery_findings": 36547,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-05T14:12:00.000Z",
+  "last_run": "2026-08-05T15:13:07.790Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 34,
+      "oracle_findings": 35,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 479,
+      "probes_run": 480,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +48,44 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (34 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (35 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 162,
-      "focus": "pwnshop update-avatar SVG XSS + coupon bypass oracles; brokencrystals SSRF fetch; juice-shop-staging oracle routes queued",
+      "urls_scanned": 8,
+      "urls_ok": 6,
+      "urls_error": 2,
+      "findings": 217,
+      "focus": "juice-shop-staging order-history/Deliverys/ftp/login/accounting-orders route oracles; pwnshop update-avatar SSRF route oracle",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (34 findings) — primary Heroku 503, staging fallback",
-      "pwnshop.ctfsecurity.com/profile/update-avatar: 18→35 findings — pwnshop-avatar-svg-xss-live-oracle shipped (PWN-012 stored XSS via SVG upload)",
-      "pwnshop.ctfsecurity.com/profile/update-avatar: pwnshop-apply-coupon-live-oracle + pwnshop-coupon-category-bypass-live-oracle (PWN-016) now firing on route scan",
-      "brokencrystals.com/api/fetch?url=https://httpbin.org/get: 66 findings — SSRF fetch oracle confirmed",
-      "pwnshop.ctfsecurity.com/api/v1/invoices: 37 findings — invoice path-traversal hub",
-      "pwnshop.ctfsecurity.com/register?next=evil-open-redirect-probe.example: 14 findings — open-redirect oracle (PWN-017)",
-      "chimera.atlascrew.dev/api/v1/auth/login+forgot-password: 5 findings each — static honeypot docs only (API backend 404)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (35 findings) — primary Heroku 503, staging fallback",
+      "juice-shop-staging.herokuapp.com/rest/order-history: 36 findings — juice-shop-order-history-bola-live-oracle confirmed",
+      "juice-shop-staging.herokuapp.com/api/Deliverys: 36 findings — juice-shop-deliverys-exposure-route-live-oracle confirmed",
+      "juice-shop-staging.herokuapp.com/rest/order-history/orders: 36 findings — accounting all-orders BOLA route oracle confirmed",
+      "juice-shop-staging.herokuapp.com/ftp: 35 findings — forgotten-backup disclosure via FTP null-byte bypass",
+      "juice-shop-staging.herokuapp.com/rest/user/login: 35 findings — juice-shop-login-sqli-live-oracle confirmed",
+      "pwnshop.ctfsecurity.com/profile/update-avatar: 39 findings — pwnshop-update-avatar-route-live-oracle (PWN-029 SSRF) + avatar SVG XSS oracles",
+      "vuln-expose.vercel.app/api/users + /api/comments: scan errors (dead deploy)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vuln-expose.vercel.app unreachable (503/dead) — queue head still wastes scan slots",
-      "juice-shop-staging oracle routes queued (security-question, track-order, chatbot, wallet, reset-password) — not yet scanned (appended to queue tail)",
-      "chimera.atlascrew.dev/*: sector API routes return GitHub Pages 404 — live vuln-api backend not deployed on public host",
+      "vuln-expose.vercel.app unreachable — 2 queue slots wasted on dead Vercel deploy",
+      "juice-shop-staging/rest/user/login: login-sqli oracle fires but route-specific POST confirmation may need dedicated login probe tuning",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
     ]
   },
   "discovery_highlights": {
-    "pwnshop.ctfsecurity.com/profile/update-avatar": 35,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 66,
-    "pwnshop.ctfsecurity.com/api/v1/invoices": 37,
-    "juice-shop-staging.herokuapp.com": 34,
-    "pwnshop.ctfsecurity.com/register?next=https://evil-open-redirect-probe.example": 14,
-    "chimera.atlascrew.dev/api/v1/auth/login": 5,
-    "chimera.atlascrew.dev/api/v1/auth/forgot-password": 5,
-    "brokencrystals.com/api/users/oidc": 66,
-    "juice-shop.herokuapp.com/rest/track-order/1": 36,
-    "vulnapi.testinvicti.com/api/users/1": 10
+    "juice-shop-staging.herokuapp.com/rest/order-history": 36,
+    "juice-shop-staging.herokuapp.com/api/Deliverys": 36,
+    "juice-shop-staging.herokuapp.com/rest/order-history/orders": 36,
+    "pwnshop.ctfsecurity.com/profile/update-avatar": 39,
+    "juice-shop-staging.herokuapp.com/ftp": 35,
+    "juice-shop-staging.herokuapp.com/rest/user/login": 35,
+    "juice-shop-staging.herokuapp.com": 35,
+    "juice-shop.herokuapp.com": 35
   }
 }
