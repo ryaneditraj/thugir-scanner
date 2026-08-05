@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:testasp.vulnweb.com",
+      "slug": "testasp-showforum-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ShowForum.asp?id=0 returns 200 but id=0' returns HTTP 500 vs baseline; testasp.vulnweb.com/ShowForum.asp?id=0 findings 4→7 (+showforum-sqli live+route oracles); benchmark juice-shop.herokuapp.com 35 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:testasp.vulnweb.com",
+      "slug": "testasp-login-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login.asp admin' OR '1'='1 redirects to Default.asp vs Invalid login on bad credentials; testasp.vulnweb.com/login.asp findings 4→8 (+login-sqli live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:testaspnet.vulnweb.com",
+      "slug": "testaspnet-comments-exposure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /Comments.aspx?id=1 returns tblComments with CommentAuthor IP and CommentText without auth; testaspnet.vulnweb.com/Comments.aspx?id=1 findings 3→5 (+comments-exposure live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logger-oast-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET/POST /logger returns missing-page shell (theme=missing) with no OAST/logger interaction body — endpoint removed or inactive on public ginandjuice.shop; deferred"
+    },
+    {
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-login-route-live-oracle",
       "status": "shipped",
@@ -19204,6 +19228,7 @@
       "shipped_at": "2026-08-05T12:20:00.000Z"
     },
     {
+<<<<<<< HEAD
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-security-question-user-live-oracle",
       "shipped_at": "2026-08-05T15:00:00.000Z"
@@ -19217,6 +19242,21 @@
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-chatbot-respond-route-live-oracle",
       "shipped_at": "2026-08-05T15:00:00.000Z"
+=======
+      "source": "discovery:testasp.vulnweb.com",
+      "slug": "testasp-showforum-sqli-live-oracle",
+      "shipped_at": "2026-08-05T18:42:00.000Z"
+    },
+    {
+      "source": "discovery:testasp.vulnweb.com",
+      "slug": "testasp-login-sqli-live-oracle",
+      "shipped_at": "2026-08-05T18:42:00.000Z"
+    },
+    {
+      "source": "discovery:testaspnet.vulnweb.com",
+      "slug": "testaspnet-comments-exposure-live-oracle",
+      "shipped_at": "2026-08-05T18:42:00.000Z"
+>>>>>>> 867e991e (power-loop: log testasp/testaspnet oracle validation + benchmark 6/6)
     }
   ]
 }
