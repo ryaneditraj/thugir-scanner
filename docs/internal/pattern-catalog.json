@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T16:12:26.776Z",
-  "total": 1839,
-  "uniqueSlugs": 1834,
+  "generatedAt": "2026-08-05T18:39:47.613Z",
+  "total": 1845,
+  "uniqueSlugs": 1840,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1821,
+    "generic": 1827,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1754,
+    "deep": 1760,
     "continuous": 0
   },
   "byCategory": {
@@ -24,10 +24,10 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 101,
+    "Information disclosure": 103,
     "Security misconfiguration": 143,
     "Broken authentication": 101,
-    "Injection": 253,
+    "Injection": 257,
     "Cross-site scripting": 651,
     "Open redirect": 11,
     "general": 20,
@@ -1642,6 +1642,12 @@
     "supabase-anon-key-no-rls",
     "supabase-service-role-in-bundle",
     "tech-stack-disclosure",
+    "testasp-login-sqli-live-oracle",
+    "testasp-login-sqli-route-live-oracle",
+    "testasp-showforum-sqli-live-oracle",
+    "testasp-showforum-sqli-route-live-oracle",
+    "testaspnet-comments-exposure-live-oracle",
+    "testaspnet-comments-exposure-route-live-oracle",
     "testfire-login-sqli-live-oracle",
     "testfire-login-sqli-route-live-oracle",
     "the-internet-abtest-route-live-oracle",
