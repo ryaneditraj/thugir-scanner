@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T15:03:31.685Z",
-  "total": 1837,
-  "uniqueSlugs": 1832,
+  "generatedAt": "2026-08-05T16:12:26.776Z",
+  "total": 1839,
+  "uniqueSlugs": 1834,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1819,
+    "generic": 1821,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1752,
+    "deep": 1754,
     "continuous": 0
   },
   "byCategory": {
@@ -24,10 +24,10 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 100,
+    "Information disclosure": 101,
     "Security misconfiguration": 143,
     "Broken authentication": 101,
-    "Injection": 252,
+    "Injection": 253,
     "Cross-site scripting": 651,
     "Open redirect": 11,
     "general": 20,
@@ -1428,6 +1428,7 @@
     "juice-shop-feedbacks-bola-live-oracle",
     "juice-shop-feedbacks-bola-route-live-oracle",
     "juice-shop-forgotten-backup-disclosure",
+    "juice-shop-forgotten-backup-route-live-oracle",
     "juice-shop-hints-exposure-live-oracle",
     "juice-shop-hints-exposure-route-live-oracle",
     "juice-shop-jwt-alg-none-live-oracle",
@@ -1440,6 +1441,7 @@
     "juice-shop-order-history-bola-route-live-oracle",
     "juice-shop-privacy-requests-bola-live-oracle",
     "juice-shop-privacy-requests-bola-route-live-oracle",
+    "juice-shop-products-search-sqli-route-live-oracle",
     "juice-shop-quantitys-exposure-live-oracle",
     "juice-shop-quantitys-exposure-route-live-oracle",
     "juice-shop-recycles-bola-live-oracle",

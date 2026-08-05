@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T16:12:11.183Z",
+  "updated_at": "2026-08-05T16:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2115,
   "discovery_findings": 36743,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-05T16:12:11.183Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-05T16:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
@@ -48,46 +48,46 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (37 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (37 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 6,
-      "urls_error": 2,
-      "findings": 194,
-      "focus": "juice-shop-staging new oracle routes (authentication-details, deluxe-membership, b2b/v2/orders, products/1/reviews, api/Hints) + xss-game level4 drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "urls_ok": 3,
+      "urls_error": 0,
+      "findings": 114,
+      "focus": "juice-shop-staging queued route gaps — login-route regex fix, /ftp forgotten-backup route, /rest/products/search SQLi route",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (37 findings) — primary Heroku 503, staging fallback",
-      "juice-shop-staging.herokuapp.com/api/Hints: 38 findings — juice-shop-hints-exposure-route-live-oracle confirmed on route scan",
-      "juice-shop-staging.herokuapp.com/rest/user/authentication-details: 37 findings — JWT alg:none live oracle fires; no route-specific oracle yet",
-      "juice-shop-staging.herokuapp.com/b2b/v2/orders: 37 findings — insecure-deserialization route oracle still absent",
-      "juice-shop-staging.herokuapp.com/rest/products/1/reviews: 37 findings — NoSQL reviews BOLA route oracle still absent",
-      "xss-game.appspot.com/level4/frame: 8 findings — reflected XSS route oracle confirmed"
+      "juice-shop-staging.herokuapp.com/rest/user/login: 35→38 findings — login-route oracle fixed (isJuiceShopLoginContext $ anchor bug on multiline corpus)",
+      "juice-shop-staging.herokuapp.com/ftp: 35→38 findings — juice-shop-forgotten-backup-route-live-oracle shipped (GET /ftp/package.json.bak%2500.md)",
+      "juice-shop-staging.herokuapp.com/rest/products/search: 0→38 findings — juice-shop-products-search-sqli-route-live-oracle shipped (SQLITE_ERROR on q='))"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "juice-shop-staging /rest/order-history/orders: WAF blocks accounting all-orders probe (Malicious activity detected)",
       "juice-shop-staging /rest/user/authentication-details: JWT alg:none fires at host level but no dedicated route oracle slug",
       "juice-shop-staging /b2b/v2/orders: orderLinesData insecure-deserialization oracle absent",
       "juice-shop-staging /rest/products/1/reviews: NoSQL product-reviews BOLA route oracle absent",
       "juice-shop-staging /rest/deluxe-membership: deluxe-membership payment/status route oracle absent",
+      "juice-shop-staging /rest/user/reset-password: WAF blocks password-reset probes from cloud agent IPs",
       "vuln-expose.vercel.app unreachable — dead deploy wastes queue slots"
     ]
   },
   "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com/rest/user/login": 38,
+    "juice-shop-staging.herokuapp.com/ftp": 38,
+    "juice-shop-staging.herokuapp.com/rest/products/search": 38,
     "juice-shop-staging.herokuapp.com/api/Hints": 38,
-    "juice-shop-staging.herokuapp.com/rest/user/authentication-details": 37,
-    "juice-shop-staging.herokuapp.com/rest/deluxe-membership": 37,
-    "juice-shop-staging.herokuapp.com/b2b/v2/orders": 37,
-    "juice-shop-staging.herokuapp.com/rest/products/1/reviews": 37,
-    "juice-shop-staging.herokuapp.com": 37,
     "juice-shop-staging.herokuapp.com/rest/chatbot/respond": 39,
+    "juice-shop-staging.herokuapp.com": 37,
     "pwnshop.ctfsecurity.com/profile/update-avatar": 39,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 66,
-    "xss-game.appspot.com/level4/frame": 8
+    "juice-shop-staging.herokuapp.com/rest/order-history": 36,
+    "juice-shop-staging.herokuapp.com/api/Deliverys": 36,
+    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 66
   }
 }
