@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T18:20:12.722Z",
+  "updated_at": "2026-08-05T19:33:02.907Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/user/authentication-details",
+      "source": "OWASP Juice Shop primary — JWT alg-none oracle GET /rest/user/authentication-details (herokuapp live 43-finding benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/products/1/reviews",
+      "source": "OWASP Juice Shop primary — product reviews author disclosure oracle GET /rest/products/1/reviews (herokuapp live)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/api/Hints",
+      "source": "OWASP Juice Shop primary — challenge hints exposure oracle GET /api/Hints (herokuapp live)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/metadata",
+      "source": "NeuraLegion/brokencrystals — XXE + reflective XSS oracle via POST XML/SVG body (README)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://juice-shop-staging.herokuapp.com/rest/user/whoami",
       "source": "OWASP Juice Shop staging — unauthenticated whoami oracle GET /rest/user/whoami (primary herokuapp 503 fallback)",
@@ -4957,11 +4982,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
-      "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (GitHub README)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://pwnshop.ctfsecurity.com/download",
       "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (GitHub README)",
       "auth": "public_demo"
@@ -5775,11 +5795,6 @@
       "url": "https://server.vulnapp.id/phpMyAdmin/",
       "source": "Metasploitable2 hub — exposed phpMyAdmin admin surface on public vulnapp hub",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/metadata",
-      "source": "NeuraLegion/brokencrystals — XXE + reflective XSS oracle via POST XML/SVG body (README)",
-      "auth": "benchmark"
     },
     {
       "url": "https://brokencrystals.com/api/products/views",
