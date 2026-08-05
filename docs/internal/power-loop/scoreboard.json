@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T20:05:35.863Z",
+  "updated_at": "2026-08-05T20:14:19.595Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 2736,
-  "total_findings": 27002,
+  "total_sites_scanned": 2741,
+  "total_findings": 27176,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1958,
-  "discovery_findings": 22899,
+  "discovery_urls_added": 1963,
+  "discovery_findings": 23073,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-05T20:05:35.863Z",
+  "last_run": "2026-08-05T20:14:19.595Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 43,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "primary_status": "503 — Heroku dyno unavailable",
+      "oracle_findings": 39,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 494,
+      "probes_run": 484,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +50,42 @@
           ]
         }
       },
-      "note": "Primary herokuapp live — stable 6/6 recall (43 findings); no benchmark misses"
+      "note": "Primary herokuapp 503; staging fallback 6/6 recall (39 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 365,
-      "focus": "primary juice-shop route oracles (auth-details/reviews/Hints) + pwnshop seller/preview SSTI + brokencrystals XXE metadata",
+      "urls_ok": 5,
+      "urls_error": 3,
+      "findings": 174,
+      "focus": "staging snippets/ImageCaptchas + escape.tech snippets/chatbot-respond + nodegoat SSRF tutorial",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (43 findings) — primary oracle live, no category gaps",
-      "juice-shop.herokuapp.com/rest/user/authentication-details: 45 findings — juice-shop-jwt-alg-none-route-live-oracle on primary",
-      "juice-shop.herokuapp.com/rest/products/1/reviews: 43 findings — juice-shop-products-reviews-exposure-route-live-oracle on primary",
-      "juice-shop.herokuapp.com/api/Hints: 45 findings — juice-shop-hints-exposure-route-live-oracle on primary",
-      "pwnshop.ctfsecurity.com/seller/preview: 38 findings — pwnshop-seller-preview-ssti live+route oracles (PWN-040)",
-      "brokencrystals.com/api/metadata: 67 findings — XXE/reflected XSS hub with SSRF metadata oracles"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (39 findings) — primary 503, staging fallback oracle",
+      "juice-shop.demo.escape.tech/rest/chatbot/respond: 45 findings — juice-shop-chatbot-respond-route-live-oracle on escape.tech demo",
+      "juice-shop.demo.escape.tech/api/snippets: 44 findings — snippets API hub with full juice-shop live oracles",
+      "juice-shop-staging.herokuapp.com/api/snippets: 39 findings — staging route-specific snippets oracle",
+      "juice-shop-staging.herokuapp.com/api/ImageCaptchas: 39 findings — captcha bypass live oracle on staging",
+      "nodegoat-websec.herokuapp.com/tutorial/ssrf: 7 findings — tutorial hub, no route-specific SSRF live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "juice-shop.herokuapp.com primary 503 — basket/1 and wallet/balance discovery scans failed (dyno cold/dead)",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
-      "brokencrystals.com/api/metadata: route-specific XXE live oracle absent (67-finding hub, SSRF oracles present)"
+      "nodegoat-websec.herokuapp.com/tutorial/ssrf: route-specific SSRF live oracle absent (7-finding tutorial hub)",
+      "vuln-expose.vercel.app: dead deploy — wastes queue scan slots"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 43,
+    "juice-shop.demo.escape.tech/rest/chatbot/respond": 45,
+    "juice-shop.demo.escape.tech/api/snippets": 44,
+    "juice-shop-staging.herokuapp.com": 39,
+    "juice-shop-staging.herokuapp.com/api/snippets": 39,
+    "juice-shop-staging.herokuapp.com/api/ImageCaptchas": 39,
+    "nodegoat-websec.herokuapp.com/tutorial/ssrf": 7,
     "juice-shop.herokuapp.com/rest/user/authentication-details": 45,
-    "juice-shop.herokuapp.com/api/Hints": 45,
-    "brokencrystals.com/api/metadata": 67,
-    "pwnshop.ctfsecurity.com/seller/preview": 38,
-    "juice-shop.herokuapp.com/rest/products/1/reviews": 43,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20
+    "brokencrystals.com/api/metadata": 67
   }
 }
