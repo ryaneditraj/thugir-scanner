@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T12:05:00.000Z",
+  "updated_at": "2026-08-05T13:11:30.115Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnapi.testinvicti.com/api/users/1",
+      "source": "Invicti VulnAPI — BOLA oracle GET /api/users/1 with Bearer one (vulnapi.testinvicti.com Swagger)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnapi.testinvicti.com/api/users/3",
+      "source": "Invicti VulnAPI — admin user BOLA oracle GET /api/users/3 with Bearer one (horizontal privilege escalation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnapi.testinvicti.com/api/validateToken",
+      "source": "Invicti VulnAPI — validateToken stack trace / info disclosure oracle GET /api/validateToken",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/track-order/1",
+      "source": "OWASP Juice Shop primary — track-order IDOR oracle GET /rest/track-order/1 (13 UTC primary dyno up)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://rest.testinvicti.com/jwt/api/users",
+      "source": "Invicti JWT REST API — users enumeration oracle GET /jwt/api/users (rest.testinvicti.com OpenAPI demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop-staging.herokuapp.com/api/Cards",
       "source": "OWASP Juice Shop staging — payment cards BOLA oracle GET /api/Cards (juice-shop-staging.herokuapp.com fallback)",
@@ -15136,5 +15161,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 15
+  "discovery_urls_added": 20
 }
