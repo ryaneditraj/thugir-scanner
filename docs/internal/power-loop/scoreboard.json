@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T04:10:00.000Z",
+  "updated_at": "2026-08-05T04:55:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2903,
-  "total_findings": 36982,
+  "total_sites_scanned": 2906,
+  "total_findings": 37019,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2055,
-  "discovery_findings": 32685,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-05T04:10:00.000Z",
+  "discovery_findings": 32722,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-05T04:55:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 482,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,34 +52,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 383,
-      "focus": "brokencrystals JWT kid-sql/weak-key validate + simple-csrf-flow + users/oidc; Firing Range external localStorage array documentWrite",
-      "errors": 3
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 737,
+      "focus": "firing-range direct localStorage function/eval + function/innerHtml + array/documentWrite toxicdom sinks",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (33 findings) — no benchmark misses",
-      "brokencrystals.com/api/auth/jwt/kid-sql/validate: 58 findings — JWT KID SQL injection validation hub",
-      "brokencrystals.com/api/auth/jwt/weak-key/validate: 12 findings — JWT weak HMAC secret validation hub",
-      "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/documentWrite: 242 findings — external array-documentwrite DOM XSS oracle",
-      "brokencrystals.com/api/auth/simple-csrf-flow: 60 findings — CSRF flow oracle",
-      "brokencrystals.com/api/users/oidc: 11 findings — OIDC user lookup oracle"
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval: 243→247 findings — function-eval live+route oracles shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/innerHtml: 241→245 findings — function-innerhtml live+route oracles shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/documentWrite: 241→245 findings — array-documentwrite live+route oracles shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "sessionStorage/function/* direct toxicdom sinks (eval, innerHtml, documentWrite) still lack route-specific oracles",
       "brokencrystals JWT validate routes (kid-sql/weak-key/x5c/x5u/jku/jwk/hmac): high-finding hubs but no route-specific live oracles per attack variant",
-      "vuln-expose.vercel.app + testphp.vulnweb.com: unreachable from cloud egress (scan errors)"
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "public-firing-range.appspot.com/dom/toxicdom/external/localStorage/array/documentWrite": 242,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval": 247,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/innerHtml": 245,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/array/documentWrite": 245,
     "brokencrystals.com/api/auth/jwt/kid-sql/validate": 58,
     "brokencrystals.com/api/auth/simple-csrf-flow": 60,
-    "brokencrystals.com/api/auth/jwt/x5c/validate": 58,
-    "brokencrystals.com/api/auth/jwt/jku/validate": 32,
-    "brokencrystals.com/api/auth/jwt/jwk/validate": 27,
     "juice-shop-staging.herokuapp.com": 33
   }
 }
