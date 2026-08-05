@@ -11945,9 +11945,42 @@
       "slug": "vuln-expose-invoices-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /invoices JS bundle builds SELECT * FROM invoices WHERE client_name LIKE via string concat (hidden_sqli_search); vuln-expose.vercel.app/invoices findings 13→14 with route-specific SQLi oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /error-demo/database-connection returns jdbc:postgresql://...password=SuperSecretDB2024! in error body; wrongsecrets.herokuapp.com/error-demo/database-connection findings 9→11 (+live+route oracles); benchmark juice-shop 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-supply-chain-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /darklab/api/v1/supply-chain/servers returns FinDrive MCP default_tools upload_file/get_file with indirect prompt injection description; owasp-finbot-ctf.org/darklab findings 8→10 (+live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-eventtriggering-eval-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /dom/eventtriggering/eval hub route probes inputTyping eval + window.name eval sinks via deferredPayload; public-firing-range.appspot.com/dom/eventtriggering/eval findings 248→249 (+eval-hub route oracle); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+      "shipped_at": "2026-08-05T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-supply-chain-live-oracle",
+      "shipped_at": "2026-08-05T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-eventtriggering-eval-hub-route-live-oracle",
+      "shipped_at": "2026-08-05T11:15:00.000Z"
+    },
     {
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-sessionstorage-function-innerhtml-route-live-oracle",
@@ -19049,6 +19082,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-simple-csrf-flow-live-oracle",
       "shipped_at": "2026-08-05T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+      "shipped_at": "2026-08-05T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-supply-chain-live-oracle",
+      "shipped_at": "2026-08-05T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-dom-eventtriggering-eval-hub-route-live-oracle",
+      "shipped_at": "2026-08-05T11:15:00.000Z"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T11:13:18.772Z",
+  "updated_at": "2026-08-05T11:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,19 +16,19 @@
     }
   },
   "total_sites_scanned": 2969,
-  "total_findings": 40474,
-  "critical_findings": 60,
+  "total_findings": 40480,
+  "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2090,
-  "discovery_findings": 35949,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-05T11:13:18.772Z",
+  "discovery_findings": 35955,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-05T11:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 33,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,51 +48,49 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 → staging fallback 6/6 (33 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 6/6 (34 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 237,
-      "focus": "juice-shop-staging Cards/Addresss/Quantitys/SecurityAnswers/track-order + chatbot/BasketItems drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 12,
+      "focus": "wrongsecrets error-demo DB password + finbot darklab MCP supply-chain + firing-range eventtriggering eval hub",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (33 findings on staging fallback) — no benchmark misses",
-      "juice-shop-staging.herokuapp.com/api/Cards: 34 findings — juice-shop-cards-bola-live-oracle confirmed",
-      "juice-shop-staging.herokuapp.com/api/Addresss: 34 findings — juice-shop-addresss-bola-live-oracle confirmed",
-      "juice-shop-staging.herokuapp.com/api/Quantitys: 34 findings — juice-shop-quantitys-exposure-live-oracle confirmed",
-      "juice-shop-staging.herokuapp.com/api/SecurityAnswers: 34 findings — juice-shop-security-answers-disclosure-live-oracle confirmed",
-      "juice-shop-staging.herokuapp.com/rest/track-order: 33 findings — track-order IDOR route confirmed",
-      "juice-shop-staging.herokuapp.com/rest/chatbot: 34 findings — juice-shop-chatbot-api-live-oracle confirmed",
-      "juice-shop-staging.herokuapp.com/api/BasketItems: 34 findings — juice-shop-basket-items-bola-live-oracle confirmed",
-      "demo.owasp-juice.shop/rest/chatbot: error (0 findings) — official demo chatbot unreachable"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/error-demo/database-connection: 9→11 findings — wrongsecrets-error-demo-database-connection-live-oracle shipped (JDBC password in error response)",
+      "owasp-finbot-ctf.org/darklab: 8→10 findings — finbot-darklab-supply-chain-live-oracle shipped (MCP FinDrive tool schemas via /darklab/api/v1/supply-chain/servers)",
+      "public-firing-range.appspot.com/dom/eventtriggering/eval: 248→249 findings — firing-range-dom-eventtriggering-eval-hub-route-live-oracle shipped (inputTyping + window.name eval sinks)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary Heroku 503 at 11 UTC — staging fallback required for benchmark",
-      "demo.owasp-juice.shop/rest/chatbot: scan error — official demo chatbot endpoint unreachable",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
       "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent when scanning route URL without signup flow"
     ]
   },
   "discovery_highlights": {
+    "public-firing-range.appspot.com/dom/eventtriggering/eval": 249,
     "juice-shop-staging.herokuapp.com/api/Cards": 34,
     "juice-shop-staging.herokuapp.com/api/Addresss": 34,
     "juice-shop-staging.herokuapp.com/api/Quantitys": 34,
     "juice-shop-staging.herokuapp.com/api/SecurityAnswers": 34,
     "juice-shop-staging.herokuapp.com/rest/chatbot": 34,
     "juice-shop-staging.herokuapp.com/api/BasketItems": 34,
-    "juice-shop-staging.herokuapp.com/rest/track-order": 33,
-    "public-firing-range.appspot.com/dom/eventtriggering/eval": 248,
     "juice-shop-staging.herokuapp.com/api/Challenges": 35,
     "juice-shop-staging.herokuapp.com": 33,
     "juice-shop-staging.herokuapp.com/api/Recycles": 33,
     "juice-shop-staging.herokuapp.com/rest/memories": 33,
     "juice-shop-staging.herokuapp.com/api/Feedbacks": 33,
+    "juice-shop.herokuapp.com": 34,
+    "wrongsecrets.herokuapp.com/error-demo/database-connection": 11,
+    "owasp-finbot-ctf.org/darklab": 10,
     "juice-shop-staging.herokuapp.com/api/Complaints": 32,
-    "wrongsecrets.herokuapp.com/error-demo/database-connection": 9
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/api/v1/transactions": 22,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52,
+    "pentest-fauxbank.vercel.app/admin": 13
   }
 }
