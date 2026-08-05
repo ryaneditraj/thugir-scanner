@@ -2010,6 +2010,8 @@ const DEEP_RULES = new Set<string>([
   "juiceShopJwtAlgNoneRouteLiveOracle",
   "juiceShopCaptchaBypassLiveOracle",
   "juiceShopCaptchaBypassRouteLiveOracle",
+  "juiceShopImageCaptchaBypassLiveOracle",
+  "juiceShopImageCaptchaBypassRouteLiveOracle",
   "juiceShopSaveLoginIpLiveOracle",
   "juiceShopSaveLoginIpRouteLiveOracle",
   "juiceShopWhoamiUnauthLiveOracle",
@@ -8367,6 +8369,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   home = await warmupRenderHost(target.toString(), home);
   home = await warmupJuiceShopHome(target.toString(), home);
   if (
+    /pwnshop|ctfsecurity\.com/i.test(targetInput) &&
+    /\/profile\//i.test(targetInput) &&
+    (home.status === 404 || home.body.length < 512)
+  ) {
+    try {
+      const pwnHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (pwnHome.status >= 200 && pwnHome.body.length > home.body.length) {
+        home = { ...pwnHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
     isJuiceShopHost(home.finalUrl || target.toString()) &&
     (await juiceShopHerokuDown(home.finalUrl || target.toString()))
   ) {
@@ -9480,6 +9499,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.includes("products-search")
       )
         return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/captcha\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-captcha")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/image-captcha\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-image-captcha")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\//i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-")
+      )
+        return -2;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;

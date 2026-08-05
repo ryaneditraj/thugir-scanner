@@ -1,7 +1,24 @@
 {
   "candidates": [
     {
-      "source": "discovery:brokencrystals.com",
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-image-captcha-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/image-captcha/ with Bearer admin JWT returns {\"image\":\"<svg...\",\"answer\":\"Z0hwp\",\"UserId\":1}; juice-shop-staging.herokuapp.com/rest/image-captcha findings 41→43 (+image-captcha-bypass live+route oracles); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-admin-delete-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / with X-Original-URL: /admin/delete?username=carlos bypasses 403 on /admin/delete; ginandjuice.shop/admin findings 24→25 (+admin-delete-route oracle on /admin scans); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-profile-route-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile/upload-avatar returns HTTP 404 stub — homepage bootstrap + extended OTP mail waits restore client-side-pwnshop markers and POST /profile/upload-avatar SVG onload oracle; pwnshop.ctfsecurity.com/profile/upload-avatar findings 4→42 (+avatar-upload-route oracle); benchmark 6/6 maintained"
+    },
+    {
       "slug": "brokencrystals-jwt-jku-rogue-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/jku/validate accepts RS256 JWT with jku header pointing at GitHub jku.json and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/jku/validate findings 9→66 (+jku-rogue live+route oracles); benchmark juice-shop-staging 41 findings 6/6 maintained"

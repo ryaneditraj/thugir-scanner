@@ -29159,7 +29159,7 @@ const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>
 
 async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
-  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500];
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500];
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
@@ -50644,7 +50644,7 @@ const ginAndJuiceAdminDeleteLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceAdminDeleteRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:my-account\/delete|admin\/delete)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:my-account\/delete|admin(?:\/delete)?)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceAdminDeleteLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53002,6 +53002,50 @@ const juiceShopCaptchaBypassRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Juice Shop /rest/captcha route scan — captcha answer returned in API response — route-specific captcha bypass oracle"
+    }
+  };
+};
+
+const juiceShopImageCaptchaBypassLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const token = await juiceShopProbeLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const url = new URL("/rest/image-captcha/", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"image"\s*:\s*"<svg/i.test(doc.body)) return NEGATIVE;
+  const answerMatch = doc.body.match(/"answer"\s*:\s*"([^"]+)"/);
+  if (!answerMatch || !answerMatch[1].trim()) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      answer: answerMatch[1],
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "Juice Shop GET /rest/image-captcha/ returns SVG captcha image and plaintext answer in JSON — image captcha bypass oracle"
+    }
+  };
+};
+
+const juiceShopImageCaptchaBypassRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/image-captcha\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopImageCaptchaBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/image-captcha route scan — authenticated API returns plaintext answer alongside SVG captcha — route-specific image captcha bypass oracle"
     }
   };
 };
@@ -64123,6 +64167,8 @@ export const RULES: Record<string, Rule> = {
   juiceShopJwtAlgNoneRouteLiveOracle,
   juiceShopCaptchaBypassLiveOracle,
   juiceShopCaptchaBypassRouteLiveOracle,
+  juiceShopImageCaptchaBypassLiveOracle,
+  juiceShopImageCaptchaBypassRouteLiveOracle,
   juiceShopSaveLoginIpLiveOracle,
   juiceShopSaveLoginIpRouteLiveOracle,
   juiceShopWhoamiUnauthLiveOracle,
