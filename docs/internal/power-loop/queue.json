@@ -2,6 +2,31 @@
   "updated_at": "2026-08-05T19:33:02.907Z",
   "discovery_urls": [
     {
+      "url": "https://juice-shop-staging.herokuapp.com/api/snippets",
+      "source": "OWASP Juice Shop staging — vulnerable code snippets API GET /api/snippets (Heroku staging fallback oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/ImageCaptchas",
+      "source": "OWASP Juice Shop staging — captcha bypass oracle GET /api/ImageCaptchas (Heroku staging fallback)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/snippets",
+      "source": "Escape.tech Juice Shop demo — vulnerable code snippets API GET /api/snippets (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/chatbot/respond",
+      "source": "Escape.tech Juice Shop demo — chatbot respond prompt-injection oracle POST /rest/chatbot/respond",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/ssrf",
+      "source": "OWASP NodeGoat websec — SSRF tutorial oracle (nodegoat-websec.herokuapp.com public demo)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://juice-shop.herokuapp.com/rest/user/authentication-details",
       "source": "OWASP Juice Shop primary — JWT alg-none oracle GET /rest/user/authentication-details (herokuapp live 43-finding benchmark)",
       "auth": "public_demo"
