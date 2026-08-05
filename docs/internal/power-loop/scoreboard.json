@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T05:10:00.000Z",
+  "updated_at": "2026-08-05T05:15:41.675Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2910,
-  "total_findings": 37180,
+  "total_sites_scanned": 2918,
+  "total_findings": 38406,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2055,
-  "discovery_findings": 32848,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-05T05:10:00.000Z",
+  "discovery_urls_added": 2060,
+  "discovery_findings": 34074,
+  "improvements_shipped": 1166,
+  "last_run": "2026-08-05T05:15:41.675Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 482,
+      "probes_run": 487,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (35 findings); no benchmark misses"
+      "note": "Primary Heroku healthy 6/6 (34-35 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 184,
-      "focus": "brokencrystals JWT weak-key + kid-sql validate + simple-csrf-flow route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 9,
+      "findings": 1410,
+      "focus": "brokencrystals JWT weak-key/kid-sql/simple-csrf route oracles + firing-range direct sessionStorage/localStorage function sinks",
+      "improvements_shipped_this_run": 5
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (35 findings) — no benchmark misses",
       "brokencrystals.com/api/auth/jwt/weak-key/validate: 12→62 findings — brokencrystals-jwt-weak-key live+route oracles shipped",
-      "brokencrystals.com/api/auth/jwt/kid-sql/validate: +kid-sql live+route oracles on 58-finding hub — JWT kid SQL injection confirmed",
-      "brokencrystals.com/api/auth/simple-csrf-flow: 60→64 findings — brokencrystals-simple-csrf live+route oracles shipped"
+      "brokencrystals.com/api/auth/jwt/kid-sql/validate: +kid-sql live+route oracles on 58-finding hub",
+      "brokencrystals.com/api/auth/simple-csrf-flow: 60→64 findings — brokencrystals-simple-csrf live+route oracles shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval: 247 findings — localStorage/function/eval route XSS oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite: 245 findings — localStorage/function/documentWrite route XSS oracle shipped",
+      "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/*: 243-245 finding hubs — direct route oracles still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "sessionStorage/function/* direct toxicdom sinks (eval, innerHtml, documentWrite) still lack route-specific oracles despite 243-245 finding hubs",
+      "localStorage/function/innerHtml direct sink still lacks route-specific oracle",
       "brokencrystals JWT validate routes (x5c/x5u/jku/jwk/hmac): still lack route-specific live oracles per attack variant",
-      "sessionStorage/function/* direct toxicdom sinks (eval, innerHtml, documentWrite) still lack route-specific oracles",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
+      "vuln-expose.vercel.app unreachable from cloud agent egress"
     ]
   },
   "discovery_highlights": {
     "brokencrystals.com/api/auth/jwt/weak-key/validate": 62,
-    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 58,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval": 247,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/innerHtml": 245,
+    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/documentWrite": 245,
+    "public-firing-range.appspot.com/dom/toxicdom/sessionStorage/function/eval": 244,
     "brokencrystals.com/api/auth/simple-csrf-flow": 64,
-    "juice-shop.herokuapp.com": 35,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval": 247
+    "juice-shop.herokuapp.com": 35
   }
 }
