@@ -7432,6 +7432,140 @@ const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatTutorialSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "ssrf", [
+    {
+      label: "SSRF tutorial title",
+      re: /Server-Side Request Forgery \(SSRF\)|Server-Side Request Forgery/i
+    },
+    {
+      label: "/research url+symbol concatenation walkthrough",
+      re: /\/research[\s\S]{0,120}req\.query\.url|needle\.get\(url/i
+    },
+    {
+      label: "SSRF mitigation guidance",
+      re: /whitelist of allowed domains|Do not accept user input in functions that control where the web server can fetch/i
+    }
+  ], "NodeGoat /tutorial/ssrf documents server-side request forgery via /research url+symbol concatenation and needle.get fetch");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const nodegoatTutorialRedosRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/redos\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatTutorialMarkers(ctx, "redos", [
+    {
+      label: "ReDoS tutorial title",
+      re: /ReDoS Regular Expressions DoS|Regular expression Denial of Service/i
+    },
+    {
+      label: "validator.js mitigation guidance",
+      re: /validator\.js|Avoid writing your own regular expressions/i
+    },
+    {
+      label: "ReDoS exponential backtracking topics",
+      re: /work very slowly \(exponentially related to input size\)|extreme situations/i
+    }
+  ], "NodeGoat /tutorial/redos documents regular expression denial of service (ReDoS) training content");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+async function nodegoatResearchSsrfLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  let cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const probeUrl = new URL("/research", ctx.origin);
+  probeUrl.searchParams.set("url", "https://example.com/");
+  probeUrl.searchParams.set("symbol", "");
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 65536,
+    timeoutMs: 20000,
+    headers: { Cookie: cookie },
+    redirect: "manual"
+  });
+  if (doc.status >= 200 && doc.status < 400) {
+    const bodyOk =
+      /example\.com/i.test(doc.body) ||
+      /needle\.get/i.test(doc.body) ||
+      /Invalid Stock Symbol|Stock Research/i.test(doc.body);
+    if (bodyOk) {
+      return {
+        fired: true,
+        confidence: /example\.com/i.test(doc.body) ? 0.93 : 0.9,
+        evidence: {
+          url: probeUrl.toString(),
+          snippet: doc.body.slice(0, 240).trim(),
+          note: "NodeGoat GET /research?url= fetches attacker-controlled URLs via req.query.url+symbol concatenation — SSRF oracle"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+}
+
+const nodegoatResearchSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/research\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await nodegoatResearchSsrfLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /research route scan — GET /research?url= fetches attacker-controlled URLs via needle.get — SSRF oracle"
+      }
+    };
+  }
+  const tutorialUrl = new URL("/tutorial/ssrf", ctx.origin).toString();
+  const doc = await ctx.probe.get(tutorialUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    {
+      label: "SSRF tutorial title",
+      re: /Server-Side Request Forgery \(SSRF\)/i
+    },
+    {
+      label: "/research url+symbol concatenation",
+      re: /\/research[\s\S]{0,120}req\.query\.url|needle\.get\(url/i
+    },
+    {
+      label: "SSRF allowlist mitigation",
+      re: /whitelist of allowed domains|Do not accept user input in functions that control where the web server can fetch/i
+    }
+  ]) {
+    const m = doc.body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      tutorialUrl,
+      markers: markers.slice(0, 3),
+      note: "NodeGoat /research route scan — /tutorial/ssrf documents /research url+symbol SSRF via needle.get (session-gated on public Heroku; marker oracle via SSRF tutorial)"
+    }
+  };
+};
+
 const nodegoatLearnOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   let cookie = await nodegoatNosqlLoginCookie(ctx);
@@ -64798,6 +64932,9 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA8RouteLiveOracle,
   nodegoatTutorialA9RouteLiveOracle,
   nodegoatTutorialA10RouteLiveOracle,
+  nodegoatTutorialSsrfRouteLiveOracle,
+  nodegoatTutorialRedosRouteLiveOracle,
+  nodegoatResearchSsrfRouteLiveOracle,
   nodegoatLearnOpenRedirectLiveOracle,
   nodegoatLearnOpenRedirectRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,

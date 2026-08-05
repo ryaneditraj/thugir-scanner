@@ -35209,6 +35209,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-tutorial-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "NodeGoat SSRF tutorial live oracle",
+    description:
+      "When scanning /tutorial/ssrf, the canonical tutorial documents server-side request forgery via /research url+symbol concatenation and needle.get outbound fetch — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document OWASP SSRF training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — allowlist outbound fetch destinations and block internal IPs in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Allowlist outbound fetch URL hosts and block link-local/metadata IP ranges.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/ssrf route documents /research url+symbol SSRF labs. Show how to isolate NodeGoat training from production SSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-tutorial-redos-route-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "medium",
+    title: "NodeGoat ReDoS tutorial live oracle",
+    description:
+      "When scanning /tutorial/redos, the canonical tutorial documents regular expression denial of service (ReDoS) with validator.js guidance — route-specific NodeGoat training oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial routes document ReDoS training surfaces for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialRedosRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — use safe regex libraries and input length limits in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Use validator.js or RE2-style safe regex instead of user-controlled patterns.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial/redos route documents ReDoS labs. Show how to isolate NodeGoat training from production regex validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-research-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "NodeGoat /research SSRF route live oracle",
+    description:
+      "When scanning /research, GET /research?url= fetches attacker-controlled URLs via req.query.url+symbol concatenation — route-specific SSRF oracle with /tutorial/ssrf marker fallback on session-gated Heroku.",
+    impactOneline:
+      "Unvalidated server-side URL fetch in /research enables SSRF against internal services and cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatResearchSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations — NodeGoat is intentional OWASP training software.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Allowlist outbound fetch URL hosts and block metadata IP ranges.",
+        "Never concatenate user-controlled url and symbol parameters into outbound fetch URLs."
+      ]
+    },
+    fixPrompt:
+      "Our /research route concatenates url+symbol into needle.get fetch targets. Show SSRF remediation for Node.js outbound requests.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-learn-open-redirect-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
