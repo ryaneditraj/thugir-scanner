@@ -26700,6 +26700,60 @@ const juiceShopForgottenBackupDisclosure: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+function isJuiceShopFtpContext(ctx: RuleContext): boolean {
+  const corpus = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return JUICE_SHOP_HOST_RE.test(corpus) && /\/ftp\b/i.test(corpus);
+}
+
+const juiceShopForgottenBackupRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJuiceShopFtpContext(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await juiceShopForgottenBackupDisclosure(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /ftp route scan — null-byte bypass exposes forgotten package.json.bak developer backup — route-specific disclosure oracle"
+    }
+  };
+};
+
+function isJuiceShopProductsSearchContext(ctx: RuleContext): boolean {
+  const corpus = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return JUICE_SHOP_HOST_RE.test(corpus) && /\/rest\/products\/search\b/i.test(corpus);
+}
+
+const juiceShopProductsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJuiceShopProductsSearchContext(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const sqlUrl = new URL("/rest/products/search?q='))", ctx.origin).toString();
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const doc = await ctx.probe.get(sqlUrl, { maxBytes: 8192, timeoutMs: 18000 });
+    if (HEROKU_STUB_RE.test(doc.body)) {
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      continue;
+    }
+    const marker = SQL_ERROR_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) break;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: sqlUrl,
+        scannedUrl: pageUrl,
+        sqlError: match?.[0]?.slice(0, 120) || "SQLITE_ERROR",
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Juice Shop /rest/products/search route scan — quote payload returns SQLITE syntax error — route-specific SQL injection oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 const JUICE_SHOP_COUPON_BOT_HISTORY_URL =
   "https://raw.githubusercontent.com/juice-shop/juicy-coupon-bot/4fb203e/lib/currentCoupons.ts";
 const JUICE_SHOP_COUPON_API_ENDPOINT_RE =
@@ -53705,7 +53759,8 @@ const juiceShopLoginSqliLiveOracle: Rule = async (ctx) => {
 
 function isJuiceShopLoginContext(ctx: RuleContext): boolean {
   const corpus = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
-  return JUICE_SHOP_HOST_RE.test(corpus) && /\/rest\/user\/login(?:\/|$|\?)/i.test(corpus);
+  // Use word boundary — $ anchor fails when scanUrl and finalUrl are joined with newlines.
+  return JUICE_SHOP_HOST_RE.test(corpus) && /\/rest\/user\/login\b/i.test(corpus);
 }
 
 const juiceShopLoginRouteLiveOracle: Rule = async (ctx) => {
@@ -63512,6 +63567,8 @@ export const RULES: Record<string, Rule> = {
   aiSecurityPrivacyPolicyRouteLiveOracle,
   aiSecurityApiSecurityRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
+  juiceShopForgottenBackupRouteLiveOracle,
+  juiceShopProductsSearchSqliRouteLiveOracle,
   juiceShopLeakedApiKeyOracle,
   clientSideEksGoatEvidence,
   clientSideCtflearnEvidence,

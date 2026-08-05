@@ -28917,6 +28917,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-forgotten-backup-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Juice Shop /ftp forgotten-backup route live oracle",
+    description:
+      "When scanning /ftp, null-byte bypass on package.json.bak%2500.md returns the Juice Shop package.json backup — route-specific forgotten developer backup oracle.",
+    impactOneline:
+      "Route-scoped scans should flag FTP null-byte backup disclosure on Juice Shop /ftp paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopForgottenBackupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove backup files from web-accessible directories; enforce strict extension allowlists without bypass.",
+      steps: [
+        "Delete .bak files from public FTP/document roots.",
+        "Reject null-byte and double-extension path tricks in file servers.",
+        "Store developer backups outside the web root."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /ftp route scan confirms package.json.bak via null-byte bypass. Show route-level FTP hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-products-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Juice Shop /rest/products/search SQLi route live oracle",
+    description:
+      "When scanning /rest/products/search, a quote payload in q= returns SQLITE syntax errors — route-specific Juice Shop product search SQL injection oracle.",
+    impactOneline:
+      "Route-scoped scans should flag SQL injection on Juice Shop product search APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopProductsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all product search lookups.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters or ORM queries.",
+        "Reject or escape SQL metacharacters in search query parameters.",
+        "Add regression tests for quote and UNION payloads on /rest/products/search."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/products/search route scan returns SQLITE errors on quote payloads. Show parameterized search query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-eks-goat-evidence",
     platform: "generic",
     category: "Security misconfiguration",

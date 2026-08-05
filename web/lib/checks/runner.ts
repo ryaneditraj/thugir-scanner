@@ -2252,6 +2252,8 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityPrivacyPolicyRouteLiveOracle",
   "aiSecurityApiSecurityRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
+  "juiceShopForgottenBackupRouteLiveOracle",
+  "juiceShopProductsSearchSqliRouteLiveOracle",
   "juiceShopLeakedApiKeyOracle",
   "clientSideEksGoatEvidence",
   "clientSideCtflearnEvidence",
@@ -9434,6 +9436,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /order-history/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-order-history")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/ftp\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-forgotten-backup")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/user\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-login")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/products\/search\b/i.test(targetInput) &&
+        p.slug.includes("products-search")
       )
         return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;

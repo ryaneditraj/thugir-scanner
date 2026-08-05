@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isJuiceShopLoginContext used $ anchor which failed on multiline corpus (scanUrl+finalUrl); fixed to \\b — POST /rest/user/login SQLi email '\\' OR 1=1--' returns admin JWT; juice-shop-staging.herokuapp.com/rest/user/login findings 35→38 (+login-route oracle); benchmark 6/6 maintained (37 findings)"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-forgotten-backup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ftp/package.json.bak%2500.md returns {\"name\":\"juice-shop\",\"version\":\"6.2.0-SNAPSHOT\"}; juice-shop-staging.herokuapp.com/ftp findings 35→38 (+forgotten-backup-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-products-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/products/search?q=')) returns Error: SQLITE_ERROR; juice-shop-staging.herokuapp.com/rest/products/search findings 0→38 (+products-search-sqli-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-security-question-user-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/user/security-question?email=morty@juice-sh.op returns {\"question\":{\"id\":7,\"question\":\"Name of your favorite pet?\"}} HTTP 200 without auth; juice-shop-staging.herokuapp.com/rest/user/security-question findings 35→38 (+security-question-user live+route oracles); benchmark juice-shop-staging 37 findings 6/6 maintained"
