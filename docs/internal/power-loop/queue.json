@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T14:05:00.000Z",
+  "updated_at": "2026-08-05T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/order-history",
+      "source": "OWASP Juice Shop staging — order history BOLA oracle GET /rest/order-history (juice-shop-staging.herokuapp.com fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/Deliverys",
+      "source": "OWASP Juice Shop staging — delivery methods exposure oracle GET /api/Deliverys (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/ftp",
+      "source": "OWASP Juice Shop staging — forgotten-backup /ftp sensitive file disclosure oracle (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/user/login",
+      "source": "OWASP Juice Shop staging — SQLi/auth-bypass login oracle POST /rest/user/login (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/order-history/orders",
+      "source": "OWASP Juice Shop staging — accounting all-orders BOLA oracle GET /rest/order-history/orders (juice-shop-staging.herokuapp.com)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnapi.testinvicti.com/api/users/1",
       "source": "Invicti VulnAPI — BOLA oracle GET /api/users/1 with Bearer one (vulnapi.testinvicti.com Swagger)",
