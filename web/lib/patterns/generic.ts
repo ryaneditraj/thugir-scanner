@@ -41397,6 +41397,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-image-captcha-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Juice Shop image captcha bypass live oracle",
+    description:
+      "GET /rest/image-captcha/ returns an SVG captcha image and the plaintext answer in JSON when authenticated — the Juice Shop image captcha bypass training oracle.",
+    impactOneline:
+      "Returning image captcha answers in API responses lets bots bypass human-verification on feedback and rating flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopImageCaptchaBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return captcha answers to the client; validate server-side only.",
+      steps: [
+        "Store image captcha answers server-side keyed by captchaId.",
+        "Return only the SVG challenge image to the client.",
+        "Reject feedback submissions when the submitted answer does not match the server record."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /rest/image-captcha/ returns the answer field in JSON alongside the SVG image. Show server-side image captcha validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-image-captcha-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Juice Shop /rest/image-captcha image captcha bypass route live oracle",
+    description:
+      "When scanning /rest/image-captcha, authenticated GET returns plaintext answer alongside SVG captcha — route-specific image captcha bypass oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag image captcha answers leaked in Juice Shop captcha API responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopImageCaptchaBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return captcha answers to the client; validate server-side only.",
+      steps: [
+        "Store image captcha answers server-side keyed by captchaId.",
+        "Return only the SVG challenge image to the client.",
+        "Reject feedback submissions when the submitted answer does not match the server record."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/image-captcha route scan exposes the answer field in JSON. Show route-level image captcha validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-save-login-ip-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -45295,9 +45347,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Broken access control",
     severityDefault: "high",
-    title: "Gin & Juice Shop /my-account/delete admin delete route live oracle",
+    title: "Gin & Juice Shop /admin admin delete route live oracle",
     description:
-      "When scanning /my-account/delete, X-Original-URL: /admin/delete?username=carlos bypasses access controls and reaches the admin deletion handler — route-specific FINDING-022 oracle.",
+      "When scanning /admin or /admin/delete, X-Original-URL: /admin/delete?username=carlos bypasses access controls and reaches the admin deletion handler — route-specific FINDING-022 oracle.",
     impactOneline:
       "Route-specific confirmation that admin user deletion is reachable via URL override header bypass.",
     detectorKind: "rule_ref",

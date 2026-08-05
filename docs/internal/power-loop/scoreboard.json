@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T23:10:40.615Z",
+  "updated_at": "2026-08-05T23:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2760,
-  "total_findings": 27878,
+  "total_sites_scanned": 2761,
+  "total_findings": 27920,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 23326,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-05T23:10:40.615Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-05T23:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 41,
+      "oracle_findings": 42,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 487,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,38 @@
           ]
         }
       },
-      "note": "Primary herokuapp 503 cold-start; staging fallback 6/6 (41 findings, 487 probes)"
+      "note": "Primary heroku 503 — staging fallback 42 findings 6/6 recall maintained"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 221,
-      "focus": "UCU OWASP CTF injection/access/crypto/ssrf + BuggyBuy register queued; brokencrystals JWT jku/jwk/x5c login hubs + preview Juice Shop SecurityAnswers/Wallets",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 120,
+      "focus": "juice-shop image-captcha bypass + ginandjuice admin-delete route + pwnshop profile 404 bootstrap",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (41 findings) — no benchmark category misses",
-      "brokencrystals.com/api/auth/jwt/jku/login: 69 findings — JWT JKU header auth oracle hub",
-      "brokencrystals.com/api/auth/jwt/x5c/login: 49 findings — JWT x5c certificate chain login oracle",
-      "preview.owasp-juice.shop/api/SecurityAnswers: 44 findings — security-answer hash disclosure oracle",
-      "preview.owasp-juice.shop/api/Wallets: 43 findings — wallet balance BOLA oracle on develop branch"
+      "juice-shop-staging.herokuapp.com/rest/image-captcha: 41→43 findings — image-captcha-bypass live+route oracles shipped",
+      "ginandjuice.shop/admin: 24→25 findings — admin-delete-route oracle now fires on /admin scans",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 4→42 findings — profile 404 homepage bootstrap + OTP retry extension",
+      "juice-shop-staging benchmark: 42 findings 6/6 recall (primary heroku 503 fallback)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary + basket/wallet routes 503 — staging fallback covers benchmark",
-      "vuln-expose.vercel.app/api/users unreachable — deploy offline or DNS failure",
-      "ucu-owasp-ctf.vercel.app/* module routes queued but not yet scanned (at queue tail)"
+      "ginandjuice.shop/my-account/change-email: race-condition oracle still absent (requires parallel POST + exploit-server inbox)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-category-bypass still OTP-gated on cold scans intermittently",
+      "juice-shop.herokuapp.com primary + basket/wallet routes 503 — staging fallback covers benchmark"
     ]
   },
   "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com/rest/image-captcha": 43,
+    "ginandjuice.shop/admin": 25,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 42,
+    "juice-shop-staging.herokuapp.com": 42,
     "brokencrystals.com/api/auth/jwt/jku/login": 69,
-    "brokencrystals.com/api/auth/jwt/x5c/login": 49,
-    "preview.owasp-juice.shop/api/SecurityAnswers": 44,
-    "preview.owasp-juice.shop/api/Wallets": 43,
-    "brokencrystals.com/api/auth/jwt/jwk/login": 16,
-    "juice-shop-staging.herokuapp.com": 41
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23
   }
 }

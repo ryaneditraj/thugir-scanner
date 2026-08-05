@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T22:08:35.939Z",
-  "total": 1862,
-  "uniqueSlugs": 1857,
+  "generatedAt": "2026-08-05T23:15:37.535Z",
+  "total": 1864,
+  "uniqueSlugs": 1859,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1844,
+    "generic": 1846,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1777,
+    "deep": 1779,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 105,
     "Security misconfiguration": 143,
-    "Broken authentication": 110,
+    "Broken authentication": 112,
     "Injection": 258,
     "Cross-site scripting": 653,
     "Open redirect": 11,
@@ -1438,6 +1438,8 @@
     "juice-shop-forgotten-backup-route-live-oracle",
     "juice-shop-hints-exposure-live-oracle",
     "juice-shop-hints-exposure-route-live-oracle",
+    "juice-shop-image-captcha-bypass-live-oracle",
+    "juice-shop-image-captcha-bypass-route-live-oracle",
     "juice-shop-jwt-alg-none-live-oracle",
     "juice-shop-jwt-alg-none-route-live-oracle",
     "juice-shop-leaked-api-key",
