@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-users-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/3 with Bearer one returns {\"username\":\"admin\",\"password\":\"adminpassword\",\"isAdmin\":true}; vulnapi.testinvicti.com findings 7→9 (+users-bola +validate-token-stack live oracles); benchmark juice-shop-staging 34 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-validate-token-stack-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/validateToken invalid JWT returns JSON with jsonwebtoken stack trace; vulnapi.testinvicti.com findings 7→9 (+stack-disclosure live oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-track-order-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/track-order/1 returns {\"status\":\"success\",\"data\":[{\"orderId\":\"1\"}]} without auth; juice-shop-staging.herokuapp.com/rest/track-order/1 findings 33→35 (+track-order-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:rest.vulnweb.com",
       "slug": "rest-vulnweb-posts-bola-live-oracle",
       "status": "shipped",
@@ -19097,6 +19115,21 @@
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-dom-eventtriggering-eval-hub-route-live-oracle",
       "shipped_at": "2026-08-05T11:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-users-bola-live-oracle",
+      "shipped_at": "2026-08-05T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-validate-token-stack-disclosure-live-oracle",
+      "shipped_at": "2026-08-05T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-track-order-idor-live-oracle",
+      "shipped_at": "2026-08-05T12:20:00.000Z"
     }
   ]
 }

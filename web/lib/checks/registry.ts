@@ -28022,6 +28022,116 @@ const restTestinvictiJwtUsersBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const VULNAPI_USER1_BEARER = "one";
+
+function isVulnapiHost(ctx: RuleContext): boolean {
+  return /vulnapi\.testinvicti\.com/i.test(ctx.origin);
+}
+
+const vulnapiUsersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const victimUrl = new URL("/api/users/3", ctx.origin).toString();
+  const doc = await ctx.probe.get(victimUrl, {
+    headers: { Authorization: `Bearer ${VULNAPI_USER1_BEARER}` },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: { username?: string; password?: string; isAdmin?: boolean } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { username?: string; password?: string; isAdmin?: boolean };
+  } catch {
+    if (
+      !/"username"\s*:\s*"admin"/.test(doc.body) ||
+      !/"password"\s*:/.test(doc.body) ||
+      !/"isAdmin"\s*:\s*true/.test(doc.body)
+    ) {
+      return NEGATIVE;
+    }
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        victimUrl,
+        bearer: VULNAPI_USER1_BEARER,
+        snippet: doc.body.slice(0, 180).trim(),
+        note: "Invicti vulnapi.testinvicti.com GET /api/users/3 with Bearer one (user1) returns admin credentials without authorization — users BOLA oracle"
+      }
+    };
+  }
+  if (parsed?.username !== "admin" || !parsed.password || parsed.isAdmin !== true) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      victimUrl,
+      bearer: VULNAPI_USER1_BEARER,
+      username: parsed.username,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Invicti vulnapi.testinvicti.com GET /api/users/3 with Bearer one (user1) returns admin password and isAdmin:true — users BOLA oracle"
+    }
+  };
+};
+
+const vulnapiUsersBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnapiUsersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti vulnapi.testinvicti.com route scan — Bearer one reads admin user record at /api/users/3 — route-specific users BOLA oracle"
+    }
+  };
+};
+
+const vulnapiValidateTokenStackDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/validateToken", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ token: "thugir.invalid.probe.token" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 400 || doc.status >= 500) return NEGATIVE;
+  if (!/"stack"\s*:/.test(doc.body)) return NEGATIVE;
+  if (!/jsonwebtoken|node_modules\/jsonwebtoken/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url,
+      status: doc.status,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Invicti vulnapi.testinvicti.com POST /api/validateToken returns Node.js stack trace in JSON error body — verbose API error disclosure oracle"
+    }
+  };
+};
+
+const vulnapiValidateTokenStackDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/validateToken/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnapiValidateTokenStackDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti vulnapi.testinvicti.com /api/validateToken route scan — invalid JWT probe returns jsonwebtoken stack trace in JSON — route-specific error disclosure oracle"
+    }
+  };
+};
+
 const restVulnwebPostsBolaLiveOracle: Rule = async (ctx) => {
   if (!isRestVulnwebHost(ctx)) return NEGATIVE;
   const listUrl = new URL("/basic_authentication/api/posts", ctx.origin).toString();
@@ -52565,6 +52675,44 @@ function juiceShopDataIdAuthHeader(): Record<string, string> {
   };
 }
 
+const juiceShopTrackOrderIdorLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const trackUrl = new URL("/rest/track-order/1", ctx.origin).toString();
+  const doc = await ctx.probe.get(trackUrl, { maxBytes: 4096, timeoutMs: 18000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (IDOR_AUTH_MARKERS.test(doc.body.slice(0, 500))) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"orderId"/.test(doc.body)) return NEGATIVE;
+  const orderMatch = doc.body.match(/"orderId"\s*:\s*"([^"]+)"/);
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: trackUrl,
+      orderId: orderMatch?.[1] ?? "1",
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Juice Shop GET /rest/track-order/1 returns order data without authentication — track-order IDOR live oracle"
+    }
+  };
+};
+
+const juiceShopTrackOrderIdorRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/rest\/track-order/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopTrackOrderIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/track-order route scan — unauthenticated GET returns orderId JSON — route-specific track-order IDOR oracle"
+    }
+  };
+};
+
 const juiceShopUsersIdorLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
@@ -62674,6 +62822,10 @@ export const RULES: Record<string, Rule> = {
   restVulnwebUsersBolaRouteLiveOracle,
   restTestinvictiJwtUsersBolaLiveOracle,
   restTestinvictiJwtUsersBolaRouteLiveOracle,
+  vulnapiUsersBolaLiveOracle,
+  vulnapiUsersBolaRouteLiveOracle,
+  vulnapiValidateTokenStackDisclosureLiveOracle,
+  vulnapiValidateTokenStackDisclosureRouteLiveOracle,
   restVulnwebPostsBolaLiveOracle,
   restVulnwebPostsBolaRouteLiveOracle,
   clientSidePwnshopEvidence,
@@ -63007,6 +63159,8 @@ export const RULES: Record<string, Rule> = {
   juiceShopLoginRouteLiveOracle,
   juiceShopChatbotApiLiveOracle,
   juiceShopChatbotRouteLiveOracle,
+  juiceShopTrackOrderIdorLiveOracle,
+  juiceShopTrackOrderIdorRouteLiveOracle,
   juiceShopUsersIdorLiveOracle,
   juiceShopUsersIdorRouteLiveOracle,
   juiceShopBasketItemsBolaLiveOracle,
