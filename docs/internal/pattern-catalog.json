@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-05T07:06:19.975Z",
-  "total": 1803,
-  "uniqueSlugs": 1798,
+  "generatedAt": "2026-08-05T08:19:28.508Z",
+  "total": 1807,
+  "uniqueSlugs": 1802,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1785,
+    "generic": 1789,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1718,
+    "deep": 1722,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 323,
+    "Broken access control": 327,
     "Exposed secret": 28,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -101,6 +101,8 @@
     "brokencrystals-partner-login-xpath-live-oracle",
     "brokencrystals-photo-bfla-live-oracle",
     "brokencrystals-photo-bfla-route-live-oracle",
+    "brokencrystals-photo-disclosure-by-email-live-oracle",
+    "brokencrystals-photo-disclosure-by-email-route-live-oracle",
     "brokencrystals-process-numbers-live-oracle",
     "brokencrystals-process-numbers-route-live-oracle",
     "brokencrystals-products-latest-limit-bypass-live-oracle",
@@ -1527,6 +1529,8 @@
     "reflexion-escalated-xss",
     "replit-exposed-dot-replit",
     "replit-secrets-in-client",
+    "rest-vulnweb-users-bola-live-oracle",
+    "rest-vulnweb-users-bola-route-live-oracle",
     "robots-sensitive-paths",
     "seclab-nextjs-lab-api-probe",
     "secret-anthropic",
