@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:rest.vulnweb.com",
+      "slug": "rest-vulnweb-posts-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /basic_authentication/api/posts/2 returns post title+content+user_id without ownership check; rest.vulnweb.com/api/products/1 findings 4→8 (+posts-bola live+route oracles); benchmark juice-shop 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:rest.testinvicti.com",
+      "slug": "rest-testinvicti-jwt-users-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /jwt/api/users/pgorczany with documented demo JWT returns user_id+email without per-user authorization; rest.testinvicti.com/jwt/api findings 4→6 (+jwt-users-bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-transactions-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/transactions?account_number=1234567890 with probe JWT returns 160+ victim transactions (from_account, amount); vulnbank.org/api/v1/transactions findings 20→22 (+transactions-bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-photo-bfla-live-oracle",
       "status": "shipped",
