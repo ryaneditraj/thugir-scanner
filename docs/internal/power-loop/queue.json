@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T13:11:30.115Z",
+  "updated_at": "2026-08-05T14:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://vulnapi.testinvicti.com/api/users/1",
@@ -15159,7 +15159,32 @@
       "url": "http://testhtml5.vulnweb.com/static/views/userinfo.html",
       "source": "Acunetix testhtml5.vulnweb.com — client-side userinfo / DOM XSS training route (HTML5 vuln lab)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/user/security-question?email=morty@juice-sh.op",
+      "source": "OWASP Juice Shop staging — password-reset security-question disclosure oracle GET /rest/user/security-question (secret-resend gap signal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/track-order/1",
+      "source": "OWASP Juice Shop staging — track-order IDOR oracle GET /rest/track-order/1 (14 UTC staging benchmark host)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/chatbot/respond",
+      "source": "OWASP Juice Shop staging — chatbot LLM proxy oracle POST /rest/chatbot/respond (prompt-injection surface)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/wallet/balance",
+      "source": "OWASP Juice Shop staging — wallet balance BOLA oracle GET /rest/wallet/balance (auth-bypass / IDOR gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/user/reset-password",
+      "source": "OWASP Juice Shop staging — reset-password validation-bypass oracle POST /rest/user/reset-password (client-side validation bypass)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 20
+  "discovery_urls_added": 25
 }
