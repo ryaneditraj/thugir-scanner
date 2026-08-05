@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-04T23:20:03.986Z",
-  "total": 1755,
-  "uniqueSlugs": 1750,
+  "generatedAt": "2026-08-05T00:26:14.659Z",
+  "total": 1761,
+  "uniqueSlugs": 1756,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1737,
+    "generic": 1743,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1670,
+    "deep": 1676,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 143,
     "Broken authentication": 89,
     "Injection": 251,
-    "Cross-site scripting": 613,
+    "Cross-site scripting": 619,
     "Open redirect": 11,
     "general": 20,
     "SSRF": 7,
@@ -916,10 +916,16 @@
     "firing-range-dom-external-localstorage-function-eval-route-live-oracle",
     "firing-range-dom-external-localstorage-property-eval-live-oracle",
     "firing-range-dom-external-localstorage-property-eval-route-live-oracle",
+    "firing-range-dom-external-sessionstorage-array-eval-live-oracle",
+    "firing-range-dom-external-sessionstorage-array-eval-route-live-oracle",
     "firing-range-dom-external-sessionstorage-array-innerhtml-live-oracle",
     "firing-range-dom-external-sessionstorage-array-innerhtml-route-live-oracle",
+    "firing-range-dom-external-sessionstorage-function-documentwrite-live-oracle",
+    "firing-range-dom-external-sessionstorage-function-documentwrite-route-live-oracle",
     "firing-range-dom-external-sessionstorage-function-eval-live-oracle",
     "firing-range-dom-external-sessionstorage-function-eval-route-live-oracle",
+    "firing-range-dom-external-sessionstorage-function-innerhtml-live-oracle",
+    "firing-range-dom-external-sessionstorage-function-innerhtml-route-live-oracle",
     "firing-range-dom-external-sessionstorage-property-eval-live-oracle",
     "firing-range-dom-external-sessionstorage-property-eval-route-live-oracle",
     "firing-range-dom-external-sessionstorage-property-innerhtml-live-oracle",
