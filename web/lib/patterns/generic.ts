@@ -21325,6 +21325,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "rest-vulnweb-users-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti rest.vulnweb.com users BOLA live oracle",
+    description:
+      "GET /basic_authentication/api/users/{username} returns any user's email and profile without per-user authorization — the Invicti Vulnerable REST API BOLA oracle.",
+    impactOneline:
+      "Authenticated API clients can enumerate and read any user's profile data by username without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restVulnwebUsersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "rest.vulnweb.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the authenticated subject matches the requested username before returning profile data.",
+        "Return HTTP 403 for cross-user profile access attempts.",
+        "Run rest.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our rest.vulnweb.com API returns any user's profile via /basic_authentication/api/users/{username}. Show BOLA remediation for REST user endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "rest-vulnweb-users-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti rest.vulnweb.com users BOLA route live oracle",
+    description:
+      "When scanning rest.vulnweb.com API routes, GET /basic_authentication/api/users/{username} returns any user's profile without authorization — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-specific confirmation that Invicti REST API labs expose cross-user profile data without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restVulnwebUsersBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "rest.vulnweb.com is an intentional Invicti benchmark — enforce per-user authorization in production.",
+      steps: [
+        "Verify the authenticated subject matches the requested username before returning profile data.",
+        "Return HTTP 403 for cross-user profile access attempts.",
+        "Run rest.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our rest.vulnweb.com route scan confirms cross-user profile disclosure. Show BOLA remediation for REST user endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -30109,6 +30161,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/users/one/{id}/photo route scan confirms isAdmin=true BFLA. Show authorization remediation for photo DELETE endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-photo-disclosure-by-email-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals photo disclosure by email oracle",
+    description:
+      "GET /api/users/one/{email}/photo returns HTTP 204 for any authenticated JWT without verifying photo ownership — the Broken Crystals photo disclosure by email oracle.",
+    impactOneline:
+      "Any authenticated user can fetch another user's profile photo by guessing or enumerating email addresses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsPhotoDisclosureByEmailLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce ownership checks on photo reads — Broken Crystals is intentional lab software.",
+      steps: [
+        "Verify the authenticated subject matches the photo owner before returning profile images.",
+        "Return HTTP 403 for cross-user photo access attempts.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/users/one/{email}/photo endpoint returns photos for any authenticated JWT. Show authorization remediation for photo read endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-photo-disclosure-by-email-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals photo disclosure by email route live oracle",
+    description:
+      "When scanning /api/users/one/{email}/photo, GET returns HTTP 204 for any authenticated JWT without ownership check — route-specific photo disclosure oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals photo endpoints leak profile images across user boundaries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsPhotoDisclosureByEmailRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce ownership checks on photo reads — Broken Crystals is intentional lab software.",
+      steps: [
+        "Verify the authenticated subject matches the photo owner before returning profile images.",
+        "Return HTTP 403 for cross-user photo access attempts.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/one/{email}/photo route scan confirms cross-user photo disclosure. Show authorization remediation for photo read endpoints.",
     version: 1,
     enabled: true
   },
