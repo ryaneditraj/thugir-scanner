@@ -42385,6 +42385,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "testasp-showforum-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Acunetix testasp ShowForum SQL injection live oracle",
+    description:
+      "GET /ShowForum.asp?id=0' returns HTTP 500 vs id=0 baseline 200 — the Acunetix Acuforum classic ASP SQLi training oracle.",
+    impactOneline:
+      "SQL injection in forum ID parameters can expose or modify the Acuforum database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testaspShowForumSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "testasp.vulnweb.com is an intentional Acunetix benchmark — use parameterized queries in production.",
+      steps: [
+        "Bind forum ID parameters as integers or prepared statement parameters.",
+        "Return generic errors without leaking SQL syntax details.",
+        "Run testasp.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our /ShowForum.asp?id= triggers HTTP 500 on quote injection. Show SQL injection remediation for ASP forum ID parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testasp-showforum-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Acunetix testasp ShowForum SQL injection route live oracle",
+    description:
+      "When scanning /ShowForum.asp, id query param quote injection returns HTTP 500 vs clean baseline — route-specific ASP SQLi oracle.",
+    impactOneline:
+      "Route-scoped scans should flag classic ASP SQL injection on Acunetix Acuforum ShowForum endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testaspShowForumSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "testasp.vulnweb.com is an intentional Acunetix benchmark — use parameterized queries in production.",
+      steps: [
+        "Bind forum ID parameters as integers or prepared statement parameters.",
+        "Return generic errors without leaking SQL syntax details.",
+        "Run testasp.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our /ShowForum.asp route scan shows SQLi on the id parameter. Show route-level ASP SQL injection fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testasp-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Acunetix testasp login SQL injection live oracle",
+    description:
+      "POST /login.asp with admin' OR '1'='1 redirects to Default.asp vs Invalid login on bad credentials — Acuforum authentication bypass oracle.",
+    impactOneline:
+      "SQL injection in login forms enables unauthenticated access to Acuforum accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testaspLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "testasp.vulnweb.com is an intentional Acunetix benchmark — use parameterized login queries in production.",
+      steps: [
+        "Use prepared statements for username/password lookups.",
+        "Reject authentication bypass payloads and rate-limit login attempts.",
+        "Run testasp.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our /login.asp accepts admin' OR '1'='1 and redirects to Default.asp. Show SQL injection authentication bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testasp-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Acunetix testasp login SQL injection route live oracle",
+    description:
+      "When scanning /login.asp, POST SQLi payload redirects to Default.asp — route-specific Acuforum authentication bypass oracle.",
+    impactOneline:
+      "Route-scoped scans should flag SQL injection login bypass on Acunetix Acuforum endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testaspLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "testasp.vulnweb.com is an intentional Acunetix benchmark — use parameterized login queries in production.",
+      steps: [
+        "Use prepared statements for username/password lookups.",
+        "Reject authentication bypass payloads and rate-limit login attempts.",
+        "Run testasp.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our /login.asp route scan confirms SQLi auth bypass. Show route-level login SQL injection fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testaspnet-comments-exposure-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Acunetix testaspnet Comments disclosure live oracle",
+    description:
+      "GET /Comments.aspx?id=1 returns user comments with poster IP and text without authentication — Acublog public comment disclosure oracle.",
+    impactOneline:
+      "Unauthenticated access to article comments exposes poster metadata on Acublog demo sites.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testaspnetCommentsExposureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "testaspnet.vulnweb.com is an intentional Acunetix benchmark — restrict comment visibility in production.",
+      steps: [
+        "Require authentication before displaying user comments.",
+        "Redact poster IP addresses from public comment views.",
+        "Run testaspnet.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our /Comments.aspx?id=1 exposes user comments without login. Show comment access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testaspnet-comments-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Acunetix testaspnet Comments disclosure route live oracle",
+    description:
+      "When scanning /Comments.aspx, article comments with poster metadata are exposed without login — route-specific Acublog disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated comment disclosure on Acunetix Acublog endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testaspnetCommentsExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "testaspnet.vulnweb.com is an intentional Acunetix benchmark — restrict comment visibility in production.",
+      steps: [
+        "Require authentication before displaying user comments.",
+        "Redact poster IP addresses from public comment views.",
+        "Run testaspnet.vulnweb.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our /Comments.aspx route scan exposes comments without auth. Show route-level comment access-control fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "thugir-jwt-weak-claims",
     platform: "generic",
     category: "Broken authentication",
