@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T06:15:00.000Z",
+  "updated_at": "2026-08-06T07:08:09.235Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2740,
-  "total_findings": 26911,
+  "total_sites_scanned": 2748,
+  "total_findings": 27008,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22814,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-06T06:15:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22869,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-06T07:08:09.235Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 42,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 497,
+      "probes_run": 488,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,40 +53,41 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 176,
-      "focus": "web-pentest upload/XSS + appsec-ci stored XSS comments oracles shipped; login/comment/admin SQLi hubs + preview juice-shop API drain",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 55,
+      "focus": "web-pentest IDOR chain (view_users/admin_dashboard/register) + BuggyBuy orders API + queue drain (login/comment/admin)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (42 findings) — primary Heroku 503, staging fallback",
-      "web-pentest-playground.onrender.com/upload: 5→9 findings — web-pentest-playground-file-upload live+route oracles shipped (multipart POST + /uploads/ canary)",
-      "appsec-ci-pipeline.onrender.com/comments/: 4→6 findings — appsec-ci-stored-xss-comments live+route oracles shipped (Django CSRF + username/message POST)",
-      "web-pentest-playground.onrender.com/comment: 6 findings — post-login-sql-bypass + stored-xss live oracles",
-      "web-pentest-playground.onrender.com/admin: 6 findings — SQLi admin-login + exposed admin panel",
-      "preview.owasp-juice.shop/api/PrivacyRequests: 45 findings — privacy-request BOLA oracle",
-      "preview.owasp-juice.shop/api/BasketItems: 45 findings — basket HPP/BOLA oracle"
+      "web-pentest-playground.onrender.com/comment: 9 findings — post-login-sql-bypass + stored-xss live oracles",
+      "web-pentest-playground.onrender.com/view_users: 8 findings — IDOR user-list oracle + admin_dashboard chain",
+      "web-pentest-playground.onrender.com/admin_dashboard: 8 findings — access-control bypass via IDOR escalation",
+      "web-pentest-playground.onrender.com/register: 8 findings — registration + admin privilege oracle",
+      "web-pentest-playground.onrender.com/login: 8 findings — SQLi login-bypass hub",
+      "web-pentest-playground.onrender.com/admin: 8 findings — SQLi admin-login + exposed admin panel",
+      "vulnerable-web-application-jecw.vercel.app/api/orders: 6 findings — order IDOR/BOLA hub (JWT session may deepen oracle)",
+      "r2s-arena.fly.dev: scan error — React2Shell arena unreachable from cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "juice-shop.herokuapp.com primary oracle intermittently 503 — staging fallback required for stable recall",
-      "vulnerable-web-application-jecw.vercel.app/checkout: route-specific price-manipulation oracle may need JWT-authenticated cart probe",
-      "appsec-ci-pipeline.onrender.com/search/: reflected XSS confirmed but SQLi search oracle not surfaced",
-      "brokencrystals.com/api/users/one/{email}/adminpermission: mass-assignment route oracle needs direct URL scan validation"
+      "r2s-arena.fly.dev: React2Shell CVE-2025-55182 arena unreachable — scan error, no findings",
+      "vulnerable-web-application-jecw.vercel.app/api/orders: 6-finding hub — route-specific order IDOR oracle may need authenticated JWT probe",
+      "web-pentest-playground.onrender.com/view_users: IDOR confirmed but Cloudflare may block live SQLi exploitation on Render"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 42,
-    "web-pentest-playground.onrender.com/upload": 9,
-    "preview.owasp-juice.shop/api/PrivacyRequests": 45,
-    "preview.owasp-juice.shop/api/BasketItems": 45,
-    "preview.owasp-juice.shop/api/Addresss/1": 45,
-    "web-pentest-playground.onrender.com/comment": 6,
-    "web-pentest-playground.onrender.com/admin": 6,
-    "appsec-ci-pipeline.onrender.com/comments/": 6,
+    "web-pentest-playground.onrender.com/comment": 9,
+    "web-pentest-playground.onrender.com/view_users": 8,
+    "web-pentest-playground.onrender.com/admin_dashboard": 8,
+    "web-pentest-playground.onrender.com/register": 8,
+    "web-pentest-playground.onrender.com/login": 8,
+    "web-pentest-playground.onrender.com/admin": 8,
+    "vulnerable-web-application-jecw.vercel.app/api/orders": 6,
     "vulnerable-web-application-jecw.vercel.app/checkout": 6,
-    "web-pentest-playground.onrender.com/login": 5,
     "appsec-ci-pipeline.onrender.com/search/": 3
   }
 }
