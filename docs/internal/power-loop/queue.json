@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T12:05:00.000Z",
+  "updated_at": "2026-08-06T13:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://preview.owasp-juice.shop/rest/captcha",
@@ -15719,7 +15719,32 @@
       "url": "https://pentest-ground.com:81/search",
       "source": "Pentest-Ground GuardianLeaks — reflected XSS / SSRF search oracle GET /search (pentest-ground.com README)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product search UNION SQLi walkthrough with /api/products/search oracle docs (GitHub Pages, 13 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews/",
+      "source": "kOaDT/oss-oopssec-store — stored XSS in product reviews walkthrough with /api/products/[id]/reviews oracle (GitHub Pages, 13 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/deluxe-membership",
+      "source": "OWASP Juice Shop preview — deluxe membership status/payment oracle GET /rest/deluxe-membership (preview.owasp-juice.shop, 13 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/b2b/v2/orders",
+      "source": "OWASP Juice Shop preview — insecure deserialization oracle POST /b2b/v2/orders orderLinesData (preview.owasp-juice.shop, 13 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/SecurityQuestions",
+      "source": "OWASP Juice Shop staging — security-question catalog disclosure oracle GET /api/SecurityQuestions (juice-shop-staging.herokuapp.com, 13 UTC discovery)",
+      "auth": "benchmark"
     }
   ],
-  "discovery_urls_added": 59
+  "discovery_urls_added": 64
 }
