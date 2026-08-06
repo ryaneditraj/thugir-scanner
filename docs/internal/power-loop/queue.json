@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T17:05:06.182Z",
+  "updated_at": "2026-08-06T18:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/oidc-client",
+      "source": "NeuraLegion/brokencrystals — OIDC client misconfiguration oracle GET /api/auth/oidc-client (swagger-json, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/fullinfo/admin",
+      "source": "NeuraLegion/brokencrystals — excessive data exposure oracle GET /api/users/fullinfo?email=admin (swagger-json, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/id/1",
+      "source": "NeuraLegion/brokencrystals — numeric user ID BOLA oracle GET /api/users/id/{id} (swagger-json, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/email/getEmails",
+      "source": "NeuraLegion/brokencrystals — email API mass-assignment / verbose error oracle GET /api/email/getEmails (swagger-json, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/v2/userinfo/admin@brokencrystals.com",
+      "source": "NeuraLegion/brokencrystals — userinfo v2 disclosure oracle GET /api/v2/userinfo/{email} (swagger-json, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop.demo.escape.tech/api/ProductReviews",
       "source": "Escape.tech Juice Shop demo — product review XSS/BOLA oracle GET /api/ProductReviews (juice-shop.demo.escape.tech, 17 UTC discovery)",
