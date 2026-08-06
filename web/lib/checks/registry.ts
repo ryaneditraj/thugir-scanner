@@ -50941,6 +50941,30 @@ const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceChangeEmailRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\/change-email\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasAccountNav =
+    /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
+  const hasLoginSurface =
+    /class=login-form/i.test(doc.body) &&
+    /name="username"/i.test(doc.body) &&
+    /type=username/i.test(doc.body);
+  if (!hasAccountNav || !hasLoginSurface) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
+      note: "Gin & Juice Shop /my-account/change-email route scan — authenticated email-change surface gated behind login (PortSwigger race-condition training lab entry point)"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -52727,6 +52751,55 @@ const sstiVulnlabFilteredRouteLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: result.confidence,
     evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const sstiVulnlabMetaCatalogLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const origin = sstiVulnlabProbeOrigin(ctx);
+  const metaUrl = new URL("/meta/", origin).toString();
+  const doc = await ctx.probe.get(metaUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { labs?: Array<{ slug?: string; has_detect_hint?: boolean; title?: string }> };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      labs?: Array<{ slug?: string; has_detect_hint?: boolean; title?: string }>;
+    };
+  } catch {
+    return NEGATIVE;
+  }
+  const labs = parsed.labs ?? [];
+  if (labs.length < 3) return NEGATIVE;
+  const hinted = labs.filter((l) => l.has_detect_hint && l.slug && l.title);
+  if (hinted.length < 3) return NEGATIVE;
+  const slugs = hinted.map((l) => l.slug).slice(0, 6);
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: metaUrl,
+      labCount: labs.length,
+      hintedSlugs: slugs,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "ssti.vulnlab.dev GET /meta/ publishes SSTI lab catalog with has_detect_hint metadata — training-lab detection oracle"
+    }
+  };
+};
+
+const sstiVulnlabMetaCatalogRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSstiVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/meta\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await sstiVulnlabMetaCatalogLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "ssti.vulnlab.dev /meta route scan — lab catalog JSON lists SSTI modules with has_detect_hint and scanner_should_fire metadata"
+    }
   };
 };
 
@@ -60671,6 +60744,12 @@ async function probeBrokencrystalsMetadataXxe(ctx: RuleContext): Promise<RuleRes
   };
 }
 
+const brokencrystalsMetadataXxeLiveOracle: Rule = async (ctx) => {
+  const result = await probeBrokencrystalsMetadataXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return result;
+};
+
 const brokencrystalsMetadataXxeRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/brokencrystals\.com/i.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
@@ -64211,6 +64290,8 @@ export const RULES: Record<string, Rule> = {
   xssVulnlabCspBypassJsonpRouteLiveOracle,
   sstiVulnlabSandboxedLiveOracle,
   sstiVulnlabSandboxedRouteLiveOracle,
+  sstiVulnlabMetaCatalogLiveOracle,
+  sstiVulnlabMetaCatalogRouteLiveOracle,
   juiceShopJwtAlgNoneLiveOracle,
   juiceShopJwtAlgNoneRouteLiveOracle,
   juiceShopCaptchaBypassLiveOracle,
@@ -64426,6 +64507,7 @@ export const RULES: Record<string, Rule> = {
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
   xpathInjectionDisclosure,
+  brokencrystalsMetadataXxeLiveOracle,
   brokencrystalsMetadataXxeRouteLiveOracle,
   xxeXmlPostProbe,
   clientSideCssInjectionEvidence,
@@ -65047,6 +65129,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogSubscribeLiveOracle,
   ginAndJuiceCatalogSubscribeRouteLiveOracle,
   ginAndJuiceCatalogProductRouteLiveOracle,
+  ginAndJuiceChangeEmailRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,

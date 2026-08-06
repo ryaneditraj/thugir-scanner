@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-metadata-xxe-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://brokencrystals.com/api/metadata with <!ENTITY xxe \"thugirXxeCanary\"> echoes canary in <root>; brokencrystals.com/api/metadata findings 60→66 (+metadata-xxe live oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-meta-catalog-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://ssti.vulnlab.dev/meta/ returns JSON labs[] with has_detect_hint, meta_url, scanner_should_fire; ssti.vulnlab.dev/meta/ findings 5→9 (+meta-catalog live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-email-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://ginandjuice.shop/my-account/change-email returns account-icon selected + login-form with username field — PortSwigger race-condition lab entry; ginandjuice.shop/my-account/change-email findings 24→27 (+change-email-route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:public-firing-range.appspot.com",
       "slug": "firing-range-reflected-parameter-body-400-401-extension",
       "status": "shipped",
@@ -19400,6 +19418,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-otp-mail-wait-extension",
       "shipped_at": "2026-08-06T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-metadata-xxe-live-oracle",
+      "shipped_at": "2026-08-06T02:00:00.000Z"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-meta-catalog-live-oracle",
+      "shipped_at": "2026-08-06T02:00:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-email-route-live-oracle",
+      "shipped_at": "2026-08-06T02:00:00.000Z"
     }
   ]
 }

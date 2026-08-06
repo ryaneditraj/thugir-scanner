@@ -28007,6 +28007,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssti-vulnlab-meta-catalog-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "ssti.vulnlab.dev meta catalog live oracle",
+    description:
+      "GET /meta/ returns JSON lab catalog with has_detect_hint, meta_url, and scanner_should_fire metadata for each SSTI training module — the ssti.vulnlab.dev detection-hint oracle.",
+    impactOneline:
+      "Public meta catalog exposes structured SSTI lab metadata for scanner calibration and training-lab fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabMetaCatalogLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not publish scanner detection hints on production apps — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Remove /meta catalog endpoints from production deployments.",
+        "Gate training-lab metadata behind authentication.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /meta endpoint publishes SSTI lab detection hints. Show how to remove scanner-calibration metadata from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssti-vulnlab-meta-catalog-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "ssti.vulnlab.dev /meta route catalog live oracle",
+    description:
+      "When scanning /meta/, JSON lab catalog lists SSTI modules with has_detect_hint and exploit_examples — route-specific training-lab detection oracle.",
+    impactOneline:
+      "Route-specific confirmation that ssti.vulnlab.dev exposes structured SSTI lab metadata at /meta/.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sstiVulnlabMetaCatalogRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not publish scanner detection hints on production apps — ssti.vulnlab.dev is intentional training software.",
+      steps: [
+        "Remove /meta catalog endpoints from production deployments.",
+        "Gate training-lab metadata behind authentication.",
+        "Run SSTI training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /meta route scan confirms SSTI lab detection-hint catalog. Show route-specific remediation for training metadata exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -29953,6 +30005,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/file/digital_ocean endpoint fetches DigitalOcean metadata via the path parameter. Show how to block cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-metadata-xxe-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/metadata XXE live oracle",
+    description:
+      "POST /api/metadata accepts XML with ENTITY expansion and echoes the canary in the response body — the Broken Crystals XML external entity oracle.",
+    impactOneline:
+      "XXE on metadata endpoints lets attackers read local files and reach internal services.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMetadataXxeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Set XML parser options to reject DOCTYPE and external entities.",
+        "Use a schema-validated XML parser with entity expansion disabled.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/metadata endpoint expands XML external entities. Show secure XML parsing for NestJS.",
     version: 1,
     enabled: true
   },
@@ -45495,6 +45573,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog/product route exposes a stock check form that posts XML to /catalog/product/stock. Show route-specific XXE remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-change-email-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/change-email route live oracle",
+    description:
+      "When scanning /my-account/change-email, the account UI exposes a login-gated email-change surface for the PortSwigger race-condition training lab — route-specific TOCTOU oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes an email-change endpoint vulnerable to race-condition abuse after authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceChangeEmailRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialize email-change requests and verify ownership atomically before updating accounts.",
+      steps: [
+        "Use database transactions or row locks when processing email-change requests.",
+        "Require re-authentication and out-of-band confirmation before applying email updates.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/change-email route is vulnerable to race-condition email takeover. Show atomic email-change validation and TOCTOU remediation.",
     version: 1,
     enabled: true
   },
