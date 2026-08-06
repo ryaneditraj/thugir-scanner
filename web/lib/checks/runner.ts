@@ -1887,8 +1887,13 @@ const DEEP_RULES = new Set<string>([
   "clientSideOopssecStoreEvidence",
   "clientSideOopssecRaceConditionEvidence",
   "clientSideOopssecXffSqliEvidence",
+  "clientSideOopssecProductSearchSqliEvidence",
+  "clientSideOopssecStoredXssReviewsEvidence",
   "oopssecXffSqliRouteLiveOracle",
   "oopssecLiveStreamBflaRouteLiveOracle",
+  "oopssecProductSearchSqliRouteLiveOracle",
+  "oopssecStoredXssReviewsRouteLiveOracle",
+  "oopssecRaceConditionCouponRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
@@ -7819,7 +7824,9 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/x-forwarded-for-sql-injection/",
     "/posts/x-forwarded-for-sql-injection",
     "/posts/sql-injection-writeup/",
-    "/posts/product-search-sql-injection/"
+    "/posts/product-search-sql-injection/",
+    "/posts/stored-xss-product-reviews/",
+    "/posts/live-stream-hijack/"
   ]) {
     try {
       const u = new URL(p, pageUrl);
