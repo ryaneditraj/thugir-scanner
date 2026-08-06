@@ -5887,6 +5887,142 @@ const oopssecLiveStreamBflaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store product-search SQLi walkthrough (posts/product-search-sql-injection) -
+const CLIENT_OOPSSEC_PRODUCT_SEARCH_SQLI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Product search SQLi walkthrough title",
+    re: /Exploiting a Product Search SQL Injection|Product Search SQL Injection/i
+  },
+  {
+    label: "/api/products/search unsanitized q parameter",
+    re: /\/api\/products\/search\?q=|q parameter gets interpolated directly into a SQL query/i
+  },
+  {
+    label: "UNION SELECT credential extraction payload",
+    re: /UNION SELECT id, email, password, role|DELIVERED' UNION SELECT/i
+  },
+  {
+    label: "Prisma $queryRawUnsafe string concatenation",
+    re: /\$queryRawUnsafe|dropped directly into the SQL string/i
+  },
+  {
+    label: "Product search SQLi walkthrough route",
+    re: /\/posts\/product-search-sql-injection/i
+  }
+];
+
+const clientSideOopssecProductSearchSqliEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_PRODUCT_SEARCH_SQLI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|product search|SQL injection|\/api\/products\/search/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents SQL injection via unsanitized q parameter in /api/products/search using $queryRawUnsafe"
+    }
+  };
+};
+
+const oopssecProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/product-search-sql-injection/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecProductSearchSqliEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/product-search-sql-injection route scan — walkthrough documents UNION-based SQLi via unsanitized /api/products/search?q parameter"
+    }
+  };
+};
+
+// --- OopsSec Store stored-XSS reviews walkthrough (posts/stored-xss-product-reviews) --
+const CLIENT_OOPSSEC_STORED_XSS_REVIEWS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Stored XSS product reviews title",
+    re: /Stored XSS in Product Reviews/i
+  },
+  {
+    label: "POST /api/products/[id]/reviews unsanitized",
+    re: /POST to \/api\/products\/\[id\]\/reviews|\/api\/products\/\[id\]\/reviews/i
+  },
+  {
+    label: "Raw HTML injection via review ref",
+    re: /reviewRefs\.current\[review\.id\] = el|Raw HTML injection/i
+  },
+  {
+    label: "/xss-flag.txt same-origin fetch oracle",
+    re: /\/xss-flag\.txt|OSS\{cr0ss_s1t3_scr1pt1ng_xss\}/i
+  },
+  {
+    label: "Stored XSS reviews walkthrough route",
+    re: /\/posts\/stored-xss-product-reviews/i
+  }
+];
+
+const clientSideOopssecStoredXssReviewsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_STORED_XSS_REVIEWS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|stored XSS|product reviews|reviewRefs/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents stored XSS via unsanitized review content rendered through raw HTML refs on product pages"
+    }
+  };
+};
+
+const oopssecStoredXssReviewsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/stored-xss-product-reviews/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecStoredXssReviewsEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/stored-xss-product-reviews route scan — walkthrough documents stored XSS via unsanitized POST /api/products/[id]/reviews and raw HTML ref injection"
+    }
+  };
+};
+
+const oopssecRaceConditionCouponRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/race-condition-coupon-abuse/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecRaceConditionEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/race-condition-coupon-abuse route scan — walkthrough documents TOCTOU coupon validation split across two separate database calls"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -66393,8 +66529,13 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecStoreEvidence,
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
+  clientSideOopssecProductSearchSqliEvidence,
+  clientSideOopssecStoredXssReviewsEvidence,
   oopssecXffSqliRouteLiveOracle,
   oopssecLiveStreamBflaRouteLiveOracle,
+  oopssecProductSearchSqliRouteLiveOracle,
+  oopssecStoredXssReviewsRouteLiveOracle,
+  oopssecRaceConditionCouponRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,

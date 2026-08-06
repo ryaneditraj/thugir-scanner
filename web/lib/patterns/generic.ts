@@ -20779,6 +20779,137 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-product-search-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store product-search SQLi walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/product-search-sql-injection documents UNION-based SQL injection via unsanitized q parameter in /api/products/search using Prisma $queryRawUnsafe.",
+    impactOneline:
+      "Public walkthrough teaches SQL injection against e-commerce product search endpoints that concatenate user input into raw SQL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecProductSearchSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Never concatenate search terms into SQL; use Prisma findMany or parameterized $queryRaw.",
+      steps: [
+        "Replace $queryRawUnsafe with prisma.product.findMany and contains filters.",
+        "Use $queryRaw with bound parameters if raw SQL is unavoidable.",
+        "Host OopsSec SQLi walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/search endpoint concatenates the q parameter into $queryRawUnsafe SQL. Show parameterized query fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-product-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store product-search SQLi route live oracle",
+    description:
+      "When scanning /posts/product-search-sql-injection, the walkthrough documents UNION-based SQLi via unsanitized /api/products/search?q parameter — route-specific live oracle.",
+    impactOneline:
+      "OopsSec product search drops user input into $queryRawUnsafe, enabling UNION SELECT credential extraction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecProductSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never concatenate search terms into SQL; use Prisma findMany or parameterized $queryRaw.",
+      steps: [
+        "Replace $queryRawUnsafe with prisma.product.findMany and contains filters.",
+        "Use $queryRaw with bound parameters if raw SQL is unavoidable.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/search endpoint concatenates the q parameter into $queryRawUnsafe SQL. Show parameterized query fixes for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-stored-xss-reviews-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store stored-XSS reviews walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/stored-xss-product-reviews documents stored XSS via unsanitized POST /api/products/[id]/reviews content rendered through raw HTML refs.",
+    impactOneline:
+      "Public walkthrough teaches stored XSS against product review features that bypass React escaping via ref-based HTML injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecStoredXssReviewsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize review content server-side with DOMPurify and render via JSX expressions, not raw HTML refs.",
+      steps: [
+        "Sanitize review content with DOMPurify before prisma.review.create.",
+        "Replace reviewRefs HTML injection with JSX {review.content} rendering.",
+        "Host OopsSec XSS walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our product reviews store unsanitized HTML and inject it via reviewRefs. Show DOMPurify sanitization and safe JSX rendering fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-stored-xss-reviews-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store stored-XSS reviews route live oracle",
+    description:
+      "When scanning /posts/stored-xss-product-reviews, the walkthrough documents stored XSS via unsanitized review POST and raw HTML ref injection — route-specific live oracle.",
+    impactOneline:
+      "OopsSec product reviews bypass React XSS protection via ref-based HTML injection of unsanitized database content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecStoredXssReviewsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize review content server-side with DOMPurify and render via JSX expressions, not raw HTML refs.",
+      steps: [
+        "Sanitize review content with DOMPurify before prisma.review.create.",
+        "Replace reviewRefs HTML injection with JSX {review.content} rendering.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our product reviews store unsanitized HTML and inject it via reviewRefs. Show route-specific XSS remediation for review rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-race-condition-coupon-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store race-condition coupon route live oracle",
+    description:
+      "When scanning /posts/race-condition-coupon-abuse, the walkthrough documents TOCTOU coupon validation split across two separate database calls — route-specific live oracle.",
+    impactOneline:
+      "OopsSec coupon redemption validates and increments usage in separate DB calls, enabling concurrent single-use coupon abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecRaceConditionCouponRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic database transactions or row-level locks for coupon redemption.",
+      steps: [
+        "Wrap coupon validation and counter increment in a single atomic transaction with SELECT FOR UPDATE.",
+        "Use idempotency keys to deduplicate concurrent redemption requests.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our coupon redemption has a TOCTOU race between validation and increment. Show atomic transaction fixes for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-voidsec-shopping-cart-evidence",
     platform: "generic",
     category: "Broken access control",
