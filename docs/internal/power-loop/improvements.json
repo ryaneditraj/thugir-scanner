@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-payments-sensitive-data-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login sarah.wilson@example.com + GET /api/payments returns cardNumber 4111-1111-1111-1111 and accountNumber 987654321; whoopspay.onrender.com/api/cards findings 12→16 (+payments-sensitive-data live+route oracles); benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-payments-sensitive-data-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/cards confirms GET /api/payments full cardNumber disclosure with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-profile-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login sarah.wilson@example.com + GET /api/auth/user returns email and balance 2850.75; whoopspay.onrender.com/api/profile findings 12→16 (+profile-api live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-profile-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/profile confirms GET /api/auth/user wallet balance disclosure with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-register-open-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register returns HTTP 201 Registration successful + connect.sid session + GET /api/auth/user balance 1000 without email verification; whoopspay.onrender.com/api/auth/register findings 12→16 (+register-open live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-register-open-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/auth/register confirms POST /api/register open registration with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-admin-login-bfla-live-oracle",
       "status": "shipped",
@@ -19850,6 +19886,36 @@
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-restflaw-uptime-cmdi-route-live-oracle",
       "shipped_at": "2026-08-06T19:45:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-payments-sensitive-data-live-oracle",
+      "shipped_at": "2026-08-06T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-payments-sensitive-data-route-live-oracle",
+      "shipped_at": "2026-08-06T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-profile-api-live-oracle",
+      "shipped_at": "2026-08-06T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-profile-api-route-live-oracle",
+      "shipped_at": "2026-08-06T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-register-open-live-oracle",
+      "shipped_at": "2026-08-06T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-register-open-route-live-oracle",
+      "shipped_at": "2026-08-06T22:10:00.000Z"
     }
   ]
 }
