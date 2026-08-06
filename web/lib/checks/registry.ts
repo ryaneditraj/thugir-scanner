@@ -26915,6 +26915,233 @@ const fauxbankAdminPanelLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- Web Pentest Playground (web-pentest-playground.onrender.com) --------------------
+function isWebPentestPlaygroundHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /web-pentest-playground\.onrender\.com/i.test(corpus);
+}
+
+function webPentestPlaygroundSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function webPentestPlaygroundRegisterLoginCookie(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_wpp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const password = "ThugirProbe123!";
+  const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  let cookie = webPentestPlaygroundSessionCookieFromDoc(registerDoc);
+  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      ...(cookie ? { Cookie: cookie } : {})
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  cookie = webPentestPlaygroundSessionCookieFromDoc(loginDoc) ?? cookie;
+  if (!cookie) return null;
+  if (![301, 302, 303, 307, 308].includes(loginDoc.status)) return null;
+  const location = loginDoc.headers["location"] || "";
+  if (!/\/dashboard/i.test(location)) return null;
+  return cookie;
+}
+
+const webPentestPlaygroundFileUploadLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const cookie = await webPentestPlaygroundRegisterLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const canary = `thugir-upload-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const filename = `thugir-probe-${Date.now().toString(36)}.txt`;
+  const boundary = `----ThugirWppUpload${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="file"; filename="${filename}"`,
+    "Content-Type: text/plain",
+    "",
+    canary,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const uploadUrl = new URL("/upload", ctx.origin).toString();
+  const uploadDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: {
+      "Content-Type": `multipart/form-data; boundary=${boundary}`,
+      Cookie: cookie
+    },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (uploadDoc.status < 200 || uploadDoc.status >= 400) return NEGATIVE;
+  const servedPath = uploadDoc.body.match(/\/uploads\/[^"'\s<>]+/)?.[0];
+  if (!servedPath) return NEGATIVE;
+  const servedUrl = new URL(servedPath, ctx.origin).toString();
+  const servedDoc = await ctx.probe.get(servedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (servedDoc.status < 200 || servedDoc.status >= 400) return NEGATIVE;
+  if (!servedDoc.body.includes(canary)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      uploadUrl,
+      servedUrl,
+      filename,
+      snippet: servedDoc.body.slice(0, 120).trim(),
+      note: "Web Pentest Playground POST /upload stores arbitrary files (including .php) and serves them at /uploads/ without auth — insecure file upload oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundFileUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/upload\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await webPentestPlaygroundFileUploadLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Web Pentest Playground /upload route scan — POST stores arbitrary files served at /uploads/ — route-specific insecure file upload oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const cookie = await webPentestPlaygroundRegisterLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const canary = `thugir-xss-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const payload = `<thugir-canary>${canary}</thugir-canary>`;
+  const commentUrl = new URL("/comment", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(commentUrl, {
+    method: "POST",
+    body: `comment=${encodeURIComponent(payload)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!postDoc.body.includes(canary) || !/<thugir-canary>/i.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: commentUrl,
+      canary,
+      snippet: postDoc.body.match(new RegExp(`<thugir-canary>[^<]{0,80}${canary}`, "i"))?.[0]?.slice(0, 160),
+      note: "Web Pentest Playground POST /comment stores unsanitized HTML and renders it on the comments page — stored XSS oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/comment\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await webPentestPlaygroundStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Web Pentest Playground /comment route scan — POST stores unsanitized HTML rendered on comments page — route-specific stored XSS oracle"
+    }
+  };
+};
+
+// --- AppSec CI Pipeline (appsec-ci-pipeline.onrender.com) ----------------------------
+function isAppsecCiPipelineHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /appsec-ci-pipeline\.onrender\.com/i.test(corpus);
+}
+
+function appsecCiCsrfTokenFromHtml(html: string): string | null {
+  return html.match(/name="csrfmiddlewaretoken"\s+value="([^"]+)"/i)?.[1] ?? null;
+}
+
+function appsecCiCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  const parts = doc.setCookies
+    .map((c) => c.split(";")[0]?.trim())
+    .filter((c) => /^(?:csrftoken|sessionid)=/i.test(c));
+  return parts.length > 0 ? parts.join("; ") : null;
+}
+
+const appsecCiStoredXssCommentsLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
+  const commentsUrl = new URL("/comments/", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(commentsUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  const csrfToken = appsecCiCsrfTokenFromHtml(getDoc.body);
+  if (!csrfToken) return NEGATIVE;
+  const cookie = appsecCiCookieFromDoc(getDoc);
+  const canary = `thugir-xss-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const payload = `<thugir-canary>${canary}</thugir-canary>`;
+  const postBody = new URLSearchParams({
+    csrfmiddlewaretoken: csrfToken,
+    name: "ThugirProbe",
+    comment: payload
+  }).toString();
+  const postDoc = await ctx.probe.get(commentsUrl, {
+    method: "POST",
+    body: postBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Referer: commentsUrl,
+      ...(cookie ? { Cookie: cookie } : {})
+    },
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!postDoc.body.includes(canary) || !/<thugir-canary>/i.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: commentsUrl,
+      canary,
+      snippet: postDoc.body.match(new RegExp(`<thugir-canary>[^<]{0,80}${canary}`, "i"))?.[0]?.slice(0, 160),
+      note: "AppSec CI Pipeline POST /comments/ stores unsanitized comment HTML and renders it without encoding — stored XSS oracle (Django CSRF token required)"
+    }
+  };
+};
+
+const appsecCiStoredXssCommentsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/comments\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await appsecCiStoredXssCommentsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "AppSec CI Pipeline /comments/ route scan — POST stores unsanitized HTML in comment cards — route-specific stored XSS oracle"
+    }
+  };
+};
+
 const sensitiveApiTokenLeakage: Rule = async (ctx) => {
   const paths = [
     ...new Set([
@@ -63756,6 +63983,12 @@ export const RULES: Record<string, Rule> = {
   fauxbankLoansRequestLiveOracle,
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
+  webPentestPlaygroundFileUploadLiveOracle,
+  webPentestPlaygroundFileUploadRouteLiveOracle,
+  webPentestPlaygroundStoredXssLiveOracle,
+  webPentestPlaygroundStoredXssRouteLiveOracle,
+  appsecCiStoredXssCommentsLiveOracle,
+  appsecCiStoredXssCommentsRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
   fauxbankProfileRouteLiveOracle,
   clientSidePrototypePollutionEvidence,
