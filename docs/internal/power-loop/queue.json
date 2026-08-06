@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T04:04:59.361Z",
+  "updated_at": "2026-08-06T05:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-pentest-playground.onrender.com/upload",
+      "source": "Adarsh-S-R/web-pentest-playground — insecure file upload oracle POST /upload (Render public demo, 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/redirect",
+      "source": "Adarsh-S-R/web-pentest-playground — open redirect oracle GET /redirect?url= (Render public demo, 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsec-ci-pipeline.onrender.com/admin/",
+      "source": "gauthamram57/appsec-ci-pipeline — Django admin panel exposure oracle (Render OSS deploy, 05 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://appsec-ci-pipeline.onrender.com/comments/",
+      "source": "gauthamram57/appsec-ci-pipeline — stored XSS comments oracle (Render OSS deploy, 05 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/cart",
+      "source": "MuhaibShamsher/BuggyBuy — cart business-logic / price manipulation oracle (Vercel OSS README, 05 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://demo2.testfire.net/bank/transfer.jsp",
       "source": "HCL AltoroJ demo2.testfire.net — transfer SQLi/XSS oracle GET /bank/transfer.jsp (ZAP AltoroJ benchmark, 02 UTC discovery)",
