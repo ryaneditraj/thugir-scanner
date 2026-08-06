@@ -2189,6 +2189,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogSubscribeRouteLiveOracle",
   "ginAndJuiceCatalogProductRouteLiveOracle",
   "ginAndJuiceChangeEmailRouteLiveOracle",
+  "ginAndJuiceChangePasswordRouteLiveOracle",
   "crapi2ShopOrdersAllRouteLiveOracle",
   "crapi2ShopOrdersIdBolaRouteLiveOracle",
   "crapiShopOrdersIdBolaRouteLiveOracle",
@@ -2372,6 +2373,10 @@ const DEEP_RULES = new Set<string>([
   "testaspnetCommentsExposureRouteLiveOracle",
   "testfireLoginSqliLiveOracle",
   "testfireLoginSqliRouteLiveOracle",
+  "testfireTransferSqliLiveOracle",
+  "testfireTransferSqliRouteLiveOracle",
+  "testfireTransferStoredXssLiveOracle",
+  "testfireTransferStoredXssRouteLiveOracle",
   "euriSecCspDynamicScriptLiveOracle",
   "euriSecCspDynamicScriptRouteLiveOracle",
   "brokencrystalsSecretsLiveOracle",
@@ -9542,6 +9547,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
+      if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;

