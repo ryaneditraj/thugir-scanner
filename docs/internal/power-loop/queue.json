@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T20:30:00.000Z",
+  "updated_at": "2026-08-06T21:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/users/search/admin",
+      "source": "NeuraLegion/brokencrystals — excessive data exposure oracle GET /api/users/search/{name} cardNumber+phoneNumber leak (README, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/files?path=package.json",
+      "source": "NeuraLegion/brokencrystals — LFI oracle GET /api/files path param distinct from /api/file (README, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/auth/register",
+      "source": "khajdari/WhoopsPay — registration mass-assignment / weak auth oracle POST /api/auth/register (Render OSS deploy, 21 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/profile",
+      "source": "khajdari/WhoopsPay — profile BOLA / excessive data exposure oracle GET /api/profile (Render OSS deploy, 21 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/cards",
+      "source": "khajdari/WhoopsPay — payment cards BOLA oracle GET /api/cards (Render OSS deploy, 21 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/admin/login",
       "source": "NeuraLegion/brokencrystals — BFLA admin login oracle POST /api/auth/admin/login (swagger-json, 20 UTC discovery)",
@@ -15896,6 +15921,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 84,
-  "updated_at": "2026-08-06T19:08:00.000Z"
+  "discovery_urls_added": 89
 }
