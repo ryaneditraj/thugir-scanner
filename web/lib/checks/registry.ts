@@ -2075,6 +2075,12 @@ function extractIdorProbePaths(text: string): string[] {
 const JUICE_SHOP_HOST_RE = /juice-shop|owasp-juice|\.juice\.shop$/i;
 const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
 
+/** Juice Shop mirrors REST resources under both /api/* and /rest/* — route scans should match either prefix. */
+function juiceShopApiOrRestRoute(pageUrl: string, pathSuffix: string): boolean {
+  const esc = pathSuffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`/(?:api|rest)/${esc}`, "i").test(pageUrl);
+}
+
 const idorObjectAccess: Rule = async (ctx) => {
   // Juice Shop benchmark oracle: GET /rest/track-order/1 returns orderId JSON without auth.
   if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
@@ -19292,7 +19298,7 @@ const vulnbankTransactionsBolaLiveOracle: Rule = async (ctx) => {
 const vulnbankTransactionsBolaRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/transactions|\/api\/transactions/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/v(?:1|2)\/transactions|\/api\/transactions/i.test(pageUrl)) return NEGATIVE;
   const result = await vulnbankTransactionsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53323,7 +53329,7 @@ const juiceShopProductsReviewsExposureLiveOracle: Rule = async (ctx) => {
 const juiceShopProductsReviewsExposureRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/rest\/products\/\d+\/reviews\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/rest\/products(?:\/\d+)?\/reviews\b/i.test(pageUrl)) return NEGATIVE;
   const result = await juiceShopProductsReviewsExposureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53532,7 +53538,7 @@ const juiceShopUsersIdorLiveOracle: Rule = async (ctx) => {
 const juiceShopUsersIdorRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Users\/\d+/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Users/\\d+")) return NEGATIVE;
   const result = await juiceShopUsersIdorLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53575,7 +53581,7 @@ const juiceShopBasketItemsBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopBasketItemsBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/BasketItems\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "BasketItems\\b")) return NEGATIVE;
   const result = await juiceShopBasketItemsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53620,7 +53626,7 @@ const juiceShopComplaintsBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopComplaintsBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Complaints\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Complaints\\b")) return NEGATIVE;
   const result = await juiceShopComplaintsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53659,7 +53665,7 @@ const juiceShopSecurityQuestionsListLiveOracle: Rule = async (ctx) => {
 const juiceShopSecurityQuestionsListRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/SecurityQuestions\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "SecurityQuestions\\b")) return NEGATIVE;
   const result = await juiceShopSecurityQuestionsListLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53823,7 +53829,7 @@ const juiceShopRecyclesBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopRecyclesBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Recycles\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Recycles\\b")) return NEGATIVE;
   const result = await juiceShopRecyclesBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53867,7 +53873,7 @@ const juiceShopCardsBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopCardsBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Cards\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Cards\\b")) return NEGATIVE;
   const result = await juiceShopCardsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -53910,7 +53916,7 @@ const juiceShopAddresssBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopAddresssBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Addresss\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Addresss\\b")) return NEGATIVE;
   const result = await juiceShopAddresssBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54045,7 +54051,7 @@ const juiceShopQuantitysExposureLiveOracle: Rule = async (ctx) => {
 const juiceShopQuantitysExposureRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Quantitys\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Quantitys\\b")) return NEGATIVE;
   const result = await juiceShopQuantitysExposureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54087,7 +54093,7 @@ const juiceShopHintsExposureLiveOracle: Rule = async (ctx) => {
 const juiceShopHintsExposureRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Hints\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Hints\\b")) return NEGATIVE;
   const result = await juiceShopHintsExposureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54130,7 +54136,7 @@ const juiceShopChallengesDisclosureLiveOracle: Rule = async (ctx) => {
 const juiceShopChallengesDisclosureRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Challenges\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Challenges\\b")) return NEGATIVE;
   const result = await juiceShopChallengesDisclosureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54170,7 +54176,7 @@ const juiceShopDeliverysExposureLiveOracle: Rule = async (ctx) => {
 const juiceShopDeliverysExposureRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Deliverys(?:\/\d+)?\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Deliverys(?:/\\d+)?\\b")) return NEGATIVE;
   const result = await juiceShopDeliverysExposureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54220,7 +54226,7 @@ const juiceShopAddresssIdBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopAddresssIdBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Addresss\/\d+/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Addresss/\\d+")) return NEGATIVE;
   const result = await juiceShopAddresssIdBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54262,7 +54268,7 @@ const juiceShopFeedbacksBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopFeedbacksBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/Feedbacks\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "Feedbacks\\b")) return NEGATIVE;
   const result = await juiceShopFeedbacksBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54307,7 +54313,7 @@ const juiceShopSecurityAnswersDisclosureLiveOracle: Rule = async (ctx) => {
 const juiceShopSecurityAnswersDisclosureRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/SecurityAnswers\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "SecurityAnswers\\b")) return NEGATIVE;
   const result = await juiceShopSecurityAnswersDisclosureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54385,7 +54391,7 @@ const juiceShopPrivacyRequestsBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopPrivacyRequestsBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/api\/PrivacyRequests\b/i.test(pageUrl)) return NEGATIVE;
+  if (!juiceShopApiOrRestRoute(pageUrl, "PrivacyRequests\\b")) return NEGATIVE;
   const result = await juiceShopPrivacyRequestsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
