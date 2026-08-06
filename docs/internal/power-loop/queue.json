@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T11:16:00.000Z",
+  "updated_at": "2026-08-06T12:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://preview.owasp-juice.shop/rest/captcha",
+      "source": "OWASP Juice Shop preview — captcha bypass oracle GET /rest/captcha (preview.owasp-juice.shop develop branch, 12 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/image-captcha",
+      "source": "OWASP Juice Shop preview — image captcha bypass oracle GET /rest/image-captcha (preview.owasp-juice.shop, 12 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/saveLoginIp",
+      "source": "OWASP Juice Shop preview — HTTP-header XSS oracle GET /rest/saveLoginIp True-Client-IP reflection (preview.owasp-juice.shop, 12 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/wallet/balance",
+      "source": "OWASP Juice Shop preview — wallet balance BOLA oracle GET /rest/wallet/balance (preview.owasp-juice.shop, 12 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/user/authentication-details",
+      "source": "OWASP Juice Shop preview — authenticated-users disclosure oracle GET /rest/user/authentication-details (preview.owasp-juice.shop, 12 UTC discovery)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://juicesec.mrdinesh.workers.dev/challenge/sqli",
       "source": "mr-dinesh/juicesec — OWASP Top 10 SQLi browser lab (Cloudflare Workers, 11 UTC discovery)",
