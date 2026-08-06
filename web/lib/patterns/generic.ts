@@ -17865,6 +17865,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "notevault-ssrf-internal-flag-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "NoteVault SSRF internal flag live oracle",
+    description:
+      "POST /api/notes/import with a self-referencing /api/internal/flag URL fetches the forbidden internal endpoint server-side and stores the TACHYON CTF flag in the imported note — the NoteVault SSRF-to-internal-flag oracle.",
+    impactOneline:
+      "SSRF via URL import can reach internal-only APIs and exfiltrate secrets the browser cannot access directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "notevaultSsrfInternalFlagLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to internal endpoints and validate import URLs against an allowlist.",
+      steps: [
+        "Deny requests to localhost, link-local, and cloud metadata IP ranges.",
+        "Resolve hostnames and validate the final destination before fetching.",
+        "Run Wizer CTF challenges only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/notes/import endpoint fetches /api/internal/flag server-side via SSRF. Show URL validation and internal network egress controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "notevault-ssrf-internal-flag-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "NoteVault /import SSRF internal flag route live oracle",
+    description:
+      "When scanning /import or /challenge, POST /api/notes/import with the origin /api/internal/flag URL retrieves the TACHYON CTF flag — route-specific internal SSRF oracle.",
+    impactOneline:
+      "Route-scoped scans should flag NoteVault import endpoints that SSRF to protected internal APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "notevaultSsrfInternalFlagRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to internal endpoints and validate import URLs against an allowlist.",
+      steps: [
+        "Deny requests to localhost, link-local, and cloud metadata IP ranges.",
+        "Resolve hostnames and validate the final destination before fetching.",
+        "Run Wizer CTF challenges only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /import route scan SSRFs to /api/internal/flag via server-side fetch. Show route-level URL validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-intigriti-challenge-evidence",
     platform: "generic",
     category: "Cross-site scripting",

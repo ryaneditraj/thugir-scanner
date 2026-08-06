@@ -507,14 +507,18 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
   if (!/\.onrender\.com$/i.test(host)) return home;
   const isVulnApp = /web-security-practice-app\.onrender\.com/i.test(host);
   const isWhoopsPay = /whoopspay\.onrender\.com/i.test(host);
-  const maxAttempts = isVulnApp || isWhoopsPay ? 8 : 5;
-  const delayMs = isVulnApp || isWhoopsPay ? 5000 : 4000;
+  const isAppsecCi = /appsec-ci-pipeline\.onrender\.com/i.test(host);
+  const isBuggyBuyApi = /vulnerable-web-application-mcd0\.onrender\.com/i.test(host);
+  const extendedWarmup = isVulnApp || isWhoopsPay || isAppsecCi || isBuggyBuyApi;
+  const maxAttempts = extendedWarmup ? 8 : 5;
+  const delayMs = extendedWarmup ? 5000 : 4000;
   let best = home;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const ready =
       !RENDER_COLD_START_RE.test(best.body) &&
       (best.body.length > 1500 ||
         /WhoopsPay|type="module"[^>]+src="\/assets\/index-/i.test(best.body) ||
+        /Django site admin|Comments Portal|AppSec CI Pipeline/i.test(best.body) ||
         /VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body)) &&
       (best.status >= 200 && best.status < 400 && /<!DOCTYPE html/i.test(best.body));
     if (ready) break;
@@ -1672,6 +1676,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWizerCtfStoredDomXssEvidence",
   "clientSideWizerCtfDomClobberingEvidence",
   "wizerCtfIdorTaskManagerProbe",
+  "notevaultSsrfInternalFlagLiveOracle",
+  "notevaultSsrfInternalFlagRouteLiveOracle",
   "clientSideIntigritiChallengeEvidence",
   "clientSideIntigritiRaceConditionChallengeEvidence",
   "clientSideIntigritiJanuaryXssFilterBypassEvidence",

