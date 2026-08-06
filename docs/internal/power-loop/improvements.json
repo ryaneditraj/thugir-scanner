@@ -2,6 +2,42 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-admin-login-bfla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/admin/login {user:admin,password:admin,op:basic} returns HTTP 201 ldapProfileLink (&(objectClass=person)(objectClass=user)(email=admin)); brokencrystals.com/api/auth/admin/login findings 69→76 (+admin-login-bfla live+route oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-admin-login-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/auth/admin/login confirms default admin credentials with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-delete-emails-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: DELETE /api/email/deleteEmails without auth returns ECONNREFUSED 127.0.0.1:1080; brokencrystals.com/api/email/deleteEmails findings 38→37 (+delete-emails live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-delete-emails-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/email/deleteEmails confirms unauthenticated DELETE with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-v1-userinfo-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic then GET /api/v1/userinfo/{email} returns firstName, lastName, company, id without auth; brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com findings 26→78 (+v1-userinfo-disclosure live+route oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-v1-userinfo-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/v1/userinfo confirms PII disclosure without auth with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-fullinfo-disclosure-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/fullinfo/admin returns cardNumber 1234 5678 9012 3456 and phoneNumber without auth; brokencrystals.com/api/users/fullinfo/admin findings 13→75 (+fullinfo-disclosure live+route oracles); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
