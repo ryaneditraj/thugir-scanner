@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T04:16:04.772Z",
+  "updated_at": "2026-08-06T05:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
   "discovery_findings": 25670,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-06T04:16:04.772Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-06T05:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 498,
+      "probes_run": 488,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,38 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle healthy (46 findings, 6/6 recall) — no benchmark misses"
+      "note": "Primary Heroku oracle 46 findings 6/6 recall — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 1204,
-      "focus": "RestFlaw eval/search/user + GuardianLeaks create/search queue drain (firing-range toxicdom + brokencrystals JWT kid-sql)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 6,
+      "focus": "Juice Shop /rest/ route alias + products/reviews route + vulnbank v2 transactions route",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "juice-shop.herokuapp.com/rest/basket/1: 48 findings — basket BOLA/IDOR live oracles on primary Heroku",
-      "preview.owasp-juice.shop/rest/chatbot: 45 findings — chatbot LLM prompt-injection oracle on develop branch",
-      "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval: 250 findings — DOM eval XSS sink hub",
-      "brokencrystals.com/api/auth/jwt/kid-sql/validate: 71 findings — JWT kid SQL injection validation oracle"
+      "preview.owasp-juice.shop/rest/PrivacyRequests: 44→45 — juice-shop-rest-api-route-alias (PrivacyRequests/BasketItems/Hints/Addresss route oracles on /rest/ prefix)",
+      "preview.owasp-juice.shop/rest/products/reviews: 45→46 — juice-shop-products-reviews-route-expansion (no product-id path)",
+      "vulnbank.org/api/v2/transactions: 21→22 — vulnbank-v2-transactions-route-live-oracle",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "RestFlaw/GuardianLeaks routes queued (eval/search/user, create/search) — older queue entries drained first",
-      "ucu-owasp-ctf.vercel.app/* module paths return 404 — injection/access/ssrf/crypto routes unreachable",
-      "vwad.owasp.org/app/pygoat/challenges/ssti returns 404 — PyGoat SSTI oracle blocked"
+      "vwad.owasp.org/app/*/login paths return 404 — pygoat/hackxor/yrprey/secure-by-design have no live demo URLs",
+      "websec.fr/level32/ returns 404 — challenge offline"
     ]
   },
   "discovery_highlights": {
+    "preview.owasp-juice.shop/rest/PrivacyRequests": 45,
+    "preview.owasp-juice.shop/rest/BasketItems": 45,
+    "preview.owasp-juice.shop/rest/Hints": 45,
+    "preview.owasp-juice.shop/rest/Addresss/1": 46,
+    "preview.owasp-juice.shop/rest/products/reviews": 46,
+    "vulnbank.org/api/v2/transactions": 22,
     "juice-shop.herokuapp.com": 46,
     "juice-shop.herokuapp.com/rest/basket/1": 48,
     "preview.owasp-juice.shop/rest/chatbot": 45,
-    "public-firing-range.appspot.com/dom/toxicdom/localStorage/function/eval": 250,
-    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 71,
-    "pentest-ground.com:9000/eval": 0,
-    "pentest-ground.com:81/create": 0
+    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 71
   }
 }

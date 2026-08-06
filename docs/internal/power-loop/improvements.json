@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:demo2.testfire.net",
-      "slug": "testfire-transfer-sqli-live-oracle",
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-rest-api-route-alias",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST http://demo2.testfire.net/bank/doTransfer toAccount=800040' OR '1'='1 returns HTTP 500 NumberFormatException For input string; demo2.testfire.net/bank/transfer.jsp findings 9→13 (+transfer-sqli live+route oracles); benchmark juice-shop-staging 42 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: route oracles only matched /api/PrivacyRequests etc. — /rest/PrivacyRequests scans missed route-specific BOLA/disclosure slugs; juiceShopApiOrRestRoute helper matches both prefixes; preview.owasp-juice.shop/rest/PrivacyRequests findings 44→45, /rest/BasketItems 43→45, /rest/Hints 44→45, /rest/Addresss/1 44→46; benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-products-reviews-route-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reviews route matcher required /rest/products/\\d+/reviews — /rest/products/reviews (no product id) missed route oracle; extended to /rest/products(?:/\\d+)?/reviews; preview.owasp-juice.shop/rest/products/reviews findings 45→46 (+products-reviews-exposure-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v2-transactions-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbank transactions route matcher only matched /api/v1/transactions — /api/v2/transactions had live oracle but no route variant; extended to /api/v(?:1|2)/transactions; vulnbank.org/api/v2/transactions findings 21→22 (+transactions-bola-route oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:demo2.testfire.net",
