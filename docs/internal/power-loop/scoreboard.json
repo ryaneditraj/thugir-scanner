@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T14:15:00.000Z",
+  "updated_at": "2026-08-06T14:55:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2725,
-  "total_findings": 26525,
-  "critical_findings": 55,
+  "total_sites_scanned": 2777,
+  "total_findings": 27985,
+  "critical_findings": 72,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1954,
-  "discovery_findings": 22494,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-06T14:15:00.000Z",
+  "discovery_urls_added": 1981,
+  "discovery_findings": 23752,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-06T14:55:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 45,
+      "oracle_findings": 44,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 482,
+      "probes_run": 478,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 (45 findings)"
+      "note": "Primary Heroku 503; staging fallback 6/6 (44 findings) — no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 28,
-      "focus": "OopsSec Store product-search SQLi + stored-XSS reviews + race-condition coupon walkthrough oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 15,
+      "findings": 413,
+      "focus": "escape.tech + preview deluxe-membership/b2b deserialization oracles; staging SecurityQuestions; web-security-learning-labs module/1011; fauxbank /api/profile sensitive-data oracle",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
-      "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection: 5→7 findings — oopssec-product-search-sqli-route-live-oracle shipped",
-      "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews: 9→11 findings — oopssec-stored-xss-reviews-route-live-oracle shipped",
-      "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse: 8→10 findings — oopssec-race-condition-coupon-route-live-oracle shipped"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (44 findings) — primary herokuapp.com 503",
+      "preview.owasp-juice.shop/api/SecurityQuestions: 48 findings — security-question catalog disclosure live oracle",
+      "preview.owasp-juice.shop/b2b/v2/orders: 47 findings — insecure deserialization oracle surface",
+      "juice-shop.demo.escape.tech/b2b/v2/orders: 47 findings — escape.tech B2B orderLinesData oracle",
+      "pentest-fauxbank.vercel.app/api/profile: 15 findings — sensitive profile data exposure oracle",
+      "web-security-learning-labs.vercel.app/module/1011: 7 findings — advanced SQLi lab module",
+      "appsec-ci-pipeline.onrender.com/search/: 5 findings — stored XSS comments + reflected XSS oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "preview.owasp-juice.shop deluxe-membership/b2b orders oracles still queued",
-      "juicesec.mrdinesh.workers.dev challenge routes only surface generic SSTI/header misses — no route-specific oracles",
-      "ssrf.vulnlab.dev/basic: route-specific SSRF live oracles still thin on non-webhook routes"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "juice-shop.herokuapp.com primary oracle intermittently 503 — staging/preview/escape.tech fallbacks required",
+      "juice-shop.demo.escape.tech/rest/deluxe-membership: route-specific oracle thin (2 findings) — membership payment bypass oracle still absent",
+      "r2s-arena.fly.dev unreachable from cloud agent — React2Shell arena scan error",
+      "juicesec.mrdinesh.workers.dev/challenge/*: Worker SPA — route-specific SSRF/JWT challenge oracles still absent (2-3 finding hubs)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 45,
-    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 7,
-    "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 11,
-    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse": 10,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 23,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "juice-shop-staging.herokuapp.com": 44,
+    "preview.owasp-juice.shop/api/SecurityQuestions": 48,
+    "preview.owasp-juice.shop/b2b/v2/orders": 47,
+    "juice-shop.demo.escape.tech/b2b/v2/orders": 47,
+    "juice-shop-staging.herokuapp.com/api/SecurityQuestions": 46,
+    "pentest-fauxbank.vercel.app/api/profile": 15,
+    "web-security-learning-labs.vercel.app/module/1011": 7,
+    "appsec-ci-pipeline.onrender.com/search/": 5
   }
 }
