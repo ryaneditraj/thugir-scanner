@@ -1523,7 +1523,7 @@ const DEEP_RULES = new Set<string>([
   "pentestGroundDvwaWeakIdRouteLiveOracle",
   "pentestGroundRestflawEvalCodeInjectionRouteLiveOracle",
   "pentestGroundRestflawTokensSqliRouteLiveOracle",
-  "pentestGroundRestflawUserSqliRouteLiveOracle",
+  "pentestGroundRestflawTokensSqliErrorRouteLiveOracle",
   "pentestGroundRestflawSearchXxeRouteLiveOracle",
   "clientSideJudgementDayArenaEvidence",
   "clientSideCahyodVulnerableLabEvidence",
