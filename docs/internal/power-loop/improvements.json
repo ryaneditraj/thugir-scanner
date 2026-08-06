@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-django-admin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://appsec-ci-pipeline.onrender.com/admin/ → 302 /admin/login/ with <title>Log in | Django site admin</title> + csrfmiddlewaretoken; appsec-ci-pipeline.onrender.com/admin/ findings 6→9 (+django-admin live+route oracles); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-django-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /admin/ route scan confirms Django administration login panel with csrfmiddlewaretoken; appsec-ci-pipeline.onrender.com/admin/ findings 6→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-login-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://web-pentest-playground.onrender.com/login username=admin' OR '1'='1'-- returns 302 Location /dashboard with session cookie; web-pentest-playground.onrender.com/login findings 8→11 (+login-sqli live+route oracles); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /login route scan — POST SQLi bypass issues session redirecting to /dashboard; web-pentest-playground.onrender.com/login findings 8→11; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-pentest-playground.onrender.com",
       "slug": "web-pentest-playground-admin-sqli-live-oracle",
       "status": "shipped",
@@ -19520,6 +19544,26 @@
       "source": "discovery:web-pentest-playground.onrender.com",
       "slug": "web-pentest-playground-view-users-route-live-oracle",
       "shipped_at": "2026-08-06T08:15:00.000Z"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-django-admin-live-oracle",
+      "shipped_at": "2026-08-06T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-django-admin-route-live-oracle",
+      "shipped_at": "2026-08-06T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-login-sqli-live-oracle",
+      "shipped_at": "2026-08-06T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-login-sqli-route-live-oracle",
+      "shipped_at": "2026-08-06T09:20:00.000Z"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T08:09:02.626Z",
-  "total": 1886,
-  "uniqueSlugs": 1881,
+  "generatedAt": "2026-08-06T09:22:34.366Z",
+  "total": 1890,
+  "uniqueSlugs": 1885,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1868,
+    "generic": 1872,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1801,
+    "deep": 1805,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 106,
-    "Security misconfiguration": 143,
+    "Security misconfiguration": 145,
     "Broken authentication": 112,
-    "Injection": 265,
+    "Injection": 267,
     "Cross-site scripting": 661,
     "Open redirect": 12,
     "general": 20,
@@ -55,6 +55,8 @@
     "ai-security-privacy-policy-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",
     "all-seeing-eye-read-route-live-oracle",
+    "appsec-ci-django-admin-live-oracle",
+    "appsec-ci-django-admin-route-live-oracle",
     "appsec-ci-stored-xss-comments-live-oracle",
     "appsec-ci-stored-xss-comments-route-live-oracle",
     "auth-security-project-dashboard-xss-route-live-oracle",
@@ -1867,6 +1869,8 @@
     "web-pentest-playground-admin-sqli-route-live-oracle",
     "web-pentest-playground-file-upload-live-oracle",
     "web-pentest-playground-file-upload-route-live-oracle",
+    "web-pentest-playground-login-sqli-live-oracle",
+    "web-pentest-playground-login-sqli-route-live-oracle",
     "web-pentest-playground-open-redirect-route-live-oracle",
     "web-pentest-playground-stored-xss-live-oracle",
     "web-pentest-playground-stored-xss-route-live-oracle",
