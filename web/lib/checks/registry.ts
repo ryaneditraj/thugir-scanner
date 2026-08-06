@@ -29159,7 +29159,7 @@ const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>
 
 async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
-  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500];
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500];
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
@@ -53610,7 +53610,7 @@ const juiceShopWalletBalanceBolaLiveOracle: Rule = async (ctx) => {
 const juiceShopWalletBalanceBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/rest\/wallet\/balance\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:rest\/wallet\/balance|api\/Wallets)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await juiceShopWalletBalanceBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -59634,7 +59634,7 @@ const brokencrystalsJwtWeakKeyLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtWeakKeyRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/weak-key\/validate/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/weak-key\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtWeakKeyLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -59692,7 +59692,7 @@ const brokencrystalsJwtKidSqlLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtKidSqlRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/kid-sql\/validate/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/kid-sql\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtKidSqlLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -59784,7 +59784,7 @@ const brokencrystalsJwtHmacConfusionLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtHmacConfusionRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/hmac\/validate/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/hmac\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtHmacConfusionLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -59838,7 +59838,7 @@ const brokencrystalsJwtJwkEmptyLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtJwkEmptyRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/jwk\/validate/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/jwk\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtJwkEmptyLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -59892,7 +59892,7 @@ const brokencrystalsJwtX5cRogueLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtX5cRogueRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/x5c\/validate/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/x5c\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtX5cRogueLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -59947,7 +59947,7 @@ const brokencrystalsJwtJkuRogueLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtJkuRogueRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/jku\/validate/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/jku\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtJkuRogueLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -60002,7 +60002,7 @@ const brokencrystalsJwtX5uRogueLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtX5uRogueRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/x5u\/validate/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/x5u\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtX5uRogueLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
