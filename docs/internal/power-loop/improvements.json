@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:public-firing-range.appspot.com",
+      "slug": "firing-range-reflected-parameter-body-400-401-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /reflected/parameter/body/400?q=thugirFrBodyNon2xxProbe returns HTTP 400 with <body>thugirFrBodyNon2xxProbe</body>; extended FIRING_RANGE_REFLECTED_BODY_NON2XX_PATHS with 400+401; public-firing-range.appspot.com/reflected/parameter/body/400 findings 249→250 (+body-non2xx-route oracle); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-angular-csti-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?searchTerm=wzwxl{{a=(7*7.0)}}h0niw reflects template expression with ng-app + angular_1-7-7.js; ginandjuice.shop/blog/post?postId=1 findings 25→31 (+angular-csti live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-route-oracle-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: blog prototype-pollution + search DOM XSS route oracles excluded /blog/post — removed exclusion; ginandjuice.shop/blog/post?postId=1 findings 25→31 (+blog-prototype-route + blog-search-dom-route oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-login-route-oracle-expansion",
       "status": "shipped",
