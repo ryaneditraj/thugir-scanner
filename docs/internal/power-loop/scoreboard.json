@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T10:30:00.000Z",
+  "updated_at": "2026-08-06T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2731,
-  "total_findings": 26609,
-  "critical_findings": 58,
+  "total_sites_scanned": 2732,
+  "total_findings": 26627,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 22545,
-  "improvements_shipped": 1174,
-  "last_run": "2026-08-06T10:30:00.000Z",
+  "discovery_findings": 22563,
+  "improvements_shipped": 1177,
+  "last_run": "2026-08-06T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 42,
@@ -53,35 +53,32 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 12,
-      "focus": "web-pentest upload RCE chain upgrade + login SQLi baseline + open-redirect live oracle",
+      "urls_scanned": 2,
+      "findings": 18,
+      "focus": "NoteVault internal-flag SSRF live oracle + AppSec CI Render warmup reliability",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (42 findings) — no benchmark misses",
-      "web-pentest-playground.onrender.com/upload: 11→12 findings — file-upload oracle upgraded to PHP RCE chain via SQLi session",
-      "web-pentest-playground.onrender.com/login: login SQLi oracle now gates on Invalid credentials negative control",
-      "web-pentest-playground.onrender.com/redirect: open-redirect-live-oracle shipped (host-level, not route-only)",
-      "whoopspay.onrender.com/api/orders: 7-finding generic hub — route-specific BOLA oracles still absent",
-      "webchal1.vercel.app/api/notes/import: SSRF endpoint fetch fires without route-specific internal-flag oracle"
+      "webchal1.vercel.app/import: 7→9 findings — notevault-ssrf-internal-flag-live-oracle shipped (POST import SSRFs to /api/internal/flag, TACHYON flag in note body)",
+      "appsec-ci-pipeline.onrender.com/admin/: 6→9 findings — Render warmup enables django-admin + stored-xss live oracles on cold-start hosts",
+      "vulnerable-web-application-mcd0.onrender.com/api/v1/*: Render API returns 500 — BuggyBuy IDOR live oracle blocked",
+      "whoopspay.onrender.com/api/*: registration succeeds but login returns Invalid credentials — authenticated BOLA oracles still blocked"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vulnerable-web-application-mcd0.onrender.com: BuggyBuy Render API 500 — IDOR/BOLA live oracles blocked",
       "whoopspay.onrender.com/api/*: login returns Invalid credentials after register — transaction/wallet IDOR oracles blocked",
-      "webchal1.vercel.app/*: ssrf-endpoint-fetch fires but no route-specific internal-flag SSRF live oracle",
-      "r2s-arena.fly.dev: React2Shell arena unreachable from cloud agent",
-      "vulnerable-web-application-jecw.vercel.app/api/*: route-specific JWT/session oracles still absent"
+      "ssrf.vulnlab.dev/*: live oracles exist but route scans may still show 2-3 finding hubs without route-specific slug"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 42,
-    "web-pentest-playground.onrender.com/upload": 12,
-    "web-pentest-playground.onrender.com/login": 11,
-    "whoopspay.onrender.com/api/orders": 7,
-    "webchal1.vercel.app/import": 7,
+    "webchal1.vercel.app/import": 9,
     "appsec-ci-pipeline.onrender.com/admin/": 9,
-    "appsec-ci-pipeline.onrender.com/comments/": 7
+    "web-pentest-playground.onrender.com/upload": 12,
+    "whoopspay.onrender.com/api/orders": 7,
+    "vulnerable-web-application-jecw.vercel.app/api/products": 6
   }
 }
