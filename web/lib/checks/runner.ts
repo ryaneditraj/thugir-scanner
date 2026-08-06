@@ -1553,6 +1553,12 @@ const DEEP_RULES = new Set<string>([
   "fauxbankLoansRequestLiveOracle",
   "fauxbankLoansNegativeAmountLiveOracle",
   "fauxbankAdminPanelLiveOracle",
+  "webPentestPlaygroundFileUploadLiveOracle",
+  "webPentestPlaygroundFileUploadRouteLiveOracle",
+  "webPentestPlaygroundStoredXssLiveOracle",
+  "webPentestPlaygroundStoredXssRouteLiveOracle",
+  "appsecCiStoredXssCommentsLiveOracle",
+  "appsecCiStoredXssCommentsRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
   "clientSideWebsecChallengeEvidence",
   "clientSideWebsecCryptoChallengeEvidence",
@@ -9557,6 +9563,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vulnweb\.netlify\.app/i.test(origin) && p.slug.startsWith("vulnweb-")) return -2;
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/vapi\.tools\.escape\.tech/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
+      if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
+      if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
       if (/dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io/i.test(origin) && p.slug.startsWith("dvga-"))
         return -2;
       if (p.platform === "generic") return 0;
