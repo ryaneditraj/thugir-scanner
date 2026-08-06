@@ -1,8 +1,23 @@
 {
   "candidates": [
     {
-      "source": "discovery:whoopspay.onrender.com",
-      "slug": "whoopspay-transaction-stored-xss-live-oracle",
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-product-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/product-search-sql-injection documents UNION SELECT via unsanitized /api/products/search?q and $queryRawUnsafe; koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection findings 5→7 (+product-search-sqli evidence + route oracle); benchmark juice-shop-staging 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-stored-xss-reviews-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/stored-xss-product-reviews documents unsanitized POST /api/products/[id]/reviews and reviewRefs raw HTML injection with /xss-flag.txt oracle; koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews findings 9→11 (+stored-xss-reviews evidence + route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-race-condition-coupon-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/race-condition-coupon-abuse documents TOCTOU coupon validation in two separate DB calls; koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse findings 8→10 (+race-condition-coupon route oracle); benchmark 6/6 maintained"
+    },
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: login sarah.wilson@example.com + POST /api/transactions description <img src=x onerror=thugir-xss-probe> stored unsanitized in GET /api/transactions; whoopspay.onrender.com/api/users findings 11→15; benchmark juice-shop-staging 45 findings 6/6 maintained"
     },
