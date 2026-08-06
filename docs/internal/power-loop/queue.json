@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T09:06:52.326Z",
+  "updated_at": "2026-08-06T10:26:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://whoopspay.onrender.com/api/orders",
+      "source": "khajdari/WhoopsPay — order history BOLA oracle GET /api/orders (Render OSS deploy, 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/auth/login",
+      "source": "khajdari/WhoopsPay — weak authentication / session oracle POST /api/auth/login (Render OSS deploy, 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/admin",
+      "source": "khajdari/WhoopsPay — broken function-level authorization oracle GET /api/admin (Render OSS deploy, 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webchal1.vercel.app/api/notes/import",
+      "source": "CryptoNite CTF 2026 webchal1 — SSRF via notes import POST /api/notes/import (blog.rei.my.id writeup, 10 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webchal1.vercel.app/import",
+      "source": "CryptoNite CTF 2026 webchal1 — SSRF import UI entry /import (blog.rei.my.id writeup, 10 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://whoopspay.onrender.com/api/transactions/1",
       "source": "khajdari/WhoopsPay — transaction IDOR/BOLA oracle GET /api/transactions/:id (Render OSS deploy, 09 UTC discovery)",
