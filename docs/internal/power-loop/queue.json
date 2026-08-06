@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T03:05:00.000Z",
+  "updated_at": "2026-08-06T04:04:59.361Z",
   "discovery_urls": [
     {
       "url": "https://demo2.testfire.net/bank/transfer.jsp",
@@ -15494,7 +15494,32 @@
       "url": "https://vulnerable-web-application-jecw.vercel.app/api/users/1",
       "source": "MuhaibShamsher/BuggyBuy — unauthenticated user API IDOR oracle GET /api/users/:id (Vercel OSS README, 03 UTC discovery)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-ground.com:9000/eval?s=test",
+      "source": "jorritfolmer/vulnerable-api RestFlaw — code injection oracle GET /eval?s= (pentest-ground.com:9000 OpenAPI, 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:9000/search",
+      "source": "jorritfolmer/vulnerable-api RestFlaw — XXE oracle POST /search application/xml (pentest-ground.com:9000 OpenAPI)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:9000/user",
+      "source": "jorritfolmer/vulnerable-api RestFlaw — SQLi user enumeration oracle GET/POST /user (pentest-ground.com:9000 OpenAPI)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:81/create",
+      "source": "Pentest-Ground GuardianLeaks — stored XSS / code injection create form (pentest-ground.com README XSS+SSRF+CMDi lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:81/search",
+      "source": "Pentest-Ground GuardianLeaks — reflected XSS / SSRF search oracle GET /search (pentest-ground.com README)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 54
+  "discovery_urls_added": 59
 }
