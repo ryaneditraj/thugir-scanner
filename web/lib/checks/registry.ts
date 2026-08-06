@@ -46065,6 +46065,8 @@ const firingRangeReflectedParameterNoscriptRouteLiveOracle: Rule = async (ctx) =
 
 const FIRING_RANGE_REFLECTED_BODY_NON2XX_PROBE = "thugirFrBodyNon2xxProbe";
 const FIRING_RANGE_REFLECTED_BODY_NON2XX_PATHS = [
+  { path: "/reflected/parameter/body/400", expectedStatus: 400 },
+  { path: "/reflected/parameter/body/401", expectedStatus: 401 },
   { path: "/reflected/parameter/body/403", expectedStatus: 403 },
   { path: "/reflected/parameter/body/404", expectedStatus: 404 },
   { path: "/reflected/parameter/body/500", expectedStatus: 500 }
@@ -46099,9 +46101,9 @@ const firingRangeReflectedParameterBodyNon2xxLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   let paths = [...FIRING_RANGE_REFLECTED_BODY_NON2XX_PATHS];
-  const routeMatch = pageUrl.match(/\/reflected\/parameter\/body\/(403|404|500)\b/i);
+  const routeMatch = pageUrl.match(/\/reflected\/parameter\/body\/(400|401|403|404|500)\b/i);
   if (routeMatch) {
-    const code = Number(routeMatch[1]) as 403 | 404 | 500;
+    const code = Number(routeMatch[1]) as 400 | 401 | 403 | 404 | 500;
     const matched = paths.filter((p) => p.expectedStatus === code);
     if (matched.length) paths = matched;
   }
@@ -46115,7 +46117,7 @@ const firingRangeReflectedParameterBodyNon2xxLiveOracle: Rule = async (ctx) => {
 const firingRangeReflectedParameterBodyNon2xxRouteLiveOracle: Rule = async (ctx) => {
   if (!isFiringRangeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/reflected\/parameter\/body\/(403|404|500)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/reflected\/parameter\/body\/(400|401|403|404|500)\b/i.test(pageUrl)) return NEGATIVE;
   let pathname = "";
   try {
     pathname = new URL(pageUrl).pathname;
@@ -50001,6 +50003,52 @@ function isGinAndJuiceHost(ctx: RuleContext): boolean {
   return /ginandjuice\.shop/i.test(ctx.origin);
 }
 
+const GIN_AND_JUICE_ANGULAR_CSTI_PROBE = "wzwxl{{a=(7*7.0)}}h0niw";
+
+const ginAndJuiceAngularCstiLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("searchTerm", GIN_AND_JUICE_ANGULAR_CSTI_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasAngularCstiSurface =
+    /ng-app/i.test(doc.body) && /angular_1-7-7\.js|angular(?:js)?\.js/i.test(doc.body);
+  if (!hasAngularCstiSurface) return NEGATIVE;
+  const probeRe = new RegExp(
+    GIN_AND_JUICE_ANGULAR_CSTI_PROBE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+    "i"
+  );
+  if (!probeRe.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet:
+        doc.body.match(/searchText\s*=\s*['"][^'"]*\{\{[^'"]*['"]/i)?.[0]?.slice(0, 160) ??
+        doc.body.match(probeRe)?.[0]?.slice(0, 120),
+      note: "Gin & Juice Shop GET /catalog?searchTerm= reflects AngularJS template expression unescaped while ng-app + angular_1-7-7.js load — client-side template injection training oracle (Burp CSTI / FINDING-005)"
+    }
+  };
+};
+
+const ginAndJuiceAngularCstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\/post|\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceAngularCstiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop route scan — ng-app page with AngularJS 1.7.7 and searchTerm {{}} reflection confirms client-side template injection surface"
+    }
+  };
+};
+
 const ginAndJuiceCatalogSearchXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const canary = `thugirXSS${Date.now().toString(36)}`;
@@ -50424,7 +50472,7 @@ const ginAndJuiceBlogPrototypePollutionDomXssLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceBlogPrototypePollutionDomXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/blog\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceBlogPrototypePollutionDomXssLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -50466,7 +50514,7 @@ const ginAndJuiceBlogSearchOpenRedirectLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceBlogSearchOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/blog\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceBlogSearchOpenRedirectLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -50515,7 +50563,7 @@ const ginAndJuiceBlogSearchDomXssLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceBlogSearchDomXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/blog\b/i.test(pageUrl) || /\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/blog\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceBlogSearchDomXssLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -64962,6 +65010,8 @@ export const RULES: Record<string, Rule> = {
   dvgaImportPasteSsrfRouteLiveOracle,
   dvgaCreatePasteStoredXssLiveOracle,
   dvgaCreatePasteStoredXssRouteLiveOracle,
+  ginAndJuiceAngularCstiLiveOracle,
+  ginAndJuiceAngularCstiRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
   ginAndJuiceBlogPostOpenRedirectLiveOracle,
