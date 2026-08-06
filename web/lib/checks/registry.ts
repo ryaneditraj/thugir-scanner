@@ -17684,6 +17684,83 @@ const clientSideJuicesecLabEvidence: Rule = async (ctx) => {
   };
 };
 
+const JUICESEC_CHALLENGE_ROUTE_LABELS: Record<
+  string,
+  { label: string; checkRe: RegExp; category: string; note: string }
+> = {
+  sqli: {
+    label: "JuiceSec SQLi lab checkSQLi",
+    checkRe: /function checkSQLi|u\.includes\s*\(\s*["']' OR '1'='1["']\)/i,
+    category: "Injection",
+    note: "JuiceSec /challenge/sqli route — inline checkSQLi validates classic OR 1=1 login bypass on the Cloudflare Workers SPA"
+  },
+  xss: {
+    label: "JuiceSec reflected XSS lab checkXSSReflected",
+    checkRe: /function checkXSSReflected|on\\w+\\s*=|<script/i,
+    category: "Cross-site scripting",
+    note: "JuiceSec /challenge/xss route — checkXSSReflected reflects unsanitized search payloads into the DOM"
+  },
+  jwt: {
+    label: "JuiceSec JWT alg:none lab checkJWT",
+    checkRe: /function checkJWT|header\.alg\s*===?\s*["']none["']/i,
+    category: "Broken authentication",
+    note: "JuiceSec /challenge/jwt route — checkJWT accepts alg:none tokens with role:admin"
+  },
+  ssrf: {
+    label: "JuiceSec SSRF link-preview lab checkSSRF",
+    checkRe: /function checkSSRF|169\.254\.169\.254|Cloud metadata endpoint reached/i,
+    category: "Server-side request forgery",
+    note: "JuiceSec /challenge/ssrf route — checkSSRF simulates cloud metadata and internal network fetch via link preview"
+  },
+  idor: {
+    label: "JuiceSec IDOR lab checkIDOR",
+    checkRe: /function checkIDOR|GET \/api\/orders\//i,
+    category: "Broken access control",
+    note: "JuiceSec /challenge/idor route — checkIDOR exposes other users' orders via predictable /api/orders/{id}"
+  }
+};
+
+const clientSideJuicesecChallengeRouteEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const challengeMatch = pageUrl.match(/\/challenge\/(sqli|xss|jwt|ssrf|idor)\b/i);
+  if (!challengeMatch) return NEGATIVE;
+  const challengeKey = challengeMatch[1]!.toLowerCase();
+  const challengeMeta = JUICESEC_CHALLENGE_ROUTE_LABELS[challengeKey];
+  if (!challengeMeta) return NEGATIVE;
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!challengeMeta.checkRe.test(corpus) || !/JuiceSec|juicesec|JUICESEC/i.test(corpus)) {
+    const homeUrl = new URL("/", ctx.origin).toString();
+    const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 600_000, timeoutMs: 20000 });
+    if (homeDoc.status >= 200 && homeDoc.status < 400 && homeDoc.body.length > 2000) {
+      corpus += `\n${homeDoc.body}`;
+    }
+  }
+
+  const hits: { label: string; sample: string }[] = [
+    { label: challengeMeta.label, sample: `/challenge/${challengeKey}` }
+  ];
+  for (const { label, re } of CLIENT_JUICESEC_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (!challengeMeta.checkRe.test(corpus)) return NEGATIVE;
+  if (hits.length < 2) return NEGATIVE;
+  if (!/JuiceSec|juicesec|JUICESEC/i.test(corpus)) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      challenge: challengeKey,
+      category: challengeMeta.category,
+      scannedUrl: pageUrl,
+      note: challengeMeta.note
+    }
+  };
+};
+
 // --- JavaSecLab comprehensive Java vulnerability platform (whgojp/JavaSecLab) ----
 const CLIENT_JAVASECLAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -27887,6 +27964,10 @@ async function probeOpenvaultBankRailwayApi(ctx: RuleContext): Promise<RuleResul
   };
 }
 
+function buggyBuySleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function probeBuggyBuyExternalApi(ctx: RuleContext): Promise<RuleResult | null> {
   if (!/BuggyBuy|Vulnerable-Web-Application|vulnerable-web-application-mcd0\.onrender\.com/i.test(ctx.combined)) {
     return null;
@@ -27894,30 +27975,59 @@ async function probeBuggyBuyExternalApi(ctx: RuleContext): Promise<RuleResult | 
   const bases = extractExternalApiBases(ctx.combined, ctx.origin, 2).filter((b) =>
     /vulnerable-web-application-mcd0\.onrender\.com/i.test(b)
   );
-  if (bases.length === 0) return null;
+  if (bases.length === 0) {
+    bases.push("https://vulnerable-web-application-mcd0.onrender.com");
+  }
   const paths = ["/api/v1/orders/1", "/api/v1/users", "/api/v1/products?limit=1"];
   const urls = buildApiProbeUrls(paths, ctx.origin, bases, 4);
-  const docs = await ctx.probe.getMany(urls, { maxBytes: 8192 }, 2);
-  for (const [url, r] of docs) {
-    if (r.status < 200 || r.status >= 300) continue;
-    const ct = r.headers["content-type"] || "";
-    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
-    if (/unauthorized|login required|sign in|authentication/i.test(r.body.slice(0, 500))) continue;
-    if (!/"(?:id|order|email|username|userId|name|products|price)"\s*:/i.test(r.body.slice(0, 400))) {
-      continue;
-    }
-    return {
-      fired: true,
-      confidence: 0.87,
-      evidence: {
-        url,
-        sample: r.body.slice(0, 120).trim(),
-        note: "BuggyBuy Render API returned order/user/product JSON without auth — IDOR/BOLA training oracle"
+  for (let attempt = 0; attempt < 5; attempt++) {
+    if (attempt > 0) await buggyBuySleep(5000);
+    const docs = await ctx.probe.getMany(urls, { maxBytes: 8192, timeoutMs: 25000 }, 2);
+    for (const [url, r] of docs) {
+      if (r.status < 200 || r.status >= 300) continue;
+      const ct = r.headers["content-type"] || "";
+      if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
+      if (/unauthorized|login required|sign in|authentication|Internal Server Error/i.test(r.body.slice(0, 500))) {
+        continue;
       }
-    };
+      if (!/"(?:id|order|email|username|userId|name|products|price)"\s*:/i.test(r.body.slice(0, 400))) {
+        continue;
+      }
+      return {
+        fired: true,
+        confidence: 0.87,
+        evidence: {
+          url,
+          sample: r.body.slice(0, 120).trim(),
+          note: "BuggyBuy Render API returned order/user/product JSON without auth — IDOR/BOLA training oracle"
+        }
+      };
+    }
   }
   return null;
 }
+
+const buggybuyApiBolaLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBuggyBuyExternalApi(ctx);
+  return hit ?? NEGATIVE;
+};
+
+const buggybuyApiBolaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vulnerable-web-application-jecw\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/(?:orders|users|products|cart|payment|search)\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBuggyBuyExternalApi(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "BuggyBuy /api/* route scan — cross-origin Render API returns order/user/product JSON without auth — IDOR/BOLA route oracle"
+    }
+  };
+};
 
 const unauthenticatedApiRoutes: Rule = async (ctx) => {
   const juiceShopHit = await probeJuiceShopProductsSearchApi(ctx);
@@ -28737,25 +28847,41 @@ function whoopsPayTransactionsExposeOtherUsers(body: string): WhoopsPayTransacti
   return rows;
 }
 
+async function whoopsPayFetchTransactionsBody(
+  ctx: RuleContext,
+  headers: Record<string, string> = { Accept: "application/json" }
+): Promise<{ body: string; url: string } | null> {
+  const url = new URL("/api/transactions", ctx.origin).toString();
+  for (let attempt = 0; attempt < 5; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, 4000));
+    const doc = await ctx.probe.get(url, {
+      headers,
+      maxBytes: 65536,
+      timeoutMs: 25000
+    });
+    if (doc.status >= 200 && doc.status < 300 && /^\s*\[/.test(doc.body.trim())) {
+      return { body: doc.body, url };
+    }
+  }
+  return null;
+}
+
 const whoopsPayTransactionsBolaLiveOracle: Rule = async (ctx) => {
   if (!isWhoopsPayHost(ctx)) return NEGATIVE;
-  const url = new URL("/api/transactions", ctx.origin).toString();
-  const unauthDoc = await ctx.probe.get(url, {
-    headers: { Accept: "application/json" },
-    maxBytes: 65536,
-    timeoutMs: 20000
-  });
-  let rows = whoopsPayTransactionsExposeOtherUsers(unauthDoc.body);
+  const unauth = await whoopsPayFetchTransactionsBody(ctx);
+  let rows = unauth ? whoopsPayTransactionsExposeOtherUsers(unauth.body) : null;
   let authMode = "unauthenticated";
+  let url = unauth?.url ?? new URL("/api/transactions", ctx.origin).toString();
   if (!rows) {
     const cookie = await whoopsPayRegisterSessionCookie(ctx);
     if (!cookie) return NEGATIVE;
-    const authDoc = await ctx.probe.get(url, {
-      headers: { Accept: "application/json", Cookie: cookie },
-      maxBytes: 65536,
-      timeoutMs: 20000
+    const authFetch = await whoopsPayFetchTransactionsBody(ctx, {
+      Accept: "application/json",
+      Cookie: cookie
     });
-    rows = whoopsPayTransactionsExposeOtherUsers(authDoc.body);
+    if (!authFetch) return NEGATIVE;
+    url = authFetch.url;
+    rows = whoopsPayTransactionsExposeOtherUsers(authFetch.body);
     authMode = "authenticated";
     if (!rows) return NEGATIVE;
   }
@@ -65379,6 +65505,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBlueTeamLabsEvidence,
   clientSideJuiceShopProjectEvidence,
   clientSideJuicesecLabEvidence,
+  clientSideJuicesecChallengeRouteEvidence,
   clientSideJavaSecLabEvidence,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
@@ -65637,6 +65764,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopAdminPanelRouteLiveOracle,
   vulnshopUsersEnumerationRouteLiveOracle,
   clientSideBuggybuyEvidence,
+  buggybuyApiBolaLiveOracle,
+  buggybuyApiBolaRouteLiveOracle,
   clientSideWebSecurityLearningLabsEvidence,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
