@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T09:10:35.923Z",
+  "updated_at": "2026-08-06T09:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2766,
-  "total_findings": 27203,
-  "critical_findings": 60,
+  "total_sites_scanned": 2770,
+  "total_findings": 27281,
+  "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1971,
-  "discovery_findings": 22971,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-06T09:10:35.923Z",
+  "discovery_findings": 22992,
+  "improvements_shipped": 1171,
+  "last_run": "2026-08-06T09:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 498,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (46 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (47 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 53,
-      "focus": "WhoopsPay fintech API IDOR/BOLA routes (transactions, wallet, users, payments, transfer) + BuggyBuy api queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 31,
+      "focus": "appsec-ci Django admin exposure + web-pentest login SQLi route oracles",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "whoopspay.onrender.com/api/transactions/1: 7 findings — client-side-whoopspay-evidence + vibe-unauthenticated-api-routes (transaction IDOR surface)",
-      "whoopspay.onrender.com/api/wallet/1: 7 findings — wallet BOLA oracle surface, no route-specific wallet-balance live oracle",
-      "whoopspay.onrender.com/api/users: 7 findings — user enumeration / excessive data exposure hub",
-      "whoopspay.onrender.com/api/payments/1: 7 findings — payment object IDOR surface",
-      "whoopspay.onrender.com/api/transfer: 7 findings — transfer BOLA / broken auth surface",
-      "vulnerable-web-application-jecw.vercel.app/api/products|users|cart: 6 findings each — client-side-buggybuy-evidence hubs, no route-specific oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "appsec-ci-pipeline.onrender.com/admin/: 6→9 findings — appsec-ci-django-admin live+route oracles shipped (Django site admin login + csrfmiddlewaretoken)",
+      "web-pentest-playground.onrender.com/login: 8→11 findings — web-pentest-playground-login-sqli live+route oracles shipped (POST SQLi → 302 /dashboard)",
+      "web-pentest-playground.onrender.com/admin: 8→11 findings — admin-sqli live+route oracles confirmed on re-scan",
+      "vulnerable-web-application-jecw.vercel.app/api/*: BuggyBuy Render API down (Internal Server Error) — route-specific oracles deferred"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "whoopspay.onrender.com/api/*: 7-finding generic hubs — route-specific transaction/wallet/payment IDOR live oracles absent without authenticated session",
-      "BuggyBuy api/* routes: 6-finding generic hubs — route-specific SQLi/IDOR/payment oracles absent without authenticated JWT session",
-      "r2s-arena.fly.dev: React2Shell arena unreachable from cloud agent (scan error)"
+      "BuggyBuy api/* routes: Render backend Internal Server Error — NoSQL login / mass-assignment oracles blocked until API recovers",
+      "whoopspay.onrender.com/api/*: route-specific transaction/wallet/payment IDOR live oracles absent without authenticated session",
+      "r2s-arena.fly.dev: React2Shell arena unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
+    "juice-shop.herokuapp.com": 47,
+    "appsec-ci-pipeline.onrender.com/admin/": 9,
+    "web-pentest-playground.onrender.com/login": 11,
+    "web-pentest-playground.onrender.com/admin": 11,
     "whoopspay.onrender.com/api/transactions/1": 7,
-    "whoopspay.onrender.com/api/wallet/1": 7,
-    "whoopspay.onrender.com/api/users": 7,
-    "whoopspay.onrender.com/api/payments/1": 7,
-    "whoopspay.onrender.com/api/transfer": 7,
-    "vulnerable-web-application-jecw.vercel.app/api/products": 6,
-    "vulnerable-web-application-jecw.vercel.app/api/users": 6,
-    "vulnerable-web-application-jecw.vercel.app/api/cart": 6
+    "vulnerable-web-application-jecw.vercel.app/api/products": 6
   }
 }
