@@ -27097,8 +27097,8 @@ const appsecCiStoredXssCommentsLiveOracle: Rule = async (ctx) => {
   const payload = `<thugir-canary>${canary}</thugir-canary>`;
   const postBody = new URLSearchParams({
     csrfmiddlewaretoken: csrfToken,
-    name: "ThugirProbe",
-    comment: payload
+    username: "ThugirProbe",
+    message: payload
   }).toString();
   const postDoc = await ctx.probe.get(commentsUrl, {
     method: "POST",
