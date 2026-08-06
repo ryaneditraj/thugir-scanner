@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T13:01:58.745Z",
+  "updated_at": "2026-08-06T13:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2753,
-  "total_findings": 27278,
+  "total_sites_scanned": 2761,
+  "total_findings": 27524,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 23091,
+  "discovery_urls_added": 1976,
+  "discovery_findings": 23355,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-06T13:01:58.745Z",
+  "last_run": "2026-08-06T13:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 45,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 488,
+      "probes_run": 482,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,37 @@
           ]
         }
       },
-      "note": "6/6 recall (46 findings); no benchmark misses"
+      "note": "Primary Heroku 503; staging fallback 6/6 (45 findings) — no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 35,
-      "focus": "WhoopsPay transaction BOLA + money-request IDOR + web-pentest Render warmup",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 246,
+      "focus": "preview.owasp-juice.shop captcha/wallet/auth-details drain + juicesec Workers lab + oopssec/staging oracle queue",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "whoopspay.onrender.com/api/users: 7→11 findings — whoopspay-transactions-bola + money-request-idor live oracles shipped",
-      "web-pentest-playground.onrender.com/login: 6→12 findings — login-sqli + file-upload + stored-xss oracles restored via Flask warmup",
-      "web-pentest-playground.onrender.com/comment: 6→12 findings — stored-xss live oracle now fires after warmup fix"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (45 findings) — primary herokuapp.com 503 cold start",
+      "preview.owasp-juice.shop/rest/captcha: 48 findings — full Juice Shop preview oracle surface on develop branch",
+      "preview.owasp-juice.shop/rest/wallet/balance: 48 findings — wallet BOLA + JWT alg:none live oracles",
+      "preview.owasp-juice.shop/rest/user/authentication-details: 48 findings — admin-role disclosure oracle",
+      "juicesec.mrdinesh.workers.dev/challenge/*: 2 findings each — client-side lab shell only (no dedicated juicesec challenge oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnerable-web-application-jecw.vercel.app: BuggyBuy backend (mcd0.onrender.com) returns HTTP 500 — live oracles deferred",
-      "whoopspay.onrender.com: XSS-in-transaction-description oracle still absent without stable POST /api/transactions sender flow"
+      "juice-shop.herokuapp.com primary oracle intermittently 503 — staging fallback required",
+      "New queue URLs pending scan: oopssec product-search-SQLi, stored-XSS reviews, preview deluxe-membership/b2b, staging SecurityQuestions",
+      "juicesec.mrdinesh.workers.dev: single-page Worker app — /challenge/* paths 404; dedicated client-side challenge oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
+    "juice-shop-staging.herokuapp.com": 45,
     "preview.owasp-juice.shop/rest/captcha": 48,
-    "web-pentest-playground.onrender.com/login": 12,
-    "web-pentest-playground.onrender.com/comment": 12,
+    "preview.owasp-juice.shop/rest/wallet/balance": 48,
+    "preview.owasp-juice.shop/rest/user/authentication-details": 48,
     "whoopspay.onrender.com/api/users": 11,
-    "webchal1.vercel.app/api/notes/import": 8
+    "web-pentest-playground.onrender.com/login": 12
   }
 }
