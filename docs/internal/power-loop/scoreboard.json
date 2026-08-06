@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T16:24:10.151Z",
+  "updated_at": "2026-08-06T17:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2792,
-  "total_findings": 28667,
+  "total_sites_scanned": 2795,
+  "total_findings": 28768,
   "critical_findings": 73,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1986,
-  "discovery_findings": 24494,
+  "discovery_urls_added": 1991,
+  "discovery_findings": 24546,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-06T16:24:10.151Z",
+  "last_run": "2026-08-06T17:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 480,
+      "probes_run": 495,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); primary juice-shop.herokuapp.com 503, staging fallback"
+      "note": "Stable 6/6 recall (49 findings); primary herokuapp + staging 503, escape.tech fallback"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 13,
-      "findings": 601,
-      "focus": "web-security-learning-labs XSS/IDOR modules; preview.owasp-juice.shop ProductReviews + SQLi search; escape.tech SecurityQuestions; queue drain brokencrystals metadata + pwnshop seller preview",
+      "urls_scanned": 2,
+      "findings": 52,
+      "focus": "escape.tech ProductReviews + saveLoginIp; demo.owasp-juice.shop wallet/deluxe/b2b queued but timed out",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "preview.owasp-juice.shop/api/ProductReviews: 51 findings — product review BOLA/XSS hub (new 16 UTC discovery)",
-      "preview.owasp-juice.shop/rest/products/search?q=test: 51 findings — juice-shop-products-search-sqli-route-live-oracle confirmed on preview develop branch",
-      "juice-shop.demo.escape.tech/api/SecurityQuestions: 48 findings — security-question catalog oracle on Escape demo",
-      "web-security-learning-labs.vercel.app/module/1012: 7 findings — XSS lab module surface",
-      "web-security-learning-labs.vercel.app/module/1013: 7 findings — IDOR lab module surface",
-      "brokencrystals.com/api/metadata: 68 findings — metadata SSRF + config disclosure hub",
-      "pwnshop.ctfsecurity.com/seller/preview: 38 findings — seller preview oracle surface"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (49 findings) — no benchmark misses",
+      "juice-shop.demo.escape.tech/api/ProductReviews: 50 findings — product review BOLA/XSS hub on Escape demo",
+      "juice-shop.demo.escape.tech/rest/saveLoginIp: 2 findings — login IP spoofing oracle surface",
+      "demo.owasp-juice.shop/rest/wallet/balance: scan error — official demo unreachable/timeout",
+      "demo.owasp-juice.shop/rest/deluxe-membership: scan error — official demo unreachable/timeout",
+      "demo.owasp-juice.shop/b2b/v2/orders: scan error — official demo unreachable/timeout"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle still 503 — staging/preview/escape fallbacks required",
-      "web-security-learning-labs modules 1012/1013 lack route-specific live oracles (generic misconfig only)",
-      "preview.owasp-juice.shop/api/ProductReviews returns 500 — findings from bundle/hub fingerprints not route-specific review oracle",
+      "juice-shop.herokuapp.com + staging still 503 — escape.tech fallback required for benchmark oracle",
+      "demo.owasp-juice.shop route-specific oracles unreachable — wallet/deluxe/b2b queue entries error on scan",
+      "juice-shop.demo.escape.tech/rest/saveLoginIp: only 2 generic findings — route-specific saveLoginIp oracle thin",
       "r2s-arena.fly.dev unreachable — repeated queue errors"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 48,
+    "juice-shop.demo.escape.tech": 49,
+    "juice-shop.demo.escape.tech/api/ProductReviews": 50,
+    "juice-shop.demo.escape.tech/rest/saveLoginIp": 2,
     "preview.owasp-juice.shop/api/ProductReviews": 51,
     "preview.owasp-juice.shop/rest/products/search?q=test": 51,
-    "juice-shop.demo.escape.tech/api/SecurityQuestions": 48,
     "brokencrystals.com/api/metadata": 68,
-    "pwnshop.ctfsecurity.com/seller/preview": 38,
-    "web-security-learning-labs.vercel.app/module/1012": 7,
-    "web-security-learning-labs.vercel.app/module/1013": 7
+    "pwnshop.ctfsecurity.com/seller/preview": 38
   }
 }

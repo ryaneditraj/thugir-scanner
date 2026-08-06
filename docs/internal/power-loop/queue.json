@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T16:06:00.000Z",
+  "updated_at": "2026-08-06T17:05:06.182Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/ProductReviews",
+      "source": "Escape.tech Juice Shop demo — product review XSS/BOLA oracle GET /api/ProductReviews (juice-shop.demo.escape.tech, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/saveLoginIp",
+      "source": "Escape.tech Juice Shop demo — login IP spoofing oracle POST /rest/saveLoginIp (juice-shop.demo.escape.tech, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/b2b/v2/orders",
+      "source": "OWASP Juice Shop demo — insecure deserialization oracle POST /b2b/v2/orders orderLinesData (demo.owasp-juice.shop, 17 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/deluxe-membership",
+      "source": "OWASP Juice Shop demo — deluxe membership status/payment oracle GET /rest/deluxe-membership (demo.owasp-juice.shop, 17 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/wallet/balance",
+      "source": "OWASP Juice Shop demo — wallet balance BOLA oracle GET /rest/wallet/balance (official demo.owasp-juice.shop, 17 UTC discovery)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1012",
       "source": "Web Security Learning Labs — XSS module lab (web-security-learning-labs.vercel.app OSS deploy, 16 UTC discovery)",
@@ -15796,5 +15821,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 74
+  "discovery_urls_added": 79
 }
