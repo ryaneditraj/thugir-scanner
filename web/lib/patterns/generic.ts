@@ -47811,5 +47811,161 @@ export const genericPatterns: Pattern[] = [
       "Our money-request route scan confirms sender IDOR via fromUserId impersonation. Show route-level validation remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "whoopspay-transaction-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "WhoopsPay stored XSS via transaction description live oracle",
+    description:
+      "POST /api/transactions accepts HTML/JS in the description field and returns it unsanitized in GET /api/transactions — the WhoopsPay stored XSS transaction-description oracle.",
+    impactOneline:
+      "Unsanitized transaction descriptions enable stored XSS against anyone viewing payment history.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayTransactionStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode transaction descriptions server-side — WhoopsPay is intentional training software.",
+      steps: [
+        "HTML-encode description fields before persistence and on API responses.",
+        "Use a strict allowlist for transaction description formatting.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/transactions endpoint stores XSS payloads in description fields. Show output encoding and sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-transaction-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "WhoopsPay transaction stored XSS route live oracle",
+    description:
+      "When scanning /api/transactions or related routes, POST stores unsanitized HTML/JS in description — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-scoped scans should flag stored XSS via unsanitized transaction descriptions on WhoopsPay API routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayTransactionStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize transaction descriptions server-side.",
+      steps: [
+        "HTML-encode description fields before persistence and on API responses.",
+        "Use a strict allowlist for transaction description formatting.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/transactions route scan confirms stored XSS via description field. Show route-level sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-test-accounts-disclosure-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "WhoopsPay test-account credential disclosure live oracle",
+    description:
+      "GET /api/test-accounts returns mock user emails and plaintext passwords without authentication — the WhoopsPay test-account credential disclosure oracle.",
+    impactOneline:
+      "Public test-account credentials let anyone authenticate as privileged demo users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayTestAccountsDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or protect /api/test-accounts in production — WhoopsPay is intentional training software.",
+      steps: [
+        "Disable /api/test-accounts outside local development.",
+        "Never return plaintext passwords from any API endpoint.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/test-accounts endpoint exposes plaintext mock-user passwords. Show credential disclosure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-test-accounts-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "WhoopsPay test-accounts credential disclosure route live oracle",
+    description:
+      "When scanning /api/test-accounts or auth routes, GET returns plaintext mock-user passwords — route-specific credential disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated test-account credential leaks on WhoopsPay.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayTestAccountsDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or protect /api/test-accounts in production.",
+      steps: [
+        "Disable /api/test-accounts outside local development.",
+        "Never return plaintext passwords from any API endpoint.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our test-accounts route scan exposes plaintext passwords. Show route-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-issues-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay unauthenticated admin issues API live oracle",
+    description:
+      "GET /api/admin/issues returns success JSON without admin authentication — the WhoopsPay unauthenticated admin issues endpoint oracle.",
+    impactOneline:
+      "Admin issue APIs reachable without authentication weaken administrative access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminIssuesUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication for /api/admin/* routes — WhoopsPay is intentional training software.",
+      steps: [
+        "Enforce admin session checks on all /api/admin endpoints.",
+        "Return 401/403 for unauthenticated admin API access.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/admin/issues endpoint responds without admin auth. Show administrative API access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-issues-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay admin issues unauthenticated route live oracle",
+    description:
+      "When scanning /api/admin routes, GET /api/admin/issues responds without admin authentication — route-specific admin API exposure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated admin issue endpoints on WhoopsPay.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminIssuesUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication for /api/admin/* routes.",
+      steps: [
+        "Enforce admin session checks on all /api/admin endpoints.",
+        "Return 401/403 for unauthenticated admin API access.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin route scan confirms unauthenticated issues API access. Show route-level admin auth remediation.",
+    version: 1,
+    enabled: true
   }
 ];

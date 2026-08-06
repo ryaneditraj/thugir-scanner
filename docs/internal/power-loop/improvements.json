@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-transaction-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login sarah.wilson@example.com + POST /api/transactions description <img src=x onerror=thugir-xss-probe> stored unsanitized in GET /api/transactions; whoopspay.onrender.com/api/users findings 11→15; benchmark juice-shop-staging 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-test-accounts-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/test-accounts returns @sarah_wilson/@elena_kowalski emails with plaintext passwords (sarah123, elena456) without auth; whoopspay.onrender.com/api/users findings 11→15; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-admin-issues-unauth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/issues returns {\"success\":true,\"data\":[],\"count\":0} without admin session; whoopspay.onrender.com/api/users findings 11→15; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
       "slug": "whoopspay-transactions-bola-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/transactions returns @elena_kowalski/@james_chen rows with routingNumber without auth; whoopspay.onrender.com/api/users findings 7→11 (+transactions-bola live+route oracles); benchmark juice-shop 46 findings 6/6 maintained"
