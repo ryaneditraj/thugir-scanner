@@ -29221,6 +29221,207 @@ const whoopsPayAdminIssuesUnauthRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+type WhoopsPayPayment = {
+  id?: number;
+  userId?: string;
+  type?: string;
+  cardNumber?: string | null;
+  accountNumber?: string | null;
+  iban?: string | null;
+};
+
+async function probeWhoopsPayPaymentsSensitiveData(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  if (!isWhoopsPayHost(ctx)) return null;
+  const session = await whoopsPayLoginTestAccount(ctx);
+  if (!session) return null;
+  const url = new URL("/api/payments", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: { Accept: "application/json", Cookie: session.cookie },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let payments: WhoopsPayPayment[] = [];
+  try {
+    const parsed = JSON.parse(doc.body) as unknown;
+    if (!Array.isArray(parsed) || parsed.length === 0) return null;
+    payments = parsed as WhoopsPayPayment[];
+  } catch {
+    return null;
+  }
+  const cardRow = payments.find(
+    (p) => typeof p.cardNumber === "string" && /\d{4}[- ]?\d{4}[- ]?\d{4}/.test(p.cardNumber)
+  );
+  const bankRow = payments.find(
+    (p) => typeof p.accountNumber === "string" && p.accountNumber.replace(/\D/g, "").length >= 6
+  );
+  if (!cardRow && !bankRow) return null;
+  const sample = cardRow ?? bankRow;
+  return {
+    fired: true,
+    confidence: cardRow && bankRow ? 0.94 : 0.92,
+    evidence: {
+      url,
+      loginHandle: session.handle,
+      paymentCount: payments.length,
+      sampleCard: cardRow?.cardNumber,
+      sampleAccountNumber: bankRow?.accountNumber,
+      sampleIban: bankRow?.iban,
+      snippet: JSON.stringify(sample ?? payments[0]).slice(0, 280),
+      note: "WhoopsPay GET /api/payments returns full card numbers and bank account details for the authenticated user — payment-card sensitive-data oracle"
+    }
+  };
+}
+
+const whoopsPayPaymentsSensitiveDataLiveOracle: Rule = async (ctx) => {
+  const hit = await probeWhoopsPayPaymentsSensitiveData(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return hit;
+};
+
+const whoopsPayPaymentsSensitiveDataRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/)?cards\b|\/api\/payments\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeWhoopsPayPaymentsSensitiveData(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay cards/payments route scan — GET /api/payments returns full card numbers and bank account numbers — route-specific payment-card disclosure oracle"
+    }
+  };
+};
+
+async function probeWhoopsPayProfileApi(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isWhoopsPayHost(ctx)) return null;
+  const session = await whoopsPayLoginTestAccount(ctx);
+  if (!session) return null;
+  const url = new URL("/api/auth/user", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: { Accept: "application/json", Cookie: session.cookie },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let user: Record<string, unknown>;
+  try {
+    const parsed = JSON.parse(doc.body) as unknown;
+    if (!parsed || typeof parsed !== "object") return null;
+    user = parsed as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const email = String(user.email ?? "");
+  const balance = user.balance;
+  if (!email || typeof balance !== "number") return null;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url,
+      loginHandle: session.handle,
+      email,
+      balance,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "WhoopsPay GET /api/auth/user returns email and wallet balance for the authenticated session — profile API sensitive-data oracle"
+    }
+  };
+}
+
+const whoopsPayProfileApiLiveOracle: Rule = async (ctx) => {
+  const hit = await probeWhoopsPayProfileApi(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return hit;
+};
+
+const whoopsPayProfileApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/)?(?:auth\/)?profile\b|\/api\/auth\/user\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeWhoopsPayProfileApi(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay profile route scan — GET /api/auth/user returns email and wallet balance — route-specific profile API disclosure oracle"
+    }
+  };
+};
+
+const whoopsPayRegisterOpenLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const username = `thugir_wp_reg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/api/register", ctx.origin).toString();
+  const doc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      password: "ThugirProbe123!",
+      email: `${username}@thugir-probe.example`
+    }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/Registration successful/i.test(doc.body)) return NEGATIVE;
+  const cookie = whoopsPaySessionCookieFromDoc(doc);
+  if (!cookie) return NEGATIVE;
+  const userUrl = new URL("/api/auth/user", ctx.origin).toString();
+  const userDoc = await ctx.probe.get(userUrl, {
+    headers: { Accept: "application/json", Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (userDoc.status < 200 || userDoc.status >= 300) return NEGATIVE;
+  let balance: number | null = null;
+  try {
+    const parsed = JSON.parse(userDoc.body) as { balance?: unknown; email?: unknown };
+    if (typeof parsed.balance === "number") balance = parsed.balance;
+    if (!parsed.email) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      registerUrl,
+      username,
+      balance,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "WhoopsPay POST /api/register creates an account, issues a session cookie, and grants wallet access without email verification — open registration oracle"
+    }
+  };
+};
+
+const whoopsPayRegisterOpenRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/)?(?:auth\/)?register\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await whoopsPayRegisterOpenLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay register route scan — POST /api/register creates account and session without email verification — route-specific open registration oracle"
+    }
+  };
+};
+
 // --- HackSec.in password-protected ethical hacking training portal ----------------
 const CLIENT_HACKSEC_RES: { label: string; re: RegExp }[] = [
   {
@@ -65691,6 +65892,12 @@ export const RULES: Record<string, Rule> = {
   whoopsPayTestAccountsDisclosureRouteLiveOracle,
   whoopsPayAdminIssuesUnauthLiveOracle,
   whoopsPayAdminIssuesUnauthRouteLiveOracle,
+  whoopsPayPaymentsSensitiveDataLiveOracle,
+  whoopsPayPaymentsSensitiveDataRouteLiveOracle,
+  whoopsPayProfileApiLiveOracle,
+  whoopsPayProfileApiRouteLiveOracle,
+  whoopsPayRegisterOpenLiveOracle,
+  whoopsPayRegisterOpenRouteLiveOracle,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,

@@ -48800,5 +48800,161 @@ export const genericPatterns: Pattern[] = [
       "Our /api/admin route scan confirms unauthenticated issues API access. Show route-level admin auth remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "whoopspay-payments-sensitive-data-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "WhoopsPay payment cards sensitive-data live oracle",
+    description:
+      "GET /api/payments returns full card numbers and bank account details for the authenticated user — the WhoopsPay payment-card sensitive-data oracle.",
+    impactOneline:
+      "Payment APIs that return full PANs and account numbers enable card fraud and account takeover if sessions are compromised.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayPaymentsSensitiveDataLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mask or tokenize card numbers in payment APIs — WhoopsPay is intentional training software.",
+      steps: [
+        "Return only last-four digits of card numbers from GET /api/payments.",
+        "Never expose full bank account numbers or IBANs in API responses.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/payments endpoint returns full card numbers and account numbers. Show PCI-aware API response remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-payments-sensitive-data-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "WhoopsPay payment cards route sensitive-data oracle",
+    description:
+      "When scanning /cards or /api/payments routes, GET /api/payments returns full card numbers and bank account details — route-specific payment-card disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag WhoopsPay payment APIs leaking full card and bank account numbers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayPaymentsSensitiveDataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mask or tokenize card numbers in payment APIs.",
+      steps: [
+        "Return only last-four digits of card numbers from GET /api/payments.",
+        "Never expose full bank account numbers or IBANs in API responses.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /cards route scan confirms full card numbers in GET /api/payments. Show route-level PCI response remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-profile-api-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "medium",
+    title: "WhoopsPay profile API sensitive-data live oracle",
+    description:
+      "GET /api/auth/user returns email and wallet balance for the authenticated session — the WhoopsPay profile API sensitive-data oracle.",
+    impactOneline:
+      "Profile APIs exposing wallet balances without field-level redaction increase impact when sessions are hijacked.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayProfileApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Minimize profile API fields and require strong session controls — WhoopsPay is intentional training software.",
+      steps: [
+        "Return only necessary profile fields from GET /api/auth/user.",
+        "Apply rate limits and anomaly detection on profile and balance endpoints.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/auth/user endpoint returns email and wallet balance. Show profile API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-profile-api-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "medium",
+    title: "WhoopsPay profile route API disclosure oracle",
+    description:
+      "When scanning /profile or /api/auth/user routes, GET /api/auth/user returns email and wallet balance — route-specific profile API disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag WhoopsPay profile endpoints returning wallet balance data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayProfileApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Minimize profile API fields and require strong session controls.",
+      steps: [
+        "Return only necessary profile fields from GET /api/auth/user.",
+        "Apply rate limits and anomaly detection on profile and balance endpoints.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route scan confirms wallet balance in GET /api/auth/user. Show route-level profile API remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-register-open-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "WhoopsPay open registration live oracle",
+    description:
+      "POST /api/register creates an account, issues a session cookie, and grants wallet access without email verification — the WhoopsPay open registration oracle.",
+    impactOneline:
+      "Open registration without verification enables mass fake accounts and wallet abuse on fintech platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayRegisterOpenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require email or phone verification before activating wallet features — WhoopsPay is intentional training software.",
+      steps: [
+        "Verify email addresses before issuing wallet-enabled sessions.",
+        "Rate-limit registration and apply bot detection.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/register endpoint creates wallet-enabled accounts without verification. Show registration hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-register-open-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "WhoopsPay open registration route live oracle",
+    description:
+      "When scanning /register or /api/register routes, POST /api/register creates an account and session without email verification — route-specific open registration oracle.",
+    impactOneline:
+      "Route-scoped scans should flag WhoopsPay registration endpoints that skip verification before wallet access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayRegisterOpenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require email or phone verification before activating wallet features.",
+      steps: [
+        "Verify email addresses before issuing wallet-enabled sessions.",
+        "Rate-limit registration and apply bot detection.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register route scan confirms unverified account creation with wallet access. Show route-level registration remediation.",
+    version: 1,
+    enabled: true
   }
 ];
