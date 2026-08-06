@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T02:06:00.000Z",
+  "updated_at": "2026-08-06T03:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://demo2.testfire.net/bank/transfer.jsp",
@@ -15469,7 +15469,32 @@
       "url": "https://vwad.owasp.org/app/secure-by-design/login",
       "source": "OWASP VWAD — secure-by-design ironic auth-bypass login surface (vwad.owasp.org directory, 01 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/preview-reviews",
+      "source": "PortSwigger Gin & Juice — preview-reviews SSTI/XSS oracle (ginandjuice.shop public lab, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/preview",
+      "source": "PortSwigger Gin & Juice — account preview template injection surface (ginandjuice.shop public lab, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/invite",
+      "source": "PortSwigger Gin & Juice — admin invite race / access-control oracle (ginandjuice.shop public lab, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/delete-account",
+      "source": "PortSwigger Gin & Juice — delete-account broken access control oracle (ginandjuice.shop public lab, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/users/1",
+      "source": "MuhaibShamsher/BuggyBuy — unauthenticated user API IDOR oracle GET /api/users/:id (Vercel OSS README, 03 UTC discovery)",
+      "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 49
+  "discovery_urls_added": 54
 }
