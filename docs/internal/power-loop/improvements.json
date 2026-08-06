@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-guardian-leaks-create-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /create reference=http://169.254.169.254/latest/meta-data/ returns ami-id/instance-id in response body; pentest-ground.com:81/create findings 4→6; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-guardian-leaks-create-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /create confirms SSRF via reference field with scannedUrl evidence; pentest-ground.com:81/create findings 4→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-uptime-cmdi-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /uptime/;id returns uid=0(root) via uptime -;id shell injection; pentest-ground.com:9000/user findings 6→8; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:juicesec.mrdinesh.workers.dev",
       "slug": "client-side-juicesec-challenge-route-evidence",
       "status": "shipped",
@@ -19740,6 +19758,26 @@
       "source": "discovery:whoopspay.onrender.com",
       "slug": "whoopspay-transactions-api-cold-start-retry",
       "shipped_at": "2026-08-06T18:30:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-guardian-leaks-create-ssrf-live-oracle",
+      "shipped_at": "2026-08-06T19:45:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-guardian-leaks-create-ssrf-route-live-oracle",
+      "shipped_at": "2026-08-06T19:45:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-uptime-cmdi-live-oracle",
+      "shipped_at": "2026-08-06T19:45:00.000Z"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-uptime-cmdi-route-live-oracle",
+      "shipped_at": "2026-08-06T19:45:00.000Z"
     }
   ]
 }

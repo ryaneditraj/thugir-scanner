@@ -40176,6 +40176,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-guardian-leaks-create-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Pentest-Ground GuardianLeaks create SSRF live oracle",
+    description:
+      "POST /create with reference=http://169.254.169.254/latest/meta-data/ fetches AWS IMDS metadata (ami-id, instance-id) server-side — the GuardianLeaks blog reference-field SSRF oracle.",
+    impactOneline:
+      "Unvalidated reference URLs on blog create let attackers probe cloud metadata and internal services.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundGuardianLeaksCreateSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GuardianLeaks is intentional training software — allowlist outbound fetch destinations.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Validate reference URLs against an allowlist before server-side retrieval.",
+        "Run GuardianLeaks only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GuardianLeaks /create endpoint fetches attacker-controlled reference URLs server-side. Show SSRF remediation with egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-guardian-leaks-create-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Pentest-Ground GuardianLeaks /create SSRF route live oracle",
+    description:
+      "When scanning /create, POST reference= fetches AWS IMDS metadata — route-specific GuardianLeaks SSRF oracle.",
+    impactOneline:
+      "Route scans on GuardianLeaks create pages need live SSRF confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundGuardianLeaksCreateSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations on blog reference fields.",
+      steps: [
+        "Deny link-local and cloud metadata IP ranges in outbound fetch handlers.",
+        "Validate reference URLs against an allowlist before server-side retrieval.",
+        "Run GuardianLeaks only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GuardianLeaks /create route fetches AWS metadata via reference=. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-restflaw-uptime-cmdi-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pentest-Ground RestFlaw uptime command injection live oracle",
+    description:
+      "GET /uptime/;id shells out to uptime -;id and returns uid= output — the RestFlaw uptime path-parameter command injection oracle.",
+    impactOneline:
+      "Unsanitized uptime flag path segments enable OS command execution via shell metacharacters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawUptimeCmdiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RestFlaw is intentional training software — never pass path segments to shell commands.",
+      steps: [
+        "Use parameterized APIs instead of shelling out to uptime.",
+        "Block shell metacharacters (; | & $ `) in path parameters.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our RestFlaw /uptime/{flag} endpoint shells out with unsanitized path input. Show command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-restflaw-uptime-cmdi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pentest-Ground RestFlaw uptime command injection route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000 routes, GET /uptime/;id returns uid= via shell metacharacters — route-specific RestFlaw command injection oracle.",
+    impactOneline:
+      "Route scans on RestFlaw hosts need live command-injection confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawUptimeCmdiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user-controlled path segments to shell commands.",
+      steps: [
+        "Use parameterized APIs instead of shelling out to uptime.",
+        "Block shell metacharacters in path parameters.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our RestFlaw /uptime route shells out with unsanitized path input. Show route-specific command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentest-ground-hub-evidence",
     platform: "generic",
     category: "Broken access control",

