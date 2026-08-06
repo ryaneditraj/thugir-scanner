@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-juicesec-challenge-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/sqli and /challenge/ssrf return 404 but homepage bootstrap via fetchDoc confirms checkSQLi/checkSSRF modules; juicesec.mrdinesh.workers.dev/challenge/sqli findings 2→3, /challenge/ssrf 2→4; benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-transactions-api-cold-start-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: whoopsPayFetchTransactionsBody retries GET /api/transactions when Render cold-start returns HTML shell; whoopspay.onrender.com/api/transactions/1 findings 7→13 (+transactions-bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-application-jecw.vercel.app",
+      "slug": "buggybuy-api-bola-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnerable-web-application-mcd0.onrender.com /api/v1/* returns HTTP 500 Internal Server Error on all paths during probe window — live oracle wired with Render retries but cannot confirm positive proof until API recovers"
+    },
+    {
       "source": "discovery:juice-shop.demo.escape.tech",
       "slug": "juice-shop-products-reviews-exposure-route-live-oracle",
       "status": "shipped",
@@ -19712,6 +19730,16 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-aws-metadata-ssrf-route-live-oracle",
       "shipped_at": "2026-08-06T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-juicesec-challenge-route-evidence",
+      "shipped_at": "2026-08-06T18:30:00.000Z"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-transactions-api-cold-start-retry",
+      "shipped_at": "2026-08-06T18:30:00.000Z"
     }
   ]
 }

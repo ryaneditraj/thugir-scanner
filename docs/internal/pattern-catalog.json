@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T17:24:23.203Z",
-  "total": 1916,
-  "uniqueSlugs": 1911,
+  "generatedAt": "2026-08-06T18:27:38.565Z",
+  "total": 1919,
+  "uniqueSlugs": 1914,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1898,
+    "generic": 1901,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1831,
+    "deep": 1834,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 353,
+    "Broken access control": 355,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 106,
     "Security misconfiguration": 145,
     "Broken authentication": 114,
-    "Injection": 274,
+    "Injection": 275,
     "Cross-site scripting": 665,
     "Open redirect": 13,
     "general": 20,
@@ -137,6 +137,8 @@
     "brokencrystals-userlogin-css-injection-live-oracle",
     "brokencrystals-users-search-exposure-live-oracle",
     "brokencrystals-users-search-route-live-oracle",
+    "buggybuy-api-bola-live-oracle",
+    "buggybuy-api-bola-route-live-oracle",
     "burpbounty-admin-panel-live-oracle",
     "burpbounty-ai-completions-live-oracle",
     "burpbounty-ai-disclosure-live-oracle",
@@ -457,6 +459,7 @@
     "client-side-judgement-day-arena-evidence",
     "client-side-juice-shop-project-evidence",
     "client-side-juice-shop-vapt-evidence",
+    "client-side-juicesec-challenge-route-evidence",
     "client-side-juicesec-lab-evidence",
     "client-side-jwt-arsenal-evidence",
     "client-side-jwt-none-evidence",

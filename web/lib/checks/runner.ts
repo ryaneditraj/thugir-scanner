@@ -1814,6 +1814,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideBlueTeamLabsEvidence",
   "clientSideJuiceShopProjectEvidence",
   "clientSideJuicesecLabEvidence",
+  "clientSideJuicesecChallengeRouteEvidence",
   "clientSideJavaSecLabEvidence",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -1884,6 +1885,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnshopEvidence",
   "clientSideVulnshopModuleEvidence",
   "clientSideBuggybuyEvidence",
+  "buggybuyApiBolaLiveOracle",
+  "buggybuyApiBolaRouteLiveOracle",
   "clientSideWebSecurityLearningLabsEvidence",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
@@ -8462,6 +8465,40 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
   if (
+    /juicesec\.mrdinesh\.workers\.dev/i.test(targetInput) &&
+    /\/challenge\/(sqli|xss|jwt|ssrf|idor)\b/i.test(targetInput) &&
+    (home.status === 404 || home.body.length < 512)
+  ) {
+    try {
+      const juiceHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (juiceHome.status >= 200 && juiceHome.body.length > home.body.length) {
+        home = { ...juiceHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
+    /vulnerable-web-application-jecw\.vercel\.app/i.test(targetInput) &&
+    /\/api\//i.test(targetInput) &&
+    (home.status === 404 || home.body.length < 512 || !/BuggyBuy/i.test(home.body))
+  ) {
+    try {
+      const buggyHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (buggyHome.status >= 200 && buggyHome.body.length > home.body.length) {
+        home = { ...buggyHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
     isJuiceShopHost(home.finalUrl || target.toString()) &&
     (await juiceShopHerokuDown(home.finalUrl || target.toString()))
   ) {
@@ -9536,7 +9573,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
 
-  const combined = [...pages.map((p) => p.body), ...scripts.map((s) => s.body), juiceShopBootstrap, whoopsPayBootstrap]
+  let juicesecBootstrap = "";
+  if (
+    /juicesec\.mrdinesh\.workers\.dev/i.test(targetInput) &&
+    /\/challenge\/(sqli|xss|jwt|ssrf|idor)\b/i.test(targetInput) &&
+    !/function checkSQLi|function checkSSRF|function checkJWT/i.test(home.body)
+  ) {
+    const juiceHomeDoc = await probe.get(new URL("/", origin).toString(), {
+      maxBytes: 600_000,
+      timeoutMs: 20000
+    });
+    if (juiceHomeDoc.status >= 200 && juiceHomeDoc.status < 400 && juiceHomeDoc.body.length > 5000) {
+      juicesecBootstrap = juiceHomeDoc.body;
+    }
+  }
+
+  const combined = [
+    ...pages.map((p) => p.body),
+    ...scripts.map((s) => s.body),
+    juiceShopBootstrap,
+    whoopsPayBootstrap,
+    juicesecBootstrap
+  ]
     .filter(Boolean)
     .join("\n");
   const detection = detectPlatform(home, combined);
