@@ -47245,9 +47245,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Broken access control",
     severityDefault: "critical",
-    title: "Web Pentest Playground insecure file upload live oracle",
+    title: "Web Pentest Playground insecure file upload RCE live oracle",
     description:
-      "POST /upload accepts arbitrary file types (including .php) after login and serves them at /uploads/ without access controls — the Web Pentest Playground file upload RCE chain oracle.",
+      "After SQLi login, POST /upload stores PHP and serves executable content at /uploads/ — the Web Pentest Playground file upload RCE chain oracle.",
     impactOneline:
       "Unrestricted file uploads let attackers store and execute malicious scripts on the server.",
     detectorKind: "rule_ref",
@@ -47341,6 +47341,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /comment route scan stores unsanitized HTML. Show route-level stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Web Pentest Playground open redirect live oracle",
+    description:
+      "GET /redirect?url= returns HTTP 302 Location to attacker-controlled hosts — the Web Pentest Playground open redirect training oracle.",
+    impactOneline:
+      "Unvalidated url query parameter enables phishing via trusted-domain redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist redirect destinations — Web Pentest Playground is intentional training software.",
+      steps: [
+        "Validate redirect targets against a same-origin or signed allowlist.",
+        "Reject absolute URLs to external hosts in redirect handlers.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect endpoint reflects the url parameter into a 302 Location header. Show open redirect remediation with destination allowlists.",
     version: 1,
     enabled: true
   },

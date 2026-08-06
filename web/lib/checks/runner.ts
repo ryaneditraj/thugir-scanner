@@ -1557,6 +1557,7 @@ const DEEP_RULES = new Set<string>([
   "webPentestPlaygroundFileUploadRouteLiveOracle",
   "webPentestPlaygroundStoredXssLiveOracle",
   "webPentestPlaygroundStoredXssRouteLiveOracle",
+  "webPentestPlaygroundOpenRedirectLiveOracle",
   "webPentestPlaygroundOpenRedirectRouteLiveOracle",
   "webPentestPlaygroundAdminSqliLiveOracle",
   "webPentestPlaygroundAdminSqliRouteLiveOracle",

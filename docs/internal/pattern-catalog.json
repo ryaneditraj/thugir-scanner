@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T09:22:34.366Z",
-  "total": 1890,
-  "uniqueSlugs": 1885,
+  "generatedAt": "2026-08-06T10:32:21.411Z",
+  "total": 1891,
+  "uniqueSlugs": 1886,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1872,
+    "generic": 1873,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1805,
+    "deep": 1806,
     "continuous": 0
   },
   "byCategory": {
@@ -29,7 +29,7 @@
     "Broken authentication": 112,
     "Injection": 267,
     "Cross-site scripting": 661,
-    "Open redirect": 12,
+    "Open redirect": 13,
     "general": 20,
     "SSRF": 7,
     "Server-side request forgery": 52,
@@ -1871,6 +1871,7 @@
     "web-pentest-playground-file-upload-route-live-oracle",
     "web-pentest-playground-login-sqli-live-oracle",
     "web-pentest-playground-login-sqli-route-live-oracle",
+    "web-pentest-playground-open-redirect-live-oracle",
     "web-pentest-playground-open-redirect-route-live-oracle",
     "web-pentest-playground-stored-xss-live-oracle",
     "web-pentest-playground-stored-xss-route-live-oracle",

