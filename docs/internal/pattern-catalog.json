@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T22:15:51.211Z",
-  "total": 1941,
-  "uniqueSlugs": 1936,
+  "generatedAt": "2026-08-06T23:05:07.085Z",
+  "total": 1947,
+  "uniqueSlugs": 1942,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1923,
+    "generic": 1929,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1856,
+    "deep": 1862,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 361,
+    "Broken access control": 367,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1799,7 +1799,13 @@
     "vapi-route-live-oracle",
     "vapi-serversurfer-ssrf-route-live-oracle",
     "vapi-stickynotes-stored-xss-route-live-oracle",
+    "vaultapp-account-export-apikey-live-oracle",
+    "vaultapp-account-export-apikey-route-live-oracle",
+    "vaultapp-admin-audit-logs-idor-live-oracle",
+    "vaultapp-admin-audit-logs-idor-route-live-oracle",
     "vaultapp-lab-guide-route-live-oracle",
+    "vaultapp-messages-read-idor-live-oracle",
+    "vaultapp-messages-read-idor-route-live-oracle",
     "verbose-error-disclosure",
     "vibe-algolia-admin-in-client",
     "vibe-auth0-secret-in-client",
