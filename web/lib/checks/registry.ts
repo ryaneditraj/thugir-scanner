@@ -60256,7 +60256,7 @@ const brokencrystalsEmailSmtpProxyLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const emailUrl = new URL("/api/email/getEmails", ctx.origin).toString();
   const doc = await ctx.probe.get(emailUrl, { maxBytes: 4096, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (doc.status < 200) return NEGATIVE;
   const smtpProxyOk =
     /ECONNREFUSED\s+127\.0\.0\.1:1080/i.test(doc.body) ||
     (/127\.0\.0\.1:1080/i.test(doc.body) && /ECONNREFUSED|connect/i.test(doc.body));
