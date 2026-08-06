@@ -41605,6 +41605,84 @@ export const genericPatterns: Pattern[] = [
     version: 1,
     enabled: true
   },
+  {
+    slug: "pentest-ground-restflaw-tokens-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pentest-Ground RestFlaw tokens SQLi route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000, POST /tokens with username admin1'-- bypasses authentication and returns an admin access token — RestFlaw SQL injection auth-bypass route oracle.",
+    impactOneline:
+      "Unparameterized SQL in the login endpoint lets attackers mint valid admin session tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawTokensSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RestFlaw is intentional security training — use parameterized queries for all SQL.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters.",
+        "Reject malformed credentials instead of surfacing database errors.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw /tokens endpoint is vulnerable to SQL injection in the username field. Show parameterized query fixes for Flask/Connexion APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-restflaw-tokens-sqli-error-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground RestFlaw tokens SQL error disclosure route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000, POST /tokens with a malformed password triggers sqlite3.OperationalError in the response — RestFlaw SQL injection error-disclosure route oracle.",
+    impactOneline:
+      "Database errors on login inputs confirm unparameterized SQL and aid further injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawTokensSqliErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and return generic auth failures instead of SQL errors.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters.",
+        "Catch database exceptions and map them to safe client responses.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw /tokens endpoint leaks sqlite3.OperationalError on malformed passwords. Show parameterized query and safe error-handling fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-restflaw-search-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground RestFlaw search XXE route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000, POST /search with billion-laughs XML entity expansion triggers parser errors — RestFlaw XML external entity route oracle.",
+    impactOneline:
+      "Unsafe XML parsing on /search enables entity expansion and external entity resolution attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawSearchXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entities and limit entity expansion in XML parsers.",
+      steps: [
+        "Use defusedxml or equivalent safe XML parsers.",
+        "Reject DTDs and external entities on API inputs.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw /search endpoint parses attacker-controlled XML unsafely. Show XXE hardening for Python XML parsers.",
+    version: 1,
+    enabled: true
+  },
 {
     slug: "exposed-infra-artifacts",
     platform: "generic",
