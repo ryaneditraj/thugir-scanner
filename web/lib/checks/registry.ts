@@ -27068,6 +27068,37 @@ const webPentestPlaygroundStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const webPentestPlaygroundOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/redirect(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const probeUrl = new URL("/redirect", ctx.origin);
+  probeUrl.searchParams.set("url", OPEN_REDIRECT_PROBE);
+  const doc = await ctx.probe.get(probeUrl.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 15000
+  });
+  const location = doc.headers["location"] || "";
+  if (
+    ![301, 302, 303, 307, 308].includes(doc.status) ||
+    !resolvesToOpenRedirectProbe(location, ctx.origin)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: probeUrl.toString(),
+      status: doc.status,
+      location,
+      note: "Web Pentest Playground GET /redirect?url= returns HTTP 302 Location to attacker-controlled host — open redirect route oracle"
+    }
+  };
+};
+
 // --- AppSec CI Pipeline (appsec-ci-pipeline.onrender.com) ----------------------------
 function isAppsecCiPipelineHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
@@ -63987,6 +64018,7 @@ export const RULES: Record<string, Rule> = {
   webPentestPlaygroundFileUploadRouteLiveOracle,
   webPentestPlaygroundStoredXssLiveOracle,
   webPentestPlaygroundStoredXssRouteLiveOracle,
+  webPentestPlaygroundOpenRedirectRouteLiveOracle,
   appsecCiStoredXssCommentsLiveOracle,
   appsecCiStoredXssCommentsRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
