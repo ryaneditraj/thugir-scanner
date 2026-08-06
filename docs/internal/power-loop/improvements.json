@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-deluxe-membership-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login jim@juice-sh.op + GET /rest/deluxe-membership returns already a deluxe member (HTTP 400) or membershipCost + POST paymentMode wallet upgrades role to deluxe; preview.owasp-juice.shop/rest/deluxe-membership findings 48→50 (+deluxe live+route oracles); benchmark juice-shop-staging 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-b2b-orders-deserialization-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: admin login + POST /b2b/v2/orders orderLinesData (function(){return true})() returns orderNo JSON; preview.owasp-juice.shop/b2b/v2/orders findings 49 (+b2b deserialization live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /basic/?url=http://127.0.0.1:8089/secret returns VULNLAB{ssrf-reached-internal-service} in response body; ssrf.vulnlab.dev/basic findings 3→16 (+strengthened basic SSRF internal-secret probe); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io/oss-oopssec-store",
       "slug": "oopssec-product-search-sqli-route-live-oracle",
       "status": "shipped",
@@ -18,6 +36,9 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/race-condition-coupon-abuse documents TOCTOU coupon validation in two separate DB calls; koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse findings 8→10 (+race-condition-coupon route oracle); benchmark 6/6 maintained"
     },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-transaction-stored-xss-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: login sarah.wilson@example.com + POST /api/transactions description <img src=x onerror=thugir-xss-probe> stored unsanitized in GET /api/transactions; whoopspay.onrender.com/api/users findings 11→15; benchmark juice-shop-staging 45 findings 6/6 maintained"
     },

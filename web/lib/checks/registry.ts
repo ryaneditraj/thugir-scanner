@@ -54946,63 +54946,75 @@ const juiceShopWalletBalanceBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const JUICE_SHOP_DELUXE_PROBE = { email: "jim@juice-sh.op", password: "ncc-1701" } as const;
-
-async function juiceShopDeluxeProbeToken(ctx: RuleContext): Promise<string | null> {
-  const loginUrl = new URL("/rest/user/login", ctx.origin).toString();
-  const doc = await ctx.probe.get(loginUrl, {
-    method: "POST",
-    body: JSON.stringify(JUICE_SHOP_DELUXE_PROBE),
-    headers: { "Content-Type": "application/json" },
-    maxBytes: 4096,
-    timeoutMs: 15000
-  });
-  if (doc.status < 200 || doc.status >= 300) return null;
-  if (HEROKU_STUB_RE.test(doc.body)) return null;
-  return doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1] ?? null;
-}
+const JUICE_SHOP_DELUXE_PROBES = [
+  { email: "jim@juice-sh.op", password: "ncc-1701" },
+  { email: "bender@juice-sh.op", password: "ohif6f6if6ch6" },
+  { email: "morty@juice-sh.op", password: "focusOnScienceMorty" }
+] as const;
 
 const juiceShopDeluxeMembershipLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const token = await juiceShopDeluxeProbeToken(ctx);
-  if (!token) return NEGATIVE;
   const url = new URL("/rest/deluxe-membership", ctx.origin).toString();
-  const statusDoc = await ctx.probe.get(url, {
-    maxBytes: 4096,
-    timeoutMs: 15000,
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  if (statusDoc.status < 200 || statusDoc.status >= 300) return NEGATIVE;
-  const costMatch = statusDoc.body.match(/"membershipCost"\s*:\s*(\d+)/);
-  if (!costMatch) return NEGATIVE;
-  const upgradeDoc = await ctx.probe.get(url, {
-    method: "POST",
-    body: JSON.stringify({ paymentMode: "wallet" }),
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    maxBytes: 4096,
-    timeoutMs: 15000
-  });
-  if (upgradeDoc.status < 200 || upgradeDoc.status >= 300) return NEGATIVE;
-  if (
-    !/deluxe member/i.test(upgradeDoc.body) &&
-    !/"role"\s*:\s*"deluxe"/i.test(upgradeDoc.body)
-  ) {
-    return NEGATIVE;
-  }
-  return {
-    fired: true,
-    confidence: 0.93,
-    evidence: {
-      url,
-      membershipCost: costMatch[1],
-      snippet: upgradeDoc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET/POST /rest/deluxe-membership lets wallet-funded users upgrade to deluxe membership — deluxe membership payment oracle"
+  for (const creds of JUICE_SHOP_DELUXE_PROBES) {
+    const loginUrl = new URL("/rest/user/login", ctx.origin).toString();
+    const loginDoc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: JSON.stringify(creds),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (loginDoc.status < 200 || loginDoc.status >= 300) continue;
+    if (HEROKU_STUB_RE.test(loginDoc.body)) continue;
+    const token = loginDoc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1];
+    if (!token) continue;
+    const statusDoc = await ctx.probe.get(url, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (statusDoc.status < 200 || statusDoc.status >= 500) continue;
+    const costMatch = statusDoc.body.match(/"membershipCost"\s*:\s*(\d+)/);
+    const alreadyDeluxe = /already a deluxe member/i.test(statusDoc.body);
+    if (!costMatch && !alreadyDeluxe) continue;
+    let upgradeSnippet = statusDoc.body.slice(0, 180).trim();
+    if (!alreadyDeluxe && costMatch) {
+      const upgradeDoc = await ctx.probe.get(url, {
+        method: "POST",
+        body: JSON.stringify({ paymentMode: "wallet" }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (upgradeDoc.status < 200 || upgradeDoc.status >= 300) continue;
+      if (
+        !/deluxe member/i.test(upgradeDoc.body) &&
+        !/"role"\s*:\s*"deluxe"/i.test(upgradeDoc.body)
+      ) {
+        continue;
+      }
+      upgradeSnippet = upgradeDoc.body.slice(0, 180).trim();
     }
-  };
+    return {
+      fired: true,
+      confidence: alreadyDeluxe ? 0.91 : 0.93,
+      evidence: {
+        url,
+        probeEmail: creds.email,
+        membershipCost: costMatch?.[1],
+        alreadyDeluxe,
+        snippet: upgradeSnippet,
+        note: alreadyDeluxe
+          ? "Juice Shop GET /rest/deluxe-membership exposes deluxe membership state for authenticated users — deluxe membership oracle"
+          : "Juice Shop GET/POST /rest/deluxe-membership lets wallet-funded users upgrade to deluxe membership — deluxe membership payment oracle"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const juiceShopDeluxeMembershipRouteLiveOracle: Rule = async (ctx) => {
