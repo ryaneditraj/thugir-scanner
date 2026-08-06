@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:demo2.testfire.net",
+      "slug": "testfire-transfer-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST http://demo2.testfire.net/bank/doTransfer toAccount=800040' OR '1'='1 returns HTTP 500 NumberFormatException For input string; demo2.testfire.net/bank/transfer.jsp findings 9→13 (+transfer-sqli live+route oracles); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo2.testfire.net",
+      "slug": "testfire-transfer-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /bank/transfer.jsp after SQLi login renders <option> labels with unescaped <script>alert(document.domain)</script>; demo2.testfire.net/bank/transfer.jsp findings 9→13 (+transfer-stored-xss live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://ginandjuice.shop/my-account/change-password returns account-icon selected + login-form with username field — PortSwigger password-change lab entry; ginandjuice.shop/my-account/change-password findings 26→27 (+change-password-route oracle); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-metadata-xxe-live-oracle",
       "status": "shipped",
