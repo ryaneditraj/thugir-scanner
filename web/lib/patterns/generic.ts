@@ -25328,6 +25328,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-juicesec-challenge-route-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "JuiceSec OWASP challenge route disclosed",
+    description:
+      "When scanning juicesec.mrdinesh.workers.dev/challenge/{sqli,xss,jwt,ssrf,idor}, homepage bootstrap confirms route-specific checkSQLi/checkJWT/checkSSRF/checkIDOR modules even when /challenge/* paths 404.",
+    impactOneline:
+      "JuiceSec challenge routes document SQLi, XSS, JWT, SSRF, and IDOR training modules for scanner benchmarking when deep-linked URLs miss the SPA shell.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideJuicesecChallengeRouteEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "JuiceSec is intentional training software — isolate Workers lab deployments from production.",
+      steps: [
+        "Run JuiceSec only on dedicated lab Workers subdomains.",
+        "Do not copy inline challenge check functions into production auth flows.",
+        "Use JuiceSec route oracles for scanner calibration only."
+      ]
+    },
+    fixPrompt:
+      "Our JuiceSec /challenge routes document deliberately insecure OWASP labs. Show how to isolate Workers lab deployments from production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "buggybuy-api-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BuggyBuy Render API BOLA live oracle",
+    description:
+      "BuggyBuy Vercel SPA exposes a cross-origin Render API that returns order, user, and product JSON without authentication — the BuggyBuy IDOR/BOLA training oracle.",
+    impactOneline:
+      "Unauthenticated access to BuggyBuy's Render backend leaks order and user records from the intentional training deployment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "buggybuyApiBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BuggyBuy is intentional training software — isolate the Render backend and enforce server-side authorization.",
+      steps: [
+        "Require authentication on all /api/v1/* routes.",
+        "Do not rely on client-side isAdmin flags for access control.",
+        "Host training backends on isolated lab infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "Our BuggyBuy SPA exposes an unauthenticated Render API. Show server-side authorization remediation for /api/v1/* routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "buggybuy-api-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BuggyBuy /api route BOLA live oracle",
+    description:
+      "When scanning vulnerable-web-application-jecw.vercel.app/api/* routes, cross-origin Render API probes confirm unauthenticated order/user/product JSON — route-specific BuggyBuy BOLA oracle.",
+    impactOneline:
+      "Route-scoped BuggyBuy scans should flag unauthenticated Render API exposure on /api/orders, /api/users, and related paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "buggybuyApiBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope BuggyBuy API access to authenticated users on the Render backend.",
+      steps: [
+        "Require authentication on all /api/v1/* routes.",
+        "Filter list endpoints by the session user ID.",
+        "Host training backends on isolated lab infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "Our BuggyBuy /api route scan leaks data from the Render backend. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnedlabs-evidence",
     platform: "generic",
     category: "Broken access control",

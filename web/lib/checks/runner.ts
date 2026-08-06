@@ -9623,6 +9623,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vapi\.tools\.escape\.tech/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
       if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
+      if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
+      if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
       if (/dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io/i.test(origin) && p.slug.startsWith("dvga-"))
         return -2;
