@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T07:05:00.000Z",
+  "updated_at": "2026-08-06T08:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/products",
+      "source": "MuhaibShamsher/BuggyBuy — product catalog SQLi/XSS oracle GET /api/products (Vercel OSS deploy, 08 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/users",
+      "source": "MuhaibShamsher/BuggyBuy — user enumeration / mass-assignment oracle GET /api/users (Vercel OSS deploy, 08 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/cart",
+      "source": "MuhaibShamsher/BuggyBuy — cart IDOR / price-tampering oracle GET /api/cart (Vercel OSS deploy, 08 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/payment",
+      "source": "MuhaibShamsher/BuggyBuy — payment bypass / business-logic oracle POST /api/payment (Vercel OSS deploy, 08 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/search",
+      "source": "MuhaibShamsher/BuggyBuy — search SQLi / reflected XSS oracle GET /api/search (Vercel OSS deploy, 08 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-pentest-playground.onrender.com/view_users",
       "source": "Adarsh-S-R/web-pentest-playground — IDOR oracle GET /view_users + /admin_dashboard escalation (Render public demo, 07 UTC discovery)",
