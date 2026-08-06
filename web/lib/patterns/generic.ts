@@ -42386,6 +42386,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-deluxe-membership-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Juice Shop deluxe membership live oracle",
+    description:
+      "GET /rest/deluxe-membership returns membershipCost and POST with paymentMode wallet upgrades the account to deluxe role — Juice Shop deluxe membership payment oracle.",
+    impactOneline:
+      "Wallet-funded membership upgrades without additional verification can enable payment-logic abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopDeluxeMembershipLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment before granting deluxe membership and audit wallet debit logic.",
+      steps: [
+        "Require verified payment before role elevation to deluxe.",
+        "Bind membership upgrades to the authenticated user with server-side balance checks.",
+        "Audit Juice Shop /rest/deluxe-membership for payment bypass paths."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/deluxe-membership endpoint upgrades users to deluxe via wallet payment. Show membership payment validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-deluxe-membership-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Juice Shop /rest/deluxe-membership route live oracle",
+    description:
+      "When scanning /rest/deluxe-membership, wallet payment upgrades the account to deluxe role — route-specific membership oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag wallet-funded deluxe membership upgrades on Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopDeluxeMembershipRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment before granting deluxe membership and audit wallet debit logic.",
+      steps: [
+        "Require verified payment before role elevation to deluxe.",
+        "Bind membership upgrades to the authenticated user with server-side balance checks.",
+        "Audit Juice Shop /rest/deluxe-membership for payment bypass paths."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /rest/deluxe-membership route scan confirms wallet-funded deluxe upgrades. Show route-level membership payment fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-b2b-orders-deserialization-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Juice Shop B2B orders insecure deserialization live oracle",
+    description:
+      "POST /b2b/v2/orders evaluates attacker-controlled orderLinesData as JavaScript and returns an orderNo — Juice Shop insecure deserialization / RCE oracle.",
+    impactOneline:
+      "Server-side evaluation of user-controlled code enables remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopB2bOrdersDeserializationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input as code; use safe structured deserialization.",
+      steps: [
+        "Parse orderLinesData as JSON or a fixed schema — never pass it to eval/vm.",
+        "Sandbox or remove dynamic code execution from B2B order handlers.",
+        "Audit Juice Shop /b2b/v2/orders for vm.runInContext usage."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /b2b/v2/orders endpoint evaluates orderLinesData as JavaScript. Show insecure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-b2b-orders-deserialization-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Juice Shop /b2b/v2/orders insecure deserialization route live oracle",
+    description:
+      "When scanning /b2b/v2/orders, orderLinesData JavaScript is evaluated server-side — route-specific insecure deserialization oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans should flag code execution via orderLinesData on Juice Shop B2B endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopB2bOrdersDeserializationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input as code; use safe structured deserialization.",
+      steps: [
+        "Parse orderLinesData as JSON or a fixed schema — never pass it to eval/vm.",
+        "Sandbox or remove dynamic code execution from B2B order handlers.",
+        "Audit Juice Shop /b2b/v2/orders for vm.runInContext usage."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /b2b/v2/orders route scan confirms orderLinesData code execution. Show route-level deserialization detection and fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-chatbot-respond-route-live-oracle",
     platform: "generic",
     category: "Prompt injection",
