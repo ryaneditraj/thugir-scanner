@@ -47525,5 +47525,109 @@ export const genericPatterns: Pattern[] = [
       "Our /comments/ route scan stores unsanitized HTML. Show route-level Django XSS remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "appsec-ci-django-admin-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "AppSec CI Pipeline Django admin panel exposure live oracle",
+    description:
+      "GET /admin/ redirects to Django administration login with csrfmiddlewaretoken — the AppSec CI Pipeline default admin panel exposure oracle.",
+    impactOneline:
+      "Exposed Django admin panels expand the attack surface for credential stuffing and auth bypass attempts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiDjangoAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Django admin to trusted networks or disable in production.",
+      steps: [
+        "Move /admin/ behind VPN or IP allowlisting.",
+        "Use strong unique admin credentials and MFA where available.",
+        "Disable Django admin on public-facing training deploys when not required."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/ endpoint exposes Django administration login. Show how to restrict admin access in Django deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsec-ci-django-admin-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "AppSec CI Pipeline /admin/ Django admin route live oracle",
+    description:
+      "When scanning /admin/, GET confirms Django site admin login with csrfmiddlewaretoken — route-specific admin panel exposure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag exposed Django admin login on AppSec CI Pipeline hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiDjangoAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Django admin to trusted networks or disable in production.",
+      steps: [
+        "Move /admin/ behind VPN or IP allowlisting.",
+        "Use strong unique admin credentials and MFA where available.",
+        "Disable Django admin on public-facing training deploys when not required."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/ route scan exposes Django administration login. Show route-level admin access restrictions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Web Pentest Playground login SQLi live oracle",
+    description:
+      "POST /login accepts username admin' OR '1'='1'-- and issues a session cookie redirecting to /dashboard — the Web Pentest Playground user login SQL injection bypass oracle.",
+    impactOneline:
+      "SQL injection on user login bypasses authentication and grants access to authenticated application features.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for user login — Web Pentest Playground is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for login queries.",
+        "Apply least-privilege database accounts for the web application.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login endpoint accepts SQLi payloads that bypass authentication. Show parameterized query remediation for Flask user login.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Web Pentest Playground /login SQLi route live oracle",
+    description:
+      "When scanning /login, POST with SQLi username bypasses user authentication and redirects to /dashboard — route-specific login auth bypass oracle.",
+    impactOneline:
+      "Route-scoped scans should flag user login SQLi authentication bypass on Web Pentest Playground /login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for user login.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for login queries.",
+        "Apply least-privilege database accounts for the web application.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login route scan accepts SQLi auth bypass. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
   }
 ];

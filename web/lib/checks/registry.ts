@@ -27100,6 +27100,56 @@ const webPentestPlaygroundOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const WEB_PENTEST_PLAYGROUND_ADMIN_SQLI_PAYLOAD = "admin' OR '1'='1'--";
+const WEB_PENTEST_PLAYGROUND_LOGIN_SQLI_PAYLOAD = "admin' OR '1'='1'--";
+
+const webPentestPlaygroundLoginSqliLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(WEB_PENTEST_PLAYGROUND_LOGIN_SQLI_PAYLOAD)}&password=x`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const cookie = webPentestPlaygroundSessionCookieFromDoc(doc);
+  const location = doc.headers["location"] || "";
+  if (
+    !cookie ||
+    ![301, 302, 303, 307, 308].includes(doc.status) ||
+    !/\/dashboard/i.test(location)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: loginUrl,
+      payload: WEB_PENTEST_PLAYGROUND_LOGIN_SQLI_PAYLOAD,
+      redirect: location,
+      note: "Web Pentest Playground POST /login accepts SQLi username admin' OR '1'='1'-- and issues session redirecting to /dashboard — user login SQL injection bypass oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await webPentestPlaygroundLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Web Pentest Playground /login route scan — POST SQLi bypass issues session and redirects to /dashboard — route-specific login auth bypass oracle"
+    }
+  };
+};
 
 async function webPentestPlaygroundAdminSessionCookie(ctx: RuleContext): Promise<string | null> {
   const adminUrl = new URL("/admin", ctx.origin).toString();
@@ -27295,6 +27345,49 @@ const appsecCiStoredXssCommentsRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "AppSec CI Pipeline /comments/ route scan — POST stores unsanitized HTML in comment cards — route-specific stored XSS oracle"
+    }
+  };
+};
+
+const appsecCiDjangoAdminLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
+  const adminUrl = new URL("/admin/", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  const djangoAdmin =
+    /Django site admin|Django administration/i.test(body) &&
+    /name="csrfmiddlewaretoken"/i.test(body) &&
+    (/id="login-form"|\/admin\/login/i.test(body) || /Log in \| Django site admin/i.test(body));
+  if (!djangoAdmin) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: doc.finalUrl || adminUrl,
+      snippet: body.match(/<title>[^<]+<\/title>/i)?.[0] ?? "Django site admin",
+      note: "AppSec CI Pipeline GET /admin/ exposes Django administration login with csrfmiddlewaretoken — default admin panel exposure oracle"
+    }
+  };
+};
+
+const appsecCiDjangoAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await appsecCiDjangoAdminLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "AppSec CI Pipeline /admin/ route scan — Django administration login panel reachable without network restriction — route-specific admin exposure oracle"
     }
   };
 };
@@ -64149,8 +64242,12 @@ export const RULES: Record<string, Rule> = {
   webPentestPlaygroundAdminSqliRouteLiveOracle,
   webPentestPlaygroundAdminDashboardRouteLiveOracle,
   webPentestPlaygroundViewUsersRouteLiveOracle,
+  webPentestPlaygroundLoginSqliLiveOracle,
+  webPentestPlaygroundLoginSqliRouteLiveOracle,
   appsecCiStoredXssCommentsLiveOracle,
   appsecCiStoredXssCommentsRouteLiveOracle,
+  appsecCiDjangoAdminLiveOracle,
+  appsecCiDjangoAdminRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
   fauxbankProfileRouteLiveOracle,
   clientSidePrototypePollutionEvidence,
