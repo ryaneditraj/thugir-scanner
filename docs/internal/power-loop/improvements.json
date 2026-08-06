@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-fullinfo-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/fullinfo/admin returns cardNumber 1234 5678 9012 3456 and phoneNumber without auth; brokencrystals.com/api/users/fullinfo/admin findings 13→75 (+fullinfo-disclosure live+route oracles); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-fullinfo-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/users/fullinfo/admin confirms cardNumber disclosure with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-id-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users/id/1 returns admin profile and /api/users/id/2 returns user profile without auth; brokencrystals.com/api/users/id/1 findings 36→77 (+users-id-bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-users-id-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/users/id/1 confirms unauthenticated BOLA with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-email-smtp-proxy-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/email/getEmails returns HTTP 500 {\"error\":\"connect ECONNREFUSED 127.0.0.1:1080\"} — server-side SMTP proxy connection; brokencrystals.com/api/email/getEmails findings 68→74 (+email-smtp-proxy live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-email-smtp-proxy-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/email/getEmails confirms internal SMTP proxy SSRF with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-guardian-leaks-create-ssrf-live-oracle",
       "status": "shipped",

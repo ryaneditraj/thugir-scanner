@@ -31414,6 +31414,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-fullinfo-disclosure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/users/fullinfo excessive data exposure oracle",
+    description:
+      "GET /api/users/fullinfo/admin returns cardNumber and phoneNumber in JSON without authentication — the Broken Crystals per-user fullinfo disclosure oracle.",
+    impactOneline:
+      "Unauthenticated fullinfo endpoints leak payment card numbers and phone numbers for targeted account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFullinfoDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full card numbers via unauthenticated profile endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication and authorization before returning full user profiles.",
+        "Mask or tokenize card numbers; return only last-four digits when necessary.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/fullinfo/{email} endpoint returns cardNumber without auth. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-fullinfo-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/users/fullinfo route disclosure oracle",
+    description:
+      "When scanning /api/users/fullinfo/{email}, GET returns cardNumber and phoneNumber without authentication — route-specific excessive data exposure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated Broken Crystals fullinfo endpoints leaking payment data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFullinfoDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full card numbers via unauthenticated profile endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication and authorization before returning full user profiles.",
+        "Mask or tokenize card numbers; return only last-four digits when necessary.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/fullinfo route scan confirms cardNumber is exposed without auth. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-users-id-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /api/users/id BOLA oracle",
+    description:
+      "GET /api/users/id/1 and /api/users/id/2 return distinct user profiles without authentication — the Broken Crystals numeric ID BOLA oracle.",
+    impactOneline:
+      "Predictable numeric user IDs let attackers enumerate and access other users' profiles without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUsersIdBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect user profile endpoints with authentication and object-level authorization — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before returning user profiles.",
+        "Use UUIDs or opaque identifiers instead of sequential numeric IDs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/id/{id} endpoint returns user profiles without auth. Show BOLA remediation for NestJS user APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-users-id-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /api/users/id route BOLA oracle",
+    description:
+      "When scanning /api/users/id/{id}, GET returns user profiles for predictable numeric IDs without authentication — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated access to user profiles by sequential ID.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUsersIdBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect user profile endpoints with authentication and object-level authorization — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before returning user profiles.",
+        "Use UUIDs or opaque identifiers instead of sequential numeric IDs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/id route scan confirms unauthenticated profile access by numeric ID. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-email-smtp-proxy-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/email/getEmails SMTP proxy SSRF oracle",
+    description:
+      "GET /api/email/getEmails triggers a server-side connection to 127.0.0.1:1080 and returns ECONNREFUSED — the Broken Crystals internal SMTP proxy SSRF oracle.",
+    impactOneline:
+      "Server-side email fetch endpoints that connect to internal proxies can be abused for SSRF and internal network reconnaissance.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsEmailSmtpProxyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side connections to internal addresses from email APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Validate and allowlist outbound SMTP/proxy destinations.",
+        "Never expose email-fetch endpoints without authentication.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email/getEmails endpoint attempts connections to 127.0.0.1:1080. Show SSRF hardening for email APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-email-smtp-proxy-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/email/getEmails route SMTP proxy oracle",
+    description:
+      "When scanning /api/email/getEmails, GET reveals server-side connection attempts to internal SMTP proxy 127.0.0.1:1080 — route-specific SSRF/misconfiguration oracle.",
+    impactOneline:
+      "Route-scoped scans should flag email APIs that trigger internal network connections.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsEmailSmtpProxyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side connections to internal addresses from email APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Validate and allowlist outbound SMTP/proxy destinations.",
+        "Never expose email-fetch endpoints without authentication.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email/getEmails route scan confirms internal SMTP proxy connection attempts. Show SSRF hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-testimonials-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
