@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T19:08:00.000Z",
+  "updated_at": "2026-08-06T20:30:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/admin/login",
+      "source": "NeuraLegion/brokencrystals — BFLA admin login oracle POST /api/auth/admin/login (swagger-json, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/email/deleteEmails",
+      "source": "NeuraLegion/brokencrystals — mass email deletion oracle DELETE /api/email/deleteEmails (swagger-json, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com",
+      "source": "NeuraLegion/brokencrystals — v1 userinfo disclosure oracle GET /api/v1/userinfo/{email} (swagger-json, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:81/create",
+      "source": "Pentest-Ground GuardianLeaks — SSRF oracle POST /create reference= (catalog + OpenAPI, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:9000/user",
+      "source": "jorritfolmer/vulnerable-api RestFlaw — uptime command-injection oracle GET /uptime/;id (pentest-ground.com:9000 OpenAPI, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/oidc-client",
       "source": "NeuraLegion/brokencrystals — OIDC client misconfiguration oracle GET /api/auth/oidc-client (swagger-json, 18 UTC discovery)",
