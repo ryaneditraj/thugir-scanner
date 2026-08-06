@@ -26790,7 +26790,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "ssrf.vulnlab.dev basic SSRF live oracle",
     description:
-      "GET /basic/?url= fetches attacker-controlled URLs server-side and returns the response body in the page — the ssrf.vulnlab.dev basic SSRF training oracle.",
+      "GET /basic/?url= fetches attacker-controlled URLs server-side — probing http://127.0.0.1:8089/secret returns the internal-service flag — the ssrf.vulnlab.dev basic SSRF training oracle.",
     impactOneline:
       "Unvalidated server-side URL fetchers let attackers probe internal services and exfiltrate responses.",
     detectorKind: "rule_ref",
