@@ -8540,7 +8540,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range reflected body non-2xx status oracle",
     description:
-      "GET /reflected/parameter/body/403, /body/404, or /body/500?q= reflects attacker input into the HTML body even when the response status is 403, 404, or 500 — Firing Range reflected XSS despite error-status training oracle.",
+      "GET /reflected/parameter/body/400, /body/401, /body/403, /body/404, or /body/500?q= reflects attacker input into the HTML body even when the response status is non-2xx — Firing Range reflected XSS despite error-status training oracle.",
     impactOneline:
       "Scanners that skip non-2xx responses miss reflected XSS when error pages echo user input unescaped.",
     detectorKind: "rule_ref",
@@ -8555,7 +8555,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /reflected/parameter/body/* routes reflect q into body on 403/404/500 responses. Show error-page reflected XSS remediation.",
+      "Our /reflected/parameter/body/* routes reflect q into body on 400/401/403/404/500 responses. Show error-page reflected XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -8566,7 +8566,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Google Firing Range /reflected/parameter/body/* non-2xx route XSS oracle",
     description:
-      "When scanning /reflected/parameter/body/403, /body/404, or /body/500, q parameter reflects unescaped into body despite non-2xx HTTP status — route-specific error-page reflected XSS oracle.",
+      "When scanning /reflected/parameter/body/400, /body/401, /body/403, /body/404, or /body/500, q parameter reflects unescaped into body despite non-2xx HTTP status — route-specific error-page reflected XSS oracle.",
     impactOneline:
       "Route-specific scans should confirm error responses do not echo attacker-controlled markup in body contexts.",
     detectorKind: "rule_ref",
@@ -44533,6 +44533,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA /create_paste route scan confirms stored XSS. Show route-specific content sanitization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-angular-csti-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop AngularJS client-side template injection live oracle",
+    description:
+      "GET /catalog?searchTerm= reflects AngularJS template expressions unescaped while ng-app and angular_1-7-7.js load — the PortSwigger Gin & Juice CSTI training oracle (Burp sample / FINDING-005).",
+    impactOneline:
+      "AngularJS 1.x ng-app on body enables client-side template injection when user input with {{}} is reflected into the compiled DOM.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAngularCstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Migrate from AngularJS 1.x; never reflect unescaped template syntax inside ng-app scope.",
+      steps: [
+        "Remove ng-app from body or restrict to non-user-controlled subtrees.",
+        "Encode {{ and }} in all reflected output.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Gin & Juice catalog reflects searchTerm with {{}} while AngularJS ng-app is active. Show client-side template injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-angular-csti-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop AngularJS CSTI route live oracle",
+    description:
+      "When scanning /blog/post or /catalog, searchTerm {{}} reflection with ng-app + angular_1-7-7.js confirms client-side template injection surface — route-specific CSTI oracle.",
+    impactOneline:
+      "Route-specific scans should confirm AngularJS CSTI surface on Gin & Juice blog and catalog paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAngularCstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Migrate from AngularJS 1.x and encode template metacharacters in reflected output.",
+      steps: [
+        "Restrict ng-app scope away from user-controlled reflection points.",
+        "Use strict CSP without unsafe-eval.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/post or /catalog routes sit on pages with AngularJS ng-app and reflected {{}}. Show route-specific CSTI remediation.",
     version: 1,
     enabled: true
   },

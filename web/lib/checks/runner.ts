@@ -2148,6 +2148,8 @@ const DEEP_RULES = new Set<string>([
   "dvgaImportPasteSsrfRouteLiveOracle",
   "dvgaCreatePasteStoredXssLiveOracle",
   "dvgaCreatePasteStoredXssRouteLiveOracle",
+  "ginAndJuiceAngularCstiLiveOracle",
+  "ginAndJuiceAngularCstiRouteLiveOracle",
   "ginAndJuiceCatalogSearchXssLiveOracle",
   "ginAndJuiceCatalogRouteLiveOracle",
   "ginAndJuiceBlogPostOpenRedirectLiveOracle",
