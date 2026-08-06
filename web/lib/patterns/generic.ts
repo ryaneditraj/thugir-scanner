@@ -31570,6 +31570,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-admin-login-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals admin login BFLA oracle",
+    description:
+      "POST /api/auth/admin/login accepts default admin/admin credentials and returns ldapProfileLink without JWT — the Broken Crystals broken function-level authorization admin login oracle.",
+    impactOneline:
+      "Default admin credentials on a privileged login endpoint let attackers authenticate as administrators without proper access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAdminLoginBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect admin login endpoints with strong credentials and proper authorization — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove default admin credentials from production deployments.",
+        "Require MFA and rate limiting on privileged login endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/auth/admin/login accepts default admin credentials. Show BFLA remediation for privileged login endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-admin-login-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/admin/login route BFLA oracle",
+    description:
+      "When scanning /api/auth/admin/login, POST with default admin/admin returns ldapProfileLink without authentication gate — route-specific BFLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag privileged admin login endpoints accepting default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAdminLoginBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect admin login endpoints with strong credentials and proper authorization — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove default admin credentials from production deployments.",
+        "Require MFA and rate limiting on privileged login endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/admin/login route scan confirms default admin credentials work. Show BFLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-delete-emails-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals DELETE /api/email/deleteEmails oracle",
+    description:
+      "DELETE /api/email/deleteEmails is reachable without authentication and attempts server-side SMTP connection to 127.0.0.1:1080 — the Broken Crystals mass email deletion oracle.",
+    impactOneline:
+      "Unauthenticated destructive email endpoints can wipe mailboxes and expose internal network services via SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsDeleteEmailsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose destructive email endpoints without authentication — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require admin authentication before bulk email deletion.",
+        "Block server-side connections to internal SMTP proxies from public APIs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DELETE /api/email/deleteEmails endpoint is reachable without auth. Show access-control remediation for destructive email APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-delete-emails-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/email/deleteEmails route deletion oracle",
+    description:
+      "When scanning /api/email/deleteEmails, unauthenticated DELETE triggers internal SMTP proxy connection — route-specific mass email deletion oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated destructive email endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsDeleteEmailsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose destructive email endpoints without authentication — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require admin authentication before bulk email deletion.",
+        "Block server-side connections to internal SMTP proxies from public APIs.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email/deleteEmails route scan confirms unauthenticated DELETE. Show access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-v1-userinfo-disclosure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/v1/userinfo disclosure oracle",
+    description:
+      "GET /api/v1/userinfo/{email} returns firstName, lastName, company, phoneNumber, and id without authentication — the Broken Crystals v1 userinfo disclosure oracle.",
+    impactOneline:
+      "Unauthenticated userinfo endpoints let attackers enumerate and harvest PII for any known email address.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsV1UserinfoDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before returning user profile data — Broken Crystals is intentional lab software.",
+      steps: [
+        "Protect /api/v1/userinfo with authentication and object-level authorization.",
+        "Return only minimal public fields for unauthenticated callers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/userinfo/{email} returns PII without auth. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-v1-userinfo-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/v1/userinfo route disclosure oracle",
+    description:
+      "When scanning /api/v1/userinfo/{email}, GET returns user profile fields without authentication — route-specific v1 userinfo disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unauthenticated Broken Crystals v1 userinfo endpoints leaking PII.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsV1UserinfoDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before returning user profile data — Broken Crystals is intentional lab software.",
+      steps: [
+        "Protect /api/v1/userinfo with authentication and object-level authorization.",
+        "Return only minimal public fields for unauthenticated callers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/userinfo route scan confirms PII disclosure without auth. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-testimonials-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
