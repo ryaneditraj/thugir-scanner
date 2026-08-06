@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T08:10:30.000Z",
+  "updated_at": "2026-08-06T08:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,13 +17,13 @@
   },
   "total_sites_scanned": 2757,
   "total_findings": 27104,
-  "critical_findings": 57,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
+  "discovery_urls_added": 1966,
   "discovery_findings": 22918,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-06T08:10:30.000Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-06T08:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); primary oracle live, no fallback needed"
+      "note": "Stable 6/6 first-pass recall (47 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 40,
-      "focus": "BuggyBuy api/products, api/users, api/cart, api/payment, api/search + queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 3,
+      "findings": 30,
+      "focus": "web-pentest-playground admin SQLi bypass + admin_dashboard + view_users route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "vulnerable-web-application-jecw.vercel.app/api/products: 6 findings — client-side-buggybuy-evidence hub, no route-specific SQLi oracle",
-      "vulnerable-web-application-jecw.vercel.app/api/users: 6 findings — user enumeration hub without mass-assignment live oracle",
-      "vulnerable-web-application-jecw.vercel.app/api/cart: 6 findings — cart IDOR hub without price-tampering live oracle",
-      "vulnerable-web-application-jecw.vercel.app/api/payment: 6 findings — payment bypass hub without business-logic live oracle",
-      "vulnerable-web-application-jecw.vercel.app/api/search: 6 findings — search SQLi/XSS hub without reflected-XSS live oracle",
-      "appsec-ci-pipeline.onrender.com/search/: 4 findings — reflected-xss-query-param + reflexion-escalated-xss live oracles"
+      "web-pentest-playground.onrender.com/admin: 8→10 findings — admin-sqli live+route oracles shipped (POST admin' OR '1'='1'-- → /admin_dashboard)",
+      "web-pentest-playground.onrender.com/admin_dashboard: 8→10 findings — admin-dashboard-route oracle shipped",
+      "web-pentest-playground.onrender.com/view_users: 8→10 findings — view-users-route oracle shipped (ID: N | Username: enumeration)",
+      "vulnerable-web-application-jecw.vercel.app/api/products: 6 findings — client-side-buggybuy-evidence hub, no route-specific SQLi oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment route oracle queued but not yet scanned this hour",
       "BuggyBuy api/* routes: 6-finding generic hubs — route-specific SQLi/IDOR/payment oracles absent without authenticated JWT session",
-      "r2s-arena.fly.dev: React2Shell arena unreachable from cloud agent (scan error)",
-      "vulnerable-web-application-jecw.vercel.app/api/orders: order IDOR oracle may need JWT session (prior run)"
+      "r2s-arena.fly.dev: React2Shell arena unreachable from cloud agent (scan error)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "web-pentest-playground.onrender.com/admin": 10,
+    "web-pentest-playground.onrender.com/admin_dashboard": 10,
+    "web-pentest-playground.onrender.com/view_users": 10,
+    "web-pentest-playground.onrender.com/redirect": 9,
+    "web-pentest-playground.onrender.com/upload": 9,
     "vulnerable-web-application-jecw.vercel.app/api/products": 6,
-    "vulnerable-web-application-jecw.vercel.app/api/users": 6,
-    "vulnerable-web-application-jecw.vercel.app/api/cart": 6,
-    "vulnerable-web-application-jecw.vercel.app/api/payment": 6,
-    "vulnerable-web-application-jecw.vercel.app/api/search": 6,
-    "appsec-ci-pipeline.onrender.com/search/": 4,
-    "web-pentest-playground.onrender.com/comment": 9
+    "appsec-ci-pipeline.onrender.com/comments/": 6
   }
 }
