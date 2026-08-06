@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T00:20:00.000Z",
+  "updated_at": "2026-08-06T01:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2771,
-  "total_findings": 28630,
+  "total_sites_scanned": 2778,
+  "total_findings": 28860,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 23964,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-06T00:20:00.000Z",
+  "discovery_urls_added": 1976,
+  "discovery_findings": 24148,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-06T01:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 42,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 488,
+      "probes_run": 498,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,38 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 — staging fallback 42 findings, 6/6 recall maintained"
+      "note": "Primary Heroku oracle recovered — 46 findings, 6/6 recall (reflexion-escalated-ssti + jwt-alg-none-accepted returned)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 155,
-      "focus": "brokencrystals JWT /login route oracles + preview /api/Wallets wallet route + pwnshop OTP reliability",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 184,
+      "focus": "brokencrystals JWT /validate route sweep (x5c/x5u/jku/jwk/hmac/rsa) + vwad pygoat/hackxor/yrprey queue additions",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "brokencrystals.com/api/auth/jwt/jwk/login: 16→72 findings — JWT login route oracle expansion (jwk-empty-route + jwt-route)",
-      "preview.owasp-juice.shop/api/Wallets: 43→45 findings — wallet-balance-bola-route oracle now fires on /api/Wallets scans",
-      "pwnshop.ctfsecurity.com/apply-coupon: 23→38 findings — OTP mail wait extension restores coupon live+route oracles on cold scans",
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (42 findings) — primary Heroku 503 fallback",
-      "brokencrystals.com/api/auth/jwt/x5u/login: 70 findings — x5u JWT login route oracle now wired via validate|login matcher"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — primary Heroku back online, +4 vs staging fallback",
+      "brokencrystals.com/api/auth/jwt/x5c/validate: 72 findings — x5c JWT validate route oracle fires on direct /validate scans",
+      "brokencrystals.com/api/auth/jwt/jku/validate: 40 findings — jku validate route with exposed-env-file + JWT oracles",
+      "brokencrystals.com/api/auth/jwt/jwk/validate: 28 findings — jwk validate route oracle expansion",
+      "brokencrystals.com/api/auth/jwt/rsa/signature/validate: 17 findings — rsa/none-algorithm validate oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary + basket/wallet routes 503 — staging fallback covers benchmark",
-      "ginandjuice.shop/my-account/change-email: race-condition oracle still absent (requires parallel POST + exploit-server inbox)",
-      "public-firing-range.appspot.com/reflected/parameter/body/400: 249-finding hub — route-specific reflected XSS oracle gap on body/400 sink"
+      "juice-shop.herokuapp.com/rest/basket/1 + /rest/wallet/balance: 503 during discovery drain — route-specific oracles blocked",
+      "vwad pygoat SSTI / hackxor login / yrprey login / secure-by-design login: queued but not reached (queue limit consumed by brokencrystals validate sweep)",
+      "brokencrystals.com/api/email/send: XXE email oracle queued but not scanned this run"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/auth/jwt/jwk/login": 72,
-    "brokencrystals.com/api/auth/jwt/x5u/login": 70,
-    "brokencrystals.com/api/auth/jwt/jku/login": 69,
-    "pwnshop.ctfsecurity.com/apply-coupon": 38,
-    "preview.owasp-juice.shop/api/Wallets": 45,
-    "juice-shop-staging.herokuapp.com": 42,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 42
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 72,
+    "brokencrystals.com/api/auth/jwt/jku/validate": 40,
+    "brokencrystals.com/api/auth/jwt/jwk/validate": 28,
+    "brokencrystals.com/api/auth/jwt/rsa/signature/validate": 17,
+    "brokencrystals.com/api/auth/jwt/x5u/validate": 14,
+    "juice-shop.herokuapp.com": 46,
+    "brokencrystals.com/api/auth/jwt/hmac/validate": 13
   }
 }
