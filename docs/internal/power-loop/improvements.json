@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-file-upload-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login session then POST multipart /upload stores .txt canary served at /uploads/ without type validation; web-pentest-playground.onrender.com/upload findings 5→9 (+file-upload live+route oracles, +stored-xss live oracle); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-stored-xss-comments-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /comments/ csrfmiddlewaretoken + POST username/message with <thugir-canary> reflects unescaped in comment cards; appsec-ci-pipeline.onrender.com/comments/ findings 4→6 (+stored-xss-comments live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login session then POST /comment with <thugir-canary> payload renders unsanitized on comments page; web-pentest-playground.onrender.com/upload scan also fires stored-xss live oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:preview.owasp-juice.shop",
       "slug": "juice-shop-rest-api-route-alias",
       "status": "shipped",
