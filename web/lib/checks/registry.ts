@@ -54595,7 +54595,10 @@ const juiceShopProductsReviewsExposureLiveOracle: Rule = async (ctx) => {
 const juiceShopProductsReviewsExposureRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
-  if (!/\/rest\/products(?:\/\d+)?\/reviews\b/i.test(pageUrl)) return NEGATIVE;
+  const onReviewsRoute =
+    /\/rest\/products(?:\/\d+)?\/reviews\b/i.test(pageUrl) ||
+    /\/api\/ProductReviews\b/i.test(pageUrl);
+  if (!onReviewsRoute) return NEGATIVE;
   const result = await juiceShopProductsReviewsExposureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -54604,7 +54607,52 @@ const juiceShopProductsReviewsExposureRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Juice Shop /rest/products/:id/reviews route scan — unauthenticated review author emails exposed — route-specific disclosure oracle"
+      note: /\/api\/ProductReviews\b/i.test(pageUrl)
+        ? "Juice Shop /api/ProductReviews route scan — legacy path maps to GET /rest/products/:id/reviews with unauthenticated author emails — route-specific disclosure oracle"
+        : "Juice Shop /rest/products/:id/reviews route scan — unauthenticated review author emails exposed — route-specific disclosure oracle"
+    }
+  };
+};
+
+function isWebSecurityLearningLabsHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /web-security-learning-labs\.vercel\.app/i.test(corpus);
+}
+
+const webSecurityLearningLabsXssModuleRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebSecurityLearningLabsHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/module\/1012\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Here is a Module:\s*1012/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      moduleId: "1012",
+      snippet: doc.body.match(/Here is a Module:[^<]*/)?.[0]?.slice(0, 80) ?? "module 1012",
+      note: "Web Security Learning Labs /module/1012 route scan — XSS training module surface confirmed on public Vercel deploy"
+    }
+  };
+};
+
+const webSecurityLearningLabsIdorModuleRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebSecurityLearningLabsHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/module\/1013\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Here is a Module:\s*1013/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      moduleId: "1013",
+      snippet: doc.body.match(/Here is a Module:[^<]*/)?.[0]?.slice(0, 80) ?? "module 1013",
+      note: "Web Security Learning Labs /module/1013 route scan — IDOR training module surface confirmed on public Vercel deploy"
     }
   };
 };
@@ -65616,6 +65664,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopUsersEnumerationRouteLiveOracle,
   clientSideBuggybuyEvidence,
   clientSideWebSecurityLearningLabsEvidence,
+  webSecurityLearningLabsXssModuleRouteLiveOracle,
+  webSecurityLearningLabsIdorModuleRouteLiveOracle,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,

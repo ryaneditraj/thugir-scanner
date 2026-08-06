@@ -34742,6 +34742,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "web-security-learning-labs-xss-module-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Web Security Learning Labs XSS module route live oracle",
+    description:
+      "When scanning /module/1012, the public Vercel deploy confirms XSS training module 1012 — route-specific training-lab surface oracle.",
+    impactOneline:
+      "Route-scoped scans should flag XSS training module surfaces on Web Security Learning Labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsXssModuleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate interactive XSS labs behind authentication on Web Security Learning Labs.",
+      steps: [
+        "Require login before serving runnable XSS training modules.",
+        "Host XSS demos on isolated training subdomains.",
+        "Do not copy lab exploit patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /module/1012 route exposes an XSS training module on Web Security Learning Labs. Show how to auth-gate lab modules.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-security-learning-labs-idor-module-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Web Security Learning Labs IDOR module route live oracle",
+    description:
+      "When scanning /module/1013, the public Vercel deploy confirms IDOR training module 1013 — route-specific training-lab surface oracle.",
+    impactOneline:
+      "Route-scoped scans should flag IDOR training module surfaces on Web Security Learning Labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsIdorModuleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate interactive IDOR labs behind authentication on Web Security Learning Labs.",
+      steps: [
+        "Require login before serving runnable IDOR training modules.",
+        "Host IDOR demos on isolated training subdomains.",
+        "Do not copy lab exploit patterns into production applications."
+      ]
+    },
+    fixPrompt:
+      "Our /module/1013 route exposes an IDOR training module on Web Security Learning Labs. Show how to auth-gate lab modules.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-archon-api-security-curriculum-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -42026,9 +42078,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Information disclosure",
     severityDefault: "medium",
-    title: "Juice Shop /rest/products/:id/reviews disclosure route live oracle",
+    title: "Juice Shop product reviews disclosure route live oracle",
     description:
-      "When scanning /rest/products/:id/reviews, unauthenticated response lists review author emails — route-specific disclosure oracle with scannedUrl evidence.",
+      "When scanning /rest/products/:id/reviews or legacy /api/ProductReviews, unauthenticated response lists review author emails — route-specific disclosure oracle with scannedUrl evidence.",
     impactOneline:
       "Route-scoped scans should flag unauthenticated review author disclosure on Juice Shop product pages.",
     detectorKind: "rule_ref",
