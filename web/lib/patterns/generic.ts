@@ -47371,6 +47371,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "web-pentest-playground-admin-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Web Pentest Playground admin SQLi live oracle",
+    description:
+      "POST /admin accepts username admin' OR '1'='1'-- and issues an admin session cookie redirecting to /admin_dashboard — the Web Pentest Playground admin authentication bypass oracle.",
+    impactOneline:
+      "SQL injection on the admin login bypasses authentication and grants privileged admin panel access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundAdminSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for admin login — Web Pentest Playground is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for login queries.",
+        "Apply least-privilege database accounts for the web application.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin login accepts SQLi payloads that bypass authentication. Show parameterized query remediation for Flask admin login.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-admin-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Web Pentest Playground /admin SQLi route live oracle",
+    description:
+      "When scanning /admin, POST with SQLi username bypasses admin authentication and redirects to /admin_dashboard — route-specific admin auth bypass oracle.",
+    impactOneline:
+      "Route-scoped scans should flag admin SQLi authentication bypass on Web Pentest Playground admin login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundAdminSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for admin login.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for login queries.",
+        "Apply least-privilege database accounts for the web application.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route scan accepts SQLi bypass payloads. Show route-level parameterized query fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-admin-dashboard-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Web Pentest Playground /admin_dashboard route live oracle",
+    description:
+      "When scanning /admin_dashboard, admin SQLi session exposes the privileged admin panel with user-management links — route-specific privilege escalation oracle.",
+    impactOneline:
+      "Unauthenticated route scans should still confirm admin panel access after SQLi bypass on Web Pentest Playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundAdminDashboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden admin authentication and enforce server-side authorization on admin routes.",
+      steps: [
+        "Use parameterized queries for admin login.",
+        "Require valid admin credentials before serving /admin_dashboard.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin_dashboard route is reachable after admin SQLi bypass. Show admin auth hardening and authorization checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-view-users-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Web Pentest Playground /view_users route live oracle",
+    description:
+      "When scanning /view_users, admin SQLi session lists all registered usernames (ID: N | Username: ...) — route-specific user enumeration / IDOR oracle.",
+    impactOneline:
+      "Privileged user listing exposes registered accounts to attackers who bypass admin authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundViewUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and authorization before exposing user directories.",
+      steps: [
+        "Gate /view_users behind verified admin sessions.",
+        "Use parameterized queries to prevent admin login SQLi.",
+        "Limit user directory responses to the minimum required fields."
+      ]
+    },
+    fixPrompt:
+      "Our /view_users route enumerates all usernames after admin SQLi bypass. Show authorization and SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "appsec-ci-stored-xss-comments-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
