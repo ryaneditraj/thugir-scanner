@@ -47239,5 +47239,161 @@ export const genericPatterns: Pattern[] = [
       "Our /level6 route scan confirms location.hash reaches script.src via includeGadget(). Show route-specific DOM XSS remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "web-pentest-playground-file-upload-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Web Pentest Playground insecure file upload live oracle",
+    description:
+      "POST /upload accepts arbitrary file types (including .php) after login and serves them at /uploads/ without access controls — the Web Pentest Playground file upload RCE chain oracle.",
+    impactOneline:
+      "Unrestricted file uploads let attackers store and execute malicious scripts on the server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundFileUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file types server-side and store uploads outside the web root.",
+      steps: [
+        "Allowlist safe extensions and verify MIME types with magic bytes.",
+        "Store uploads outside the public web root or serve via authenticated download endpoints.",
+        "Disable script execution in upload directories."
+      ]
+    },
+    fixPrompt:
+      "Our /upload endpoint stores .php files at /uploads/. Show secure file upload validation and storage fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Web Pentest Playground /upload file upload route live oracle",
+    description:
+      "When scanning /upload, POST stores arbitrary files served at /uploads/ without type validation — route-specific insecure file upload oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unrestricted file uploads on Web Pentest Playground upload endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file types server-side and store uploads outside the web root.",
+      steps: [
+        "Allowlist safe extensions and verify MIME types with magic bytes.",
+        "Store uploads outside the public web root or serve via authenticated download endpoints.",
+        "Disable script execution in upload directories."
+      ]
+    },
+    fixPrompt:
+      "Our /upload route scan stores arbitrary files at /uploads/. Show route-level upload validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Web Pentest Playground stored XSS live oracle",
+    description:
+      "POST /comment stores unsanitized HTML and renders it on the comments page — the Web Pentest Playground stored XSS training oracle.",
+    impactOneline:
+      "Stored XSS in comments lets attackers execute scripts in other users' browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize user comments before rendering in HTML.",
+      steps: [
+        "HTML-encode comment text on output or sanitize with a strict allowlist.",
+        "Use Content-Security-Policy to block inline script execution.",
+        "Validate and escape all user-supplied content before storage and display."
+      ]
+    },
+    fixPrompt:
+      "Our /comment endpoint stores unsanitized HTML. Show stored XSS remediation for Flask comment rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Web Pentest Playground /comment stored XSS route live oracle",
+    description:
+      "When scanning /comment, POST stores unsanitized HTML rendered on the comments page — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-scoped scans should flag stored XSS on Web Pentest Playground comment endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize user comments before rendering in HTML.",
+      steps: [
+        "HTML-encode comment text on output or sanitize with a strict allowlist.",
+        "Use Content-Security-Policy to block inline script execution.",
+        "Validate and escape all user-supplied content before storage and display."
+      ]
+    },
+    fixPrompt:
+      "Our /comment route scan stores unsanitized HTML. Show route-level stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsec-ci-stored-xss-comments-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "AppSec CI Pipeline stored XSS comments live oracle",
+    description:
+      "POST /comments/ stores unsanitized comment HTML and renders it in comment cards — the AppSec CI Pipeline stored XSS training oracle.",
+    impactOneline:
+      "Stored XSS in the comments portal lets attackers execute scripts in visitors' browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiStoredXssCommentsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape user comments before rendering in Django templates.",
+      steps: [
+        "Use Django auto-escaping or explicit |escape filters on comment fields.",
+        "Sanitize HTML with bleach or similar if rich text is required.",
+        "Add Content-Security-Policy headers to limit script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /comments/ endpoint stores unsanitized HTML in comment cards. Show Django template escaping fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsec-ci-stored-xss-comments-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "AppSec CI Pipeline /comments/ stored XSS route live oracle",
+    description:
+      "When scanning /comments/, POST with CSRF token stores unsanitized HTML in comment cards — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-scoped scans should flag stored XSS on AppSec CI Pipeline comment endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiStoredXssCommentsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Escape user comments before rendering in Django templates.",
+      steps: [
+        "Use Django auto-escaping or explicit |escape filters on comment fields.",
+        "Sanitize HTML with bleach or similar if rich text is required.",
+        "Add Content-Security-Policy headers to limit script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /comments/ route scan stores unsanitized HTML. Show route-level Django XSS remediation.",
+    version: 1,
+    enabled: true
   }
 ];
