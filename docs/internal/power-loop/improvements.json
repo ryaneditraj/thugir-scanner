@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:webchal1.vercel.app",
+      "slug": "notevault-ssrf-internal-flag-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/notes/import {\"url\":\"https://webchal1.vercel.app/api/internal/flag\"} returns id; GET /api/notes/{id} body contains TACHYON{5SrF_inj3ct10N_c0ol_123wed3}; webchal1.vercel.app/import findings 7→9; benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:webchal1.vercel.app",
+      "slug": "notevault-ssrf-internal-flag-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /import fires route-specific internal SSRF oracle alongside host-level notevault-ssrf-internal-flag-live-oracle; webchal1.vercel.app/import findings 7→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-render-warmup-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: warmupRenderHost extended 8×5s for appsec-ci-pipeline.onrender.com with Django/Comments ready markers; appsec-ci-pipeline.onrender.com/admin/ findings 6→9 (+django-admin +stored-xss live oracles); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-pentest-playground.onrender.com",
       "slug": "web-pentest-playground-file-upload-rce-upgrade",
       "status": "shipped",
