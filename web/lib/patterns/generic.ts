@@ -47345,6 +47345,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "web-pentest-playground-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Web Pentest Playground /redirect open redirect route live oracle",
+    description:
+      "GET /redirect?url= returns HTTP 302 Location to attacker-controlled hosts — the Web Pentest Playground open redirect training route oracle.",
+    impactOneline:
+      "Unvalidated url query parameter enables phishing via trusted-domain redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist redirect destinations — Web Pentest Playground is intentional training software.",
+      steps: [
+        "Validate redirect targets against a same-origin or signed allowlist.",
+        "Reject absolute URLs to external hosts in redirect handlers.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect route reflects the url parameter into a 302 Location header. Show open redirect remediation with destination allowlists.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "appsec-ci-stored-xss-comments-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

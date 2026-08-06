@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T06:28:10.099Z",
-  "total": 1881,
-  "uniqueSlugs": 1876,
+  "generatedAt": "2026-08-06T07:45:24.202Z",
+  "total": 1882,
+  "uniqueSlugs": 1877,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1863,
+    "generic": 1864,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1796,
+    "deep": 1797,
     "continuous": 0
   },
   "byCategory": {
@@ -29,7 +29,7 @@
     "Broken authentication": 112,
     "Injection": 263,
     "Cross-site scripting": 661,
-    "Open redirect": 11,
+    "Open redirect": 12,
     "general": 20,
     "SSRF": 7,
     "Server-side request forgery": 52,
@@ -1864,6 +1864,7 @@
     "weak-api-default-credentials",
     "web-pentest-playground-file-upload-live-oracle",
     "web-pentest-playground-file-upload-route-live-oracle",
+    "web-pentest-playground-open-redirect-route-live-oracle",
     "web-pentest-playground-stored-xss-live-oracle",
     "web-pentest-playground-stored-xss-route-live-oracle",
     "windsurf-public-env-leak",

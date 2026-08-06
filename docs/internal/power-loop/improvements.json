@@ -2,6 +2,12 @@
   "candidates": [
     {
       "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect?url=https://evil-open-redirect-probe.example/thugir-redirect-test returns 302 Location to probe host; web-pentest-playground.onrender.com/redirect findings 8→9 (+open-redirect-route oracle distinct from generic open-redirect-query-param); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
       "slug": "web-pentest-playground-file-upload-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: register+login session then POST multipart /upload stores .txt canary served at /uploads/ without type validation; web-pentest-playground.onrender.com/upload findings 5→9 (+file-upload live+route oracles, +stored-xss live oracle); benchmark juice-shop-staging 42 findings 6/6 maintained"
