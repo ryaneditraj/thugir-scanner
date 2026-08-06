@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T09:20:00.000Z",
+  "updated_at": "2026-08-06T10:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2770,
-  "total_findings": 27281,
-  "critical_findings": 62,
+  "total_sites_scanned": 2730,
+  "total_findings": 26597,
+  "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 22992,
-  "improvements_shipped": 1171,
-  "last_run": "2026-08-06T09:20:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22533,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-06T10:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 43,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 425,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); no benchmark misses"
+      "note": "Primary oracle LIVE 6/6 (43 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 31,
-      "focus": "appsec-ci Django admin exposure + web-pentest login SQLi route oracles",
-      "improvements_shipped_this_run": 2
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 46,
+      "focus": "WhoopsPay orders/auth/admin API routes + webchal1 SSRF import endpoints + BuggyBuy payment/search queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "appsec-ci-pipeline.onrender.com/admin/: 6→9 findings — appsec-ci-django-admin live+route oracles shipped (Django site admin login + csrfmiddlewaretoken)",
-      "web-pentest-playground.onrender.com/login: 8→11 findings — web-pentest-playground-login-sqli live+route oracles shipped (POST SQLi → 302 /dashboard)",
-      "web-pentest-playground.onrender.com/admin: 8→11 findings — admin-sqli live+route oracles confirmed on re-scan",
-      "vulnerable-web-application-jecw.vercel.app/api/*: BuggyBuy Render API down (Internal Server Error) — route-specific oracles deferred"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (43 findings) — no benchmark misses",
+      "webchal1.vercel.app/api/notes/import: 6 findings incl ssrf-endpoint-fetch + reflexion-escalated-ssti (CryptoNite CTF SSRF oracle)",
+      "webchal1.vercel.app/import: 7 findings incl ssrf-endpoint-fetch + permissive-cors",
+      "whoopspay.onrender.com/api/orders: 7-finding generic hub (client-side-whoopspay-evidence + vibe-unauthenticated-api-routes)",
+      "whoopspay.onrender.com/api/auth/login: 7-finding generic hub without route-specific weak-auth live oracle",
+      "whoopspay.onrender.com/api/admin: 7-finding generic hub without BFLA admin-panel live oracle",
+      "vulnerable-web-application-jecw.vercel.app/api/payment: 6-finding generic BuggyBuy hub (queue drain)",
+      "vulnerable-web-application-jecw.vercel.app/api/search: 6-finding generic BuggyBuy hub (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "BuggyBuy api/* routes: Render backend Internal Server Error — NoSQL login / mass-assignment oracles blocked until API recovers",
-      "whoopspay.onrender.com/api/*: route-specific transaction/wallet/payment IDOR live oracles absent without authenticated session",
-      "r2s-arena.fly.dev: React2Shell arena unreachable from cloud agent"
+      "whoopspay.onrender.com/api/orders|auth/login|admin: route-specific BOLA/weak-auth/BFLA live oracles absent without authenticated session",
+      "webchal1.vercel.app/*: ssrf-endpoint-fetch fires but no route-specific internal-flag SSRF live oracle",
+      "r2s-arena.fly.dev: React2Shell arena unreachable from cloud agent (scan error)",
+      "vulnerable-web-application-jecw.vercel.app/api/*: route-specific JWT/session oracles still absent on generic 6-finding hubs"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "appsec-ci-pipeline.onrender.com/admin/": 9,
-    "web-pentest-playground.onrender.com/login": 11,
-    "web-pentest-playground.onrender.com/admin": 11,
-    "whoopspay.onrender.com/api/transactions/1": 7,
-    "vulnerable-web-application-jecw.vercel.app/api/products": 6
+    "juice-shop.herokuapp.com": 43,
+    "webchal1.vercel.app/import": 7,
+    "webchal1.vercel.app/api/notes/import": 6,
+    "whoopspay.onrender.com/api/orders": 7,
+    "whoopspay.onrender.com/api/auth/login": 7,
+    "whoopspay.onrender.com/api/admin": 7,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }

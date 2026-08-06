@@ -1,1007 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-08-05T12:06:32.884Z",
-      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-chimera-vuln-lab-evidence",
-          "title": "Chimera WAF honeypot documents 456+ intentional API vulnerabilities",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 471,
-      "status": "ok",
-      "scanned_at": "2026-08-05T12:06:32.884Z"
-    },
-    {
-      "run_id": "2026-08-05T12:06:37.950Z",
-      "url": "https://chimera.atlascrew.dev/api/v1/saas/tenants/1/projects",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-chimera-vuln-lab-evidence",
-          "title": "Chimera WAF honeypot documents 456+ intentional API vulnerabilities",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 471,
-      "status": "ok",
-      "scanned_at": "2026-08-05T12:06:37.950Z"
-    },
-    {
-      "run_id": "2026-08-05T12:06:42.674Z",
-      "url": "https://chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-chimera-vuln-lab-evidence",
-          "title": "Chimera WAF honeypot documents 456+ intentional API vulnerabilities",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 470,
-      "status": "ok",
-      "scanned_at": "2026-08-05T12:06:42.674Z"
-    },
-    {
-      "run_id": "2026-08-05T13:00:55.780Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 35,
-      "findings": [
-        {
-          "slug": "juice-shop-addresss-bola-live-oracle",
-          "title": "Juice Shop shipping addresses BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-addresss-id-bola-live-oracle",
-          "title": "Juice Shop address-by-ID BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-chatbot-route-live-oracle",
-          "title": "Juice Shop chatbot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-login-sqli-live-oracle",
-          "title": "Juice Shop login SQL injection live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-users-idor-live-oracle",
-          "title": "Juice Shop user profile IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-items-bola-live-oracle",
-          "title": "Juice Shop basket items BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-questions-list-live-oracle",
-          "title": "Juice Shop security-question catalog live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-recycles-bola-live-oracle",
-          "title": "Juice Shop recycle requests BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-cards-bola-live-oracle",
-          "title": "Juice Shop payment cards BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-idor-live-oracle",
-          "title": "Juice Shop basket IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-memories-bola-live-oracle",
-          "title": "Juice Shop memories BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-admin-config-live-oracle",
-          "title": "Juice Shop admin application-configuration live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "juice-shop-quantitys-exposure-live-oracle",
-          "title": "Juice Shop inventory quantities exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-hints-exposure-live-oracle",
-          "title": "Juice Shop challenge hints exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-challenges-disclosure-live-oracle",
-          "title": "Juice Shop challenge scoreboard exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-deliverys-exposure-live-oracle",
-          "title": "Juice Shop delivery methods exposed live oracle",
-          "severity": "low",
-          "confidence": 0.89,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-feedbacks-bola-live-oracle",
-          "title": "Juice Shop product feedback BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-answers-disclosure-live-oracle",
-          "title": "Juice Shop security-answer hashes disclosed live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-track-order-idor-live-oracle",
-          "title": "Juice Shop track-order IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 490,
-      "status": "ok",
-      "scanned_at": "2026-08-05T13:00:55.780Z"
-    },
-    {
-      "run_id": "2026-08-05T13:04:41.986Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary 35 findings, 6/6 recall (pages=6 probes=490)",
-      "teacher_delta": [],
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      },
-      "notes": "No teacher tools available. 13 UTC run: primary juice-shop up (35 findings, 6/6). New queue: vulnapi users/1+3, validateToken, juice-shop track-order/1, rest.testinvicti JWT users.",
-      "scanned_at": "2026-08-05T13:04:41.986Z"
-    },
-    {
-      "run_id": "2026-08-05T13:04:46.276Z",
-      "url": "https://demo.owasp-juice.shop/rest/chatbot",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 36,
-      "findings": [
-        {
-          "slug": "juice-shop-addresss-bola-live-oracle",
-          "title": "Juice Shop shipping addresses BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-addresss-id-bola-live-oracle",
-          "title": "Juice Shop address-by-ID BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-chatbot-route-live-oracle",
-          "title": "Juice Shop chatbot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-login-sqli-live-oracle",
-          "title": "Juice Shop login SQL injection live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-users-idor-live-oracle",
-          "title": "Juice Shop user profile IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-items-bola-live-oracle",
-          "title": "Juice Shop basket items BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-questions-list-live-oracle",
-          "title": "Juice Shop security-question catalog live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-recycles-bola-live-oracle",
-          "title": "Juice Shop recycle requests BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-cards-bola-live-oracle",
-          "title": "Juice Shop payment cards BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-idor-live-oracle",
-          "title": "Juice Shop basket IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-memories-bola-live-oracle",
-          "title": "Juice Shop memories BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-admin-config-live-oracle",
-          "title": "Juice Shop admin application-configuration live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "juice-shop-quantitys-exposure-live-oracle",
-          "title": "Juice Shop inventory quantities exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-hints-exposure-live-oracle",
-          "title": "Juice Shop challenge hints exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-challenges-disclosure-live-oracle",
-          "title": "Juice Shop challenge scoreboard exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-deliverys-exposure-live-oracle",
-          "title": "Juice Shop delivery methods exposed live oracle",
-          "severity": "low",
-          "confidence": 0.89,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-feedbacks-bola-live-oracle",
-          "title": "Juice Shop product feedback BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-answers-disclosure-live-oracle",
-          "title": "Juice Shop security-answer hashes disclosed live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-privacy-requests-bola-live-oracle",
-          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-track-order-idor-live-oracle",
-          "title": "Juice Shop track-order IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 484,
-      "status": "ok",
-      "scanned_at": "2026-08-05T13:04:46.276Z"
-    },
-    {
-      "run_id": "2026-08-05T13:06:36.320Z",
-      "url": "https://demo.owasp-juice.shop/rest/track-order/1",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 36,
-      "findings": [
-        {
-          "slug": "juice-shop-addresss-bola-live-oracle",
-          "title": "Juice Shop shipping addresses BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-addresss-id-bola-live-oracle",
-          "title": "Juice Shop address-by-ID BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-chatbot-route-live-oracle",
-          "title": "Juice Shop chatbot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-login-sqli-live-oracle",
-          "title": "Juice Shop login SQL injection live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-users-idor-live-oracle",
-          "title": "Juice Shop user profile IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-items-bola-live-oracle",
-          "title": "Juice Shop basket items BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-questions-list-live-oracle",
-          "title": "Juice Shop security-question catalog live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-recycles-bola-live-oracle",
-          "title": "Juice Shop recycle requests BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-cards-bola-live-oracle",
-          "title": "Juice Shop payment cards BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-idor-live-oracle",
-          "title": "Juice Shop basket IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-memories-bola-live-oracle",
-          "title": "Juice Shop memories BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-admin-config-live-oracle",
-          "title": "Juice Shop admin application-configuration live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "juice-shop-quantitys-exposure-live-oracle",
-          "title": "Juice Shop inventory quantities exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-hints-exposure-live-oracle",
-          "title": "Juice Shop challenge hints exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-challenges-disclosure-live-oracle",
-          "title": "Juice Shop challenge scoreboard exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-deliverys-exposure-live-oracle",
-          "title": "Juice Shop delivery methods exposed live oracle",
-          "severity": "low",
-          "confidence": 0.89,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-feedbacks-bola-live-oracle",
-          "title": "Juice Shop product feedback BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-answers-disclosure-live-oracle",
-          "title": "Juice Shop security-answer hashes disclosed live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-privacy-requests-bola-live-oracle",
-          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-track-order-idor-live-oracle",
-          "title": "Juice Shop track-order IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-track-order-idor-route-live-oracle",
-          "title": "Juice Shop track-order IDOR route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 468,
-      "status": "ok",
-      "scanned_at": "2026-08-05T13:06:36.320Z"
-    },
-    {
-      "run_id": "2026-08-05T13:08:21.131Z",
-      "url": "https://vuln-expose.vercel.app/api/users",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-08-05T13:08:21.131Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-08-05T13:08:43.837Z",
-      "url": "https://vuln-expose.vercel.app/api/comments",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-08-05T13:08:43.837Z",
-      "error": "We couldn't reach vuln-expose.vercel.app. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
       "run_id": "2026-08-05T13:09:06.528Z",
       "url": "https://ginandjuice.shop/?url=https://evil-open-redirect-probe.example",
       "auth": "public_demo",
@@ -43526,6 +42525,765 @@
       "probes_run": 547,
       "status": "ok",
       "scanned_at": "2026-08-06T09:26:19.932Z"
+    },
+    {
+      "run_id": "2026-08-06T10:02:46.446Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 43,
+      "findings": [
+        {
+          "slug": "juice-shop-addresss-bola-live-oracle",
+          "title": "Juice Shop shipping addresses BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-addresss-id-bola-live-oracle",
+          "title": "Juice Shop address-by-ID BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-route-live-oracle",
+          "title": "Juice Shop /ftp forgotten-backup route live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-products-search-sqli-route-live-oracle",
+          "title": "Juice Shop /rest/products/search SQLi route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-captcha-bypass-live-oracle",
+          "title": "Juice Shop captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-image-captcha-bypass-live-oracle",
+          "title": "Juice Shop image captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-save-login-ip-live-oracle",
+          "title": "Juice Shop login IP spoofing live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-whoami-unauth-live-oracle",
+          "title": "Juice Shop unauthenticated whoami live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-products-reviews-exposure-live-oracle",
+          "title": "Juice Shop product reviews disclosure live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-login-sqli-live-oracle",
+          "title": "Juice Shop login SQL injection live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-login-route-live-oracle",
+          "title": "Juice Shop /rest/user/login SQLi route live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-users-idor-live-oracle",
+          "title": "Juice Shop user profile IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-items-bola-live-oracle",
+          "title": "Juice Shop basket items BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-questions-list-live-oracle",
+          "title": "Juice Shop security-question catalog live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-security-question-user-live-oracle",
+          "title": "Juice Shop user security-question disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-wallet-balance-bola-live-oracle",
+          "title": "Juice Shop wallet balance BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-recycles-bola-live-oracle",
+          "title": "Juice Shop recycle requests BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-cards-bola-live-oracle",
+          "title": "Juice Shop payment cards BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-idor-live-oracle",
+          "title": "Juice Shop basket IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-memories-bola-live-oracle",
+          "title": "Juice Shop memories BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-admin-config-live-oracle",
+          "title": "Juice Shop admin application-configuration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "juice-shop-quantitys-exposure-live-oracle",
+          "title": "Juice Shop inventory quantities exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-hints-exposure-live-oracle",
+          "title": "Juice Shop challenge hints exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-challenges-disclosure-live-oracle",
+          "title": "Juice Shop challenge scoreboard exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-deliverys-exposure-live-oracle",
+          "title": "Juice Shop delivery methods exposed live oracle",
+          "severity": "low",
+          "confidence": 0.89,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-feedbacks-bola-live-oracle",
+          "title": "Juice Shop product feedback BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-answers-disclosure-live-oracle",
+          "title": "Juice Shop security-answer hashes disclosed live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-track-order-idor-live-oracle",
+          "title": "Juice Shop track-order IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-order-history-bola-live-oracle",
+          "title": "Juice Shop order-history BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 425,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:02:46.446Z"
+    },
+    {
+      "run_id": "2026-08-06T10:26:56.420Z",
+      "url": "https://whoopspay.onrender.com/api/orders",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-whoopspay-evidence",
+          "title": "WhoopsPay educational fintech vulnerability lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 609,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:26:56.420Z"
+    },
+    {
+      "run_id": "2026-08-06T10:27:38.274Z",
+      "url": "https://whoopspay.onrender.com/api/auth/login",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-whoopspay-evidence",
+          "title": "WhoopsPay educational fintech vulnerability lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 611,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:27:38.274Z"
+    },
+    {
+      "run_id": "2026-08-06T10:28:20.297Z",
+      "url": "https://whoopspay.onrender.com/api/admin",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-whoopspay-evidence",
+          "title": "WhoopsPay educational fintech vulnerability lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 609,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:28:20.297Z"
+    },
+    {
+      "run_id": "2026-08-06T10:29:01.961Z",
+      "url": "https://webchal1.vercel.app/api/notes/import",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "client-side-wizer-ctf-evidence",
+          "title": "Wizer developer security CTF disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 487,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:29:01.961Z"
+    },
+    {
+      "run_id": "2026-08-06T10:29:09.723Z",
+      "url": "https://webchal1.vercel.app/import",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "ssrf-endpoint-fetch",
+          "title": "SSRF — server fetches attacker-controlled URL",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "client-side-wizer-ctf-evidence",
+          "title": "Wizer developer security CTF disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 501,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:29:09.723Z"
+    },
+    {
+      "run_id": "2026-08-06T10:29:15.847Z",
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/payment",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-buggybuy-evidence",
+          "title": "BuggyBuy vulnerable e-commerce training app disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 548,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:29:15.847Z"
+    },
+    {
+      "run_id": "2026-08-06T10:29:20.877Z",
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/search",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-buggybuy-evidence",
+          "title": "BuggyBuy vulnerable e-commerce training app disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 548,
+      "status": "ok",
+      "scanned_at": "2026-08-06T10:29:20.877Z"
+    },
+    {
+      "run_id": "2026-08-06T10:29:24.706Z",
+      "url": "https://r2s-arena.fly.dev",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-08-06T10:29:24.706Z",
+      "error": "We couldn't reach r2s-arena.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     }
   ]
 }
