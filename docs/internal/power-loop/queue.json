@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T21:05:00.000Z",
+  "updated_at": "2026-08-06T22:17:26.962Z",
   "discovery_urls": [
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/account/export",
+      "source": "MRMcyber/vaultapp — account data export IDOR oracle GET /api/account/export (Vercel OSS deploy, 22 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/admin/audit-logs",
+      "source": "MRMcyber/vaultapp — admin audit-log IDOR oracle GET /api/admin/audit-logs (Vercel OSS deploy, 22 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/admin/users/1",
+      "source": "MRMcyber/vaultapp — admin user lookup IDOR oracle GET /api/admin/users/:id (Vercel OSS deploy, 22 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/messages/read",
+      "source": "MRMcyber/vaultapp — message read IDOR oracle POST /api/messages/read (Vercel OSS deploy, 22 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/Memorys",
+      "source": "Escape.tech Juice Shop demo — memory/rce challenge API oracle GET /api/Memorys (juice-shop.demo.escape.tech, 22 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/users/search/admin",
       "source": "NeuraLegion/brokencrystals — excessive data exposure oracle GET /api/users/search/{name} cardNumber+phoneNumber leak (README, 21 UTC discovery)",
