@@ -30867,6 +30867,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "testfire-transfer-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Altoro Mutual transfer SQL injection live oracle",
+    description:
+      "POST /bank/doTransfer with toAccount=800040' OR '1'='1 returns HTTP 500 NumberFormatException exposing the injected account value — the IBM Altoro Mutual fund-transfer injection oracle.",
+    impactOneline:
+      "SQL injection in the transfer form causes server-side errors that disclose attacker-controlled input during fund transfers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireTransferSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all account identifiers in transfer handlers — Altoro Mutual is intentional training software.",
+      steps: [
+        "Use prepared statements or strict integer parsing for account IDs in transfer servlets.",
+        "Return generic transfer failures without exposing exception messages to users.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /bank/doTransfer endpoint throws NumberFormatException on SQLi payloads in toAccount. Show injection remediation for Java transfer servlets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-transfer-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Altoro Mutual /bank/transfer.jsp SQL injection route oracle",
+    description:
+      "When scanning /bank/transfer.jsp, POST /bank/doTransfer with a SQLi toAccount payload triggers NumberFormatException — route-specific transfer injection confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Altoro Mutual fund transfers are vulnerable to injection via account fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireTransferSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all account identifiers in transfer handlers — Altoro Mutual is intentional training software.",
+      steps: [
+        "Use prepared statements or strict integer parsing for account IDs in transfer servlets.",
+        "Return generic transfer failures without exposing exception messages to users.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/transfer.jsp route scan confirms SQLi via /bank/doTransfer. Show parameterized query remediation for Java transfer servlets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-transfer-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Altoro Mutual transfer stored XSS live oracle",
+    description:
+      "GET /bank/transfer.jsp after authentication renders stored XSS payloads inside account <option> labels — the IBM Altoro Mutual transfer-page stored XSS oracle.",
+    impactOneline:
+      "Stored XSS in account names executes in the transfer dropdown, enabling session hijacking during banking operations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireTransferStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user-supplied data before rendering in HTML — Altoro Mutual is intentional training software.",
+      steps: [
+        "HTML-encode account labels before inserting into <option> elements.",
+        "Validate and sanitize account nicknames at input time.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/transfer.jsp page renders stored XSS in account dropdown options. Show output-encoding remediation for JSP transfer forms.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-transfer-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Altoro Mutual /bank/transfer.jsp stored XSS route oracle",
+    description:
+      "When scanning /bank/transfer.jsp, authenticated account dropdown options contain unescaped <script> tags — route-specific stored XSS confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Altoro Mutual transfer page renders stored XSS in account selection dropdowns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireTransferStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user-supplied data before rendering in HTML — Altoro Mutual is intentional training software.",
+      steps: [
+        "HTML-encode account labels before inserting into <option> elements.",
+        "Validate and sanitize account nicknames at input time.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/transfer.jsp route scan confirms stored XSS in account dropdown options. Show output-encoding remediation for JSP transfer forms.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "euri-sec-csp-dynamic-script-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -45599,6 +45703,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /my-account/change-email route is vulnerable to race-condition email takeover. Show atomic email-change validation and TOCTOU remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-change-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/change-password route live oracle",
+    description:
+      "When scanning /my-account/change-password, the account UI exposes a login-gated password-change surface for the PortSwigger account-takeover training lab — route-specific auth oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes a password-change endpoint gated behind authentication for account-takeover training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceChangePasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require current-password verification and rate-limit password-change requests.",
+      steps: [
+        "Verify the current password before applying password updates.",
+        "Invalidate other sessions after a successful password change.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/change-password route exposes a login-gated password-change surface. Show secure password-change validation and session invalidation remediation.",
     version: 1,
     enabled: true
   },
