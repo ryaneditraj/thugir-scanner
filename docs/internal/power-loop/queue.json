@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T06:05:00.000Z",
+  "updated_at": "2026-08-06T07:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-pentest-playground.onrender.com/view_users",
+      "source": "Adarsh-S-R/web-pentest-playground — IDOR oracle GET /view_users + /admin_dashboard escalation (Render public demo, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/admin_dashboard",
+      "source": "Adarsh-S-R/web-pentest-playground — admin dashboard access-control bypass via IDOR chain (Render public demo, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/register",
+      "source": "Adarsh-S-R/web-pentest-playground — user registration + admin privilege oracle POST /register (Render public demo, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-application-jecw.vercel.app/api/orders",
+      "source": "MuhaibShamsher/BuggyBuy — order IDOR/BOLA oracle GET /api/orders (Vercel OSS README, 07 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://r2s-arena.fly.dev",
+      "source": "zamdevio/r2s — React2Shell CVE-2025-55182 intentionally vulnerable Next.js arena (fly.dev public demo, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-pentest-playground.onrender.com/login",
       "source": "Adarsh-S-R/web-pentest-playground — SQLi login-bypass oracle POST /login (Render public demo, 06 UTC discovery)",
