@@ -509,7 +509,8 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
   const isWhoopsPay = /whoopspay\.onrender\.com/i.test(host);
   const isAppsecCi = /appsec-ci-pipeline\.onrender\.com/i.test(host);
   const isBuggyBuyApi = /vulnerable-web-application-mcd0\.onrender\.com/i.test(host);
-  const extendedWarmup = isVulnApp || isWhoopsPay || isAppsecCi || isBuggyBuyApi;
+  const isWebPentestPlayground = /web-pentest-playground\.onrender\.com/i.test(host);
+  const extendedWarmup = isVulnApp || isWhoopsPay || isAppsecCi || isBuggyBuyApi || isWebPentestPlayground;
   const maxAttempts = extendedWarmup ? 8 : 5;
   const delayMs = extendedWarmup ? 5000 : 4000;
   let best = home;
@@ -519,7 +520,8 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
       (best.body.length > 1500 ||
         /WhoopsPay|type="module"[^>]+src="\/assets\/index-/i.test(best.body) ||
         /Django site admin|Comments Portal|AppSec CI Pipeline/i.test(best.body) ||
-        /VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body)) &&
+        /VulnApp|Built-in Vulnerabilities|deliberately vulnerable/i.test(best.body) ||
+        /Invalid credentials|Werkzeug/i.test(best.body)) &&
       (best.status >= 200 && best.status < 400 && /<!DOCTYPE html/i.test(best.body));
     if (ready) break;
     await new Promise((r) => setTimeout(r, delayMs));
@@ -533,6 +535,21 @@ async function warmupRenderHost(targetUrl: string, home: FetchedDoc): Promise<Fe
       (retried.body.length > best.body.length || RENDER_COLD_START_RE.test(best.body))
     ) {
       best = retried;
+    }
+  }
+  if (isWebPentestPlayground) {
+    const loginUrl = new URL("/login", best.finalUrl || targetUrl).toString();
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const probe = await fetchDoc(loginUrl, {
+        method: "POST",
+        body: "username=thugir-warmup-probe&password=invalid",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        timeoutMs: 20000,
+        maxBytes: 512,
+        redirect: "manual"
+      });
+      if (probe.status === 200 && /Invalid credentials/i.test(probe.body)) break;
+      await new Promise((r) => setTimeout(r, 4000));
     }
   }
   return best;
@@ -1569,6 +1586,10 @@ const DEEP_RULES = new Set<string>([
   "webPentestPlaygroundViewUsersRouteLiveOracle",
   "webPentestPlaygroundLoginSqliLiveOracle",
   "webPentestPlaygroundLoginSqliRouteLiveOracle",
+  "whoopsPayTransactionsBolaLiveOracle",
+  "whoopsPayTransactionsBolaRouteLiveOracle",
+  "whoopsPayMoneyRequestIdorLiveOracle",
+  "whoopsPayMoneyRequestIdorRouteLiveOracle",
   "appsecCiStoredXssCommentsLiveOracle",
   "appsecCiStoredXssCommentsRouteLiveOracle",
   "appsecCiDjangoAdminLiveOracle",
@@ -9580,6 +9601,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/vapi\.tools\.escape\.tech/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
+      if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
       if (/dvga\.tools\.escape\.tech|xplat-demo\.threatx\.io/i.test(origin) && p.slug.startsWith("dvga-"))
         return -2;

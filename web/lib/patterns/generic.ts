@@ -47707,5 +47707,109 @@ export const genericPatterns: Pattern[] = [
       "Our /login route scan accepts SQLi auth bypass. Show route-level parameterized query remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "whoopspay-transactions-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay transaction list BOLA live oracle",
+    description:
+      "GET /api/transactions returns other users' payment history with fromUserId handles and routing numbers without per-user authorization — the WhoopsPay transaction list broken-object-level-authorization oracle.",
+    impactOneline:
+      "Exposed transaction lists leak payment amounts, routing numbers, and PII for all platform users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayTransactionsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope transaction queries to the authenticated user — WhoopsPay is intentional training software.",
+      steps: [
+        "Filter GET /api/transactions by the session user ID before returning rows.",
+        "Deny unauthenticated access to transaction history endpoints.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/transactions endpoint returns every user's payments. Show authorization-scoped query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-transactions-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay /api/transactions BOLA route live oracle",
+    description:
+      "When scanning /api/transactions or related API routes, GET returns other users' payment history — route-specific transaction list BOLA oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unscoped transaction list exposure on WhoopsPay API routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayTransactionsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope transaction queries to the authenticated user.",
+      steps: [
+        "Filter GET /api/transactions by the session user ID before returning rows.",
+        "Deny unauthenticated access to transaction history endpoints.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/transactions route scan leaks all users' payments. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-money-request-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay money-request sender IDOR live oracle",
+    description:
+      "POST /api/money-request accepts arbitrary fromUserId (e.g. @elena_kowalski) from any session — the WhoopsPay money-request sender impersonation oracle.",
+    impactOneline:
+      "Missing sender validation lets attackers create money requests attributed to other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayMoneyRequestIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind fromUserId to the authenticated session user — WhoopsPay is intentional training software.",
+      steps: [
+        "Derive fromUserId from the session instead of trusting client-supplied handles.",
+        "Reject money-request payloads where fromUserId does not match the logged-in user.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/money-request accepts fromUserId for other users. Show server-side sender validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-money-request-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "WhoopsPay money-request IDOR route live oracle",
+    description:
+      "When scanning /api/transfer or money-request routes, POST fromUserId impersonates another user — route-specific sender IDOR oracle.",
+    impactOneline:
+      "Route-scoped scans should flag money-request sender impersonation on WhoopsPay API routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayMoneyRequestIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind fromUserId to the authenticated session user.",
+      steps: [
+        "Derive fromUserId from the session instead of trusting client-supplied handles.",
+        "Reject money-request payloads where fromUserId does not match the logged-in user.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our money-request route scan confirms sender IDOR via fromUserId impersonation. Show route-level validation remediation.",
+    version: 1,
+    enabled: true
   }
 ];
