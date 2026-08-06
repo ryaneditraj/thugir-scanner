@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-file-upload-rce-upgrade",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SQLi session + multipart POST /upload stores PHP at /uploads/ returning thugir-rce-probe canary (was .txt-only); web-pentest-playground.onrender.com/upload findings 11→12; benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-login-sqli-baseline",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login SQLi oracle now requires HTTP 200 Invalid credentials on bad creds before confirming 302 /dashboard bypass; web-pentest-playground.onrender.com/login oracle confidence improved; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect?url=https://evil-open-redirect-probe.example/thugir-redirect-test returns 302 Location to probe host; web-pentest-playground.onrender.com/upload scan 11→12 (+open-redirect-live-oracle distinct from route-only); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:appsec-ci-pipeline.onrender.com",
       "slug": "appsec-ci-django-admin-live-oracle",
       "status": "shipped",
