@@ -15419,7 +15419,32 @@
       "url": "https://vulnerable-web-application-jecw.vercel.app/register",
       "source": "MuhaibShamsher/BuggyBuy — open registration / NoSQL injection oracle (Vercel OSS README homepage)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/pygoat/challenges/ssti",
+      "source": "OWASP VWAD — PyGoat SSTI challenge route (vwad.owasp.org directory, 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/hackxor/login",
+      "source": "OWASP VWAD — Hackxor login SQLi/auth oracle (vwad.owasp.org directory, 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/yrprey/login",
+      "source": "OWASP VWAD — YrPrey login injection oracle (vwad.owasp.org directory, 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/email/send?name=test@email.com",
+      "source": "NeuraLegion/brokencrystals — XXE/email injection oracle GET /api/email/send (GitHub README vuln catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/secure-by-design/login",
+      "source": "OWASP VWAD — secure-by-design ironic auth-bypass login surface (vwad.owasp.org directory, 01 UTC discovery)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 44
+  "discovery_urls_added": 49
 }
