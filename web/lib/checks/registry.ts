@@ -60491,11 +60491,9 @@ const testfireLoginSqliRouteLiveOracle: Rule = async (ctx) => {
 };
 
 function testfireSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
-  return (
-    doc.setCookies.find((c) => /^AltoroAccounts=/i.test(c))?.split(";")[0] ??
-    doc.setCookies.find((c) => /AltoroAccounts/i.test(c))?.split(";")[0] ??
-    null
-  );
+  if (!doc.setCookies.length) return null;
+  const parts = doc.setCookies.map((c) => c.split(";")[0]).filter(Boolean);
+  return parts.length ? parts.join("; ") : null;
 }
 
 async function testfireLoginSessionCookie(ctx: RuleContext): Promise<string | null> {
