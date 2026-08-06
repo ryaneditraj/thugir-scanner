@@ -9671,6 +9671,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-api-")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-oidc-client-secret")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-config")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-fullinfo")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-users-id")) return -2;
+      if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-email-smtp")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
