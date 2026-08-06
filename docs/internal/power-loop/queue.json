@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T22:17:26.962Z",
+  "updated_at": "2026-08-06T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop.demo.escape.tech/redirect?to=https://evil-open-redirect-probe.example",
+      "source": "Escape.tech Juice Shop demo — token-stealing open redirect oracle GET /redirect?to= (Insomnia DAST report + juice-shop REST docs, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/file-upload",
+      "source": "Escape.tech Juice Shop demo — complaint file-upload traversal + SSTI chain oracle POST /file-upload (Insomnia DAST report, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/b2b/v2/orders",
+      "source": "Escape.tech Juice Shop demo — B2B insecure deserialization oracle POST /rest/b2b/v2/orders (juice-shop challenge docs, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://idor-website.vercel.app/api/employees/1",
+      "source": "IDOR Lab SecureBank — employee record IDOR oracle GET /api/employees/:id (idor-website.vercel.app Vercel deploy, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/users/one/1/photo?isAdmin=true",
+      "source": "NeuraLegion/brokencrystals — BFLA profile-photo delete oracle DELETE /users/one/:id/photo?isAdmin= (Swagger README, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vaultapp-omega.vercel.app/api/account/export",
       "source": "MRMcyber/vaultapp — account data export IDOR oracle GET /api/account/export (Vercel OSS deploy, 22 UTC discovery)",
