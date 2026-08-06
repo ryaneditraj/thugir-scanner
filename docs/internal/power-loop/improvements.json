@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-login-route-oracle-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JWT route matchers only matched /validate — scanning /api/auth/jwt/jwk/login missed jwk-empty-route oracle; extended weak-key/kid-sql/hmac/jwk/x5c/jku/x5u route regex to (validate|login); brokencrystals.com/api/auth/jwt/jwk/login findings 16→72 (+jwk-empty-route + jwt-route oracles); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-wallet-balance-route-api-wallets",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: preview.owasp-juice.shop/api/Wallets route scan had live wallet-balance oracle but no route variant — extended route matcher to /api/Wallets; preview.owasp-juice.shop/api/Wallets findings 43→45 (+wallet-balance-bola-route oracle); benchmark juice-shop-staging 42 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-mail-wait-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PwnMail OTP delivery intermittently missed on cold /apply-coupon scans — extended OTP_MAIL_WAITS_MS 6→8 intervals (7500/8500ms); pwnshop.ctfsecurity.com/apply-coupon findings 23→38 with apply-coupon + coupon-category-bypass live+route oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-image-captcha-bypass-live-oracle",
       "status": "shipped",
@@ -19349,6 +19367,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-x5u-rogue-live-oracle",
       "shipped_at": "2026-08-05T22:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-login-route-oracle-expansion",
+      "shipped_at": "2026-08-06T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "juice-shop-wallet-balance-route-api-wallets",
+      "shipped_at": "2026-08-06T00:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-mail-wait-extension",
+      "shipped_at": "2026-08-06T00:20:00.000Z"
     }
   ]
 }
