@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T05:15:00.000Z",
+  "updated_at": "2026-08-06T05:21:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2806,
-  "total_findings": 30858,
-  "critical_findings": 59,
+  "total_sites_scanned": 2731,
+  "total_findings": 26698,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1986,
-  "discovery_findings": 25670,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-06T05:15:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22643,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-06T05:21:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 34,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 488,
+      "probes_run": 315,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,43 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle 46 findings 6/6 recall — no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (34 findings); primary oracle live, no fallback needed"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 6,
-      "focus": "Juice Shop /rest/ route alias + products/reviews route + vulnbank v2 transactions route",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 156,
+      "focus": "web-pentest upload/redirect + appsec-ci admin/comments + buggybuy cart + queue drain (preview Complaints, brokencrystals photo BOLA)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "preview.owasp-juice.shop/rest/PrivacyRequests: 44→45 — juice-shop-rest-api-route-alias (PrivacyRequests/BasketItems/Hints/Addresss route oracles on /rest/ prefix)",
-      "preview.owasp-juice.shop/rest/products/reviews: 45→46 — juice-shop-products-reviews-route-expansion (no product-id path)",
-      "vulnbank.org/api/v2/transactions: 21→22 — vulnbank-v2-transactions-route-live-oracle",
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (34 findings) — no benchmark misses",
+      "web-pentest-playground.onrender.com/upload: 5 findings — insecure file upload route",
+      "web-pentest-playground.onrender.com/redirect: 5 findings — open redirect oracle",
+      "appsec-ci-pipeline.onrender.com/admin/: 6 findings — Django admin panel exposure",
+      "appsec-ci-pipeline.onrender.com/comments/: 4 findings — stored XSS comments surface",
+      "vulnerable-web-application-jecw.vercel.app/cart: 6 findings — cart business-logic hub",
+      "preview.owasp-juice.shop/api/Complaints: 45 findings — complaint API BOLA oracle",
+      "brokencrystals.com/api/users/one/1/photo?isAdmin=true: 70 findings — mass-assignment photo BOLA hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vwad.owasp.org/app/*/login paths return 404 — pygoat/hackxor/yrprey/secure-by-design have no live demo URLs",
-      "websec.fr/level32/ returns 404 — challenge offline"
+      "vulnerable-web-application-jecw.vercel.app/cart: route-specific price-manipulation oracle still absent",
+      "appsec-ci-pipeline.onrender.com/comments/: stored-XSS live oracle may need POST probe",
+      "web-pentest-playground.onrender.com/upload: file-upload RCE chain oracle absent without multipart POST"
     ]
   },
   "discovery_highlights": {
-    "preview.owasp-juice.shop/rest/PrivacyRequests": 45,
-    "preview.owasp-juice.shop/rest/BasketItems": 45,
-    "preview.owasp-juice.shop/rest/Hints": 45,
-    "preview.owasp-juice.shop/rest/Addresss/1": 46,
-    "preview.owasp-juice.shop/rest/products/reviews": 46,
-    "vulnbank.org/api/v2/transactions": 22,
-    "juice-shop.herokuapp.com": 46,
-    "juice-shop.herokuapp.com/rest/basket/1": 48,
-    "preview.owasp-juice.shop/rest/chatbot": 45,
-    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 71
+    "juice-shop.herokuapp.com": 34,
+    "brokencrystals.com/api/users/one/1/photo?isAdmin=true": 70,
+    "preview.owasp-juice.shop/api/Complaints": 45,
+    "appsec-ci-pipeline.onrender.com/admin/": 6,
+    "vulnerable-web-application-jecw.vercel.app/cart": 6,
+    "web-pentest-playground.onrender.com/upload": 5,
+    "web-pentest-playground.onrender.com/redirect": 5,
+    "appsec-ci-pipeline.onrender.com/comments/": 4,
+    "brokencrystals.com/api/users/one/admin/photo": 15
   }
 }
