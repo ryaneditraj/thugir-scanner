@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-tokens-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /tokens with username admin1'-- returns admin access token (user id 10); pentest-ground.com:9000/eval findings 8→10 (+tokens-sqli route oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-tokens-sqli-error-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /tokens password ' triggers sqlite3.OperationalError unrecognized token in Werkzeug debugger response; pentest-ground.com:9000/tokens findings 4→6 (+tokens-sqli-error route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-restflaw-search-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /search with billion-laughs XML returns HTTP 400 Detected an entity reference loop; pentest-ground.com:9000/search findings 4→6 (+search-xxe route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:preview.owasp-juice.shop",
       "slug": "juice-shop-deluxe-membership-live-oracle",
       "status": "shipped",

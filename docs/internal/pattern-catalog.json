@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T15:44:54.839Z",
-  "total": 1912,
-  "uniqueSlugs": 1907,
+  "generatedAt": "2026-08-06T16:17:47.987Z",
+  "total": 1915,
+  "uniqueSlugs": 1910,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1894,
+    "generic": 1897,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1827,
+    "deep": 1830,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 106,
     "Security misconfiguration": 145,
     "Broken authentication": 114,
-    "Injection": 271,
+    "Injection": 274,
     "Cross-site scripting": 665,
     "Open redirect": 13,
     "general": 20,
@@ -1536,6 +1536,9 @@
     "pentest-ground-dvwa-xss-d-route-live-oracle",
     "pentest-ground-dvwa-xss-r-route-live-oracle",
     "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
+    "pentest-ground-restflaw-search-xxe-route-live-oracle",
+    "pentest-ground-restflaw-tokens-sqli-error-route-live-oracle",
+    "pentest-ground-restflaw-tokens-sqli-route-live-oracle",
     "permissive-cors",
     "php-strcmp-array-bypass",
     "phpinfo-exposed",

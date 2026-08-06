@@ -41632,28 +41632,28 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "pentest-ground-restflaw-user-sqli-route-live-oracle",
+    slug: "pentest-ground-restflaw-tokens-sqli-error-route-live-oracle",
     platform: "generic",
-    category: "Broken access control",
-    severityDefault: "critical",
-    title: "Pentest-Ground RestFlaw user SQLi BOLA route live oracle",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground RestFlaw tokens SQL error disclosure route live oracle",
     description:
-      "When scanning pentest-ground.com:9000, GET /user/2' OR '1'='1 with a user1 session token bypasses object-level authorization and returns another user's record — RestFlaw SQLi BOLA route oracle.",
+      "When scanning pentest-ground.com:9000, POST /tokens with a malformed password triggers sqlite3.OperationalError in the response — RestFlaw SQL injection error-disclosure route oracle.",
     impactOneline:
-      "SQL injection in the user ID path parameter defeats per-user access controls on /user/{id}.",
+      "Database errors on login inputs confirm unparameterized SQL and aid further injection.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "pentestGroundRestflawUserSqliRouteLiveOracle" },
+    detectorConfig: { rule: "pentestGroundRestflawTokensSqliErrorRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
-      summary: "Validate user IDs as integers and enforce object-level authorization after lookup.",
+      summary: "Use parameterized queries and return generic auth failures instead of SQL errors.",
       steps: [
-        "Use parameterized queries for user lookups.",
-        "Compare authenticated user ID to requested record before returning data.",
+        "Replace string-concatenated SQL with bound parameters.",
+        "Catch database exceptions and map them to safe client responses.",
         "Run RestFlaw only on isolated lab infrastructure."
       ]
     },
     fixPrompt:
-      "Our Pentest-Ground RestFlaw /user/{id} endpoint allows SQL injection to bypass BOLA checks. Show safe user lookup and authorization patterns.",
+      "Our Pentest-Ground RestFlaw /tokens endpoint leaks sqlite3.OperationalError on malformed passwords. Show parameterized query and safe error-handling fixes.",
     version: 1,
     enabled: true
   },

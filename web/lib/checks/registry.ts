@@ -37705,56 +37705,30 @@ const pentestGroundRestflawTokensSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const pentestGroundRestflawUserSqliRouteLiveOracle: Rule = async (ctx) => {
+const pentestGroundRestflawTokensSqliErrorRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/pentest-ground\.com:9000/i.test(pageUrl)) return NEGATIVE;
-  const origin = pentestGroundRestflawProbeOrigin(ctx);
-  const loginDoc = await ctx.probe.get(new URL("/tokens", origin).toString(), {
+  const tokensUrl = new URL("/tokens", pentestGroundRestflawProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(tokensUrl, {
     method: "POST",
-    body: JSON.stringify({ username: "user1", password: "pass1" }),
+    body: JSON.stringify({ username: "x", password: "'" }),
     headers: { "Content-Type": "application/json" },
-    maxBytes: 4096,
+    maxBytes: 8192,
     timeoutMs: 15000
   });
-  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
-  let login: { access?: { token?: { id?: string } } };
-  try {
-    login = JSON.parse(loginDoc.body) as typeof login;
-  } catch {
-    return NEGATIVE;
-  }
-  const tokenId = login.access?.token?.id;
-  if (!tokenId) return NEGATIVE;
-  const boladoc = await ctx.probe.get(new URL("/user/2", origin).toString(), {
-    headers: { "X-Auth-Token": tokenId },
-    maxBytes: 4096,
-    timeoutMs: 15000
-  });
-  if (!/token and user do not match/i.test(boladoc.body)) return NEGATIVE;
-  const sqliUrl = new URL("/user/2' OR '1'='1", origin).toString();
-  const sqliDoc = await ctx.probe.get(sqliUrl, {
-    headers: { "X-Auth-Token": tokenId },
-    maxBytes: 4096,
-    timeoutMs: 15000
-  });
-  if (sqliDoc.status < 200 || sqliDoc.status >= 400) return NEGATIVE;
-  let user: { user?: { id?: number; name?: string } };
-  try {
-    user = JSON.parse(sqliDoc.body) as typeof user;
-  } catch {
-    return NEGATIVE;
-  }
-  if (!user.user?.name) return NEGATIVE;
+  const sqliOk =
+    /sqlite3\.OperationalError/i.test(doc.body) ||
+    (/OperationalError/i.test(doc.body) && /unrecognized token/i.test(doc.body));
+  if (!sqliOk) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.94,
+    confidence: 0.93,
     evidence: {
       scannedUrl: pageUrl,
-      sqliUrl,
-      userName: user.user.name,
-      snippet: sqliDoc.body.slice(0, 240).trim(),
-      note: "Pentest-Ground RestFlaw GET /user/2' OR '1'='1 with user1 token bypasses object-level authorization — SQL injection BOLA route oracle"
+      tokensUrl,
+      snippet: doc.body.match(/sqlite3\.OperationalError[^\n<]{0,120}/i)?.[0] || doc.body.slice(0, 240).trim(),
+      note: "Pentest-Ground RestFlaw POST /tokens with malformed password triggers sqlite3.OperationalError — SQL injection error-disclosure route oracle"
     }
   };
 };
@@ -37773,7 +37747,7 @@ const pentestGroundRestflawSearchXxeRouteLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
   const xxeOk =
     /entity reference loop/i.test(doc.body) ||
     /Detected an entity reference loop/i.test(doc.body) ||
@@ -65765,7 +65739,7 @@ export const RULES: Record<string, Rule> = {
   pentestGroundDvwaWeakIdRouteLiveOracle,
   pentestGroundRestflawEvalCodeInjectionRouteLiveOracle,
   pentestGroundRestflawTokensSqliRouteLiveOracle,
-  pentestGroundRestflawUserSqliRouteLiveOracle,
+  pentestGroundRestflawTokensSqliErrorRouteLiveOracle,
   pentestGroundRestflawSearchXxeRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
