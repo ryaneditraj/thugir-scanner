@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T19:45:00.000Z",
+  "updated_at": "2026-08-06T20:32:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2812,
-  "total_findings": 29306,
+  "total_sites_scanned": 2821,
+  "total_findings": 29655,
   "critical_findings": 82,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2001,
-  "discovery_findings": 24991,
+  "discovery_urls_added": 2006,
+  "discovery_findings": 25294,
   "improvements_shipped": 1171,
-  "last_run": "2026-08-06T19:45:00.000Z",
+  "last_run": "2026-08-06T20:32:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); herokuapp 503, staging fallback"
+      "note": "Primary herokuapp 503; staging fallback 6/6 stable (46 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 8,
-      "focus": "Pentest-Ground GuardianLeaks create SSRF + RestFlaw uptime command injection",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 303,
+      "focus": "brokencrystals swagger-json gaps (admin/login, deleteEmails, v1/userinfo) + Pentest-Ground GuardianLeaks SSRF + RestFlaw cmdi",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "pentest-ground.com:81/create: 4→6 findings — guardian-leaks-create-ssrf live+route oracles (POST reference= fetches AWS IMDS ami-id)",
-      "pentest-ground.com:9000/user: 6→8 findings — restflaw-uptime-cmdi live+route oracles (GET /uptime/;id returns uid=0(root))",
-      "ssrf.vulnlab.dev/basic: route SSRF oracles already firing (16 findings) — prior learning gap closed",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon oracles already firing (38 findings) — prior learning gap closed"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "brokencrystals.com/api/auth/admin/login: 69 findings — hub oracles fire; route-specific admin-login oracle still absent",
+      "brokencrystals.com/api/email/deleteEmails: 38 findings — hub oracles fire; route-specific deleteEmails oracle still absent",
+      "brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com: 26 findings — v1 userinfo disclosure hub",
+      "pentest-ground.com:81/create: 6 findings — guardian-leaks-create-ssrf live+route oracles confirmed",
+      "pentest-ground.com:9000/user: 8 findings — restflaw-uptime-cmdi live+route oracles confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.demo.escape.tech/rest/deluxe-membership: API returns not eligible — deluxe oracle blocked on escape.tech demo",
-      "web-security-learning-labs modules behind Vercel Security Checkpoint — route live oracles blocked",
-      "demo.owasp-juice.shop/b2b/v2/orders returns error — deserialization oracle blocked"
+      "brokencrystals /api/auth/admin/login and /api/email/deleteEmails need route-specific live oracles (hub-only 69/38 findings)",
+      "juice-shop.herokuapp.com primary still 503 — staging fallback required"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 48,
-    "pentest-ground.com:81/create": 6,
+    "juice-shop-staging.herokuapp.com": 46,
+    "brokencrystals.com/api/auth/admin/login": 69,
+    "brokencrystals.com/api/auth/oidc-client": 74,
+    "brokencrystals.com/api/users/id/1": 55,
+    "brokencrystals.com/api/email/deleteEmails": 38,
+    "brokencrystals.com/api/users/fullinfo/admin": 27,
+    "brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com": 26,
     "pentest-ground.com:9000/user": 8,
-    "brokencrystals.com/api/auth/oidc-client": 75,
-    "juice-shop.demo.escape.tech/api/ProductReviews": 52,
-    "ssrf.vulnlab.dev/basic": 16,
-    "pwnshop.ctfsecurity.com/apply-coupon": 38
+    "pentest-ground.com:81/create": 6
   }
 }
