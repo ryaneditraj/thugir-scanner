@@ -17696,7 +17696,7 @@ const JUICESEC_CHALLENGE_ROUTE_LABELS: Record<
   },
   xss: {
     label: "JuiceSec reflected XSS lab checkXSSReflected",
-    checkRe: /function checkXSSReflected|on\\w+\\s*=|<script/i,
+    checkRe: /function checkXSSReflected|on\w+\s*=|<script/i,
     category: "Cross-site scripting",
     note: "JuiceSec /challenge/xss route — checkXSSReflected reflects unsanitized search payloads into the DOM"
   },
@@ -17721,7 +17721,7 @@ const JUICESEC_CHALLENGE_ROUTE_LABELS: Record<
 };
 
 const clientSideJuicesecChallengeRouteEvidence: Rule = async (ctx) => {
-  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   const challengeMatch = pageUrl.match(/\/challenge\/(sqli|xss|jwt|ssrf|idor)\b/i);
   if (!challengeMatch) return NEGATIVE;
   const challengeKey = challengeMatch[1]!.toLowerCase();
@@ -17729,12 +17729,11 @@ const clientSideJuicesecChallengeRouteEvidence: Rule = async (ctx) => {
   if (!challengeMeta) return NEGATIVE;
 
   let corpus = `${ctx.combined}\n${pageUrl}`;
-  if (!challengeMeta.checkRe.test(corpus) || !/JuiceSec|juicesec|JUICESEC/i.test(corpus)) {
-    const homeUrl = new URL("/", ctx.origin).toString();
-    const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 600_000, timeoutMs: 20000 });
-    if (homeDoc.status >= 200 && homeDoc.status < 400 && homeDoc.body.length > 2000) {
-      corpus += `\n${homeDoc.body}`;
-    }
+  const labOrigin = new URL(pageUrl).origin;
+  const homeUrl = new URL("/", labOrigin).toString();
+  const homeDoc = await fetchDoc(homeUrl, { maxBytes: 600_000, timeoutMs: 20000 });
+  if (homeDoc.status >= 200 && homeDoc.status < 400 && homeDoc.body.length > 2000) {
+    corpus += `\n${homeDoc.body}`;
   }
 
   const hits: { label: string; sample: string }[] = [

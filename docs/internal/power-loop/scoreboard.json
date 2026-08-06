@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T18:12:00.000Z",
+  "updated_at": "2026-08-06T18:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1996,
   "discovery_findings": 24744,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-06T18:12:00.000Z",
+  "improvements_shipped": 1169,
+  "last_run": "2026-08-06T18:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,38 @@
           ]
         }
       },
-      "note": "Primary herokuapp 503; staging fallback 6/6 (46 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (50 findings); herokuapp + staging 503, escape.tech fallback"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 198,
-      "focus": "brokencrystals swagger-json OIDC client + fullinfo/id/userinfo v2 + email/getEmails; escape.tech ProductReviews drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 26,
+      "focus": "JuiceSec /challenge/* route oracles + WhoopsPay transactions API cold-start retry",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "brokencrystals.com/api/auth/oidc-client: 71 findings — oidc-client-secret-route-live-oracle fires on route scan",
-      "brokencrystals.com/api/users/fullinfo/admin: 29 findings — excessive data exposure hub",
-      "brokencrystals.com/api/users/id/1: 24 findings — numeric ID BOLA hub",
-      "juice-shop.demo.escape.tech/api/ProductReviews: 52 findings — products-reviews-exposure-route oracle on escape.tech",
-      "brokencrystals.com/api/email/getEmails: 11 findings — verbose error / email API surface",
-      "brokencrystals.com/api/v2/userinfo/admin@brokencrystals.com: 9 findings — userinfo v2 disclosure hub",
-      "juice-shop.demo.escape.tech/rest/saveLoginIp: 2 findings — login IP spoofing route surface"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "juicesec.mrdinesh.workers.dev/challenge/sqli: 2→3 findings — client-side-juicesec-challenge-route-evidence shipped (homepage fetchDoc bootstrap for 404 challenge paths)",
+      "juicesec.mrdinesh.workers.dev/challenge/ssrf: 2→4 findings — route-specific SSRF lab oracle via checkSSRF markers",
+      "whoopspay.onrender.com/api/transactions/1: 7→13 findings — whoopsPayFetchTransactionsBody cold-start retry restores BOLA live+route oracles",
+      "vulnerable-web-application-jecw.vercel.app/api/products: Render API HTTP 500 — buggybuy-api-bola oracle rejected until backend recovers"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/b2b/v2/orders: scan error (503) — route-specific deserialization oracle unreachable",
-      "brokencrystals.com/api/email/getEmails: route-specific mass-assignment oracle still absent (11-finding hub)",
-      "brokencrystals.com/api/v2/userinfo/*: route-specific disclosure oracle still absent (9-finding hub)"
+      "vulnerable-web-application-mcd0.onrender.com API returns HTTP 500 — BuggyBuy live oracle blocked",
+      "pwnshop.ctfsecurity.com/admin/security: PWN-014 second-order SQLi needs admin session (OTP-gated)",
+      "web-security-learning-labs modules behind Vercel Security Checkpoint — route live oracles blocked"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.demo.escape.tech": 50,
+    "juicesec.mrdinesh.workers.dev/challenge/sqli": 3,
+    "juicesec.mrdinesh.workers.dev/challenge/ssrf": 4,
+    "whoopspay.onrender.com/api/transactions/1": 13,
     "brokencrystals.com/api/auth/oidc-client": 71,
     "juice-shop.demo.escape.tech/api/ProductReviews": 52,
     "brokencrystals.com/api/users/fullinfo/admin": 29,
-    "brokencrystals.com/api/users/id/1": 24,
-    "brokencrystals.com/api/email/getEmails": 11,
-    "brokencrystals.com/api/v2/userinfo/admin@brokencrystals.com": 9,
-    "juice-shop-staging.herokuapp.com": 46,
-    "juice-shop.demo.escape.tech/rest/saveLoginIp": 2
+    "pwnshop.ctfsecurity.com/seller/preview": 38
   }
 }
