@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T16:17:47.987Z",
-  "total": 1915,
-  "uniqueSlugs": 1910,
+  "generatedAt": "2026-08-06T17:24:23.203Z",
+  "total": 1916,
+  "uniqueSlugs": 1911,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1897,
+    "generic": 1898,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1830,
+    "deep": 1831,
     "continuous": 0
   },
   "byCategory": {
@@ -31,7 +31,7 @@
     "Cross-site scripting": 665,
     "Open redirect": 13,
     "general": 20,
-    "SSRF": 7,
+    "SSRF": 8,
     "Server-side request forgery": 54,
     "Sensitive data exposure": 36,
     "AI security": 50,
@@ -67,6 +67,7 @@
     "brokencrystals-api-fetch-route-live-oracle",
     "brokencrystals-api-file-httpbin-ssrf-live-oracle",
     "brokencrystals-aws-metadata-ssrf-live-oracle",
+    "brokencrystals-aws-metadata-ssrf-route-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
     "brokencrystals-config-live-oracle",
     "brokencrystals-config-route-live-oracle",

@@ -30140,6 +30140,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-aws-metadata-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/metadata AWS SSRF route live oracle",
+    description:
+      "When scanning /api/metadata, GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns AWS IMDS — route-specific cloud SSRF oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans of /api/metadata should confirm cloud metadata SSRF via the sibling /api/file/aws endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsAwsMetadataSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to link-local and cloud metadata addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254 and other link-local/metadata IP ranges.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/metadata route scan confirms AWS metadata SSRF via /api/file/aws. Show how to block cloud metadata SSRF on route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-azure-metadata-ssrf-live-oracle",
     platform: "generic",
     category: "SSRF",
@@ -34738,58 +34764,6 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host Web Security Learning Labs-style SQLi/XSS/IDOR training modules. Show how to auth-gate labs and isolate them from production.",
-    version: 1,
-    enabled: true
-  },
-  {
-    slug: "web-security-learning-labs-xss-module-route-live-oracle",
-    platform: "generic",
-    category: "Cross-site scripting",
-    severityDefault: "medium",
-    title: "Web Security Learning Labs XSS module route live oracle",
-    description:
-      "When scanning /module/1012, the public Vercel deploy confirms XSS training module 1012 — route-specific training-lab surface oracle.",
-    impactOneline:
-      "Route-scoped scans should flag XSS training module surfaces on Web Security Learning Labs.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "webSecurityLearningLabsXssModuleRouteLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "Gate interactive XSS labs behind authentication on Web Security Learning Labs.",
-      steps: [
-        "Require login before serving runnable XSS training modules.",
-        "Host XSS demos on isolated training subdomains.",
-        "Do not copy lab exploit patterns into production applications."
-      ]
-    },
-    fixPrompt:
-      "Our /module/1012 route exposes an XSS training module on Web Security Learning Labs. Show how to auth-gate lab modules.",
-    version: 1,
-    enabled: true
-  },
-  {
-    slug: "web-security-learning-labs-idor-module-route-live-oracle",
-    platform: "generic",
-    category: "Broken access control",
-    severityDefault: "medium",
-    title: "Web Security Learning Labs IDOR module route live oracle",
-    description:
-      "When scanning /module/1013, the public Vercel deploy confirms IDOR training module 1013 — route-specific training-lab surface oracle.",
-    impactOneline:
-      "Route-scoped scans should flag IDOR training module surfaces on Web Security Learning Labs.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "webSecurityLearningLabsIdorModuleRouteLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "Gate interactive IDOR labs behind authentication on Web Security Learning Labs.",
-      steps: [
-        "Require login before serving runnable IDOR training modules.",
-        "Host IDOR demos on isolated training subdomains.",
-        "Do not copy lab exploit patterns into production applications."
-      ]
-    },
-    fixPrompt:
-      "Our /module/1013 route exposes an IDOR training module on Web Security Learning Labs. Show how to auth-gate lab modules.",
     version: 1,
     enabled: true
   },

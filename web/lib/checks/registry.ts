@@ -54614,45 +54614,19 @@ const juiceShopProductsReviewsExposureRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-function isWebSecurityLearningLabsHost(ctx: RuleContext): boolean {
-  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
-  return /web-security-learning-labs\.vercel\.app/i.test(corpus);
-}
-
-const webSecurityLearningLabsXssModuleRouteLiveOracle: Rule = async (ctx) => {
-  if (!isWebSecurityLearningLabsHost(ctx)) return NEGATIVE;
+const brokencrystalsAwsMetadataSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/module\/1012\b/i.test(pageUrl)) return NEGATIVE;
-  const doc = await ctx.probe.get(pageUrl, { maxBytes: 16384, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/Here is a Module:\s*1012/i.test(doc.body)) return NEGATIVE;
+  if (!/\/api\/metadata\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsAwsMetadataSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.88,
+    confidence: result.confidence,
     evidence: {
+      ...result.evidence,
       scannedUrl: pageUrl,
-      moduleId: "1012",
-      snippet: doc.body.match(/Here is a Module:[^<]*/)?.[0]?.slice(0, 80) ?? "module 1012",
-      note: "Web Security Learning Labs /module/1012 route scan — XSS training module surface confirmed on public Vercel deploy"
-    }
-  };
-};
-
-const webSecurityLearningLabsIdorModuleRouteLiveOracle: Rule = async (ctx) => {
-  if (!isWebSecurityLearningLabsHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/module\/1013\b/i.test(pageUrl)) return NEGATIVE;
-  const doc = await ctx.probe.get(pageUrl, { maxBytes: 16384, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/Here is a Module:\s*1013/i.test(doc.body)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.88,
-    evidence: {
-      scannedUrl: pageUrl,
-      moduleId: "1013",
-      snippet: doc.body.match(/Here is a Module:[^<]*/)?.[0]?.slice(0, 80) ?? "module 1013",
-      note: "Web Security Learning Labs /module/1013 route scan — IDOR training module surface confirmed on public Vercel deploy"
+      note: "Broken Crystals /api/metadata route scan — GET /api/file/aws?path=169.254.169.254/latest/meta-data/ returns AWS IMDS — route-specific cloud SSRF oracle"
     }
   };
 };
@@ -65664,8 +65638,6 @@ export const RULES: Record<string, Rule> = {
   vulnshopUsersEnumerationRouteLiveOracle,
   clientSideBuggybuyEvidence,
   clientSideWebSecurityLearningLabsEvidence,
-  webSecurityLearningLabsXssModuleRouteLiveOracle,
-  webSecurityLearningLabsIdorModuleRouteLiveOracle,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
@@ -66062,6 +66034,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsApiFileHttpbinSsrfLiveOracle,
   brokencrystalsApiFetchRouteLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
+  brokencrystalsAwsMetadataSsrfRouteLiveOracle,
   brokencrystalsAzureMetadataSsrfLiveOracle,
   brokencrystalsDigitalOceanMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
