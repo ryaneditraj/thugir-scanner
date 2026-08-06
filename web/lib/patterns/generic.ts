@@ -41605,6 +41605,84 @@ export const genericPatterns: Pattern[] = [
     version: 1,
     enabled: true
   },
+  {
+    slug: "pentest-ground-restflaw-tokens-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pentest-Ground RestFlaw tokens SQLi route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000, POST /tokens with username admin1'-- bypasses authentication and returns an admin access token — RestFlaw SQL injection auth-bypass route oracle.",
+    impactOneline:
+      "Unparameterized SQL in the login endpoint lets attackers mint valid admin session tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawTokensSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RestFlaw is intentional security training — use parameterized queries for all SQL.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters.",
+        "Reject malformed credentials instead of surfacing database errors.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw /tokens endpoint is vulnerable to SQL injection in the username field. Show parameterized query fixes for Flask/Connexion APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-restflaw-user-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Pentest-Ground RestFlaw user SQLi BOLA route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000, GET /user/2' OR '1'='1 with a user1 session token bypasses object-level authorization and returns another user's record — RestFlaw SQLi BOLA route oracle.",
+    impactOneline:
+      "SQL injection in the user ID path parameter defeats per-user access controls on /user/{id}.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawUserSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate user IDs as integers and enforce object-level authorization after lookup.",
+      steps: [
+        "Use parameterized queries for user lookups.",
+        "Compare authenticated user ID to requested record before returning data.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw /user/{id} endpoint allows SQL injection to bypass BOLA checks. Show safe user lookup and authorization patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-restflaw-search-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground RestFlaw search XXE route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000, POST /search with billion-laughs XML entity expansion triggers parser errors — RestFlaw XML external entity route oracle.",
+    impactOneline:
+      "Unsafe XML parsing on /search enables entity expansion and external entity resolution attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawSearchXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entities and limit entity expansion in XML parsers.",
+      steps: [
+        "Use defusedxml or equivalent safe XML parsers.",
+        "Reject DTDs and external entities on API inputs.",
+        "Run RestFlaw only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw /search endpoint parses attacker-controlled XML unsafely. Show XXE hardening for Python XML parsers.",
+    version: 1,
+    enabled: true
+  },
 {
     slug: "exposed-infra-artifacts",
     platform: "generic",
