@@ -1463,6 +1463,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideMindApiEvidence",
   "clientSideHermesCodexEvidence",
   "clientSidePentestGroundGuardianLeaksEvidence",
+  "pentestGroundGuardianLeaksCreateSsrfLiveOracle",
+  "pentestGroundGuardianLeaksCreateSsrfRouteLiveOracle",
   "clientSidePentestGroundHubEvidence",
   "pentestGroundDvwaExecCmdiRouteLiveOracle",
   "pentestGroundDvwaCspBypassRouteLiveOracle",
@@ -1525,6 +1527,8 @@ const DEEP_RULES = new Set<string>([
   "pentestGroundRestflawTokensSqliRouteLiveOracle",
   "pentestGroundRestflawTokensSqliErrorRouteLiveOracle",
   "pentestGroundRestflawSearchXxeRouteLiveOracle",
+  "pentestGroundRestflawUptimeCmdiLiveOracle",
+  "pentestGroundRestflawUptimeCmdiRouteLiveOracle",
   "clientSideJudgementDayArenaEvidence",
   "clientSideCahyodVulnerableLabEvidence",
   "clientSideXssC2CollectorEvidence",
@@ -9604,6 +9608,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const w = (p: Pattern) => {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
+      if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
       if (/zerohealth\.aliyu\.dev/i.test(origin) && p.slug.startsWith("zerohealth-")) return -2;
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
