@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T00:15:30.517Z",
+  "updated_at": "2026-08-06T00:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2768,
-  "total_findings": 28445,
+  "total_sites_scanned": 2771,
+  "total_findings": 28630,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1971,
-  "discovery_findings": 23809,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-06T00:15:30.517Z",
+  "discovery_findings": 23964,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-06T00:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -52,37 +52,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 483,
-      "focus": "ginandjuice blog SSTI + preview reviews/Hints + firing-range reflected body/400 + escape.tech track-order + brokencrystals x5u JWT",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 155,
+      "focus": "brokencrystals JWT /login route oracles + preview /api/Wallets wallet route + pwnshop OTP reliability",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
+      "brokencrystals.com/api/auth/jwt/jwk/login: 16→72 findings — JWT login route oracle expansion (jwk-empty-route + jwt-route)",
+      "preview.owasp-juice.shop/api/Wallets: 43→45 findings — wallet-balance-bola-route oracle now fires on /api/Wallets scans",
+      "pwnshop.ctfsecurity.com/apply-coupon: 23→38 findings — OTP mail wait extension restores coupon live+route oracles on cold scans",
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (42 findings) — primary Heroku 503 fallback",
-      "ginandjuice.shop/blog/post?postId=1: 25 findings — blog post SSTI/XSS route oracle",
-      "preview.owasp-juice.shop/rest/products/1/reviews: 46 findings — product reviews disclosure live oracle",
-      "public-firing-range.appspot.com/reflected/parameter/body/400: 249 findings — reflected XSS parameter benchmark hub",
-      "preview.owasp-juice.shop/api/Hints: 45 findings — challenge hints exposure oracle",
-      "juice-shop.demo.escape.tech/rest/track-order: 48 findings — order tracking IDOR oracle",
-      "brokencrystals.com/api/auth/jwt/x5u/login: 70 findings — x5u JWT confusion hub"
+      "brokencrystals.com/api/auth/jwt/x5u/login: 70 findings — x5u JWT login route oracle now wired via validate|login matcher"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "juice-shop.herokuapp.com primary + basket/wallet routes 503 — staging fallback covers benchmark",
       "ginandjuice.shop/my-account/change-email: race-condition oracle still absent (requires parallel POST + exploit-server inbox)",
-      "brokencrystals.com/api/auth/jwt/x5u/login: route-specific x5u JWT oracle absent (70-finding hub)",
-      "public-firing-range reflected/parameter/body/400: 249-finding hub — route-specific reflected XSS oracle gap on body/400 sink"
+      "public-firing-range.appspot.com/reflected/parameter/body/400: 249-finding hub — route-specific reflected XSS oracle gap on body/400 sink"
     ]
   },
   "discovery_highlights": {
-    "https://public-firing-range.appspot.com/reflected/parameter/body/400?q=a": 249,
-    "https://brokencrystals.com/api/auth/jwt/x5u/login": 70,
-    "https://juice-shop.demo.escape.tech/rest/track-order": 48,
-    "https://preview.owasp-juice.shop/rest/products/1/reviews": 46,
-    "https://preview.owasp-juice.shop/api/Hints": 45,
-    "https://ginandjuice.shop/blog/post?postId=1": 25,
-    "juice-shop-staging.herokuapp.com": 42
+    "brokencrystals.com/api/auth/jwt/jwk/login": 72,
+    "brokencrystals.com/api/auth/jwt/x5u/login": 70,
+    "brokencrystals.com/api/auth/jwt/jku/login": 69,
+    "pwnshop.ctfsecurity.com/apply-coupon": 38,
+    "preview.owasp-juice.shop/api/Wallets": 45,
+    "juice-shop-staging.herokuapp.com": 42,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 42
   }
 }
