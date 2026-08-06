@@ -60145,6 +60145,150 @@ const brokencrystalsUsersSearchExposureLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsFullinfoDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const fullinfoUrl = new URL("/api/users/fullinfo/admin", ctx.origin).toString();
+  const doc = await ctx.probe.get(fullinfoUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let user: Record<string, unknown>;
+  try {
+    const parsed = JSON.parse(doc.body) as unknown;
+    if (!parsed || typeof parsed !== "object") return NEGATIVE;
+    user = parsed as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const cardNumber = String(user.cardNumber ?? "");
+  const email = String(user.email ?? "");
+  if (!email || !/\d{4}/.test(cardNumber)) return NEGATIVE;
+  if (typeof user.phoneNumber !== "string" || !/\+?\d/.test(user.phoneNumber)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: fullinfoUrl,
+      email,
+      cardRedacted: cardNumber.replace(/\d(?=\d{4})/g, "*"),
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Broken Crystals GET /api/users/fullinfo/admin returns cardNumber and phoneNumber without authentication — excessive data exposure oracle"
+    }
+  };
+};
+
+const brokencrystalsFullinfoDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/fullinfo\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsFullinfoDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/fullinfo route scan — GET returns cardNumber and phoneNumber without authentication"
+    }
+  };
+};
+
+function brokencrystalsParseUserProfile(doc: {
+  status: number;
+  body: string;
+}): Record<string, unknown> | null {
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as unknown;
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : null;
+  } catch {
+    return null;
+  }
+}
+
+const brokencrystalsUsersIdBolaLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const id1Url = new URL("/api/users/id/1", ctx.origin).toString();
+  const id2Url = new URL("/api/users/id/2", ctx.origin).toString();
+  const [doc1, doc2] = await Promise.all([
+    ctx.probe.get(id1Url, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(id2Url, { maxBytes: 4096, timeoutMs: 15000 })
+  ]);
+  const user1 = brokencrystalsParseUserProfile(doc1);
+  const user2 = brokencrystalsParseUserProfile(doc2);
+  if (!user1 || !user2) return NEGATIVE;
+  const email1 = String(user1.email ?? "");
+  const email2 = String(user2.email ?? "");
+  if (!email1 || !email2 || email1 === email2) return NEGATIVE;
+  const id1 = Number(user1.id);
+  const id2 = Number(user2.id);
+  if (id1 !== 1 || id2 !== 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: id1Url,
+      email1,
+      email2,
+      snippet: doc1.body.slice(0, 180).trim(),
+      note: "Broken Crystals GET /api/users/id/{id} returns user profiles for predictable numeric IDs without authentication — BOLA/IDOR oracle"
+    }
+  };
+};
+
+const brokencrystalsUsersIdBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/id\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsUsersIdBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/id/{id} route scan — unauthenticated access to user profiles by numeric ID"
+    }
+  };
+};
+
+const brokencrystalsEmailSmtpProxyLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const emailUrl = new URL("/api/email/getEmails", ctx.origin).toString();
+  const doc = await ctx.probe.get(emailUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const smtpProxyOk =
+    /ECONNREFUSED\s+127\.0\.0\.1:1080/i.test(doc.body) ||
+    (/127\.0\.0\.1:1080/i.test(doc.body) && /ECONNREFUSED|connect/i.test(doc.body));
+  if (!smtpProxyOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: emailUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/email/getEmails attempts server-side SMTP connection to 127.0.0.1:1080 — internal proxy SSRF/misconfiguration oracle"
+    }
+  };
+};
+
+const brokencrystalsEmailSmtpProxyRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/email\/getEmails\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsEmailSmtpProxyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/email/getEmails route scan — server-side connection attempt to internal SMTP proxy at 127.0.0.1:1080"
+    }
+  };
+};
+
 const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/testimonials/count", ctx.origin);
@@ -66304,6 +66448,12 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsSecretsRouteLiveOracle,
   brokencrystalsSafeFilesRfiLiveOracle,
   brokencrystalsUsersSearchExposureLiveOracle,
+  brokencrystalsFullinfoDisclosureLiveOracle,
+  brokencrystalsFullinfoDisclosureRouteLiveOracle,
+  brokencrystalsUsersIdBolaLiveOracle,
+  brokencrystalsUsersIdBolaRouteLiveOracle,
+  brokencrystalsEmailSmtpProxyLiveOracle,
+  brokencrystalsEmailSmtpProxyRouteLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
   brokencrystalsTestimonialsIframeInjectionLiveOracle,
   brokencrystalsTestimonialsXssLiveOracle,
