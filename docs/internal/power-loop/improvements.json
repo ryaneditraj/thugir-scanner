@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-products-reviews-exposure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/products/1/reviews returns author emails without auth; route matcher extended to legacy /api/ProductReviews; juice-shop.demo.escape.tech/api/ProductReviews findings 51 (+products-reviews-exposure-route oracle with scannedUrl); benchmark juice-shop.demo.escape.tech 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-aws-metadata-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file/aws?path=http://169.254.169.254/latest/meta-data/ returns ami-id/instance-id when scanning /api/metadata route; brokencrystals.com/api/metadata findings 72→73 (+aws-metadata-ssrf-route oracle); benchmark juice-shop.demo.escape.tech 49 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-restflaw-tokens-sqli-route-live-oracle",
       "status": "shipped",
@@ -19690,6 +19702,16 @@
       "source": "discovery:web-pentest-playground.onrender.com",
       "slug": "web-pentest-playground-login-sqli-route-live-oracle",
       "shipped_at": "2026-08-06T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-products-reviews-exposure-route-live-oracle",
+      "shipped_at": "2026-08-06T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-aws-metadata-ssrf-route-live-oracle",
+      "shipped_at": "2026-08-06T17:15:00.000Z"
     }
   ]
 }
