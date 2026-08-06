@@ -2077,8 +2077,7 @@ const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
 
 /** Juice Shop mirrors REST resources under both /api/* and /rest/* — route scans should match either prefix. */
 function juiceShopApiOrRestRoute(pageUrl: string, pathSuffix: string): boolean {
-  const esc = pathSuffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return new RegExp(`/(?:api|rest)/${esc}`, "i").test(pageUrl);
+  return new RegExp(`/(?:api|rest)/${pathSuffix}`, "i").test(pageUrl);
 }
 
 const idorObjectAccess: Rule = async (ctx) => {
