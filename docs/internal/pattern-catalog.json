@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T10:32:21.411Z",
-  "total": 1891,
-  "uniqueSlugs": 1886,
+  "generatedAt": "2026-08-06T11:09:25.330Z",
+  "total": 1893,
+  "uniqueSlugs": 1888,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1873,
+    "generic": 1875,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1806,
+    "deep": 1808,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "Open redirect": 13,
     "general": 20,
     "SSRF": 7,
-    "Server-side request forgery": 52,
+    "Server-side request forgery": 54,
     "Sensitive data exposure": 36,
     "AI security": 50,
     "Business logic": 14,
@@ -1505,6 +1505,8 @@
     "nodegoat-tutorial-a9-route-live-oracle",
     "nodegoat-tutorial-redos-route-live-oracle",
     "nodegoat-tutorial-ssrf-route-live-oracle",
+    "notevault-ssrf-internal-flag-live-oracle",
+    "notevault-ssrf-internal-flag-route-live-oracle",
     "notices-file-lfi-probe",
     "oauth-oidc-metadata-exposed",
     "oopssec-live-stream-bfla-route-live-oracle",
