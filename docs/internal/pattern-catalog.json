@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-06T11:09:25.330Z",
-  "total": 1893,
-  "uniqueSlugs": 1888,
+  "generatedAt": "2026-08-06T12:15:14.951Z",
+  "total": 1897,
+  "uniqueSlugs": 1892,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1875,
+    "generic": 1879,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1808,
+    "deep": 1812,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 346,
+    "Broken access control": 350,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1878,6 +1878,10 @@
     "web-pentest-playground-stored-xss-live-oracle",
     "web-pentest-playground-stored-xss-route-live-oracle",
     "web-pentest-playground-view-users-route-live-oracle",
+    "whoopspay-money-request-idor-live-oracle",
+    "whoopspay-money-request-idor-route-live-oracle",
+    "whoopspay-transactions-bola-live-oracle",
+    "whoopspay-transactions-bola-route-live-oracle",
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
     "wrongsecrets-challenge-live-oracle",

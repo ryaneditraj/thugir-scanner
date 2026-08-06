@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T12:16:00.000Z",
+  "updated_at": "2026-08-06T12:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2749,
-  "total_findings": 27197,
-  "critical_findings": 60,
+  "total_sites_scanned": 2752,
+  "total_findings": 27233,
+  "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1971,
-  "discovery_findings": 23056,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-06T12:16:00.000Z",
+  "discovery_findings": 23091,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-06T12:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 44,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 478,
+      "probes_run": 488,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,35 @@
           ]
         }
       },
-      "note": "Primary Heroku 503 — staging fallback 6/6 (44 findings); captcha-bypass + save-login-ip oracles present; no benchmark misses"
+      "note": "6/6 recall (46 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 246,
-      "focus": "preview juice-shop captcha/image-captcha/saveLoginIp/wallet/auth-details + juicesec sqli/xss/idor queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 35,
+      "focus": "WhoopsPay transaction BOLA + money-request IDOR + web-pentest Render warmup",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (44 findings) — primary Heroku 503, no category gaps",
-      "preview.owasp-juice.shop/rest/captcha: 48 findings — captcha-bypass + image-captcha-bypass live oracles",
-      "preview.owasp-juice.shop/rest/saveLoginIp: 48 findings — save-login-ip HTTP-header XSS live oracle",
-      "preview.owasp-juice.shop/rest/wallet/balance: 48 findings — wallet-balance BOLA live oracle",
-      "preview.owasp-juice.shop/rest/user/authentication-details: 48 findings — JWT none-algorithm route oracle",
-      "juicesec.mrdinesh.workers.dev/challenge/sqli: 2 findings — only misconfig+SSTI reflexion (no route-specific SQLi oracle)",
-      "juicesec.mrdinesh.workers.dev/challenge/xss: 2 findings — no route-specific XSS oracle on challenge page",
-      "juicesec.mrdinesh.workers.dev/challenge/idor: 2 findings — no route-specific IDOR oracle on challenge page"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "whoopspay.onrender.com/api/users: 7→11 findings — whoopspay-transactions-bola + money-request-idor live oracles shipped",
+      "web-pentest-playground.onrender.com/login: 6→12 findings — login-sqli + file-upload + stored-xss oracles restored via Flask warmup",
+      "web-pentest-playground.onrender.com/comment: 6→12 findings — stored-xss live oracle now fires after warmup fix"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juicesec.mrdinesh.workers.dev/challenge/*: inline checkSQLi/checkJWT/checkSSRF challenge oracles absent — only generic misconfig+SSTI reflexion fires",
-      "juicesec.mrdinesh.workers.dev/challenge/ssrf|jwt: not scanned this run (queue limit 8) — route-specific oracles need dedicated challenge-page probes"
+      "vulnerable-web-application-jecw.vercel.app: BuggyBuy backend (mcd0.onrender.com) returns HTTP 500 — live oracles deferred",
+      "whoopspay.onrender.com: XSS-in-transaction-description oracle still absent without stable POST /api/transactions sender flow"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 44,
+    "juice-shop.herokuapp.com": 46,
     "preview.owasp-juice.shop/rest/captcha": 48,
-    "preview.owasp-juice.shop/rest/saveLoginIp": 48,
-    "preview.owasp-juice.shop/rest/wallet/balance": 48,
-    "preview.owasp-juice.shop/rest/user/authentication-details": 48,
-    "preview.owasp-juice.shop/api/Addresss/1": 46,
-    "juicesec.mrdinesh.workers.dev/challenge/sqli": 2,
-    "juicesec.mrdinesh.workers.dev/challenge/xss": 2
+    "web-pentest-playground.onrender.com/login": 12,
+    "web-pentest-playground.onrender.com/comment": 12,
+    "whoopspay.onrender.com/api/users": 11,
+    "webchal1.vercel.app/api/notes/import": 8
   }
 }

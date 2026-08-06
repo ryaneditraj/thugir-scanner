@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-transactions-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/transactions returns @elena_kowalski/@james_chen rows with routingNumber without auth; whoopspay.onrender.com/api/users findings 7→11 (+transactions-bola live+route oracles); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-money-request-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/money-request fromUserId=@elena_kowalski returns Money request created successfully with victim as sender; whoopspay.onrender.com/api/users findings 7→11 (+money-request-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-render-warmup-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: warmupRenderHost extended for web-pentest-playground with POST /login Invalid-credentials Flask probe; web-pentest-playground.onrender.com/login findings 6→12 with login-sqli + file-upload + stored-xss live oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:webchal1.vercel.app",
       "slug": "notevault-ssrf-internal-flag-live-oracle",
       "status": "shipped",
