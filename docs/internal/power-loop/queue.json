@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-05T21:08:00.000Z",
+  "updated_at": "2026-08-06T00:05:59.243Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=1",
+      "source": "PortSwigger Gin & Juice — blog post SSTI/XSS oracle GET /blog/post?postId= (ginandjuice.shop public lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/products/1/reviews",
+      "source": "OWASP Juice Shop preview — product reviews disclosure oracle GET /rest/products/1/reviews (preview.owasp-juice.shop develop branch)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body/400?q=a",
+      "source": "Google Firing Range — reflected XSS parameter/body/400 benchmark (public-firing-range.appspot.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Hints",
+      "source": "OWASP Juice Shop preview — challenge hints exposure oracle GET /api/Hints (preview.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/track-order",
+      "source": "Escape.tech Juice Shop demo — order tracking IDOR oracle GET /rest/track-order (juice-shop.demo.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop-staging.herokuapp.com/api/snippets",
       "source": "OWASP Juice Shop staging — vulnerable code snippets API GET /api/snippets (Heroku staging fallback oracle)",
