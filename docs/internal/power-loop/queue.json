@@ -2,6 +2,31 @@
   "updated_at": "2026-08-06T16:06:00.000Z",
   "discovery_urls": [
     {
+      "url": "https://web-security-learning-labs.vercel.app/module/1012",
+      "source": "Web Security Learning Labs — XSS module lab (web-security-learning-labs.vercel.app OSS deploy, 16 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1013",
+      "source": "Web Security Learning Labs — IDOR module lab (web-security-learning-labs.vercel.app OSS deploy, 16 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/ProductReviews",
+      "source": "OWASP Juice Shop preview — product review XSS/BOLA oracle GET /api/ProductReviews (preview.owasp-juice.shop develop branch, 16 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/products/search?q=test",
+      "source": "OWASP Juice Shop preview — SQLi search oracle GET /rest/products/search?q= (preview.owasp-juice.shop develop branch, 16 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/api/SecurityQuestions",
+      "source": "Escape.tech Juice Shop demo — security-question catalog disclosure oracle GET /api/SecurityQuestions (juice-shop.demo.escape.tech, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://preview.owasp-juice.shop/rest/captcha",
       "source": "OWASP Juice Shop preview — captcha bypass oracle GET /rest/captcha (preview.owasp-juice.shop develop branch, 12 UTC discovery)",
       "auth": "benchmark"
@@ -15768,31 +15793,6 @@
     {
       "url": "https://pentest-fauxbank.vercel.app/api/profile",
       "source": "alfredang/pentest FauxBank — sensitive data exposure oracle GET /api/profile (pentest-fauxbank.vercel.app Vercel OSS banking lab, 14 UTC discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://web-security-learning-labs.vercel.app/module/1012",
-      "source": "Web Security Learning Labs — XSS module lab (web-security-learning-labs.vercel.app OSS deploy, 16 UTC discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://web-security-learning-labs.vercel.app/module/1013",
-      "source": "Web Security Learning Labs — IDOR module lab (web-security-learning-labs.vercel.app OSS deploy, 16 UTC discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://preview.owasp-juice.shop/api/ProductReviews",
-      "source": "OWASP Juice Shop preview — product review XSS/BOLA oracle GET /api/ProductReviews (preview.owasp-juice.shop develop branch, 16 UTC discovery)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://preview.owasp-juice.shop/rest/products/search?q=test",
-      "source": "OWASP Juice Shop preview — SQLi search oracle GET /rest/products/search?q= (preview.owasp-juice.shop develop branch, 16 UTC discovery)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://juice-shop.demo.escape.tech/api/SecurityQuestions",
-      "source": "Escape.tech Juice Shop demo — security-question catalog disclosure oracle GET /api/SecurityQuestions (juice-shop.demo.escape.tech, 16 UTC discovery)",
       "auth": "public_demo"
     }
   ],
