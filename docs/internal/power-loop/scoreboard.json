@@ -65,6 +65,7 @@
       "juice-shop.demo.escape.tech/redirect?to=: 48-finding hub — route-specific open-redirect oracle still absent",
       "juice-shop.demo.escape.tech/file-upload: 48-finding hub — route-specific upload-traversal/SSTI oracle still absent",
       "idor-website.vercel.app/api/employees/1: 3 findings — minimal hub; employee IDOR route oracle absent",
+      "vaultapp IDOR oracles merged from parallel run (audit-logs, messages/read, account-export)",
       "demo.owasp-juice.shop/rest/deluxe-membership + /rest/wallet/balance: 503 errors"
     ],
     "learning_gaps": [
@@ -73,6 +74,7 @@
       "juice-shop.demo.escape.tech/redirect?to=: 48-finding hub without route-specific open-redirect live oracle",
       "juice-shop.demo.escape.tech/file-upload: 48-finding hub without complaint upload traversal/SSTI route oracle",
       "idor-website.vercel.app/api/employees/:id: 3-finding hub — employee IDOR route oracle needs JWT session",
+      "vaultapp-omega.vercel.app/api/admin/users/1: DELETE privilege-escalation oracle still absent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "demo.owasp-juice.shop queue URLs still 503 — prefer escape.tech fallbacks"
     ]

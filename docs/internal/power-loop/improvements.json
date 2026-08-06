@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-audit-logs-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login sysadmin/adminpass1 + GET /api/admin/audit-logs?user_id=299 returns PROFILE_VIEW/EXPORT_DATA logs without admin role check; vaultapp-omega.vercel.app/api/admin/audit-logs findings 6→10 (+audit-logs-idor live+route oracles); benchmark juice-shop.demo.escape.tech 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-audit-logs-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/admin/audit-logs confirms arbitrary user_id audit-log query with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-messages-read-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login sysadmin + POST /api/messages/read message_id=42 returns sender_username jmurphy9 / receiver srogers78 private message body without ownership check; vaultapp-omega.vercel.app/api/messages/read findings 3→10 (+messages-read-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-messages-read-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/messages/read confirms POST message_id IDOR with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-account-export-apikey-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login sysadmin + GET /api/notes/9 leaks victim API key + GET /api/account/export X-API-Key:3744b879… exports amendoza69 profile/transactions while authenticated as sysadmin; vaultapp-omega.vercel.app/api/account/export findings 6→10 (+account-export-apikey live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-account-export-apikey-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/account/export confirms X-API-Key impersonation exports victim account data with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:whoopspay.onrender.com",
       "slug": "whoopspay-payments-sensitive-data-live-oracle",
       "status": "shipped",
