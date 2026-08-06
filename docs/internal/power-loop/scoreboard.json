@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T00:03:31.427Z",
+  "updated_at": "2026-08-06T00:15:30.517Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2762,
-  "total_findings": 27962,
+  "total_sites_scanned": 2768,
+  "total_findings": 28445,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 23326,
+  "discovery_urls_added": 1971,
+  "discovery_findings": 23809,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-06T00:03:31.427Z",
+  "last_run": "2026-08-06T00:15:30.517Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 42,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 488,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,41 @@
           ]
         }
       },
-      "note": "Primary heroku 503 — staging fallback 42 findings 6/6 recall maintained"
+      "note": "Primary juice-shop.herokuapp.com 503 — staging fallback 42 findings, 6/6 recall maintained"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 120,
-      "focus": "juice-shop image-captcha bypass + ginandjuice admin-delete route + pwnshop profile 404 bootstrap",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 483,
+      "focus": "ginandjuice blog SSTI + preview reviews/Hints + firing-range reflected body/400 + escape.tech track-order + brokencrystals x5u JWT",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com/rest/image-captcha: 41→43 findings — image-captcha-bypass live+route oracles shipped",
-      "ginandjuice.shop/admin: 24→25 findings — admin-delete-route oracle now fires on /admin scans",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: 4→42 findings — profile 404 homepage bootstrap + OTP retry extension",
-      "juice-shop-staging benchmark: 42 findings 6/6 recall (primary heroku 503 fallback)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (42 findings) — primary Heroku 503 fallback",
+      "ginandjuice.shop/blog/post?postId=1: 25 findings — blog post SSTI/XSS route oracle",
+      "preview.owasp-juice.shop/rest/products/1/reviews: 46 findings — product reviews disclosure live oracle",
+      "public-firing-range.appspot.com/reflected/parameter/body/400: 249 findings — reflected XSS parameter benchmark hub",
+      "preview.owasp-juice.shop/api/Hints: 45 findings — challenge hints exposure oracle",
+      "juice-shop.demo.escape.tech/rest/track-order: 48 findings — order tracking IDOR oracle",
+      "brokencrystals.com/api/auth/jwt/x5u/login: 70 findings — x5u JWT confusion hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "juice-shop.herokuapp.com primary + basket/wallet routes 503 — staging fallback covers benchmark",
       "ginandjuice.shop/my-account/change-email: race-condition oracle still absent (requires parallel POST + exploit-server inbox)",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-category-bypass still OTP-gated on cold scans intermittently",
-      "juice-shop.herokuapp.com primary + basket/wallet routes 503 — staging fallback covers benchmark"
+      "brokencrystals.com/api/auth/jwt/x5u/login: route-specific x5u JWT oracle absent (70-finding hub)",
+      "public-firing-range reflected/parameter/body/400: 249-finding hub — route-specific reflected XSS oracle gap on body/400 sink"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com/rest/image-captcha": 43,
-    "ginandjuice.shop/admin": 25,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 42,
-    "juice-shop-staging.herokuapp.com": 42,
-    "brokencrystals.com/api/auth/jwt/jku/login": 69,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 23
+    "https://public-firing-range.appspot.com/reflected/parameter/body/400?q=a": 249,
+    "https://brokencrystals.com/api/auth/jwt/x5u/login": 70,
+    "https://juice-shop.demo.escape.tech/rest/track-order": 48,
+    "https://preview.owasp-juice.shop/rest/products/1/reviews": 46,
+    "https://preview.owasp-juice.shop/api/Hints": 45,
+    "https://ginandjuice.shop/blog/post?postId=1": 25,
+    "juice-shop-staging.herokuapp.com": 42
   }
 }
