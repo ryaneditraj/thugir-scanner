@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T10:26:00.000Z",
+  "updated_at": "2026-08-06T11:16:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/challenge/sqli",
+      "source": "mr-dinesh/juicesec — OWASP Top 10 SQLi browser lab (Cloudflare Workers, 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/challenge/xss",
+      "source": "mr-dinesh/juicesec — OWASP Top 10 XSS browser lab (Cloudflare Workers, 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/challenge/idor",
+      "source": "mr-dinesh/juicesec — OWASP Top 10 IDOR browser lab (Cloudflare Workers, 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/challenge/ssrf",
+      "source": "mr-dinesh/juicesec — OWASP Top 10 SSRF browser lab (Cloudflare Workers, 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juicesec.mrdinesh.workers.dev/challenge/jwt",
+      "source": "mr-dinesh/juicesec — OWASP Top 10 JWT tampering browser lab (Cloudflare Workers, 11 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://whoopspay.onrender.com/api/orders",
       "source": "khajdari/WhoopsPay — order history BOLA oracle GET /api/orders (Render OSS deploy, 10 UTC discovery)",
