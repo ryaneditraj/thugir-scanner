@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T08:05:00.000Z",
+  "updated_at": "2026-08-06T09:06:52.326Z",
   "discovery_urls": [
+    {
+      "url": "https://whoopspay.onrender.com/api/transactions/1",
+      "source": "khajdari/WhoopsPay — transaction IDOR/BOLA oracle GET /api/transactions/:id (Render OSS deploy, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/wallet/1",
+      "source": "khajdari/WhoopsPay — wallet balance BOLA oracle GET /api/wallet/:userId (Render OSS deploy, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/users",
+      "source": "khajdari/WhoopsPay — user enumeration / excessive data exposure GET /api/users (Render OSS deploy, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/payments/1",
+      "source": "khajdari/WhoopsPay — payment object IDOR oracle GET /api/payments/:id (Render OSS deploy, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://whoopspay.onrender.com/api/transfer",
+      "source": "khajdari/WhoopsPay — money transfer BOLA / broken auth oracle POST /api/transfer (Render OSS deploy, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnerable-web-application-jecw.vercel.app/api/products",
       "source": "MuhaibShamsher/BuggyBuy — product catalog SQLi/XSS oracle GET /api/products (Vercel OSS deploy, 08 UTC discovery)",
