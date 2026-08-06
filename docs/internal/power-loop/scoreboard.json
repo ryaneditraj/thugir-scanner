@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 482,
+      "probes_run": 394,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
