@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-admin-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://web-pentest-playground.onrender.com/admin username=admin' OR '1'='1'-- returns 302 Location /admin_dashboard with admin session cookie; web-pentest-playground.onrender.com/admin findings 8→10 (+admin-sqli live+route oracles); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-admin-dashboard-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: admin SQLi session GET /admin_dashboard returns <title>Admin Dashboard</title> with View Users links; web-pentest-playground.onrender.com/admin_dashboard findings 8→10 (+admin-dashboard-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-view-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: admin SQLi session GET /view_users returns <title>Users List</title> with ID: N | Username: rows; web-pentest-playground.onrender.com/view_users findings 8→10 (+view-users-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
       "slug": "web-pentest-playground-open-redirect-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect?url=https://evil-open-redirect-probe.example/thugir-redirect-test returns 302 Location to probe host; web-pentest-playground.onrender.com/redirect findings 8→9 (+open-redirect-route oracle distinct from generic open-redirect-query-param); benchmark juice-shop 46 findings 6/6 maintained"
@@ -19487,6 +19505,21 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-change-email-route-live-oracle",
       "shipped_at": "2026-08-06T02:00:00.000Z"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-admin-sqli-live-oracle",
+      "shipped_at": "2026-08-06T08:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-admin-dashboard-route-live-oracle",
+      "shipped_at": "2026-08-06T08:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-view-users-route-live-oracle",
+      "shipped_at": "2026-08-06T08:15:00.000Z"
     }
   ]
 }
