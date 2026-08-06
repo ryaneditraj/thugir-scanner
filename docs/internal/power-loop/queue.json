@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T18:05:00.000Z",
+  "updated_at": "2026-08-06T19:08:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/api/auth/oidc-client",
@@ -15844,7 +15844,33 @@
       "url": "https://pentest-fauxbank.vercel.app/api/profile",
       "source": "alfredang/pentest FauxBank — sensitive data exposure oracle GET /api/profile (pentest-fauxbank.vercel.app Vercel OSS banking lab, 14 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/api/ProductReviews",
+      "source": "OWASP Juice Shop staging — product review XSS/BOLA oracle GET /api/ProductReviews (juice-shop-staging.herokuapp.com, 19 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/loans",
+      "source": "alfredang/pentest FauxBank — loan approval BFLA oracle GET /api/loans (GitHub README api routes, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/support",
+      "source": "alfredang/pentest FauxBank — stored XSS support ticket oracle POST /api/support (GitHub README lesson 3, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/lookup?policy_number=1",
+      "source": "atlas-crew/Chimera API-DOCUMENTATION — blind boolean SQLi oracle GET /api/v1/insurance/policies/lookup (public vuln-api demo, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/claims/search?policy_id=1",
+      "source": "atlas-crew/Chimera API-DOCUMENTATION — ORDER BY injection oracle GET /api/v1/claims/search (public vuln-api demo, 19 UTC discovery)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 79
+  "discovery_urls_added": 84,
+  "updated_at": "2026-08-06T19:08:00.000Z"
 }
