@@ -1,6 +1,36 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-9-terraform-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-9 documents Terraform state + AWS Secrets Manager walkthrough (What happens in the Terraform state?); wrongsecrets-challenge-live-oracle focus chain adds Terraform state markers; wrongsecrets.herokuapp.com/challenge/challenge-9 findings 11 with challenge live+route oracles; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage catalog IDOR · CWE-639 + Accessing objects by predictable IDs without authorization checks; ai-security-platform-iota.vercel.app/challenges/idor findings 6→8 (+ai-security-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage catalog Redirect · CWE-601 + Unvalidated redirects that route users to attacker-controlled URLs; ai-security-platform-iota.vercel.app/challenges/open-redirect findings 6→8 (+ai-security-open-redirect-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage catalog XSS · CWE-79 + Injecting malicious scripts into pages viewed by other users; ai-security-platform-iota.vercel.app/challenges/xss findings 6→8 (+ai-security-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "pygoat-juicesec-route-disambiguation",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSidePygoatChallengeRouteEvidence matched /challenge/ssrf on juicesec hosts via shared slug collision; added juicesec host guard; juicesec.mrdinesh.workers.dev/challenge/ssrf findings 2→3 with client-side-juicesec-challenge-route-evidence (pygoat FP removed); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-module-topics-1026-1036",
       "status": "shipped",
