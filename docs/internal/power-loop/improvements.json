@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-audit-log-plaintext-password-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with canary password then GET /api/v1/events returns detail with password: <canary> in plaintext (LOGIN_FAILED); pwnshop.ctfsecurity.com/logs findings 40 (+plaintext-password live+route oracles, PWN-027); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-export-orders-csv-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mass-assignment is_admin=true + OTP session then GET /admin/export-orders returns text/csv Order ID,... rows (PWN-021→PWN-013 chain); pwnshop.ctfsecurity.com/admin/export-orders findings 24→43 (+export-orders-csv live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-audit-logs-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeUserId fix — iterate user_id 50/100/200 until audit logs non-empty; rootadmin GET /api/admin/audit-logs?user_id=50 returns 3 log rows without admin role check; vaultapp-omega.vercel.app/api/admin/audit-logs findings 6→14 (+idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-account-delete-csrf-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: fresh OTP session + POST /account/delete confirm=yes returns 302 / then relogin Invalid credentials without CSRF token; pwnshop.ctfsecurity.com/account/delete findings 12→41 (+account-delete-csrf live+route oracles); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
