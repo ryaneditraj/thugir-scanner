@@ -29828,6 +29828,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "AI Security Platform IDOR challenge route live oracle",
+    description:
+      "When scanning /challenges/idor, the platform catalog documents CWE-639 predictable object IDs reachable without authorization checks — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms IDOR training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce object-level authorization on every ID lookup.",
+      steps: [
+        "Require session auth and ownership checks on every object reference endpoint.",
+        "Use non-enumerable IDs or indirect references for sensitive resources.",
+        "Log and alert on cross-tenant object access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/idor route documents predictable ID access without authorization. Show object-level authz checks for Next.js API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "AI Security Platform open redirect challenge route live oracle",
+    description:
+      "When scanning /challenges/open-redirect, the platform catalog documents CWE-601 unvalidated redirects to attacker-controlled URLs — route-specific open redirect training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms open redirect training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — allowlist redirect destinations server-side.",
+      steps: [
+        "Validate redirect targets against an allowlist of trusted hosts.",
+        "Use relative paths or signed redirect tokens instead of raw URL parameters.",
+        "Reject protocol-relative and javascript: redirect targets."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/open-redirect route documents unvalidated redirects. Show server-side redirect allowlisting for Next.js apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "AI Security Platform XSS challenge route live oracle",
+    description:
+      "When scanning /challenges/xss, the platform catalog documents CWE-79 script injection into pages viewed by other users — route-specific XSS training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms XSS training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — encode output and enforce a strict Content-Security-Policy.",
+      steps: [
+        "HTML-encode all user-controlled output in React/Next.js components.",
+        "Avoid dangerouslySetInnerHTML unless content is strictly sanitized.",
+        "Deploy a nonce-based CSP without unsafe-inline."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/xss route documents script injection into pages viewed by other users. Show output encoding and CSP hardening for Next.js.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-forgotten-backup-disclosure",
     platform: "generic",
     category: "Information disclosure",
