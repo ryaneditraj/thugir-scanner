@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T12:05:00.000Z",
+  "updated_at": "2026-08-07T13:06:13.886Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1031",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1031 (public Vercel demo, 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1032",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1032 (public Vercel demo, 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1033",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1033 (public Vercel demo, 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/products",
+      "source": "chethan-vinayak/vulnshop — unauthenticated product API oracle GET /api/v1/products (Vercel OSS deploy README, 13 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/track-order/1",
+      "source": "OWASP Juice Shop preview — track-order IDOR oracle GET /rest/track-order/1 (preview.owasp-juice.shop develop branch, 13 UTC discovery)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1028",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1028 (public Vercel demo, 12 UTC discovery)",
