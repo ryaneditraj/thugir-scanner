@@ -35548,32 +35548,6 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "crapi-community-posts-route-live-oracle",
-    platform: "generic",
-    category: "Broken access control",
-    severityDefault: "high",
-    title: "crAPI community posts BOLA route live oracle",
-    description:
-      "When scanning /community/api/v2/community/posts, community vehicleid leaks enable cross-user location reads — route-specific crAPI BOLA oracle (API1).",
-    impactOneline:
-      "Route scans on community post endpoints should confirm vehicle UUID leaks that enable location tracking.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "crapiCommunityPostsRouteLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "crAPI is intentional API security training — enforce object-level authorization on vehicle location endpoints in production.",
-      steps: [
-        "Verify the authenticated user owns the vehicle before returning location data.",
-        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
-        "Run crAPI only on isolated scanner evaluation infrastructure."
-      ]
-    },
-    fixPrompt:
-      "Our crAPI /community/api/v2/community/posts route scan confirms BOLA via vehicleid leaks. Show object-level authorization remediation.",
-    version: 1,
-    enabled: true
-  },
-  {
     slug: "crapi-signup-open-registration-live-oracle",
     platform: "generic",
     category: "Broken authentication",

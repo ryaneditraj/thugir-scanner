@@ -2297,7 +2297,6 @@ const DEEP_RULES = new Set<string>([
   "crapiVehicleRouteLiveOracle",
   "crapiDashboardLiveOracle",
   "crapiDashboardRouteLiveOracle",
-  "crapiCommunityPostsRouteLiveOracle",
   "crapiSignupOpenRegistrationLiveOracle",
   "crapiSignupRouteLiveOracle",
   "crapiOtpBruteforceLiveOracle",
@@ -9858,6 +9857,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/(?:api\/)?support\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-") &&
+        /support/.test(p.slug)
+      )
+        return -3;
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
       if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
