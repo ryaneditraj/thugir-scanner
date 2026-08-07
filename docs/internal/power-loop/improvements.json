@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-transfer-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: broadened route match from /api/transfer only to /(?:api/)?transfer; pentest-fauxbank.vercel.app/transfer findings 15→13 (+fauxbank-transfer-route-live-oracle with csrf-transfer probe); benchmark juice-shop.herokuapp.com 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-save-login-ip-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopProbeLoginToken retries uncached fetchDoc on cold-start miss; saveLoginIp oracle uses fetchDoc for authenticated GET bypassing 401 route-scan cache; runner priority -3 on /rest/saveLoginIp; juice-shop-staging.herokuapp.com/rest/saveLoginIp 50 findings incl save-login-ip live+route oracles; benchmark 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-save-login-ip-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rest/saveLoginIp with Authorization + True-Client-IP:203.0.113.42 returns lastLoginIp:203.0.113.42; login token retry + authenticated fetchDoc bypass fixes probe-cache poisoning on route scans; staging /rest/saveLoginIp 50 findings with save-login-ip oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-cart-route-live-oracle",
       "status": "shipped",
