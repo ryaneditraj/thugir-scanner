@@ -2,6 +2,30 @@
   "candidates": [
     {
       "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-hidden-admin-manager-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNSHOP_FLASK_ROUTE_URL_ORACLES curated fallback for chethan-vinayak/vulnshop README #16 GET /manager hidden admin path; vulnshop.vercel.app/manager findings 6→7 (+hidden-admin-manager-route oracle); benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-hidden-admin-administrator-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNSHOP_FLASK_ROUTE_URL_ORACLES curated fallback for README #17 GET /administrator hidden admin path; vulnshop.vercel.app/administrator findings 6→7 (+hidden-admin-administrator-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-api-info-component-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNSHOP_FLASK_ROUTE_URL_ORACLES curated fallback for README #18 GET /api/info Flask/PyYAML version disclosure; vulnshop.vercel.app/api/info findings 6→7 (+api-info-component-disclosure-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-api-process-deserialization-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNSHOP_FLASK_ROUTE_URL_ORACLES curated fallback for README #19 POST /api/process pickle deserialization; vulnshop.vercel.app/api/process findings 6→7 (+api-process-deserialization-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-jwt-login-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /jwt-protected alg:none probe + VULNSHOP_FLASK_ROUTE_URL_ORACLES curated fallback for chethan-vinayak/vulnshop README #8; vulnshop.vercel.app/jwt-login findings 6→7 (+jwt-login-route oracle); benchmark juice-shop-staging 49 findings 6/6 maintained"
