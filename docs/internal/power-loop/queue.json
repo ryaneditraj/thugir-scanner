@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T13:06:13.886Z",
+  "updated_at": "2026-08-07T14:05:03.551Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1034",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1034 (public Vercel demo, 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1035",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1035 (public Vercel demo, 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1036",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1036 (public Vercel demo, 14 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/orders",
+      "source": "chethan-vinayak/vulnshop — unauthenticated orders API oracle GET /api/v1/orders (Vercel OSS deploy README, 14 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/users",
+      "source": "chethan-vinayak/vulnshop — user enumeration API oracle GET /api/v1/users (Vercel OSS deploy README, 14 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1031",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1031 (public Vercel demo, 13 UTC discovery)",
