@@ -23482,6 +23482,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-jwt-none-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "VulnShop JWT alg:none bypass live oracle",
+    description:
+      "GET /jwt-protected accepts alg:none JWT without signature verification on VulnShop Flask deploys — JWT none-algorithm authentication bypass oracle.",
+    impactOneline:
+      "Accepting alg:none JWTs lets attackers forge admin tokens without knowing the signing secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopJwtNoneLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none and enforce signature verification — VulnShop is intentional training software.",
+      steps: [
+        "Whitelist allowed JWT algorithms and reject \"none\".",
+        "Verify signatures on every protected route before trusting claims.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /jwt-protected accepts alg:none JWTs. Show JWT algorithm allow-list and signature verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-jwt-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "VulnShop /jwt-login JWT alg:none route live oracle",
+    description:
+      "When scanning /jwt-login, live alg:none bypass on /jwt-protected or curated Flask-route oracle confirms JWT none-algorithm training module.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /jwt-login documents JWT alg:none authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopJwtLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none and enforce signature verification on /jwt-login issued tokens.",
+      steps: [
+        "Whitelist allowed JWT algorithms and reject \"none\".",
+        "Verify signatures on every protected route before trusting claims.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /jwt-login route documents JWT alg:none bypass. Show route-specific JWT hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-buy-ticket-race-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop buy-ticket race condition live oracle",
+    description:
+      "POST /buy-ticket sells multiple tickets via concurrent requests when the counter lacks mutex protection — race condition oracle.",
+    impactOneline:
+      "TOCTOU race on ticket inventory lets attackers oversell limited stock or bypass purchase limits.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopBuyTicketRaceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic inventory decrements or database locks — VulnShop is intentional training software.",
+      steps: [
+        "Protect inventory counters with mutexes or transactional updates.",
+        "Reject concurrent purchases that would oversell limited stock.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /buy-ticket has a race condition on ticket inventory. Show atomic counter and locking remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-buy-ticket-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /buy-ticket race condition route live oracle",
+    description:
+      "When scanning /buy-ticket, live concurrent POST race or curated Flask-route oracle confirms ticket-counter race condition training module.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /buy-ticket documents concurrent purchase race conditions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopBuyTicketRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic inventory decrements on /buy-ticket.",
+      steps: [
+        "Protect inventory counters with mutexes or transactional updates.",
+        "Reject concurrent purchases that would oversell limited stock.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /buy-ticket route documents a ticket purchase race condition. Show route-specific locking remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-products-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -35476,7 +35580,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1023 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking) from the lab catalog chunks — route-specific training-lab oracle.",
+      "When scanning /module/1011–1025 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition) from the lab catalog chunks — route-specific training-lab oracle.",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
