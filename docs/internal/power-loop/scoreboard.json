@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T01:10:00.000Z",
+  "updated_at": "2026-08-07T01:44:26.769Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2853,
-  "total_findings": 30911,
+  "total_sites_scanned": 2860,
+  "total_findings": 31069,
   "critical_findings": 91,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2021,
-  "discovery_findings": 25954,
+  "discovery_urls_added": 2026,
+  "discovery_findings": 26113,
   "improvements_shipped": 1170,
-  "last_run": "2026-08-07T01:10:00.000Z",
+  "last_run": "2026-08-07T01:44:26.769Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 416,
+      "probes_run": 504,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,41 @@
           ]
         }
       },
-      "note": "Primary herokuapp 6/6 (51 findings); no benchmark misses"
+      "note": "Primary herokuapp 6/6 (50 findings); full live-oracle suite including address BOLA, file-upload, wallet balance"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 40,
-      "focus": "vaultapp users/transactions/notes IDOR oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 159,
+      "focus": "vulnbank SSRF upload + metadata chain; pwnshop CSRF delete + wallet topup + stored XSS review; juice-shop demo deluxe-membership + wallet/balance back online",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
-      "vaultapp-omega.vercel.app/api/users/1: 6→13 — vaultapp-users-idor live+route oracles (GET /api/users/:id cross-user PII)",
-      "vaultapp-omega.vercel.app/api/transactions/1: 6→14 — vaultapp-transactions-idor live+route oracles (account_id query leaks victim tx history)",
-      "vaultapp-omega.vercel.app/api/notes/1: 6→13 — vaultapp-notes-idor live+route oracles (GET /api/notes/:id private note owned by another user)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "vulnbank.org/upload_profile_picture_url: 21 findings — vulnbank-upload-profile-picture-url-ssrf-live-oracle fires (127.0.0.1 metadata fetch)",
+      "pwnshop.ctfsecurity.com/wallet/topup/vulnbank: 31 findings — pwnshop-wallet-topup-vulnbank-live-oracle + route oracle",
+      "pwnshop.ctfsecurity.com/account/delete: 35 findings — generic hub; pwnshop-csrf-account-delete live oracle still absent (PWN-026)",
+      "pwnshop.ctfsecurity.com/review: 13 findings — client-side-pwnshop-review-xss-oracle only; no route-specific stored-XSS live oracle",
+      "demo.owasp-juice.shop/rest/deluxe-membership: 22 findings — demo back online after prior 503s",
+      "demo.owasp-juice.shop/rest/wallet/balance: 16 findings — wallet BOLA oracle active on demo host"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "idor-website.vercel.app/api/employees/:id: deploy returns 404 — employee IDOR oracle blocked",
+      "pwnshop.ctfsecurity.com/account/delete: CSRF account-deletion live oracle absent (PWN-026 needs authenticated session + cross-origin POST probe)",
+      "pwnshop.ctfsecurity.com/review: stored XSS live oracle absent without authenticated product-review POST",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vaultapp /api/documents/:id returns Invalid document ID — document IDOR oracle still absent"
+      "r2s-arena.fly.dev: unreachable — skipped"
     ]
   },
   "discovery_highlights": {
-    "vaultapp-omega.vercel.app/api/users/1": 13,
-    "vaultapp-omega.vercel.app/api/transactions/1": 14,
-    "vaultapp-omega.vercel.app/api/notes/1": 13,
-    "juice-shop.herokuapp.com": 51,
-    "vaultapp-omega.vercel.app/api/admin/users/1": 10,
-    "brokencrystals.com/users/one/1/photo?isAdmin=true": 79
+    "juice-shop.herokuapp.com": 50,
+    "pwnshop.ctfsecurity.com/account/delete": 35,
+    "pwnshop.ctfsecurity.com/wallet/topup/vulnbank": 31,
+    "demo.owasp-juice.shop/rest/deluxe-membership": 22,
+    "vulnbank.org/upload_profile_picture_url": 21,
+    "vulnbank.org/latest/meta-data/iam/security-credentials/vulnbank-role": 21,
+    "demo.owasp-juice.shop/rest/wallet/balance": 16,
+    "pwnshop.ctfsecurity.com/review": 13
   }
 }

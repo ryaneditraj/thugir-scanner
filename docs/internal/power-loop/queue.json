@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-06T23:05:00.000Z",
+  "updated_at": "2026-08-07T01:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnbank.org/upload_profile_picture_url",
+      "source": "Commando-X/vuln-bank — SSRF profile-picture URL import oracle POST /upload_profile_picture_url (GitHub README + Medium writeup, 01 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/account/delete",
+      "source": "ctfsec/pwnshop — CSRF account self-deletion oracle POST /account/delete (PWN-026 vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wallet/topup/vulnbank",
+      "source": "ctfsec/pwnshop — Vulnbank wallet funding credited-amount override oracle POST /wallet/topup/vulnbank (PWN-042 vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/review",
+      "source": "ctfsec/pwnshop — stored XSS product review oracle POST /review (PWN-011 vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/latest/meta-data/iam/security-credentials/vulnbank-role",
+      "source": "Commando-X/vuln-bank — simulated EC2 metadata SSRF chain target GET /latest/meta-data/iam/security-credentials/vulnbank-role (GitHub README SSRF section, 01 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop.demo.escape.tech/redirect?to=https://evil-open-redirect-probe.example",
       "source": "Escape.tech Juice Shop demo — token-stealing open redirect oracle GET /redirect?to= (Insomnia DAST report + juice-shop REST docs, 23 UTC discovery)",
