@@ -63662,23 +63662,6 @@ const crapiDashboardRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
-  if (!isCrapiLabHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/community\/api\/v2\/community\/posts\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await crapiVehicleBolaLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: "crAPI /community/api/v2/community/posts route scan — community vehicleid leak enables cross-user location read — BOLA route oracle (API1)"
-    }
-  };
-};
-
 const crapiSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
   if (!isCrapi1Host(ctx)) return NEGATIVE;
   const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
@@ -69866,7 +69849,6 @@ export const RULES: Record<string, Rule> = {
   crapiVehicleRouteLiveOracle,
   crapiDashboardLiveOracle,
   crapiDashboardRouteLiveOracle,
-  crapiCommunityPostsRouteLiveOracle,
   crapiSignupOpenRegistrationLiveOracle,
   crapiSignupRouteLiveOracle,
   crapiOtpBruteforceLiveOracle,

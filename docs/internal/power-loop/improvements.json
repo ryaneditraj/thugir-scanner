@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-guardian-leaks-search-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://pentest-ground.com:81/search query=test' raises sqlite3.OperationalError; query=' OR 1=1-- returns multiple /post/ links; pentest-ground.com:81/search findings 5→7 (+search-sqli live+route oracles); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-support-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/support stores <img onerror=thugirXSScanary> and GET /api/support returns unescaped payload; fauxbankSupportRouteLiveOracle + priority sort on /api/support scans; pentest-fauxbank.vercel.app/api/support fires fauxbank-stored-xss-support-probe (route oracle when Vercel checkpoint allows); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-dashboard-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: signup+login JWT then GET /identity/api/v2/user/dashboard returns email, number, available_credit:100.0; crapi.apisec.ai/identity/api/v2/user/dashboard findings 8 (+crapi-dashboard live+route oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-profile-route-bootstrap",
       "status": "shipped",
