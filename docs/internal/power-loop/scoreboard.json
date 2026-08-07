@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T18:20:18.930Z",
+  "updated_at": "2026-08-07T18:23:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2827,
-  "total_findings": 28390,
+  "total_sites_scanned": 2835,
+  "total_findings": 28474,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2001,
-  "discovery_findings": 23478,
+  "discovery_urls_added": 2006,
+  "discovery_findings": 23562,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-07T18:20:18.930Z",
+  "last_run": "2026-08-07T18:23:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 486,
+      "probes_run": 447,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 recall (48 findings); no benchmark misses"
+      "note": "Primary Heroku 503 + staging timeout; escape.tech fallback 6/6 (51 findings with rich juice-shop live-oracle set); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 80,
-      "focus": "WSL placeholder oracles for unreleased module routes 1037-1045 (+1046-1050 via generic placeholder fallback)",
-      "improvements_shipped_this_run": 3
+      "findings": 84,
+      "focus": "WSL modules 1046-1050 drain + pwnshop/debug/info wallet-top-up oracle; queued bypass403 protected paths + vaultapp.vercel.app API routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — primary Heroku dyno 503",
-      "web-security-learning-labs.vercel.app/module/1041: 7→8 findings — module-route-evidence for CSR placeholder shell (1037-1045)",
-      "web-security-learning-labs.vercel.app/module/1046-1048: 7 findings — WSL module catalog oracles",
-      "pwnshop.ctfsecurity.com/debug/info: 45 findings — debug endpoint PWN-018 hub",
-      "ssrf.vulnlab.dev/basic: 15 findings on route scan — SSRF live/route oracles validated",
-      "web-security-learning-labs.vercel.app/module/1049-1050: CSR placeholder shells — now covered by placeholder-topic fallback"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (51 findings) after Heroku 503 + staging timeout",
+      "pwnshop.ctfsecurity.com/debug/info: 46 findings incl pwnshop-wallet-topup-vulnbank-live-oracle (PWN-042)",
+      "web-security-learning-labs.vercel.app/module/1046-1048: 8 findings with module-route-evidence",
+      "web-security-learning-labs.vercel.app/module/1049-1050: 3 findings — CSR placeholder shells",
+      "web-security-learning-labs.vercel.app/module/1034: 5 findings with WSL module catalog oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (Resend key not in current Bluesky/Mastodon/Reddit feeds)",
-      "juice-shop.herokuapp.com primary oracle intermittently 503 — staging fallback required",
+      "juice-shop.herokuapp.com + staging intermittently unavailable — escape.tech fallback required",
+      "secret-resend slug still absent on juice-shop benchmark",
+      "bypass403.vercel.app /admin /secret /config + vaultapp.vercel.app API routes queued at tail pending drain",
       "WSL unreleased modules: topic titles not yet in FarciarzYT/WebSecurityLearningLabs ModulesData.ts — placeholder topic only",
       "vulnshop Railway backend offline — live API oracles fall back to README route evidence"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 48,
-    "pwnshop.ctfsecurity.com/debug/info": 45,
-    "web-security-learning-labs.vercel.app/module/1041": 8,
-    "web-security-learning-labs.vercel.app/module/1046": 7,
-    "web-security-learning-labs.vercel.app/module/1047": 7,
-    "web-security-learning-labs.vercel.app/module/1048": 7,
+    "juice-shop.demo.escape.tech": 51,
+    "pwnshop.ctfsecurity.com/debug/info": 46,
+    "web-security-learning-labs.vercel.app/module/1046": 8,
+    "web-security-learning-labs.vercel.app/module/1047": 8,
+    "web-security-learning-labs.vercel.app/module/1048": 8,
     "ssrf.vulnlab.dev/basic": 15,
-    "vulnbank.org/api/v3/user/1": 24
+    "vulnbank.org/api/v3/user/1": 24,
+    "juice-shop-staging.herokuapp.com": 48
   }
 }
