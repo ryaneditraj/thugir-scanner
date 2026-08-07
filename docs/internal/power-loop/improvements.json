@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-module-topics-1026-1036",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: TomaszTlusty/WebSecurityLearningLabs app/module/[moduleID]/page.tsx renders CSR placeholder Here is a Module: {id}; extended WEB_SECURITY_LEARNING_MODULE_TOPICS 1026-1036 (NoSQL Injection through Host Header Injection); web-security-learning-labs.vercel.app/module/1031 findings 3→8 (+module-route-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1026-1036",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds extended module priority seeds 1024-1036; web-security-learning-labs.vercel.app/module/1026 findings 3→8 (+module-route-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-users-profile-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README #22 GET /api/v1/users/<id>/profile BOLA; vulnshop-users-profile-bola-route-live-oracle + profile-mass-assignment route exclusion for /users/\\d+/profile; vulnshop.vercel.app/api/v1/users/1/profile findings 9→8 with route-specific API1 BOLA oracle (replaces incorrect profile-mass-assignment match); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-v3-user-idor-live-oracle",
       "status": "shipped",

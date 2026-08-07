@@ -33075,6 +33075,7 @@ const vulnshopProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/profile\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/users\/\d+\/profile\b/i.test(pageUrl)) return NEGATIVE;
   const live = await vulnshopProfileMassAssignmentLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -33163,6 +33164,7 @@ const vulnshopUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/users\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/users\/\d+\/profile\b/i.test(pageUrl)) return NEGATIVE;
   const live = await vulnshopAdminPanelLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -33184,6 +33186,59 @@ const vulnshopUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
       ...module.evidence,
       scannedUrl: pageUrl,
       note: "VulnShop /users route scan — unauthenticated user enumeration with plaintext passwords via admin and debug routes documented in SPA"
+    }
+  };
+};
+
+const vulnshopUsersProfileBolaLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (!apiBase) return NEGATIVE;
+  for (const userId of ["1", "2"]) {
+    const profileUrl = `${apiBase}/v1/users/${userId}/profile`;
+    const doc = await ctx.probe.get(profileUrl, { maxBytes: 8192, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    if (
+      /"email"\s*:/i.test(doc.body) &&
+      /"username"\s*:/i.test(doc.body) &&
+      (/"role"\s*:/i.test(doc.body) || /"balance"\s*:/i.test(doc.body))
+    ) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          profileUrl,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: `VulnShop GET /api/v1/users/${userId}/profile returns user profile (email, username, role/balance) without object-level authorization — API BOLA oracle (README #22)`
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
+const vulnshopUsersProfileBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/users\/\d+\/profile\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopUsersProfileBolaLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /api/v1/users/{id}/profile route scan — unauthenticated user profile disclosure confirmed (API1 BOLA)"
+      }
+    };
+  }
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "VulnShop /api/v1/users/{id}/profile route scan — chethan-vinayak/vulnshop README oracle #22 documents BOLA on user profile API"
     }
   };
 };
@@ -33738,7 +33793,18 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1022": "SSTI",
   "1023": "Clickjacking",
   "1024": "Server-Side Template Injection (Advanced)",
-  "1025": "Race Condition"
+  "1025": "Race Condition",
+  "1026": "NoSQL Injection",
+  "1027": "Open Redirect",
+  "1028": "Mass Assignment",
+  "1029": "File Upload Vulnerabilities",
+  "1030": "Insecure Deserialization",
+  "1031": "Broken Authentication (Session Management)",
+  "1032": "API Broken Function Level Authorization",
+  "1033": "Business Logic Flaws",
+  "1034": "HTTP Request Smuggling",
+  "1035": "Web Cache Poisoning",
+  "1036": "Host Header Injection"
 };
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -33754,7 +33820,18 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1022": /SSTI|Server-Side Template Injection/i,
   "1023": /Clickjacking|UI redress/i,
   "1024": /SSTI|Server-Side Template Injection|Template Injection/i,
-  "1025": /Race Condition|race condition|TOCTOU/i
+  "1025": /Race Condition|race condition|TOCTOU/i,
+  "1026": /NoSQL|MongoDB injection/i,
+  "1027": /Open Redirect|redirect.*validation/i,
+  "1028": /Mass Assignment|mass-assignment/i,
+  "1029": /File Upload|upload.*validation/i,
+  "1030": /Deserialization|pickle|unserialize/i,
+  "1031": /Session Management|session fixation|broken authentication/i,
+  "1032": /BFLA|function level authorization|API5/i,
+  "1033": /Business Logic|business-logic/i,
+  "1034": /Request Smuggling|HTTP desync/i,
+  "1035": /Cache Poisoning|web cache/i,
+  "1036": /Host Header|host header injection/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -68906,6 +68983,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopAdminPanelLiveOracle,
   vulnshopAdminPanelRouteLiveOracle,
   vulnshopUsersEnumerationRouteLiveOracle,
+  vulnshopUsersProfileBolaLiveOracle,
+  vulnshopUsersProfileBolaRouteLiveOracle,
   vulnshopJwtNoneLiveOracle,
   vulnshopJwtLoginRouteLiveOracle,
   vulnshopBuyTicketRaceLiveOracle,
