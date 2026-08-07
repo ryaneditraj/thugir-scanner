@@ -45890,6 +45890,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "graphqlbook-internal-user-search-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "GraphQL Bookstore internal user search BOLA live oracle",
+    description:
+      "POST /graphql { _internalUserSearch(username:\"admin\") } on api.graphqlbook.org returns admin user id and role without authentication — the GraphQL Bookstore BOLA oracle.",
+    impactOneline:
+      "Unauthenticated internal GraphQL queries expose other users' accounts and roles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookInternalUserSearchBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and authorization on internal GraphQL resolvers — GraphQL Bookstore is intentional training software.",
+      steps: [
+        "Remove or auth-gate _internalUserSearch from the public schema.",
+        "Enforce per-user authorization on user lookup resolvers.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql endpoint exposes _internalUserSearch without authentication. Show GraphQL BOLA remediation for internal user lookups.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphqlbook-internal-user-search-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "GraphQL Bookstore /graphql internal user search route live oracle",
+    description:
+      "When scanning /graphql on api.graphqlbook.org, _internalUserSearch returns admin user records without authentication — route-specific GraphQL BOLA oracle.",
+    impactOneline:
+      "Route scans confirm unauthenticated internal user search on the GraphQL endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookInternalUserSearchBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate internal user search resolvers on public /graphql routes.",
+      steps: [
+        "Remove _internalUserSearch from the public schema.",
+        "Require admin roles for cross-user lookups.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms _internalUserSearch BOLA. Show route-specific GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphqlbook-fetch-external-resource-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "GraphQL Bookstore fetch external resource SSRF live oracle",
+    description:
+      "POST /graphql { _fetchExternalResource(url:\"http://127.0.0.1:8080\") } on api.graphqlbook.org fetches internal service metadata — the GraphQL Bookstore SSRF oracle.",
+    impactOneline:
+      "GraphQL resolvers that fetch attacker-controlled URLs enable SSRF to internal services and cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookFetchExternalResourceSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF in GraphQL URL-fetch resolvers — GraphQL Bookstore is intentional training software.",
+      steps: [
+        "Deny private IP ranges and link-local addresses in _fetchExternalResource.",
+        "Use an allowlist of outbound fetch destinations.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql endpoint _fetchExternalResource fetches internal URLs. Show GraphQL SSRF remediation for URL-fetch resolvers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphqlbook-fetch-external-resource-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "GraphQL Bookstore /graphql SSRF route live oracle",
+    description:
+      "When scanning /graphql on api.graphqlbook.org, _fetchExternalResource fetches attacker-controlled internal URLs — route-specific GraphQL SSRF oracle.",
+    impactOneline:
+      "Route scans confirm SSRF via GraphQL URL-fetch resolvers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookFetchExternalResourceSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block private IPs in GraphQL URL-fetch resolvers on public /graphql routes.",
+      steps: [
+        "Validate and resolve URLs before fetch; deny internal ranges.",
+        "Restrict _fetchExternalResource to http/https allowlists.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms _fetchExternalResource SSRF. Show route-specific GraphQL outbound-fetch hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvga-my-pastes-idor-live-oracle",
     platform: "generic",
     category: "Broken access control",
