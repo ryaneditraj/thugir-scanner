@@ -15342,6 +15342,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-support-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "FauxBank /api/support stored XSS route live oracle",
+    description:
+      "When scanning /api/support or /support, POST stores raw HTML and GET returns unescaped XSS payload in ticket body — route-specific FauxBank stored XSS oracle.",
+    impactOneline:
+      "Route scans on support ticket APIs need live stored XSS confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankSupportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode all user-supplied ticket content before storage and rendering.",
+      steps: [
+        "HTML-encode ticket bodies on output or sanitize with a strict allowlist.",
+        "Use Content-Security-Policy to block inline script execution.",
+        "Add regression tests that reject script tags in support submissions."
+      ]
+    },
+    fixPrompt:
+      "Our FauxBank /api/support route stores and returns raw XSS in ticket bodies. Show route-specific output encoding fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fauxbank-loans-request-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -35470,6 +35496,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-dashboard-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "medium",
+    title: "crAPI user dashboard excessive data exposure live oracle",
+    description:
+      "GET /identity/api/v2/user/dashboard returns authenticated user profile with email, phone number, and available_credit — the crAPI excessive data exposure oracle (API3).",
+    impactOneline:
+      "Dashboard APIs that return full PII and credit balances enable account profiling and social-engineering attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiDashboardLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — return least-privilege user fields in production dashboards.",
+      steps: [
+        "Strip phone numbers and credit balances from dashboard responses unless required.",
+        "Scope dashboard fields to the authenticated user's own profile only.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /identity/api/v2/user/dashboard returns email, phone number, and available_credit. Show excessive data exposure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-dashboard-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "medium",
+    title: "crAPI /user/dashboard excessive data exposure route live oracle",
+    description:
+      "When scanning /identity/api/v2/user/dashboard, authenticated GET returns email, phone number, and available_credit — route-specific crAPI excessive data exposure oracle.",
+    impactOneline:
+      "Route scans on crAPI dashboard endpoints should confirm excessive PII exposure with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiDashboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — return least-privilege user fields in production dashboards.",
+      steps: [
+        "Strip phone numbers and credit balances from dashboard responses unless required.",
+        "Scope dashboard fields to the authenticated user's own profile only.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /identity/api/v2/user/dashboard route returns full PII and credit balance. Show route-specific data minimization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-community-posts-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI community posts BOLA route live oracle",
+    description:
+      "When scanning /community/api/v2/community/posts, community vehicleid leaks enable cross-user location reads — route-specific crAPI BOLA oracle (API1).",
+    impactOneline:
+      "Route scans on community post endpoints should confirm vehicle UUID leaks that enable location tracking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiCommunityPostsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on vehicle location endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /community/api/v2/community/posts route scan confirms BOLA via vehicleid leaks. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-signup-open-registration-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -41599,6 +41703,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our GuardianLeaks /create route fetches AWS metadata via reference=. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-guardian-leaks-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground GuardianLeaks search SQL injection live oracle",
+    description:
+      "POST /search query= is concatenated into SQLite — test' raises OperationalError and ' OR 1=1-- returns multiple /post/ links — the GuardianLeaks search SQLi oracle.",
+    impactOneline:
+      "Unsanitized search queries let attackers enumerate all blog posts and extract database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundGuardianLeaksSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all SQLite search filters.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters.",
+        "Return generic search errors instead of sqlite3 stack traces.",
+        "Run GuardianLeaks only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GuardianLeaks POST /search endpoint concatenates query= into SQLite. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-guardian-leaks-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground GuardianLeaks /search SQLi route live oracle",
+    description:
+      "When scanning /search, POST query= triggers SQLite OperationalError and boolean OR bypass lists multiple posts — route-specific GuardianLeaks SQLi oracle.",
+    impactOneline:
+      "Route scans on GuardianLeaks search pages need live SQLi confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundGuardianLeaksSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all SQLite search filters.",
+      steps: [
+        "Replace string-concatenated SQL with bound parameters.",
+        "Return generic search errors instead of sqlite3 stack traces.",
+        "Run GuardianLeaks only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GuardianLeaks /search route concatenates query= into SQLite. Show route-specific parameterized query remediation.",
     version: 1,
     enabled: true
   },
