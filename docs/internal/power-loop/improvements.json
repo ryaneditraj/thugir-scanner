@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-admin-security-second-order-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mass-assignment admin OTP session then GET /admin/security?search=' OR 1=1-- returns full audit_log rows (baseline empty search 0-2 rows vs sqli 20+ LOGIN_FAILED/ACCOUNT_REGISTERED entries); pwnshop.ctfsecurity.com/admin/security findings 46→43 with +admin-security-second-order-sqli live+route oracles (PWN-014); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:idor-website.vercel.app",
+      "slug": "idor-website-mock-api-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: homepage bundle documents VULNERABLE ENDPOINT: GET/PUT/DELETE /api/users/${t} with No authorization check + No ownership verification; idor-website.vercel.app/api/employees/3 findings 4→6 (+mock-api-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended wrongsecretsChallengeLiveOracle markers for challenge-7 Vault+K8s walkthrough (secret is no longer in K8s + Find the Secret in Vault using the logged root token + setup the K8s environment root token); wrongsecrets.herokuapp.com/challenge/7 findings 11 maintained with route-specific challenge oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:api.graphqlbook.org",
       "slug": "graphqlbook-internal-user-search-bola-live-oracle",
       "status": "shipped",

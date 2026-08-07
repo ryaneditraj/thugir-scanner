@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T06:14:03.414Z",
-  "total": 1974,
-  "uniqueSlugs": 1969,
+  "generatedAt": "2026-08-07T07:24:21.262Z",
+  "total": 1978,
+  "uniqueSlugs": 1973,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1956,
+    "generic": 1960,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1889,
+    "deep": 1893,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 380,
+    "Broken access control": 382,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 106,
     "Security misconfiguration": 146,
     "Broken authentication": 116,
-    "Injection": 281,
+    "Injection": 283,
     "Cross-site scripting": 665,
     "Open redirect": 15,
     "general": 20,
@@ -1435,6 +1435,8 @@
     "http-403-bypass-probe",
     "idor-sequential-ids",
     "idor-website-api-route-evidence",
+    "idor-website-mock-api-idor-live-oracle",
+    "idor-website-mock-api-idor-route-live-oracle",
     "inline-state-secrets",
     "insecure-cookies",
     "ist-edu-dashboard-idor-route-live-oracle",
@@ -1579,6 +1581,8 @@
     "pwnshop-account-delete-csrf-live-oracle",
     "pwnshop-account-delete-csrf-route-live-oracle",
     "pwnshop-admin-login-sqli-live-oracle",
+    "pwnshop-admin-security-second-order-sqli-live-oracle",
+    "pwnshop-admin-security-second-order-sqli-route-live-oracle",
     "pwnshop-apply-coupon-live-oracle",
     "pwnshop-apply-coupon-route-live-oracle",
     "pwnshop-audit-log-plaintext-password-live-oracle",

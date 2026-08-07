@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T07:08:00.000Z",
+  "updated_at": "2026-08-07T07:30:24.543Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2731,
-  "total_findings": 26665,
+  "total_sites_scanned": 2735,
+  "total_findings": 26720,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 22594,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-07T07:08:00.000Z",
+  "discovery_findings": 22600,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-07T07:30:24.543Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -48,43 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings); primary Heroku oracle healthy"
+      "note": "Stable 6/6 first-pass recall (50 findings); staging fallback 49 when primary 503"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 107,
-      "focus": "web-security-learning-labs modules 1021-1023 + juice-shop Escape security-question route + fauxbank accounts/2 IDOR + graphqlbook queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 167,
+      "focus": "WSL modules 1021-1023 catalog + pwnshop admin-security SQLi + idor-website mock API IDOR + wrongsecrets challenge-7 markers",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
-      "juice-shop.demo.escape.tech/rest/user/security-question: 51 findings — full juice-shop oracle suite on Escape demo route",
-      "pentest-fauxbank.vercel.app/api/accounts/2: 15 findings — fauxbank-idor-accounts-probe + fauxbank-accounts-route-live-oracle",
-      "api.graphqlbook.org/graphql: 12 findings — GraphQL introspection/BOLA oracle",
+      "pwnshop.ctfsecurity.com/admin/security: 46→43 — pwnshop-admin-security-second-order-sqli live+route oracles shipped (PWN-014 boolean OR 1=1 audit_log bypass)",
+      "idor-website.vercel.app/api/employees/3: 4→6 — idor-website-mock-api-idor live+route oracles shipped (GET/PUT/DELETE /api/users/${t} bundle markers)",
+      "wrongsecrets.herokuapp.com/challenge/7: 11 findings — wrongsecrets-challenge oracle extended with Vault+K8s root-token walkthrough markers",
       "web-security-learning-labs.vercel.app/module/1021-1023: 7 findings each — catalog module oracles",
-      "web-security-learning-labs.vercel.app/module/1019-1020: 4 findings each — prior queue drain"
+      "juice-shop.demo.escape.tech/rest/user/security-question: 51 findings — security-question route oracle",
+      "pentest-fauxbank.vercel.app/api/accounts/2: 15 findings — fauxbank-idor-accounts route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "web-security-learning-labs module/1021+: catalog pages return generic findings — route-specific exploit oracles still absent",
       "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
+      "pwnshop.ctfsecurity.com/wishlist/:user_id: route 404 on public deploy (PWN-003 not exposed)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
+    "pwnshop.ctfsecurity.com/admin/security": 43,
+    "idor-website.vercel.app/api/employees/3": 6,
+    "wrongsecrets.herokuapp.com/challenge/7": 11,
     "juice-shop.demo.escape.tech/rest/user/security-question": 51,
     "pentest-fauxbank.vercel.app/api/accounts/2": 15,
     "api.graphqlbook.org/graphql": 12,
     "web-security-learning-labs.vercel.app/module/1021": 7,
     "web-security-learning-labs.vercel.app/module/1022": 7,
     "web-security-learning-labs.vercel.app/module/1023": 7,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
