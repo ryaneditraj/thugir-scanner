@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T18:14:16.345Z",
-  "total": 1999,
-  "uniqueSlugs": 1994,
+  "generatedAt": "2026-08-07T19:08:18.831Z",
+  "total": 2004,
+  "uniqueSlugs": 1999,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1981,
+    "generic": 1986,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1914,
+    "deep": 1919,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 393,
+    "Broken access control": 398,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -242,6 +242,10 @@
     "burpbounty-xxe-soap-live-oracle",
     "burpbounty-xxe-upload-live-oracle",
     "burpbounty-zoho-cve-live-oracle",
+    "bypass403-admin-live-oracle",
+    "bypass403-admin-route-live-oracle",
+    "bypass403-api-admin-live-oracle",
+    "bypass403-api-admin-route-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
@@ -286,6 +290,7 @@
     "client-side-burp-bounty-lab-evidence",
     "client-side-bwapp-evidence",
     "client-side-bwapp-injection-catalog-evidence",
+    "client-side-bypass403-lab-evidence",
     "client-side-cahyod-vulnerable-lab-evidence",
     "client-side-ces-ctf-evidence",
     "client-side-chimera-vuln-lab-evidence",

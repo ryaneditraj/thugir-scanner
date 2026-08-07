@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T19:04:16.564Z",
+  "updated_at": "2026-08-07T19:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2011,
   "discovery_findings": 23610,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-07T19:04:16.564Z",
+  "improvements_shipped": 1176,
+  "last_run": "2026-08-07T19:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
@@ -53,33 +53,34 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 48,
-      "focus": "WSL modules 1051-1055 new discovery + queue drain 1035-1036 + vulnshop orders IDOR oracle",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 106,
+      "focus": "pwnshop profile-route bootstrap + bypass403 route live oracles; WSL modules 1051-1055 + vulnshop orders IDOR",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 8→47 findings — pwnshop-profile-route-bootstrap restores OTP session + PWN catalog markers",
+      "bypass403.vercel.app/admin + /api/admin: route live oracles shipped (trailing-slash + semicolon bypass)",
       "web-security-learning-labs.vercel.app/module/1051-1053: 8 findings with reflexion-escalated-ssti",
-      "web-security-learning-labs.vercel.app/module/1054-1055: 3 findings — CSR placeholder shells",
-      "vulnshop.vercel.app/api/v1/orders: 8 findings with vulnshop-orders-idor-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1035-1036: 5 findings with WSL module catalog oracles"
+      "vulnshop.vercel.app/api/v1/orders: 8 findings with vulnshop-orders-idor-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "bypass403.vercel.app /admin /secret /config + vaultapp.vercel.app API routes queued at tail pending drain",
-      "WSL unreleased modules 1054-1055: placeholder topic only — no module-route-evidence yet",
-      "vulnshop Railway backend may be offline for some routes — orders oracle live on Vercel deploy"
+      "secret-resend slug still absent on juice-shop benchmark",
+      "bypass403.vercel.app: Vercel Security Checkpoint blocks automated probes intermittently",
+      "vaultapp.vercel.app repurposed (Clutch-It) — queue URLs stale; vaultapp-omega.vercel.app remains canonical lab host",
+      "WSL unreleased modules 1054-1055: placeholder topic only"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 47,
+    "pwnshop.ctfsecurity.com/debug/info": 46,
+    "juice-shop.demo.escape.tech": 51,
     "web-security-learning-labs.vercel.app/module/1051": 8,
     "web-security-learning-labs.vercel.app/module/1052": 8,
-    "web-security-learning-labs.vercel.app/module/1053": 8,
     "vulnshop.vercel.app/api/v1/orders": 8,
-    "pwnshop.ctfsecurity.com/debug/info": 46,
-    "juice-shop.demo.escape.tech": 51
+    "bypass403.vercel.app/admin": 8
   }
 }
