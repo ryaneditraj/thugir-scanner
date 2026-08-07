@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T06:05:00.000Z",
+  "updated_at": "2026-08-07T07:01:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1021",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1021 (Hack Club devlog, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1022",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1022 (public Vercel demo, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1023",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1023 (public Vercel demo, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/user/security-question",
+      "source": "OWASP Juice Shop Escape demo — password-reset security-question disclosure oracle GET /rest/user/security-question (benchmark gap signal, 07 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/accounts/2",
+      "source": "alfredang/pentest FauxBank — IDOR oracle GET /api/accounts/2 (Vercel OSS banking lab README, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://api.graphqlbook.org/graphql",
       "source": "DghostNinja/graphql-bookstore-API — OWASP API Top 10 GraphQL oracle POST /graphql introspection + BOLA (api.graphqlbook.org docs, 05 UTC discovery)",
@@ -16121,5 +16146,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 94
+  "discovery_urls_added": 99
 }
