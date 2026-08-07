@@ -2610,6 +2610,11 @@ const DEEP_RULES = new Set<string>([
   "vampiBooksExcessiveDataLiveOracle",
   "vampiBooksRouteLiveOracle",
   "http403BypassProbe",
+  "bypass403AdminLiveOracle",
+  "bypass403AdminRouteLiveOracle",
+  "bypass403ApiAdminLiveOracle",
+  "bypass403ApiAdminRouteLiveOracle",
+  "clientSideBypass403LabEvidence",
   "clientSideDevsecopsPipelineVisualizerEvidence",
   "clientSideQamaxAdversaryEvidence",
   "clientSideHacksplainingEvidence",
@@ -9716,12 +9721,31 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
 
+  let pwnshopBootstrap = "";
+  if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
+    const needsBootstrap =
+      /\/profile\//i.test(targetInput) ||
+      !/PWN-\d{3}|OWASP Top 10 2025/i.test(`${home.body}\n${[...pages, ...scripts].map((p) => p.body).join("\n")}`);
+    if (needsBootstrap) {
+      const bootstrapUrls = [
+        new URL("/", origin).toString(),
+        new URL("/vulnerabilities", origin).toString()
+      ];
+      const bootDocs = await probe.getMany(bootstrapUrls, { maxBytes: 400_000, timeoutMs: 20000 }, 2);
+      pwnshopBootstrap = [...bootDocs.values()]
+        .filter((d) => d.status >= 200 && d.status < 400 && d.body.length > 1000)
+        .map((d) => d.body)
+        .join("\n");
+    }
+  }
+
   const combined = [
     ...pages.map((p) => p.body),
     ...scripts.map((s) => s.body),
     juiceShopBootstrap,
     whoopsPayBootstrap,
-    juicesecBootstrap
+    juicesecBootstrap,
+    pwnshopBootstrap
   ]
     .filter(Boolean)
     .join("\n");
@@ -9827,6 +9851,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
       if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
+      if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
       if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
