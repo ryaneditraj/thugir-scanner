@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T00:20:00.000Z",
+  "updated_at": "2026-08-07T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2852,
-  "total_findings": 30860,
+  "total_sites_scanned": 2853,
+  "total_findings": 30911,
   "critical_findings": 91,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2021,
   "discovery_findings": 25954,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-07T00:20:00.000Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-07T01:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,36 +48,35 @@
           ]
         }
       },
-      "note": "Primary herokuapp 6/6 (49 findings); escape.tech intermittent 503 during validation"
+      "note": "Primary herokuapp 6/6 (51 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 110,
-      "focus": "juice-shop escape.tech redirect + file-upload; vaultapp admin/users DELETE",
+      "findings": 40,
+      "focus": "vaultapp users/transactions/notes IDOR oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
-      "juice-shop.demo.escape.tech/redirect?to=: 48→50 — juice-shop-open-redirect live+route oracles (allowlist substring bypass → 302 evil-open-redirect-probe.example)",
-      "juice-shop.demo.escape.tech/file-upload: 48→50 — juice-shop-file-upload live+route oracles (zip-slip legal.md + XML XXE /etc/passwd)",
-      "vaultapp-omega.vercel.app/api/admin/users/1: 6→10 — vaultapp-admin-users-delete live+route oracles (rootadmin DELETE arbitrary user)",
-      "idor-website.vercel.app/api/employees/1: still 404 — Vercel deploy down, skipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
+      "vaultapp-omega.vercel.app/api/users/1: 6→13 — vaultapp-users-idor live+route oracles (GET /api/users/:id cross-user PII)",
+      "vaultapp-omega.vercel.app/api/transactions/1: 6→14 — vaultapp-transactions-idor live+route oracles (account_id query leaks victim tx history)",
+      "vaultapp-omega.vercel.app/api/notes/1: 6→13 — vaultapp-notes-idor live+route oracles (GET /api/notes/:id private note owned by another user)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.demo.escape.tech intermittent 503 — herokuapp primary oracle used for benchmark validation",
       "idor-website.vercel.app/api/employees/:id: deploy returns 404 — employee IDOR oracle blocked",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vaultapp /api/documents/:id returns Invalid document ID — document IDOR oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.demo.escape.tech/redirect?to=https://evil-open-redirect-probe.example": 50,
-    "juice-shop.demo.escape.tech/file-upload": 50,
+    "vaultapp-omega.vercel.app/api/users/1": 13,
+    "vaultapp-omega.vercel.app/api/transactions/1": 14,
+    "vaultapp-omega.vercel.app/api/notes/1": 13,
+    "juice-shop.herokuapp.com": 51,
     "vaultapp-omega.vercel.app/api/admin/users/1": 10,
-    "brokencrystals.com/users/one/1/photo?isAdmin=true": 79,
-    "juice-shop.demo.escape.tech": 48,
-    "juice-shop.herokuapp.com": 49
+    "brokencrystals.com/users/one/1/photo?isAdmin=true": 79
   }
 }

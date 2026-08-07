@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-users-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login player01 + GET /api/users/15 returns dreed19@gmail.com phone balance ssn_last4 without ownership check; vaultapp-omega.vercel.app/api/users/1 findings 6→13 (+users-idor live+route oracles); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-users-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/users/:id confirms cross-user profile PII disclosure with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-transactions-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login player01 + GET /api/transactions?account_id=ACCT-00015 returns victim transaction history (Insurance Premium, Rent Payment rows); vaultapp-omega.vercel.app/api/transactions/1 findings 6→14 (+transactions-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-transactions-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/transactions confirms account_id query returns another user's transaction history with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-notes-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login player01 + GET /api/notes/15 returns private Password Backup note owned by awatson43 with admin pass + master key; vaultapp-omega.vercel.app/api/notes/1 findings 6→13 (+notes-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-notes-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/notes/:id confirms private-note IDOR without ownership check with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop.demo.escape.tech",
       "slug": "juice-shop-open-redirect-live-oracle",
       "status": "shipped",
