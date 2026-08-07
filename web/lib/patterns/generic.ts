@@ -13265,6 +13265,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "idor-website-mock-api-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "IDOR Lab mock API IDOR live oracle",
+    description:
+      "idor-website.vercel.app ships a client-side user store with VULNERABLE ENDPOINT markers for GET/PUT/DELETE /api/users/{id} without authorization or ownership checks — the IDOR simulation live oracle.",
+    impactOneline:
+      "Client bundles that document cross-user profile access without server-side checks teach IDOR patterns that must not reach production APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "idorWebsiteMockApiIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add server-side ownership checks; remove vulnerable demo markers from production bundles.",
+      steps: [
+        "Verify the authenticated user owns every record on GET/PUT/DELETE.",
+        "Remove VULNERABLE ENDPOINT documentation from client bundles.",
+        "Use non-guessable IDs and audit all /api/users/{id} style routes."
+      ]
+    },
+    fixPrompt:
+      "Our idor-website bundle documents mock GET/PUT/DELETE /api/users/{id} without authorization. Show server-side ownership checks and bundle cleanup.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "idor-website-mock-api-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "IDOR Lab /api/* mock API IDOR route live oracle",
+    description:
+      "When scanning idor-website.vercel.app /api/* routes (including /api/employees/:id aliases), bootstrap the homepage bundle to confirm mock GET/PUT/DELETE /api/users/{id} without authorization.",
+    impactOneline:
+      "Route scans of IDOR lab API paths confirm client-documented missing ownership checks on user records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "idorWebsiteMockApiIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add server-side ownership checks; remove vulnerable demo markers from production bundles.",
+      steps: [
+        "Verify the authenticated user owns every record on GET/PUT/DELETE.",
+        "Remove VULNERABLE ENDPOINT documentation from client bundles.",
+        "Use non-guessable IDs and audit all /api/users/{id} style routes."
+      ]
+    },
+    fixPrompt:
+      "Our idor-website /api/* route scan confirms mock IDOR-prone /api/users/{userId} endpoints. Show server-side ownership checks and bundle cleanup.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sql-evidence",
     platform: "generic",
     category: "Injection",
@@ -22932,6 +22984,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /logs route scan confirms plaintext passwords in audit log detail. Show route-specific audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-admin-security-second-order-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Pwnshop admin security audit-log SQLi live oracle (PWN-014)",
+    description:
+      "GET /admin/security?search= concatenates the search term into audit_log LIKE clauses — boolean OR 1=1 bypass returns the full audit log without sanitization (PWN-014).",
+    impactOneline:
+      "Second-order SQL injection in admin audit-log search can leak credentials and security events from any table.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAdminSecuritySecondOrderSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize audit-log search queries — Pwnshop PWN-014 is intentional lab software.",
+      steps: [
+        "Use prepared statements for audit_log search filters.",
+        "Escape LIKE wildcards in user-supplied search terms.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/security search box concatenates user input into audit_log SQL. Show parameterized query remediation for audit-log search.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-admin-security-second-order-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Pwnshop admin security SQLi route live oracle (PWN-014)",
+    description:
+      "When scanning /admin/security, mass-assignment admin session plus boolean OR 1=1 search bypass confirms audit_log SQL injection — route-specific second-order SQLi oracle.",
+    impactOneline:
+      "Route scans on admin security tabs need live confirmation of concatenated audit-log SQLi.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize audit-log search queries — Pwnshop is intentional lab software.",
+      steps: [
+        "Use prepared statements for audit_log search filters.",
+        "Escape LIKE wildcards in user-supplied search terms.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/security route scan confirms audit_log SQL injection via search parameter. Show route-specific remediation.",
     version: 1,
     enabled: true
   },
