@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-search-route-sqli-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/search and /search?q= are SPA shells but bundle documents try SQL injection here on /products; VULNSHOP_PRODUCT_SEARCH_ROUTE_RE + search module oracle alias; vulnshop.vercel.app/api/search findings 6→8 (+vulnshop-products-sqli-route-live-oracle); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1046-1050",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue modules 1046-1050 CSR placeholder shells Here is a Module: {id}; extractWebSecurityLearningLabsSeeds + module priority seeds extended 1046-1050; web-security-learning-labs.vercel.app/module/1046 findings 8 with module-route-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-10-11-aws-markers",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenge-10 documents AWS Secrets Manager + CSI-Driver K8s mount; challenge-11 documents IAM privilege escalation + AWS SSM Parameter Store; clientSideWrongSecretsChallengeEvidence note branches for AWS Secrets Manager CSI and SSM Parameter Store; wrongsecrets.herokuapp.com/challenge/challenge-10 findings 11 maintained; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-route-placeholder-1037-1045",
       "status": "shipped",
