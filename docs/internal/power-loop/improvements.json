@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect?to=https://evil-open-redirect-probe.example/?pwned=https://github.com/juice-shop/juice-shop returns HTTP 302 Location to probe host (allowlist substring bypass); juice-shop.demo.escape.tech/redirect?to= findings 48→50 (+open-redirect live+route oracles); benchmark juice-shop.herokuapp.com 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /redirect?to= fires open-redirect oracle with scannedUrl + Location header evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-file-upload-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /file-upload ZIP ../../ftp/legal.md overwrites legal.md with THUGIR-ZIP-ORACLE (204) and XML XXE returns root:x:0:0 in 410 error; juice-shop.demo.escape.tech/file-upload findings 48→50 (+file-upload live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /file-upload confirms zip-slip or XXE/SSTI complaint upload chain with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-users-delete-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login rootadmin + DELETE /api/admin/users/{id} returns User deleted successfully for victim amendoza69 without admin role check; vaultapp-omega.vercel.app/api/admin/users/1 findings 6→10 (+admin-users-delete live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-admin-users-delete-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/admin/users/:id confirms unprivileged DELETE with scannedUrl evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vaultapp-omega.vercel.app",
       "slug": "vaultapp-admin-audit-logs-idor-live-oracle",
       "status": "shipped",
