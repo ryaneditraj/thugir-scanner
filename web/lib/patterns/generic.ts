@@ -33910,6 +33910,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-v3-user-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank v3 user-details API IDOR live oracle",
+    description:
+      "GET /api/v3/user/{id} returns another user's username, balance, and account_number for any authenticated JWT without object-level authorization — the Vuln Bank v3 user IDOR oracle.",
+    impactOneline:
+      "Missing authorization on the v3 user-details API lets any logged-in customer enumerate and read other users' account profiles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV3UserIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on /api/v3/user/{id} — Vuln Bank is intentional training software.",
+      steps: [
+        "Verify the JWT user_id matches the requested user id or an admin role before returning profile data.",
+        "Return 404 for unauthorized cross-user lookups instead of leaking other accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v3/user/{id} endpoint returns other users' profiles without authorization checks. Show BOLA remediation for user-detail APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v3-user-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank v3 user-details route IDOR live oracle",
+    description:
+      "When scanning /api/v3/user/{id}, GET returns another user's profile without object-level authorization — route-specific Vuln Bank v3 user IDOR oracle.",
+    impactOneline:
+      "Route scans on v3 user-detail endpoints should confirm missing object-level authorization for cross-user profile reads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV3UserIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on /api/v3/user/{id} — Vuln Bank is intentional training software.",
+      steps: [
+        "Verify the JWT user_id matches the requested user id or an admin role before returning profile data.",
+        "Return 404 for unauthorized cross-user lookups instead of leaking other accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v3/user/{id} route scan confirms cross-user profile reads without authorization. Show BOLA remediation for user-detail APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v3-reset-password-versioning-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v3 reset-password accepts v1 leaked PIN",
+    description:
+      "POST /api/v1/forgot-password leaks debug_info.pin and the same PIN resets the account via POST /api/v3/reset-password — the Vuln Bank API version confusion password-reset oracle.",
+    impactOneline:
+      "Legacy forgot-password APIs that leak reset PINs remain exploitable through newer reset-password endpoints that share the same PIN store.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV3ResetPasswordVersioningLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire legacy forgot-password versions and isolate reset PIN handling per API version — Vuln Bank is intentional training software.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Block cross-version reset flows or use version-specific PIN stores.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our v1 forgot-password leaks debug_info.pin and v3 reset-password accepts it. Show API versioning and password-reset remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v3-reset-password-versioning-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v3 reset-password route API versioning oracle",
+    description:
+      "When scanning /api/v3/reset-password, v1 forgot-password PIN leaks reset the account on the v3 endpoint — route-specific API version confusion oracle.",
+    impactOneline:
+      "Route scans on v3 reset-password should confirm legacy PIN leaks remain exploitable across API versions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV3ResetPasswordVersioningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire legacy forgot-password versions and isolate reset PIN handling per API version — Vuln Bank is intentional training software.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Block cross-version reset flows or use version-specific PIN stores.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v3/reset-password route scan confirms v1 PIN leaks reset accounts on v3. Show API versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-sup3r-secret-admin-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -35736,7 +35840,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1025 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition) from the lab catalog chunks — route-specific training-lab oracle.",
+      "When scanning /module/1011–1025 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
