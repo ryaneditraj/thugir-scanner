@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T11:05:00.000Z",
+  "updated_at": "2026-08-07T12:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1028",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1028 (public Vercel demo, 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1029",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1029 (public Vercel demo, 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1030",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1030 (public Vercel demo, 12 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/search",
+      "source": "chethan-vinayak/vulnshop — product search SQLi oracle GET /api/search (Vercel OSS deploy README, 12 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/user/security-question",
+      "source": "OWASP Juice Shop preview — password-reset security-question disclosure oracle GET /rest/user/security-question (preview.owasp-juice.shop develop branch, 12 UTC discovery)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1027",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1027 (public Vercel demo, 11 UTC discovery)",
