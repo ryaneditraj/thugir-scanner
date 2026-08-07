@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T14:05:03.551Z",
+  "updated_at": "2026-08-07T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1037",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1037 (public Vercel demo, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1038",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1038 (public Vercel demo, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1039",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1039 (public Vercel demo, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1040",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1040 (public Vercel demo, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop README — intentionally public debug endpoint PWN-018 exposes sessionSecret + CHAT_OVERRIDE_TOKEN (public demo, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1034",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1034 (public Vercel demo, 14 UTC discovery)",
