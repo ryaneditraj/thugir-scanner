@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T06:15:00.000Z",
+  "updated_at": "2026-08-07T07:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2898,
-  "total_findings": 32135,
-  "critical_findings": 96,
+  "total_sites_scanned": 2731,
+  "total_findings": 26665,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2041,
-  "discovery_findings": 26816,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-07T06:15:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22594,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-07T07:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 509,
+      "probes_run": 505,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,43 @@
           ]
         }
       },
-      "note": "6/6 recall (51 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (50 findings); primary Heroku oracle healthy"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 171,
-      "focus": "graphqlbook GraphQL BOLA/SSRF route oracles + WSL module 1019-1020 catalog map + queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 107,
+      "focus": "web-security-learning-labs modules 1021-1023 + juice-shop Escape security-question route + fauxbank accounts/2 IDOR + graphqlbook queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
-      "api.graphqlbook.org/graphql: 8→12 — graphqlbook-internal-user-search-bola + fetch-external-resource-ssrf live+route oracles shipped",
-      "web-security-learning-labs.vercel.app/module/1019: 3→7 — module route oracle extended to Directory Traversal (1019) with Vercel checkpoint fallback",
-      "web-security-learning-labs.vercel.app/module/1020: 3→7 — module route oracle extended to LDAP Injection (1020) with Vercel checkpoint fallback",
-      "juice-shop.herokuapp.com/rest/user/security-question: 52 findings — secret-resend gap signal route (sensitive_data still covered on benchmark)",
-      "pwnshop.ctfsecurity.com/admin/export-orders: 43 findings — admin export-orders hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "juice-shop.demo.escape.tech/rest/user/security-question: 51 findings — full juice-shop oracle suite on Escape demo route",
+      "pentest-fauxbank.vercel.app/api/accounts/2: 15 findings — fauxbank-idor-accounts-probe + fauxbank-accounts-route-live-oracle",
+      "api.graphqlbook.org/graphql: 12 findings — GraphQL introspection/BOLA oracle",
+      "web-security-learning-labs.vercel.app/module/1021-1023: 7 findings each — catalog module oracles",
+      "web-security-learning-labs.vercel.app/module/1019-1020: 4 findings each — prior queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon oracles intermittent on cold OTP scans (40 findings when session completes)",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: avatar SVG XSS oracle restored when OTP session completes (44 findings)",
-      "web-security-learning-labs.vercel.app/module/1021+: catalog not yet mapped beyond 1020",
-      "crapi.apisec.ai/community/posts/1 + mechanic/service_requests: queued for next drain"
+      "web-security-learning-labs module/1021+: catalog pages return generic findings — route-specific exploit oracles still absent",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com": 50,
+    "juice-shop.demo.escape.tech/rest/user/security-question": 51,
+    "pentest-fauxbank.vercel.app/api/accounts/2": 15,
     "api.graphqlbook.org/graphql": 12,
-    "web-security-learning-labs.vercel.app/module/1019": 7,
-    "web-security-learning-labs.vercel.app/module/1020": 7,
-    "juice-shop.herokuapp.com": 51,
-    "juice-shop.herokuapp.com/rest/user/security-question": 52,
-    "web-security-learning-labs.vercel.app/module/1016": 8,
-    "vulnbank.org/api/v2/transfer": 22,
-    "brokencrystals.com/api/users/one/regular_user/photo": 77,
-    "pwnshop.ctfsecurity.com/admin/export-orders": 43,
-    "pwnshop.ctfsecurity.com/logs": 40,
-    "wrongsecrets.herokuapp.com/challenge/8": 11,
-    "vaultapp-omega.vercel.app/api/admin/audit-logs": 14
+    "web-security-learning-labs.vercel.app/module/1021": 7,
+    "web-security-learning-labs.vercel.app/module/1022": 7,
+    "web-security-learning-labs.vercel.app/module/1023": 7,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }
