@@ -22884,6 +22884,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-audit-log-plaintext-password-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Pwnshop audit log plaintext password live oracle (PWN-027)",
+    description:
+      "POST /login writes submitted passwords in plaintext to the unauthenticated /api/v1/events audit log detail field — the Pwnshop plaintext password logging oracle.",
+    impactOneline:
+      "Logging cleartext passwords in audit trails exposes credentials to anyone who can read the log API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAuditLogPlaintextPasswordLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords in audit detail fields — Pwnshop PWN-027 is intentional lab software.",
+      steps: [
+        "Redact password fields before writing audit log entries.",
+        "Restrict /api/v1/events to authenticated admin roles.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /login endpoint logs submitted passwords in plaintext on /api/v1/events. Show secure audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-audit-log-plaintext-password-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Pwnshop audit log plaintext password route live oracle (PWN-027)",
+    description:
+      "When scanning /logs, failed login passwords appear in plaintext on unauthenticated /api/v1/events — route-specific plaintext password logging oracle.",
+    impactOneline:
+      "Route scans on audit-log pages need live confirmation that passwords are written in cleartext.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAuditLogPlaintextPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords in audit detail fields — Pwnshop is intentional lab software.",
+      steps: [
+        "Redact password fields before writing audit log entries.",
+        "Restrict audit log APIs to authenticated admin roles.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /logs route scan confirms plaintext passwords in audit log detail. Show route-specific audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-export-orders-csv-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Pwnshop admin CSV order export live oracle (PWN-013)",
+    description:
+      "Mass-assignment admin (PWN-021) plus OTP session reaches GET /admin/export-orders and returns unescaped order CSV — the Pwnshop CSV export oracle.",
+    impactOneline:
+      "Unauthenticated or low-privilege access to CSV order exports can leak PII and enable spreadsheet formula injection when fields are not sanitized.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopExportOrdersCsvLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict order export to real admins and prefix CSV formula fields — Pwnshop PWN-013 is intentional lab software.",
+      steps: [
+        "Require verified admin role before /admin/export-orders.",
+        "Prefix spreadsheet formula characters (=, +, -, @) in exported CSV cells.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/export-orders endpoint is reachable via mass-assignment admin and exports raw CSV. Show CSV injection and access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-export-orders-csv-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Pwnshop export-orders CSV route live oracle (PWN-013)",
+    description:
+      "When scanning /admin/export-orders, mass-assignment admin session downloads order CSV without real admin credentials — route-specific CSV export oracle.",
+    impactOneline:
+      "Route scans on export-orders need live CSV export confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopExportOrdersCsvRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict order export to verified admins and sanitize CSV fields — Pwnshop is intentional lab software.",
+      steps: [
+        "Require verified admin role before /admin/export-orders.",
+        "Prefix formula characters in exported CSV cells.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/export-orders route scan confirms CSV export without real admin credentials. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-wallet-topup-vulnbank-live-oracle",
     platform: "generic",
     category: "Business logic",
