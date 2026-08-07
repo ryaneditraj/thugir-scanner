@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T03:03:47.611Z",
+  "updated_at": "2026-08-07T03:08:38.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2861,
-  "total_findings": 31185,
+  "total_sites_scanned": 2869,
+  "total_findings": 31394,
   "critical_findings": 93,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2021,
-  "discovery_findings": 26130,
+  "discovery_urls_added": 2026,
+  "discovery_findings": 26339,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-07T03:03:47.611Z",
+  "last_run": "2026-08-07T03:08:38.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 487,
+      "probes_run": 505,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,30 +52,39 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 87,
-      "focus": "brokencrystals /api/files alias + idor-website API route bootstrap + web-security-learning-labs module routes",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 209,
+      "focus": "pwnshop admin/export-orders CSV injection + /logs audit exposure + web-security-learning-labs CSRF/JWT modules + idor-website employees/3 + queue drain (brokencrystals subscriptions, wrongsecrets challenge/7, pwnshop cart)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
-      "brokencrystals.com/api/files?path=package.json: 15→75 — brokencrystals-files-lfi-route-live-oracle shipped (README /api/files alias → live GET /api/file?path=package.json LFI)",
-      "idor-website.vercel.app/api/employees/1: 3→4 — idor-website-api-route-evidence shipped (bootstrap homepage bundle for VULNERABLE /api/users/{userId} docs)",
-      "web-security-learning-labs.vercel.app/module/1013: 6→8 — web-security-learning-labs-module-route-evidence shipped (IDOR module catalog oracle)"
+      "pwnshop.ctfsecurity.com/cart: 38 findings — pwnshop-coupon-category-bypass-live-oracle + pwnshop-avatar-svg-xss-live-oracle now fire (PWN-016, PWN-012)",
+      "brokencrystals.com/api/subscriptions: 75-finding hub — route-specific DOM-XSS subscription oracle still absent",
+      "pwnshop.ctfsecurity.com/admin/export-orders: 39-finding hub — CSV formula injection live oracle absent (PWN-013, admin-gated)",
+      "pwnshop.ctfsecurity.com/logs: 28-finding hub — plaintext password audit-log live oracle absent (PWN-027)",
+      "web-security-learning-labs.vercel.app/module/1014+1015: 7 findings each — module catalog evidence only (CSRF/JWT modules)",
+      "idor-website.vercel.app/api/employees/3: 4 findings — IDOR live oracle still absent (server API 404)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "idor-website.vercel.app server API returns 404 — client-side bundle evidence only (no live server IDOR)",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "pwnshop.ctfsecurity.com/admin/export-orders: CSV injection oracle absent without admin session (PWN-013)",
+      "pwnshop.ctfsecurity.com/logs: plaintext password audit-log oracle absent (PWN-027)",
+      "brokencrystals.com/api/subscriptions: route-specific DOM-XSS subscription oracle absent",
+      "idor-website.vercel.app/api/employees/*: server API returns 404 — client-side bundle evidence only"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/files?path=package.json": 75,
-    "idor-website.vercel.app/api/employees/1": 4,
-    "web-security-learning-labs.vercel.app/module/1013": 8,
     "juice-shop.herokuapp.com": 50,
-    "vaultapp-omega.vercel.app/api/users/1": 13,
-    "juice-shop.demo.escape.tech/redirect?to=https://evil-open-redirect-probe.example": 50
+    "brokencrystals.com/api/subscriptions": 75,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 39,
+    "pwnshop.ctfsecurity.com/cart": 38,
+    "pwnshop.ctfsecurity.com/logs": 28,
+    "wrongsecrets.herokuapp.com/challenge/7": 11,
+    "web-security-learning-labs.vercel.app/module/1014": 7,
+    "web-security-learning-labs.vercel.app/module/1015": 7,
+    "idor-website.vercel.app/api/employees/3": 4
   }
 }
