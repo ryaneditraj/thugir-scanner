@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T01:05:00.000Z",
+  "updated_at": "2026-08-07T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/subscriptions",
+      "source": "NeuraLegion/brokencrystals — DOM XSS mailing-list oracle POST /api/subscriptions?email= (README DOM XSS section, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/7",
+      "source": "OWASP WrongSecrets — challenge 7 client-side secret oracle (public Heroku demo, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/cart",
+      "source": "ctfsec/pwnshop — cart/checkout business-logic oracle GET /cart (PWN vulnerabilities index, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v2/transfer",
+      "source": "Commando-X/vuln-bank — wire transfer BOPLA oracle POST /api/v2/transfer (GitHub README API section, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://idor-website.vercel.app/api/employees/2",
+      "source": "IDOR Lab SecureBank — employee record #2 IDOR oracle GET /api/employees/:id (idor-website Vercel deploy, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/upload_profile_picture_url",
       "source": "Commando-X/vuln-bank — SSRF profile-picture URL import oracle POST /upload_profile_picture_url (GitHub README + Medium writeup, 01 UTC discovery)",
