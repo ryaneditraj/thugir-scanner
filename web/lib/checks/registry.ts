@@ -12052,12 +12052,12 @@ const clientSideCsrfEvidence: Rule = async (ctx) => {
 const CLIENT_IDOR_MARKER_RE =
   /VULNERABLE ENDPOINT|No authorization check|No ownership verification|any authenticated user can access|belonging to another user/i;
 
-const clientSideIdorEvidence: Rule = async (ctx) => {
+function clientSideIdorEvidenceFromCorpus(corpus: string): RuleResult {
   // SPA IDOR simulation labs (client-side user store + /dashboard/:userId route).
   if (
-    /IDOR\s+SIMULATION|Simple IDOR/i.test(ctx.combined) &&
-    (/dashboard\/:userId|path:\s*["']\/dashboard\/:userId/i.test(ctx.combined) ||
-      /\.users\[[a-z]{1,8}\]/.test(ctx.combined))
+    /IDOR\s+SIMULATION|Simple IDOR/i.test(corpus) &&
+    (/dashboard\/:userId|path:\s*["']\/dashboard\/:userId/i.test(corpus) ||
+      /\.users\[[a-z]{1,8}\]/.test(corpus))
   ) {
     return {
       fired: true,
@@ -12068,17 +12068,17 @@ const clientSideIdorEvidence: Rule = async (ctx) => {
       }
     };
   }
-  if (!CLIENT_IDOR_MARKER_RE.test(ctx.combined)) return NEGATIVE;
+  if (!CLIENT_IDOR_MARKER_RE.test(corpus)) return NEGATIVE;
   const endpoints = new Set<string>();
   const re = /\/api\/[a-z0-9_./-]+(?:\$\{[^}]+\}|\{[a-zA-Z]+\})?/gi;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(ctx.combined))) endpoints.add(m[0]);
+  while ((m = re.exec(corpus))) endpoints.add(m[0]);
   if (endpoints.size === 0) return NEGATIVE;
   const markers: string[] = [];
-  if (/VULNERABLE ENDPOINT/i.test(ctx.combined)) markers.push("VULNERABLE ENDPOINT");
-  if (/No authorization check/i.test(ctx.combined)) markers.push("No authorization check");
-  if (/No ownership verification/i.test(ctx.combined)) markers.push("No ownership verification");
-  if (/belonging to another user/i.test(ctx.combined)) markers.push("cross-user object access");
+  if (/VULNERABLE ENDPOINT/i.test(corpus)) markers.push("VULNERABLE ENDPOINT");
+  if (/No authorization check/i.test(corpus)) markers.push("No authorization check");
+  if (/No ownership verification/i.test(corpus)) markers.push("No ownership verification");
+  if (/belonging to another user/i.test(corpus)) markers.push("cross-user object access");
   return {
     fired: true,
     confidence: 0.88,
@@ -12086,6 +12086,44 @@ const clientSideIdorEvidence: Rule = async (ctx) => {
       endpoints: [...endpoints].slice(0, 5),
       markers,
       note: "client bundle documents IDOR-prone API routes without ownership checks"
+    }
+  };
+}
+
+const clientSideIdorEvidence: Rule = async (ctx) => {
+  return clientSideIdorEvidenceFromCorpus(ctx.combined);
+};
+
+/** idor-website.vercel.app route scans hit /api/* 404 shells — bootstrap homepage JS for IDOR docs. */
+const idorWebsiteApiRouteEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/idor-website\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\//i.test(pageUrl)) return NEGATIVE;
+  let corpus = ctx.combined;
+  if (!CLIENT_IDOR_MARKER_RE.test(corpus)) {
+    const homeDoc = await fetchDoc(new URL("/", ctx.origin).toString(), { maxBytes: 16384 });
+    corpus = homeDoc.body;
+    const scriptRe = /src="(\/assets\/[^"]+\.js)"/gi;
+    let sm: RegExpExecArray | null;
+    let fetched = 0;
+    while ((sm = scriptRe.exec(homeDoc.body)) && fetched < 4) {
+      fetched++;
+      const scriptDoc = await fetchDoc(new URL(sm[1], ctx.origin).toString(), {
+        maxBytes: 524288,
+        timeoutMs: 15000
+      });
+      corpus += "\n" + scriptDoc.body;
+    }
+  }
+  const result = clientSideIdorEvidenceFromCorpus(corpus);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "idor-website.vercel.app /api/* route scan — homepage bundle documents VULNERABLE /api/users/{userId} GET/PUT/DELETE without authorization (employees alias in queue maps to users IDOR lab)"
     }
   };
 };
@@ -32284,6 +32322,51 @@ const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
       note: isKnownHost && hits.length < 3
         ? "web-security-learning-labs.vercel.app is a known interactive vulnerability labs platform (URL oracle; Next.js CSR shell may omit module markers)"
         : "Web Security Learning Labs documents interactive SQL injection, XSS, IDOR, and CSRF training modules"
+    }
+  };
+};
+
+const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
+  "1011": "SQL Injection",
+  "1012": "Cross-Site Scripting (XSS)",
+  "1013": "IDOR"
+};
+
+const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/web-security-learning-labs\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
+  if (!moduleMatch) return NEGATIVE;
+  const moduleId = moduleMatch[1];
+  const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId];
+  if (!topic) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!new RegExp(topic.replace(/[()]/g, "\\$&"), "i").test(corpus)) {
+    const modulesDoc = await fetchDoc(new URL("/learn/modules", ctx.origin).toString(), {
+      maxBytes: 65536,
+      timeoutMs: 15000
+    });
+    corpus += "\n" + modulesDoc.body;
+    const chunkRe = /\/_next\/static\/chunks\/[a-z0-9_-]+\.js/gi;
+    const chunks = [...new Set(modulesDoc.body.match(chunkRe) ?? [])].slice(0, 6);
+    for (const chunkPath of chunks) {
+      const chunkDoc = await fetchDoc(new URL(chunkPath, ctx.origin).toString(), {
+        maxBytes: 262144,
+        timeoutMs: 15000
+      });
+      corpus += "\n" + chunkDoc.body;
+    }
+  }
+  if (!/Web Security Learning Labs/i.test(corpus)) return NEGATIVE;
+  if (!new RegExp(topic.replace(/[()]/g, "\\$&"), "i").test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      moduleId,
+      moduleTopic: topic,
+      scannedUrl: pageUrl,
+      note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle`
     }
   };
 };
@@ -61715,6 +61798,24 @@ const brokencrystalsFileLfiRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+/** README documents /api/files but the live LFI endpoint is GET /api/file?path=. */
+const brokencrystalsFilesLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/files\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsFileLfiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/files route scan — README alias; live LFI confirmed on GET /api/file?path=package.json — route-specific local file inclusion oracle"
+    }
+  };
+};
+
 const brokencrystalsFileRawLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -66644,6 +66745,7 @@ export const RULES: Record<string, Rule> = {
   serverActionAuthz,
   idorProbe,
   clientSideIdorEvidence,
+  idorWebsiteApiRouteEvidence,
   clientSideSqlEvidence,
   clientSideXssEvidence,
   clientSideCsrfEvidence,
@@ -67134,6 +67236,7 @@ export const RULES: Record<string, Rule> = {
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,
   clientSideWebSecurityLearningLabsEvidence,
+  webSecurityLearningLabsModuleRouteEvidence,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
@@ -67616,6 +67719,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
   brokencrystalsFileLfiRouteLiveOracle,
+  brokencrystalsFilesLfiRouteLiveOracle,
   brokencrystalsFileRawLfiRouteLiveOracle,
   brokencrystalsTestimonialsCountSqliRouteLiveOracle,
   brokencrystalsProductsLatestLimitBypassRouteLiveOracle,
