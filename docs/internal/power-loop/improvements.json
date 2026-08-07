@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:api.graphqlbook.org",
+      "slug": "graphqlbook-internal-user-search-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { _internalUserSearch(username:\"admin\") } returns {\"id\":\"...\",\"username\":\"admin\",\"role\":\"admin\"} without auth; api.graphqlbook.org/graphql findings 8→12 (+bola live+route oracles); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:api.graphqlbook.org",
+      "slug": "graphqlbook-fetch-external-resource-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { _fetchExternalResource(url:\"http://127.0.0.1:8080\") } returns bookstore-api internal service JSON; api.graphqlbook.org/graphql findings 8→12 (+ssrf live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended WEB_SECURITY_LEARNING_MODULE_TOPICS to 1019 Directory Traversal / 1020 LDAP Injection with checkpoint URL-oracle fallback; web-security-learning-labs.vercel.app/module/1019 findings 3→7 and /module/1020 3→7 (+module-route evidence); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-route-evidence",
       "status": "shipped",
@@ -20102,6 +20120,21 @@
       "source": "discovery:whoopspay.onrender.com",
       "slug": "whoopspay-register-open-route-live-oracle",
       "shipped_at": "2026-08-06T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:api.graphqlbook.org",
+      "slug": "graphqlbook-internal-user-search-bola-live-oracle",
+      "shipped_at": "2026-08-07T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:api.graphqlbook.org",
+      "slug": "graphqlbook-fetch-external-resource-ssrf-live-oracle",
+      "shipped_at": "2026-08-07T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-evidence",
+      "shipped_at": "2026-08-07T06:15:00.000Z"
     }
   ]
 }

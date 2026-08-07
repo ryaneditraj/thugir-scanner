@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T05:21:00.609Z",
-  "total": 1970,
-  "uniqueSlugs": 1965,
+  "generatedAt": "2026-08-07T06:14:03.414Z",
+  "total": 1974,
+  "uniqueSlugs": 1969,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1952,
+    "generic": 1956,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1885,
+    "deep": 1889,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 378,
+    "Broken access control": 380,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -32,7 +32,7 @@
     "Open redirect": 15,
     "general": 20,
     "SSRF": 10,
-    "Server-side request forgery": 56,
+    "Server-side request forgery": 58,
     "Sensitive data exposure": 47,
     "AI security": 50,
     "Business logic": 16,
@@ -1425,6 +1425,10 @@
     "graphiql-ui-exposed",
     "graphql-endpoint-disclosed-in-docs",
     "graphql-introspection-enabled",
+    "graphqlbook-fetch-external-resource-ssrf-live-oracle",
+    "graphqlbook-fetch-external-resource-ssrf-route-live-oracle",
+    "graphqlbook-internal-user-search-bola-live-oracle",
+    "graphqlbook-internal-user-search-bola-route-live-oracle",
     "hidden-prompt-injection",
     "html-comment-credential-disclosure",
     "hts-yuppers-search-sqli-probe",

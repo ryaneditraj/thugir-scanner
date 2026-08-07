@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T06:07:00.000Z",
+  "updated_at": "2026-08-07T06:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,23 +16,23 @@
     }
   },
   "total_sites_scanned": 2898,
-  "total_findings": 32109,
-  "critical_findings": 94,
+  "total_findings": 32135,
+  "critical_findings": 96,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2041,
-  "discovery_findings": 26790,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-07T06:07:00.000Z",
+  "discovery_findings": 26816,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-07T06:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 505,
+      "probes_run": 509,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,45 @@
           ]
         }
       },
-      "note": "Primary herokuapp 6/6 (50 findings); reflexion-escalated-ssti + juice-shop-products-search-sqli-route-live-oracle; no benchmark misses"
+      "note": "6/6 recall (51 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 145,
-      "focus": "crAPI BOLA/BFLA routes + Juice Shop demo order-history + NodeGoat profile + queue drain (graphqlbook, WSL 1014/1019/1020, juice-shop security-question, wrongsecrets, pwnshop admin/logs)",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 171,
+      "focus": "graphqlbook GraphQL BOLA/SSRF route oracles + WSL module 1019-1020 catalog map + queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — reflexion-escalated-ssti critical + 49 oracle slugs; no benchmark misses",
-      "juice-shop.herokuapp.com/rest/user/security-question: 52 findings — secret-resend gap signal route (sensitive_data still covered on benchmark via other slugs)",
-      "pwnshop.ctfsecurity.com/admin/export-orders: 43 findings — admin export-orders hub",
-      "pwnshop.ctfsecurity.com/logs: 13 findings (down from 40 prior) — logs route lighter pass",
-      "wrongsecrets.herokuapp.com/challenge/8: 11 findings — client-side secret challenge oracle",
-      "api.graphqlbook.org/graphql: 8 findings — introspection hit without route-specific BOLA/SSRF live oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
+      "api.graphqlbook.org/graphql: 8→12 — graphqlbook-internal-user-search-bola + fetch-external-resource-ssrf live+route oracles shipped",
+      "web-security-learning-labs.vercel.app/module/1019: 3→7 — module route oracle extended to Directory Traversal (1019) with Vercel checkpoint fallback",
+      "web-security-learning-labs.vercel.app/module/1020: 3→7 — module route oracle extended to LDAP Injection (1020) with Vercel checkpoint fallback",
+      "juice-shop.herokuapp.com/rest/user/security-question: 52 findings — secret-resend gap signal route (sensitive_data still covered on benchmark)",
+      "pwnshop.ctfsecurity.com/admin/export-orders: 43 findings — admin export-orders hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question slugs)",
-      "api.graphqlbook.org/graphql: no route-specific GraphQL BOLA/SSRF live oracles despite introspection hit",
-      "web-security-learning-labs.vercel.app/module/1014/1019/1020: catalog placeholder pages — module route oracle not yet extended",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
-      "crapi.apisec.ai/community/posts/1 + mechanic/service_requests + user/dashboard: queued for next drain (06 UTC discovery)",
-      "demo.owasp-juice.shop/rest/order-history + nodegoat-websec profile: queued for next drain (06 UTC discovery)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon oracles intermittent on cold OTP scans (40 findings when session completes)",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: avatar SVG XSS oracle restored when OTP session completes (44 findings)",
+      "web-security-learning-labs.vercel.app/module/1021+: catalog not yet mapped beyond 1020",
+      "crapi.apisec.ai/community/posts/1 + mechanic/service_requests: queued for next drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "juice-shop.herokuapp.com/rest/user/security-question": 52,
-    "pwnshop.ctfsecurity.com/admin/export-orders": 43,
-    "pwnshop.ctfsecurity.com/logs": 13,
-    "wrongsecrets.herokuapp.com/challenge/8": 11,
-    "api.graphqlbook.org/graphql": 8,
+    "api.graphqlbook.org/graphql": 12,
     "web-security-learning-labs.vercel.app/module/1019": 7,
     "web-security-learning-labs.vercel.app/module/1020": 7,
-    "web-security-learning-labs.vercel.app/module/1014": 4,
+    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com/rest/user/security-question": 52,
+    "web-security-learning-labs.vercel.app/module/1016": 8,
+    "vulnbank.org/api/v2/transfer": 22,
     "brokencrystals.com/api/users/one/regular_user/photo": 77,
-    "vulnbank.org/api/v2/transfer": 22
+    "pwnshop.ctfsecurity.com/admin/export-orders": 43,
+    "pwnshop.ctfsecurity.com/logs": 40,
+    "wrongsecrets.herokuapp.com/challenge/8": 11,
+    "vaultapp-omega.vercel.app/api/admin/audit-logs": 14
   }
 }
