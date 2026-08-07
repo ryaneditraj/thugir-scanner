@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v3-user-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login JWT then GET /api/v3/user/1652 returns status:success user.username=racer3_13959 without object-level auth; vulnbank.org/api/v3/user/1 findings 24 (+v3-user-idor live+route oracles); benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v3-reset-password-versioning-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/forgot-password returns debug_info.pin (3-digit) and POST /api/v3/reset-password with same reset_pin returns Password has been reset successfully; vulnbank.org/api/v3/reset-password findings 24 (+v3-reset-password-versioning live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-placeholder-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Next.js CSR shell renders Here is a Module: <!-- -->1025 breaking placeholder regex; fixed HTML-comment tolerant shell + curated-topic fallback; web-security-learning-labs.vercel.app/module/1025 findings 7 (+module-route-evidence restored); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-transfer-route-live-oracle",
       "status": "shipped",
@@ -20282,6 +20300,31 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "client-side-web-security-learning-labs-evidence",
       "shipped_at": "2026-08-07T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v3-user-idor-live-oracle",
+      "shipped_at": "2026-08-07T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v3-user-idor-route-live-oracle",
+      "shipped_at": "2026-08-07T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v3-reset-password-versioning-live-oracle",
+      "shipped_at": "2026-08-07T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v3-reset-password-versioning-route-live-oracle",
+      "shipped_at": "2026-08-07T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-placeholder-fix",
+      "shipped_at": "2026-08-07T14:30:00.000Z"
     }
   ]
 }
