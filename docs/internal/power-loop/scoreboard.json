@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T13:04:19.154Z",
+  "updated_at": "2026-08-07T13:11:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2781,
-  "total_findings": 27488,
+  "total_sites_scanned": 2788,
+  "total_findings": 27648,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1981,
-  "discovery_findings": 23069,
+  "discovery_urls_added": 1986,
+  "discovery_findings": 23229,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-07T13:04:19.154Z",
+  "last_run": "2026-08-07T13:11:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 505,
+      "probes_run": 503,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,43 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle healthy — 6/6 recall (50 findings); no staging fallback needed"
+      "note": "Primary Heroku oracle healthy — 6/6 recall (52 findings); no staging fallback needed"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 141,
-      "focus": "WSL modules 1028-1030 + vulnshop /api/search + preview juice-shop security-question route",
+      "findings": 160,
+      "focus": "WSL modules 1031-1033 + vulnshop /api/v1/products + preview juice-shop track-order IDOR",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — primary oracle healthy, no benchmark misses",
-      "preview.owasp-juice.shop/rest/user/security-question: 51 findings — juice-shop-security-question-user-route-live-oracle fires on develop preview",
-      "web-security-learning-labs module/1028-1030: 7 findings each — reflexion SSTI (critical) on new catalog modules",
-      "vulnshop.vercel.app/api/search: 6 findings — client-side evidence only (SPA shell; no live SQLi oracle)",
-      "wrongsecrets.herokuapp.com/challenge/8: 11 findings — challenge oracle reachable after prior 404",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings) — primary oracle healthy, no benchmark misses",
+      "preview.owasp-juice.shop/rest/track-order/1: 52 findings — juice-shop-track-order-idor-live-oracle fires on develop preview",
+      "vulnshop.vercel.app/api/v1/products: 8 findings — vulnshop-products-sqli-route-live-oracle (new live oracle on /api/v1/products)",
+      "web-security-learning-labs module/1031-1033: 7 findings each — reflexion SSTI (critical) on new catalog modules",
+      "pwnshop.ctfsecurity.com/admin/export-orders: 45 findings — queue drain (CSV formula injection oracle)",
+      "pwnshop.ctfsecurity.com/logs: 34 findings — plaintext password audit-log exposure",
       "api.vulnbank.org/api/v1/login: connection error (unreachable from cloud agent)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnshop.vercel.app/api/search: product-search SQLi live oracle absent (Vercel SPA shell only)",
+      "WSL modules 1031-1033: generic reflexion SSTI only — no route-specific challenge oracles",
       "api.vulnbank.org unreachable from cloud agent (recurring connection error)",
-      "WSL modules 1028-1030: generic reflexion SSTI only — no route-specific challenge oracles"
+      "vulnshop.vercel.app/api/search: product-search SQLi live oracle still absent on /api/search (but /api/v1/products now has live oracle)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 52,
+    "preview.owasp-juice.shop/rest/track-order/1": 52,
+    "vulnshop.vercel.app/api/v1/products": 8,
+    "web-security-learning-labs.vercel.app/module/1031": 7,
+    "web-security-learning-labs.vercel.app/module/1032": 7,
+    "web-security-learning-labs.vercel.app/module/1033": 7,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 45,
+    "pwnshop.ctfsecurity.com/logs": 34,
     "preview.owasp-juice.shop/rest/user/security-question": 51,
-    "web-security-learning-labs.vercel.app/module/1028": 7,
-    "web-security-learning-labs.vercel.app/module/1029": 7,
-    "web-security-learning-labs.vercel.app/module/1030": 7,
-    "vulnshop.vercel.app/api/search": 6,
-    "wrongsecrets.herokuapp.com/challenge/8": 11,
-    "vulnshop.vercel.app/cart": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level15.php": 4,
-    "pwnshop.ctfsecurity.com/admin/export-orders": 47
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
