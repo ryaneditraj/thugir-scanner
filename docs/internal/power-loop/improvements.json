@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1051-1060",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue modules 1051-1060 CSR placeholder shells; extractWebSecurityLearningLabsSeeds + module priority seeds extended 1051-1060; web-security-learning-labs.vercel.app/module/1060 findings 3→8 (+module-route-evidence, client-side-web-security-learning-labs-evidence); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-secret-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /secret 403; path-normalization bypass via /secret/ /secret/..;/ (same oracle family as /admin trailing-slash); bypass403SecretLiveOracle + route oracle + FORBIDDEN_403_PROBE_PATHS /secret; bypass403.vercel.app/secret oracle wired — Vercel Security Checkpoint intermittently blocks automated probes (3 findings when blocked); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-config-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /config 403; header-manipulation bypass via X-Original-URL/X-Rewrite-URL on / and IP override headers on /config; bypass403ConfigLiveOracle + route oracle + FORBIDDEN_403_PROBE_PATHS /config; bypass403.vercel.app/config oracle wired — Vercel Security Checkpoint intermittently blocks automated probes; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-guardian-leaks-search-sqli-live-oracle",
       "status": "shipped",

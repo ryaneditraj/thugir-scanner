@@ -36299,6 +36299,108 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bypass403-secret-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /secret path-normalization bypass live oracle",
+    description:
+      "GET /secret returns 403 Forbidden but trailing-slash or semicolon path-normalization bypass returns a success flag — the BypassX protected secret path oracle.",
+    impactOneline:
+      "Path-normalization bypasses on protected secret routes let attackers reach sensitive resources without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403SecretLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize request paths before authorization checks.",
+      steps: [
+        "Reject ambiguous trailing-slash and dot-segment paths before authz.",
+        "Return consistent 404 for unknown protected paths instead of distinguishable 403 responses.",
+        "Apply authorization on the canonical path, not the raw request URI."
+      ]
+    },
+    fixPrompt:
+      "Our /secret returns 403 but /secret/ bypasses it on bypass403.vercel.app. Show path canonicalization before authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-secret-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /secret route path-normalization bypass live oracle",
+    description:
+      "When scanning /secret on bypass403.vercel.app, path-normalization bypass reaches the protected secret resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm path-normalization bypasses on protected secret endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403SecretRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize request paths before authorization checks.",
+      steps: [
+        "Reject trailing-slash and semicolon path tricks before authz.",
+        "Apply authorization on the canonical path, not the raw request URI."
+      ]
+    },
+    fixPrompt:
+      "Our /secret route scan shows path-normalization bypass. Show path canonicalization before authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-config-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /config header-manipulation bypass live oracle",
+    description:
+      "GET /config returns 403 but X-Original-URL, X-Rewrite-URL, or client IP header manipulation bypass returns a success flag — the BypassX header bypass oracle.",
+    impactOneline:
+      "Header-manipulation bypasses on protected config routes let attackers reach sensitive configuration without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403ConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-controlled override headers and validate IP allowlists server-side.",
+      steps: [
+        "Strip X-Original-URL and X-Rewrite-URL at the edge before routing.",
+        "Do not trust X-Forwarded-For or X-Custom-IP-Authorization from untrusted clients.",
+        "Apply authorization after canonical path resolution, not on override headers."
+      ]
+    },
+    fixPrompt:
+      "Our /config returns 403 but header manipulation bypasses it on bypass403.vercel.app. Show header stripping and server-side IP validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-config-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /config route header-manipulation bypass live oracle",
+    description:
+      "When scanning /config on bypass403.vercel.app, header-manipulation bypass reaches the protected config resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm header-manipulation bypasses on protected config endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403ConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-controlled override headers before authorization.",
+      steps: [
+        "Strip X-Original-URL and X-Rewrite-URL at the edge.",
+        "Do not trust client IP override headers from untrusted sources."
+      ]
+    },
+    fixPrompt:
+      "Our /config route scan shows header-manipulation bypass. Show header stripping and server-side validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bypass403-lab-evidence",
     platform: "generic",
     category: "Broken access control",

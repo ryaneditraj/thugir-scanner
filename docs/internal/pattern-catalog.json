@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T20:18:18.929Z",
-  "total": 2009,
-  "uniqueSlugs": 2004,
+  "generatedAt": "2026-08-07T21:10:38.407Z",
+  "total": 2013,
+  "uniqueSlugs": 2008,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1991,
+    "generic": 1995,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1924,
+    "deep": 1928,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 398,
+    "Broken access control": 402,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -246,6 +246,10 @@
     "bypass403-admin-route-live-oracle",
     "bypass403-api-admin-live-oracle",
     "bypass403-api-admin-route-live-oracle",
+    "bypass403-config-live-oracle",
+    "bypass403-config-route-live-oracle",
+    "bypass403-secret-live-oracle",
+    "bypass403-secret-route-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
