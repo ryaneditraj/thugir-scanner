@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T22:03:58.136Z",
+  "updated_at": "2026-08-07T22:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2862,
-  "total_findings": 28803,
+  "total_sites_scanned": 2870,
+  "total_findings": 28847,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2021,
-  "discovery_findings": 23698,
+  "discovery_urls_added": 2026,
+  "discovery_findings": 23742,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-07T22:03:58.136Z",
+  "last_run": "2026-08-07T22:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 48,
@@ -54,35 +54,33 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 42,
-      "focus": "WSL modules 1061-1065 + engine evolve WSL 1051-1060 seeds + bypass403 secret/config oracles",
-      "improvements_shipped_this_run": 3
+      "findings": 44,
+      "focus": "WSL modules 1066-1070 catalog expansion + queue drain (1059-1060, vulnshop users)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1060: 3→8 findings with module-route-evidence + client-side-web-security-learning-labs-evidence",
-      "web-security-learning-labs.vercel.app/module/1061-1063: 8 findings each with reflexion-escalated-ssti",
-      "web-security-learning-labs.vercel.app/module/1064: 6 findings (SSTI + misconfig)",
-      "web-security-learning-labs.vercel.app/module/1065: 3 findings — placeholder shell (SSTI only)",
-      "bypass403.vercel.app/secret + /config: oracles wired (Vercel Security Checkpoint blocks live validation intermittently)"
+      "web-security-learning-labs.vercel.app/module/1066-1068: 8 findings each with reflexion-escalated-ssti + module-route-evidence",
+      "web-security-learning-labs.vercel.app/module/1069-1070: 3 findings — placeholder shells (SSTI only)",
+      "web-security-learning-labs.vercel.app/module/1059-1060: queue drain 3 findings each (SSTI shells)",
+      "vulnshop.vercel.app/api/v1/users: 8 findings with vulnshop-users-enumeration-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (Resend key not in current social feeds)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "juice-shop.herokuapp.com primary Heroku dyno 503 — staging fallback required",
-      "WSL modules 1064-1065: thinner placeholder shells vs 1061-1063 full SSTI labs",
-      "bypass403.vercel.app: Vercel Security Checkpoint intermittently blocks automated probes — oracles fire when lab reachable",
-      "vaultapp.vercel.app /api/users/1 + /login queued at tail — pending drain"
+      "WSL modules 1069-1070: thinner placeholder shells vs 1066-1068 full SSTI labs",
+      "vaultapp.vercel.app /api/users/1 + /login queued at tail — pending drain",
+      "bypass403.vercel.app: Vercel Security Checkpoint intermittently blocks automated probes"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
-    "web-security-learning-labs.vercel.app/module/1060": 8,
-    "web-security-learning-labs.vercel.app/module/1061": 8,
-    "web-security-learning-labs.vercel.app/module/1062": 8,
-    "web-security-learning-labs.vercel.app/module/1063": 8,
-    "web-security-learning-labs.vercel.app/module/1064": 6,
-    "web-security-learning-labs.vercel.app/module/1065": 3,
+    "web-security-learning-labs.vercel.app/module/1066": 8,
+    "web-security-learning-labs.vercel.app/module/1067": 8,
+    "web-security-learning-labs.vercel.app/module/1068": 8,
+    "web-security-learning-labs.vercel.app/module/1069": 3,
+    "web-security-learning-labs.vercel.app/module/1070": 3,
     "vulnshop.vercel.app/api/v1/users": 8
   }
 }
