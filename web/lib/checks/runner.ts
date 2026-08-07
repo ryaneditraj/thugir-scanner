@@ -8532,7 +8532,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /juicesec\.mrdinesh\.workers\.dev/i.test(targetInput) &&
-    /\/challenge\/(sqli|xss|jwt|ssrf|idor)\b/i.test(targetInput) &&
+    /\/challenge\/(?:sqli|xss-reflected|broken-auth|idor|robots|sensitive-data|jwt|cmdi|ssrf|xss-stored|xss)\b/i.test(
+      targetInput
+    ) &&
     (home.status === 404 || home.body.length < 512)
   ) {
     try {
@@ -9668,8 +9670,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let juicesecBootstrap = "";
   if (
     /juicesec\.mrdinesh\.workers\.dev/i.test(targetInput) &&
-    /\/challenge\/(sqli|xss|jwt|ssrf|idor)\b/i.test(targetInput) &&
-    !/function checkSQLi|function checkSSRF|function checkJWT/i.test(home.body)
+    /\/challenge\/(?:sqli|xss-reflected|broken-auth|idor|robots|sensitive-data|jwt|cmdi|ssrf|xss-stored|xss)\b/i.test(
+      targetInput
+    ) &&
+    !/function checkSQLi|function checkSSRF|function checkJWT|function checkCmdInjection/i.test(home.body)
   ) {
     const juiceHomeDoc = await probe.get(new URL("/", origin).toString(), {
       maxBytes: 600_000,

@@ -17762,8 +17762,32 @@ const CLIENT_JUICESEC_LAB_RES: { label: string; re: RegExp }[] = [
   {
     label: "JuiceSec SSRF link-preview lab",
     re: /checkSSRF\s*\(|Cloud metadata endpoint reached|server fetches it for you/i
+  },
+  {
+    label: "JuiceSec command injection lab",
+    re: /checkCmdInjection\s*\(|ping -c 1 \[YOUR_INPUT\]/i
+  },
+  {
+    label: "JuiceSec broken authentication lab",
+    re: /checkBrokenAuth\s*\(|WEAK_CREDS|No lockout implemented/i
+  },
+  {
+    label: "JuiceSec robots.txt misconfiguration lab",
+    re: /checkRobots\s*\(|Disallow: \/admin-9f3a2c/i
+  },
+  {
+    label: "JuiceSec sensitive data exposure lab",
+    re: /checkSensitiveData\s*\(|\/api\/v1\/users/i
+  },
+  {
+    label: "JuiceSec stored XSS lab",
+    re: /submitStoredXSS\s*\(|renderXSSStored/i
   }
 ];
+
+/** Canonical JuiceSec /challenge/{id} slugs from the CHALLENGES catalog. */
+const JUICESEC_CHALLENGE_ROUTE_RE =
+  /\/challenge\/(sqli|xss-reflected|broken-auth|idor|robots|sensitive-data|jwt|cmdi|ssrf|xss-stored|xss)\b/i;
 
 const clientSideJuicesecLabEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -17795,11 +17819,41 @@ const JUICESEC_CHALLENGE_ROUTE_LABELS: Record<
     category: "Injection",
     note: "JuiceSec /challenge/sqli route — inline checkSQLi validates classic OR 1=1 login bypass on the Cloudflare Workers SPA"
   },
+  "xss-reflected": {
+    label: "JuiceSec reflected XSS lab checkXSSReflected",
+    checkRe: /function checkXSSReflected|renderXSSReflected/i,
+    category: "Cross-site scripting",
+    note: "JuiceSec /challenge/xss-reflected route — checkXSSReflected reflects unsanitized search payloads into the DOM"
+  },
   xss: {
     label: "JuiceSec reflected XSS lab checkXSSReflected",
-    checkRe: /function checkXSSReflected|on\w+\s*=|<script/i,
+    checkRe: /function checkXSSReflected|renderXSSReflected/i,
     category: "Cross-site scripting",
     note: "JuiceSec /challenge/xss route — checkXSSReflected reflects unsanitized search payloads into the DOM"
+  },
+  "broken-auth": {
+    label: "JuiceSec broken authentication lab checkBrokenAuth",
+    checkRe: /function checkBrokenAuth|WEAK_CREDS|No lockout implemented/i,
+    category: "Broken authentication",
+    note: "JuiceSec /challenge/broken-auth route — checkBrokenAuth accepts weak admin credentials with no lockout or rate limit"
+  },
+  idor: {
+    label: "JuiceSec IDOR lab checkIDOR",
+    checkRe: /function checkIDOR|GET \/api\/orders\//i,
+    category: "Broken access control",
+    note: "JuiceSec /challenge/idor route — checkIDOR exposes other users' orders via predictable /api/orders/{id}"
+  },
+  robots: {
+    label: "JuiceSec robots.txt misconfiguration lab checkRobots",
+    checkRe: /function checkRobots|Disallow: \/admin-9f3a2c/i,
+    category: "Security misconfiguration",
+    note: "JuiceSec /challenge/robots route — checkRobots reveals hidden /admin-9f3a2c path via robots.txt enumeration"
+  },
+  "sensitive-data": {
+    label: "JuiceSec sensitive data exposure lab checkSensitiveData",
+    checkRe: /function checkSensitiveData|\/api\/v1\/users/i,
+    category: "Sensitive data exposure",
+    note: "JuiceSec /challenge/sensitive-data route — checkSensitiveData leaks user records with passwords and credit cards from /api/v1/users"
   },
   jwt: {
     label: "JuiceSec JWT alg:none lab checkJWT",
@@ -17807,23 +17861,29 @@ const JUICESEC_CHALLENGE_ROUTE_LABELS: Record<
     category: "Broken authentication",
     note: "JuiceSec /challenge/jwt route — checkJWT accepts alg:none tokens with role:admin"
   },
+  cmdi: {
+    label: "JuiceSec command injection lab checkCmdInjection",
+    checkRe: /function checkCmdInjection|ping -c 1 \[YOUR_INPUT\]/i,
+    category: "Injection",
+    note: "JuiceSec /challenge/cmdi route — checkCmdInjection passes user input to a shell ping command"
+  },
   ssrf: {
     label: "JuiceSec SSRF link-preview lab checkSSRF",
     checkRe: /function checkSSRF|169\.254\.169\.254|Cloud metadata endpoint reached/i,
     category: "Server-side request forgery",
     note: "JuiceSec /challenge/ssrf route — checkSSRF simulates cloud metadata and internal network fetch via link preview"
   },
-  idor: {
-    label: "JuiceSec IDOR lab checkIDOR",
-    checkRe: /function checkIDOR|GET \/api\/orders\//i,
-    category: "Broken access control",
-    note: "JuiceSec /challenge/idor route — checkIDOR exposes other users' orders via predictable /api/orders/{id}"
+  "xss-stored": {
+    label: "JuiceSec stored XSS lab submitStoredXSS",
+    checkRe: /function submitStoredXSS|renderXSSStored/i,
+    category: "Cross-site scripting",
+    note: "JuiceSec /challenge/xss-stored route — submitStoredXSS stores and renders raw HTML review payloads"
   }
 };
 
 const clientSideJuicesecChallengeRouteEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
-  const challengeMatch = pageUrl.match(/\/challenge\/(sqli|xss|jwt|ssrf|idor)\b/i);
+  const challengeMatch = pageUrl.match(JUICESEC_CHALLENGE_ROUTE_RE);
   if (!challengeMatch) return NEGATIVE;
   const challengeKey = challengeMatch[1]!.toLowerCase();
   const challengeMeta = JUICESEC_CHALLENGE_ROUTE_LABELS[challengeKey];
@@ -28097,14 +28157,34 @@ async function probeBuggyBuyExternalApi(ctx: RuleContext): Promise<RuleResult | 
   }
   const paths = ["/api/v1/orders/1", "/api/v1/users", "/api/v1/products?limit=1"];
   const urls = buildApiProbeUrls(paths, ctx.origin, bases, 4);
+  let degradedHit: RuleResult | null = null;
   for (let attempt = 0; attempt < 5; attempt++) {
     if (attempt > 0) await buggyBuySleep(5000);
     const docs = await ctx.probe.getMany(urls, { maxBytes: 8192, timeoutMs: 25000 }, 2);
     for (const [url, r] of docs) {
+      const body = r.body.slice(0, 500);
+      if (
+        r.status >= 500 &&
+        r.status < 600 &&
+        /"(?:message|error)"\s*:\s*"/i.test(body) &&
+        /fetching order|server error|Server Error/i.test(body)
+      ) {
+        degradedHit ??= {
+          fired: true,
+          confidence: 0.82,
+          evidence: {
+            url,
+            status: r.status,
+            sample: body.slice(0, 120).trim(),
+            note: "BuggyBuy Render API accepted unauthenticated /api/v1/* request and returned server-side order error JSON — degraded IDOR/BOLA training oracle (backend cold-start or DB unavailable)"
+          }
+        };
+        continue;
+      }
       if (r.status < 200 || r.status >= 300) continue;
       const ct = r.headers["content-type"] || "";
       if (!/json/i.test(ct) && !/^\s*[\[{]/.test(r.body.trim())) continue;
-      if (/unauthorized|login required|sign in|authentication|Internal Server Error/i.test(r.body.slice(0, 500))) {
+      if (/unauthorized|login required|sign in|authentication|Internal Server Error/i.test(body)) {
         continue;
       }
       if (!/"(?:id|order|email|username|userId|name|products|price)"\s*:/i.test(r.body.slice(0, 400))) {
@@ -28121,7 +28201,7 @@ async function probeBuggyBuyExternalApi(ctx: RuleContext): Promise<RuleResult | 
       };
     }
   }
-  return null;
+  return degradedHit;
 }
 
 const buggybuyApiBolaLiveOracle: Rule = async (ctx) => {
@@ -32773,26 +32853,50 @@ const CLIENT_WEB_SECURITY_LEARNING_LABS_RES: { label: string; re: RegExp }[] = [
 
 const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
-  const corpus = `${ctx.combined}\n${pageUrl}`;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
   const isKnownHost = /web-security-learning-labs\.vercel\.app/i.test(pageUrl);
+  const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
+  let checkpointBlocked = false;
+  if (isKnownHost && moduleMatch) {
+    const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+    corpus += "\n" + moduleDoc.body;
+    if (webSecurityLearningLabsCheckpointBlocked(moduleDoc.body)) checkpointBlocked = true;
+  }
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEB_SECURITY_LEARNING_LABS_RES) {
     const m = corpus.match(re);
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   const minHits = isKnownHost ? 1 : 4;
-  if (hits.length < minHits) return NEGATIVE;
-  if (!/Web Security Learning Labs|web-security-learning-labs/i.test(corpus)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: hits.length >= 5 ? 0.9 : isKnownHost ? 0.86 : 0.86,
-    evidence: {
-      markers: hits.slice(0, 4),
-      note: isKnownHost && hits.length < 3
-        ? "web-security-learning-labs.vercel.app is a known interactive vulnerability labs platform (URL oracle; Next.js CSR shell may omit module markers)"
-        : "Web Security Learning Labs documents interactive SQL injection, XSS, IDOR, and CSRF training modules"
+  if (hits.length >= minHits && /Web Security Learning Labs|web-security-learning-labs/i.test(corpus)) {
+    return {
+      fired: true,
+      confidence: hits.length >= 5 ? 0.9 : isKnownHost ? 0.86 : 0.86,
+      evidence: {
+        markers: hits.slice(0, 4),
+        note: isKnownHost && hits.length < 3
+          ? "web-security-learning-labs.vercel.app is a known interactive vulnerability labs platform (URL oracle; Next.js CSR shell may omit module markers)"
+          : "Web Security Learning Labs documents interactive SQL injection, XSS, IDOR, and CSRF training modules"
+      }
+    };
+  }
+  if (isKnownHost && moduleMatch) {
+    const moduleId = moduleMatch[1]!;
+    const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId];
+    if (topic && (checkpointBlocked || webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus))) {
+      return {
+        fired: true,
+        confidence: 0.86,
+        evidence: {
+          moduleId,
+          moduleTopic: topic,
+          scannedUrl: pageUrl,
+          note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — client-side lab platform oracle (Vercel checkpoint blocked catalog fetch; curated module-id map)`
+        }
+      };
     }
-  };
+  }
+  return NEGATIVE;
 };
 
 const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
