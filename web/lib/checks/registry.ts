@@ -32861,7 +32861,7 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
       timeoutMs: 15000
     });
     corpus += "\n" + modulesDoc.body;
-    checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(modulesDoc.body);
+    if (webSecurityLearningLabsCheckpointBlocked(modulesDoc.body)) checkpointBlocked = true;
     const chunkRe = /\/_next\/static\/chunks\/[a-z0-9_-]+\.js/gi;
     const chunks = [...new Set(modulesDoc.body.match(chunkRe) ?? [])].slice(0, 6);
     for (const chunkPath of chunks) {
