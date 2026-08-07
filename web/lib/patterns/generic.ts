@@ -47840,6 +47840,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vaultapp-users-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp user-profile IDOR live oracle",
+    description:
+      "GET /api/users/:id returns another user's email, phone, balance, and account number without ownership check — the VaultApp user-profile IDOR training oracle.",
+    impactOneline:
+      "Missing object ownership checks on user-profile APIs expose PII for any authenticated user.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappUsersIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — scope user-profile reads to the authenticated principal.",
+      steps: [
+        "Return 403 when req.user.id !== requested user id unless admin.",
+        "Strip sensitive fields from cross-user profile responses.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/users/:id returns other users' PII without ownership check. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-users-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp user-profile route IDOR live oracle",
+    description:
+      "When scanning /api/users/:id, GET returns another user's profile PII without ownership check — route-specific VaultApp user-profile IDOR oracle.",
+    impactOneline:
+      "Route scans on user-profile endpoints should confirm missing object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappUsersIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — scope user-profile reads to the authenticated principal.",
+      steps: [
+        "Return 403 when req.user.id !== requested user id unless admin.",
+        "Strip sensitive fields from cross-user profile responses.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/:id route scan confirms user-profile IDOR without ownership check. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-transactions-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp transaction-history IDOR live oracle",
+    description:
+      "GET /api/transactions?account_id= returns another user's transaction history without ownership check — the VaultApp transaction-history IDOR training oracle.",
+    impactOneline:
+      "Missing account ownership checks on transaction APIs expose financial history to any authenticated user.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappTransactionsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — bind transaction queries to the authenticated user's account.",
+      steps: [
+        "Verify account_id belongs to req.user before returning transactions.",
+        "Return 403 when querying another user's account_id.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/transactions?account_id= returns other users' transaction history. Show account-scoped authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-transactions-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp transaction-history route IDOR live oracle",
+    description:
+      "When scanning /api/transactions, account_id query returns another user's transaction history without ownership check — route-specific VaultApp transaction IDOR oracle.",
+    impactOneline:
+      "Route scans on transaction endpoints should confirm missing account-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappTransactionsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — bind transaction queries to the authenticated user's account.",
+      steps: [
+        "Verify account_id belongs to req.user before returning transactions.",
+        "Return 403 when querying another user's account_id.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/transactions route scan confirms transaction-history IDOR via account_id. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-notes-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp private-note IDOR live oracle",
+    description:
+      "GET /api/notes/:id returns another user's private note body without ownership check — the VaultApp private-note IDOR training oracle.",
+    impactOneline:
+      "Missing note ownership checks expose private credentials and secrets stored in user notes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappNotesIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify note owner matches authenticated user before returning content.",
+      steps: [
+        "Check note.user_id === req.user.id before returning note body.",
+        "Return 403 for private notes requested by non-owners.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/notes/:id returns other users' private notes. Show note ownership authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-notes-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp private-note route IDOR live oracle",
+    description:
+      "When scanning /api/notes/:id, GET returns another user's private note without ownership check — route-specific VaultApp private-note IDOR oracle.",
+    impactOneline:
+      "Route scans on note endpoints should confirm missing object-level authorization on private notes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappNotesIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify note owner matches authenticated user before returning content.",
+      steps: [
+        "Check note.user_id === req.user.id before returning note body.",
+        "Return 403 for private notes requested by non-owners.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/notes/:id route scan confirms private-note IDOR without ownership check. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnweb-comments-xss-route-live-oracle",
     platform: "generic",
     category: "Injection",
