@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T04:10:00.000Z",
+  "updated_at": "2026-08-07T05:07:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2879,
-  "total_findings": 31664,
+  "total_sites_scanned": 2888,
+  "total_findings": 31800,
   "critical_findings": 93,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2031,
-  "discovery_findings": 26559,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-07T04:10:00.000Z",
+  "discovery_urls_added": 2036,
+  "discovery_findings": 26645,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-07T05:07:30.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,36 +48,38 @@
           ]
         }
       },
-      "note": "Primary herokuapp 6/6 (51 findings); no benchmark misses"
+      "note": "Primary herokuapp 6/6 (50 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 97,
-      "focus": "pwnshop PWN-027 plaintext password audit log + PWN-013 CSV export via mass-assignment admin OTP + VaultApp audit-log IDOR probe fix",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 86,
+      "focus": "graphqlbook GraphQL introspection + WSL modules 1019-1020 + juice-shop security-question route + wrongsecrets challenge/8",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/logs: +pwnshop-audit-log-plaintext-password live+route oracles — failed login passwords in /api/v1/events detail (PWN-027)",
-      "pwnshop.ctfsecurity.com/admin/export-orders: 24→43 — pwnshop-export-orders-csv live+route oracles via mass-assignment admin OTP chain (PWN-013)",
-      "vaultapp-omega.vercel.app/api/admin/audit-logs: 6→14 — vaultapp-admin-audit-logs-idor probeUserId fix (user_id=50 has log rows)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "api.graphqlbook.org/graphql: 8 findings — graphql-introspection-enabled + dir-discovery on OWASP API Top 10 demo",
+      "juice-shop.herokuapp.com/rest/user/security-question: 52-finding hub — security-question oracles fire but secret-resend slug still absent",
+      "wrongsecrets.herokuapp.com/challenge/8: 11 findings — client-side-wrongsecrets-challenge-evidence + spring-boot-actuator-exposed",
+      "web-security-learning-labs.vercel.app/module/1019|1020: 3-finding generic hubs — module-specific lab oracles absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnbank.org/latest/meta-data/* simulated EC2 metadata chain returns HTTP 404 on live deploy",
-      "web-security-learning-labs.vercel.app/module/1014|1015|1016-1018: catalog uses 0007 CSRF / 0008 Command Injection IDs — module route oracle not yet extended"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via security-question-disclosure + other slugs)",
+      "api.graphqlbook.org/graphql: no route-specific GraphQL BOLA/SSRF live oracles despite introspection hit",
+      "web-security-learning-labs.vercel.app/module/1016-1020: catalog placeholder pages — module route oracle not yet extended"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com/rest/user/security-question": 52,
+    "api.graphqlbook.org/graphql": 8,
+    "wrongsecrets.herokuapp.com/challenge/8": 11,
+    "juice-shop.herokuapp.com": 50,
+    "brokencrystals.com/api/users/one/regular_user/photo": 77,
     "pwnshop.ctfsecurity.com/admin/export-orders": 43,
     "pwnshop.ctfsecurity.com/logs": 40,
-    "vaultapp-omega.vercel.app/api/admin/audit-logs": 14,
-    "brokencrystals.com/api/users/one/regular_user/photo": 77,
-    "juice-shop.herokuapp.com": 51,
-    "pwnshop.ctfsecurity.com/account/delete": 41,
     "vulnbank.org/api/ai/chat/anonymous": 22
   }
 }

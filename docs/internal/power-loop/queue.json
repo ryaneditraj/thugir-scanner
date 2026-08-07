@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T04:04:00.000Z",
+  "updated_at": "2026-08-07T05:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://api.graphqlbook.org/graphql",
+      "source": "DghostNinja/graphql-bookstore-API — OWASP API Top 10 GraphQL oracle POST /graphql introspection + BOLA (api.graphqlbook.org docs, 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1019",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1019 (public Vercel demo, 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1020",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1020 (public Vercel demo, 05 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/user/security-question",
+      "source": "OWASP Juice Shop primary — password-reset security-question disclosure oracle GET /rest/user/security-question (secret-resend gap signal, 05 UTC discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/8",
+      "source": "OWASP WrongSecrets — client-side secret challenge oracle GET /challenge/8 (public Heroku demo, 05 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1016",
       "source": "Web Security Learning Labs — command injection module catalog oracle GET /module/1016 (public Vercel demo, 04 UTC discovery)",
