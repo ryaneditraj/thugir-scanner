@@ -7359,6 +7359,118 @@ const vulnforgeAcademyLevelXssRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
+  number,
+  { vulnerability: string; note: string }
+> = {
+  13: {
+    vulnerability: "SSRF",
+    note: "VulnForge Academy level 13 — GET /api/levels/ssrf/level13 fetches attacker-controlled URLs without validation"
+  },
+  14: {
+    vulnerability: "SSRF (Cloud Metadata)",
+    note: "VulnForge Academy level 14 — SSRF to AWS IMDS 169.254.169.254 returns cloud metadata and training flags"
+  },
+  15: {
+    vulnerability: "SSRF Filter Bypass",
+    note: "VulnForge Academy level 15 — weak localhost blocklist bypassable via 127.1/decimal IP encoding (FLAG{ssrf15_f1lt3r_byp4ss})"
+  },
+  19: {
+    vulnerability: "Command Injection",
+    note: "VulnForge Academy level 19 — ping host parameter passed to shell=True enabling command chaining (FLAG{rce19_c0mm4nd_1nj})"
+  }
+};
+
+function vulnforgeAcademyLevelUrlOracle(
+  levelNum: number
+): { fired: true; confidence: number; evidence: Record<string, unknown> } | null {
+  const oracle = VULNFORGE_ACADEMY_LEVEL_URL_ORACLES[levelNum];
+  if (!oracle) return null;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      level: levelNum,
+      vulnerability: oracle.vulnerability,
+      note: oracle.note
+    }
+  };
+}
+
+const vulnforgeAcademyLevelSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 13 || levelNum > 15) return NEGATIVE;
+  const ssrfUrl = new URL(`/api/levels/ssrf/level${levelNum}`, ctx.origin);
+  ssrfUrl.searchParams.set("url", levelNum === 15 ? "http://127.1/" : "http://example.com/");
+  const doc = await ctx.probe.get(ssrfUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    /FLAG\{ssrf|Filter bypassed|ssrf1[345]_/i.test(doc.body) ||
+    (/Blocked:/i.test(doc.body) && /Try alternative representations/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: ssrfUrl.toString(),
+        level: levelNum,
+        snippet: doc.body.slice(0, 240).trim(),
+        note: `VulnForge Academy level ${levelNum} route scan — SSRF endpoint returns filter-bypass flag or blocklist training response`
+      }
+    };
+  }
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl
+    }
+  };
+};
+
+const vulnforgeAcademyLevelRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum !== 19) return NEGATIVE;
+  const rceUrl = new URL("/api/levels/rce/level19", ctx.origin);
+  rceUrl.searchParams.set("host", "127.0.0.1;id");
+  const doc = await ctx.probe.get(rceUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    /FLAG\{rce|Command injection successful|uid=\d+/i.test(doc.body) ||
+    (/Try injecting additional commands/i.test(doc.body) && /"command"/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /FLAG\{|uid=\d+/i.test(doc.body) ? 0.93 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: rceUrl.toString(),
+        level: levelNum,
+        snippet: doc.body.slice(0, 240).trim(),
+        note: "VulnForge Academy level 19 route scan — ping host parameter enables shell command chaining"
+      }
+    };
+  }
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl
+    }
+  };
+};
+
 const vulnbankUploadProfilePictureUrlRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -32312,6 +32424,15 @@ const VULNSHOP_MODULE_ORACLES: {
     note: "VulnShop POST /buy-ticket documents race condition — unmutexed ticket counter exhaustible via concurrent requests"
   },
   {
+    pathRe: /\/cart\b/i,
+    markers: [
+      { label: "Race Condition lab", re: /Race Condition|race_condition/i },
+      { label: "Flash sale route", re: /flash[-_]?sale|limited stock|remaining_stock/i },
+      { label: "Concurrent cart purchase", re: /concurrent|oversell|inventory race/i }
+    ],
+    note: "VulnShop /cart documents flash-sale inventory race condition — concurrent POST /api/v1/flash-sale oversells limited stock"
+  },
+  {
     pathRe: /\/manager\b/i,
     markers: [
       { label: "Manager Console title", re: /Manager Console/i },
@@ -32363,6 +32484,11 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/buy-ticket\b/i,
     vulnerability: "Race Condition",
     note: "VulnShop Flask POST /buy-ticket — unmutexed ticket counter vulnerable to concurrent purchase race — README oracle #11"
+  },
+  {
+    pathRe: /\/cart\b/i,
+    vulnerability: "Race Condition (Flash Sale)",
+    note: "VulnShop Flask POST /api/v1/flash-sale — unmutexed stock counter vulnerable to concurrent cart checkout race — README oracle #42"
   },
   {
     pathRe: /\/manager\b/i,
@@ -33074,6 +33200,59 @@ const vulnshopBuyTicketRouteLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const vulnshopFlashSaleRaceLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const saleUrl = new URL("/api/v1/flash-sale", ctx.origin).toString();
+  const probeDoc = await ctx.probe.get(saleUrl, {
+    method: "POST",
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ product_id: 1, quantity: 1 })
+  });
+  if (probeDoc.status === 405 && looksVulnshopReactSpaShell(probeDoc.body)) return NEGATIVE;
+  if (looksVulnshopReactSpaShell(probeDoc.body)) return NEGATIVE;
+  if (probeDoc.status < 200 || probeDoc.status >= 500) return NEGATIVE;
+  const concurrent = 12;
+  const results = await Promise.all(
+    Array.from({ length: concurrent }, () =>
+      ctx.probe.get(saleUrl, {
+        method: "POST",
+        maxBytes: 2048,
+        timeoutMs: 25000,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product_id: 1, quantity: 1 })
+      })
+    )
+  );
+  const purchases = results.filter(
+    (r) =>
+      r.status >= 200 &&
+      r.status < 300 &&
+      /"status"\s*:\s*"success"|Purchased|remaining_stock/i.test(r.body)
+  ).length;
+  if (purchases < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: purchases >= 3 ? 0.93 : 0.9,
+    evidence: {
+      saleUrl,
+      concurrentRequests: concurrent,
+      successfulPurchases: purchases,
+      snippet: results.find((r) => /success|Purchased/i.test(r.body))?.body.slice(0, 200).trim(),
+      note: "VulnShop POST /api/v1/flash-sale sold multiple units via concurrent requests — race condition on unmutexed flash-sale stock counter"
+    }
+  };
+};
+
+const vulnshopCartRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/cart\b/i,
+    vulnshopFlashSaleRaceLiveOracle,
+    "VulnShop /cart route scan — flash-sale inventory race condition confirmed or documented"
+  );
 
 const vulnshopHiddenAdminPathLiveOracle = (path: string, markers: RegExp): Rule => async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
@@ -68521,6 +68700,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopJwtLoginRouteLiveOracle,
   vulnshopBuyTicketRaceLiveOracle,
   vulnshopBuyTicketRouteLiveOracle,
+  vulnshopFlashSaleRaceLiveOracle,
+  vulnshopCartRouteLiveOracle,
   vulnshopHiddenAdminManagerLiveOracle,
   vulnshopHiddenAdminManagerRouteLiveOracle,
   vulnshopHiddenAdminAdministratorLiveOracle,
@@ -69796,6 +69977,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatSignupRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnforgeAcademyLevelXssRouteLiveOracle,
+  vulnforgeAcademyLevelSsrfRouteLiveOracle,
+  vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,
   agentpwnMcpExploitationRouteLiveOracle,
