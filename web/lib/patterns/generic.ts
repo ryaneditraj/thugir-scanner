@@ -23586,6 +23586,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-flash-sale-race-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop flash-sale race condition live oracle",
+    description:
+      "POST /api/v1/flash-sale sells multiple units via concurrent requests when the stock counter lacks mutex protection — flash-sale race oracle.",
+    impactOneline:
+      "TOCTOU race on flash-sale inventory lets attackers oversell limited stock during cart checkout.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopFlashSaleRaceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic inventory decrements or database locks — VulnShop is intentional training software.",
+      steps: [
+        "Protect flash-sale stock counters with mutexes or transactional updates.",
+        "Reject concurrent purchases that would oversell limited inventory.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/flash-sale has a race condition on inventory. Show atomic stock counter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-cart-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /cart flash-sale race condition route live oracle",
+    description:
+      "When scanning /cart, live concurrent POST /api/v1/flash-sale race or curated Flask-route oracle confirms flash-sale inventory race condition training module.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /cart documents concurrent flash-sale purchase race conditions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCartRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic inventory decrements on /api/v1/flash-sale.",
+      steps: [
+        "Protect flash-sale stock counters with mutexes or transactional updates.",
+        "Reject concurrent purchases that would oversell limited inventory.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /cart route documents a flash-sale inventory race condition. Show route-specific locking remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-hidden-admin-manager-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -36870,6 +36922,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /register route scan confirms NodeGoat open signup. Show route-specific registration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnForge Academy level SSRF route live oracle",
+    description:
+      "When scanning level13–15.php routes, /api/levels/ssrf/level{N} returns SSRF filter-bypass flags or blocklist training responses — route-specific VulnForge Academy SSRF oracle.",
+    impactOneline:
+      "VulnForge Academy SSRF levels expose server-side fetch with weak URL blocklists bypassable via IP encoding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate and restrict outbound fetch destinations in production apps.",
+      steps: [
+        "Resolve URLs and deny link-local, loopback, and metadata IP ranges.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 15 SSRF route has a bypassable localhost blocklist. Show SSRF egress control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnForge Academy level 19 RCE route live oracle",
+    description:
+      "When scanning level19.php routes, /api/levels/rce/level19 passes the host ping parameter to shell=True — route-specific VulnForge Academy command injection oracle.",
+    impactOneline:
+      "VulnForge Academy level 19 enables OS command chaining via unsanitized ping host input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — never pass user input to shell execution in production apps.",
+      steps: [
+        "Use subprocess without shell=True and validate host against a strict allowlist.",
+        "Reject shell metacharacters in user-supplied command parameters.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 19 route passes user input to shell=True ping. Show safe subprocess remediation.",
     version: 1,
     enabled: true
   },
