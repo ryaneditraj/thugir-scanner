@@ -11647,6 +11647,126 @@ const http403BypassProbe: Rule = async (ctx) => {
   };
 };
 
+function isBypass403Host(ctx: RuleContext): boolean {
+  return /bypass403\.vercel\.app/i.test(ctx.origin);
+}
+
+async function probeBypass403AdminTrailingSlash(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  const adminUrl = new URL("/admin", ctx.origin).toString();
+  const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096 });
+  if (baseline.status !== 403) return null;
+  const bypassUrl = new URL("/admin/", ctx.origin).toString();
+  const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096 });
+  if (bypass.status < 200 || bypass.status >= 300) return null;
+  if (!/trailing slash bypass|flag\{/i.test(bypass.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      original: adminUrl,
+      bypass: bypassUrl,
+      status: bypass.status,
+      snippet: bypass.body.slice(0, 200).trim(),
+      note: "bypass403.vercel.app GET /admin returns 403 but /admin/ trailing-slash normalization bypass returns success flag — BypassX path-normalization lab oracle"
+    }
+  };
+}
+
+const bypass403AdminLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403AdminTrailingSlash(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403AdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403AdminTrailingSlash(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "bypass403.vercel.app /admin route scan — trailing-slash normalization bypass reaches protected admin resource"
+    }
+  };
+};
+
+async function probeBypass403ApiAdminSemicolon(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  const adminUrl = new URL("/api/admin", ctx.origin).toString();
+  const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096 });
+  if (baseline.status !== 403) return null;
+  const bypassUrls = forbidden403BypassUrls(ctx.origin, "/api/admin");
+  for (const bypassUrl of bypassUrls) {
+    const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096 });
+    if (bypass.status < 200 || bypass.status >= 300) continue;
+    if (!/flag\{|semicolon|bypass success/i.test(bypass.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        original: adminUrl,
+        bypass: bypassUrl,
+        status: bypass.status,
+        snippet: bypass.body.slice(0, 200).trim(),
+        note: "bypass403.vercel.app GET /api/admin returns 403 but /api/admin/..;/ semicolon path bypass returns success flag — BypassX API path-normalization lab oracle"
+      }
+    };
+  }
+  return null;
+}
+
+const bypass403ApiAdminLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403ApiAdminSemicolon(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403ApiAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403ApiAdminSemicolon(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "bypass403.vercel.app /api/admin route scan — semicolon path-normalization bypass reaches protected API admin resource"
+    }
+  };
+};
+
+const CLIENT_BYPASS403_RES: { label: string; re: RegExp }[] = [
+  { label: "BypassX 403 bypass laboratory", re: /BypassX|bypass403/i },
+  { label: "403 bypass testing laboratory", re: /403 bypass|Advanced 403 Bypass/i },
+  { label: "Path normalization bypass success", re: /Trailing slash bypass success|path-normalization bypass/i },
+  { label: "Protected admin access denied", re: /Access Denied:\s*Forbidden|API Access Denied/i }
+];
+
+const clientSideBypass403LabEvidence: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_BYPASS403_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "bypass403.vercel.app documents the BypassX interactive 403 bypass training laboratory with path-normalization bypass endpoints"
+    }
+  };
+};
+
 // --- Intentionally vulnerable auth portal (VulnPortal-style terminals) -----------
 const CLIENT_VULN_AUTH_PORTAL_RES: { label: string; re: RegExp }[] = [
   {
@@ -31145,7 +31265,7 @@ const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>
 
 async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
-  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500];
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
@@ -70287,6 +70407,11 @@ export const RULES: Record<string, Rule> = {
   vampiBooksExcessiveDataLiveOracle,
   vampiBooksRouteLiveOracle,
   http403BypassProbe,
+  bypass403AdminLiveOracle,
+  bypass403AdminRouteLiveOracle,
+  bypass403ApiAdminLiveOracle,
+  bypass403ApiAdminRouteLiveOracle,
+  clientSideBypass403LabEvidence,
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
   clientSideHacksplainingEvidence,

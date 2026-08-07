@@ -36120,6 +36120,133 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bypass403-admin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /admin trailing-slash bypass live oracle",
+    description:
+      "GET /admin returns 403 Forbidden but /admin/ trailing-slash path normalization bypass returns a success flag — the BypassX 403 bypass training oracle.",
+    impactOneline:
+      "Path-normalization bypasses on admin routes let attackers reach protected resources without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403AdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize request paths before authorization checks.",
+      steps: [
+        "Reject ambiguous trailing-slash and dot-segment paths before authz.",
+        "Return consistent 404 for unknown admin routes instead of distinguishable 403 responses.",
+        "Apply authorization on the canonical path, not the raw request URI."
+      ]
+    },
+    fixPrompt:
+      "Our /admin returns 403 but /admin/ bypasses it on bypass403.vercel.app. Show path canonicalization before authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /admin route trailing-slash bypass live oracle",
+    description:
+      "When scanning /admin on bypass403.vercel.app, trailing-slash normalization bypass reaches the protected resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm path-normalization bypasses on protected admin endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403AdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize request paths before authorization checks.",
+      steps: [
+        "Reject ambiguous trailing-slash paths before authz.",
+        "Apply authorization on the canonical path, not the raw request URI."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route scan shows trailing-slash bypass. Show path canonicalization before authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-api-admin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /api/admin semicolon bypass live oracle",
+    description:
+      "GET /api/admin returns 403 but /api/admin/..;/ semicolon path-normalization bypass returns a success flag — the BypassX API 403 bypass training oracle.",
+    impactOneline:
+      "Semicolon and dot-segment path tricks bypass API admin access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403ApiAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and validate API paths before authorization.",
+      steps: [
+        "Reject ..;/ and ;/ path normalization tricks before authz.",
+        "Parse and canonicalize URL paths with the same library used for routing."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin returns 403 but /api/admin/..;/ bypasses it. Show API path canonicalization before authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-api-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /api/admin route semicolon bypass live oracle",
+    description:
+      "When scanning /api/admin on bypass403.vercel.app, semicolon path-normalization bypass reaches the protected API resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm semicolon path-normalization bypasses on protected API admin endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403ApiAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize and validate API paths before authorization.",
+      steps: [
+        "Reject ..;/ and ;/ path tricks before authz.",
+        "Parse URL paths with the same library used for routing."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin route scan shows semicolon path bypass. Show API path canonicalization before authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-bypass403-lab-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "BypassX 403 bypass training laboratory disclosed",
+    description:
+      "bypass403.vercel.app documents the BypassX interactive 403 bypass laboratory with path-normalization and header-manipulation training endpoints.",
+    impactOneline:
+      "Public 403 bypass labs expose path-normalization attack patterns attackers can replay on misconfigured admin routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideBypass403LabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run 403 bypass training labs on isolated hosts, not production admin routes.",
+      steps: [
+        "Do not deploy BypassX-style vulnerable admin paths to production.",
+        "Normalize request paths before authorization on all admin and API routes.",
+        "Return consistent 404 for unknown protected paths."
+      ]
+    },
+    fixPrompt:
+      "We host a BypassX-style 403 bypass lab. Show how to isolate training endpoints from production admin routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-devsecops-pipeline-visualizer-evidence",
     platform: "generic",
     category: "Injection",
