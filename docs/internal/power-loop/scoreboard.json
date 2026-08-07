@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T04:02:46.277Z",
+  "updated_at": "2026-08-07T04:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2871,
-  "total_findings": 31470,
+  "total_sites_scanned": 2879,
+  "total_findings": 31664,
   "critical_findings": 93,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2026,
-  "discovery_findings": 26365,
+  "discovery_urls_added": 2031,
+  "discovery_findings": 26559,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-07T04:02:46.277Z",
+  "last_run": "2026-08-07T04:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,38 @@
           ]
         }
       },
-      "note": "Primary herokuapp 6/6 (51 findings); no benchmark misses"
+      "note": "Primary herokuapp 6/6 (50 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 87,
-      "focus": "pwnshop account-delete CSRF (PWN-026) + download path-traversal live oracle + vulnbank upload_profile_picture_url route matcher",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 194,
+      "focus": "brokencrystals photo BFLA + vulnbank anonymous LLM chat + pwnshop admin/export-orders + /logs queue drain + web-security-learning-labs modules 1016-1018"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/account/delete: 12→41 — pwnshop-account-delete-csrf live+route oracles shipped (POST confirm=yes deletes OTP session, relogin Invalid credentials, no CSRF)",
-      "pwnshop.ctfsecurity.com/download: +pwnshop-download-path-traversal-live-oracle on origin scans (GET file=../../package.json, PWN-038)",
-      "vulnbank.org/upload_profile_picture_url: 21→22 — vulnbank-upload-profile-picture-url-route-live-oracle now fires on /upload_profile_picture_url path"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "brokencrystals.com/api/users/one/regular_user/photo: 77 findings — brokencrystals-photo-bfla-live-oracle + photo-disclosure-by-email route oracles fire",
+      "vulnbank.org/api/ai/chat/anonymous: 22 findings — vulnbank-ai-anonymous-chat-live-oracle + route oracle on unauthenticated LLM endpoint",
+      "pwnshop.ctfsecurity.com/admin/export-orders: 40-finding hub — CSV injection oracle still absent without admin session (PWN-013)",
+      "pwnshop.ctfsecurity.com/logs: 31-finding hub — plaintext password audit-log oracle still absent (PWN-027)",
+      "web-security-learning-labs.vercel.app/module/1016-1018: 7 findings each — generic misconfig/SSTI hubs without module-specific lab oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "pwnshop.ctfsecurity.com/admin/export-orders: CSV injection oracle absent without admin session (PWN-013)",
       "pwnshop.ctfsecurity.com/logs: plaintext password audit-log oracle absent (PWN-027)",
-      "vulnbank.org/latest/meta-data/* simulated EC2 metadata chain returns HTTP 404 on live deploy"
+      "web-security-learning-labs module/1016-1018: route-specific command-injection/SSRF/prototype-pollution oracles absent (7-finding generic hubs)"
     ]
   },
   "discovery_highlights": {
-    "pwnshop.ctfsecurity.com/account/delete": 41,
-    "pwnshop.ctfsecurity.com/download": 27,
-    "vulnbank.org/upload_profile_picture_url": 22,
-    "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/files?path=package.json": 75,
-    "pwnshop.ctfsecurity.com/cart": 38,
-    "vaultapp-omega.vercel.app/api/users/1": 13
+    "juice-shop.herokuapp.com": 50,
+    "brokencrystals.com/api/users/one/regular_user/photo": 77,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 40,
+    "pwnshop.ctfsecurity.com/logs": 31,
+    "vulnbank.org/api/ai/chat/anonymous": 22,
+    "web-security-learning-labs.vercel.app/module/1016": 7,
+    "web-security-learning-labs.vercel.app/module/1014": 3
   }
 }
