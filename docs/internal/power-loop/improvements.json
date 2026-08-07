@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended WEB_SECURITY_LEARNING_MODULE_TOPICS to 1021 XXE / 1022 SSTI / 1023 Clickjacking + placeholder shell + checkpoint flag preservation when /learn/modules succeeds behind Vercel checkpoint; web-security-learning-labs.vercel.app/module/1021-1023 findings 7→8 with +module-route-evidence; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-export-orders-csv-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: shared pwnshopAdminOtpSessionByProbe cache + extended OTP_MAIL_WAITS_MS to 10 intervals restores mass-assignment admin session on cold /admin/export-orders route scans; pwnshop.ctfsecurity.com/admin/export-orders findings 14→47 (+export-orders-csv route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ssrfVulnlabPrioritySeeds prepends /basic /metadata /blocklist /redirect /allowlist routes when scanning ssrf.vulnlab.dev; ssrf.vulnlab.dev/basic findings 3→15 (+basic-route and host SSRF oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-admin-security-second-order-sqli-live-oracle",
       "status": "shipped",
