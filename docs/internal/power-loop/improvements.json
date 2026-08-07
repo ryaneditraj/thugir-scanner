@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-placeholder-1037-1045",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: FarciarzYT/WebSecurityLearningLabs module/[moduleID] renders CSR placeholder Here is a Module: 1037-1045 without catalog topics; webSecurityLearningLabsModuleRouteEvidence resolves WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC for unmapped IDs; web-security-learning-labs.vercel.app/module/1041 findings 7→8 (+module-route-evidence); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-client-placeholder-1037-1045",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideWebSecurityLearningLabsEvidence uses placeholder-topic fallback for unreleased module IDs 1037-1045; module/1041 retains client-side-web-security-learning-labs-evidence with moduleTopic Interactive vulnerability lab (CSR placeholder shell); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1037-1045",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1037-1045; discovery queue drain for WSL new modules; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-9-terraform-markers",
       "status": "shipped",
@@ -20373,6 +20391,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-route-placeholder-fix",
       "shipped_at": "2026-08-07T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-placeholder-1037-1045",
+      "shipped_at": "2026-08-07T17:25:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-client-placeholder-1037-1045",
+      "shipped_at": "2026-08-07T17:25:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1037-1045",
+      "shipped_at": "2026-08-07T17:25:00.000Z"
     }
   ]
 }
