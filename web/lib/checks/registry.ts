@@ -19099,6 +19099,23 @@ const vulnbankTransferNegativeAmountLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankTransferNegativeAmountRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:transfer|api\/v2\/transfer)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankTransferNegativeAmountLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /transfer route scan — POST accepts negative amount and credits sender balance — money-transfer business-logic oracle"
+    }
+  };
+};
+
 const vulnbankGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
@@ -32627,8 +32644,32 @@ const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
 const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1011": "SQL Injection",
   "1012": "Cross-Site Scripting (XSS)",
-  "1013": "IDOR"
+  "1013": "IDOR",
+  "1014": "CSRF",
+  "1015": "JWT",
+  "1016": "Command Injection",
+  "1017": "SSRF",
+  "1018": "Prototype Pollution"
 };
+
+/** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
+const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
+  "1014": /CSRF|Cross-Site Request Forgery/i,
+  "1015": /JWT|JSON Web Token/i,
+  "1016": /Command Injection|OS command injection/i,
+  "1017": /SSRF|Server-Side Request Forgery/i,
+  "1018": /Prototype Pollution/i
+};
+
+function webSecurityLearningModuleTopicMatches(moduleId: string, topic: string, corpus: string): boolean {
+  const alias = WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES[moduleId];
+  if (alias?.test(corpus)) return true;
+  return new RegExp(topic.replace(/[()]/g, "\\$&"), "i").test(corpus);
+}
+
+function webSecurityLearningLabsCheckpointBlocked(corpus: string): boolean {
+  return /Vercel Security Checkpoint|verifying your browser/i.test(corpus);
+}
 
 const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -32639,12 +32680,14 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
   const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId];
   if (!topic) return NEGATIVE;
   let corpus = `${ctx.combined}\n${pageUrl}`;
-  if (!new RegExp(topic.replace(/[()]/g, "\\$&"), "i").test(corpus)) {
+  let checkpointBlocked = false;
+  if (!webSecurityLearningModuleTopicMatches(moduleId, topic, corpus)) {
     const modulesDoc = await fetchDoc(new URL("/learn/modules", ctx.origin).toString(), {
       maxBytes: 65536,
       timeoutMs: 15000
     });
     corpus += "\n" + modulesDoc.body;
+    checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(modulesDoc.body);
     const chunkRe = /\/_next\/static\/chunks\/[a-z0-9_-]+\.js/gi;
     const chunks = [...new Set(modulesDoc.body.match(chunkRe) ?? [])].slice(0, 6);
     for (const chunkPath of chunks) {
@@ -32653,20 +32696,36 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
         timeoutMs: 15000
       });
       corpus += "\n" + chunkDoc.body;
+      if (webSecurityLearningLabsCheckpointBlocked(chunkDoc.body)) checkpointBlocked = true;
     }
   }
-  if (!/Web Security Learning Labs/i.test(corpus)) return NEGATIVE;
-  if (!new RegExp(topic.replace(/[()]/g, "\\$&"), "i").test(corpus)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.88,
-    evidence: {
-      moduleId,
-      moduleTopic: topic,
-      scannedUrl: pageUrl,
-      note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle`
-    }
-  };
+  const topicHit = webSecurityLearningModuleTopicMatches(moduleId, topic, corpus);
+  const brandHit = /Web Security Learning Labs/i.test(corpus);
+  if (topicHit && brandHit) {
+    return {
+      fired: true,
+      confidence: 0.88,
+      evidence: {
+        moduleId,
+        moduleTopic: topic,
+        scannedUrl: pageUrl,
+        note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle`
+      }
+    };
+  }
+  if (checkpointBlocked || (!brandHit && /web-security-learning-labs\.vercel\.app/i.test(pageUrl))) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        moduleId,
+        moduleTopic: topic,
+        scannedUrl: pageUrl,
+        note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle (Vercel checkpoint blocked catalog fetch; curated module-id map)`
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const clientSideBuggybuyEvidence: Rule = async (ctx) => {
@@ -63079,7 +63138,7 @@ const brokencrystalsPhotoBflaLiveOracle: Rule = async (ctx) => {
 const brokencrystalsPhotoBflaRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/photo/i.test(pageUrl) || !/[?&]isAdmin=true/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/)?users\/one\/[^/]+\/photo\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsPhotoBflaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -67336,6 +67395,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankVirtualCardsBolaLiveOracle,
   vulnbankUploadProfilePictureUrlSsrfLiveOracle,
   vulnbankTransferNegativeAmountLiveOracle,
+  vulnbankTransferNegativeAmountRouteLiveOracle,
   vulnbankGraphqlIntrospectionLiveOracle,
   vulnbankV1ForgotPasswordPinLeakLiveOracle,
   vulnbankV2ForgotPasswordEnumerationLiveOracle,

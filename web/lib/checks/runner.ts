@@ -2551,6 +2551,7 @@ const DEEP_RULES = new Set<string>([
   "vulnbankVirtualCardsBolaLiveOracle",
   "vulnbankUploadProfilePictureUrlSsrfLiveOracle",
   "vulnbankTransferNegativeAmountLiveOracle",
+  "vulnbankTransferNegativeAmountRouteLiveOracle",
   "vulnbankGraphqlIntrospectionLiveOracle",
   "vulnbankV1ForgotPasswordPinLeakLiveOracle",
   "vulnbankV2ForgotPasswordEnumerationLiveOracle",
