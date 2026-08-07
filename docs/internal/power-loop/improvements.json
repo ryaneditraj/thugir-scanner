@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-account-delete-csrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fresh OTP session + POST /account/delete confirm=yes returns 302 / then relogin Invalid credentials without CSRF token; pwnshop.ctfsecurity.com/account/delete findings 12→41 (+account-delete-csrf live+route oracles); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-account-delete-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /account/delete confirms POST confirm=yes deletes authenticated account without CSRF protection (PWN-026); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-path-traversal-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /download?file=../../package.json returns pwnshop-app package.json after seller OTP session; pwnshop.ctfsecurity.com/download findings include +pwnshop-download-path-traversal-live-oracle on origin scans; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-upload-profile-picture-url-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route matcher extended to /upload_profile_picture_url — POST image_url=https://www.google.com/favicon.ico returns status:success; vulnbank.org/upload_profile_picture_url findings 21→22 (+route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-files-lfi-route-live-oracle",
       "status": "shipped",

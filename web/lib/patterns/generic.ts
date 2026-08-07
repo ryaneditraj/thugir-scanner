@@ -22678,6 +22678,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-download-path-traversal-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop download path traversal live oracle (PWN-038)",
+    description:
+      "GET /download?file=../../package.json returns application package.json via path.join traversal — the Pwnshop invoice download path-traversal oracle.",
+    impactOneline:
+      "Unvalidated file= parameters let authenticated sellers read arbitrary files from the server filesystem.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopDownloadPathTraversalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate download paths against an allowlisted directory — Pwnshop PWN-038 is intentional lab software.",
+      steps: [
+        "Reject .. traversal in file= parameters.",
+        "Verify resolved paths remain under the invoices directory.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /download endpoint returns ../../package.json via path traversal. Show download path validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-download-path-traversal-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -22802,6 +22828,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /order/:id route exposes other users' orders. Show route-specific order authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-account-delete-csrf-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Pwnshop account self-deletion CSRF live oracle (PWN-026)",
+    description:
+      "POST /account/delete with confirm=yes deletes the OTP-authenticated session without a CSRF token — the Pwnshop account self-deletion CSRF oracle.",
+    impactOneline:
+      "Missing CSRF protection on account deletion lets attackers trick logged-in users into deleting their own accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAccountDeleteCsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens on destructive POST actions — Pwnshop PWN-026 is intentional lab software.",
+      steps: [
+        "Add CSRF tokens to /account/delete forms and validate on POST.",
+        "Require re-authentication before account deletion.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /account/delete endpoint deletes accounts without CSRF protection. Show account-deletion CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-account-delete-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Pwnshop account delete CSRF route live oracle (PWN-026)",
+    description:
+      "When scanning /account/delete, POST confirm=yes deletes the authenticated account without CSRF protection — route-specific account self-deletion CSRF oracle.",
+    impactOneline:
+      "Route scans on account-delete pages need live CSRF confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAccountDeleteCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens on destructive POST actions — Pwnshop is intentional lab software.",
+      steps: [
+        "Add CSRF tokens to /account/delete forms and validate on POST.",
+        "Require re-authentication before account deletion.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /account/delete route deletes accounts without CSRF protection. Show route-specific account-deletion CSRF remediation.",
     version: 1,
     enabled: true
   },
@@ -36360,7 +36438,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Vuln Bank profile upload route SSRF live oracle",
     description:
-      "When scanning /profile/upload, POST /upload_profile_picture_url fetches attacker-controlled image_url server-side — route-specific Vuln Bank profile-picture SSRF oracle.",
+      "When scanning /profile/upload or /upload_profile_picture_url, POST /upload_profile_picture_url fetches attacker-controlled image_url server-side — route-specific Vuln Bank profile-picture SSRF oracle.",
     impactOneline:
       "Route-specific confirmation that profile upload pages expose server-side URL fetch SSRF on Vuln Bank training instances.",
     detectorKind: "rule_ref",
