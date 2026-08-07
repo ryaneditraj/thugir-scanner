@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-profile-route-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile/upload-avatar 404 shell lacks PWN-* catalog markers; pwnshopBootstrap merges / + /vulnerabilities; pwnshopCompleteOtpSession waits extended to 10 intervals; pwnshop.ctfsecurity.com/profile/upload-avatar findings 8→47 (+avatar-svg-xss + avatar-upload-route oracles); benchmark 6/6 maintained (juice-shop.demo.escape.tech)"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin 403 {\"message\":\"Access Denied: Forbidden\"}; GET /admin/ 200 trailing-slash bypass flag; bypass403AdminLiveOracle + route oracle; bypass403.vercel.app/admin findings 3→8 when lab reachable (Vercel Security Checkpoint intermittently blocks automated probes); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-api-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin 403 API Access Denied; GET /api/admin/..;/ 200 semicolon bypass flag; bypass403ApiAdminLiveOracle + route oracle + client-side-bypass403-lab-evidence; bypass403.vercel.app/api/admin findings 3→7 when lab reachable; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-search-route-sqli-oracle",
       "status": "shipped",
@@ -20424,6 +20442,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1037-1045",
       "shipped_at": "2026-08-07T17:25:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-profile-route-bootstrap",
+      "shipped_at": "2026-08-07T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-admin-route-live-oracle",
+      "shipped_at": "2026-08-07T19:15:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-api-admin-route-live-oracle",
+      "shipped_at": "2026-08-07T19:15:00.000Z"
     }
   ]
 }
