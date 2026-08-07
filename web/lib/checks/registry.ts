@@ -11587,7 +11587,9 @@ const FORBIDDEN_403_PROBE_PATHS = [
   "/internal",
   "/debug",
   "/api/admin",
-  "/manage"
+  "/manage",
+  "/secret",
+  "/config"
 ];
 const FORBIDDEN_403_BYPASS_MARKERS =
   /bypass success|access granted|access denied:\s*forbidden|flag\{|trailing slash bypass/i;
@@ -11738,6 +11740,124 @@ const bypass403ApiAdminRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "bypass403.vercel.app /api/admin route scan — semicolon path-normalization bypass reaches protected API admin resource"
+    }
+  };
+};
+
+async function probeBypass403PathNormalization(
+  ctx: RuleContext,
+  path: string,
+  note: string
+): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  const originalUrl = new URL(path, ctx.origin).toString();
+  const baseline = await ctx.probe.get(originalUrl, { maxBytes: 4096 });
+  if (baseline.status !== 403) return null;
+  const bypassUrls = forbidden403BypassUrls(ctx.origin, path);
+  for (const bypassUrl of bypassUrls) {
+    const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096 });
+    if (bypass.status < 200 || bypass.status >= 300) continue;
+    if (!FORBIDDEN_403_BYPASS_MARKERS.test(bypass.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        original: originalUrl,
+        bypass: bypassUrl,
+        status: bypass.status,
+        snippet: bypass.body.slice(0, 200).trim(),
+        note
+      }
+    };
+  }
+  return null;
+}
+
+const bypass403SecretLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403PathNormalization(
+    ctx,
+    "/secret",
+    "bypass403.vercel.app GET /secret returns 403 but path-normalization bypass (/secret/, /secret/..;/) returns success flag — BypassX protected secret path oracle"
+  );
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403SecretRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/secret\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403PathNormalization(
+    ctx,
+    "/secret",
+    "bypass403.vercel.app /secret route scan — path-normalization bypass reaches protected secret resource"
+  );
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: { ...hit.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const BYPASS403_CONFIG_HEADER_PROBES: Array<{ header: string; value: string; target: "home" | "config" }> = [
+  { header: "X-Original-URL", value: "/config", target: "home" },
+  { header: "X-Rewrite-URL", value: "/config", target: "home" },
+  { header: "X-Custom-IP-Authorization", value: "127.0.0.1", target: "config" },
+  { header: "X-Forwarded-For", value: "127.0.0.1", target: "config" },
+  { header: "X-Originating-IP", value: "127.0.0.1", target: "config" },
+  { header: "Client-IP", value: "127.0.0.1", target: "config" },
+  { header: "X-Remote-IP", value: "127.0.0.1", target: "config" },
+  { header: "X-Remote-Addr", value: "127.0.0.1", target: "config" }
+];
+
+async function probeBypass403ConfigHeaderBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  const configUrl = new URL("/config", ctx.origin).toString();
+  const baseline = await ctx.probe.get(configUrl, { maxBytes: 4096 });
+  if (baseline.status !== 403) return null;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  for (const probe of BYPASS403_CONFIG_HEADER_PROBES) {
+    const url = probe.target === "home" ? homeUrl : configUrl;
+    const doc = await ctx.probe.get(url, {
+      maxBytes: 4096,
+      headers: { [probe.header]: probe.value }
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    if (!FORBIDDEN_403_BYPASS_MARKERS.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        original: configUrl,
+        bypass: url,
+        header: `${probe.header}: ${probe.value}`,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "bypass403.vercel.app GET /config returns 403 but header-manipulation bypass (X-Original-URL, X-Rewrite-URL, or client IP headers) returns success flag — BypassX header bypass oracle"
+      }
+    };
+  }
+  return null;
+}
+
+const bypass403ConfigLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403ConfigHeaderBypass(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403ConfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/config\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403ConfigHeaderBypass(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "bypass403.vercel.app /config route scan — header-manipulation bypass reaches protected config resource"
     }
   };
 };
@@ -70543,6 +70663,10 @@ export const RULES: Record<string, Rule> = {
   bypass403AdminRouteLiveOracle,
   bypass403ApiAdminLiveOracle,
   bypass403ApiAdminRouteLiveOracle,
+  bypass403SecretLiveOracle,
+  bypass403SecretRouteLiveOracle,
+  bypass403ConfigLiveOracle,
+  bypass403ConfigRouteLiveOracle,
   clientSideBypass403LabEvidence,
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
