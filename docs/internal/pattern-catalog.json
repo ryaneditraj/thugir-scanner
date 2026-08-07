@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T15:23:57.461Z",
-  "total": 1996,
-  "uniqueSlugs": 1991,
+  "generatedAt": "2026-08-07T16:07:41.252Z",
+  "total": 1999,
+  "uniqueSlugs": 1994,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1978,
+    "generic": 1981,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1911,
+    "deep": 1914,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 392,
+    "Broken access control": 393,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -28,8 +28,8 @@
     "Security misconfiguration": 147,
     "Broken authentication": 120,
     "Injection": 285,
-    "Cross-site scripting": 665,
-    "Open redirect": 15,
+    "Cross-site scripting": 666,
+    "Open redirect": 16,
     "general": 20,
     "SSRF": 10,
     "Server-side request forgery": 59,
@@ -53,7 +53,10 @@
     "agentpwn-context-window-route-live-oracle",
     "agentpwn-mcp-exploitation-route-live-oracle",
     "ai-security-api-security-route-live-oracle",
+    "ai-security-idor-route-live-oracle",
+    "ai-security-open-redirect-route-live-oracle",
     "ai-security-privacy-policy-route-live-oracle",
+    "ai-security-xss-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",
     "all-seeing-eye-read-route-live-oracle",
     "appsec-ci-django-admin-live-oracle",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T16:07:03.605Z",
+  "updated_at": "2026-08-07T16:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2812,
-  "total_findings": 28174,
+  "total_sites_scanned": 2817,
+  "total_findings": 28212,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1996,
-  "discovery_findings": 23404,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-07T16:07:03.605Z",
+  "discovery_findings": 23442,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-07T16:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,40 +48,44 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 recall (47 findings); no benchmark misses"
+      "note": "Primary Heroku 503; staging fallback 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 40,
-      "focus": "WSL modules 1041-1045 new catalog oracles + queue drain 1037-1039",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 38,
+      "focus": "AI Security Platform IDOR/XSS/open-redirect route oracles + WrongSecrets challenge-9 Terraform markers + JuiceSec/PyGoat route disambiguation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — primary Heroku dyno 503",
-      "web-security-learning-labs.vercel.app/module/1041: 7 findings — new WSL module catalog oracle",
-      "web-security-learning-labs.vercel.app/module/1042: 7 findings — new WSL module catalog oracle",
-      "web-security-learning-labs.vercel.app/module/1043: 7 findings — new WSL module catalog oracle",
-      "web-security-learning-labs.vercel.app/module/1044: 7 findings — new WSL module catalog oracle",
-      "web-security-learning-labs.vercel.app/module/1045: 3 findings — new WSL module catalog oracle (sparse shell)",
-      "web-security-learning-labs.vercel.app/module/1037-1039: 3 findings each — queue drain CSR placeholder shells"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — primary Heroku dyno 503",
+      "ai-security-platform-iota.vercel.app/challenges/idor: 6→8 findings — ai-security-idor-route-live-oracle shipped (CWE-639 catalog oracle)",
+      "ai-security-platform-iota.vercel.app/challenges/xss: 6→8 findings — ai-security-xss-route-live-oracle shipped (CWE-79 catalog oracle)",
+      "ai-security-platform-iota.vercel.app/challenges/open-redirect: 6→8 findings — ai-security-open-redirect-route-live-oracle shipped (CWE-601 catalog oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-9: 11 findings — Terraform state + AWS Secrets Manager markers in challenge live oracle",
+      "juicesec.mrdinesh.workers.dev/challenge/ssrf: 2→3 findings — pygoat route FP removed; client-side-juicesec-challenge-route-evidence restored",
+      "web-security-learning-labs.vercel.app/module/1041-1045: WSL module catalog oracles (prior run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "juice-shop.herokuapp.com primary oracle intermittently 503 — staging fallback required",
-      "WSL modules 1041-1045: CSR placeholder shells yield generic misconfig only — route-specific oracles absent"
+      "ssrf.vulnlab.dev/*: route scans not yet in last-24h results — live oracles exist but need discovery scan validation",
+      "WSL modules 1041-1045: CSR placeholder shells yield generic misconfig only — route-specific oracles absent",
+      "vulnshop Railway backend offline — live API oracles fall back to README route evidence"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 47,
+    "juice-shop-staging.herokuapp.com": 48,
+    "ai-security-platform-iota.vercel.app/challenges/idor": 8,
+    "ai-security-platform-iota.vercel.app/challenges/xss": 8,
+    "ai-security-platform-iota.vercel.app/challenges/open-redirect": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-9": 11,
+    "juicesec.mrdinesh.workers.dev/challenge/ssrf": 3,
     "web-security-learning-labs.vercel.app/module/1041": 7,
     "web-security-learning-labs.vercel.app/module/1042": 7,
-    "web-security-learning-labs.vercel.app/module/1043": 7,
-    "web-security-learning-labs.vercel.app/module/1044": 7,
-    "web-security-learning-labs.vercel.app/module/1045": 3,
-    "web-security-learning-labs.vercel.app/module/1037": 3,
-    "web-security-learning-labs.vercel.app/module/1038": 3
+    "vulnbank.org/api/v3/user/1": 24,
+    "vulnbank.org/api/v3/reset-password": 24
   }
 }
