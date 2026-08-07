@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T14:10:15.437Z",
-  "total": 1994,
-  "uniqueSlugs": 1989,
+  "generatedAt": "2026-08-07T15:23:57.461Z",
+  "total": 1996,
+  "uniqueSlugs": 1991,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1976,
+    "generic": 1978,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1909,
+    "deep": 1911,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 390,
+    "Broken access control": 392,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1946,6 +1946,8 @@
     "vulnshop-profile-mass-assignment-live-oracle",
     "vulnshop-profile-mass-assignment-route-live-oracle",
     "vulnshop-users-enumeration-route-live-oracle",
+    "vulnshop-users-profile-bola-live-oracle",
+    "vulnshop-users-profile-bola-route-live-oracle",
     "vulnweb-comments-xss-route-live-oracle",
     "vulnweb-csrf-route-live-oracle",
     "vulnweb-profile-idor-route-live-oracle",

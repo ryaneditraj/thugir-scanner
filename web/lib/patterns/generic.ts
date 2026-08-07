@@ -23976,6 +23976,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-users-profile-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop user profile API BOLA live oracle",
+    description:
+      "GET /api/v1/users/{id}/profile returns another user's email, username, and role/balance without object-level authorization — the VulnShop API1 BOLA training oracle.",
+    impactOneline:
+      "Broken object-level authorization on user profile APIs lets attackers enumerate other users' account data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUsersProfileBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind profile lookups to the authenticated user or enforce object-level authorization.",
+      steps: [
+        "Require authentication on /api/v1/users/{id}/profile.",
+        "Verify the requester owns or is authorized for the requested profile.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop GET /api/v1/users/{id}/profile endpoint returns other users' profiles without auth. Show API BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-users-profile-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop user profile API BOLA route live oracle",
+    description:
+      "When scanning /api/v1/users/{id}/profile, unauthenticated GET returns user profile fields without object-level authorization — route-specific API1 BOLA oracle.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop documents BOLA on user profile API routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUsersProfileBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind profile lookups to the authenticated user on route handlers.",
+      steps: [
+        "Require authentication on /api/v1/users/{id}/profile route handlers.",
+        "Verify the requester owns or is authorized for the requested profile.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/users/{id}/profile route leaks profiles without auth. Show route-specific API BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwtlens-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -35840,7 +35892,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1025 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
+      "When scanning /module/1011–1036 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",

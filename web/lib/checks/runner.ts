@@ -2355,6 +2355,8 @@ const DEEP_RULES = new Set<string>([
   "vulnshopAdminPanelLiveOracle",
   "vulnshopAdminPanelRouteLiveOracle",
   "vulnshopUsersEnumerationRouteLiveOracle",
+  "vulnshopUsersProfileBolaLiveOracle",
+  "vulnshopUsersProfileBolaRouteLiveOracle",
   "vulnshopJwtNoneLiveOracle",
   "vulnshopJwtLoginRouteLiveOracle",
   "vulnshopBuyTicketRaceLiveOracle",
@@ -6457,7 +6459,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023"]) {
+  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036"]) {
     try {
       out.add(new URL(`/module/${moduleId}`, pageUrl).toString());
     } catch {
