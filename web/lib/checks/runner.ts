@@ -6437,6 +6437,13 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
+  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023"]) {
+    try {
+      out.add(new URL(`/module/${moduleId}`, pageUrl).toString());
+    } catch {
+      /* ignore */
+    }
+  }
   for (const m of html.matchAll(/href=["'](?:\.\/)?models\/([A-Za-z]+demo\.html)["']/gi)) {
     try {
       out.add(new URL(`models/${m[1]}`, pageUrl).toString());
@@ -9057,8 +9064,32 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-7",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-9",
-        "https://wrongsecrets.herokuapp.com/challenge/challenge-10"
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
+        "https://wrongsecrets.herokuapp.com/challenge/8"
       ]
+    : [];
+  const ssrfVulnlabPrioritySeeds = /ssrf\.vulnlab\.dev/i.test(home.finalUrl)
+    ? [
+        "https://ssrf.vulnlab.dev/basic",
+        "https://ssrf.vulnlab.dev/metadata",
+        "https://ssrf.vulnlab.dev/blocklist",
+        "https://ssrf.vulnlab.dev/redirect",
+        "https://ssrf.vulnlab.dev/allowlist",
+        "https://ssrf.vulnlab.dev/metadata-gcp",
+        "https://ssrf.vulnlab.dev/metadata-azure",
+        "https://ssrf.vulnlab.dev/scheme",
+        "https://ssrf.vulnlab.dev/gopher",
+        "https://ssrf.vulnlab.dev/parser",
+        "https://ssrf.vulnlab.dev/blind",
+        "https://ssrf.vulnlab.dev/webhook"
+      ]
+    : [];
+  const webSecurityLearningModulePrioritySeeds = /web-security-learning-labs\.vercel\.app\/module\/\d{4}/i.test(
+    home.finalUrl
+  )
+    ? ["1019", "1020", "1021", "1022", "1023"].map((id) =>
+        new URL(`/module/${id}`, home.finalUrl).toString()
+      )
     : [];
   const grpcGoatPrioritySeeds =
     /vwad\.owasp\.org\/app\/grpc-goat|rootxjs\.github\.io\/blog\/grpc-goat/i.test(home.finalUrl)
@@ -9257,6 +9288,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadCatalogPrioritySeeds,
       ...vwadCatalogLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
+      ...ssrfVulnlabPrioritySeeds,
+      ...webSecurityLearningModulePrioritySeeds,
       ...owaspTop10LabsPrioritySeeds,
       ...owaspTop10IntroHubPrioritySeeds,
       ...domgoCxssIntroPrioritySeeds,

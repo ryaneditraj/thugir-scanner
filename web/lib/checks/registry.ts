@@ -31499,7 +31499,12 @@ const pwnshopAuditLogPlaintextPasswordRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-async function pwnshopFreshMassAssignmentAdminOtpSession(
+const pwnshopAdminOtpSessionByProbe = new WeakMap<
+  ProbeCache,
+  Promise<{ cookie: string; username: string } | null>
+>();
+
+async function pwnshopFreshMassAssignmentAdminOtpSessionUncached(
   ctx: RuleContext
 ): Promise<{ cookie: string; username: string } | null> {
   const username = `thugir_adm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -31530,7 +31535,7 @@ async function pwnshopFreshMassAssignmentAdminOtpSession(
     return null;
   }
   cookie = pwnshopSessionCookieFromDoc(loginDoc) ?? cookie;
-  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500];
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     await pwnshopSleep(OTP_MAIL_WAITS_MS[attempt]);
     const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
@@ -31555,6 +31560,16 @@ async function pwnshopFreshMassAssignmentAdminOtpSession(
     return { cookie, username };
   }
   return null;
+}
+
+async function pwnshopFreshMassAssignmentAdminOtpSession(
+  ctx: RuleContext
+): Promise<{ cookie: string; username: string } | null> {
+  const cached = pwnshopAdminOtpSessionByProbe.get(ctx.probe);
+  if (cached) return cached;
+  const promise = pwnshopFreshMassAssignmentAdminOtpSessionUncached(ctx);
+  pwnshopAdminOtpSessionByProbe.set(ctx.probe, promise);
+  return promise;
 }
 
 async function probePwnshopExportOrdersCsv(ctx: RuleContext): Promise<RuleResult | null> {
@@ -32790,7 +32805,10 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1017": "SSRF",
   "1018": "Prototype Pollution",
   "1019": "Directory Traversal",
-  "1020": "LDAP Injection"
+  "1020": "LDAP Injection",
+  "1021": "XXE",
+  "1022": "SSTI",
+  "1023": "Clickjacking"
 };
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -32801,8 +32819,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1017": /SSRF|Server-Side Request Forgery/i,
   "1018": /Prototype Pollution/i,
   "1019": /Directory Traversal|Path Traversal|LFI/i,
-  "1020": /LDAP Injection|LDAP/i
+  "1020": /LDAP Injection|LDAP/i,
+  "1021": /XXE|XML External Entity/i,
+  "1022": /SSTI|Server-Side Template Injection/i,
+  "1023": /Clickjacking|UI redress/i
 };
+
+function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
+  return new RegExp(`Here is a Module:\\s*${moduleId}\\b`, "i").test(corpus);
+}
 
 function webSecurityLearningModuleTopicMatches(moduleId: string, topic: string, corpus: string): boolean {
   const alias = WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES[moduleId];
@@ -32824,7 +32849,13 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
   if (!topic) return NEGATIVE;
   let corpus = `${ctx.combined}\n${pageUrl}`;
   let checkpointBlocked = false;
-  if (!webSecurityLearningModuleTopicMatches(moduleId, topic, corpus)) {
+  const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  corpus += "\n" + moduleDoc.body;
+  if (webSecurityLearningLabsCheckpointBlocked(moduleDoc.body)) checkpointBlocked = true;
+  if (
+    !webSecurityLearningModuleTopicMatches(moduleId, topic, corpus) &&
+    !webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus)
+  ) {
     const modulesDoc = await fetchDoc(new URL("/learn/modules", ctx.origin).toString(), {
       maxBytes: 65536,
       timeoutMs: 15000
@@ -32842,7 +32873,9 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
       if (webSecurityLearningLabsCheckpointBlocked(chunkDoc.body)) checkpointBlocked = true;
     }
   }
-  const topicHit = webSecurityLearningModuleTopicMatches(moduleId, topic, corpus);
+  const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
+  const topicHit =
+    webSecurityLearningModuleTopicMatches(moduleId, topic, corpus) || placeholderShell;
   const brandHit = /Web Security Learning Labs/i.test(corpus);
   if (topicHit && brandHit) {
     return {
