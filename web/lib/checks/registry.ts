@@ -25407,6 +25407,14 @@ const CLIENT_WRONGSECRETS_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
     label: "CI/CD pipeline secrets walkthrough",
     re: /CI\/CD pipeline|CI\/CD tooling|Github Actions|Exfiltrate the secret using Github/i
+  },
+  {
+    label: "AWS Secrets Manager CSI walkthrough",
+    re: /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i
+  },
+  {
+    label: "AWS SSM Parameter Store IAM walkthrough",
+    re: /Parameter Store|SSM Parameter|cant-read-secrets/i
   }
 ];
 
@@ -25424,17 +25432,22 @@ const clientSideWrongSecretsChallengeEvidence: Rule = async (ctx) => {
   if (hits.length < 3) return NEGATIVE;
   const challengeId =
     pageUrl.match(/challenge-(\d+)/i)?.[1] ?? corpus.match(/challenge-(\d+)/i)?.[1];
-  const note = /K8s Configmap|config-map in the default namespace/i.test(corpus)
-    ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Kubernetes configmap secret extraction with answer submission UI`
-    : /CI\/CD pipeline|CI\/CD tooling|Github Actions/i.test(corpus)
-      ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents CI/CD pipeline secret exfiltration with answer submission UI`
-      : /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i.test(corpus)
-        ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker COPY layer secret extraction with answer submission UI`
-        : /application\.properties|Spring Boot application/i.test(corpus)
-          ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
-          : /Docker documentation|copy the Jar file/i.test(corpus)
-            ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
-            : `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`;
+  const note = /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(corpus)
+    ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents AWS Secrets Manager via K8s CSI driver with answer submission UI`
+    : /IAM privilege escalation|cant-read-secrets/i.test(corpus) &&
+        /Parameter Store|SSM Parameter/i.test(corpus)
+      ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents AWS SSM Parameter Store IAM privilege escalation with answer submission UI`
+      : /K8s Configmap|config-map in the default namespace/i.test(corpus)
+        ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Kubernetes configmap secret extraction with answer submission UI`
+        : /CI\/CD pipeline|CI\/CD tooling|Github Actions/i.test(corpus)
+          ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents CI/CD pipeline secret exfiltration with answer submission UI`
+          : /COPY operations|COPY&#8217;ing|what COPY|hid a key there/i.test(corpus)
+            ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker COPY layer secret extraction with answer submission UI`
+            : /application\.properties|Spring Boot application/i.test(corpus)
+              ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents secrets in Spring application.properties / Spring Cloud Config with answer submission UI`
+              : /Docker documentation|copy the Jar file/i.test(corpus)
+                ? `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents Docker-layer secret extraction (docker cp + JD-GUI) with answer submission UI`
+                : `WrongSecrets challenge ${challengeId ?? "N"} walkthrough documents hardcoded-secret hunting in Git, Docker layers, or cloud config with answer submission UI`;
   return {
     fired: true,
     confidence: hits.length >= 4 ? 0.91 : 0.88,
@@ -32559,6 +32572,14 @@ const VULNSHOP_MODULE_ORACLES: {
     note: "VulnShop /products documents SQL injection via product search parameter"
   },
   {
+    pathRe: /\/(?:api\/)?search\b/i,
+    markers: [
+      { label: "SQL injection search placeholder", re: /try SQL injection here/i },
+      { label: "Products search lab", re: /Search products/i }
+    ],
+    note: "VulnShop /search and /api/search alias the /products SQLi lab — product search parameter is injectable"
+  },
+  {
     pathRe: /\/admin\b/i,
     markers: [
       { label: "Admin panel title", re: /🔧 Admin Panel/i },
@@ -32880,10 +32901,12 @@ const vulnshopProductsSqliLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const VULNSHOP_PRODUCT_SEARCH_ROUTE_RE = /\/(?:api\/v1\/)?products\b|\/(?:api\/)?search\b/i;
+
 const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/products\b/i.test(pageUrl)) return NEGATIVE;
+  if (!VULNSHOP_PRODUCT_SEARCH_ROUTE_RE.test(pageUrl)) return NEGATIVE;
   const live = await vulnshopProductsSqliLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -32892,11 +32915,15 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
       evidence: {
         ...live.evidence,
         scannedUrl: pageUrl,
-        note: "VulnShop /products route scan — live SQLi on product search parameter confirmed"
+        note: /\/search\b/i.test(pageUrl)
+          ? "VulnShop /search or /api/search route scan — live SQLi on /api/products?search= confirmed"
+          : "VulnShop /products route scan — live SQLi on product search parameter confirmed"
       }
     };
   }
-  const module = vulnshopModuleEvidence(ctx, /\/products\b/i);
+  const module =
+    vulnshopModuleEvidence(ctx, /\/(?:api\/)?search\b/i) ??
+    vulnshopModuleEvidence(ctx, /\/products\b/i);
   if (!module) return NEGATIVE;
   return {
     fired: true,
@@ -32904,7 +32931,9 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...module.evidence,
       scannedUrl: pageUrl,
-      note: "VulnShop /products route scan — SQL injection via product search parameter documented in SPA"
+      note: /\/search\b/i.test(pageUrl)
+        ? "VulnShop /search or /api/search route scan — SQL injection via product search parameter documented in SPA bundle"
+        : "VulnShop /products route scan — SQL injection via product search parameter documented in SPA"
     }
   };
 };

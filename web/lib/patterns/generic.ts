@@ -35970,7 +35970,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1045 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1045) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
+      "When scanning /module/1011–1050 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1050) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
