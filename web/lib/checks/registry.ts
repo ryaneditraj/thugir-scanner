@@ -32310,6 +32310,42 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Concurrent ticket purchase", re: /concurrent POST|ticket count|tickets_remaining/i }
     ],
     note: "VulnShop POST /buy-ticket documents race condition — unmutexed ticket counter exhaustible via concurrent requests"
+  },
+  {
+    pathRe: /\/manager\b/i,
+    markers: [
+      { label: "Manager Console title", re: /Manager Console/i },
+      { label: "Management Access panel", re: /Management Access/i },
+      { label: "System Status table", re: /System Status|CPU Usage|Uptime/i }
+    ],
+    note: "VulnShop GET /manager exposes management console without authentication — hidden admin path oracle #16"
+  },
+  {
+    pathRe: /\/administrator\b/i,
+    markers: [
+      { label: "Administrator Panel title", re: /Administrator Panel/i },
+      { label: "Administrator Access", re: /Administrator Access/i },
+      { label: "Advanced Configuration", re: /Advanced Configuration/i }
+    ],
+    note: "VulnShop GET /administrator exposes advanced configuration panel without authentication — hidden admin path oracle #17"
+  },
+  {
+    pathRe: /\/api\/info\b/i,
+    markers: [
+      { label: "Vulnerable Components lab", re: /Vulnerable Components|component_scan|\[A06\]/i },
+      { label: "Flask version disclosure", re: /Flask 2\.0\.1|framework.*Flask/i },
+      { label: "Known CVE dependency", re: /pyyaml.*5\.1|CVE-2019-11324/i }
+    ],
+    note: "VulnShop GET /api/info exposes framework and dependency versions with known CVEs — vulnerable components oracle #18"
+  },
+  {
+    pathRe: /\/api\/process\b/i,
+    markers: [
+      { label: "Insecure Deserialization lab", re: /Insecure Deserialization|deserialization|\[A08\]/i },
+      { label: "Pickle unpickle route", re: /pickle\.loads|base64\.b64decode/i },
+      { label: "Integrity Failures", re: /Integrity Failures|Software and Data Integrity/i }
+    ],
+    note: "VulnShop POST /api/process deserializes attacker-controlled pickle data — insecure deserialization oracle #19"
   }
 ];
 
@@ -32327,6 +32363,26 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/buy-ticket\b/i,
     vulnerability: "Race Condition",
     note: "VulnShop Flask POST /buy-ticket — unmutexed ticket counter vulnerable to concurrent purchase race — README oracle #11"
+  },
+  {
+    pathRe: /\/manager\b/i,
+    vulnerability: "Hidden Admin Path",
+    note: "VulnShop Flask GET /manager exposes management console without authentication — README oracle #16"
+  },
+  {
+    pathRe: /\/administrator\b/i,
+    vulnerability: "Hidden Admin Path",
+    note: "VulnShop Flask GET /administrator exposes advanced configuration panel without authentication — README oracle #17"
+  },
+  {
+    pathRe: /\/api\/info\b/i,
+    vulnerability: "Vulnerable Components",
+    note: "VulnShop Flask GET /api/info exposes Flask/Python/dependency versions with known CVEs — README oracle #18"
+  },
+  {
+    pathRe: /\/api\/process\b/i,
+    vulnerability: "Insecure Deserialization",
+    note: "VulnShop Flask POST /api/process unpickles attacker-controlled base64 pickle payloads — README oracle #19"
   }
 ];
 
@@ -33018,6 +33074,161 @@ const vulnshopBuyTicketRouteLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const vulnshopHiddenAdminPathLiveOracle = (path: string, markers: RegExp): Rule => async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const url = new URL(path, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!markers.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: `VulnShop GET ${path} returns unauthenticated admin panel HTML — hidden admin path exposure oracle`
+    }
+  };
+};
+
+const vulnshopHiddenAdminManagerLiveOracle = vulnshopHiddenAdminPathLiveOracle(
+  "/manager",
+  /Manager Console|Management Access|System Status/i
+);
+
+const vulnshopHiddenAdminAdministratorLiveOracle = vulnshopHiddenAdminPathLiveOracle(
+  "/administrator",
+  /Administrator Panel|Administrator Access|Advanced Configuration/i
+);
+
+function vulnshopRouteOracleWithFallback(
+  ctx: RuleContext,
+  pathRe: RegExp,
+  live: Rule,
+  routeNote: string
+): Promise<RuleResult> {
+  return (async () => {
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+    if (!pathRe.test(pageUrl)) return NEGATIVE;
+    const liveResult = await live(ctx);
+    if (liveResult.fired) {
+      return {
+        fired: true,
+        confidence: liveResult.confidence,
+        evidence: {
+          ...liveResult.evidence,
+          scannedUrl: pageUrl,
+          note: routeNote
+        }
+      };
+    }
+    const module = vulnshopModuleEvidence(ctx, pathRe);
+    if (module) {
+      return {
+        fired: true,
+        confidence: module.confidence,
+        evidence: {
+          ...module.evidence,
+          scannedUrl: pageUrl,
+          note: `${routeNote} (SPA documentation markers)`
+        }
+      };
+    }
+    const urlOracle = vulnshopFlaskRouteUrlOracle(ctx, pathRe);
+    if (!urlOracle) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: urlOracle.confidence,
+      evidence: {
+        ...urlOracle.evidence,
+        scannedUrl: pageUrl
+      }
+    };
+  })();
+}
+
+const vulnshopHiddenAdminManagerRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/manager\b/i,
+    vulnshopHiddenAdminManagerLiveOracle,
+    "VulnShop /manager route scan — unauthenticated management console confirmed or documented"
+  );
+
+const vulnshopHiddenAdminAdministratorRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/administrator\b/i,
+    vulnshopHiddenAdminAdministratorLiveOracle,
+    "VulnShop /administrator route scan — unauthenticated administrator panel confirmed or documented"
+  );
+
+const vulnshopApiInfoLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const infoUrl = new URL("/api/info", ctx.origin).toString();
+  const doc = await ctx.probe.get(infoUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (
+    !/"framework"\s*:\s*"Flask|"python_version"|"dependencies"|pyyaml|werkzeug/i.test(doc.body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      infoUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnShop GET /api/info exposes Flask/Python/dependency versions with known CVEs — vulnerable components disclosure oracle"
+    }
+  };
+};
+
+const vulnshopApiInfoRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/info\b/i,
+    vulnshopApiInfoLiveOracle,
+    "VulnShop /api/info route scan — framework and dependency version disclosure confirmed or documented"
+  );
+
+/** Benign pickle.dumps({"a": 1}) — safe probe for /api/process deserialization oracle. */
+const VULNSHOP_BENIGN_PICKLE_B64 = "gASVCgAAAAAAAAB9lIwBYZRLAXMu";
+
+const vulnshopApiProcessDeserializationLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const processUrl = new URL("/api/process", ctx.origin).toString();
+  const doc = await ctx.probe.get(processUrl, {
+    method: "POST",
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `data=${encodeURIComponent(VULNSHOP_BENIGN_PICKLE_B64)}`
+  });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"|"result"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      processUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnShop POST /api/process unpickles attacker-controlled base64 pickle payloads without integrity verification — insecure deserialization oracle"
+    }
+  };
+};
+
+const vulnshopApiProcessRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/process\b/i,
+    vulnshopApiProcessDeserializationLiveOracle,
+    "VulnShop /api/process route scan — insecure pickle deserialization confirmed or documented"
+  );
 
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -68310,6 +68521,14 @@ export const RULES: Record<string, Rule> = {
   vulnshopJwtLoginRouteLiveOracle,
   vulnshopBuyTicketRaceLiveOracle,
   vulnshopBuyTicketRouteLiveOracle,
+  vulnshopHiddenAdminManagerLiveOracle,
+  vulnshopHiddenAdminManagerRouteLiveOracle,
+  vulnshopHiddenAdminAdministratorLiveOracle,
+  vulnshopHiddenAdminAdministratorRouteLiveOracle,
+  vulnshopApiInfoLiveOracle,
+  vulnshopApiInfoRouteLiveOracle,
+  vulnshopApiProcessDeserializationLiveOracle,
+  vulnshopApiProcessRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,

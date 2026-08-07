@@ -23586,6 +23586,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-hidden-admin-manager-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VulnShop /manager hidden admin path route live oracle",
+    description:
+      "When scanning /manager, live Flask probe or curated route oracle confirms unauthenticated management console exposure.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /manager is an unauthenticated hidden admin path.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopHiddenAdminManagerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect /manager with server-side authentication and authorization.",
+      steps: [
+        "Require admin authentication before exposing management consoles.",
+        "Remove or restrict hidden admin paths in production deployments.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /manager route exposes a management console without authentication. Show route-specific access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-hidden-admin-administrator-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VulnShop /administrator hidden admin path route live oracle",
+    description:
+      "When scanning /administrator, live Flask probe or curated route oracle confirms unauthenticated advanced configuration panel exposure.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /administrator is an unauthenticated hidden admin path.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopHiddenAdminAdministratorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect /administrator with server-side authentication and authorization.",
+      steps: [
+        "Require admin authentication before exposing configuration panels.",
+        "Remove or restrict hidden admin paths in production deployments.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /administrator route exposes an advanced configuration panel without authentication. Show route-specific access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-api-info-component-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "VulnShop /api/info vulnerable components route live oracle",
+    description:
+      "When scanning /api/info, live Flask probe or curated route oracle confirms framework and dependency version disclosure with known CVEs.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/info leaks component versions aiding targeted exploits.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopApiInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove version disclosure from /api/info in production APIs.",
+      steps: [
+        "Do not expose framework, language, or dependency versions to unauthenticated callers.",
+        "Keep dependencies patched and monitor for known CVEs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/info route exposes Flask/Python/dependency versions. Show route-specific component disclosure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-api-process-deserialization-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /api/process insecure deserialization route live oracle",
+    description:
+      "When scanning /api/process, live benign pickle probe or curated route oracle confirms unvalidated pickle deserialization.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/process accepts attacker-controlled serialized objects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopApiProcessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted pickle payloads — use signed JSON schemas instead.",
+      steps: [
+        "Reject pickle and other unsafe deserialization formats from user input.",
+        "Verify integrity with HMAC or digital signatures before processing serialized data.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/process route unpickles attacker-controlled data. Show route-specific deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-products-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
