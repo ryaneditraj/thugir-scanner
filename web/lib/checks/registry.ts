@@ -7362,7 +7362,7 @@ const vulnforgeAcademyLevelXssRouteLiveOracle: Rule = async (ctx) => {
 const vulnbankUploadProfilePictureUrlRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/profile\/upload/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:profile\/upload|upload_profile_picture_url)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await vulnbankUploadProfilePictureUrlSsrfLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -31304,6 +31304,135 @@ const pwnshopWalletTopupRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Pwnshop /wallet or /profile route scan — Vulnbank wallet top-up accepts credited_amount parameter (PWN-042 family)"
+    }
+  };
+};
+
+async function pwnshopFreshOtpSessionWithUsername(
+  ctx: RuleContext
+): Promise<{ cookie: string; username: string } | null> {
+  const username = `thugir_del_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  const registerDoc = await fetchDoc(new URL("/register", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  let cookie = pwnshopSessionCookieFromDoc(registerDoc);
+  if (!cookie) return null;
+  const loginDoc = await fetchDoc(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=ThugirTest123!`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loginLocation = loginDoc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(loginDoc.status) || !/verify-otp/i.test(loginLocation)) {
+    return null;
+  }
+  cookie = pwnshopSessionCookieFromDoc(loginDoc) ?? cookie;
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500];
+  for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
+    await pwnshopSleep(OTP_MAIL_WAITS_MS[attempt]);
+    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+    if (!inboxToken) continue;
+    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+    if (!otp) continue;
+    const verifyDoc = await fetchDoc(new URL("/verify-otp", ctx.origin).toString(), {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) continue;
+    const verifyLocation = verifyDoc.headers["location"] || "";
+    if (!verifyLocation || /verify-otp/i.test(verifyLocation)) continue;
+    cookie = pwnshopSessionCookieFromDoc(verifyDoc) ?? cookie;
+    return { cookie, username };
+  }
+  return null;
+}
+
+async function probePwnshopAccountDeleteCsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isPwnshopHost(ctx)) return null;
+  const session = await pwnshopFreshOtpSessionWithUsername(ctx);
+  if (!session) return null;
+  const { cookie, username } = session;
+  const deleteUrl = new URL("/account/delete", ctx.origin).toString();
+  const deleteDoc = await fetchDoc(deleteUrl, {
+    method: "POST",
+    body: "confirm=yes",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (![301, 302, 303, 307, 308].includes(deleteDoc.status)) return null;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await fetchDoc(loginUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=ThugirTest123!`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loginLocation = loginDoc.headers["location"] || "";
+  const invalidCreds = /Invalid credentials/i.test(loginDoc.body);
+  const deleted =
+    invalidCreds &&
+    !/verify-otp/i.test(loginLocation) &&
+    (loginDoc.status === 200 || (loginDoc.status >= 300 && loginDoc.status < 400));
+  if (!deleted) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      deleteUrl,
+      username,
+      deleteStatus: deleteDoc.status,
+      deleteLocation: deleteDoc.headers["location"] || "",
+      loginStatus: loginDoc.status,
+      snippet: loginDoc.body.match(/Invalid credentials/i)?.[0] ?? "Invalid credentials",
+      note: "Pwnshop POST /account/delete with confirm=yes deletes the OTP-authenticated session without a CSRF token — relogin returns Invalid credentials (PWN-026)"
+    }
+  };
+}
+
+const pwnshopAccountDeleteCsrfLiveOracle: Rule = async (ctx) => {
+  const hit = await probePwnshopAccountDeleteCsrf(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const pwnshopAccountDeleteCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/account\/delete/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePwnshopAccountDeleteCsrf(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /account/delete route scan — POST confirm=yes deletes the authenticated account without CSRF protection (PWN-026)"
     }
   };
 };
@@ -67210,6 +67339,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopOrderIdorRouteLiveOracle,
   pwnshopWalletTopupVulnbankLiveOracle,
   pwnshopWalletTopupRouteLiveOracle,
+  pwnshopAccountDeleteCsrfLiveOracle,
+  pwnshopAccountDeleteCsrfRouteLiveOracle,
   fauxbankLoansRouteLiveOracle,
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,

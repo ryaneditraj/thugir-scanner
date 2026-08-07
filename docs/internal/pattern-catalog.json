@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T02:11:58.400Z",
-  "total": 1962,
-  "uniqueSlugs": 1957,
+  "generatedAt": "2026-08-07T03:31:56.279Z",
+  "total": 1965,
+  "uniqueSlugs": 1960,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1944,
+    "generic": 1947,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1877,
+    "deep": 1880,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 376,
+    "Broken access control": 377,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -36,6 +36,7 @@
     "Sensitive data exposure": 45,
     "AI security": 50,
     "Business logic": 16,
+    "Cross-site request forgery": 2,
     "Insecure file upload": 2,
     "Command injection": 2,
     "XML external entity injection": 1,
@@ -1571,6 +1572,8 @@
     "phpmyadmin-exposed",
     "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
+    "pwnshop-account-delete-csrf-live-oracle",
+    "pwnshop-account-delete-csrf-route-live-oracle",
     "pwnshop-admin-login-sqli-live-oracle",
     "pwnshop-apply-coupon-live-oracle",
     "pwnshop-apply-coupon-route-live-oracle",
@@ -1584,6 +1587,7 @@
     "pwnshop-coupon-category-bypass-route-live-oracle",
     "pwnshop-debug-info-live-oracle",
     "pwnshop-debug-info-route-live-oracle",
+    "pwnshop-download-path-traversal-live-oracle",
     "pwnshop-download-path-traversal-route-live-oracle",
     "pwnshop-events-audit-live-oracle",
     "pwnshop-events-audit-route-live-oracle",
