@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-26T11:06:00.000Z",
+  "updated_at": "2026-08-07T08:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/2",
@@ -9804,6 +9804,31 @@
       "url": "https://brokencrystals.com/api/users/one/admin_user/info",
       "source": "NeuraLegion/brokencrystals — mass-assignment privilege escalation PUT target /api/users/one/{email}/info (README)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/user/login",
+      "source": "escape.tech Juice Shop demo — REST login SQLi oracle (official demo.owasp-juice.shop sibling deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level2/frame",
+      "source": "Google XSS Game level 2 — persistent XSS in chat oracle (awesome-vulnerable-apps online list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/3",
+      "source": "OWASP WrongSecrets — Challenge 3 secrets-in-logs oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1",
+      "source": "apisec-inc/urban-VAmPI — unauthenticated user enumeration GET /users/v1 (OWASP API Top 10 broken auth)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v3/user",
+      "source": "vulnbank.org — v3 user BOLA/IDOR API oracle (public vuln bank lab API surface)",
+      "auth": "public_demo"
     }
   ]
 }
