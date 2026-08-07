@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-juicesec-challenge-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended JUICESEC_CHALLENGE_ROUTE_LABELS to all 10 catalog slugs (xss-reflected, broken-auth, robots, sensitive-data, cmdi, xss-stored) + homepage bootstrap regex; juicesec.mrdinesh.workers.dev/challenge/robots|cmdi|broken-auth findings 2→3 with +challenge-route-evidence; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-application-jecw.vercel.app",
+      "slug": "buggybuy-api-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBuggyBuyExternalApi accepts HTTP 500 JSON {\"message\":\"Server error while fetching order.\"} from mcd0.onrender.com /api/v1/orders/1 as degraded unauthenticated BOLA oracle when Render backend cold; vulnerable-web-application-jecw.vercel.app/api/orders findings 6→9 (+bola live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "client-side-web-security-learning-labs-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideWebSecurityLearningLabsEvidence checkpoint fallback via curated WEB_SECURITY_LEARNING_MODULE_TOPICS map when Vercel checkpoint blocks catalog fetch; web-security-learning-labs.vercel.app/module/1019 findings 4→5 with +client-side-web-security-learning-labs-evidence on checkpoint-blocked scans; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-route-evidence",
       "status": "shipped",
@@ -20171,6 +20189,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-route-evidence",
       "shipped_at": "2026-08-07T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:juicesec.mrdinesh.workers.dev",
+      "slug": "client-side-juicesec-challenge-route-evidence",
+      "shipped_at": "2026-08-07T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-web-application-jecw.vercel.app",
+      "slug": "buggybuy-api-bola-live-oracle",
+      "shipped_at": "2026-08-07T09:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "client-side-web-security-learning-labs-evidence",
+      "shipped_at": "2026-08-07T09:20:00.000Z"
     }
   ]
 }

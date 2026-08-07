@@ -25646,9 +25646,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "JuiceSec OWASP challenge route disclosed",
     description:
-      "When scanning juicesec.mrdinesh.workers.dev/challenge/{sqli,xss,jwt,ssrf,idor}, homepage bootstrap confirms route-specific checkSQLi/checkJWT/checkSSRF/checkIDOR modules even when /challenge/* paths 404.",
+      "When scanning juicesec.mrdinesh.workers.dev/challenge/{sqli,xss-reflected,broken-auth,idor,robots,sensitive-data,jwt,cmdi,ssrf,xss-stored}, homepage bootstrap confirms route-specific checkSQLi/checkJWT/checkSSRF/checkIDOR modules even when /challenge/* paths 404.",
     impactOneline:
-      "JuiceSec challenge routes document SQLi, XSS, JWT, SSRF, and IDOR training modules for scanner benchmarking when deep-linked URLs miss the SPA shell.",
+      "JuiceSec challenge routes document SQLi, XSS, JWT, SSRF, IDOR, command injection, robots.txt, and sensitive-data training modules for scanner benchmarking when deep-linked URLs miss the SPA shell.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "clientSideJuicesecChallengeRouteEvidence" },
     tierRequired: "deep",

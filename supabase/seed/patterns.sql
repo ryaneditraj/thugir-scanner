@@ -4118,7 +4118,7 @@ values
    true),
   ('client-side-juicesec-challenge-route-evidence', 'generic', 'Injection', 'medium',
    'JuiceSec OWASP challenge route disclosed',
-   'When scanning juicesec.mrdinesh.workers.dev/challenge/{sqli,xss,jwt,ssrf,idor}, homepage bootstrap confirms route-specific checkSQLi/checkJWT/checkSSRF/checkIDOR modules even when /challenge/* paths 404.',
+   'When scanning juicesec.mrdinesh.workers.dev/challenge/{sqli,xss-reflected,broken-auth,idor,robots,sensitive-data,jwt,cmdi,ssrf,xss-stored}, homepage bootstrap confirms route-specific checkSQLi/checkJWT/checkSSRF/checkIDOR modules even when /challenge/* paths 404.',
    'JuiceSec challenge routes document SQLi, XSS, JWT, SSRF, and IDOR training modules for scanner benchmarking when deep-linked URLs miss the SPA shell.',
    'rule_ref',
    '{"rule":"clientSideJuicesecChallengeRouteEvidence"}'::jsonb,

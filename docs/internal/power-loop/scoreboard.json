@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T09:08:30.000Z",
+  "updated_at": "2026-08-07T09:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 22800,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-07T09:08:30.000Z",
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-07T09:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -53,37 +53,40 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 46,
-      "focus": "wrongsecrets challenge/9 Terraform + WSL modules 1024-1025 + vulnshop jwt-login/buy-ticket race-condition seeds",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 13,
+      "findings": 86,
+      "focus": "JuiceSec 10-challenge catalog + BuggyBuy degraded Render BOLA oracle + WSL checkpoint client-side fallback + wrongsecrets challenge/9 + vulnshop seeds",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/9: 11 findings — wrongsecrets-challenge-live-oracle + database-connection error oracle (Terraform challenge)",
-      "web-security-learning-labs.vercel.app/module/1024: 5 findings — reflexion-escalated-ssti + WSL platform evidence",
+      "juicesec.mrdinesh.workers.dev/challenge/robots|cmdi|broken-auth: 2→3 findings — full 10-challenge JuiceSec catalog route oracles",
+      "vulnerable-web-application-jecw.vercel.app/api/orders: 6→9 findings — buggybuy-api-bola degraded oracle on Render HTTP 500 JSON",
+      "web-security-learning-labs.vercel.app/module/1019: 4→5 findings — client-side-web-security-learning-labs-evidence checkpoint fallback",
+      "wrongsecrets.herokuapp.com/challenge/8: 11 findings — challenge-8 short URL alias confirmed (logging walkthrough)",
+      "wrongsecrets.herokuapp.com/challenge/9: 11 findings — Terraform challenge walkthrough oracles",
       "vulnshop.vercel.app/jwt-login: 6 findings — client-side-vulnshop-evidence but no JWT-none live oracle",
-      "vulnshop.vercel.app/buy-ticket: 6 findings — client-side-vulnshop-evidence but no race-condition live oracle"
+      "web-security-learning-labs.vercel.app/module/1024: 5 findings — reflexion-escalated-ssti + WSL platform evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs; Resend key not in current social feeds)",
       "vulnshop.vercel.app/jwt-login: JWT alg=none live oracle absent (client-side evidence only)",
       "vulnshop.vercel.app/buy-ticket: race-condition ticket-purchase live oracle absent",
       "web-security-learning-labs module/1025: 3-finding generic hub — module-route evidence absent",
-      "juice-shop.herokuapp.com/rest/user/security-question: primary 503 blocks secret-resend gap probe"
+      "pwnshop.ctfsecurity.com/wishlist/:user_id: route 404 on public deploy (PWN-003 not exposed)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 49,
-    "wrongsecrets.herokuapp.com/challenge/9": 11,
     "wrongsecrets.herokuapp.com/challenge/8": 11,
+    "wrongsecrets.herokuapp.com/challenge/9": 11,
+    "vulnerable-web-application-jecw.vercel.app/api/orders": 9,
+    "juicesec.mrdinesh.workers.dev/challenge/robots": 3,
+    "web-security-learning-labs.vercel.app/module/1019": 5,
     "web-security-learning-labs.vercel.app/module/1024": 5,
-    "vulnshop.vercel.app/jwt-login": 6,
-    "vulnshop.vercel.app/buy-ticket": 6,
     "pwnshop.ctfsecurity.com/admin/export-orders": 47,
     "ssrf.vulnlab.dev/basic": 15,
-    "web-security-learning-labs.vercel.app/module/1021": 8,
-    "pentest-fauxbank.vercel.app/api/accounts/2": 15
+    "vulnshop.vercel.app/jwt-login": 6
   }
 }
