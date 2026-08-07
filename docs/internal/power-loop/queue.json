@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T05:05:00.000Z",
+  "updated_at": "2026-08-07T06:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://api.graphqlbook.org/graphql",
@@ -16094,7 +16094,32 @@
       "url": "https://chimera.atlascrew.dev/api/v1/claims/search?policy_id=1",
       "source": "atlas-crew/Chimera API-DOCUMENTATION — ORDER BY injection oracle GET /api/v1/claims/search (public vuln-api demo, 19 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/community/api/v2/community/posts/1",
+      "source": "OWASP crAPI v1 — BOLA GET /community/api/v2/community/posts/{id} without owner auth (APIsec hosted crapi.apisec.ai, 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/workshop/api/mechanic/service_requests",
+      "source": "OWASP crAPI v1 — BFLA GET /workshop/api/mechanic/service_requests (APIsec hosted crapi.apisec.ai, 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://crapi.apisec.ai/identity/api/v2/user/dashboard",
+      "source": "OWASP crAPI v1 — unauthenticated dashboard oracle GET /identity/api/v2/user/dashboard (APIsec hosted crapi.apisec.ai, 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/order-history",
+      "source": "OWASP Juice Shop demo — order-history BOLA oracle GET /rest/order-history (official demo.owasp-juice.shop, 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "OWASP NodeGoat — profile IDOR / mass-assignment oracle GET /profile (nodegoat-websec.herokuapp.com public demo, 06 UTC discovery)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 89
+  "discovery_urls_added": 94
 }
