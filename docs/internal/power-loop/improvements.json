@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-cart-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnshopRouteOracleWithFallback + VULNSHOP_FLASK_ROUTE_URL_ORACLES /cart flash-sale race README oracle #42 POST /api/v1/flash-sale; vulnshop.vercel.app/cart findings 6→7 (+vulnshop-cart-route-live-oracle); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNFORGE_ACADEMY_LEVEL_URL_ORACLES level 15 SSRF filter bypass (127.1 encoding FLAG{ssrf15_f1lt3r_byp4ss}); vulnforge-academy.vercel.app/.../level15.php findings 4 with route-specific SSRF oracle (replaces generic sql-error FP); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-rce-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNFORGE_ACADEMY_LEVEL_URL_ORACLES level 19 command injection via shell=True ping host (FLAG{rce19_c0mm4nd_1nj}); vulnforge-academy.vercel.app/.../level19.php findings 4 with route-specific RCE oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-hidden-admin-manager-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: VULNSHOP_FLASK_ROUTE_URL_ORACLES curated fallback for chethan-vinayak/vulnshop README #16 GET /manager hidden admin path; vulnshop.vercel.app/manager findings 6→7 (+hidden-admin-manager-route oracle); benchmark juice-shop-staging 47 findings 6/6 maintained"

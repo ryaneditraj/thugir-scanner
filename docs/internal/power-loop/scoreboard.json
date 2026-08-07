@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T11:15:00.000Z",
+  "updated_at": "2026-08-07T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2769,
-  "total_findings": 27233,
-  "critical_findings": 55,
+  "total_sites_scanned": 2773,
+  "total_findings": 27295,
+  "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1976,
-  "discovery_findings": 22917,
-  "improvements_shipped": 1174,
-  "last_run": "2026-08-07T11:15:00.000Z",
+  "discovery_findings": 22928,
+  "improvements_shipped": 1177,
+  "last_run": "2026-08-07T12:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings staging fallback; primary heroku 503)"
+      "note": "Stable 6/6 recall (51 findings primary heroku)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 28,
-      "focus": "vulnshop hidden-admin manager/administrator + api/info component disclosure + api/process deserialization",
-      "improvements_shipped_this_run": 4
+      "urls_scanned": 3,
+      "findings": 15,
+      "focus": "vulnshop /cart flash-sale race + vulnforge academy level15 SSRF + level19 RCE route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "vulnshop.vercel.app/manager: 6→7 findings — vulnshop-hidden-admin-manager-route-live-oracle shipped (Flask URL oracle #16)",
-      "vulnshop.vercel.app/administrator: 6→7 findings — vulnshop-hidden-admin-administrator-route-live-oracle shipped (Flask URL oracle #17)",
-      "vulnshop.vercel.app/api/info: 6→7 findings — vulnshop-api-info-component-disclosure-route-live-oracle shipped (Flask URL oracle #18)",
-      "vulnshop.vercel.app/api/process: 6→7 findings — vulnshop-api-process-deserialization-route-live-oracle shipped (Flask URL oracle #19)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
+      "vulnshop.vercel.app/cart: 6→7 findings — vulnshop-cart-route-live-oracle shipped (Flask URL oracle #42 flash-sale race)",
+      "vulnforge-academy.vercel.app/.../level15.php: route-specific vulnforge-academy-level-ssrf-route-live-oracle shipped (SSRF filter bypass oracle)",
+      "vulnforge-academy.vercel.app/.../level19.php: route-specific vulnforge-academy-level-rce-route-live-oracle shipped (command injection oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnshop Flask live oracles require Railway backend — current vercel.app serves React SPA shell (URL-oracle fallback fires)",
-      "vulnshop.vercel.app/cart: concurrent race-condition live oracle absent (SPA shell only)",
+      "vulnshop Flask live oracles require Railway backend — vercel.app SPA shell triggers URL-oracle fallback",
+      "web-security-learning-labs.vercel.app/module/1026-1027: module-route-evidence absent (topics 1026/1027 not in WEB_SECURITY_LEARNING_MODULE_TOPICS)",
       "pwnshop.ctfsecurity.com/wishlist/:user_id: route 404 on public deploy (PWN-003 not exposed)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 51,
+    "vulnshop.vercel.app/cart": 7,
+    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level15.php": 4,
+    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php": 4,
     "vulnshop.vercel.app/manager": 7,
     "vulnshop.vercel.app/administrator": 7,
     "vulnshop.vercel.app/api/info": 7,
     "vulnshop.vercel.app/api/process": 7,
-    "vulnshop.vercel.app/jwt-login": 7,
-    "vulnshop.vercel.app/buy-ticket": 7,
     "web-security-learning-labs.vercel.app/module/1027": 7,
-    "pwnshop.ctfsecurity.com/admin/export-orders": 47,
-    "ssrf.vulnlab.dev/basic": 15
+    "pwnshop.ctfsecurity.com/admin/export-orders": 47
   }
 }
