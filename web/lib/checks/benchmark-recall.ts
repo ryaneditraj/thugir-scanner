@@ -17,6 +17,7 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "juice-shop-chatbot-api-live-oracle": ["auth_bypass"],
   "juice-shop-chatbot-respond-route-live-oracle": ["auth_bypass"],
   "juice-shop-security-question-user-live-oracle": ["sensitive_data"],
+  "juice-shop-security-questions-list-live-oracle": ["sensitive_data"],
   "juice-shop-wallet-balance-bola-live-oracle": ["idor", "auth_bypass"],
   "dangerous-html-sinks": ["xss"],
   "dom-eval-xss": ["xss"],
