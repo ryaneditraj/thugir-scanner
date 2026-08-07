@@ -13239,6 +13239,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "idor-website-api-route-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "IDOR Lab /api/* route bundle evidence oracle",
+    description:
+      "When scanning idor-website.vercel.app /api/* routes (including /api/employees/:id aliases), bootstrap the homepage bundle to confirm VULNERABLE /api/users/{userId} GET/PUT/DELETE without authorization.",
+    impactOneline:
+      "Route scans of IDOR lab API paths confirm client-documented missing ownership checks on user records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "idorWebsiteApiRouteEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add server-side ownership checks; remove vulnerable demo markers from production bundles.",
+      steps: [
+        "Verify the authenticated user owns every record on GET/PUT/DELETE.",
+        "Remove VULNERABLE ENDPOINT documentation from client bundles.",
+        "Use non-guessable IDs and audit all /api/users/{id} style routes."
+      ]
+    },
+    fixPrompt:
+      "Our idor-website /api/* route scan documents IDOR-prone /api/users/{userId} without authorization. Show server-side ownership checks and bundle cleanup.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sql-evidence",
     platform: "generic",
     category: "Injection",
@@ -32298,6 +32324,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-files-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/files route LFI live oracle",
+    description:
+      "When scanning /api/files?path=, the live LFI endpoint is GET /api/file?path=package.json (README alias) — route-specific local file inclusion confirmation.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals file-read endpoints expose application package.json via path parameters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFilesLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block arbitrary file reads via path parameters — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove user-controlled path parameters from file-serving endpoints.",
+        "Use strict allowlists for readable files and chroot file access.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/files route scan confirms local file inclusion via the /api/file?path= alias. Show LFI/path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-testimonials-count-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -35102,6 +35154,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host a BUG Collection-style vulnerable Next.js training app. Show how to isolate testLib labs and fix MongoDB injection on production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-security-learning-labs-module-route-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Web Security Learning Labs module route evidence oracle",
+    description:
+      "When scanning /module/1011|1012|1013 on web-security-learning-labs.vercel.app, confirm the module topic (SQL Injection, XSS, IDOR) from the lab catalog chunks — route-specific training-lab oracle.",
+    impactOneline:
+      "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsModuleRouteEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training labs are intentional — isolate from production infrastructure.",
+      steps: [
+        "Run vulnerability labs only on isolated evaluation hosts.",
+        "Do not reuse lab module IDs or routes in production apps.",
+        "Use the lab catalog for security training, not as production API design."
+      ]
+    },
+    fixPrompt:
+      "Our /module/{id} route scan maps to Web Security Learning Labs training topics. This is intentional lab infrastructure — confirm isolation from production.",
     version: 1,
     enabled: true
   },

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-files-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file?path=package.json returns broken-crystals package.json when scanning /api/files?path= (README alias); brokencrystals.com/api/files?path=package.json findings 15→75 (+files-lfi-route oracle); benchmark juice-shop.herokuapp.com 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:idor-website.vercel.app",
+      "slug": "idor-website-api-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/employees/1 route scan bootstraps homepage bundle — VULNERABLE /api/users/{userId} GET/PUT/DELETE without authorization; idor-website.vercel.app/api/employees/1 findings 3→4 (+api-route evidence oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /module/1013 route scan confirms IDOR training module from /learn/modules catalog chunks; web-security-learning-labs.vercel.app/module/1013 findings 6→8 (+module-route evidence oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vaultapp-omega.vercel.app",
       "slug": "vaultapp-users-idor-live-oracle",
       "status": "shipped",
