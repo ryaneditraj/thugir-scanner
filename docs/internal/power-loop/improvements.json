@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-rsc-placeholder-regex",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Next.js RSC flight payload encodes placeholders as Here is a Module: \",\"1065\" — webSecurityLearningLabsPlaceholderModuleShell now matches [^\\d]{0,32} gap before module id; web-security-learning-labs.vercel.app/module/1065 intermittent 3→8 with module-route-evidence when Vercel checkpoint allows; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1061-1065",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1061-1065; queue drain for WSL new CSR placeholder modules; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-login-checkpoint-retry-export-userid",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappLogin retries rootadmin on Vercel Security Checkpoint; probeVaultappAccountExportApiKeyIdor resolves victim username via GET /api/users/{user_id} when owner_username omitted; manual oracle: rootadmin login + note 51 API key exports gmartin44 profile; vaultapp checkpoint blocks automated scans intermittently; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1051-1060",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: queue modules 1051-1060 CSR placeholder shells; extractWebSecurityLearningLabsSeeds + module priority seeds extended 1051-1060; web-security-learning-labs.vercel.app/module/1060 findings 3→8 (+module-route-evidence, client-side-web-security-learning-labs-evidence); benchmark juice-shop-staging 48 findings 6/6 maintained"
