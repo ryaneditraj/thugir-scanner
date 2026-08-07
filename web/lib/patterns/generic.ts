@@ -33390,6 +33390,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-transfer-negative-amount-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank transfer route negative-amount business-logic oracle",
+    description:
+      "When scanning /transfer or /api/v2/transfer, POST accepts negative amount values and credits the sender's balance — route-specific money-transfer business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that transfer endpoints lack positive-amount validation on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankTransferNegativeAmountRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate transfer amounts are positive and enforce balance checks — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero transfer amounts at the API layer.",
+        "Debit the sender atomically and verify sufficient funds before crediting the recipient.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /transfer route scan confirms amount:-500 increases sender balance. Show business-logic validation for money transfers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-request-loan-negative-amount-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -35346,7 +35372,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011|1012|1013 on web-security-learning-labs.vercel.app, confirm the module topic (SQL Injection, XSS, IDOR) from the lab catalog chunks — route-specific training-lab oracle.",
+      "When scanning /module/1011–1018 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution) from the lab catalog chunks — route-specific training-lab oracle.",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
