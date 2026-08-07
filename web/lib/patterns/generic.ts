@@ -43946,6 +43946,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Juice Shop allowlist-bypass open redirect live oracle",
+    description:
+      "GET /redirect?to=https://evil.example/?pwned=https://github.com/juice-shop/juice-shop satisfies the substring allowlist then 302 redirects to the attacker host — Juice Shop token-stealing open redirect oracle.",
+    impactOneline:
+      "Allowlist bypass on /redirect enables phishing and OAuth token theft via trusted Juice Shop origin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets with strict URL parsing, not substring allowlist checks.",
+      steps: [
+        "Parse redirect URLs and compare origin/host against an explicit allowlist.",
+        "Reject attacker-controlled hosts even when a trusted URL appears in query parameters.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /redirect?to= bypasses allowlist via embedded github.com substring. Show open-redirect remediation with strict URL validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Juice Shop /redirect route open redirect live oracle",
+    description:
+      "When scanning /redirect?to=, allowlist substring bypass issues HTTP 302 to attacker-controlled host — route-specific open redirect oracle.",
+    impactOneline:
+      "Route-scoped scans should flag Juice Shop /redirect allowlist bypass open redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets with strict URL parsing, not substring allowlist checks.",
+      steps: [
+        "Parse redirect URLs and compare origin/host against an explicit allowlist.",
+        "Reject attacker-controlled hosts even when a trusted URL appears in query parameters.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /redirect route scan confirms allowlist-bypass open redirect. Show route-level redirect validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-file-upload-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Juice Shop complaint file-upload live oracle",
+    description:
+      "POST /file-upload accepts ZIP path traversal overwriting ftp/legal.md, XML XXE disclosing /etc/passwd, or YAML SSTI via vm.runInContext — Juice Shop complaint upload chain oracle.",
+    impactOneline:
+      "Unrestricted complaint uploads enable path traversal, XXE file disclosure, and server-side template injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopFileUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable dangerous upload parsers and validate archive entry paths.",
+      steps: [
+        "Reject ZIP entries with path traversal sequences before extraction.",
+        "Disable external XML entities and unsafe YAML constructors on upload handlers.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop POST /file-upload allows zip-slip, XXE, and YAML SSTI. Show secure complaint upload handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Juice Shop /file-upload route live oracle",
+    description:
+      "When scanning /file-upload, authenticated multipart upload confirms zip-slip, XXE, or YAML SSTI — route-specific complaint upload oracle.",
+    impactOneline:
+      "Route-scoped scans should flag Juice Shop complaint upload traversal and injection chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable dangerous upload parsers and validate archive entry paths.",
+      steps: [
+        "Reject ZIP entries with path traversal sequences before extraction.",
+        "Disable external XML entities and unsafe YAML constructors on upload handlers.",
+        "Run Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /file-upload route scan confirms zip-slip or XXE/SSTI upload chains. Show route-level upload hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-admin-users-delete-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VaultApp admin user-delete privilege escalation live oracle",
+    description:
+      "DELETE /api/admin/users/:id succeeds for any authenticated lab user without admin role verification — VaultApp broken function-level authorization oracle.",
+    impactOneline:
+      "Any logged-in user can delete arbitrary accounts via the admin user-management API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappAdminUsersDeleteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role checks on all /api/admin/users/:id DELETE handlers.",
+      steps: [
+        "Require admin role middleware before user deletion endpoints.",
+        "Audit admin API routes for missing function-level authorization.",
+        "Run VaultApp only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "VaultApp DELETE /api/admin/users/:id works for non-admin sessions. Show BFLA remediation for admin user deletion.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-admin-users-delete-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "VaultApp /api/admin/users/:id delete route live oracle",
+    description:
+      "When scanning /api/admin/users/:id, authenticated DELETE removes another user's account without admin authorization — route-specific privilege escalation oracle.",
+    impactOneline:
+      "Route-scoped scans should flag unprivileged DELETE on VaultApp admin user-management endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappAdminUsersDeleteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role checks on all /api/admin/users/:id DELETE handlers.",
+      steps: [
+        "Require admin role middleware before user deletion endpoints.",
+        "Audit admin API routes for missing function-level authorization.",
+        "Run VaultApp only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VaultApp /api/admin/users/:id route scan confirms unprivileged DELETE. Show route-level admin authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "testasp-showforum-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
