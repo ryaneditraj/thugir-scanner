@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T10:05:00.000Z",
+  "updated_at": "2026-08-07T11:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1027",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1027 (public Vercel demo, 11 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/cart",
+      "source": "chethan-vinayak/vulnshop — concurrent cart race-condition oracle GET /cart (Vercel OSS deploy README, 11 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level15.php",
+      "source": "webspoilt/vulnforge-academy — Level 15 SSRF internal-service oracle (Vercel OSS deploy, 11 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php",
+      "source": "webspoilt/vulnforge-academy — Level 19 RCE command-injection oracle (Vercel OSS deploy, 11 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://api.vulnbank.org/api/v1/login",
+      "source": "Commando-X/vuln-bank — public API host login oracle POST /api/v1/login (api.vulnbank.org README deploy, 11 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnshop.vercel.app/manager",
       "source": "chethan-vinayak/vulnshop — hidden admin path oracle GET /manager (Vercel OSS deploy README, 10 UTC discovery)",
