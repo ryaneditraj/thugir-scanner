@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T00:06:23.348Z",
-  "total": 1953,
-  "uniqueSlugs": 1948,
+  "generatedAt": "2026-08-07T01:06:20.671Z",
+  "total": 1959,
+  "uniqueSlugs": 1954,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1935,
+    "generic": 1941,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1868,
+    "deep": 1874,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 369,
+    "Broken access control": 375,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1812,6 +1812,12 @@
     "vaultapp-lab-guide-route-live-oracle",
     "vaultapp-messages-read-idor-live-oracle",
     "vaultapp-messages-read-idor-route-live-oracle",
+    "vaultapp-notes-idor-live-oracle",
+    "vaultapp-notes-idor-route-live-oracle",
+    "vaultapp-transactions-idor-live-oracle",
+    "vaultapp-transactions-idor-route-live-oracle",
+    "vaultapp-users-idor-live-oracle",
+    "vaultapp-users-idor-route-live-oracle",
     "verbose-error-disclosure",
     "vibe-algolia-admin-in-client",
     "vibe-auth0-secret-in-client",
