@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1066-1070",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1066-1070; webSecurityLearningLabsHomeBootstrap merges / + /learn/modules when scanning /module/* CSR shells; benchmark juice-shop.demo.escape.tech 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-security-questions-api-priming",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /api/SecurityQuestions added to JUICE_SHOP_API_HEALTH_PATHS + primeJuiceShopApiProbes + juiceShopBenchmarkOracleReady sensitive check; juice-shop-security-questions-list-live-oracle in benchmark-recall SLUG_TO_BENCHMARK; juice-shop.demo.escape.tech benchmark 48→49 findings 6/6 (secret-resend slug still absent — Resend key not in feeds)"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-lab-guide-api-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappBootstrap fetches /lab-guide + /login when scanning /api/* routes; vaultappLogin rootadmin checkpoint retries 4× with backoff; vaultapp API route priority sort -3; pwnshop apply-coupon/wallet bootstrap + brokencrystals adminpermission route priority; benchmark 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-rsc-placeholder-regex",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Next.js RSC flight payload encodes placeholders as Here is a Module: \",\"1065\" — webSecurityLearningLabsPlaceholderModuleShell now matches [^\\d]{0,32} gap before module id; web-security-learning-labs.vercel.app/module/1065 intermittent 3→8 with module-route-evidence when Vercel checkpoint allows; benchmark juice-shop-staging 48 findings 6/6 maintained"

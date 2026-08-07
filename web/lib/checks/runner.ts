@@ -335,6 +335,7 @@ const JUICE_SHOP_API_HEALTH_PATHS = [
   "/rest/products/search?q=apple",
   "/rest/products/search?q=''))",
   "/rest/user/security-question?email=admin@juice-sh.op",
+  "/api/SecurityQuestions",
   "/ftp/package.json.bak%2500.md"
 ];
 
@@ -351,6 +352,8 @@ async function juiceShopApiLive(pageUrl: string): Promise<boolean> {
       if (doc.status < 200) continue;
       if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return true;
       if (p.includes("security-question") && /"question"\s*:/i.test(doc.body)) return true;
+      if (p.includes("SecurityQuestions") && /"status"\s*:\s*"success"/i.test(doc.body) && /"data"\s*:\s*\[/i.test(doc.body))
+        return true;
       if (p.includes("ftp") && /"name"\s*:\s*"juice-shop"/i.test(doc.body)) return true;
       if (p.includes("track-order") && /"status"\s*:\s*"success"|"orderId"/i.test(doc.body))
         return true;
@@ -383,6 +386,12 @@ async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> 
         if (doc.status < 200 || HEROKU_APP_ERROR_RE.test(doc.body)) return null;
         if (p.includes("admin") && /"config"|"application"/i.test(doc.body)) return "admin";
         if (p.includes("security-question") && /"question"\s*:/i.test(doc.body))
+          return "sensitive";
+        if (
+          p.includes("SecurityQuestions") &&
+          /"status"\s*:\s*"success"/i.test(doc.body) &&
+          /"data"\s*:\s*\[/i.test(doc.body)
+        )
           return "sensitive";
         if (p.includes("ftp") && /"name"\s*:\s*"juice-shop"/i.test(doc.body)) return "sensitive";
         if (
@@ -433,6 +442,7 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
     "/rest/admin/application-configuration",
     "/rest/track-order/1",
     "/rest/user/security-question?email=admin@juice-sh.op",
+    "/api/SecurityQuestions",
     "/rest/products/search?q=''))",
     "/rest/products/search?q=warmup",
     "/rest/products/search?q=apple",
@@ -6476,7 +6486,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036", "1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065"]) {
+  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036", "1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070"]) {
     try {
       out.add(new URL(`/module/${moduleId}`, pageUrl).toString());
     } catch {
@@ -7453,7 +7463,7 @@ function extractVaultappSeeds(html: string, pageUrl: string): string[] {
   }
   if (!/vaultapp-omega\.vercel\.app/i.test(host) && !/VaultApp|Security Training Lab/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/login", "/dashboard"]) {
+  for (const p of ["/login", "/lab-guide", "/dashboard"]) {
     try {
       out.add(new URL(p, pageUrl).toString());
     } catch {
@@ -9135,7 +9145,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const webSecurityLearningModulePrioritySeeds = /web-security-learning-labs\.vercel\.app\/module\/\d{4}/i.test(
     home.finalUrl
   )
-    ? ["1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1019", "1020", "1021", "1022", "1023"].map(
+    ? ["1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1019", "1020", "1021", "1022", "1023"].map(
         (id) => new URL(`/module/${id}`, home.finalUrl).toString()
       )
     : [];
@@ -9733,7 +9743,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let pwnshopBootstrap = "";
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     const needsBootstrap =
-      /\/profile\//i.test(targetInput) ||
+      /\/profile\/|\/apply-coupon|\/wallet\b/i.test(targetInput) ||
       !/PWN-\d{3}|OWASP Top 10 2025/i.test(`${home.body}\n${[...pages, ...scripts].map((p) => p.body).join("\n")}`);
     if (needsBootstrap) {
       const bootstrapUrls = [
@@ -9748,13 +9758,41 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
 
+  let webSecurityLearningLabsBootstrap = "";
+  if (/web-security-learning-labs\.vercel\.app/i.test(origin) && /\/module\/\d{4}/i.test(targetInput)) {
+    const bootUrls = [
+      new URL("/", origin).toString(),
+      new URL("/learn/modules", origin).toString()
+    ];
+    const bootDocs = await probe.getMany(bootUrls, { maxBytes: 200_000, timeoutMs: 20000 }, 2);
+    webSecurityLearningLabsBootstrap = [...bootDocs.values()]
+      .filter((d) => d.status >= 200 && d.status < 400 && d.body.length > 500)
+      .map((d) => d.body)
+      .join("\n");
+  }
+
+  let vaultappBootstrap = "";
+  if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput)) {
+    const bootUrls = [
+      new URL("/lab-guide", origin).toString(),
+      new URL("/login", origin).toString()
+    ];
+    const bootDocs = await probe.getMany(bootUrls, { maxBytes: 200_000, timeoutMs: 25000 }, 2);
+    vaultappBootstrap = [...bootDocs.values()]
+      .filter((d) => d.status >= 200 && d.status < 400 && d.body.length > 500)
+      .map((d) => d.body)
+      .join("\n");
+  }
+
   const combined = [
     ...pages.map((p) => p.body),
     ...scripts.map((s) => s.body),
     juiceShopBootstrap,
     whoopsPayBootstrap,
     juicesecBootstrap,
-    pwnshopBootstrap
+    pwnshopBootstrap,
+    webSecurityLearningLabsBootstrap,
+    vaultappBootstrap
   ]
     .filter(Boolean)
     .join("\n");
@@ -9815,10 +9853,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
-        /\/profile\//i.test(targetInput) &&
+        /\/profile\/|\/apply-coupon|\/wallet\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
         return -2;
+      if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
@@ -9860,6 +9899,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
       if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
+      if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
