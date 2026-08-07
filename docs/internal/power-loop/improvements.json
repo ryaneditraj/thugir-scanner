@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-jwt-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /jwt-protected alg:none probe + VULNSHOP_FLASK_ROUTE_URL_ORACLES curated fallback for chethan-vinayak/vulnshop README #8; vulnshop.vercel.app/jwt-login findings 6→7 (+jwt-login-route oracle); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-buy-ticket-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: concurrent POST /buy-ticket race probe + curated Flask-route URL oracle for README #11; vulnshop.vercel.app/buy-ticket findings 6→7 (+buy-ticket-route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended WEB_SECURITY_LEARNING_MODULE_TOPICS to 1024 SSTI Advanced / 1025 Race Condition; web-security-learning-labs.vercel.app/module/1025 findings 3→5 (+module-route-evidence); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:juicesec.mrdinesh.workers.dev",
       "slug": "client-side-juicesec-challenge-route-evidence",
       "status": "shipped",

