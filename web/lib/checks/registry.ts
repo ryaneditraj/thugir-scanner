@@ -32033,7 +32033,7 @@ const fauxbankLoansRouteLiveOracle: Rule = async (ctx) => {
 const fauxbankTransferRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/transfer/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/)?transfer\b/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankCsrfTransferProbe(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -32042,7 +32042,7 @@ const fauxbankTransferRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "FauxBank /api/transfer route scan — POST executes fund transfer without CSRF token (lesson #7)"
+      note: "FauxBank /transfer route scan — POST /api/transfer executes fund transfer without CSRF token (lesson #7)"
     }
   };
 };
@@ -56388,16 +56388,24 @@ const JUICE_SHOP_SAVE_LOGIN_IP_PROBE = "203.0.113.42";
 
 async function juiceShopProbeLoginToken(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/rest/user/login", ctx.origin).toString();
-  const doc = await ctx.probe.get(loginUrl, {
-    method: "POST",
+  const loginOpts = {
+    method: "POST" as const,
     body: JSON.stringify({ email: "admin@juice-sh.op", password: "admin123" }),
     headers: { "Content-Type": "application/json" },
     maxBytes: 4096,
     timeoutMs: 15000
-  });
-  if (doc.status < 200 || doc.status >= 300) return null;
-  if (HEROKU_STUB_RE.test(doc.body)) return null;
-  return doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1] ?? null;
+  };
+  // Probe cache can retain an early cold-start login miss while later rules need a token.
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const doc =
+      attempt === 0 ? await ctx.probe.get(loginUrl, loginOpts) : await fetchDoc(loginUrl, loginOpts);
+    if (doc.status >= 200 && doc.status < 300 && !HEROKU_STUB_RE.test(doc.body)) {
+      const token = doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1] ?? null;
+      if (token) return token;
+    }
+    if (attempt < 3) await new Promise((r) => setTimeout(r, 2000));
+  }
+  return null;
 }
 
 const juiceShopSaveLoginIpLiveOracle: Rule = async (ctx) => {

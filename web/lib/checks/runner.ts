@@ -9766,6 +9766,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/saveLoginIp\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-save-login-ip")
+      )
+        return -3;
+      if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\//i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
