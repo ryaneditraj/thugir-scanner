@@ -67533,7 +67533,7 @@ async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
   if (!isVaultappHost(ctx)) return null;
   const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
   for (const creds of VAULTAPP_LAB_CREDENTIALS) {
-    const maxAttempts = creds.username === "rootadmin" ? 2 : 1;
+    const maxAttempts = creds.username === "rootadmin" ? 4 : creds.username === "sysadmin" ? 2 : 1;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const doc = await ctx.probe.get(loginUrl, {
         method: "POST",
@@ -67544,7 +67544,7 @@ async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
       });
       if (vaultappCheckpointBlocked(doc.body)) {
         if (attempt < maxAttempts - 1) {
-          await new Promise((resolve) => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 3000 + attempt * 1500));
           continue;
         }
         break;
