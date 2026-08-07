@@ -40918,6 +40918,7 @@ const PYGOAT_CHALLENGE_ROUTE_LABELS: Record<
 
 const clientSidePygoatChallengeRouteEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (/juicesec\.mrdinesh\.workers\.dev/i.test(pageUrl)) return NEGATIVE;
   const challengeMatch = pageUrl.match(/\/challenge\/(ssrf|xxe|csrf)\b/i);
   if (!challengeMatch) return NEGATIVE;
   const challengeKey = challengeMatch[1]!.toLowerCase();
@@ -58369,6 +58370,10 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
       re: /challenge focuses on.*Logging|Logging<\/strong>/i
     },
     {
+      label: "Terraform state secrets walkthrough",
+      re: /challenge focuses on.*Terraform|What happens in the Terraform state|generating a secret through Terraform/i
+    },
+    {
       label: "AWS Secrets Manager CSI walkthrough",
       re: /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i
     },
@@ -58538,7 +58543,11 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
                       ? "HashiCorp Vault template injection secrets"
                       : /challenge focuses on.*Vault|Vault<\/strong>/i.test(doc.body)
                         ? "HashiCorp Vault secrets"
-                        : /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(doc.body)
+                        : /challenge focuses on.*Terraform|What happens in the Terraform state|generating a secret through Terraform/i.test(
+                              doc.body
+                            )
+                          ? "Terraform state / AWS Secrets Manager secrets"
+                          : /AWS Secrets Manager|CSI-Driver|CSI driver for AWS/i.test(doc.body)
                   ? "AWS Secrets Manager via K8s CSI driver"
                   : /IAM privilege escalation|Parameter Store/i.test(doc.body)
                   ? "IAM privilege escalation / AWS Parameter Store secrets"
@@ -60743,6 +60752,45 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
       }
     ],
     note: "AI Security Platform api-security challenge — Auth & API catalog covers IDOR, cookie auth bypass, rate limiting, and leaked secrets in the Next.js workshop"
+  },
+  idor: {
+    routeRe: /\/challenges\/idor\b/i,
+    markers: [
+      { label: "IDOR challenge route", re: /\/challenges\/idor/i },
+      { label: "IDOR CWE-639 training module", re: /IDOR[\s\S]{0,48}CWE-639/i },
+      {
+        label: "predictable ID access without authorization",
+        re: /Accessing objects by predictable IDs without authorization checks/i
+      },
+      { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
+    ],
+    note: "AI Security Platform idor challenge — predictable object IDs reachable without authorization checks (CWE-639)"
+  },
+  "open-redirect": {
+    routeRe: /\/challenges\/open-redirect\b/i,
+    markers: [
+      { label: "Open Redirect challenge route", re: /\/challenges\/open-redirect/i },
+      { label: "Open Redirect CWE-601 training module", re: /Redirect[\s\S]{0,48}CWE-601/i },
+      {
+        label: "unvalidated redirect to attacker URL",
+        re: /Unvalidated redirects that route users to attacker-controlled URLs/i
+      },
+      { label: "Client-side challenge category", re: /Client-side/i }
+    ],
+    note: "AI Security Platform open-redirect challenge — unvalidated redirects route users to attacker-controlled URLs (CWE-601)"
+  },
+  xss: {
+    routeRe: /\/challenges\/xss\b/i,
+    markers: [
+      { label: "XSS challenge route", re: /\/challenges\/xss/i },
+      { label: "Cross-Site Scripting CWE-79 training module", re: /XSS[\s\S]{0,48}CWE-79/i },
+      {
+        label: "malicious script injection into pages",
+        re: /Injecting malicious scripts into pages viewed by other users/i
+      },
+      { label: "Client-side challenge category", re: /Client-side/i }
+    ],
+    note: "AI Security Platform xss challenge — reflected/stored script injection into pages viewed by other users (CWE-79)"
   }
 };
 
@@ -60784,6 +60832,15 @@ const aiSecurityPrivacyPolicyRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityApiSecurityRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "api-security");
+
+const aiSecurityIdorRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "idor");
+
+const aiSecurityOpenRedirectRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "open-redirect");
+
+const aiSecurityXssRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "xss");
 
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
@@ -69355,6 +69412,9 @@ export const RULES: Record<string, Rule> = {
   clientSideAiSecurityPlatformEvidence,
   aiSecurityPrivacyPolicyRouteLiveOracle,
   aiSecurityApiSecurityRouteLiveOracle,
+  aiSecurityIdorRouteLiveOracle,
+  aiSecurityOpenRedirectRouteLiveOracle,
+  aiSecurityXssRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
   juiceShopForgottenBackupRouteLiveOracle,
   juiceShopProductsSearchSqliRouteLiveOracle,
