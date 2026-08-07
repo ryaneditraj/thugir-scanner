@@ -56414,14 +56414,19 @@ const juiceShopSaveLoginIpLiveOracle: Rule = async (ctx) => {
   const token = await juiceShopProbeLoginToken(ctx);
   if (!token) return NEGATIVE;
   const url = new URL("/rest/saveLoginIp", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, {
+  const probeOpts = {
     maxBytes: 4096,
     timeoutMs: 15000,
     headers: {
       Authorization: `Bearer ${token}`,
       "True-Client-IP": JUICE_SHOP_SAVE_LOGIN_IP_PROBE
     }
-  });
+  };
+  // Route scans cache unauthenticated 401 on /rest/saveLoginIp — bypass probe for authenticated reflection check.
+  let doc = await fetchDoc(url, probeOpts);
+  if (doc.status < 200 || doc.status >= 300) {
+    doc = await ctx.probe.get(url, probeOpts);
+  }
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   if (!new RegExp(`"lastLoginIp"\\s*:\\s*"${JUICE_SHOP_SAVE_LOGIN_IP_PROBE}"`).test(doc.body)) {
     return NEGATIVE;
