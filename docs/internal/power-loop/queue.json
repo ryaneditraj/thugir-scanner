@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T08:08:00.000Z",
+  "updated_at": "2026-08-07T09:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/9",
+      "source": "OWASP WrongSecrets — Terraform secrets challenge GET /challenge/9 (Heroku public demo, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1024",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1024 (public Vercel demo, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1025",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1025 (public Vercel demo, 09 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/jwt-login",
+      "source": "chethan-vinayak/vulnshop — JWT none-algorithm bypass oracle GET /jwt-login (Vercel OSS deploy README, 09 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/buy-ticket",
+      "source": "chethan-vinayak/vulnshop — race-condition ticket purchase oracle POST /buy-ticket (Vercel OSS deploy, 09 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1021",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1021 (Hack Club devlog, 07 UTC discovery)",
