@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-07T02:05:00.000Z",
+  "updated_at": "2026-08-07T03:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/export-orders",
+      "source": "ctfsec/pwnshop — PWN-013 CSV formula injection oracle GET /admin/export-orders (vulnerabilities index, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/logs",
+      "source": "ctfsec/pwnshop — PWN-027 plaintext password audit-log exposure GET /logs (vulnerabilities index, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1014",
+      "source": "Web Security Learning Labs — CSRF module catalog oracle GET /module/1014 (public Vercel demo, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1015",
+      "source": "Web Security Learning Labs — JWT security module catalog oracle GET /module/1015 (public Vercel demo, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://idor-website.vercel.app/api/employees/3",
+      "source": "IDOR Lab SecureBank — employee record #3 IDOR oracle GET /api/employees/:id (idor-website Vercel deploy, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/subscriptions",
       "source": "NeuraLegion/brokencrystals — DOM XSS mailing-list oracle POST /api/subscriptions?email= (README DOM XSS section, 02 UTC discovery)",
