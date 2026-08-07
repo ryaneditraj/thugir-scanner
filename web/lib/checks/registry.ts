@@ -33761,8 +33761,15 @@ const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
   }
   if (isKnownHost && moduleMatch) {
     const moduleId = moduleMatch[1]!;
-    const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId];
-    if (topic && (checkpointBlocked || webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus))) {
+    const topic =
+      WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] ??
+      (webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus)
+        ? WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC
+        : undefined);
+    if (
+      topic &&
+      (checkpointBlocked || webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus))
+    ) {
       return {
         fired: true,
         confidence: 0.86,
@@ -33777,6 +33784,9 @@ const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
   }
   return NEGATIVE;
 };
+
+const WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC =
+  "Interactive vulnerability lab (CSR placeholder shell)";
 
 const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1011": "SQL Injection",
@@ -33855,16 +33865,17 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
   const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
   if (!moduleMatch) return NEGATIVE;
   const moduleId = moduleMatch[1];
-  const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId];
-  if (!topic) return NEGATIVE;
   let corpus = `${ctx.combined}\n${pageUrl}`;
   let checkpointBlocked = false;
   const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
   corpus += "\n" + moduleDoc.body;
   if (webSecurityLearningLabsCheckpointBlocked(moduleDoc.body)) checkpointBlocked = true;
+  let placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
+  const mappedTopic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId];
   if (
-    !webSecurityLearningModuleTopicMatches(moduleId, topic, corpus) &&
-    !webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus)
+    mappedTopic &&
+    !webSecurityLearningModuleTopicMatches(moduleId, mappedTopic, corpus) &&
+    !placeholderShell
   ) {
     const modulesDoc = await fetchDoc(new URL("/learn/modules", ctx.origin).toString(), {
       maxBytes: 65536,
@@ -33882,8 +33893,11 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
       corpus += "\n" + chunkDoc.body;
       if (webSecurityLearningLabsCheckpointBlocked(chunkDoc.body)) checkpointBlocked = true;
     }
+    placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
   }
-  const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
+  const topic =
+    mappedTopic ?? (placeholderShell ? WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC : undefined);
+  if (!topic) return NEGATIVE;
   const topicHit =
     webSecurityLearningModuleTopicMatches(moduleId, topic, corpus) || placeholderShell;
   const brandHit = /Web Security Learning Labs/i.test(corpus);
