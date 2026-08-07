@@ -15,7 +15,10 @@ export function extractApiPaths(text: string, limit = 10): string[] {
       const p = m[1].split("?")[0].replace(/\/+$/, "") || m[1];
       if (p.includes("${") || p.includes("{{") || p.includes("{") || p.length > 80) continue;
       if (/\.(js|css|png|jpg|svg|ico|map)$/i.test(p)) continue;
-      paths.add(p.startsWith("/") ? p : `/${p}`);
+      const normalized = p.startsWith("/") ? p : `/${p}`;
+      // Protocol-relative "//" from JS comments breaks jwtAlgNoneProbe new URL(path, origin).
+      if (normalized === "/" || normalized === "//" || /^\/\/+$/.test(normalized)) continue;
+      paths.add(normalized);
       if (paths.size >= limit * 2) break;
     }
   }

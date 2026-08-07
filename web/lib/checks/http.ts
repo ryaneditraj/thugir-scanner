@@ -29,7 +29,7 @@ const BROWSER_UA =
 const UA = `${BROWSER_UA} ThugirScanner/1.0 (+https://thugirlabs.com/scanner)`;
 
 /** Known training labs with expired or mis-issued TLS — retry fetch with verification disabled. */
-const INSECURE_TLS_LAB_HOSTS = new Set(["bugbait.io"]);
+const INSECURE_TLS_LAB_HOSTS = new Set(["bugbait.io", "testfire.net", "demo2.testfire.net"]);
 
 const insecureTlsAgent = new https.Agent({ rejectUnauthorized: false });
 
