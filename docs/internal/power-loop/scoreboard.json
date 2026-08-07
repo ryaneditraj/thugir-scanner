@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T22:06:00.000Z",
+  "updated_at": "2026-08-07T22:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2870,
-  "total_findings": 28847,
+  "total_findings": 28851,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2026,
   "discovery_findings": 23742,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-07T22:06:00.000Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-07T22:18:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -48,39 +48,49 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (48 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com unreachable; staging fallback 6/6 (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 44,
-      "focus": "WSL modules 1066-1070 catalog expansion + queue drain (1059-1060, vulnshop users)",
-      "improvements_shipped_this_run": 0
+      "focus": "engine evolve — WSL RSC placeholder regex + seeds 1061-1065 + vaultapp checkpoint retry/export user_id; WSL 1066-1070 queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1065: RSC placeholder regex improves module-route-evidence on CSR shells (3→8 when checkpoint allows)",
       "web-security-learning-labs.vercel.app/module/1066-1068: 8 findings each with reflexion-escalated-ssti + module-route-evidence",
       "web-security-learning-labs.vercel.app/module/1069-1070: 3 findings — placeholder shells (SSTI only)",
-      "web-security-learning-labs.vercel.app/module/1059-1060: queue drain 3 findings each (SSTI shells)",
+      "vaultapp-omega.vercel.app: login checkpoint retry + account-export user_id username resolution wired (Vercel checkpoint blocks automated probes intermittently)",
+      "bypass403.vercel.app/admin + ssrf.vulnlab.dev/basic: live oracles fire when scanned directly (15 SSRF + 6 bypass403 findings)",
       "vulnshop.vercel.app/api/v1/users: 8 findings with vulnshop-users-enumeration-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop benchmark (Resend key not in current social feeds)",
       "juice-shop.herokuapp.com primary Heroku dyno 503 — staging fallback required",
+      "vaultapp-omega.vercel.app + bypass403.vercel.app: Vercel Security Checkpoint intermittently blocks automated login/probes",
       "WSL modules 1069-1070: thinner placeholder shells vs 1066-1068 full SSTI labs",
-      "vaultapp.vercel.app /api/users/1 + /login queued at tail — pending drain",
-      "bypass403.vercel.app: Vercel Security Checkpoint intermittently blocks automated probes"
+      "pwnshop.ctfsecurity.com/apply-coupon + profile/upload-avatar: authenticated coupon/XSS oracles still absent without OTP session"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
+    "web-security-learning-labs.vercel.app/module/1060": 8,
+    "web-security-learning-labs.vercel.app/module/1061": 8,
+    "web-security-learning-labs.vercel.app/module/1062": 8,
+    "web-security-learning-labs.vercel.app/module/1063": 8,
+    "web-security-learning-labs.vercel.app/module/1064": 6,
+    "web-security-learning-labs.vercel.app/module/1065": 8,
     "web-security-learning-labs.vercel.app/module/1066": 8,
     "web-security-learning-labs.vercel.app/module/1067": 8,
     "web-security-learning-labs.vercel.app/module/1068": 8,
     "web-security-learning-labs.vercel.app/module/1069": 3,
     "web-security-learning-labs.vercel.app/module/1070": 3,
+    "ssrf.vulnlab.dev/basic": 15,
+    "bypass403.vercel.app/admin": 6,
     "vulnshop.vercel.app/api/v1/users": 8
   }
 }
