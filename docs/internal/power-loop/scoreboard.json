@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T14:30:00.000Z",
+  "updated_at": "2026-08-07T15:04:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2798,
-  "total_findings": 27964,
+  "total_sites_scanned": 2816,
+  "total_findings": 28224,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1991,
-  "discovery_findings": 23341,
-  "improvements_shipped": 1172,
-  "last_run": "2026-08-07T14:30:00.000Z",
+  "discovery_urls_added": 1996,
+  "discovery_findings": 23420,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-07T15:04:30.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 505,
+      "probes_run": 502,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (51 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 55,
-      "focus": "vulnbank v3 user IDOR + v3 reset-password API versioning + WSLL module route placeholder fix",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 79,
+      "focus": "WSL modules 1037-1040 SSTI + pwnshop /debug/info secret disclosure hub",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "vulnbank.org/api/v3/user/1: 24 findings — vulnbank-v3-user-idor live+route oracles (GET returns cross-user profile without authz)",
-      "vulnbank.org/api/v3/reset-password: 24 findings — vulnbank-v3-reset-password-versioning live+route oracles (v1 PIN leak resets via v3)",
-      "web-security-learning-labs.vercel.app/module/1025: 7 findings — web-security-learning-labs-module-route-evidence restored via HTML-comment tolerant placeholder regex"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/debug/info: 42 findings — pwnshop-debug-info-live-oracle exposes sessionSecret + CHAT_OVERRIDE_TOKEN (PWN-018)",
+      "pwnshop.ctfsecurity.com/debug/info: coupon-category-bypass + verify-otp-bruteforce + seller-preview SSTI live oracles from debug hub crawl",
+      "web-security-learning-labs.vercel.app/module/1037-1040: 7 findings each — reflexion-escalated-ssti on new module catalog",
+      "web-security-learning-labs.vercel.app/module/1034-1036: 3 findings each — rescanned (48h window expired)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "web-security-learning-labs modules 1026+ lack curated topic map entries (placeholder fix only covers 1011–1025)"
+      "pwnshop /api/v1/events: unauthenticated audit log (PWN-005) not yet a dedicated queue head URL",
+      "web-security-learning-labs modules 1041+ not yet cataloged for discovery"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "vulnbank.org/api/v3/user/1": 24,
-    "vulnbank.org/api/v3/reset-password": 24,
-    "web-security-learning-labs.vercel.app/module/1025": 7,
-    "juice-shop-staging.herokuapp.com/rest/saveLoginIp": 50,
-    "pentest-fauxbank.vercel.app/transfer": 13,
-    "pwnshop.ctfsecurity.com/admin/export-orders": 45
+    "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/debug/info": 42,
+    "web-security-learning-labs.vercel.app/module/1037": 7,
+    "web-security-learning-labs.vercel.app/module/1038": 7,
+    "web-security-learning-labs.vercel.app/module/1039": 7,
+    "web-security-learning-labs.vercel.app/module/1040": 7,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 45,
+    "vulnbank.org/api/v3/user/1": 24
   }
 }
