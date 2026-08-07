@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T10:02:45.644Z",
+  "updated_at": "2026-08-07T10:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2753,
-  "total_findings": 27067,
+  "total_sites_scanned": 2761,
+  "total_findings": 27123,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 22800,
+  "discovery_urls_added": 1971,
+  "discovery_findings": 22856,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-07T10:02:45.644Z",
+  "last_run": "2026-08-07T10:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 489,
+      "probes_run": 485,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,40 +53,38 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 13,
-      "findings": 86,
-      "focus": "JuiceSec 10-challenge catalog + BuggyBuy degraded Render BOLA oracle + WSL checkpoint client-side fallback + wrongsecrets challenge/9 + vulnshop seeds",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 56,
+      "focus": "vulnshop hidden-admin paths + deserialization + WSL module/1026 SSTI + wrongsecrets challenge/9 + queue drain 1024-1025",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
-      "juicesec.mrdinesh.workers.dev/challenge/robots|cmdi|broken-auth: 2→3 findings — full 10-challenge JuiceSec catalog route oracles",
-      "vulnerable-web-application-jecw.vercel.app/api/orders: 6→9 findings — buggybuy-api-bola degraded oracle on Render HTTP 500 JSON",
-      "web-security-learning-labs.vercel.app/module/1019: 4→5 findings — client-side-web-security-learning-labs-evidence checkpoint fallback",
-      "wrongsecrets.herokuapp.com/challenge/8: 11 findings — challenge-8 short URL alias confirmed (logging walkthrough)",
-      "wrongsecrets.herokuapp.com/challenge/9: 11 findings — Terraform challenge walkthrough oracles",
-      "vulnshop.vercel.app/jwt-login: 6 findings — client-side-vulnshop-evidence but no JWT-none live oracle",
-      "web-security-learning-labs.vercel.app/module/1024: 5 findings — reflexion-escalated-ssti + WSL platform evidence"
+      "wrongsecrets.herokuapp.com/challenge/9: 11 findings — challenge oracles + error-demo database-connection live oracle",
+      "web-security-learning-labs.vercel.app/module/1026: 7 findings — reflexion-escalated-ssti + WSL platform evidence",
+      "web-security-learning-labs.vercel.app/module/1024: 7 findings — reflexion-escalated-ssti confirmed",
+      "web-security-learning-labs.vercel.app/module/1025: 7 findings — reflexion-escalated-ssti + WSL evidence",
+      "vulnshop.vercel.app/manager|administrator|api/process|api/info: 6 findings each — client-side-vulnshop-evidence only, no route-specific live oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs; Resend key not in current social feeds)",
-      "vulnshop.vercel.app/jwt-login: JWT alg=none live oracle absent (client-side evidence only)",
-      "vulnshop.vercel.app/buy-ticket: race-condition ticket-purchase live oracle absent",
-      "web-security-learning-labs module/1025: 3-finding generic hub — module-route evidence absent",
-      "pwnshop.ctfsecurity.com/wishlist/:user_id: route 404 on public deploy (PWN-003 not exposed)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vulnshop.vercel.app/manager|administrator: hidden-admin-path live oracle absent (client-side evidence only)",
+      "vulnshop.vercel.app/api/process: insecure-deserialization live oracle absent (client-side evidence only)",
+      "vulnshop.vercel.app/api/info: vulnerable-components disclosure oracle absent",
+      "vulnshop.vercel.app/jwt-login|buy-ticket: JWT-none and race-condition live oracles still absent (queued, not drained this run)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 49,
-    "wrongsecrets.herokuapp.com/challenge/8": 11,
     "wrongsecrets.herokuapp.com/challenge/9": 11,
-    "vulnerable-web-application-jecw.vercel.app/api/orders": 9,
-    "juicesec.mrdinesh.workers.dev/challenge/robots": 3,
-    "web-security-learning-labs.vercel.app/module/1019": 5,
-    "web-security-learning-labs.vercel.app/module/1024": 5,
-    "pwnshop.ctfsecurity.com/admin/export-orders": 47,
-    "ssrf.vulnlab.dev/basic": 15,
-    "vulnshop.vercel.app/jwt-login": 6
+    "web-security-learning-labs.vercel.app/module/1026": 7,
+    "web-security-learning-labs.vercel.app/module/1024": 7,
+    "web-security-learning-labs.vercel.app/module/1025": 7,
+    "vulnshop.vercel.app/manager": 6,
+    "vulnshop.vercel.app/administrator": 6,
+    "vulnshop.vercel.app/api/process": 6,
+    "vulnshop.vercel.app/api/info": 6,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 47
   }
 }
