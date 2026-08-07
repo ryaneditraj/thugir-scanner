@@ -23175,7 +23175,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "FauxBank transfer route live oracle",
     description:
-      "When scanning /api/transfer, POST accepts authenticated fund transfers without a CSRF token — route-specific transfer forgery oracle.",
+      "When scanning /transfer or /api/transfer, POST accepts authenticated fund transfers without a CSRF token — route-specific transfer forgery oracle.",
     impactOneline:
       "Route scans on transfer APIs need live CSRF-missing confirmation with scannedUrl evidence.",
     detectorKind: "rule_ref",
