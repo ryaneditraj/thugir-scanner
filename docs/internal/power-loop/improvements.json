@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended WEB_SECURITY_LEARNING_MODULE_TOPICS to 1014 CSRF / 1015 JWT / 1016 Command Injection / 1017 SSRF / 1018 Prototype Pollution + Vercel checkpoint URL-oracle fallback; web-security-learning-labs.vercel.app/module/1016 findings 7→8 (+module-route evidence); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-transfer-negative-amount-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/v2/transfer confirms POST /transfer amount:-500 credits sender balance; vulnbank.org/api/v2/transfer findings 21→22 (+transfer-negative-amount route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-photo-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route matcher relaxed from isAdmin=true query to /users/one/{id}/photo path — DELETE ?isAdmin=true bypasses auth on /api/users/one/regular_user/photo scan; brokencrystals.com/api/users/one/regular_user/photo findings 78→77 (+photo-bfla-route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-audit-log-plaintext-password-live-oracle",
       "status": "shipped",

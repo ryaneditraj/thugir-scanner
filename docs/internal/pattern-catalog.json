@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-07T04:07:14.263Z",
-  "total": 1969,
-  "uniqueSlugs": 1964,
+  "generatedAt": "2026-08-07T05:21:00.609Z",
+  "total": 1970,
+  "uniqueSlugs": 1965,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1951,
+    "generic": 1952,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1884,
+    "deep": 1885,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 377,
+    "Broken access control": 378,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1879,6 +1879,7 @@
     "vulnbank-transactions-bola-live-oracle",
     "vulnbank-transactions-bola-route-live-oracle",
     "vulnbank-transfer-negative-amount-live-oracle",
+    "vulnbank-transfer-negative-amount-route-live-oracle",
     "vulnbank-upload-profile-picture-url-route-live-oracle",
     "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
     "vulnbank-v1-forgot-password-pin-leak-live-oracle",
