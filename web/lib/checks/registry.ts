@@ -14,7 +14,7 @@ import {
   reflexionEscalatedSqli,
   reflexionEscalatedSsti
 } from "./agent-power";
-import { fetchDoc, looksHtml, type FetchedDoc } from "./http";
+import { fetchDoc, isVercelSecurityCheckpoint, looksHtml, type FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import {
   extractApiPaths,
@@ -11674,25 +11674,36 @@ const bypass403SessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>(
 
 async function bypass403CompleteSessionUncached(ctx: RuleContext): Promise<string | null> {
   const startUrl = new URL("/start", ctx.origin).toString();
-  const username = `thugir_bypass403_${Date.now().toString(36)}`;
-  const doc = await ctx.probe.get(startUrl, {
-    method: "POST",
-    body: `username=${encodeURIComponent(username)}`,
+  const postOpts = {
+    method: "POST" as const,
+    body: `username=${encodeURIComponent(`thugir_bypass403_${Date.now().toString(36)}`)}`,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       "User-Agent": BYPASS403_BROWSER_UA
     },
     maxBytes: 4096,
     timeoutMs: 15000,
-    redirect: "manual"
-  });
-  return bypass403SessionCookieFromDoc(doc);
+    redirect: "manual" as const
+  };
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const doc =
+      attempt === 0 ? await ctx.probe.get(startUrl, postOpts) : await fetchDoc(startUrl, postOpts);
+    const cookie = bypass403SessionCookieFromDoc(doc);
+    if (cookie) return cookie;
+    if (!isVercelSecurityCheckpoint(doc) && doc.status !== 403) break;
+    await new Promise((resolve) => setTimeout(resolve, 1200 * (attempt + 1)));
+  }
+  return null;
 }
 
 async function bypass403CompleteSession(ctx: RuleContext): Promise<string | null> {
   const cached = bypass403SessionByProbe.get(ctx.probe);
   if (cached) return cached;
-  const promise = bypass403CompleteSessionUncached(ctx);
+  const promise = bypass403CompleteSessionUncached(ctx).then((session) => {
+    if (!session) bypass403SessionByProbe.delete(ctx.probe);
+    return session;
+  });
   bypass403SessionByProbe.set(ctx.probe, promise);
   return promise;
 }
@@ -11716,7 +11727,23 @@ export async function primeBypass403SessionForDeepScan(
   if (!/bypass403\.vercel\.app/i.test(origin)) return;
   if (!/\/(?:admin|secret|config|waf|debug|internal|secure|api\/admin)\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
-  await bypass403CompleteSession(ctx);
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const session = await bypass403CompleteSession(ctx);
+    if (!session) {
+      bypass403SessionByProbe.delete(probe);
+      await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
+      continue;
+    }
+    const headers = await bypass403RequestHeaders(ctx);
+    const health = await fetchDoc(new URL("/api/admin", origin).toString(), {
+      maxBytes: 512,
+      timeoutMs: 12000,
+      headers
+    });
+    if (health.status === 403) return;
+    bypass403SessionByProbe.delete(probe);
+    await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
+  }
 }
 
 async function probeBypass403WafCfConnectingIp(ctx: RuleContext): Promise<RuleResult | null> {
@@ -11820,26 +11847,29 @@ const bypass403AdminRouteLiveOracle: Rule = async (ctx) => {
 
 async function probeBypass403ApiAdminSemicolon(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
-  const headers = await bypass403RequestHeaders(ctx);
   const adminUrl = new URL("/api/admin", ctx.origin).toString();
-  const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096, headers });
-  if (baseline.status !== 403) return null;
-  const bypassUrls = forbidden403BypassUrls(ctx.origin, "/api/admin");
-  for (const bypassUrl of bypassUrls) {
-    const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096, headers });
-    if (bypass.status < 200 || bypass.status >= 300) continue;
-    if (!/flag\{|semicolon|bypass success/i.test(bypass.body)) continue;
-    return {
-      fired: true,
-      confidence: 0.94,
-      evidence: {
-        original: adminUrl,
-        bypass: bypassUrl,
-        status: bypass.status,
-        snippet: bypass.body.slice(0, 200).trim(),
-        note: "bypass403.vercel.app GET /api/admin returns 403 but /api/admin/..;/ semicolon path bypass returns success flag — BypassX API path-normalization lab oracle"
-      }
-    };
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if (attempt > 0) bypass403SessionByProbe.delete(ctx.probe);
+    const headers = await bypass403RequestHeaders(ctx);
+    const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096, headers });
+    if (baseline.status !== 403) return null;
+    const bypassUrls = forbidden403BypassUrls(ctx.origin, "/api/admin");
+    for (const bypassUrl of bypassUrls) {
+      const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096, headers });
+      if (bypass.status < 200 || bypass.status >= 300) continue;
+      if (!/flag\{|semicolon|bypass success/i.test(bypass.body)) continue;
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          original: adminUrl,
+          bypass: bypassUrl,
+          status: bypass.status,
+          snippet: bypass.body.slice(0, 200).trim(),
+          note: "bypass403.vercel.app GET /api/admin returns 403 but /api/admin/..;/ semicolon path bypass returns success flag — BypassX API path-normalization lab oracle"
+        }
+      };
+    }
   }
   return null;
 }
