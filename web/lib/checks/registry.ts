@@ -30188,17 +30188,30 @@ async function probeWhoopsPayAdminExpressLogsDisclosure(ctx: RuleContext): Promi
   const url = new URL("/api/admin/logs/express", ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     headers: { Accept: "application/json", Cookie: session.cookie },
-    maxBytes: 65536,
+    maxBytes: 262144,
     timeoutMs: 20000
   });
   if (doc.status < 200 || doc.status >= 300) return null;
-  let parsed: { logs?: unknown } | null = null;
+  let logs: string[] = [];
   try {
-    parsed = JSON.parse(doc.body) as { logs?: unknown };
+    const parsed = JSON.parse(doc.body) as { logs?: unknown };
+    logs = Array.isArray(parsed?.logs) ? (parsed.logs as string[]) : [];
   } catch {
-    return null;
+    const leakFromRaw = doc.body.match(
+      /POST \/api\/login[\s\S]{0,240}?\\"password\\":\\"[^\\]+\\"/
+    );
+    if (!leakFromRaw) return null;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url,
+        adminHandle: session.handle,
+        snippet: leakFromRaw[0].slice(0, 280),
+        note: "WhoopsPay GET /api/admin/logs/express returns request logs with plaintext login passwords — admin express log sensitive-data disclosure oracle"
+      }
+    };
   }
-  const logs = Array.isArray(parsed?.logs) ? (parsed.logs as string[]) : [];
   if (logs.length === 0) return null;
   const passwordLeak = logs.find(
     (line) =>
