@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-08T18:04:25.529Z",
+  "updated_at": "2026-08-08T19:03:52.377Z",
   "discovery_urls": [
+    {
+      "url": "https://bypass403.vercel.app/secret",
+      "source": "Karthikdude/bypass403 — protected /secret path normalization bypass oracle (bypass403.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/config",
+      "source": "Karthikdude/bypass403 — protected /config header-manipulation bypass oracle (bypass403.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/internal",
+      "source": "Karthikdude/bypass403 — protected /internal endpoint for 403 bypass lab (GitHub README live demo, 00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/vulnerabilities/sqli/",
+      "source": "PentestForge Lab — hosted DVWA SQLi oracle GET /vulnerabilities/sqli/ (lab.pentest-forge.com, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mutillidae.lab.pentest-forge.com/user-info.php",
+      "source": "PentestForge Lab — Mutillidae user-info.php IDOR/session oracle (lab.pentest-forge.com, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31",
       "source": "NeuraLegion/brokencrystals — business-constraint bypass oracle GET /api/products?date_from=&date_to= (README llms.txt, 17 UTC discovery)",
@@ -16856,16 +16881,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://bypass403.vercel.app/secret",
-      "source": "Karthikdude/bypass403 — protected /secret path normalization bypass oracle (bypass403.vercel.app)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://bypass403.vercel.app/config",
-      "source": "Karthikdude/bypass403 — protected /config header-manipulation bypass oracle (bypass403.vercel.app)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vaultapp-omega.vercel.app/api/users/1",
       "source": "MRMcyber/vaultapp — IDOR users API GET /api/users/:id on vaultapp-omega.vercel.app (canonical; vaultapp.vercel.app hosts Clutch-It)",
       "auth": "oss_deploy"
@@ -16874,11 +16889,6 @@
       "url": "https://vaultapp-omega.vercel.app/login",
       "source": "MRMcyber/vaultapp — lab login with documented test credentials player/player123 (vaultapp-omega.vercel.app)",
       "auth": "oss_deploy"
-    },
-    {
-      "url": "https://bypass403.vercel.app/internal",
-      "source": "Karthikdude/bypass403 — protected /internal endpoint for 403 bypass lab (GitHub README live demo, 00 UTC discovery)",
-      "auth": "public_demo"
     },
     {
       "url": "https://bypass403.vercel.app/debug",
@@ -16973,6 +16983,11 @@
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/14",
       "source": "OWASP WrongSecrets — challenge/14 secret oracle (wrongsecrets.herokuapp.com, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.lab.pentest-forge.com/rest/admin/application-configuration",
+      "source": "PentestForge Lab — Juice Shop admin config oracle (juice-shop.lab.pentest-forge.com, 19 UTC discovery)",
       "auth": "public_demo"
     }
   ],
