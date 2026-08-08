@@ -42844,6 +42844,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-forge-dvwa-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge DVWA SQL injection route live oracle",
+    description:
+      "When scanning /vulnerabilities/sqli/ on dvwa.lab.pentest-forge.com, POST id=1' OR '1'='1 returns multiple user rows — PentestForge hosted DVWA SQL injection route oracle.",
+    impactOneline:
+      "Unsanitized SQL concatenation on PentestForge DVWA id parameters lets attackers dump every user record with a tautology payload.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — use parameterized queries instead of string concatenation.",
+      steps: [
+        "Bind user input with prepared statements or ORM parameterization.",
+        "Reject unexpected characters in numeric ID fields.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/sqli/ route concatenates id into SQL. Show injection remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "the-internet-shadowdom-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",

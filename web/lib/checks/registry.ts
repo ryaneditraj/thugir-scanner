@@ -34984,15 +34984,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1164; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1169; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1164 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1164; moduleNum++) {
+/** CSR placeholder shells 1125–1169 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1169; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35000,7 +35000,7 @@ for (let moduleNum = 1125; moduleNum <= 1164; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 40 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 45 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -39338,6 +39338,45 @@ const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
       userRows,
       snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
       note: "Pentest-Ground DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — SQL injection route oracle"
+    }
+  };
+};
+
+function isPentestForgeDvwaHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /dvwa\.lab\.pentest-forge\.com/i.test(corpus);
+}
+
+function pentestForgeDvwaProbeOrigin(ctx: RuleContext): string {
+  if (isPentestForgeDvwaHost(ctx)) return "https://dvwa.lab.pentest-forge.com";
+  return ctx.origin;
+}
+
+const pentestForgeDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/sqli\/?/i.test(pageUrl)) return NEGATIVE;
+  const sqliUrl = new URL("/vulnerabilities/sqli/", pentestForgeDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(sqliUrl, {
+    method: "POST",
+    body: "id=1' OR '1'='1&Submit=Submit",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/1' OR '1'='1/i.test(doc.body)) return NEGATIVE;
+  const userRows = (doc.body.match(/First name:/gi) || []).length;
+  if (userRows < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      sqliUrl,
+      userRows,
+      snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
+      note: "PentestForge DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — dvwa.lab.pentest-forge.com SQL injection route oracle"
     }
   };
 };
@@ -70642,6 +70681,7 @@ export const RULES: Record<string, Rule> = {
   pentestGroundDvwaExecCmdiRouteLiveOracle,
   pentestGroundDvwaCspBypassRouteLiveOracle,
   pentestGroundDvwaSqliRouteLiveOracle,
+  pentestForgeDvwaSqliRouteLiveOracle,
   pentestGroundDvwaUploadRouteLiveOracle,
   pentestGroundDvwaCsrfRouteLiveOracle,
   pentestGroundDvwaXssRRouteLiveOracle,
