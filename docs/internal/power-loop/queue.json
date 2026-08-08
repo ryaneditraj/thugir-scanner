@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T17:06:55.297Z",
+  "updated_at": "2026-08-08T18:04:25.529Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31",
@@ -16949,7 +16949,32 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1124",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1124 (public Vercel demo, 10 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/10",
+      "source": "OWASP WrongSecrets — challenge/10 secret exposure oracle (public Heroku demo, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/11",
+      "source": "OWASP WrongSecrets — challenge/11 secret oracle (wrongsecrets.herokuapp.com, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/12",
+      "source": "OWASP WrongSecrets — challenge/12 secret oracle (wrongsecrets.herokuapp.com, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/13",
+      "source": "OWASP WrongSecrets — challenge/13 secret oracle (wrongsecrets.herokuapp.com, 18 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/14",
+      "source": "OWASP WrongSecrets — challenge/14 secret oracle (wrongsecrets.herokuapp.com, 18 UTC discovery)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 5
+  "discovery_urls_added": 10
 }
