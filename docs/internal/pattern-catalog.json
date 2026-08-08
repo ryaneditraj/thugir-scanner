@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-08T10:15:07.709Z",
-  "total": 2032,
-  "uniqueSlugs": 2028,
+  "generatedAt": "2026-08-08T11:17:20.342Z",
+  "total": 2034,
+  "uniqueSlugs": 2030,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2014,
+    "generic": 2016,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1947,
+    "deep": 1949,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 106,
     "Security misconfiguration": 147,
-    "Broken authentication": 122,
+    "Broken authentication": 124,
     "Injection": 289,
     "Cross-site scripting": 668,
     "Open redirect": 16,
@@ -1881,6 +1881,8 @@
     "vibe-supabase-storage-public",
     "vibe-unauthenticated-api-routes",
     "vibe-weak-csp",
+    "voting-app-signup-open-live-oracle",
+    "voting-app-signup-open-route-live-oracle",
     "voting-app-user-polls-idor-live-oracle",
     "voting-app-user-polls-idor-route-live-oracle",
     "voting-app-vote-stuffing-live-oracle",
