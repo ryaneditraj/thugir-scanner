@@ -31680,6 +31680,60 @@ const votingAppVoteStuffingRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function votingAppSignupOpenProbe(ctx: RuleContext): Promise<RuleResult | null> {
+  const signupUrl = new URL("/api/signup", ctx.origin).toString();
+  const name = `thugir_probe_${Date.now().toString(36).slice(-8)}`;
+  const doc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({ name, password: "ThugirProbe123!" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status === 429 || /rate limit|too many requests/i.test(doc.body)) return null;
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let userId = "";
+  try {
+    const parsed = JSON.parse(doc.body) as { id?: string };
+    userId = String(parsed.id ?? "");
+  } catch {
+    return null;
+  }
+  if (!/^[a-f0-9]{24}$/i.test(userId)) return null;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: signupUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Voting App POST /api/signup creates a MongoDB user without authentication or invite — open registration oracle"
+    }
+  };
+}
+
+const votingAppSignupOpenLiveOracle: Rule = async (ctx) => {
+  if (!isVotingAppHost(ctx)) return NEGATIVE;
+  const hit = await votingAppSignupOpenProbe(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const votingAppSignupOpenRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVotingAppHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/signup\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await votingAppSignupOpenProbe(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Voting App /api/signup route scan — POST creates a user without authentication — route-specific open registration oracle"
+    }
+  };
+};
+
 const CLIENT_VOTING_APP_RES: { label: string; re: RegExp }[] = [
   { label: "Voting App by SSbit01 title", re: /Voting App by SSbit01/i },
   { label: "MongoDB-backed poll platform", re: /create polls and everyone can vote/i },
@@ -34900,7 +34954,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1119; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1124; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
@@ -69855,6 +69909,8 @@ export const RULES: Record<string, Rule> = {
   votingAppUserPollsIdorRouteLiveOracle,
   votingAppVoteStuffingLiveOracle,
   votingAppVoteStuffingRouteLiveOracle,
+  votingAppSignupOpenLiveOracle,
+  votingAppSignupOpenRouteLiveOracle,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,

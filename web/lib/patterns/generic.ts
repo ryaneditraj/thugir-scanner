@@ -51312,5 +51312,57 @@ export const genericPatterns: Pattern[] = [
       "Our /api/vote route scan confirms vote stuffing via fresh anonymous sessions. Show route-level remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "voting-app-signup-open-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Voting App open registration live oracle",
+    description:
+      "POST /api/signup creates a MongoDB user without authentication or invite — the SSbit01 Voting App open registration oracle.",
+    impactOneline:
+      "Open registration on poll platforms enables mass account creation for vote manipulation and enumeration attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppSignupOpenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require invite codes or admin approval before creating poll accounts.",
+      steps: [
+        "Disable public signup on production poll deployments.",
+        "Rate-limit POST /api/signup and require email verification.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/signup endpoint creates users without authentication. Show open registration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-signup-open-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Voting App open registration route live oracle",
+    description:
+      "When scanning /api/signup, POST creates a MongoDB user without authentication — route-specific open registration oracle.",
+    impactOneline:
+      "Route-scoped scans should confirm poll signup endpoints are not open to unauthenticated mass registration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppSignupOpenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require invite codes or admin approval before creating poll accounts.",
+      steps: [
+        "Disable public signup on production poll deployments.",
+        "Rate-limit POST /api/signup and require email verification.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/signup route scan confirms open registration. Show route-level signup hardening.",
+    version: 1,
+    enabled: true
   }
 ];
