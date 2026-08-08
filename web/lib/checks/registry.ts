@@ -31438,27 +31438,37 @@ type VotingAppPoll = { _id?: string; question?: string; answers?: VotingAppPollA
 async function votingAppRegisterSession(
   ctx: RuleContext
 ): Promise<{ cookie: string; userId: string } | null> {
-  const name = `t${Date.now().toString(36).slice(-7)}${Math.random().toString(36).slice(2, 5)}`;
   const signupUrl = new URL("/api/signup", ctx.origin).toString();
-  const doc = await ctx.probe.get(signupUrl, {
-    method: "POST",
-    body: JSON.stringify({ name, password: "ThugirProbe123!" }),
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    maxBytes: 4096,
-    timeoutMs: 20000
-  });
-  if (doc.status < 200 || doc.status >= 300) return null;
-  let userId = "";
-  try {
-    const parsed = JSON.parse(doc.body) as { id?: string };
-    userId = String(parsed.id ?? "");
-  } catch {
-    return null;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const name = `t${Date.now().toString(36).slice(-7)}${Math.random().toString(36).slice(2, 5)}`;
+    const doc = await ctx.probe.get(signupUrl, {
+      method: "POST",
+      body: JSON.stringify({ name, password: "ThugirProbe123!" }),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 20000
+    });
+    if (doc.status === 429 || /rate limit|too many requests/i.test(doc.body)) {
+      if (attempt < 3) {
+        await new Promise((resolve) => setTimeout(resolve, 2500 + attempt * 2000));
+        continue;
+      }
+      return null;
+    }
+    if (doc.status < 200 || doc.status >= 300) return null;
+    let userId = "";
+    try {
+      const parsed = JSON.parse(doc.body) as { id?: string };
+      userId = String(parsed.id ?? "");
+    } catch {
+      return null;
+    }
+    if (!/^[a-f0-9]{24}$/i.test(userId)) return null;
+    const cookie = votingAppSessionCookieFromDoc(doc);
+    if (!cookie) return null;
+    return { cookie, userId };
   }
-  if (!/^[a-f0-9]{24}$/i.test(userId)) return null;
-  const cookie = votingAppSessionCookieFromDoc(doc);
-  if (!cookie) return null;
-  return { cookie, userId };
+  return null;
 }
 
 async function votingAppCreatePoll(ctx: RuleContext, cookie: string): Promise<string | null> {
@@ -34804,7 +34814,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1104; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1114; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;

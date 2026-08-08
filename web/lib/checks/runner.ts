@@ -290,9 +290,20 @@ async function fetchJuiceShopSocialFeedBodies(
     if (bskyUrl) {
       const handle = bskyUrl.match(/profile\/([^/?#]+)/i)?.[1];
       if (handle) {
-        const feedUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${encodeURIComponent(handle)}&limit=20`;
-        const doc = await probe.get(feedUrl, { maxBytes: 96_000, timeoutMs: 12000 });
-        if (doc.status >= 200 && doc.status < 400) chunks.push(doc.body);
+        let cursor: string | undefined;
+        for (let page = 0; page < 5; page++) {
+          const feedUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${encodeURIComponent(handle)}&limit=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`;
+          const doc = await probe.get(feedUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+          if (doc.status < 200 || doc.status >= 400) break;
+          chunks.push(doc.body);
+          try {
+            const parsed = JSON.parse(doc.body) as { cursor?: string };
+            cursor = parsed.cursor;
+            if (!cursor) break;
+          } catch {
+            break;
+          }
+        }
       }
     }
 
@@ -306,9 +317,22 @@ async function fetchJuiceShopSocialFeedBodies(
         if (lookup.status >= 200 && lookup.status < 400) {
           const idMatch = lookup.body.match(/"id"\s*:\s*"(\d+)"/);
           if (idMatch) {
-            const statusesUrl = `${instance}/api/v1/accounts/${idMatch[1]}/statuses?limit=25`;
-            const statuses = await probe.get(statusesUrl, { maxBytes: 96_000, timeoutMs: 12000 });
-            if (statuses.status >= 200 && statuses.status < 400) chunks.push(statuses.body);
+            let maxId: string | null = null;
+            for (let page = 0; page < 5; page++) {
+              const statusesUrl = `${instance}/api/v1/accounts/${idMatch[1]}/statuses?limit=40${maxId ? `&max_id=${maxId}` : ""}`;
+              const statuses = await probe.get(statusesUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+              if (statuses.status < 200 || statuses.status >= 400) break;
+              chunks.push(statuses.body);
+              try {
+                const posts = JSON.parse(statuses.body) as Array<{ id?: string }>;
+                if (!Array.isArray(posts) || posts.length === 0) break;
+                const lastId = posts[posts.length - 1]?.id;
+                if (!lastId || posts.length < 40) break;
+                maxId = lastId;
+              } catch {
+                break;
+              }
+            }
           }
         }
       }
@@ -318,13 +342,26 @@ async function fetchJuiceShopSocialFeedBodies(
     if (redditUrl) {
       const subMatch = redditUrl.match(/reddit\.com\/r\/([^/?#]+)/i);
       if (subMatch) {
-        const feedUrl = `https://www.reddit.com/r/${encodeURIComponent(subMatch[1]!)}/new.json?limit=25`;
-        const feed = await probe.get(feedUrl, {
-          maxBytes: 96_000,
-          timeoutMs: 12000,
-          headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
-        });
-        if (feed.status >= 200 && feed.status < 400) chunks.push(feed.body);
+        let after: string | undefined;
+        for (let page = 0; page < 4; page++) {
+          const feedUrl = `https://www.reddit.com/r/${encodeURIComponent(subMatch[1]!)}/new.json?limit=100${after ? `&after=${encodeURIComponent(after)}` : ""}`;
+          const feed = await probe.get(feedUrl, {
+            maxBytes: 96_000,
+            timeoutMs: 12000,
+            headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+          });
+          if (feed.status < 200 || feed.status >= 400) break;
+          chunks.push(feed.body);
+          try {
+            const parsed = JSON.parse(feed.body) as {
+              data?: { after?: string; children?: unknown[] };
+            };
+            after = parsed.data?.after;
+            if (!after || !parsed.data?.children?.length) break;
+          } catch {
+            break;
+          }
+        }
       }
     }
   } catch {
@@ -6510,7 +6547,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036", "1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075", "1076", "1077", "1078", "1079", "1080", "1081", "1082", "1083", "1084", "1085", "1086", "1087", "1088", "1089", "1090", "1091", "1092", "1093", "1094", "1095", "1096", "1097", "1098", "1099", "1100", "1101", "1102", "1103", "1104"]) {
+  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036", "1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075", "1076", "1077", "1078", "1079", "1080", "1081", "1082", "1083", "1084", "1085", "1086", "1087", "1088", "1089", "1090", "1091", "1092", "1093", "1094", "1095", "1096", "1097", "1098", "1099", "1100", "1101", "1102", "1103", "1104", "1105", "1106", "1107", "1108", "1109", "1110", "1111", "1112", "1113", "1114"]) {
     try {
       out.add(new URL(`/module/${moduleId}`, pageUrl).toString());
     } catch {
