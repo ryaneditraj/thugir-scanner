@@ -33760,9 +33760,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Vuln Bank SQL injection login bypass oracle",
     description:
-      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
+      "POST /login with username admin' OR '1'='1 bypasses authentication and returns a JWT without valid credentials — the Vuln Bank SQL injection login oracle.",
     impactOneline:
-      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
+      "SQL injection in login endpoints lets attackers authenticate without valid credentials and obtain session tokens.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
     tierRequired: "deep",
@@ -33775,7 +33775,32 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
+      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns a JWT without valid credentials. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sqli-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank /login SQL injection route live oracle",
+    description:
+      "When scanning /login on vulnbank.org, POST with username admin' OR '1'='1 bypasses authentication and returns a JWT — route-specific SQL injection login oracle.",
+    impactOneline:
+      "Route-specific scans confirm SQL injection in login endpoints issues session tokens without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSqliLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for administrative accounts."
+      ]
+    },
+    fixPrompt:
+      "Our /login route scan shows SQLi bypass with admin' OR '1'='1. Show parameterized query remediation for authentication.",
     version: 1,
     enabled: true
   },
@@ -34478,32 +34503,6 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /register endpoint accepts is_admin:true in the JSON body and grants admin privileges. Show BOPLA remediation for user registration APIs.",
-    version: 1,
-    enabled: true
-  },
-  {
-    slug: "vulnbank-sqli-login-live-oracle",
-    platform: "generic",
-    category: "Injection",
-    severityDefault: "critical",
-    title: "Vuln Bank SQL injection login bypass oracle",
-    description:
-      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
-    impactOneline:
-      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
-      steps: [
-        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
-        "Apply account lockout and MFA for administrative accounts.",
-        "Run Vuln Bank only on isolated pentest training infrastructure."
-      ]
-    },
-    fixPrompt:
-      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
     version: 1,
     enabled: true
   },
