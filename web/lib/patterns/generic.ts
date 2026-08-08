@@ -33130,6 +33130,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-products-date-manipulation-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals products date-range manipulation live oracle",
+    description:
+      "GET /api/products?date_from=&date_to= accepts multi-year date spans without server-side range limits — returning expanded product sets and significant query latency (README date-manipulation oracle).",
+    impactOneline:
+      "Unbounded date-range queries on marketplace product endpoints enable resource exhaustion and bypass intended catalog window constraints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsDateManipulationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cap date-range spans server-side — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject or clamp date_from/date_to ranges exceeding a business-defined maximum.",
+        "Require pagination for historical catalog exports.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products endpoint accepts unbounded date_from/date_to ranges. Show date-range validation and query performance hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-products-date-manipulation-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /api/products date-range manipulation route live oracle",
+    description:
+      "When scanning /api/products with date_from/date_to, the API accepts multi-year spans without rejection — route-specific date-manipulation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals marketplace product queries allow unbounded historical date ranges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsDateManipulationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cap date-range spans on /api/products route handlers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject or clamp date_from/date_to ranges exceeding a business-defined maximum.",
+        "Add query timeouts and indexes for marketplace date filters.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products route scan confirms unbounded date_from/date_to acceptance. Show route-level date-range validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-auth-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

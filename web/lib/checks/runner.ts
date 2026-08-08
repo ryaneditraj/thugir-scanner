@@ -2645,6 +2645,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsFileRawLfiRouteLiveOracle",
   "brokencrystalsTestimonialsCountSqliRouteLiveOracle",
   "brokencrystalsProductsLatestLimitBypassRouteLiveOracle",
+  "brokencrystalsProductsDateManipulationLiveOracle",
+  "brokencrystalsProductsDateManipulationRouteLiveOracle",
   "crapi2AuthLoginRouteLiveOracle",
   "vulnExposeAuthBypassApiLiveOracle",
   "vulnExposeSqliSearchApiLiveOracle",
@@ -7763,6 +7765,8 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
     "/api/spawn",
     "/api/file",
     "/api/metadata",
+    "/api/products",
+    "/api/products/latest",
     "/api/products/views"
   ]) {
     try {
@@ -10078,6 +10082,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-email-smtp")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/products\b/i.test(targetInput) &&
+        /date_from|date_to/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-products-date-manipulation")
+      )
+        return -3;
       if (/idor-website\.vercel\.app/i.test(origin) && p.slug.startsWith("idor-website-mock-api")) return -2;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
