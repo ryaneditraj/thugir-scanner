@@ -31418,6 +31418,227 @@ const pwnshopPrototypePollutionSearchFiltersRouteLiveOracle: Rule = async (ctx) 
   };
 };
 
+// --- SSbit01 Voting App (voting-app*.vercel.app) live oracles -----------------
+function isVotingAppHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return /voting-app[\w-]*\.vercel\.app/i.test(corpus) || /Voting App by SSbit01/i.test(corpus);
+}
+
+function votingAppSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return (
+    doc.setCookies.find((c) => /^voting-app_cookie=/i.test(c))?.split(";")[0] ??
+    doc.setCookies.find((c) => /voting-app/i.test(c))?.split(";")[0] ??
+    null
+  );
+}
+
+type VotingAppPollAnswer = { value?: string; votes?: number };
+type VotingAppPoll = { _id?: string; question?: string; answers?: VotingAppPollAnswer[] };
+
+async function votingAppRegisterSession(
+  ctx: RuleContext
+): Promise<{ cookie: string; userId: string } | null> {
+  const name = `thugir_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const signupUrl = new URL("/api/signup", ctx.origin).toString();
+  const doc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({ name, password: "ThugirProbe123!" }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let userId = "";
+  try {
+    const parsed = JSON.parse(doc.body) as { id?: string };
+    userId = String(parsed.id ?? "");
+  } catch {
+    return null;
+  }
+  if (!/^[a-f0-9]{24}$/i.test(userId)) return null;
+  const cookie = votingAppSessionCookieFromDoc(doc);
+  if (!cookie) return null;
+  return { cookie, userId };
+}
+
+async function votingAppCreatePoll(ctx: RuleContext, cookie: string): Promise<string | null> {
+  const url = new URL("/api/poll", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({
+      question: `thugir probe ${Date.now()}?`,
+      answers: ["yes", "no"]
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { id?: string };
+    const pollId = String(parsed.id ?? "");
+    return /^[a-f0-9]{24}$/i.test(pollId) ? pollId : null;
+  } catch {
+    return null;
+  }
+}
+
+async function votingAppFetchUserPolls(
+  ctx: RuleContext,
+  userId: string,
+  cookie?: string
+): Promise<{ url: string; polls: VotingAppPoll[] } | null> {
+  const url = new URL(`/api/user/${userId}/polls`, ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: {
+      Accept: "application/json",
+      ...(cookie ? { Cookie: cookie } : {})
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(doc.body) as { data?: VotingAppPoll[] };
+    if (!Array.isArray(parsed?.data)) return null;
+    return { url, polls: parsed.data };
+  } catch {
+    return null;
+  }
+}
+
+function votingAppPollYesVotes(polls: VotingAppPoll[], pollId: string): number {
+  const poll = polls.find((p) => String(p._id) === pollId);
+  const yes = poll?.answers?.find((a) => a.value === "yes");
+  return typeof yes?.votes === "number" ? yes.votes : 0;
+}
+
+const votingAppUserPollsIdorLiveOracle: Rule = async (ctx) => {
+  if (!isVotingAppHost(ctx)) return NEGATIVE;
+  const session = await votingAppRegisterSession(ctx);
+  if (!session) return NEGATIVE;
+  const pollId = await votingAppCreatePoll(ctx, session.cookie);
+  if (!pollId) return NEGATIVE;
+  const unauth = await votingAppFetchUserPolls(ctx, session.userId);
+  if (!unauth) return NEGATIVE;
+  const poll = unauth.polls.find((p) => String(p._id) === pollId);
+  if (!poll?.question || !/thugir probe/i.test(poll.question)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: unauth.url,
+      userId: session.userId,
+      pollId,
+      question: poll.question.slice(0, 120),
+      snippet: JSON.stringify(poll).slice(0, 200),
+      note: "Voting App GET /api/user/{id}/polls returns poll data without authentication — user polls IDOR oracle (SSbit01 README documents exposed user IDs)"
+    }
+  };
+};
+
+const votingAppUserPollsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVotingAppHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/user\/[a-f0-9]{24}\/polls\b/i.test(pageUrl) && !/\/user\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await votingAppUserPollsIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Voting App /api/user/{id}/polls route scan — unauthenticated poll enumeration via author user ID — route-specific user polls IDOR oracle"
+    }
+  };
+};
+
+const votingAppVoteStuffingLiveOracle: Rule = async (ctx) => {
+  if (!isVotingAppHost(ctx)) return NEGATIVE;
+  const session = await votingAppRegisterSession(ctx);
+  if (!session) return NEGATIVE;
+  const pollId = await votingAppCreatePoll(ctx, session.cookie);
+  if (!pollId) return NEGATIVE;
+  const baseline = await votingAppFetchUserPolls(ctx, session.userId);
+  if (!baseline) return NEGATIVE;
+  const before = votingAppPollYesVotes(baseline.polls, pollId);
+  const voteUrl = new URL(`/api/vote/${pollId}`, ctx.origin);
+  voteUrl.searchParams.set("answer", "yes");
+  const voteTarget = voteUrl.toString();
+  for (let i = 0; i < 2; i++) {
+    const voteDoc = await ctx.probe.get(voteTarget, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      maxBytes: 2048,
+      timeoutMs: 15000
+    });
+    if (voteDoc.status < 200 || voteDoc.status >= 300) return NEGATIVE;
+  }
+  const afterFetch = await votingAppFetchUserPolls(ctx, session.userId);
+  if (!afterFetch) return NEGATIVE;
+  const after = votingAppPollYesVotes(afterFetch.polls, pollId);
+  if (after < before + 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: voteTarget,
+      pollId,
+      votesBefore: before,
+      votesAfter: after,
+      anonymousVotesAdded: after - before,
+      note: "Voting App POST /api/vote/{pollId} accepts multiple anonymous votes from fresh sessions — session-only vote tracking enables vote stuffing"
+    }
+  };
+};
+
+const votingAppVoteStuffingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVotingAppHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/vote\b/i.test(pageUrl) && !/\/poll\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await votingAppVoteStuffingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Voting App vote route scan — multiple anonymous POST /api/vote/{id} requests increment tally without rate limiting — route-specific vote stuffing oracle"
+    }
+  };
+};
+
+const CLIENT_VOTING_APP_RES: { label: string; re: RegExp }[] = [
+  { label: "Voting App by SSbit01 title", re: /Voting App by SSbit01/i },
+  { label: "MongoDB-backed poll platform", re: /create polls and everyone can vote/i },
+  { label: "Documented user ID exposure", re: /User ID is exposed to the client/i },
+  { label: "Iron-session voting cookie", re: /voting-app_cookie|iron-session/i }
+];
+
+const clientSideVotingAppEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_VOTING_APP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!isVotingAppHost(ctx)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "SSbit01 Voting App documents intentional vulnerabilities including exposed MongoDB user IDs and session-only vote tracking"
+    }
+  };
+};
+
 function isPwnshopHost(ctx: RuleContext): boolean {
   return /pwnshop|ctfsecurity\.com/i.test(ctx.origin);
 }
@@ -34582,7 +34803,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1100; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1104; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
@@ -69532,6 +69753,11 @@ export const RULES: Record<string, Rule> = {
   whoopsPayAdminDatabaseExecuteRouteLiveOracle,
   whoopsPayAdminExpressLogsDisclosureLiveOracle,
   whoopsPayAdminExpressLogsDisclosureRouteLiveOracle,
+  clientSideVotingAppEvidence,
+  votingAppUserPollsIdorLiveOracle,
+  votingAppUserPollsIdorRouteLiveOracle,
+  votingAppVoteStuffingLiveOracle,
+  votingAppVoteStuffingRouteLiveOracle,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,
