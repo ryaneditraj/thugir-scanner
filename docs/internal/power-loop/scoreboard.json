@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T14:07:44.413Z",
+  "updated_at": "2026-08-08T15:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3004,
-  "total_findings": 31160,
+  "total_sites_scanned": 3005,
+  "total_findings": 31209,
   "critical_findings": 66,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 3368,
   "discovery_findings": 24973,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-08T14:07:44.413Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-08T15:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
@@ -50,42 +50,36 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 49 findings 6/6 recall (pages=6 probes=489); secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 49 findings 6/6 recall; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 49,
-      "focus": "WSL module/1140-1144 NEW + drain 1135-1137 queue head",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "WSL module/1140-1144 SSTI route-oracle extension",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1140: 8 findings — SSTI reflexion + module shell (NEW)",
-      "web-security-learning-labs.vercel.app/module/1141: 8 findings — SSTI reflexion + module shell (NEW)",
-      "web-security-learning-labs.vercel.app/module/1142: 8 findings — SSTI reflexion + module shell (NEW)",
-      "web-security-learning-labs.vercel.app/module/1143: 5 findings — SSTI shell only (NEW)",
-      "web-security-learning-labs.vercel.app/module/1144: 5 findings — SSTI shell only (NEW)",
-      "web-security-learning-labs.vercel.app/module/1135-1137: 5 findings each — queue drain (SSTI shell, no route-specific oracles)"
+      "web-security-learning-labs.vercel.app/module/1140: 8→6 findings — +web-security-learning-labs-ssti-module-route-live-oracle shipped",
+      "web-security-learning-labs.vercel.app/module/1143: 5→6 findings — +ssti-module-route-live-oracle shipped",
+      "WSL module map + seeds extended 1139→1144 for CSR placeholder SSTI shells"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL module/1140-1144: catalog shells — SSTI reflexion fires but route-specific vuln oracles absent",
-      "WSL module/1135-1139: same SSTI-shell pattern; module-specific live oracles still absent"
+      "bypass403.vercel.app/internal: internal-xff oracle absent when Vercel checkpoint blocks session priming",
+      "bypass403/vaultapp URLs still queued at tail pending drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 49,
-    "web-security-learning-labs.vercel.app/module/1140": 8,
+    "web-security-learning-labs.vercel.app/module/1140": 6,
+    "web-security-learning-labs.vercel.app/module/1143": 6,
     "web-security-learning-labs.vercel.app/module/1141": 8,
     "web-security-learning-labs.vercel.app/module/1142": 8,
-    "web-security-learning-labs.vercel.app/module/1143": 5,
     "web-security-learning-labs.vercel.app/module/1144": 5,
-    "web-security-learning-labs.vercel.app/module/1135": 5,
-    "web-security-learning-labs.vercel.app/module/1136": 5,
-    "web-security-learning-labs.vercel.app/module/1137": 5,
     "vaultapp-omega.vercel.app/api/messages/read": 15,
     "pwnshop.ctfsecurity.com/apply-coupon": 45
   }
