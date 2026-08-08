@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T04:08:00.000Z",
+  "updated_at": "2026-08-08T04:09:40.565Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -20,10 +20,10 @@
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2051,
+  "discovery_urls_added": 3323,
   "discovery_findings": 24553,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-08T04:08:00.000Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-08T04:09:40.565Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -34,6 +34,7 @@
       "pages_crawled": 6,
       "probes_run": 509,
       "live_oracle_slugs": 38,
+      "staging_fallback": "juice-shop-staging.herokuapp.com 6/6 (48 findings) when primary 503",
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,39 +50,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (50 findings, 38 juice-shop-* live oracles); secret-resend slug still absent"
+      "note": "Parallel 04 UTC runs: primary Heroku 6/6 (50 findings); concurrent run hit 503→staging 48 findings. secret-resend slug still absent."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
       "findings": 302,
-      "focus": "WSL module/1091-1095 queued; drained juice-shop.demo.escape.tech oracles + brokencrystals BFLA photo + whoopspay register",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL module/1091-1095 queued; drained juice-shop.demo.escape.tech oracles + brokencrystals BFLA photo + whoopspay register; parallel run scanned module/1090",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live-oracle slugs) — no benchmark misses",
-      "juice-shop.demo.escape.tech/redirect: 51 findings — open-redirect + full juice-shop oracle bundle on Escape demo",
-      "juice-shop.demo.escape.tech/file-upload: 51 findings — complaint file-upload live oracle on staging demo",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live-oracle slugs)",
+      "juice-shop-staging.herokuapp.com: 6/6 fallback (48 findings) when primary 503",
+      "juice-shop.demo.escape.tech/redirect: 51 findings — open-redirect oracle on Escape demo",
       "brokencrystals.com/users/one/1/photo?isAdmin=true: 77 findings — BFLA profile-photo delete oracle",
       "whoopspay.onrender.com/api/auth/register: 16 findings — unauthenticated registration endpoint",
-      "idor-website.vercel.app/api/employees/1: 6 findings — IDOR lab baseline"
+      "web-security-learning-labs.vercel.app/module/1090: 7 findings — module bootstrap self-fetch"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL module/1091-1095 queued but not yet scanned — queue drain prioritized older entries",
-      "api.vulnbank.org unreachable from cloud agent — queue entry errors persist"
+      "WSL module/1091-1095 queued but not yet scanned",
+      "api.vulnbank.org unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
     "brokencrystals.com/users/one/1/photo?isAdmin=true": 77,
     "juice-shop.demo.escape.tech/redirect": 51,
     "juice-shop.herokuapp.com": 50,
+    "juice-shop-staging.herokuapp.com": 48,
     "whoopspay.onrender.com/api/auth/register": 16,
-    "idor-website.vercel.app/api/employees/1": 6,
+    "web-security-learning-labs.vercel.app/module/1090": 7,
     "brokencrystals.com/api/users/search/admin": 79,
-    "bypass403.vercel.app/secure": 9,
     "pwnshop.ctfsecurity.com/review": 41
   }
 }
