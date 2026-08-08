@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T11:22:00.000Z",
+  "updated_at": "2026-08-08T12:08:16.752Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2977,
-  "total_findings": 30844,
+  "total_sites_scanned": 2986,
+  "total_findings": 30965,
   "critical_findings": 66,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 3353,
-  "discovery_findings": 24804,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-08T11:22:00.000Z",
+  "discovery_urls_added": 3358,
+  "discovery_findings": 24875,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-08T12:08:16.752Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 507,
+      "probes_run": 509,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,32 +48,34 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com unreachable; staging fallback 48 findings 6/6 recall maintained"
+      "note": "Primary juice-shop.herokuapp.com reachable; 50 findings 6/6 recall (rich live-oracle set incl JWT alg-none + SSTI reflexion)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 76,
-      "focus": "WSL checkpoint bootstrap backoff + voting-app API route warmup + signup open-registration oracle",
-      "improvements_shipped_this_run": 3
+      "findings": 71,
+      "focus": "WSL modules 1130-1134 new + drained 1113-1114 backlog + vulnbank.org/login"
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1115: 5→7 findings — checkpoint bootstrap backoff shipped",
-      "voting-app-iota.vercel.app/api/signup: BlockedTargetError→8 findings — API route home warmup shipped",
-      "web-security-learning-labs.vercel.app/module/1125-1127: 8 findings each — SSTI/reflection lab shells (prior 11 UTC queue drain)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1130-1132: 8 findings each — new SSTI/reflection lab shells",
+      "web-security-learning-labs.vercel.app/module/1133-1134: 5 findings each — module-route-evidence shells",
+      "web-security-learning-labs.vercel.app/module/1113-1114: 5 findings each — backlog drain from 08 UTC queue",
+      "vulnbank.org/login: 27 findings — hidden-admin + auth oracle hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "voting-app-signup-open oracle intermittent under Vercel signup rate limits after session prime"
+      "WSL module shells (1133-1134) return 5-finding baseline without route-specific live oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 50,
     "vulnbank.org/login": 27,
-    "voting-app-iota.vercel.app/api/signup": 8,
-    "web-security-learning-labs.vercel.app/module/1115": 7,
+    "web-security-learning-labs.vercel.app/module/1130": 8,
+    "web-security-learning-labs.vercel.app/module/1131": 8,
+    "web-security-learning-labs.vercel.app/module/1132": 8,
     "web-security-learning-labs.vercel.app/module/1125": 8,
     "pwnshop.ctfsecurity.com/apply-coupon": 45,
     "brokencrystals.com/api/users/one/regular_user/adminpermission": 79
