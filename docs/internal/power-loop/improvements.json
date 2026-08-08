@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-date-manipulation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: authenticated GET /api/products?date_from=01-01-2000&date_to=31-12-2099 returns 11 products in ~2s vs 6-month window 0 products in 36ms (DD-MM-YYYY); brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31 findings 73→75 (+date-manipulation live+route oracles); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1155-1159",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1159 programmatically (was capped at 1154); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1159; web-security-learning-labs.vercel.app/module/1155-1159 drain-ready; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1155-1159-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1154→1125-1159; runner SSTI priority regex 115[0-4]→115[0-9]; module/1155-1159 findings +web-security-learning-labs-ssti-module-route-live-oracle; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "preview-juice-shop-memorys-api-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Memorys on preview.owasp-juice.shop returns HTTP 500 Unexpected path: /api/Memorys — develop preview branch lacks memory/RCE challenge route; no portable live oracle"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-seeds-1150-1154",
       "status": "shipped",
