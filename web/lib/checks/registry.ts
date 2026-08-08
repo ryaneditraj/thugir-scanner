@@ -34984,6 +34984,18 @@ const clientSideWebSecurityLearningLabsEvidence: Rule = async (ctx) => {
         }
       };
     }
+    if (WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] && /\/module\/\d{4}\b/i.test(pageUrl)) {
+      return {
+        fired: true,
+        confidence: 0.85,
+        evidence: {
+          moduleId,
+          moduleTopic: WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId],
+          scannedUrl: pageUrl,
+          note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]} training module — client-side lab platform oracle (curated module-id URL map)`
+        }
+      };
+    }
   }
   return NEGATIVE;
 };
@@ -35027,8 +35039,8 @@ for (let moduleNum = 1037; moduleNum <= 1169; moduleNum++) {
   }
 }
 
-/** CSR placeholder shells 1125–1169 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1169; moduleNum++) {
+/** CSR placeholder shells 1125–1174 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1174; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35036,7 +35048,7 @@ for (let moduleNum = 1125; moduleNum <= 1169; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 45 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 50 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -35175,6 +35187,18 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
         moduleTopic: topic,
         scannedUrl: pageUrl,
         note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle (curated module-id map; CSR placeholder shell)`
+      }
+    };
+  }
+  if (mappedTopic && /\/module\/\d{4}\b/i.test(pageUrl)) {
+    return {
+      fired: true,
+      confidence: 0.85,
+      evidence: {
+        moduleId,
+        moduleTopic: topic,
+        scannedUrl: pageUrl,
+        note: `web-security-learning-labs.vercel.app/module/${moduleId} is the ${topic} training module — route-specific lab catalog oracle (curated module-id URL map; CSR shell omitted catalog markers)`
       }
     };
   }
