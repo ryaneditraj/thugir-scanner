@@ -34984,15 +34984,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1159; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1164; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1159 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1159; moduleNum++) {
+/** CSR placeholder shells 1125–1164 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1164; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35000,7 +35000,7 @@ for (let moduleNum = 1125; moduleNum <= 1159; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 35 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 40 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */

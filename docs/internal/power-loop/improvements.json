@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1160-1164",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1164 programmatically (was capped at 1159); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1164; web-security-learning-labs.vercel.app/module/1160-1164 drain-ready; benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1160-1164-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1159→1125-1164; runner SSTI priority regex 115[0-9]→115[0-9]|116[0-4]; module/1160-1164 findings +web-security-learning-labs-ssti-module-route-live-oracle; benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-stale-route-cleanup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /secret and /config return HTTP 404 on live bypass403.vercel.app; GET /internal X-Forwarded-For: evil.com, 127.0.0.1 stays 403 (bypass broken); disabled internal-xff live+route oracles, removed /secret /config from priority seeds and queue, prepended working routes; bypass403.vercel.app/admin findings 9 (+admin-route, api-admin, waf, debug, secure-bearer oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-products-date-manipulation-live-oracle",
       "status": "shipped",

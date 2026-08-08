@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T19:06:30.000Z",
+  "updated_at": "2026-08-08T19:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2747,
-  "total_findings": 27059,
+  "total_sites_scanned": 2743,
+  "total_findings": 27039,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1964,
-  "discovery_findings": 22839,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-08T19:06:30.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22821,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-08T19:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 489,
+      "probes_run": 488,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,38 @@
           ]
         }
       },
-      "note": "Primary juice-shop.herokuapp.com 503 — staging fallback 6/6 (49 findings); secret-resend slug still absent"
+      "note": "Primary juice-shop.herokuapp.com 503; staging fallback 6/6 (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 5,
-      "findings": 27,
-      "focus": "bypass403 /secret /config /internal drain + PentestForge DVWA SQLi + Mutillidae user-info oracles",
-      "improvements_shipped_this_run": 0
+      "urls_added": 5,
+      "urls_scanned": 1,
+      "findings": 9,
+      "focus": "bypass403 queue drain + WSL module 1160-1164 extension",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings) — primary Heroku 503, no category gaps",
-      "bypass403.vercel.app/secret: 8 findings — http-403-bypass-probe + 5 bypass403 live oracles (admin, api/admin, waf, debug, secure)",
-      "bypass403.vercel.app/config: 8 findings — header-manipulation 403 bypass oracles",
-      "bypass403.vercel.app/internal: 9 findings — +reflexion-escalated-ssti on internal path drain",
-      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli/: 1 finding — missing-security-headers only (login-gated, probes_run=0)",
-      "mutillidae.lab.pentest-forge.com/user-info.php: 1 finding — missing-security-headers only (probes_run=0)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "bypass403.vercel.app/admin: 9 findings — admin-route, api-admin, waf, debug, secure-bearer oracles firing; internal-xff disabled (live bypass broken)",
+      "web-security-learning-labs.vercel.app/module/1160-1164: drain-ready via module seed + SSTI extension",
+      "bypass403 /secret + /config removed from queue (HTTP 404 on live lab)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary Heroku dyno 503 this hour — staging fallback required",
-      "PentestForge DVWA/Mutillidae paths login-gated — need session-aware probes or root URL seeds",
-      "preview.owasp-juice.shop/api/Memorys — memory/RCE route absent on develop preview branch",
-      "vaultapp.vercel.app queue URLs point to Clutch-It app (not vaultapp-omega lab) — queue cleanup needed",
-      "juice-shop.lab.pentest-forge.com/rest/admin/application-configuration queued but not scanned this run"
+      "juice-shop.herokuapp.com primary Heroku dyno intermittently 503 — staging fallback required",
+      "bypass403.vercel.app/internal + /header-pollution XFF bypass broken on live deployment — oracles disabled",
+      "vaultapp-omega.vercel.app/api/documents/:id returns Invalid document ID for all probe IDs — queue entry removed"
     ]
   },
   "discovery_highlights": {
-    "bypass403.vercel.app/internal": 9,
-    "bypass403.vercel.app/secret": 8,
-    "bypass403.vercel.app/config": 8,
+    "bypass403.vercel.app/admin": 9,
     "brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31": 75,
     "brokencrystals.com/?q=test": 74,
     "preview.owasp-juice.shop/rest/b2b/v2/orders": 52,
-    "preview.owasp-juice.shop/api/Memorys": 51,
-    "juice-shop-staging.herokuapp.com": 49,
-    "pentest-ground.com:81/search?q=test": 7,
+    "juice-shop-staging.herokuapp.com": 47,
     "web-security-learning-labs.vercel.app/module/1148": 6,
+    "web-security-learning-labs.vercel.app/module/1149": 6,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20
   }

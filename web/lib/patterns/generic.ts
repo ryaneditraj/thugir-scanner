@@ -36629,7 +36629,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /internal returns 403 but X-Forwarded-For: evil.com, 127.0.0.1 bypasses it on bypass403.vercel.app. Show XFF parsing hardening.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-internal-xff-pollution-route-live-oracle",
@@ -36654,7 +36654,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /internal route scan shows X-Forwarded-For pollution bypass. Show XFF parsing hardening.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-secure-bearer-invalid-token-live-oracle",
