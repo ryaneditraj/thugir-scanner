@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1140-1144-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1139→1125-1144; WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1144; web-security-learning-labs.vercel.app/module/1140 findings 8→6 (+web-security-learning-labs-ssti-module-route-live-oracle); module/1143 5→6 (+route oracle); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1144",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1144 programmatically (was capped at 1139); queue modules 1140-1144 drain-ready; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-priority-regex-1140-1144",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner SSTI priority regex 113[0-9]→113[0-9]|114[0-4]; generic.ts module-route-evidence + ssti-oracle descriptions updated to 1144; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-ssti-module-1135-1139-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1134→1125-1139; runner SSTI priority regex 113[0-4]→113[0-9]; module seeds 1011-1139; web-security-learning-labs.vercel.app/module/1135 findings 8→9 (+ssti-module-route-live-oracle); module/1137 8→9; benchmark juice-shop-staging 49 findings 6/6 maintained"
@@ -20860,6 +20878,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1140-1144-extension",
+      "shipped_at": "2026-08-08T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1144",
+      "shipped_at": "2026-08-08T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-priority-regex-1140-1144",
+      "shipped_at": "2026-08-08T15:10:00.000Z"
+    },
     {
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-request-headers-session-ua",
