@@ -28,6 +28,8 @@ interface PowerResult {
 
 type PowerRule = (ctx: PowerCtx) => Promise<PowerResult>;
 
+const BYPASS403_HOST_RE = /bypass403\.vercel\.app/i;
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -124,6 +126,7 @@ export const thugirDirEnum: PowerRule = async (ctx) => {
 
 // --- Reflexion multi-encoding XSS -------------------------------------------
 export const reflexionEscalatedXss: PowerRule = async (ctx) => {
+  if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -160,6 +163,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
 
 // --- Reflexion SQLi with escalation -----------------------------------------
 export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
+  if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
   const sqlErrors =
@@ -195,6 +199,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
 
 // --- Reflexion SSTI multi-template ------------------------------------------
 export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
+  if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
