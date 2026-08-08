@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-checkpoint-bootstrap-backoff",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsBootstrap retries / + /learn/modules + module target up to 4× with backoff when Vercel Security Checkpoint blocks CSR shell; web-security-learning-labs.vercel.app/module/1115 findings 5→7 (+tech-stack-disclosure +thugir-sensitive-js-endpoints); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-api-route-home-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reachTarget failure + thin /api/* responses on voting-app hosts fetch homepage corpus before scan; https://voting-app-iota.vercel.app/api/signup route scan recovered from BlockedTargetError to 8 findings incl user-polls-idor + vote-stuffing; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-signup-open-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/signup with name+password returns MongoDB user id without auth; votingAppSignupOpenLiveOracle + route oracle on /api/signup; homepage scan 8 findings maintained; signup route scan 8 findings (oracle intermittent under Vercel signup rate limits); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-sqli-login-live-oracle",
       "status": "shipped",
@@ -20770,6 +20788,21 @@
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-queue-login-host-fix",
       "shipped_at": "2026-08-08T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-checkpoint-bootstrap-backoff",
+      "shipped_at": "2026-08-08T11:20:00.000Z"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-api-route-home-warmup",
+      "shipped_at": "2026-08-08T11:20:00.000Z"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-signup-open-route-live-oracle",
+      "shipped_at": "2026-08-08T11:20:00.000Z"
     }
   ]
 }
