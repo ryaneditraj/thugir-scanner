@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1086-1090",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1086-1090; curated module-id placeholder map loop 1037→1090; web-security-learning-labs.vercel.app/module/1090 findings 3→7 (+web-security-learning-labs-module-route-evidence + client-side-web-security-learning-labs-evidence); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-bootstrap-self-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsBootstrap merges / + /learn/modules + current /module/* target when scanning CSR placeholder shells; improves combined corpus for client-side-web-security-learning-labs-evidence on thin Vercel checkpoint passes; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-checkpoint-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsModuleRouteEvidence retries module fetch after home warmup when Vercel Security Checkpoint blocks first pass; web-security-learning-labs.vercel.app/module/1090 intermittent 3→7 findings; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-secure-bearer-invalid-token-live-oracle",
       "status": "shipped",
@@ -20599,6 +20617,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1071-1075",
       "shipped_at": "2026-08-08T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1086-1090",
+      "shipped_at": "2026-08-08T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-bootstrap-self-fetch",
+      "shipped_at": "2026-08-08T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-checkpoint-retry",
+      "shipped_at": "2026-08-08T04:10:00.000Z"
     }
   ]
 }
