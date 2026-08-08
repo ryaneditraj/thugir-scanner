@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T06:15:00.000Z",
+  "updated_at": "2026-08-08T07:04:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2926,
-  "total_findings": 30136,
+  "total_sites_scanned": 2935,
+  "total_findings": 30238,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 3328,
-  "discovery_findings": 24621,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-08T06:15:00.000Z",
+  "discovery_urls_added": 3333,
+  "discovery_findings": 24673,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-08T07:04:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 507,
+      "probes_run": 509,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,40 @@
           ]
         }
       },
-      "note": "6/6 recall (49 findings on staging fallback); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (50 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 27,
-      "focus": "WSL 1096-1100 seeds + WhoopsPay admin SQL execute + express log password disclosure",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 52,
+      "focus": "WSL modules 1105-1109 new + backlog drain 1099/1100/1091",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings)",
-      "web-security-learning-labs.vercel.app/module/1096: 8 findings — module-route-evidence after 1096-1100 seed extension",
-      "whoopspay.onrender.com/api/admin: 16→17 — admin-database-execute live oracle (arbitrary SQL via leaked test-account creds)",
-      "whoopspay.onrender.com/api/admin/logs: 16→19 — express-logs live+route oracles (plaintext passwords in request logs)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1105-1108: 8 findings each — module-route-evidence + SSTI shell",
+      "web-security-learning-labs.vercel.app/module/1109: 5 findings — SSTI shell",
+      "web-security-learning-labs.vercel.app/module/1099-1100: 5 findings each — backlog drain",
+      "web-security-learning-labs.vercel.app/module/1091: 5 findings — backlog drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "WSL module/1092-1095 still queued at head pending next drain",
       "api.vulnbank.org unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "whoopspay.onrender.com/api/admin/logs": 19,
-    "whoopspay.onrender.com/api/admin": 17,
+    "juice-shop.herokuapp.com": 50,
+    "web-security-learning-labs.vercel.app/module/1105": 8,
+    "web-security-learning-labs.vercel.app/module/1106": 8,
+    "web-security-learning-labs.vercel.app/module/1107": 8,
+    "web-security-learning-labs.vercel.app/module/1108": 8,
+    "web-security-learning-labs.vercel.app/module/1109": 5,
+    "web-security-learning-labs.vercel.app/module/1099": 5,
+    "web-security-learning-labs.vercel.app/module/1100": 5,
     "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "pwnshop.ctfsecurity.com/wallet": 43,
-    "juice-shop.herokuapp.com": 52,
-    "ssrf.vulnlab.dev/basic": 15,
-    "web-security-learning-labs.vercel.app/module/1096": 8,
-    "web-security-learning-labs.vercel.app/module/1097": 8,
-    "web-security-learning-labs.vercel.app/module/1098": 8
+    "pwnshop.ctfsecurity.com/wallet": 43
   }
 }
