@@ -2,6 +2,18 @@
   "candidates": [
     {
       "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-debug-verb-tunneling-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /debug returns 403 but /debug?_method=GET returns {\"message\":\"Verb tunneling bypass success!\",\"flag\":...}; bypass403.vercel.app/debug findings 8 (+bypass403-debug-verb-tunneling-live-oracle + bypass403-debug-verb-tunneling-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-search-admin-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + login + GET adminpermission isAdmin:true when scanning /api/users/search/admin; brokencrystals.com/api/users/search/admin findings 79 (+brokencrystals-search-admin-mass-assignment-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-waf-cf-connecting-ip-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /start session + GET /waf with CF-Connecting-IP: 127.0.0.1 returns {\"message\":\"Cloudflare IP bypass success!\",\"flag\":...}; bypass403.vercel.app/waf findings 3→7 (+bypass403-waf-live-oracle + bypass403-waf-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"

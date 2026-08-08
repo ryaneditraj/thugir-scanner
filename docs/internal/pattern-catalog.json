@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-08T01:10:37.437Z",
-  "total": 2016,
-  "uniqueSlugs": 2011,
+  "generatedAt": "2026-08-08T02:08:38.963Z",
+  "total": 2019,
+  "uniqueSlugs": 2014,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1998,
+    "generic": 2001,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1931,
+    "deep": 1934,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 404,
+    "Broken access control": 407,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -136,6 +136,7 @@
     "brokencrystals-process-numbers-route-live-oracle",
     "brokencrystals-products-latest-limit-bypass-live-oracle",
     "brokencrystals-safe-files-rfi-live-oracle",
+    "brokencrystals-search-admin-mass-assignment-route-live-oracle",
     "brokencrystals-secrets-live-oracle",
     "brokencrystals-secrets-route-live-oracle",
     "brokencrystals-simple-csrf-flow-live-oracle",
@@ -248,6 +249,8 @@
     "bypass403-api-admin-route-live-oracle",
     "bypass403-config-live-oracle",
     "bypass403-config-route-live-oracle",
+    "bypass403-debug-verb-tunneling-live-oracle",
+    "bypass403-debug-verb-tunneling-route-live-oracle",
     "bypass403-secret-live-oracle",
     "bypass403-secret-route-live-oracle",
     "bypass403-waf-live-oracle",
