@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T21:33:32.297Z",
+  "updated_at": "2026-08-08T22:05:51.055Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2764,
-  "total_findings": 27223,
+  "total_sites_scanned": 2773,
+  "total_findings": 27327,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1976,
-  "discovery_findings": 22982,
+  "discovery_urls_added": 1981,
+  "discovery_findings": 23037,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-08T21:33:32.297Z",
+  "last_run": "2026-08-08T22:05:51.055Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 21,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 188,
+      "probes_run": 509,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,38 @@
           ]
         }
       },
-      "note": "Primary Heroku woke after ~28min cold start; 6/6 recall with 21 findings and 11 juice-shop-* live oracles; parallel run used staging fallback 6/6 (49 findings); secret-resend slug still absent"
+      "note": "Primary Heroku healthy 6/6 with 49 findings and full juice-shop-* live-oracle set; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 52,
-      "focus": "WSL module catalog 1170-1174 extension + drain 1165-1167 tail",
+      "findings": 55,
+      "focus": "WSL module catalog 1175-1179 extension + drain 1163/1168/1169 tail",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (21 findings) — no benchmark category misses",
-      "web-security-learning-labs.vercel.app/module/1170-1172: 8 findings each — reflexion-escalated-ssti without ssti-module-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1173-1174: 5 findings each — thinner SSTI reflexion shells",
-      "web-security-learning-labs.vercel.app/module/1165-1167: 6 findings each — catalog shells without route-specific oracles",
-      "bypass403.vercel.app/api/admin: prior run shipped session retry + reflexion FP fix (10 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark category misses",
+      "web-security-learning-labs.vercel.app/module/1175-1178: 8 findings each — reflexion-escalated-ssti shells",
+      "web-security-learning-labs.vercel.app/module/1179: 5 findings — thinner SSTI reflexion hub",
+      "web-security-learning-labs.vercel.app/module/1163/1168/1169: 6 findings each — catalog shells without route-specific oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key and forgotten-backup oracles)",
-      "WSL modules 1170-1174: generic SSTI reflexion fires but ssti-module-route-live-oracle absent (1173-1174 only 5-finding hubs)",
-      "WSL modules 1165-1167: still catalog shells — route-specific vuln oracles not firing",
-      "juice-shop primary Heroku 503 on cold start — ~28min benchmark wall time when dyno wakes"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other oracles)",
+      "WSL modules 1175-1179: generic SSTI reflexion fires but ssti-module-route-live-oracle absent on 1179 (5-finding hub)",
+      "WSL modules 1163/1168/1169: still catalog shells — route-specific vuln oracles not firing"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 21,
-    "juice-shop-staging.herokuapp.com": 49,
-    "web-security-learning-labs.vercel.app/module/1170": 8,
-    "web-security-learning-labs.vercel.app/module/1171": 8,
-    "web-security-learning-labs.vercel.app/module/1172": 8,
-    "bypass403.vercel.app/api/admin": 10,
-    "bypass403.vercel.app/secure": 10,
-    "brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31": 75
+    "juice-shop.herokuapp.com": 49,
+    "web-security-learning-labs.vercel.app/module/1175": 8,
+    "web-security-learning-labs.vercel.app/module/1176": 8,
+    "web-security-learning-labs.vercel.app/module/1177": 8,
+    "web-security-learning-labs.vercel.app/module/1178": 8,
+    "web-security-learning-labs.vercel.app/module/1179": 5,
+    "web-security-learning-labs.vercel.app/module/1163": 6,
+    "web-security-learning-labs.vercel.app/module/1168": 6,
+    "web-security-learning-labs.vercel.app/module/1169": 6
   }
 }
