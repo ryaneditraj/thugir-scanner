@@ -34383,7 +34383,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1085; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1090; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
@@ -34448,7 +34448,20 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
   let checkpointBlocked = false;
   const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
   corpus += "\n" + moduleDoc.body;
-  if (webSecurityLearningLabsCheckpointBlocked(moduleDoc.body)) checkpointBlocked = true;
+  if (webSecurityLearningLabsCheckpointBlocked(moduleDoc.body)) {
+    checkpointBlocked = true;
+    const homeDoc = await fetchDoc(new URL("/", ctx.origin).toString(), {
+      maxBytes: 65536,
+      timeoutMs: 15000
+    });
+    if (!webSecurityLearningLabsCheckpointBlocked(homeDoc.body)) {
+      const retryDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+      if (!webSecurityLearningLabsCheckpointBlocked(retryDoc.body)) {
+        corpus += "\n" + retryDoc.body;
+        checkpointBlocked = false;
+      }
+    }
+  }
   let placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
   const mappedTopic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId];
   if (
