@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-08T02:04:00.000Z",
+  "updated_at": "2026-08-08T03:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1086",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1086 (public Vercel demo, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1087",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1087 (public Vercel demo, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1088",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1088 (public Vercel demo, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1089",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1089 (public Vercel demo, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1090",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1090 (public Vercel demo, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1081",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1081 (public Vercel demo, 02 UTC discovery)",
