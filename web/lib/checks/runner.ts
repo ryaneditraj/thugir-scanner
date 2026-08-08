@@ -6577,7 +6577,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (let moduleNum = 1011; moduleNum <= 1164; moduleNum++) {
+  for (let moduleNum = 1011; moduleNum <= 1169; moduleNum++) {
     try {
       out.add(new URL(`/module/${moduleNum}`, pageUrl).toString());
     } catch {
@@ -9312,7 +9312,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     home.finalUrl
   )
     ? [
-        ...Array.from({ length: 1164 - 1037 + 1 }, (_, i) => String(1037 + i)),
+        ...Array.from({ length: 1169 - 1037 + 1 }, (_, i) => String(1037 + i)),
         "1019",
         "1020",
         "1021",
@@ -9987,6 +9987,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const all = patternsForTier("deep").sort((a, b) => {
     const w = (p: Pattern) => {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
+      if (/dvwa\.lab\.pentest-forge\.com/i.test(origin) && p.slug.startsWith("pentest-forge-dvwa")) return -2;
+      if (
+        /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/vulnerabilities\/sqli\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-dvwa-sqli")
+      )
+        return -3;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
@@ -10115,11 +10122,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/bypass403\.vercel\.app/i.test(origin) && /\/debug\b/i.test(targetInput) && p.slug.startsWith("bypass403-debug")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/secure\b/i.test(targetInput) && p.slug.startsWith("bypass403-secure")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-admin")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/api\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-api-admin")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/secret\b/i.test(targetInput) && p.slug.startsWith("bypass403-secret")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-4])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
