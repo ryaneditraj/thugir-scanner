@@ -65006,6 +65006,97 @@ const brokencrystalsProductsLatestLimitBypassRouteLiveOracle: Rule = async (ctx)
   };
 };
 
+function brokencrystalsFormatDdMmYyyy(d: Date): string {
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  return `${dd}-${mm}-${yyyy}`;
+}
+
+async function probeBrokencrystalsProductsDateManipulation(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const token = await brokencrystalsProbeUserToken(ctx);
+  if (!token) return null;
+  const now = new Date();
+  const shortTo = new Date(now);
+  const shortFrom = new Date(now);
+  shortFrom.setMonth(shortFrom.getMonth() - 6);
+  const shortUrl = new URL("/api/products", ctx.origin);
+  shortUrl.searchParams.set("date_from", brokencrystalsFormatDdMmYyyy(shortFrom));
+  shortUrl.searchParams.set("date_to", brokencrystalsFormatDdMmYyyy(shortTo));
+  const longUrl = new URL("/api/products", ctx.origin);
+  longUrl.searchParams.set("date_from", "01-01-2000");
+  longUrl.searchParams.set("date_to", "31-12-2099");
+  const shortStart = Date.now();
+  const shortDoc = await ctx.probe.get(shortUrl.toString(), {
+    headers: { authorization: token },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  const shortElapsedMs = Date.now() - shortStart;
+  const longStart = Date.now();
+  const longDoc = await ctx.probe.get(longUrl.toString(), {
+    headers: { authorization: token },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  const longElapsedMs = Date.now() - longStart;
+  if (shortDoc.status < 200 || shortDoc.status >= 400) return null;
+  if (longDoc.status < 200 || longDoc.status >= 400) return null;
+  let shortCount = 0;
+  let longCount = 0;
+  try {
+    const shortItems = JSON.parse(shortDoc.body);
+    const longItems = JSON.parse(longDoc.body);
+    if (!Array.isArray(shortItems) || !Array.isArray(longItems)) return null;
+    shortCount = shortItems.length;
+    longCount = longItems.length;
+  } catch {
+    return null;
+  }
+  const performanceImpact = longElapsedMs >= 1200 && longElapsedMs > shortElapsedMs + 800;
+  const dataExpansion = longCount > shortCount && longCount >= 3;
+  if (!performanceImpact && !dataExpansion) return null;
+  return {
+    fired: true,
+    confidence: performanceImpact && dataExpansion ? 0.94 : 0.92,
+    evidence: {
+      shortUrl: shortUrl.toString(),
+      longUrl: longUrl.toString(),
+      shortCount,
+      longCount,
+      shortElapsedMs,
+      longElapsedMs,
+      note: "Broken Crystals GET /api/products accepts unbounded date_from/date_to (DD-MM-YYYY) without server-side range limits — wide ranges return more catalog rows and significant query latency (README date-manipulation oracle)"
+    }
+  };
+}
+
+const brokencrystalsProductsDateManipulationLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBrokencrystalsProductsDateManipulation(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const brokencrystalsProductsDateManipulationRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/products\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/api\/products\/(?:latest|search|views)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsProductsDateManipulation(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/products route scan — unbounded date_from/date_to query accepts multi-year ranges without rejection, returning expanded product sets with high latency — date-manipulation oracle"
+    }
+  };
+};
+
 const brokencrystalsApiFileHttpbinSsrfLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const bc = await probeBrokencrystalsFileSsrf(ctx);
@@ -70972,6 +71063,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileRawLfiRouteLiveOracle,
   brokencrystalsTestimonialsCountSqliRouteLiveOracle,
   brokencrystalsProductsLatestLimitBypassRouteLiveOracle,
+  brokencrystalsProductsDateManipulationLiveOracle,
+  brokencrystalsProductsDateManipulationRouteLiveOracle,
   crapiMechanicReportBolaLiveOracle,
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
