@@ -32870,6 +32870,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-search-admin-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/users/search/admin mass-assignment route live oracle",
+    description:
+      "When scanning /api/users/search/admin, POST /api/users/basic with isAdmin:true and GET adminpermission confirms privilege escalation — route-specific mass-assignment confirmation oracle.",
+    impactOneline:
+      "Route scans on /api/users/search/admin need live mass-assignment confirmation, not just empty search results.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSearchAdminMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable user attributes and protect adminpermission probes.",
+      steps: [
+        "Use DTOs or strong-parameter filtering to block isAdmin on create/update.",
+        "Require authentication before exposing admin search or adminpermission endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/search/admin route is reachable without auth and mass-assignment on signup escalates to admin. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-mcp-tools-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -36448,6 +36474,57 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /waf route scan shows CF-Connecting-IP bypass. Show CDN header validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-debug-verb-tunneling-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /debug verb-tunneling bypass live oracle",
+    description:
+      "GET /debug returns 403 but ?_method=GET verb-tunneling query bypass returns a success flag — the BypassX debug endpoint 403 bypass training oracle.",
+    impactOneline:
+      "Verb-tunneling via _method query parameters bypasses HTTP method restrictions on protected debug routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403DebugVerbTunnelingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate HTTP methods on the canonical request, not tunneled override parameters.",
+      steps: [
+        "Reject _method and X-HTTP-Method-Override unless explicitly required and authenticated.",
+        "Apply authorization after resolving the effective HTTP method.",
+        "Return consistent 404 for unknown debug routes instead of distinguishable 403 responses."
+      ]
+    },
+    fixPrompt:
+      "Our /debug returns 403 but /debug?_method=GET bypasses it on bypass403.vercel.app. Show method override hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-debug-verb-tunneling-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /debug route verb-tunneling bypass live oracle",
+    description:
+      "When scanning /debug on bypass403.vercel.app, ?_method=GET verb-tunneling bypass reaches the protected debug resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm verb-tunneling bypasses on protected debug endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403DebugVerbTunnelingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate HTTP methods on the canonical request, not tunneled override parameters.",
+      steps: [
+        "Reject _method query overrides before authorization.",
+        "Apply authorization on the resolved HTTP method."
+      ]
+    },
+    fixPrompt:
+      "Our /debug route scan shows ?_method=GET bypass. Show method override hardening.",
     version: 1,
     enabled: true
   },

@@ -11957,6 +11957,58 @@ const bypass403ConfigRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeBypass403DebugVerbTunneling(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  await bypass403CompleteSession(ctx);
+  const debugUrl = new URL("/debug", ctx.origin).toString();
+  const baseline = await ctx.probe.get(debugUrl, {
+    maxBytes: 4096,
+    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+  });
+  if (baseline.status !== 403) return null;
+  const bypassUrl = new URL("/debug", ctx.origin);
+  bypassUrl.searchParams.set("_method", "GET");
+  const bypass = await ctx.probe.get(bypassUrl.toString(), {
+    maxBytes: 4096,
+    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+  });
+  if (bypass.status < 200 || bypass.status >= 300) return null;
+  if (!/verb tunneling bypass success/i.test(bypass.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      original: debugUrl,
+      bypass: bypassUrl.toString(),
+      status: bypass.status,
+      snippet: bypass.body.slice(0, 200).trim(),
+      note: "bypass403.vercel.app GET /debug returns 403 but ?_method=GET verb-tunneling query bypass returns success flag — BypassX debug endpoint oracle"
+    }
+  };
+}
+
+const bypass403DebugVerbTunnelingLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403DebugVerbTunneling(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403DebugVerbTunnelingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/debug\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403DebugVerbTunneling(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "bypass403.vercel.app /debug route scan — ?_method=GET verb-tunneling bypass reaches protected debug resource"
+    }
+  };
+};
+
 const CLIENT_BYPASS403_RES: { label: string; re: RegExp }[] = [
   { label: "BypassX 403 bypass laboratory", re: /BypassX|bypass403/i },
   { label: "403 bypass testing laboratory", re: /403 bypass|Advanced 403 Bypass/i },
@@ -64237,6 +64289,23 @@ const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsSearchAdminMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/search\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/search/admin route scan — POST /api/users/basic isAdmin:true then GET adminpermission confirms mass-assignment privilege escalation"
+    }
+  };
+};
+
 const brokencrystalsAdminpermissionRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -70102,6 +70171,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMassAssignmentLiveOracle,
   brokencrystalsMassAssignmentPutLiveOracle,
   brokencrystalsAdminpermissionRouteLiveOracle,
+  brokencrystalsSearchAdminMassAssignmentRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
   brokencrystalsFileLfiRouteLiveOracle,
   brokencrystalsFilesLfiRouteLiveOracle,
@@ -70814,6 +70884,8 @@ export const RULES: Record<string, Rule> = {
   bypass403ConfigRouteLiveOracle,
   bypass403WafLiveOracle,
   bypass403WafRouteLiveOracle,
+  bypass403DebugVerbTunnelingLiveOracle,
+  bypass403DebugVerbTunnelingRouteLiveOracle,
   clientSideBypass403LabEvidence,
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
