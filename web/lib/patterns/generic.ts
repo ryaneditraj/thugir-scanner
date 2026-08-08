@@ -51183,5 +51183,135 @@ export const genericPatterns: Pattern[] = [
       "Our /api/admin/logs route scan confirms password leakage in express logs. Show route-level log redaction remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-voting-app-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SSbit01 Voting App training platform disclosed",
+    description:
+      "Client bundle or page metadata references the SSbit01 Voting App — an intentionally vulnerable Next.js poll platform with documented user ID exposure and session-only vote tracking.",
+    impactOneline:
+      "Training poll apps with broken access control are useful scanner oracles for IDOR and business-logic flaws.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVotingAppEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not deploy intentionally vulnerable poll apps to production domains.",
+      steps: [
+        "Restrict poll APIs to authenticated owners for user-specific resources.",
+        "Avoid returning MongoDB user IDs to clients when not required.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our scan detected the SSbit01 Voting App training platform. Show broken access control remediation for poll APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-user-polls-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Voting App user polls IDOR live oracle",
+    description:
+      "GET /api/user/{id}/polls returns poll questions and vote tallies without authentication — the SSbit01 Voting App user polls enumeration oracle.",
+    impactOneline:
+      "Unauthenticated poll enumeration exposes private voting data and enables targeted vote manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppUserPollsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and author ownership before returning user polls.",
+      steps: [
+        "Bind /api/user/{id}/polls to the authenticated session user ID.",
+        "Return 401 for unauthenticated requests to user-specific poll listings.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/user/{id}/polls scan returns poll data without authentication. Show user polls IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-user-polls-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Voting App user polls IDOR route live oracle",
+    description:
+      "When scanning /api/user/{id}/polls or /user routes, unauthenticated poll enumeration succeeds — route-specific user polls IDOR oracle.",
+    impactOneline:
+      "Route-scoped scans should flag Voting App poll APIs that leak data without session checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppUserPollsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on route-specific user poll APIs.",
+      steps: [
+        "Bind poll listing routes to authenticated session user IDs.",
+        "Return 401 for cross-user or anonymous poll enumeration.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/user/{id}/polls route scan confirms unauthenticated poll enumeration. Show route-level IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-vote-stuffing-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Voting App vote stuffing live oracle",
+    description:
+      "POST /api/vote/{pollId} accepts multiple anonymous votes from fresh sessions because vote tracking is session-only — the SSbit01 Voting App vote stuffing oracle.",
+    impactOneline:
+      "Session-only vote deduplication allows attackers to inflate poll results with unlimited anonymous votes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppVoteStuffingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-poll vote limits with IP, device, or authenticated identity binding.",
+      steps: [
+        "Track votes by user account or verified identity, not only session cookies.",
+        "Rate-limit POST /api/vote and require CAPTCHA for anonymous voters.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vote endpoint accepts multiple anonymous votes from fresh sessions. Show vote stuffing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-vote-stuffing-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Voting App vote stuffing route live oracle",
+    description:
+      "When scanning /api/vote or /poll routes, multiple anonymous POST /api/vote/{id} requests increment tallies — route-specific vote stuffing oracle.",
+    impactOneline:
+      "Route-scoped scans should confirm Voting App vote endpoints lack durable anti-stuffing controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppVoteStuffingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind votes to durable identity and rate-limit vote routes.",
+      steps: [
+        "Require login or verified identity before accepting votes on sensitive polls.",
+        "Rate-limit vote routes and detect rapid anonymous vote bursts.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/vote route scan confirms vote stuffing via fresh anonymous sessions. Show route-level remediation.",
+    version: 1,
+    enabled: true
   }
 ];
