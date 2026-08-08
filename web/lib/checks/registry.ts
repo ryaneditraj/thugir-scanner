@@ -12009,6 +12009,122 @@ const bypass403DebugVerbTunnelingRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const BYPASS403_INTERNAL_XFF_CHAIN = "evil.com, 127.0.0.1";
+
+async function probeBypass403InternalXffPollution(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  await bypass403CompleteSession(ctx);
+  const internalUrl = new URL("/internal", ctx.origin).toString();
+  const baseline = await ctx.probe.get(internalUrl, {
+    maxBytes: 4096,
+    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+  });
+  if (baseline.status !== 403) return null;
+  const bypass = await ctx.probe.get(internalUrl, {
+    maxBytes: 4096,
+    headers: {
+      "User-Agent": BYPASS403_BROWSER_UA,
+      "X-Forwarded-For": BYPASS403_INTERNAL_XFF_CHAIN
+    }
+  });
+  if (bypass.status < 200 || bypass.status >= 300) return null;
+  if (!/header pollution bypass success/i.test(bypass.body) && !FORBIDDEN_403_BYPASS_MARKERS.test(bypass.body)) {
+    return null;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      original: internalUrl,
+      header: `X-Forwarded-For: ${BYPASS403_INTERNAL_XFF_CHAIN}`,
+      status: bypass.status,
+      snippet: bypass.body.slice(0, 200).trim(),
+      note: "bypass403.vercel.app GET /internal returns 403 but X-Forwarded-For: evil.com, 127.0.0.1 header-pollution chain bypass returns success flag — BypassX internal IP-filter oracle"
+    }
+  };
+}
+
+const bypass403InternalXffPollutionLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403InternalXffPollution(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403InternalXffPollutionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/internal\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403InternalXffPollution(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "bypass403.vercel.app /internal route scan — X-Forwarded-For header-pollution chain bypass reaches protected internal resource"
+    }
+  };
+};
+
+const BYPASS403_SECURE_INVALID_BEARER = "Bearer invalid_token";
+
+async function probeBypass403SecureBearerBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  const secureUrl = new URL("/secure", ctx.origin).toString();
+  const baseline = await ctx.probe.get(secureUrl, {
+    maxBytes: 4096,
+    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+  });
+  if (baseline.status !== 403) return null;
+  const bypass = await ctx.probe.get(secureUrl, {
+    maxBytes: 4096,
+    headers: {
+      "User-Agent": BYPASS403_BROWSER_UA,
+      Authorization: BYPASS403_SECURE_INVALID_BEARER
+    }
+  });
+  if (bypass.status < 200 || bypass.status >= 300) return null;
+  if (
+    !/invalid bearer token bypass success/i.test(bypass.body) &&
+    !FORBIDDEN_403_BYPASS_MARKERS.test(bypass.body)
+  ) {
+    return null;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      original: secureUrl,
+      authorization: BYPASS403_SECURE_INVALID_BEARER,
+      status: bypass.status,
+      snippet: bypass.body.slice(0, 200).trim(),
+      note: "bypass403.vercel.app GET /secure returns 403 but Authorization: Bearer invalid_token bypass returns success flag — BypassX authentication-bypass oracle"
+    }
+  };
+}
+
+const bypass403SecureBearerInvalidTokenLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403SecureBearerBypass(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403SecureBearerInvalidTokenRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/secure\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403SecureBearerBypass(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "bypass403.vercel.app /secure route scan — Authorization: Bearer invalid_token bypass reaches protected secure resource"
+    }
+  };
+};
+
 const CLIENT_BYPASS403_RES: { label: string; re: RegExp }[] = [
   { label: "BypassX 403 bypass laboratory", re: /BypassX|bypass403/i },
   { label: "403 bypass testing laboratory", re: /403 bypass|Advanced 403 Bypass/i },
@@ -34267,6 +34383,13 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
+for (let moduleNum = 1037; moduleNum <= 1085; moduleNum++) {
+  const moduleId = String(moduleNum);
+  if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
+    WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
+  }
+}
+
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
 const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1014": /CSRF|Cross-Site Request Forgery/i,
@@ -34299,7 +34422,9 @@ function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus:
   // Flight payload may encode as: Here is a Module: \",\"1065\"
   return (
     new RegExp(`Here is a Module:\\s*(?:<!--[^>]*-->)?\\s*${moduleId}\\b`, "i").test(corpus) ||
-    new RegExp(`Here is a Module:[^\\d]{0,32}${moduleId}\\b`, "i").test(corpus)
+    new RegExp(`Here is a Module:[^\\d]{0,32}${moduleId}\\b`, "i").test(corpus) ||
+    new RegExp(`Here is a Module:\\\\",\\\\"${moduleId}\\\\"`, "i").test(corpus) ||
+    new RegExp(`/module/${moduleId}\\b`, "i").test(corpus)
   );
 }
 
@@ -70886,6 +71011,10 @@ export const RULES: Record<string, Rule> = {
   bypass403WafRouteLiveOracle,
   bypass403DebugVerbTunnelingLiveOracle,
   bypass403DebugVerbTunnelingRouteLiveOracle,
+  bypass403InternalXffPollutionLiveOracle,
+  bypass403InternalXffPollutionRouteLiveOracle,
+  bypass403SecureBearerInvalidTokenLiveOracle,
+  bypass403SecureBearerInvalidTokenRouteLiveOracle,
   clientSideBypass403LabEvidence,
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,
