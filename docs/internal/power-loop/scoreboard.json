@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T01:15:00.000Z",
+  "updated_at": "2026-08-08T02:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2892,
-  "total_findings": 29306,
+  "total_sites_scanned": 2900,
+  "total_findings": 29419,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2041,
-  "discovery_findings": 24092,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-08T01:15:00.000Z",
+  "discovery_urls_added": 2046,
+  "discovery_findings": 24155,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-08T02:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 487,
+      "probes_run": 509,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,41 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging fallback 6/6 with 48 juice-shop-* live-oracle findings; secret-resend slug still absent"
+      "note": "Primary Heroku oracle healthy 6/6 (50 findings incl juice-shop-* live-oracle slugs); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 48,
-      "focus": "bypass403 /waf CF-Connecting-IP oracle + pwnshop /review stored-XSS route oracle",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 63,
+      "focus": "WSL modules 1081-1085 catalog oracle + vaultapp account-export/audit-logs IDOR drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — maintained after engine evolve",
-      "bypass403.vercel.app/waf: 3→7 findings — bypass403-waf-live-oracle via CF-Connecting-IP: 127.0.0.1",
-      "pwnshop.ctfsecurity.com/review: 12→41 findings — pwnshop-product-review-stored-xss-review-route-live-oracle shipped (PWN-011)",
-      "brokencrystals.com/api/users/search/admin: 81 findings — excessive data exposure + BFLA + SSRF live-oracle hub",
-      "api.vulnbank.org/api/v1/login: unreachable from cloud agent (0 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — primary oracle healthy, no category gaps",
+      "web-security-learning-labs.vercel.app/module/1081-1084: 8 findings each — module-route-evidence + client-side lab markers",
+      "web-security-learning-labs.vercel.app/module/1085: 3 findings — reflexion-escalated-ssti on SSTI module shell",
+      "vaultapp-omega.vercel.app/api/account/export: 14 findings — vaultapp-account-export-apikey + admin audit-log IDOR oracles",
+      "vaultapp-omega.vercel.app/api/admin/audit-logs: 14 findings — vaultapp-admin-audit-logs-idor-route-live-oracle",
+      "api.vulnbank.org/api/v1/login: unreachable from cloud agent (error, 0 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "bypass403.vercel.app/internal /debug /secure: 403 bypass techniques not yet ported (waf CF-Connecting-IP shipped)",
+      "WSL module/1085: SSTI lab shell only 3 findings — route-specific SSTI oracle may need module-content parsing",
       "api.vulnbank.org unreachable from cloud agent — queue entry errors persist",
-      "brokencrystals.com/api/users/search/admin: mass-assignment confirmation oracle still absent without signup flow"
+      "bypass403.vercel.app/internal /debug /secure: 403 bypass techniques still queued at tail pending drain"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com": 50,
+    "web-security-learning-labs.vercel.app/module/1081": 8,
+    "web-security-learning-labs.vercel.app/module/1082": 8,
+    "web-security-learning-labs.vercel.app/module/1083": 8,
+    "web-security-learning-labs.vercel.app/module/1084": 8,
+    "vaultapp-omega.vercel.app/api/account/export": 14,
+    "vaultapp-omega.vercel.app/api/admin/audit-logs": 14,
     "pwnshop.ctfsecurity.com/review": 41,
-    "bypass403.vercel.app/waf": 7,
-    "juice-shop-staging.herokuapp.com": 48,
-    "brokencrystals.com/api/users/search/admin": 81,
-    "brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com": 29,
-    "pwnshop.ctfsecurity.com/account/delete": 41,
-    "vulnbank.org/latest/meta-data/iam/security-credentials/vulnbank-role": 23,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20
+    "brokencrystals.com/api/users/search/admin": 81
   }
 }
