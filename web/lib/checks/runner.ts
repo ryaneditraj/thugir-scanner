@@ -8624,6 +8624,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
 
   let home = await reachTarget(target, targetInput);
+  if (
+    home.status === 0 &&
+    /voting-app[\w-]*\.vercel\.app/i.test(targetInput) &&
+    /\/api\//i.test(targetInput)
+  ) {
+    try {
+      const voteHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (voteHome.status >= 200 && voteHome.body.length > 512) {
+        home = { ...voteHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
   if (stubRedirect && home.body.length < 4096) {
