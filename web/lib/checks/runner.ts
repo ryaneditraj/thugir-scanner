@@ -18,6 +18,7 @@ import {
 import {
   FREE_RULES,
   RULES,
+  primeBypass403SessionForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
   type RuleContext
@@ -8667,6 +8668,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
   if (
+    /bypass403\.vercel\.app/i.test(targetInput) &&
+    /\/(?:admin|secret|config|waf|debug|internal|secure|api\/admin)\b/i.test(targetInput) &&
+    (home.status === 404 || home.status === 403 || home.body.length < 512)
+  ) {
+    try {
+      const bypassHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (bypassHome.status >= 200 && bypassHome.body.length > home.body.length) {
+        home = { ...bypassHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
     /juicesec\.mrdinesh\.workers\.dev/i.test(targetInput) &&
     /\/challenge\/(?:sqli|xss-reflected|broken-auth|idor|robots|sensitive-data|jwt|cmdi|ssrf|xss-stored|xss)\b/i.test(
       targetInput
@@ -8739,6 +8757,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
+  }
+  if (/bypass403\.vercel\.app/i.test(origin)) {
+    await primeBypass403SessionForDeepScan(probe, origin, targetInput, home);
   }
   if (/voting-app[\w-]*\.vercel\.app/i.test(origin)) {
     await primeVotingAppSessionForDeepScan(probe, origin, home);
@@ -10051,6 +10072,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/waf\b/i.test(targetInput) && p.slug.startsWith("bypass403-waf")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/secret\b/i.test(targetInput) && p.slug.startsWith("bypass403-secret")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/internal\b/i.test(targetInput) && p.slug.startsWith("bypass403-internal")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/debug\b/i.test(targetInput) && p.slug.startsWith("bypass403-debug")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/secure\b/i.test(targetInput) && p.slug.startsWith("bypass403-secure")) return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&

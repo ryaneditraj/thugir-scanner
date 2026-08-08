@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-request-headers-session-ua",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bypass403RequestHeaders returns BYPASS403_BROWSER_UA + POST /start session cookie; wired into http403BypassProbe, waf/admin/api-admin/path-normalization/config-header/debug-verb/internal-xff/secure-bearer probes; bypass403.vercel.app/admin route scan 9 findings incl bypass403-admin-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "prime-bypass403-session-deep-scan-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primeBypass403SessionForDeepScan pre-warms bypass403CompleteSession during deep-scan bootstrap on /admin|secret|config|waf|debug|internal|secure|api/admin routes; bypass403 home warmup fetches / when route returns 404/403/thin body; bypass403.vercel.app/admin+secret route scans 9 findings each (5 bypass403 oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-route-deprioritization-secret-config-internal",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pattern sort -3 on bypass403 hosts for secret/config/internal/debug/secure route scans (waf already had -3); prioritizes route-specific live oracles on bypass403.vercel.app/secret /config /internal; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-checkpoint-bootstrap-backoff",
       "status": "shipped",
@@ -20803,6 +20821,23 @@
       "source": "discovery:voting-app-iota.vercel.app",
       "slug": "voting-app-signup-open-route-live-oracle",
       "shipped_at": "2026-08-08T11:20:00.000Z"
+    }
+  ],
+  "shipped_history": [
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-request-headers-session-ua",
+      "shipped_at": "2026-08-08T12:48:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "prime-bypass403-session-deep-scan-bootstrap",
+      "shipped_at": "2026-08-08T12:48:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-route-deprioritization-secret-config-internal",
+      "shipped_at": "2026-08-08T12:48:00.000Z"
     }
   ]
 }
