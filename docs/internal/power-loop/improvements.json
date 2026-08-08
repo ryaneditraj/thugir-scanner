@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1105-1114",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1105-1114; curated module-id placeholder map loop 1037→1114; web-security-learning-labs.vercel.app/module/1105-1109 findings 8 incl web-security-learning-labs-module-route-evidence; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-social-feed-deep-pagination",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies paginates Bluesky (5×50), Mastodon (5×40 max_id), Reddit (4×100 after) for Leaked API Key / secret-resend corpus; juice-shop.herokuapp.com benchmark 51 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current feeds)"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-signup-rate-limit-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: votingAppRegisterSession retries POST /api/signup up to 4× with backoff on HTTP 429 / rate-limit body; improves vote-stuffing + user-polls IDOR oracle reliability under Vercel signup throttling; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:voting-app-iota.vercel.app",
       "slug": "voting-app-user-polls-idor-live-oracle",
       "status": "shipped",
