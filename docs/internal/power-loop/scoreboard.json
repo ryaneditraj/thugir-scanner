@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T02:05:00.000Z",
+  "updated_at": "2026-08-08T02:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2900,
-  "total_findings": 29419,
-  "critical_findings": 58,
+  "total_sites_scanned": 2902,
+  "total_findings": 29506,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2046,
-  "discovery_findings": 24155,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-08T02:05:00.000Z",
+  "discovery_findings": 24242,
+  "improvements_shipped": 1172,
+  "last_run": "2026-08-08T02:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle healthy 6/6 (50 findings incl juice-shop-* live-oracle slugs); secret-resend slug still absent"
+      "note": "Primary Heroku oracle healthy 6/6 (50 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 63,
-      "focus": "WSL modules 1081-1085 catalog oracle + vaultapp account-export/audit-logs IDOR drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 10,
+      "findings": 150,
+      "focus": "bypass403 /debug verb-tunneling + brokencrystals search/admin mass-assignment route oracles; WSL 1081-1085 + vaultapp IDOR drain",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — primary oracle healthy, no category gaps",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — maintained after engine evolve",
+      "bypass403.vercel.app/debug: 8 findings — bypass403-debug-verb-tunneling via ?_method=GET query bypass",
+      "brokencrystals.com/api/users/search/admin: 79 findings — brokencrystals-search-admin-mass-assignment-route-live-oracle shipped",
       "web-security-learning-labs.vercel.app/module/1081-1084: 8 findings each — module-route-evidence + client-side lab markers",
-      "web-security-learning-labs.vercel.app/module/1085: 3 findings — reflexion-escalated-ssti on SSTI module shell",
-      "vaultapp-omega.vercel.app/api/account/export: 14 findings — vaultapp-account-export-apikey + admin audit-log IDOR oracles",
-      "vaultapp-omega.vercel.app/api/admin/audit-logs: 14 findings — vaultapp-admin-audit-logs-idor-route-live-oracle",
-      "api.vulnbank.org/api/v1/login: unreachable from cloud agent (error, 0 findings)"
+      "vaultapp-omega.vercel.app/api/account/export: 14 findings — vaultapp account-export + audit-log IDOR oracles",
+      "bypass403.vercel.app/internal /secure: XFF chain pollution and basic-auth bypass oracles still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL module/1085: SSTI lab shell only 3 findings — route-specific SSTI oracle may need module-content parsing",
+      "bypass403.vercel.app/internal /secure: XFF chain pollution and basic-auth bypass oracles still absent",
       "api.vulnbank.org unreachable from cloud agent — queue entry errors persist",
-      "bypass403.vercel.app/internal /debug /secure: 403 bypass techniques still queued at tail pending drain"
+      "WSL module/1085: SSTI lab shell only 3 findings — route-specific SSTI oracle may need module-content parsing"
     ]
   },
   "discovery_highlights": {
+    "brokencrystals.com/api/users/search/admin": 79,
     "juice-shop.herokuapp.com": 50,
+    "bypass403.vercel.app/debug": 8,
     "web-security-learning-labs.vercel.app/module/1081": 8,
     "web-security-learning-labs.vercel.app/module/1082": 8,
-    "web-security-learning-labs.vercel.app/module/1083": 8,
-    "web-security-learning-labs.vercel.app/module/1084": 8,
     "vaultapp-omega.vercel.app/api/account/export": 14,
-    "vaultapp-omega.vercel.app/api/admin/audit-logs": 14,
     "pwnshop.ctfsecurity.com/review": 41,
-    "brokencrystals.com/api/users/search/admin": 81
+    "bypass403.vercel.app/waf": 7
   }
 }
