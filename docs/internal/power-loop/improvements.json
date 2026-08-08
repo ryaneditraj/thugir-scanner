@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1091-1095",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1091-1095; curated module-id placeholder map loop 1037→1095; web-security-learning-labs.vercel.app/module/1093 findings include web-security-learning-labs-module-route-evidence; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-session-prime-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan warms OTP mail during deep-scan bootstrap for /apply-coupon /wallet /profile /review routes; pwnshop.ctfsecurity.com/apply-coupon findings 13→45 (+apply-coupon + coupon-category-bypass route oracles); pwnshop.ctfsecurity.com/wallet 12→43 (+wallet-topup route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-route-priority-weight",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: deep-scan pattern sort -3 for ssrf-vulnlab-*-route-* when scanning /basic /metadata /blocklist /redirect /allowlist /scheme /gopher /parser /blind /webhook; ssrf.vulnlab.dev/basic findings 15 incl ssrf-vulnlab-basic-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1086-1090",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1086-1090; curated module-id placeholder map loop 1037→1090; web-security-learning-labs.vercel.app/module/1090 findings 3→7 (+web-security-learning-labs-module-route-evidence + client-side-web-security-learning-labs-evidence); benchmark juice-shop-staging 48 findings 6/6 maintained"
@@ -20632,6 +20650,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-checkpoint-retry",
       "shipped_at": "2026-08-08T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1091-1095",
+      "shipped_at": "2026-08-08T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-session-prime-bootstrap",
+      "shipped_at": "2026-08-08T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-route-priority-weight",
+      "shipped_at": "2026-08-08T05:10:00.000Z"
     }
   ]
 }

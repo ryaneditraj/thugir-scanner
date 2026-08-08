@@ -31701,6 +31701,19 @@ async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | nul
   return promise;
 }
 
+/** Pre-warm OTP mail delivery during deep-scan bootstrap so auth-gated route oracles are ready. */
+export async function primePwnshopOtpSessionForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/profile\/|\/apply-coupon|\/wallet\b|\/review\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  await pwnshopCompleteOtpSession(ctx);
+}
+
 const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const victimUser = `thugir_victim_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -34383,7 +34396,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1090; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1095; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;

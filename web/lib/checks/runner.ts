@@ -15,7 +15,12 @@ import {
   type FetchedDoc
 } from "./http";
 
-import { FREE_RULES, RULES, type RuleContext } from "./registry";
+import {
+  FREE_RULES,
+  RULES,
+  primePwnshopOtpSessionForDeepScan,
+  type RuleContext
+} from "./registry";
 import { ProbeCache } from "./probe-cache";
 import { fetchScriptsBatched, fetchPagesBatched, expandGithackModuleImports } from "./fetch-scripts";
 
@@ -6496,7 +6501,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036", "1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075", "1076", "1077", "1078", "1079", "1080", "1081", "1082", "1083", "1084", "1085", "1086", "1087", "1088", "1089", "1090"]) {
+  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036", "1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075", "1076", "1077", "1078", "1079", "1080", "1081", "1082", "1083", "1084", "1085", "1086", "1087", "1088", "1089", "1090", "1091", "1092", "1093", "1094", "1095"]) {
     try {
       out.add(new URL(`/module/${moduleId}`, pageUrl).toString());
     } catch {
@@ -8581,7 +8586,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   home = await warmupJuiceShopHome(target.toString(), home);
   if (
     /pwnshop|ctfsecurity\.com/i.test(targetInput) &&
-    /\/profile\//i.test(targetInput) &&
+    /\/profile\/|\/apply-coupon|\/wallet\b|\/review\b/i.test(targetInput) &&
     (home.status === 404 || home.body.length < 512)
   ) {
     try {
@@ -8646,6 +8651,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const probe = new ProbeCache();
   if (isJuiceShopHost(home.finalUrl || target.toString())) {
     await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
+  }
+  if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
+    await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
   }
   home = await applyWargameBasicAuth(home.finalUrl || target.toString(), home, probe, home.body);
   const owaspGenaiSessionRef: { cookie?: string } = {};
@@ -9167,7 +9175,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const webSecurityLearningModulePrioritySeeds = /web-security-learning-labs\.vercel\.app\/module\/\d{4}/i.test(
     home.finalUrl
   )
-    ? ["1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075", "1076", "1077", "1078", "1079", "1080", "1081", "1082", "1083", "1084", "1085", "1086", "1087", "1088", "1089", "1090", "1019", "1020", "1021", "1022", "1023"].map(
+    ? ["1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075", "1076", "1077", "1078", "1079", "1080", "1081", "1082", "1083", "1084", "1085", "1086", "1087", "1088", "1089", "1090", "1091", "1092", "1093", "1094", "1095", "1019", "1020", "1021", "1022", "1023"].map(
         (id) => new URL(`/module/${id}`, home.finalUrl).toString()
       )
     : [];
@@ -9829,6 +9837,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (
+        /ssrf\.vulnlab\.dev/i.test(origin) &&
+        /\/(basic|metadata(?:-aws|-gcp|-azure)?|blocklist|redirect|allowlist|scheme|gopher|parser|blind|webhook)\b/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("ssrf-vulnlab-") &&
+        /-route-/.test(p.slug)
+      )
+        return -3;
       if (/zerohealth\.aliyu\.dev/i.test(origin) && p.slug.startsWith("zerohealth-")) return -2;
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && /juice-shop-addresss/.test(p.slug)) return -3;
