@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-08T19:08:38.168Z",
-  "total": 2037,
-  "uniqueSlugs": 2033,
+  "generatedAt": "2026-08-08T20:04:11.448Z",
+  "total": 2038,
+  "uniqueSlugs": 2034,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2019,
+    "generic": 2020,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1952,
+    "deep": 1953,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 106,
     "Security misconfiguration": 147,
     "Broken authentication": 124,
-    "Injection": 290,
+    "Injection": 291,
     "Cross-site scripting": 668,
     "Open redirect": 16,
     "general": 20,
@@ -1578,6 +1578,7 @@
     "oopssec-xff-sqli-route-live-oracle",
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
+    "pentest-forge-dvwa-sqli-route-live-oracle",
     "pentest-forge-linked-lab-probe",
     "pentest-ground-dvwa-csp-bypass-route-live-oracle",
     "pentest-ground-dvwa-csrf-route-live-oracle",

@@ -2,9 +2,21 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
-      "slug": "web-security-learning-labs-module-seeds-1160-1164",
+      "slug": "web-security-learning-labs-module-seeds-1165-1169",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1164 programmatically (was capped at 1159); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1164; web-security-learning-labs.vercel.app/module/1160-1164 drain-ready; benchmark juice-shop-staging 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1169 programmatically (was capped at 1164); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1169; web-security-learning-labs.vercel.app/module/1165-1169 drain-ready; benchmark juice-shop.herokuapp.com 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1165-1169-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1164→1125-1169; runner SSTI priority regex 116[0-4]→116[0-9] + bypass403 /api/admin route -3 priority; module/1160 findings 9 with web-security-learning-labs-ssti-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.lab.pentest-forge.com",
+      "slug": "pentest-forge-dvwa-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/sqli/ id=1' OR '1'='1 tautology oracle ported from pentest-ground-dvwa-sqli-route-live-oracle for dvwa.lab.pentest-forge.com; lab HTTP 502 during validation — oracle ready when PentestForge DVWA returns; benchmark juice-shop 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
