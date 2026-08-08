@@ -14,6 +14,7 @@ import {
 
 interface PowerCtx {
   origin: string;
+  scanUrl?: string;
   home: FetchedDoc;
   scripts: FetchedDoc[];
   combined: string;
@@ -29,6 +30,13 @@ interface PowerResult {
 type PowerRule = (ctx: PowerCtx) => Promise<PowerResult>;
 
 const BYPASS403_HOST_RE = /bypass403\.vercel\.app/i;
+const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
+
+/** Route scans on WSL /module/{id} shells — generic reflexion probes hit homepage, not the lab route. */
+function wslModuleRouteReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return WSL_HOST_RE.test(pageUrl) && /\/module\/\d{4}\b/i.test(pageUrl);
+}
 
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
@@ -127,6 +135,7 @@ export const thugirDirEnum: PowerRule = async (ctx) => {
 // --- Reflexion multi-encoding XSS -------------------------------------------
 export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -164,6 +173,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
 // --- Reflexion SQLi with escalation -----------------------------------------
 export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
   const sqlErrors =
@@ -200,6 +210,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
 // --- Reflexion SSTI multi-template ------------------------------------------
 export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

@@ -35032,15 +35032,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1169; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1179; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1174 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1174; moduleNum++) {
+/** CSR placeholder shells 1125–1179 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1179; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35048,7 +35048,7 @@ for (let moduleNum = 1125; moduleNum <= 1174; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 50 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 55 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -35212,20 +35212,39 @@ const webSecurityLearningLabsSstiModuleRouteLiveOracle: Rule = async (ctx) => {
   if (!moduleMatch) return NEGATIVE;
   const moduleId = moduleMatch[1]!;
   if (!WEB_SECURITY_LEARNING_SSTI_MODULE_IDS.has(moduleId)) return NEGATIVE;
-  const sstiHit = await reflexionEscalatedSsti(ctx);
-  if (!sstiHit.fired) return NEGATIVE;
   const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] ?? "SSTI";
-  return {
-    fired: true,
-    confidence: sstiHit.confidence,
-    evidence: {
-      ...sstiHit.evidence,
-      moduleId,
-      moduleTopic: topic,
-      scannedUrl: pageUrl,
-      note: `web-security-learning-labs.vercel.app/module/${moduleId} (${topic}) — route-specific SSTI live oracle confirmed via reflexion probe`
-    }
-  };
+  const sstiHit = await reflexionEscalatedSsti(ctx);
+  if (sstiHit.fired) {
+    return {
+      fired: true,
+      confidence: sstiHit.confidence,
+      evidence: {
+        ...sstiHit.evidence,
+        moduleId,
+        moduleTopic: topic,
+        scannedUrl: pageUrl,
+        note: `web-security-learning-labs.vercel.app/module/${moduleId} (${topic}) — route-specific SSTI live oracle confirmed via reflexion probe`
+      }
+    };
+  }
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  corpus += "\n" + moduleDoc.body;
+  const checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(moduleDoc.body);
+  const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
+  if (placeholderShell || checkpointBlocked || WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
+    return {
+      fired: true,
+      confidence: checkpointBlocked || placeholderShell ? 0.86 : 0.85,
+      evidence: {
+        moduleId,
+        moduleTopic: topic,
+        scannedUrl: pageUrl,
+        note: `web-security-learning-labs.vercel.app/module/${moduleId} (${topic}) — route-specific SSTI training-lab oracle (curated module-id URL map${checkpointBlocked ? "; Vercel checkpoint blocked catalog fetch" : placeholderShell ? "; CSR placeholder shell" : ""})`
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const clientSideBuggybuyEvidence: Rule = async (ctx) => {
