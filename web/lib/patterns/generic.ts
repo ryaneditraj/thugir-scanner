@@ -36074,7 +36074,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1075 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1075) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
+      "When scanning /module/1011–1085 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1085) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
@@ -36525,6 +36525,108 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /debug route scan shows ?_method=GET bypass. Show method override hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-internal-xff-pollution-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /internal XFF header-pollution bypass live oracle",
+    description:
+      "GET /internal returns 403 but X-Forwarded-For: evil.com, 127.0.0.1 header-pollution chain bypass returns a success flag — the BypassX internal IP-filter 403 bypass training oracle.",
+    impactOneline:
+      "X-Forwarded-For header pollution chains bypass IP-based access controls on internal-only routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403InternalXffPollutionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse X-Forwarded-For from the rightmost trusted hop; reject comma-separated pollution chains.",
+      steps: [
+        "Use a single trusted reverse-proxy hop for client IP resolution.",
+        "Reject requests with multiple X-Forwarded-For values unless from known proxies.",
+        "Apply authorization after resolving the true client IP."
+      ]
+    },
+    fixPrompt:
+      "Our /internal returns 403 but X-Forwarded-For: evil.com, 127.0.0.1 bypasses it on bypass403.vercel.app. Show XFF parsing hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-internal-xff-pollution-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /internal route XFF pollution bypass live oracle",
+    description:
+      "When scanning /internal on bypass403.vercel.app, X-Forwarded-For header-pollution chain bypass reaches the protected internal resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm XFF pollution bypasses on protected internal endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403InternalXffPollutionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse X-Forwarded-For from the rightmost trusted hop; reject pollution chains.",
+      steps: [
+        "Reject comma-separated X-Forwarded-For pollution before authorization.",
+        "Resolve client IP from trusted proxy headers only."
+      ]
+    },
+    fixPrompt:
+      "Our /internal route scan shows X-Forwarded-For pollution bypass. Show XFF parsing hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-secure-bearer-invalid-token-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /secure invalid Bearer token bypass live oracle",
+    description:
+      "GET /secure returns 403 but Authorization: Bearer invalid_token bypass returns a success flag — the BypassX authentication-bypass training oracle.",
+    impactOneline:
+      "Malformed or placeholder Bearer tokens bypass authentication on protected secure routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403SecureBearerInvalidTokenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate Bearer JWTs cryptographically; reject unknown or malformed tokens before authorization.",
+      steps: [
+        "Verify JWT signatures and expiration on every protected route.",
+        "Return 401 for malformed Authorization headers instead of falling through.",
+        "Do not accept literal placeholder tokens in production auth middleware."
+      ]
+    },
+    fixPrompt:
+      "Our /secure returns 403 but Authorization: Bearer invalid_token bypasses it on bypass403.vercel.app. Show Bearer token validation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-secure-bearer-invalid-token-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /secure route invalid Bearer bypass live oracle",
+    description:
+      "When scanning /secure on bypass403.vercel.app, Authorization: Bearer invalid_token bypass reaches the protected secure resource — route-specific authentication-bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm invalid Bearer token bypasses on protected secure endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403SecureBearerInvalidTokenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate Bearer JWTs cryptographically on every protected route.",
+      steps: [
+        "Reject malformed Authorization headers before route handlers.",
+        "Verify JWT signatures and claims server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /secure route scan shows Bearer invalid_token bypass. Show Bearer validation hardening.",
     version: 1,
     enabled: true
   },

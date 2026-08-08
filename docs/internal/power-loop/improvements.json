@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-secure-bearer-invalid-token-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /secure returns 403 but Authorization: Bearer invalid_token returns {\"message\":\"Invalid bearer token bypass success!\",\"flag\":...}; bypass403.vercel.app/secure findings 8→9 (+bypass403-secure-bearer-invalid-token-live-oracle + route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1085-map",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: curated module-id map extended 1037–1085 + placeholder shell flight-payload regex; web-security-learning-labs.vercel.app/module/1085 findings 3→8 (+web-security-learning-labs-module-route-evidence + client-side-web-security-learning-labs-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-internal-xff-pollution-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Karthikdude/bypass403 source confirms GET /internal + X-Forwarded-For: evil.com, 127.0.0.1 returns header pollution bypass flag; Vercel edge strips XFF on live deploy so oracle does not fire on bypass403.vercel.app/internal yet — retained for self-hosted BypassX parity; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-debug-verb-tunneling-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /debug returns 403 but /debug?_method=GET returns {\"message\":\"Verb tunneling bypass success!\",\"flag\":...}; bypass403.vercel.app/debug findings 8 (+bypass403-debug-verb-tunneling-live-oracle + bypass403-debug-verb-tunneling-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
