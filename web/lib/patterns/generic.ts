@@ -36073,7 +36073,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1085 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1085) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
+      "When scanning /module/1011–1139 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1139) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
@@ -36099,7 +36099,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Web Security Learning Labs SSTI module route live oracle",
     description:
-      "When scanning SSTI modules (1022, 1024, 1125–1134) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle.",
+      "When scanning SSTI modules (1022, 1024, 1125–1139) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle.",
     impactOneline:
       "Route-specific SSTI confirmation on WSL training modules enables targeted scanner calibration for template-injection labs.",
     detectorKind: "rule_ref",

@@ -34984,15 +34984,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1134; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1139; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1134 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1134; moduleNum++) {
+/** CSR placeholder shells 1125–1139 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1139; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35000,7 +35000,7 @@ for (let moduleNum = 1125; moduleNum <= 1134; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 10 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 15 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -68626,7 +68626,14 @@ async function probeVaultappMessagesReadIdor(ctx: RuleContext): Promise<RuleResu
     "Content-Type": "application/json",
     Accept: "application/json"
   };
-  for (let messageId = 1; messageId <= 60; messageId++) {
+  const messageIdsToTry = [
+    110, 42, 51, 75, 99,
+    ...Array.from({ length: 80 }, (_, i) => i + 100)
+  ];
+  const seenMessageIds = new Set<number>();
+  for (const messageId of messageIdsToTry) {
+    if (seenMessageIds.has(messageId)) continue;
+    seenMessageIds.add(messageId);
     const doc = await ctx.probe.get(readUrl, {
       method: "POST",
       body: JSON.stringify({ message_id: messageId }),
