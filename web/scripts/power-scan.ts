@@ -38,6 +38,8 @@ interface BenchmarkTarget extends ScanEntry {
 }
 
 const BENCHMARK_MIN_FINDINGS = 5;
+/** Primary Heroku can hit 6/6 via generic bundle checks while live-oracle probes stay cold. */
+const BENCHMARK_JUICE_SHOP_RICH_FINDINGS = 15;
 const BENCHMARK_RETRY_DELAY_MS = 12000;
 const BENCHMARK_FINAL_RETRY_DELAY_MS = 25000;
 
@@ -110,6 +112,22 @@ function recentlyScanned(url: string, runs: ScanRunResult[], hours = 48): boolea
     if (!runKey || runKey !== key) return false;
     return new Date(r.scanned_at).getTime() > cutoff;
   });
+}
+
+function juiceShopLiveOracleSlugCount(findings: BenchmarkFinding[]): number {
+  return findings.filter((f) => /^juice-shop-/i.test(f.slug)).length;
+}
+
+/** 6/6 recall with no juice-shop-* live oracles — Heroku partial wake / bundle-only pass. */
+function benchmarkThinJuiceShopPass(
+  url: string,
+  findings: BenchmarkFinding[],
+  recall: ReturnType<typeof computeBenchmarkRecall> | null
+): boolean {
+  if (!/juice-shop|owasp-juice/i.test(url)) return false;
+  if (recall === null || recall.gap.length > 0) return false;
+  const liveOracles = juiceShopLiveOracleSlugCount(findings);
+  return liveOracles === 0 || findings.length < BENCHMARK_JUICE_SHOP_RICH_FINDINGS;
 }
 
 function benchmarkFallbackUrls(target: BenchmarkTarget | undefined, primaryUrl: string): string[] {
@@ -379,7 +397,7 @@ async function main() {
       if (recall !== null && recall.gap.length > 0) {
         for (const fallbackUrl of benchmarkFallbackUrls(target, entry.url)) {
           console.log(`benchmark fallback ${fallbackUrl} (gap=${recall.gap.join(",")})`);
-          const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind);
+          const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind, scanOptions);
           saveResults(fallback);
           if (fallback.status !== "ok") continue;
           const merged = mergeBenchmarkFindings(result.findings, fallback.findings);
@@ -400,6 +418,46 @@ async function main() {
             recall = mergedRecall;
           }
           if (recall.gap.length === 0 && result.finding_count >= BENCHMARK_MIN_FINDINGS) break;
+        }
+      }
+
+      if (
+        recall !== null &&
+        benchmarkThinJuiceShopPass(entry.url, result.findings, recall) &&
+        benchmarkFallbackUrls(target, entry.url).length > 0
+      ) {
+        console.log(
+          `benchmark thin pass ${entry.url} findings=${result.finding_count} liveOracles=${juiceShopLiveOracleSlugCount(result.findings)} — trying fallbacks`
+        );
+        for (const fallbackUrl of benchmarkFallbackUrls(target, entry.url)) {
+          console.log(`benchmark thin-pass fallback ${fallbackUrl}`);
+          const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind, scanOptions);
+          saveResults(fallback);
+          if (fallback.status !== "ok") continue;
+          const merged = mergeBenchmarkFindings(result.findings, fallback.findings);
+          const mergedRecall = computeBenchmarkRecall(merged, expected);
+          const mergedLiveOracles = juiceShopLiveOracleSlugCount(merged);
+          if (
+            mergedLiveOracles > juiceShopLiveOracleSlugCount(result.findings) ||
+            merged.length > result.finding_count
+          ) {
+            result = {
+              ...result,
+              url: fallbackUrl,
+              findings: merged,
+              finding_count: merged.length,
+              pages_crawled: Math.max(result.pages_crawled, fallback.pages_crawled),
+              probes_run: Math.max(result.probes_run, fallback.probes_run)
+            };
+            recall = mergedRecall;
+          }
+          if (
+            recall.gap.length === 0 &&
+            juiceShopLiveOracleSlugCount(result.findings) > 0 &&
+            result.finding_count >= BENCHMARK_JUICE_SHOP_RICH_FINDINGS
+          ) {
+            break;
+          }
         }
       }
     }
