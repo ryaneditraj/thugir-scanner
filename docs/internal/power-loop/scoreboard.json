@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T03:15:00.000Z",
+  "updated_at": "2026-08-08T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2906,
-  "total_findings": 29616,
+  "total_sites_scanned": 2908,
+  "total_findings": 29712,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2046,
   "discovery_findings": 24251,
   "improvements_shipped": 1170,
-  "last_run": "2026-08-08T03:15:00.000Z",
+  "last_run": "2026-08-08T04:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 509,
+      "probes_run": 489,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (51 findings); secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 recall (48 findings with juice-shop-* live-oracle slugs)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 25,
-      "focus": "bypass403 /secure Bearer invalid_token + WSL module/1085 catalog map extension",
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "WSL module seeds 1086-1090 + module bootstrap self-fetch + checkpoint retry",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — maintained",
-      "bypass403.vercel.app/secure: 8→9 findings — bypass403-secure-bearer-invalid-token-live-oracle shipped (Authorization: Bearer invalid_token)",
-      "web-security-learning-labs.vercel.app/module/1085: 3→8 findings — module-id map 1037–1085 + placeholder shell regex",
-      "bypass403.vercel.app/internal: XFF pollution oracle source-confirmed but Vercel edge strips X-Forwarded-For on live deploy"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — primary Heroku 503",
+      "web-security-learning-labs.vercel.app/module/1090: 3→7 findings — seeds 1086-1090 + module bootstrap self-fetch + checkpoint retry",
+      "web-security-learning-labs.vercel.app/module/1086-1089: stable 8 findings with module-route-evidence (03 UTC queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "bypass403.vercel.app/internal: Vercel edge overwrites X-Forwarded-For — internal XFF pollution oracle needs direct app access",
+      "bypass403.vercel.app/internal: Vercel edge strips X-Forwarded-For — internal XFF pollution oracle needs direct app access",
+      "ssrf.vulnlab.dev/*: oracles wired but queue tail not yet drained in results.json",
       "api.vulnbank.org unreachable from cloud agent — queue entry errors persist"
     ]
   },
   "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com": 48,
+    "web-security-learning-labs.vercel.app/module/1090": 7,
+    "web-security-learning-labs.vercel.app/module/1086": 8,
     "brokencrystals.com/api/users/search/admin": 79,
-    "juice-shop.herokuapp.com": 51,
-    "bypass403.vercel.app/secure": 9,
-    "web-security-learning-labs.vercel.app/module/1085": 8,
-    "bypass403.vercel.app/debug": 8,
-    "web-security-learning-labs.vercel.app/module/1081": 8,
-    "vaultapp-omega.vercel.app/api/account/export": 14,
-    "pwnshop.ctfsecurity.com/review": 41
+    "pwnshop.ctfsecurity.com/review": 41,
+    "vaultapp-omega.vercel.app/api/admin/users/1": 14,
+    "bypass403.vercel.app/secure": 9
   }
 }
