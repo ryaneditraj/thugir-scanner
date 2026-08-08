@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1150-1154",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1154 programmatically (was capped at 1149); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1154; web-security-learning-labs.vercel.app/module/1150-1154 drain-ready; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1150-1154-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1149→1125-1154; runner SSTI priority regex 114[0-9]→114[0-9]|115[0-4]; module/1150-1154 findings +web-security-learning-labs-ssti-module-route-live-oracle (was reflexion-only); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp.vercel.app",
+      "slug": "vaultapp-vercel-app-canonical-rewrite",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultapp.vercel.app serves Clutch-It SPA (not MRMcyber lab); canonicalDiscoveryUrl rewrites to vaultapp-omega.vercel.app; queue.json 3 stale URLs fixed; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-seeds-1145-1149",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1149 programmatically (was capped at 1144); WEB_SECURITY_LEARNING_MODULE_TOPICS + SSTI module IDs extended 1125-1144→1125-1149; web-security-learning-labs.vercel.app/module/1145 findings 9 (+ssti-module-route-live-oracle + module-route-evidence); module/1149 findings 9; benchmark juice-shop-staging 49 findings 6/6 maintained"
