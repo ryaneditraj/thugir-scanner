@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1170-1174",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1174 programmatically (was capped at 1169); WEB_SECURITY_LEARNING_MODULE_TOPICS SSTI placeholder loop 1125-1174; web-security-learning-labs.vercel.app/module/1170-1174 drain-ready; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1170-1174-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS extended 1125-1169→1125-1174; runner SSTI priority regex 116[0-9]→116[0-9]|117[0-4]; module/1170 findings +web-security-learning-labs-ssti-module-route-live-oracle (+module-route-evidence, client-side markers); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-curated-url-map-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: module-route + client-side oracles fire on curated WEB_SECURITY_LEARNING_MODULE_TOPICS when CSR shells omit catalog markers; module/1165 findings 6→6 with ssti-module-route + module-route-evidence + client-side-web-security-learning-labs-evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-session-vercel-challenge-retry",
       "status": "shipped",
