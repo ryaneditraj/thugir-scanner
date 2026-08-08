@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T02:15:00.000Z",
+  "updated_at": "2026-08-08T03:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2902,
-  "total_findings": 29506,
-  "critical_findings": 60,
+  "total_sites_scanned": 2730,
+  "total_findings": 26621,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2046,
-  "discovery_findings": 24242,
-  "improvements_shipped": 1172,
-  "last_run": "2026-08-08T02:15:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22549,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-08T03:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 509,
+      "probes_run": 507,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,41 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle healthy 6/6 (50 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (51 findings); primary Heroku healthy; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 150,
-      "focus": "bypass403 /debug verb-tunneling + brokencrystals search/admin mass-assignment route oracles; WSL 1081-1085 + vaultapp IDOR drain",
-      "improvements_shipped_this_run": 2
+      "urls_scanned": 8,
+      "findings": 62,
+      "focus": "WSL module/1086-1090 catalog expansion + vaultapp-omega IDOR oracles queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — maintained after engine evolve",
-      "bypass403.vercel.app/debug: 8 findings — bypass403-debug-verb-tunneling via ?_method=GET query bypass",
-      "brokencrystals.com/api/users/search/admin: 79 findings — brokencrystals-search-admin-mass-assignment-route-live-oracle shipped",
-      "web-security-learning-labs.vercel.app/module/1081-1084: 8 findings each — module-route-evidence + client-side lab markers",
-      "vaultapp-omega.vercel.app/api/account/export: 14 findings — vaultapp account-export + audit-log IDOR oracles",
-      "bypass403.vercel.app/internal /secure: XFF chain pollution and basic-auth bypass oracles still absent"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1086-1089: 8 findings each — module-route-evidence + reflexion SSTI shell",
+      "web-security-learning-labs.vercel.app/module/1090: 3 findings — SSTI shell only (placeholder module)",
+      "vaultapp-omega.vercel.app/api/admin/users/1: 14 findings — admin user-delete + audit-log IDOR oracles",
+      "vaultapp-omega.vercel.app/api/messages/read: 13 findings — message-read IDOR oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "bypass403.vercel.app/internal /secure: XFF chain pollution and basic-auth bypass oracles still absent",
-      "api.vulnbank.org unreachable from cloud agent — queue entry errors persist",
-      "WSL module/1085: SSTI lab shell only 3 findings — route-specific SSTI oracle may need module-content parsing"
+      "api.vulnbank.org unreachable from cloud agent (persists 03 UTC)",
+      "WSL module/1090: thin 3-finding shell — no module-route-evidence oracle (placeholder catalog entry)",
+      "bypass403.vercel.app /internal /debug /secure still at queue tail pending drain"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/users/search/admin": 79,
-    "juice-shop.herokuapp.com": 50,
-    "bypass403.vercel.app/debug": 8,
-    "web-security-learning-labs.vercel.app/module/1081": 8,
-    "web-security-learning-labs.vercel.app/module/1082": 8,
-    "vaultapp-omega.vercel.app/api/account/export": 14,
-    "pwnshop.ctfsecurity.com/review": 41,
-    "bypass403.vercel.app/waf": 7
+    "juice-shop.herokuapp.com": 51,
+    "web-security-learning-labs.vercel.app/module/1086": 8,
+    "web-security-learning-labs.vercel.app/module/1087": 8,
+    "web-security-learning-labs.vercel.app/module/1088": 8,
+    "web-security-learning-labs.vercel.app/module/1089": 8,
+    "web-security-learning-labs.vercel.app/module/1090": 3,
+    "vaultapp-omega.vercel.app/api/admin/users/1": 14,
+    "vaultapp-omega.vercel.app/api/messages/read": 13,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }
