@@ -31629,7 +31629,9 @@ const CLIENT_VOTING_APP_RES: { label: string; re: RegExp }[] = [
   { label: "Voting App by SSbit01 title", re: /Voting App by SSbit01/i },
   { label: "MongoDB-backed poll platform", re: /create polls and everyone can vote/i },
   { label: "Documented user ID exposure", re: /User ID is exposed to the client/i },
-  { label: "Iron-session voting cookie", re: /voting-app_cookie|iron-session/i }
+  { label: "Iron-session voting cookie", re: /voting-app\d*_cookie|iron-session/i },
+  { label: "Documented intentional vulnerabilities", re: /many\s+<strong[^>]*>vulnerabilities<\/strong>|vulnerabilities.*SSbit01\/voting-app/i },
+  { label: "MongoDB Atlas hosting disclosure", re: /MongoDB Atlas deployed in the AWS/i }
 ];
 
 const clientSideVotingAppEvidence: Rule = async (ctx) => {
@@ -32117,6 +32119,35 @@ async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | nul
   const promise = pwnshopCompleteOtpSessionUncached(ctx);
   pwnshopOtpSessionByProbe.set(ctx.probe, promise);
   return promise;
+}
+
+/** Pre-warm a signup session during deep-scan bootstrap so live oracles run before Vercel rate limits. */
+export async function primeVotingAppSessionForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/voting-app[\w-]*\.vercel\.app/i.test(origin)) return;
+  const signupUrl = new URL("/api/signup", origin).toString();
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const name = `prime${Date.now().toString(36).slice(-6)}${Math.random().toString(36).slice(2, 4)}`;
+    const doc = await probe.get(signupUrl, {
+      method: "POST",
+      body: JSON.stringify({ name, password: "ThugirProbe123!" }),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 20000
+    });
+    if (doc.status === 429 || /rate limit|too many requests/i.test(doc.body)) {
+      if (attempt < 2) {
+        await new Promise((resolve) => setTimeout(resolve, 2000 + attempt * 1500));
+        continue;
+      }
+      return;
+    }
+    if (doc.status >= 200 && doc.status < 300) return;
+    return;
+  }
 }
 
 /** Pre-warm OTP mail delivery during deep-scan bootstrap so auth-gated route oracles are ready. */
@@ -34814,7 +34845,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1114; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1119; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;

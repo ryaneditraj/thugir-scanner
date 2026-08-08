@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1115-1119",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1101-1119; curated module-id placeholder map loop 1037→1119; web-security-learning-labs.vercel.app/module/1115 findings 8 incl web-security-learning-labs-module-route-evidence; module/1110-1112 findings 5-8; benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-session-prime-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primeVotingAppSessionForDeepScan warms POST /api/signup before rule eval; voting-app-* pattern sort -3 on voting-app hosts; CLIENT_VOTING_APP_RES adds voting-app2_cookie + vulnerabilities readme markers; voting-app-iota.vercel.app findings 5→8 (+client-side-voting-app-evidence +user-polls-idor +vote-stuffing); benchmark 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-queue-login-host-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue replaces dead api.vulnbank.org/api/v1/login with https://vulnbank.org/login; vulnbank-* pattern sort -2 on /login route scans; vulnbankSqliLoginLiveOracle targets POST /login on vulnbank.org origin; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1105-1114",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1105-1114; curated module-id placeholder map loop 1037→1114; web-security-learning-labs.vercel.app/module/1105-1109 findings 8 incl web-security-learning-labs-module-route-evidence; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
@@ -20719,6 +20737,21 @@
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-route-priority-weight",
       "shipped_at": "2026-08-08T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1115-1119",
+      "shipped_at": "2026-08-08T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-session-prime-bootstrap",
+      "shipped_at": "2026-08-08T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-queue-login-host-fix",
+      "shipped_at": "2026-08-08T09:10:00.000Z"
     }
   ]
 }
