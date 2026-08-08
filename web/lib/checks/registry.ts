@@ -11714,7 +11714,7 @@ export async function primeBypass403SessionForDeepScan(
   home: FetchedDoc
 ): Promise<void> {
   if (!/bypass403\.vercel\.app/i.test(origin)) return;
-  if (!/\/(?:admin|waf|debug|internal|secure|api\/admin)\b/i.test(scanUrl)) return;
+  if (!/\/(?:admin|secret|config|waf|debug|internal|secure|api\/admin)\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   await bypass403CompleteSession(ctx);
 }
@@ -34984,15 +34984,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1144; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1149; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1144 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1144; moduleNum++) {
+/** CSR placeholder shells 1125–1149 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1149; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35000,7 +35000,7 @@ for (let moduleNum = 1125; moduleNum <= 1144; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 20 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 25 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
