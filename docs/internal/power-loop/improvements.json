@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1096-1100",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1096-1100; curated module-id placeholder map loop 1037→1100; web-security-learning-labs.vercel.app/module/1096 findings 8 incl web-security-learning-labs-module-route-evidence; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-admin-database-execute-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/test-accounts leaks admin creds; POST /api/admin/database/execute SELECT name FROM sqlite_master returns users/transactions rows; whoopspay.onrender.com/api/admin findings 16→17 (+admin-database-execute live oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-admin-express-logs-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: admin login via test-accounts then GET /api/admin/logs/express returns POST /api/login log lines with plaintext password field; whoopspay.onrender.com/api/admin/logs findings 16→19 (+express-logs live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1091-1095",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1091-1095; curated module-id placeholder map loop 1037→1095; web-security-learning-labs.vercel.app/module/1093 findings include web-security-learning-labs-module-route-evidence; benchmark juice-shop 52 findings 6/6 maintained"

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T06:05:09.977Z",
+  "updated_at": "2026-08-08T06:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2932,
-  "total_findings": 30169,
-  "critical_findings": 62,
+  "total_sites_scanned": 2926,
+  "total_findings": 30136,
+  "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 3333,
-  "discovery_findings": 24654,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-08T06:05:09.977Z",
+  "discovery_urls_added": 3328,
+  "discovery_findings": 24621,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-08T06:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_error": "juice-shop.herokuapp.com 503 — Heroku dyno unavailable",
       "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 489,
-      "live_oracle_slugs": 35,
+      "probes_run": 507,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,41 +48,37 @@
           ]
         }
       },
-      "note": "6/6 recall on staging fallback (49 findings); primary Heroku 503; secret-resend slug still absent"
+      "note": "6/6 recall (49 findings on staging fallback); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 52,
-      "focus": "voting-app-iota NEW + WSL module/1101-1104 NEW; drained WSL 1096-1098 backlog",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 27,
+      "focus": "WSL 1096-1100 seeds + WhoopsPay admin SQL execute + express log password disclosure",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings) — primary Heroku 503",
-      "voting-app-iota.vercel.app: 5 findings — SSTI shell + dangerous-html-sinks + permissive-cors (new OSS deploy)",
-      "web-security-learning-labs.vercel.app/module/1101-1104: 8 findings each — module-route-evidence + SSTI shell",
-      "web-security-learning-labs.vercel.app/module/1096-1098: 5 findings each — module-route-evidence + SSTI shell (backlog drain)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings)",
+      "web-security-learning-labs.vercel.app/module/1096: 8 findings — module-route-evidence after 1096-1100 seed extension",
+      "whoopspay.onrender.com/api/admin: 16→17 — admin-database-execute live oracle (arbitrary SQL via leaked test-account creds)",
+      "whoopspay.onrender.com/api/admin/logs: 16→19 — express-logs live+route oracles (plaintext passwords in request logs)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle degraded (503) — staging fallback required for full recall",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "owasp.andreabrioschi.it returns 403 from cloud agent — OWASP Interactive Learning Lab unreachable",
-      "api.vulnbank.org unreachable from cloud agent",
-      "WSL module/1099-1100 + 1091-1095 still queued at head pending next drain"
+      "api.vulnbank.org unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 49,
-    "web-security-learning-labs.vercel.app/module/1101": 8,
-    "web-security-learning-labs.vercel.app/module/1102": 8,
-    "web-security-learning-labs.vercel.app/module/1103": 8,
-    "web-security-learning-labs.vercel.app/module/1104": 8,
-    "voting-app-iota.vercel.app": 5,
-    "web-security-learning-labs.vercel.app/module/1096": 5,
-    "web-security-learning-labs.vercel.app/module/1097": 5,
-    "web-security-learning-labs.vercel.app/module/1098": 5,
-    "pwnshop.ctfsecurity.com/apply-coupon": 45
+    "whoopspay.onrender.com/api/admin/logs": 19,
+    "whoopspay.onrender.com/api/admin": 17,
+    "pwnshop.ctfsecurity.com/apply-coupon": 45,
+    "pwnshop.ctfsecurity.com/wallet": 43,
+    "juice-shop.herokuapp.com": 52,
+    "ssrf.vulnlab.dev/basic": 15,
+    "web-security-learning-labs.vercel.app/module/1096": 8,
+    "web-security-learning-labs.vercel.app/module/1097": 8,
+    "web-security-learning-labs.vercel.app/module/1098": 8
   }
 }
