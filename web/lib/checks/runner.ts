@@ -2641,6 +2641,7 @@ const DEEP_RULES = new Set<string>([
   "vulnbankAiAnonymousChatRouteLiveOracle",
   "vulnbankBoplaRegisterLiveOracle",
   "vulnbankSqliLoginLiveOracle",
+  "vulnbankSqliLoginRouteLiveOracle",
   "vulnbankMerchantRegisterLiveOracle",
   "vulnbankBillPaymentsNegativeAmountLiveOracle",
   "vulnbankMerchantPaymentChargeLiveOracle",
