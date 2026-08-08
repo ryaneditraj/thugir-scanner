@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-08T09:11:42.662Z",
+  "generatedAt": "2026-08-08T10:15:07.709Z",
   "total": 2032,
-  "uniqueSlugs": 2027,
+  "uniqueSlugs": 2028,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -1915,6 +1915,7 @@
     "vulnbank-request-loan-live-oracle",
     "vulnbank-request-loan-negative-amount-live-oracle",
     "vulnbank-sqli-login-live-oracle",
+    "vulnbank-sqli-login-route-live-oracle",
     "vulnbank-sup3r-secret-admin-live-oracle",
     "vulnbank-transactions-bola-live-oracle",
     "vulnbank-transactions-bola-route-live-oracle",

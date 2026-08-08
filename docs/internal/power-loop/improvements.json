@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sqli-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/login username=admin' OR '1'='1 returns status:success + JWT while invalid creds return status:error; relaxed oracle accepts non-admin SQLi bypass; vulnbank.org/login findings 24→27; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sqli-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan https://vulnbank.org/login fires vulnbank-sqli-login-route-live-oracle alongside host oracle; findings 24→27; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bill-payments-negative-amount-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/bill-payments/create amount:-50 with vulnbankProbeUserToken(balance:10000) returns status:success payment_details.amount=-50; replaced broken vulnbankSqliAdminToken (admin suspended); vulnbank.org/login findings 24→27 incl bill-payments oracle; benchmark 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1115-1119",
       "status": "shipped",
