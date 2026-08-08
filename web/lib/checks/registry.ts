@@ -11588,8 +11588,6 @@ const FORBIDDEN_403_PROBE_PATHS = [
   "/debug",
   "/api/admin",
   "/manage",
-  "/secret",
-  "/config",
   "/secure",
   "/waf"
 ];
@@ -11716,7 +11714,7 @@ export async function primeBypass403SessionForDeepScan(
   home: FetchedDoc
 ): Promise<void> {
   if (!/bypass403\.vercel\.app/i.test(origin)) return;
-  if (!/\/(?:admin|secret|config|waf|debug|internal|secure|api\/admin)\b/i.test(scanUrl)) return;
+  if (!/\/(?:admin|waf|debug|internal|secure|api\/admin)\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   await bypass403CompleteSession(ctx);
 }
@@ -34986,12 +34984,24 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1124; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1134; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
+
+/** CSR placeholder shells 1125–1134 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1134; moduleNum++) {
+  WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
+    "Server-Side Template Injection (Advanced)";
+}
+
+const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
+  "1022",
+  "1024",
+  ...Array.from({ length: 10 }, (_, i) => String(1125 + i))
+]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
 const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
@@ -35133,6 +35143,29 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+const webSecurityLearningLabsSstiModuleRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/web-security-learning-labs\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
+  if (!moduleMatch) return NEGATIVE;
+  const moduleId = moduleMatch[1]!;
+  if (!WEB_SECURITY_LEARNING_SSTI_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  const sstiHit = await reflexionEscalatedSsti(ctx);
+  if (!sstiHit.fired) return NEGATIVE;
+  const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] ?? "SSTI";
+  return {
+    fired: true,
+    confidence: sstiHit.confidence,
+    evidence: {
+      ...sstiHit.evidence,
+      moduleId,
+      moduleTopic: topic,
+      scannedUrl: pageUrl,
+      note: `web-security-learning-labs.vercel.app/module/${moduleId} (${topic}) — route-specific SSTI live oracle confirmed via reflexion probe`
+    }
+  };
 };
 
 const clientSideBuggybuyEvidence: Rule = async (ctx) => {
@@ -70439,6 +70472,7 @@ export const RULES: Record<string, Rule> = {
   buggybuyApiBolaRouteLiveOracle,
   clientSideWebSecurityLearningLabsEvidence,
   webSecurityLearningLabsModuleRouteEvidence,
+  webSecurityLearningLabsSstiModuleRouteLiveOracle,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,

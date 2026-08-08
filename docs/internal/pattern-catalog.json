@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-08T12:44:57.556Z",
-  "total": 2034,
-  "uniqueSlugs": 2030,
+  "generatedAt": "2026-08-08T13:11:27.615Z",
+  "total": 2035,
+  "uniqueSlugs": 2031,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2016,
+    "generic": 2017,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1949,
+    "deep": 1950,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 106,
     "Security misconfiguration": 147,
     "Broken authentication": 124,
-    "Injection": 289,
+    "Injection": 290,
     "Cross-site scripting": 668,
     "Open redirect": 16,
     "general": 20,
@@ -2001,6 +2001,7 @@
     "web-pentest-playground-stored-xss-route-live-oracle",
     "web-pentest-playground-view-users-route-live-oracle",
     "web-security-learning-labs-module-route-evidence",
+    "web-security-learning-labs-ssti-module-route-live-oracle",
     "whoopspay-admin-database-execute-live-oracle",
     "whoopspay-admin-database-execute-route-live-oracle",
     "whoopspay-admin-express-logs-disclosure-live-oracle",

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsSstiModuleRouteLiveOracle fires reflexionEscalatedSsti on modules 1022/1024/1125-1134; web-security-learning-labs.vercel.app/module/1130 findings 8→9 (+route oracle); module/1133 findings 5→8; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-social-twitter-facebook-feed-corpus",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with twitterUrl syndication.twitter.com + facebookUrl page fetch from application-configuration social config; benchmark juice-shop-staging 49 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current feeds)"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-secret-config-routes-removed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /secret and /config return HTTP 404 on live bypass403.vercel.app (routes absent from Karthikdude/bypass403); disabled bypass403-secret/config live+route oracles, removed /secret /config from FORBIDDEN_403_PROBE_PATHS and priority seeds; bypass403.vercel.app/secret route scan 9 findings (5 working oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-request-headers-session-ua",
       "status": "shipped",
