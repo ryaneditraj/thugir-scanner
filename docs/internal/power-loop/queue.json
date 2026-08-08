@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-08T16:04:27.943Z",
+  "updated_at": "2026-08-08T17:06:55.297Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31",
+      "source": "NeuraLegion/brokencrystals — business-constraint bypass oracle GET /api/products?date_from=&date_to= (README llms.txt, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/api/Memorys",
+      "source": "OWASP Juice Shop preview — memory/RCE challenge API oracle GET /api/Memorys (preview.owasp-juice.shop develop branch, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/?q=test",
+      "source": "NeuraLegion/brokencrystals — DOM XSS landing ?q= query-param oracle (GitHub README, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:81/search?q=test",
+      "source": "Pentest-Ground GuardianLeaks — reflected XSS/SSRF search oracle GET /search?q= (pentest-ground.com README, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/b2b/v2/orders",
+      "source": "OWASP Juice Shop preview — insecure deserialization oracle POST /rest/b2b/v2/orders (preview.owasp-juice.shop, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1150",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1150 (public Vercel demo, 16 UTC discovery)",
@@ -16925,5 +16950,6 @@
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1124 (public Vercel demo, 10 UTC discovery)",
       "auth": "public_demo"
     }
-  ]
+  ],
+  "discovery_urls_added": 5
 }
