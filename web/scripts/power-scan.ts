@@ -43,6 +43,20 @@ const BENCHMARK_JUICE_SHOP_RICH_FINDINGS = 15;
 const BENCHMARK_RETRY_DELAY_MS = 12000;
 const BENCHMARK_FINAL_RETRY_DELAY_MS = 25000;
 
+/** vaultapp.vercel.app hosts Clutch-It — MRMcyber VaultApp lab lives on vaultapp-omega.vercel.app */
+function canonicalDiscoveryUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    if (/^vaultapp\.vercel\.app$/i.test(u.hostname)) {
+      u.hostname = "vaultapp-omega.vercel.app";
+      return u.toString();
+    }
+  } catch {
+    /* ignore */
+  }
+  return url;
+}
+
 type BenchmarkFinding = ScanRunResult["findings"][number];
 
 /** Union first-pass + retry findings by slug — Heroku cold-start often splits categories across passes. */
@@ -281,8 +295,9 @@ async function main() {
       discovery_urls: []
     });
     for (const u of queue.discovery_urls) {
-      if (recentlyScanned(u.url, priorRuns)) continue;
-      targets.push({ entry: u, kind: "discovery" });
+      const canonicalUrl = canonicalDiscoveryUrl(u.url);
+      if (recentlyScanned(canonicalUrl, priorRuns)) continue;
+      targets.push({ entry: { ...u, url: canonicalUrl }, kind: "discovery" });
     }
   }
 

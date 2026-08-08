@@ -14711,8 +14711,8 @@
       "auth": "benchmark"
     },
     {
-      "url": "https://vaultapp.vercel.app",
-      "source": "MRMcyber/vaultapp — 10 IDOR challenges fintech training lab (GitHub Vercel deploy)",
+      "url": "https://vaultapp-omega.vercel.app/",
+      "source": "MRMcyber/vaultapp — 10 IDOR challenges fintech training lab (canonical vaultapp-omega.vercel.app; vaultapp.vercel.app hosts Clutch-It)",
       "auth": "public_demo"
     },
     {
@@ -16866,13 +16866,13 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vaultapp.vercel.app/api/users/1",
-      "source": "MRMcyber/vaultapp — IDOR users API GET /api/users/:id on vaultapp.vercel.app deploy",
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp — IDOR users API GET /api/users/:id on vaultapp-omega.vercel.app (canonical; vaultapp.vercel.app hosts Clutch-It)",
       "auth": "oss_deploy"
     },
     {
-      "url": "https://vaultapp.vercel.app/login",
-      "source": "MRMcyber/vaultapp — lab login with documented test credentials player/player123 (vaultapp.vercel.app)",
+      "url": "https://vaultapp-omega.vercel.app/login",
+      "source": "MRMcyber/vaultapp — lab login with documented test credentials player/player123 (vaultapp-omega.vercel.app)",
       "auth": "oss_deploy"
     },
     {
