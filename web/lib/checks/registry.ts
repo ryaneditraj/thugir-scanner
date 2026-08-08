@@ -31426,7 +31426,7 @@ function isVotingAppHost(ctx: RuleContext): boolean {
 
 function votingAppSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
   return (
-    doc.setCookies.find((c) => /^voting-app_cookie=/i.test(c))?.split(";")[0] ??
+    doc.setCookies.find((c) => /^voting-app\d*_cookie=/i.test(c))?.split(";")[0] ??
     doc.setCookies.find((c) => /voting-app/i.test(c))?.split(";")[0] ??
     null
   );
@@ -31438,7 +31438,7 @@ type VotingAppPoll = { _id?: string; question?: string; answers?: VotingAppPollA
 async function votingAppRegisterSession(
   ctx: RuleContext
 ): Promise<{ cookie: string; userId: string } | null> {
-  const name = `thugir_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const name = `t${Date.now().toString(36).slice(-7)}${Math.random().toString(36).slice(2, 5)}`;
   const signupUrl = new URL("/api/signup", ctx.origin).toString();
   const doc = await ctx.probe.get(signupUrl, {
     method: "POST",
@@ -31490,13 +31490,14 @@ async function votingAppCreatePoll(ctx: RuleContext, cookie: string): Promise<st
 async function votingAppFetchUserPolls(
   ctx: RuleContext,
   userId: string,
-  cookie?: string
+  opts?: { cookie?: string; cacheBust?: string }
 ): Promise<{ url: string; polls: VotingAppPoll[] } | null> {
   const url = new URL(`/api/user/${userId}/polls`, ctx.origin).toString();
   const doc = await ctx.probe.get(url, {
     headers: {
       Accept: "application/json",
-      ...(cookie ? { Cookie: cookie } : {})
+      ...(opts?.cookie ? { Cookie: opts.cookie } : {}),
+      ...(opts?.cacheBust ? { "X-Thugir-Probe": opts.cacheBust } : {})
     },
     maxBytes: 16384,
     timeoutMs: 20000
@@ -31573,13 +31574,13 @@ const votingAppVoteStuffingLiveOracle: Rule = async (ctx) => {
   for (let i = 0; i < 2; i++) {
     const voteDoc = await ctx.probe.get(voteTarget, {
       method: "POST",
-      headers: { Accept: "application/json" },
+      headers: { Accept: "application/json", "X-Thugir-Probe": String(i) },
       maxBytes: 2048,
       timeoutMs: 15000
     });
     if (voteDoc.status < 200 || voteDoc.status >= 300) return NEGATIVE;
   }
-  const afterFetch = await votingAppFetchUserPolls(ctx, session.userId);
+  const afterFetch = await votingAppFetchUserPolls(ctx, session.userId, { cacheBust: "after-votes" });
   if (!afterFetch) return NEGATIVE;
   const after = votingAppPollYesVotes(afterFetch.polls, pollId);
   if (after < before + 2) return NEGATIVE;
