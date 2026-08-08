@@ -11687,8 +11687,14 @@ async function bypass403CompleteSessionUncached(ctx: RuleContext): Promise<strin
   };
 
   for (let attempt = 0; attempt < 3; attempt++) {
-    const doc =
-      attempt === 0 ? await ctx.probe.get(startUrl, postOpts) : await fetchDoc(startUrl, postOpts);
+    if (attempt === 0) {
+      await fetchDoc(new URL("/", ctx.origin).toString(), {
+        maxBytes: 4096,
+        timeoutMs: 12000,
+        headers: { "User-Agent": BYPASS403_BROWSER_UA }
+      });
+    }
+    const doc = await fetchDoc(startUrl, postOpts);
     const cookie = bypass403SessionCookieFromDoc(doc);
     if (cookie) return cookie;
     if (!isVercelSecurityCheckpoint(doc) && doc.status !== 403) break;
