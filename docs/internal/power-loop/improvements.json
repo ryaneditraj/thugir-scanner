@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-benchmark-thin-pass-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: power-scan benchmarkThinJuiceShopPass triggers staging fallback when 6/6 recall has zero juice-shop-* live-oracle slugs or findings<15; primary Heroku 503→staging 49 findings 6/6 with juice-shop-admin-config-live-oracle + track-order-idor-live-oracle (vs 23 UTC thin pass 10 generic findings)"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1071-1075",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1071-1075; web-security-learning-labs.vercel.app/module/1074-1075 findings 3→8 (+module-route-evidence, client-side-web-security-learning-labs-evidence); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1066-1070",
       "status": "shipped",
@@ -20529,6 +20541,16 @@
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-api-admin-route-live-oracle",
       "shipped_at": "2026-08-07T19:15:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-benchmark-thin-pass-fallback",
+      "shipped_at": "2026-08-08T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1071-1075",
+      "shipped_at": "2026-08-08T00:10:00.000Z"
     }
   ]
 }
