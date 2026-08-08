@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-user-polls-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/signup + create poll then unauthenticated GET /api/user/{id}/polls returns poll question/answers; voting-app-iota.vercel.app findings 5→7 (+client-side-voting-app-evidence +user-polls-idor); vote-stuffing oracle validated manually (before 0 after 2 anonymous votes); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-vote-stuffing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: two cache-busted POST /api/vote/{pollId}?answer=yes from fresh sessions increment yes votes 0→2; ProbeCache dedupe fix via X-Thugir-Probe header; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1101-1104",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1101-1104; curated module-id placeholder map loop 1037→1104; web-security-learning-labs.vercel.app/module/1101-1104 findings include web-security-learning-labs-module-route-evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1096-1100",
       "status": "shipped",
