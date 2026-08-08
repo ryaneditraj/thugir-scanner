@@ -366,6 +366,30 @@ async function fetchJuiceShopSocialFeedBodies(
         }
       }
     }
+
+    const twitterUrl = social.twitterUrl;
+    if (twitterUrl) {
+      const handle = twitterUrl.match(/twitter\.com\/([^/?#]+)/i)?.[1];
+      if (handle) {
+        const syndicationUrl = `https://syndication.twitter.com/srv/timeline-profile/screen-name/${encodeURIComponent(handle)}`;
+        const tw = await probe.get(syndicationUrl, {
+          maxBytes: 96_000,
+          timeoutMs: 12000,
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+        });
+        if (tw.status >= 200 && tw.status < 400) chunks.push(tw.body);
+      }
+    }
+
+    const facebookUrl = social.facebookUrl;
+    if (facebookUrl) {
+      const fb = await probe.get(facebookUrl, {
+        maxBytes: 96_000,
+        timeoutMs: 12000,
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+      });
+      if (fb.status >= 200 && fb.status < 400) chunks.push(fb.body);
+    }
   } catch {
     /* ignore malformed config or feed fetch errors */
   }
@@ -1978,6 +2002,7 @@ const DEEP_RULES = new Set<string>([
   "buggybuyApiBolaRouteLiveOracle",
   "clientSideWebSecurityLearningLabsEvidence",
   "webSecurityLearningLabsModuleRouteEvidence",
+  "webSecurityLearningLabsSstiModuleRouteLiveOracle",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
@@ -9276,9 +9301,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://bypass403.vercel.app/secure",
         "https://bypass403.vercel.app/waf",
         "https://bypass403.vercel.app/admin",
-        "https://bypass403.vercel.app/api/admin",
-        "https://bypass403.vercel.app/secret",
-        "https://bypass403.vercel.app/config"
+        "https://bypass403.vercel.app/api/admin"
       ]
     : [];
   const webSecurityLearningModulePrioritySeeds = /web-security-learning-labs\.vercel\.app\/module\/\d{4}/i.test(
@@ -10072,11 +10095,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/waf\b/i.test(targetInput) && p.slug.startsWith("bypass403-waf")) return -3;
-      if (/bypass403\.vercel\.app/i.test(origin) && /\/secret\b/i.test(targetInput) && p.slug.startsWith("bypass403-secret")) return -3;
-      if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/internal\b/i.test(targetInput) && p.slug.startsWith("bypass403-internal")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/debug\b/i.test(targetInput) && p.slug.startsWith("bypass403-debug")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/secure\b/i.test(targetInput) && p.slug.startsWith("bypass403-secure")) return -3;
+      if (
+        /web-security-learning-labs\.vercel\.app/i.test(origin) &&
+        /\/module\/(?:1022|1024|112[5-9]|113[0-4])\b/i.test(targetInput) &&
+        p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
+      )
+        return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&

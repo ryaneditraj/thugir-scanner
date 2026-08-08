@@ -36093,6 +36093,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "web-security-learning-labs-ssti-module-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Web Security Learning Labs SSTI module route live oracle",
+    description:
+      "When scanning SSTI modules (1022, 1024, 1125–1134) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle.",
+    impactOneline:
+      "Route-specific SSTI confirmation on WSL training modules enables targeted scanner calibration for template-injection labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsSstiModuleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training labs are intentional — use sandboxed template engines in production.",
+      steps: [
+        "Never pass user input to server-side template renderers.",
+        "Use logic-less templates or strict context auto-escaping.",
+        "Isolate vulnerability labs from production infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our WSL /module/{id} SSTI route scan confirms template injection via reflexion probe. Show sandboxed template rendering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-buggybuy-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -36347,7 +36373,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /secret returns 403 but /secret/ bypasses it on bypass403.vercel.app. Show path canonicalization before authorization.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-secret-route-live-oracle",
@@ -36372,7 +36398,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /secret route scan shows path-normalization bypass. Show path canonicalization before authorization.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-config-live-oracle",
@@ -36423,7 +36449,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /config route scan shows header-manipulation bypass. Show header stripping and server-side validation.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-waf-live-oracle",
