@@ -51079,5 +51079,109 @@ export const genericPatterns: Pattern[] = [
       "Our /register route scan confirms unverified account creation with wallet access. Show route-level registration remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "whoopspay-admin-database-execute-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WhoopsPay admin arbitrary SQL execute live oracle",
+    description:
+      "After logging in with admin credentials leaked via GET /api/test-accounts, POST /api/admin/database/execute runs arbitrary SQL and returns table rows — the WhoopsPay admin database execute oracle.",
+    impactOneline:
+      "Arbitrary SQL execution lets attackers dump or modify the entire WhoopsPay database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminDatabaseExecuteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove raw SQL execution from admin APIs — WhoopsPay is intentional training software.",
+      steps: [
+        "Delete or hard-disable /api/admin/database/execute in production builds.",
+        "Use parameterized queries and strict role checks for any admin data access.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/database/execute endpoint runs arbitrary SQL. Show safe admin data-access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-database-execute-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WhoopsPay admin database execute route live oracle",
+    description:
+      "When scanning /api/admin/database routes, POST /api/admin/database/execute runs arbitrary SQL with admin session — route-specific admin database execute oracle.",
+    impactOneline:
+      "Route-scoped scans should flag WhoopsPay admin database endpoints that accept raw SQL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminDatabaseExecuteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove raw SQL execution from admin APIs.",
+      steps: [
+        "Delete or hard-disable /api/admin/database/execute in production builds.",
+        "Use parameterized queries and strict role checks for any admin data access.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/database route scan confirms arbitrary SQL execution. Show route-level remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-express-logs-disclosure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "WhoopsPay admin express logs password disclosure live oracle",
+    description:
+      "GET /api/admin/logs/express returns Express request logs that include plaintext login passwords from POST /api/login bodies — the WhoopsPay admin express log disclosure oracle.",
+    impactOneline:
+      "Admin log endpoints that echo request bodies leak user passwords and session secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminExpressLogsDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact credentials from admin logs — WhoopsPay is intentional training software.",
+      steps: [
+        "Strip password and token fields before writing request logs.",
+        "Restrict log endpoints to break-glass admin roles with audit trails.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/logs/express endpoint returns passwords from login requests. Show log redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-express-logs-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "WhoopsPay admin express logs route live oracle",
+    description:
+      "When scanning /api/admin/logs routes, GET /api/admin/logs/express returns request logs with plaintext login passwords — route-specific admin log disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag WhoopsPay admin log endpoints that expose credential-bearing request bodies.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminExpressLogsDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact credentials from admin logs.",
+      steps: [
+        "Strip password and token fields before writing request logs.",
+        "Restrict log endpoints to break-glass admin roles with audit trails.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/logs route scan confirms password leakage in express logs. Show route-level log redaction remediation.",
+    version: 1,
+    enabled: true
   }
 ];
