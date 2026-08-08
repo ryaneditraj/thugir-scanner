@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T03:15:00.000Z",
+  "updated_at": "2026-08-08T04:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2906,
-  "total_findings": 29616,
+  "total_sites_scanned": 2914,
+  "total_findings": 29968,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2046,
-  "discovery_findings": 24251,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-08T03:15:00.000Z",
+  "discovery_urls_added": 2051,
+  "discovery_findings": 24553,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-08T04:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 509,
+      "live_oracle_slugs": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +49,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (51 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (50 findings, 38 juice-shop-* live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 25,
-      "focus": "bypass403 /secure Bearer invalid_token + WSL module/1085 catalog map extension",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 302,
+      "focus": "WSL module/1091-1095 queued; drained juice-shop.demo.escape.tech oracles + brokencrystals BFLA photo + whoopspay register",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — maintained",
-      "bypass403.vercel.app/secure: 8→9 findings — bypass403-secure-bearer-invalid-token-live-oracle shipped (Authorization: Bearer invalid_token)",
-      "web-security-learning-labs.vercel.app/module/1085: 3→8 findings — module-id map 1037–1085 + placeholder shell regex",
-      "bypass403.vercel.app/internal: XFF pollution oracle source-confirmed but Vercel edge strips X-Forwarded-For on live deploy"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live-oracle slugs) — no benchmark misses",
+      "juice-shop.demo.escape.tech/redirect: 51 findings — open-redirect + full juice-shop oracle bundle on Escape demo",
+      "juice-shop.demo.escape.tech/file-upload: 51 findings — complaint file-upload live oracle on staging demo",
+      "brokencrystals.com/users/one/1/photo?isAdmin=true: 77 findings — BFLA profile-photo delete oracle",
+      "whoopspay.onrender.com/api/auth/register: 16 findings — unauthenticated registration endpoint",
+      "idor-website.vercel.app/api/employees/1: 6 findings — IDOR lab baseline"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "bypass403.vercel.app/internal: Vercel edge overwrites X-Forwarded-For — internal XFF pollution oracle needs direct app access",
+      "WSL module/1091-1095 queued but not yet scanned — queue drain prioritized older entries",
       "api.vulnbank.org unreachable from cloud agent — queue entry errors persist"
     ]
   },
   "discovery_highlights": {
+    "brokencrystals.com/users/one/1/photo?isAdmin=true": 77,
+    "juice-shop.demo.escape.tech/redirect": 51,
+    "juice-shop.herokuapp.com": 50,
+    "whoopspay.onrender.com/api/auth/register": 16,
+    "idor-website.vercel.app/api/employees/1": 6,
     "brokencrystals.com/api/users/search/admin": 79,
-    "juice-shop.herokuapp.com": 51,
     "bypass403.vercel.app/secure": 9,
-    "web-security-learning-labs.vercel.app/module/1085": 8,
-    "bypass403.vercel.app/debug": 8,
-    "web-security-learning-labs.vercel.app/module/1081": 8,
-    "vaultapp-omega.vercel.app/api/account/export": 14,
     "pwnshop.ctfsecurity.com/review": 41
   }
 }
