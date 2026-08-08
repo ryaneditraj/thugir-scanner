@@ -6575,7 +6575,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (let moduleNum = 1011; moduleNum <= 1144; moduleNum++) {
+  for (let moduleNum = 1011; moduleNum <= 1149; moduleNum++) {
     try {
       out.add(new URL(`/module/${moduleNum}`, pageUrl).toString());
     } catch {
@@ -9301,6 +9301,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://bypass403.vercel.app/secure",
         "https://bypass403.vercel.app/waf",
         "https://bypass403.vercel.app/admin",
+        "https://bypass403.vercel.app/secret",
+        "https://bypass403.vercel.app/config",
         "https://bypass403.vercel.app/api/admin"
       ]
     : [];
@@ -9308,7 +9310,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     home.finalUrl
   )
     ? [
-        ...Array.from({ length: 1144 - 1037 + 1 }, (_, i) => String(1037 + i)),
+        ...Array.from({ length: 1149 - 1037 + 1 }, (_, i) => String(1037 + i)),
         "1019",
         "1020",
         "1021",
@@ -10103,9 +10105,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/bypass403\.vercel\.app/i.test(origin) && /\/internal\b/i.test(targetInput) && p.slug.startsWith("bypass403-internal")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/debug\b/i.test(targetInput) && p.slug.startsWith("bypass403-debug")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/secure\b/i.test(targetInput) && p.slug.startsWith("bypass403-secure")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-admin")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/secret\b/i.test(targetInput) && p.slug.startsWith("bypass403-secret")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-4])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
