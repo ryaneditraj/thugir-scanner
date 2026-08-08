@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T05:04:00.000Z",
+  "updated_at": "2026-08-08T05:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,18 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 3328,
   "discovery_findings": 24602,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-08T05:04:00.000Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-08T05:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 509,
+      "probes_run": 489,
+      "live_oracle_slugs": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +49,37 @@
           ]
         }
       },
-      "note": "Primary Heroku healthy 6/6 (51 findings); secret-resend slug still absent (sensitive_data covered via other slugs)"
+      "note": "6/6 recall (52 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 49,
-      "focus": "WSL module/1096-1100 new + drained pending 1091-1093 from queue head",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL 1091-1095 seeds + pwnshop OTP prime + ssrf route priority; WSL module/1096-1100 drained",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1096: 8 findings — module-route-evidence + dangerous-html-sinks + SSTI shell",
-      "web-security-learning-labs.vercel.app/module/1097: 8 findings — module-route-evidence + dangerous-html-sinks + SSTI shell",
-      "web-security-learning-labs.vercel.app/module/1098: 8 findings — module-route-evidence + dangerous-html-sinks + SSTI shell",
-      "web-security-learning-labs.vercel.app/module/1099-1100: 5 findings each — SSTI reflexion shell on module pages",
-      "web-security-learning-labs.vercel.app/module/1091-1093: 5 findings each — pending queue drain from 04 UTC"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
+      "pwnshop.ctfsecurity.com/apply-coupon: 13→45 findings — OTP prime restores coupon live oracles",
+      "pwnshop.ctfsecurity.com/wallet: 12→43 findings — wallet-topup route oracles restored",
+      "ssrf.vulnlab.dev/basic: 15 findings incl ssrf-vulnlab-basic-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1096-1098: 8 findings each — module-route-evidence + SSTI shell"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL module/1094-1095 still queued (not reached in 8-URL limit)",
       "api.vulnbank.org unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/apply-coupon": 45,
+    "pwnshop.ctfsecurity.com/wallet": 43,
+    "juice-shop.herokuapp.com": 52,
+    "ssrf.vulnlab.dev/basic": 15,
     "web-security-learning-labs.vercel.app/module/1096": 8,
     "web-security-learning-labs.vercel.app/module/1097": 8,
     "web-security-learning-labs.vercel.app/module/1098": 8,
-    "web-security-learning-labs.vercel.app/module/1099": 5,
-    "web-security-learning-labs.vercel.app/module/1100": 5,
-    "web-security-learning-labs.vercel.app/module/1091": 5,
-    "web-security-learning-labs.vercel.app/module/1092": 5,
-    "web-security-learning-labs.vercel.app/module/1093": 5
+    "pwnshop.ctfsecurity.com/review": 41
   }
 }
