@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Primary Heroku woke after long cold start; 6/6 recall with 21 findings; parallel run used staging fallback 6/6 (49 findings); secret-resend slug still absent"
+      "note": "Primary Heroku woke after ~28min cold start; 6/6 recall with 21 findings and 11 juice-shop-* live oracles; parallel run used staging fallback 6/6 (49 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -67,7 +67,7 @@
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key and forgotten-backup oracles)",
       "WSL modules 1170-1174: generic SSTI reflexion fires but ssti-module-route-live-oracle absent (1173-1174 only 5-finding hubs)",
       "WSL modules 1165-1167: still catalog shells — route-specific vuln oracles not firing",
       "juice-shop primary Heroku 503 on cold start — ~28min benchmark wall time when dyno wakes"
@@ -78,9 +78,9 @@
     "juice-shop-staging.herokuapp.com": 49,
     "web-security-learning-labs.vercel.app/module/1170": 8,
     "web-security-learning-labs.vercel.app/module/1171": 8,
+    "web-security-learning-labs.vercel.app/module/1172": 8,
     "bypass403.vercel.app/api/admin": 10,
     "bypass403.vercel.app/secure": 10,
-    "brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31": 75,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31": 75
   }
 }
