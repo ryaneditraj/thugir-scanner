@@ -16504,6 +16504,31 @@
       "url": "https://vaultapp.vercel.app/login",
       "source": "MRMcyber/vaultapp — lab login with documented test credentials player/player123 (vaultapp.vercel.app)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bypass403.vercel.app/internal",
+      "source": "Karthikdude/bypass403 — protected /internal endpoint for 403 bypass lab (GitHub README live demo, 00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/debug",
+      "source": "Karthikdude/bypass403 — protected /debug endpoint for 403 bypass technique lab (bypass403.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/api/admin",
+      "source": "Karthikdude/bypass403 — protected /api/admin API route 403 bypass oracle (bypass403.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/secure",
+      "source": "Karthikdude/bypass403 — protected /secure endpoint header-manipulation bypass oracle (00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bypass403.vercel.app/waf",
+      "source": "Karthikdude/bypass403 — protected /waf modern-WAF bypass technique oracle (bypass403.vercel.app)",
+      "auth": "public_demo"
     }
   ]
 }
