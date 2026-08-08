@@ -36401,6 +36401,83 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bypass403-waf-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /waf CF-Connecting-IP bypass live oracle",
+    description:
+      "GET /waf returns 403 (automated tool / WAF block) but CF-Connecting-IP: 127.0.0.1 with a browser User-Agent bypass returns a Cloudflare IP bypass success flag — the BypassX modern WAF oracle.",
+    impactOneline:
+      "WAF bypass via spoofed CF-Connecting-IP lets attackers reach protected routes blocked for automated scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403WafLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not trust CF-Connecting-IP or client IP override headers from untrusted clients.",
+      steps: [
+        "Strip CF-Connecting-IP at the edge unless set by your CDN.",
+        "Block automated scanner fingerprints with rate limits, not spoofable IP headers.",
+        "Apply authorization after WAF inspection on canonical request metadata."
+      ]
+    },
+    fixPrompt:
+      "Our /waf endpoint is bypassed via CF-Connecting-IP on bypass403.vercel.app. Show CDN header validation and WAF hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-waf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /waf route CF-Connecting-IP bypass live oracle",
+    description:
+      "When scanning /waf on bypass403.vercel.app, CF-Connecting-IP header bypass reaches the protected WAF lab resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm WAF bypass via spoofed Cloudflare client IP headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403WafRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not trust CF-Connecting-IP from untrusted clients.",
+      steps: [
+        "Strip CF-Connecting-IP unless injected by your CDN.",
+        "Validate WAF decisions using server-side request metadata."
+      ]
+    },
+    fixPrompt:
+      "Our /waf route scan shows CF-Connecting-IP bypass. Show CDN header validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-review-stored-xss-review-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pwnshop /review stored XSS route live oracle (PWN-011)",
+    description:
+      "When scanning /review on pwnshop.ctfsecurity.com, POST /review stores unsanitized comment HTML rendered via EJS <%- %> on /product/:id — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route scans on /review need live stored XSS confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductReviewStoredXssReviewRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode review HTML before rendering — Pwnshop PWN-011 is intentional lab software.",
+      steps: [
+        "Use <%= %> escaped output instead of <%- %> for review comments.",
+        "Sanitize review HTML with a strict allow-list before storage.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /review route stores unsanitized HTML on product pages. Show stored XSS remediation for review comments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bypass403-lab-evidence",
     platform: "generic",
     category: "Broken access control",

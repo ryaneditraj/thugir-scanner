@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-08T00:06:39.938Z",
-  "total": 2013,
-  "uniqueSlugs": 2008,
+  "generatedAt": "2026-08-08T01:10:37.437Z",
+  "total": 2016,
+  "uniqueSlugs": 2011,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 1995,
+    "generic": 1998,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1928,
+    "deep": 1931,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 402,
+    "Broken access control": 404,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -28,7 +28,7 @@
     "Security misconfiguration": 147,
     "Broken authentication": 120,
     "Injection": 287,
-    "Cross-site scripting": 667,
+    "Cross-site scripting": 668,
     "Open redirect": 16,
     "general": 20,
     "SSRF": 10,
@@ -250,6 +250,8 @@
     "bypass403-config-route-live-oracle",
     "bypass403-secret-live-oracle",
     "bypass403-secret-route-live-oracle",
+    "bypass403-waf-live-oracle",
+    "bypass403-waf-route-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
@@ -1628,6 +1630,7 @@
     "pwnshop-order-idor-live-oracle",
     "pwnshop-order-idor-route-live-oracle",
     "pwnshop-product-review-stored-xss-live-oracle",
+    "pwnshop-product-review-stored-xss-review-route-live-oracle",
     "pwnshop-product-review-stored-xss-route-live-oracle",
     "pwnshop-product-search-sqli-live-oracle",
     "pwnshop-prototype-pollution-search-filters-live-oracle",

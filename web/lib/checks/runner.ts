@@ -1880,6 +1880,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopMailIdorRouteLiveOracle",
   "pwnshopProductReviewStoredXssLiveOracle",
   "pwnshopProductReviewStoredXssRouteLiveOracle",
+  "pwnshopProductReviewStoredXssReviewRouteLiveOracle",
   "pwnshopAvatarSvgXssLiveOracle",
   "pwnshopApplyCouponLiveOracle",
   "pwnshopCouponCategoryBypassLiveOracle",
@@ -2633,6 +2634,8 @@ const DEEP_RULES = new Set<string>([
   "bypass403SecretRouteLiveOracle",
   "bypass403ConfigLiveOracle",
   "bypass403ConfigRouteLiveOracle",
+  "bypass403WafLiveOracle",
+  "bypass403WafRouteLiveOracle",
   "clientSideBypass403LabEvidence",
   "clientSideDevsecopsPipelineVisualizerEvidence",
   "clientSideQamaxAdversaryEvidence",
@@ -9142,6 +9145,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://ssrf.vulnlab.dev/webhook"
       ]
     : [];
+  const bypass403PrioritySeeds = /bypass403\.vercel\.app/i.test(home.finalUrl)
+    ? [
+        "https://bypass403.vercel.app/internal",
+        "https://bypass403.vercel.app/debug",
+        "https://bypass403.vercel.app/secure",
+        "https://bypass403.vercel.app/waf",
+        "https://bypass403.vercel.app/admin",
+        "https://bypass403.vercel.app/api/admin",
+        "https://bypass403.vercel.app/secret",
+        "https://bypass403.vercel.app/config"
+      ]
+    : [];
   const webSecurityLearningModulePrioritySeeds = /web-security-learning-labs\.vercel\.app\/module\/\d{4}/i.test(
     home.finalUrl
   )
@@ -9347,6 +9362,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadCatalogLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
       ...ssrfVulnlabPrioritySeeds,
+      ...bypass403PrioritySeeds,
       ...webSecurityLearningModulePrioritySeeds,
       ...owaspTop10LabsPrioritySeeds,
       ...owaspTop10IntroHubPrioritySeeds,
@@ -9743,7 +9759,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let pwnshopBootstrap = "";
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     const needsBootstrap =
-      /\/profile\/|\/apply-coupon|\/wallet\b/i.test(targetInput) ||
+      /\/profile\/|\/apply-coupon|\/wallet\b|\/review\b/i.test(targetInput) ||
       !/PWN-\d{3}|OWASP Top 10 2025/i.test(`${home.body}\n${[...pages, ...scripts].map((p) => p.body).join("\n")}`);
     if (needsBootstrap) {
       const bootstrapUrls = [
@@ -9901,6 +9917,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/waf\b/i.test(targetInput) && p.slug.startsWith("bypass403-waf")) return -3;
+      if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/(?:api\/)?support\b/i.test(targetInput) &&

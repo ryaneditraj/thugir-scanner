@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T01:07:57.292Z",
+  "updated_at": "2026-08-08T01:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2041,
   "discovery_findings": 24092,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-08T01:07:57.292Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-08T01:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -52,37 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 166,
-      "focus": "WSL modules 1076-1080 queued + brokencrystals API oracles + pentest-ground GuardianLeaks/RestFlaw",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 48,
+      "focus": "bypass403 /waf CF-Connecting-IP oracle + pwnshop /review stored-XSS route oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — full live-oracle pass after Heroku 503",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — maintained after engine evolve",
+      "bypass403.vercel.app/waf: 3→7 findings — bypass403-waf-live-oracle via CF-Connecting-IP: 127.0.0.1",
+      "pwnshop.ctfsecurity.com/review: 12→41 findings — pwnshop-product-review-stored-xss-review-route-live-oracle shipped (PWN-011)",
       "brokencrystals.com/api/users/search/admin: 81 findings — excessive data exposure + BFLA + SSRF live-oracle hub",
-      "brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com: 29 findings — v1 userinfo disclosure oracle",
-      "pentest-ground.com:81/create: 7 findings — GuardianLeaks SSRF + SQLi live oracles",
-      "pentest-ground.com:9000/user: 8 findings — RestFlaw CMDi + eval + XXE live oracles",
       "api.vulnbank.org/api/v1/login: unreachable from cloud agent (0 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "bypass403.vercel.app/* + WSL modules 1076-1080 still queued at tail (not reached in limit-8 drain)",
+      "bypass403.vercel.app/internal /debug /secure: 403 bypass techniques not yet ported (waf CF-Connecting-IP shipped)",
       "api.vulnbank.org unreachable from cloud agent — queue entry errors persist",
-      "brokencrystals.com/api/users/search/admin: 81-finding hub — mass-assignment confirmation oracle still absent without signup flow"
+      "brokencrystals.com/api/users/search/admin: mass-assignment confirmation oracle still absent without signup flow"
     ]
   },
   "discovery_highlights": {
+    "pwnshop.ctfsecurity.com/review": 41,
+    "bypass403.vercel.app/waf": 7,
     "juice-shop-staging.herokuapp.com": 48,
     "brokencrystals.com/api/users/search/admin": 81,
     "brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com": 29,
-    "brokencrystals.com/api/auth/admin/login": 17,
-    "brokencrystals.com/api/files?path=package.json": 13,
-    "pentest-ground.com:9000/user": 8,
-    "pentest-ground.com:81/create": 7,
-    "brokencrystals.com/api/email/deleteEmails": 11,
+    "pwnshop.ctfsecurity.com/account/delete": 41,
+    "vulnbank.org/latest/meta-data/iam/security-credentials/vulnbank-role": 23,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
