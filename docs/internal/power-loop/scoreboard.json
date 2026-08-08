@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T10:20:00.000Z",
+  "updated_at": "2026-08-08T11:15:36.792Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2959,
-  "total_findings": 30599,
+  "total_sites_scanned": 2968,
+  "total_findings": 30671,
   "critical_findings": 66,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 3348,
-  "discovery_findings": 24728,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-08T10:20:00.000Z",
+  "discovery_urls_added": 3353,
+  "discovery_findings": 24777,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-08T11:15:36.792Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 23,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 450,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,39 @@
           ]
         }
       },
-      "note": "6/6 recall (51 findings on primary Heroku); no benchmark misses; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (23 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 27,
-      "focus": "vulnbank.org/login SQLi login oracle repair + bill-payments probe auth fix",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 49,
+      "focus": "WSL modules 1125-1129 NEW + drained pending 1110-1112 queue head",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
-      "vulnbank.org/login: 24→27 findings — vulnbank-sqli-login-live-oracle + route oracle shipped (admin' OR '1'='1 JWT bypass)",
-      "vulnbank.org/login: vulnbank-bill-payments-negative-amount-live-oracle restored via funded probe user (amount:-50 success)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (23 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1125-1127: 8 findings each — SSTI/reflection lab shells",
+      "web-security-learning-labs.vercel.app/module/1128-1129: 5 findings each — SSTI shell variants",
+      "web-security-learning-labs.vercel.app/module/1110-1112: 5 findings each — drained pending queue from 08 UTC discovery"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "bypass403.vercel.app URLs still queued — Vercel checkpoint intermittently blocks trailing-slash probes",
+      "WSL module/1113-1114 still queued — pending next drain",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "ssrf.vulnlab.dev/*: queued at tail — live oracles exist but route scans not yet drained from queue"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent when scanning route URLs without full crawl"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "vulnbank.org/login": 27,
-    "web-security-learning-labs.vercel.app/module/1115": 8,
-    "vulnshop.vercel.app/manager": 7,
-    "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 78
+    "juice-shop.herokuapp.com": 23,
+    "web-security-learning-labs.vercel.app/module/1125": 8,
+    "web-security-learning-labs.vercel.app/module/1126": 8,
+    "web-security-learning-labs.vercel.app/module/1127": 8,
+    "web-security-learning-labs.vercel.app/module/1128": 5,
+    "web-security-learning-labs.vercel.app/module/1129": 5,
+    "web-security-learning-labs.vercel.app/module/1110": 5,
+    "web-security-learning-labs.vercel.app/module/1111": 5,
+    "web-security-learning-labs.vercel.app/module/1112": 5
   }
 }
