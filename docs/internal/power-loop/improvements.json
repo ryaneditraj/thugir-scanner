@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-curated-url-map-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsSstiModuleRouteLiveOracle fires on curated WEB_SECURITY_LEARNING_MODULE_TOPICS when CSR placeholder shells omit reflexion SSTI proof; module/1173 findings 5→8 (+ssti-module-route-live-oracle); module/1174 5→8; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1175-1179",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1179 (was capped at 1174); WEB_SECURITY_LEARNING_SSTI_MODULE_IDS 1125-1179; module/1175 findings 8 with ssti-module-route + module-route-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-module-route-reflexion-fp-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reflexion-escalated-ssti false-positive on WSL /module/{id} route scans (homepage coincidental '49' in Vercel shell); reflexionEscalatedXss/Sqli/Ssti return NEGATIVE when scanUrl matches /module/\\d{4}; module/1173-1174 findings 5→8 without reflexion FP, +ssti-module-route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-seeds-1170-1174",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1174 programmatically (was capped at 1169); WEB_SECURITY_LEARNING_MODULE_TOPICS SSTI placeholder loop 1125-1174; web-security-learning-labs.vercel.app/module/1170-1174 drain-ready; benchmark juice-shop-staging 49 findings 6/6 maintained"
@@ -13525,6 +13543,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-curated-url-map-fallback",
+      "shipped_at": "2026-08-08T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1175-1179",
+      "shipped_at": "2026-08-08T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-module-route-reflexion-fp-suppression",
+      "shipped_at": "2026-08-08T23:10:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
