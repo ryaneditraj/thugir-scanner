@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1145-1149",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1149 programmatically (was capped at 1144); WEB_SECURITY_LEARNING_MODULE_TOPICS + SSTI module IDs extended 1125-1144→1125-1149; web-security-learning-labs.vercel.app/module/1145 findings 9 (+ssti-module-route-live-oracle + module-route-evidence); module/1149 findings 9; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-secret-config-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bypass403PrioritySeeds adds /secret + /config; primeBypass403SessionForDeepScan extended to secret|config routes; bypass403.vercel.app/admin findings 9 (+bypass403-admin-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-admin-secret-config-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner pattern sort -3 for bypass403-admin|secret|config route scans; SSTI priority regex 114[0-4]→114[0-9]; bypass403.vercel.app/admin route scan fires admin-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-ssti-module-1140-1144-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1139→1125-1144; WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1144; web-security-learning-labs.vercel.app/module/1140 findings 8→6 (+web-security-learning-labs-ssti-module-route-live-oracle); module/1143 5→6 (+route oracle); benchmark juice-shop-staging 49 findings 6/6 maintained"
