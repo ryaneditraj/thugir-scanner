@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T12:04:59.560Z",
+  "updated_at": "2026-08-09T12:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2957,
-  "total_findings": 30299,
+  "total_sites_scanned": 2959,
+  "total_findings": 30399,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2076,
-  "discovery_findings": 24738,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-09T12:04:59.560Z",
+  "discovery_urls_added": 2078,
+  "discovery_findings": 24748,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-09T12:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,36 +48,34 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 (49 findings pages=6 probes=586); secret-resend slug still absent"
+      "note": "Primary Heroku awake 6/6 (50 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 48,
-      "focus": "WSL module catalog extend 1215-1219 + drain placeholder modules 1194/1185/1186",
-      "improvements_shipped_this_run": 0
+      "urls_added": 2,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "WSL placeholder checkpoint fallback + sec-research-lab command-injection/idor queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1215: 8 findings — placeholder-module-route-live-oracle (new slug)",
-      "web-security-learning-labs.vercel.app/module/1216-1218: 7 findings each — WSL catalog shells, no SSTI reflexion",
-      "web-security-learning-labs.vercel.app/module/1219: 4 findings — thin shell module",
-      "web-security-learning-labs.vercel.app/module/1194/1185/1186: 5 findings each — placeholder modules drained from queue"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1210: 7→5 findings — placeholder-module-route-live-oracle via checkpoint curated-map fallback (no SSTI FP)",
+      "secresearchlab.web.app/labs/command-injection: 9 findings — sec-research-lab-command-injection-route-live-oracle",
+      "secresearchlab.web.app/labs/idor: 10 findings — sec-research-lab-idor-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via security-question oracles)",
-      "WSL modules 1216-1219 lack route-specific SSTI/injection oracles — catalog shells only",
-      "secresearchlab.web.app/labs/command-injection + idor at queue tail — pending drain"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "WSL modules 1216-1219 catalog shells — placeholder oracle when checkpoint allows"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
+    "juice-shop.herokuapp.com": 50,
+    "web-security-learning-labs.vercel.app/module/1210": 5,
+    "secresearchlab.web.app/labs/command-injection": 9,
+    "secresearchlab.web.app/labs/idor": 10,
     "web-security-learning-labs.vercel.app/module/1215": 8,
-    "web-security-learning-labs.vercel.app/module/1216": 7,
-    "web-security-learning-labs.vercel.app/module/1217": 7,
-    "web-security-learning-labs.vercel.app/module/1218": 7,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 47,
     "secure-bank-bay.vercel.app/login": 9,
     "ssrf.vulnlab.dev/basic": 15
