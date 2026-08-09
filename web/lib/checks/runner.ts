@@ -10210,13 +10210,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|300))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-4]\d|350))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|1300)\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-4]\d|1350)\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
