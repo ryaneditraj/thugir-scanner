@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T15:05:30.000Z",
+  "updated_at": "2026-08-09T15:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2987,
-  "total_findings": 30703,
+  "total_sites_scanned": 2988,
+  "total_findings": 30754,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2088,
+  "discovery_urls_added": 2093,
   "discovery_findings": 24859,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-09T15:05:30.000Z",
+  "improvements_shipped": 1179,
+  "last_run": "2026-08-09T15:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
@@ -57,29 +57,30 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 52,
-      "focus": "WSL modules 1230-1234 new + drain 1227-1229",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL catalog extended 1250→1280 + modules 1230-1255 queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1251: 7→5 findings — placeholder-module-route-live-oracle restored via catalog max 1280",
+      "web-security-learning-labs.vercel.app/module/1280: placeholder oracle fires on catalog tail modules",
       "web-security-learning-labs.vercel.app/module/1231-1234: placeholder-module-route-live-oracle stable (8 findings each)",
-      "web-security-learning-labs.vercel.app/module/1230: thin catalog shell (5 findings, no SSTI reflexion)",
-      "web-security-learning-labs.vercel.app/module/1227-1229: drained queue shells (5 findings each)"
+      "pwnshop.ctfsecurity.com/wallet/topup/vulnbank: wallet-topup live+route oracles stable (45 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1230+ remain catalog shells — SSTI reflexion oracle absent"
+      "WSL modules 1281+ not yet in catalog — extend when new placeholder shells appear"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 47,
-    "web-security-learning-labs.vercel.app/module/1234": 8,
-    "web-security-learning-labs.vercel.app/module/1233": 8,
-    "web-security-learning-labs.vercel.app/module/1232": 8,
-    "web-security-learning-labs.vercel.app/module/1231": 8,
     "pwnshop.ctfsecurity.com/cart": 48,
+    "pwnshop.ctfsecurity.com/wallet/topup/vulnbank": 45,
+    "web-security-learning-labs.vercel.app/module/1234": 8,
+    "web-security-learning-labs.vercel.app/module/1251": 5,
+    "web-security-learning-labs.vercel.app/module/1280": 5,
     "secresearchlab.web.app/labs/command-injection": 9,
-    "secresearchlab.web.app/labs/idor": 10
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 78
   }
 }
