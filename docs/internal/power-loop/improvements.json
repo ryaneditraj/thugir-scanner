@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1200-1207",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds + WEB_SECURITY_LEARNING_MODULE_TOPICS + WEB_SECURITY_LEARNING_SSTI_MODULE_IDS extended 1199→1207; runner SSTI priority regex adds 120[0-7]; module/1203 findings 7→8 (+web-security-learning-labs-ssti-module-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-documents-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MRMcyber/vaultapp pages/api/documents/[encoded_id].js decodes base64 to sequential IDs without ownership check; GET /api/documents/MQ== (base64 of 1) returns other users' invoice/statement content; vaultapp-omega.vercel.app/api/documents/1 findings 13→14 (+documents-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-comments-stored-xss-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README lists 84 vulnerabilities with no /comments route; vulnshop.vercel.app SPA bundle has no comments markers; vulnshop-production.up.railway.app backend 404 Application not found — no portable live oracle"
+    },
+    {
       "source": "benchmark:juice-shop",
       "slug": "reflexion-ssti-isolated-49-arithmetic",
       "status": "shipped",
