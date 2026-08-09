@@ -1982,6 +1982,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopApplyCouponLiveOracle",
   "pwnshopCouponCategoryBypassLiveOracle",
   "pwnshopAvatarUploadRouteLiveOracle",
+  "pwnshopCartCheckoutRouteLiveOracle",
   "pwnshopApplyCouponRouteLiveOracle",
   "pwnshopCouponCategoryBypassRouteLiveOracle",
   "pwnshopSellerPreviewSstiLiveOracle",
@@ -8727,7 +8728,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   home = await warmupJuiceShopHome(target.toString(), home);
   if (
     /pwnshop|ctfsecurity\.com/i.test(targetInput) &&
-    /\/profile\/|\/apply-coupon|\/wallet\b|\/review\b/i.test(targetInput) &&
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(targetInput) &&
     (home.status === 404 || home.body.length < 512)
   ) {
     try {
@@ -9961,7 +9962,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let pwnshopBootstrap = "";
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     const needsBootstrap =
-      /\/profile\/|\/apply-coupon|\/wallet\b|\/review\b/i.test(targetInput) ||
+      /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(targetInput) ||
       !/PWN-\d{3}|OWASP Top 10 2025/i.test(`${home.body}\n${[...pages, ...scripts].map((p) => p.body).join("\n")}`);
     if (needsBootstrap) {
       const bootstrapUrls = [
@@ -10100,10 +10101,17 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
-        /\/profile\/|\/apply-coupon|\/wallet\b/i.test(targetInput) &&
+        /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
         return -2;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/cart\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /coupon|checkout/.test(p.slug)
+      )
+        return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
@@ -10191,13 +10199,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|20[0-9]|21[0-5]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2(?:0\d|1\d|2\d|3\d|4\d|50)))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9]|117[0-9]|118[0-9]|119[0-9]|120[0-9]|121[0-5])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12(?:0\d|1\d|2\d|3\d|4\d|50))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
