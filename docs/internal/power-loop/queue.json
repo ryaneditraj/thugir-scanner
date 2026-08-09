@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T20:09:40.081Z",
+  "updated_at": "2026-08-09T21:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/redos",
@@ -17839,6 +17839,31 @@
       "url": "https://secure-bank-bay.vercel.app/admin",
       "source": "Areeeshaa/SecureBank — RBAC/admin access-control oracle GET /admin (secure-bank-bay.vercel.app OSS deploy, 07 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/register",
+      "source": "alfredang/pentest FauxBank — open registration mass-assignment oracle POST /api/register (pentest-fauxbank Vercel OSS banking lab, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/storefront",
+      "source": "ctfsec/pwnshop — seller storefront SSTI preview oracle GET /seller/storefront (PWN-040 vulnerabilities index, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/mcp/tools",
+      "source": "NeuraLegion/brokencrystals — MCP tool enumeration oracle GET /api/mcp/tools (public demo LLM agent surface, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/60",
+      "source": "OWASP WrongSecrets — insecure MCP server env-var leak oracle challenge-60 (public Heroku demo, 21 UTC discovery)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/track-order/1",
+      "source": "Escape.tech Juice Shop demo — track-order IDOR oracle GET /rest/track-order/:id (juice-shop.demo.escape.tech, 21 UTC discovery)",
+      "auth": "benchmark"
     }
   ]
 }
