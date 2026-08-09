@@ -21,6 +21,7 @@ import {
   primeBypass403SessionForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
+  WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX,
   type RuleContext
 } from "./registry";
 import { ProbeCache } from "./probe-cache";
@@ -6617,7 +6618,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (let moduleNum = 1011; moduleNum <= 1250; moduleNum++) {
+  for (let moduleNum = 1011; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
     try {
       out.add(new URL(`/module/${moduleNum}`, pageUrl).toString());
     } catch {
@@ -9359,7 +9360,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     home.finalUrl
   )
     ? [
-        ...Array.from({ length: 1250 - 1037 + 1 }, (_, i) => String(1037 + i)),
+        ...Array.from(
+          { length: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX - 1037 + 1 },
+          (_, i) => String(1037 + i)
+        ),
         "1019",
         "1020",
         "1021",
@@ -10101,6 +10105,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/wallet\/topup\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /wallet-topup/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
@@ -10199,13 +10210,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2(?:0\d|1\d|2\d|3\d|4\d|50)))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2(?:0\d|1\d|2\d|3\d|4\d|5\d|6\d|7\d|80)))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12(?:0\d|1\d|2\d|3\d|4\d|50))\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12(?:0\d|1\d|2\d|3\d|4\d|5\d|6\d|7\d|80))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;

@@ -32371,7 +32371,7 @@ export async function primePwnshopOtpSessionForDeepScan(
   home: FetchedDoc
 ): Promise<void> {
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
-  if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(scanUrl)) return;
+  if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   await pwnshopCompleteOtpSession(ctx);
 }
@@ -32983,7 +32983,7 @@ const pwnshopWalletTopupVulnbankLiveOracle: Rule = async (ctx) => {
 const pwnshopWalletTopupRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:wallet|profile)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:wallet(?:\/topup)?|profile)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopWalletTopupVulnbankLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -35084,7 +35084,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1250;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1280;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
