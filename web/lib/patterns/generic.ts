@@ -34923,6 +34923,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sec-research-lab-prototype-pollution-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Sec Research Lab prototype pollution route live oracle",
+    description:
+      "Route scans on /labs/prototype-pollution confirm admin-escalation and client-side gadget pollution training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public prototype pollution training labs document __proto__ injection and privilege-escalation attack scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabPrototypePollutionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive prototype pollution modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser prototype pollution modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style prototype pollution training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Sec Research Lab IDOR route live oracle",
+    description:
+      "Route scans on /labs/idor confirm profile-peeking, order-tampering, and admin-panel IDOR training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public IDOR training labs document insecure direct object reference and authorization bypass scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive IDOR modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser IDOR modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style IDOR training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-host-header-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Sec Research Lab host header injection route live oracle",
+    description:
+      "Route scans on /labs/host-header confirm password-reset poisoning and web-cache poisoning training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public host header injection training labs document password-reset poisoning and cache-poisoning attack scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabHostHeaderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive host header injection modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser host header injection modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style host header injection training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-overthewire-bandit-evidence",
     platform: "generic",
     category: "Broken authentication",

@@ -2563,6 +2563,9 @@ const DEEP_RULES = new Set<string>([
   "secResearchLabXxeLabRouteLiveOracle",
   "secResearchLabCommandInjectionRouteLiveOracle",
   "secResearchLabJwtLabRouteLiveOracle",
+  "secResearchLabPrototypePollutionRouteLiveOracle",
+  "secResearchLabIdorRouteLiveOracle",
+  "secResearchLabHostHeaderRouteLiveOracle",
   "clientSideBrokencrystalsEvidence",
   "clientSideBrokencrystalsPrototypePollutionEvidence",
   "clientSideBrokencrystalsDomXssEvidence",
@@ -7230,7 +7233,10 @@ function extractSecResearchLabSeeds(html: string, pageUrl: string): string[] {
     "/labs/ssrf-lab/",
     "/labs/xxe-lab/",
     "/labs/command-injection/",
-    "/labs/jwt-lab/"
+    "/labs/jwt-lab/",
+    "/labs/prototype-pollution/",
+    "/labs/idor/",
+    "/labs/host-header/"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -10178,6 +10184,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/xxe-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-xxe-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/idor\/?$/i.test(targetInput) && p.slug === "sec-research-lab-idor-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-route-live-oracle") return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
