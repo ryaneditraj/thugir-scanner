@@ -32838,6 +32838,23 @@ const pwnshopSellerPreviewSstiRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopSellerStorefrontSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/seller\/storefront\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopSellerPreviewSstiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /seller/storefront route scan — seller storefront preview SSTI via GET /seller/preview?template= evaluates <%= 7*7 %> to 49 (PWN-040)"
+    }
+  };
+};
+
 const pwnshopDownloadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -35925,6 +35942,28 @@ const secureBankBayStoredXssCommentsRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /api/comments stores raw HTML in vulnerable mode",
       note: "secure-bank-bay.vercel.app /comments bundle documents stored XSS via POST /api/comments in Attack Mode — route-specific XSS training oracle"
+    }
+  };
+};
+
+const secureBankBayStoredXssMessagesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/messages\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const xssOk =
+    /\/api\/comments/i.test(corpus) &&
+    (/Stored XSS Demo/i.test(corpus) ||
+      /Comments \(XSS Lab\)/i.test(corpus) ||
+      /innerHTML=e/i.test(corpus));
+  if (!xssOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/comments stores raw HTML rendered via innerHTML in vulnerable mode",
+      note: "secure-bank-bay.vercel.app /messages route scan — SPA bundle documents stored XSS via POST /api/comments in Attack Mode — route-specific XSS training oracle"
     }
   };
 };
@@ -60442,6 +60481,22 @@ const wrongsecretsMcpRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge60McpRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?60\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsMcpExecuteCommandLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-60 route scan — MCP Server Environment Variable Exposure challenge confirms unauthenticated execute_command env leak including WRONGSECRETS_MCP_SECRET"
+    }
+  };
+};
+
 const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/chat/query", ctx.origin).toString();
@@ -71299,6 +71354,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopSellerPreviewSstiLiveOracle,
   pwnshopDownloadPathTraversalLiveOracle,
   pwnshopSellerPreviewSstiRouteLiveOracle,
+  pwnshopSellerStorefrontSstiRouteLiveOracle,
   pwnshopDownloadPathTraversalRouteLiveOracle,
   pwnshopPrototypePollutionSearchFiltersLiveOracle,
   pwnshopPrototypePollutionSearchFiltersRouteLiveOracle,
@@ -71375,6 +71431,7 @@ export const RULES: Record<string, Rule> = {
   clientSideSecurebankBlogEvidence,
   secureBankBaySqliLoginRouteLiveOracle,
   secureBankBayStoredXssCommentsRouteLiveOracle,
+  secureBankBayStoredXssMessagesRouteLiveOracle,
   secureBankBayAdminRbacRouteLiveOracle,
   clientSideBugBountyHunterEvidence,
   clientSideBugBountyHunterChallengeScenarioEvidence,
@@ -71711,6 +71768,7 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
   wrongsecretsMcpRouteLiveOracle,
+  wrongsecretsChallenge60McpRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
