@@ -31433,6 +31433,16 @@ const PWNSHOP_PATH_TRAVERSAL_MARKERS: { label: string; re: RegExp }[] = [
   { label: "Path Traversal Invoice Download title", re: /Path Traversal[\s\S]{0,80}Invoice Download/i }
 ];
 
+const PWNSHOP_CART_CHECKOUT_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-016 coupon bypass registry ID", re: /PWN-016/i },
+  { label: "Checkout coupon_code parameter", re: /POST \/checkout|GET \/checkout|coupon_code=/i },
+  { label: "PHONE20 category-restricted coupon", re: /PHONE20|phones-only|allowed_category/i },
+  {
+    label: "Checkout category re-validation gap",
+    re: /checkout accepts coupon|category restriction|re-validat/i
+  }
+];
+
 function pwnshopRouteOracle(
   ctx: RuleContext,
   pathRe: RegExp,
@@ -32284,8 +32294,11 @@ const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>
 async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
   const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
-  const uploadAvatarRoute = /\/profile\/upload-avatar/i.test(ctx.scanUrl || ctx.home.finalUrl || "");
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const uploadAvatarRoute = /\/profile\/upload-avatar/i.test(pageUrl);
+  const cartRoute = /\/cart\b/i.test(pageUrl);
   if (uploadAvatarRoute) await pwnshopSleep(3000);
+  if (cartRoute) await pwnshopSleep(2000);
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
@@ -32358,7 +32371,7 @@ export async function primePwnshopOtpSessionForDeepScan(
   home: FetchedDoc
 ): Promise<void> {
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
-  if (!/\/profile\/|\/apply-coupon|\/wallet\b|\/review\b/i.test(scanUrl)) return;
+  if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   await pwnshopCompleteOtpSession(ctx);
 }
@@ -32668,10 +32681,18 @@ const pwnshopAvatarUploadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopCartCheckoutRouteLiveOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/cart\b/i,
+    PWNSHOP_CART_CHECKOUT_MARKERS,
+    "Pwnshop /cart route scan — checkout accepts coupon_code without re-validating category restrictions at settlement (PWN-016 cart/checkout business-logic oracle)"
+  );
+
 const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/apply-coupon/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/apply-coupon|\/cart\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopApplyCouponLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -32680,7 +32701,9 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+      note: /\/cart\b/i.test(pageUrl)
+        ? "Pwnshop /cart route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+        : "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
     }
   };
 };
@@ -32688,7 +32711,7 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/apply-coupon/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/apply-coupon|\/cart\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopCouponCategoryBypassLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -32697,7 +32720,9 @@ const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+      note: /\/cart\b/i.test(pageUrl)
+        ? "Pwnshop /cart route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+        : "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
     }
   };
 };
@@ -71114,6 +71139,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopApplyCouponLiveOracle,
   pwnshopCouponCategoryBypassLiveOracle,
   pwnshopAvatarUploadRouteLiveOracle,
+  pwnshopCartCheckoutRouteLiveOracle,
   pwnshopApplyCouponRouteLiveOracle,
   pwnshopCouponCategoryBypassRouteLiveOracle,
   pwnshopSellerPreviewSstiLiveOracle,

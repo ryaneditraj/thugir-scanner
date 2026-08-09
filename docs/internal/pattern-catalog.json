@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-09T13:09:45.223Z",
-  "total": 2057,
-  "uniqueSlugs": 2053,
+  "generatedAt": "2026-08-09T14:19:36.913Z",
+  "total": 2058,
+  "uniqueSlugs": 2054,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2039,
+    "generic": 2040,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1972,
+    "deep": 1973,
     "continuous": 0
   },
   "byCategory": {
@@ -35,7 +35,7 @@
     "Server-side request forgery": 60,
     "Sensitive data exposure": 51,
     "AI security": 50,
-    "Business logic": 18,
+    "Business logic": 19,
     "Cross-site request forgery": 2,
     "Insecure file upload": 2,
     "Command injection": 2,
@@ -1621,6 +1621,7 @@
     "pwnshop-avatar-upload-route-live-oracle",
     "pwnshop-avatar-url-ssrf-live-oracle",
     "pwnshop-avatar-url-ssrf-route-live-oracle",
+    "pwnshop-cart-checkout-route-live-oracle",
     "pwnshop-chat-init-email-enumeration-live-oracle",
     "pwnshop-chat-prompt-injection-live-oracle",
     "pwnshop-coupon-category-bypass-live-oracle",

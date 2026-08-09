@@ -22704,6 +22704,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-cart-checkout-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Pwnshop cart checkout business-logic route live oracle (PWN-016)",
+    description:
+      "When scanning /cart, checkout accepts coupon_code without re-validating category restrictions applied at /apply-coupon — the Pwnshop cart/checkout coupon business-logic oracle.",
+    impactOneline:
+      "Cart checkout can settle category-restricted coupons without matching cart contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopCartCheckoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate coupon category restrictions at checkout settlement — Pwnshop PWN-016 is intentional lab software.",
+      steps: [
+        "Enforce allowed_category checks again when processing checkout coupon_code.",
+        "Reject checkout when cart contents no longer match coupon category restrictions.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /cart checkout accepts PHONE20 on non-phone cart items. Show coupon re-validation at checkout settlement.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-seller-preview-ssti-live-oracle",
     platform: "generic",
     category: "Injection",

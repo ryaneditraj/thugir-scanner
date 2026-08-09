@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-placeholder-ssti-priority-regex-1216-1250",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: deep-scan pattern sort extended placeholder priority to modules 1037-1250 and SSTI priority to 1022/1024/1120-1250 (regex previously capped at 1215); web-security-learning-labs.vercel.app/module/1216 findings 7→8 (+placeholder-module-route-live-oracle); module/1220 placeholder oracle stable; benchmark juice-shop-staging 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-cart-checkout-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopCartCheckoutRouteLiveOracle + /cart route matchers on apply-coupon/category-bypass route oracles; pwnshop.ctfsecurity.com/cart findings 13→48 (+cart-checkout-route + coupon route live oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-cart-otp-bootstrap-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cart added to primePwnshopOtpSessionForDeepScan + pwnshopBootstrap + home warmup; runner -3 priority for pwnshop coupon/checkout slugs on /cart; 2s OTP pre-wait on cart route; pwnshop.ctfsecurity.com/cart live oracles enabled (13→48 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1216-1250",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended 1215→1250 (WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX); web-security-learning-labs.vercel.app/module/1216 findings 4→5 (+placeholder-module-route-live-oracle); module/1219 4→5; benchmark juice-shop-staging 47 findings 6/6 maintained"
