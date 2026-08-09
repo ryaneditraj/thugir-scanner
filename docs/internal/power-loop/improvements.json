@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: modules 1037–1207 render Here is a Module: {id} CSR placeholder shells; web-security-learning-labs.vercel.app/module/1200 findings 8→5 (+placeholder-module-route-live-oracle, -ssti-module-route-live-oracle FP); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-placeholder-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsSstiModuleRouteLiveOracle returns NEGATIVE on placeholderShell without reflexion SSTI confirmation; module/1200 no longer mislabeled critical SSTI; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-host-header-web-cache-poisoning-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Level 2 Web Cache Poisoning + X-Cache-Key + vary=Host + Cache Status HIT in host-header chunk; secresearchlab.web.app/labs/host-header findings 10→11 (+web-cache-poisoning live oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:secresearchlab.web.app",
       "slug": "sec-research-lab-cors-lab-route-live-oracle",
       "status": "shipped",
