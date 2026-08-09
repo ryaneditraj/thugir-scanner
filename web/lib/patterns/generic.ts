@@ -22782,6 +22782,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-seller-storefront-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop seller storefront SSTI route live oracle (PWN-040)",
+    description:
+      "When scanning /seller/storefront, seller preview SSTI via GET /seller/preview?template= evaluates <%= 7*7 %> to 49 via ejs.render() — route-specific SSTI oracle.",
+    impactOneline:
+      "Route scans on seller storefront entry points need live SSTI confirmation beyond client-bundle evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopSellerStorefrontSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sandbox or remove ejs.render() from seller preview — Pwnshop is intentional lab software.",
+      steps: [
+        "Block template= reflection into ejs.render().",
+        "Use static preview HTML instead of server-side template evaluation.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /seller/storefront route links to preview SSTI evaluating <%= 7*7 %> to 49. Show route-specific SSTI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-download-path-traversal-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -29148,6 +29174,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WrongSecrets /mcp route leaks environment variables via MCP execute_command. Show remediation for MCP tool gateway hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-60-mcp-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "OWASP WrongSecrets challenge-60 MCP route live oracle",
+    description:
+      "When scanning /challenge/60 or /challenge/challenge-60, POST /mcp tools/call execute_command('env') confirms environment variable leak including WRONGSECRETS_MCP_SECRET — route-specific challenge-60 MCP oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-60 MCP environment variable exposure is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge60McpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-60 is intentional — never expose MCP execute_command without authentication in production.",
+      steps: [
+        "Disable or authenticate MCP tool endpoints before production deploy.",
+        "Never forward environment variables from MCP tool responses to clients.",
+        "Rotate any secrets that appeared in process environment dumps."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-60 route links to an MCP server that leaks environment variables. Show remediation for MCP tool gateway hardening.",
     version: 1,
     enabled: true
   },
@@ -36687,6 +36739,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /comments route stores raw HTML in vulnerable mode. Show stored XSS remediation for comment APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-bank-bay-stored-xss-messages-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SecureBank Bay stored XSS messages route live oracle",
+    description:
+      "When scanning /messages on secure-bank-bay.vercel.app, the SPA bundle documents stored XSS via POST /api/comments that renders raw HTML in Attack Mode — route-specific XSS training oracle.",
+    impactOneline:
+      "Educational banking SPA exposes intentional stored XSS comment flows in client bundle when scanning the /messages route alias.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBayStoredXssMessagesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBank Bay is intentional lab software — sanitize and encode stored user content.",
+      steps: [
+        "Sanitize HTML or use a strict allowlist before storing comments.",
+        "Encode output in templates instead of rendering raw HTML.",
+        "Run Attack Mode labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /messages route documents stored XSS via /api/comments in vulnerable mode. Show stored XSS remediation for comment APIs.",
     version: 1,
     enabled: true
   },
