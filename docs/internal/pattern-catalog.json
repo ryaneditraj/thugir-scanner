@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-09T08:06:42.199Z",
-  "total": 2050,
-  "uniqueSlugs": 2046,
+  "generatedAt": "2026-08-09T09:04:23.359Z",
+  "total": 2052,
+  "uniqueSlugs": 2048,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2032,
+    "generic": 2034,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1965,
+    "deep": 1967,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 106,
-    "Security misconfiguration": 148,
+    "Security misconfiguration": 150,
     "Broken authentication": 125,
     "Injection": 296,
     "Cross-site scripting": 669,
@@ -1672,6 +1672,8 @@
     "rest-vulnweb-users-bola-route-live-oracle",
     "robots-sensitive-paths",
     "sec-research-lab-command-injection-route-live-oracle",
+    "sec-research-lab-cors-lab-route-live-oracle",
+    "sec-research-lab-host-header-password-reset-poisoning-live-oracle",
     "sec-research-lab-host-header-route-live-oracle",
     "sec-research-lab-idor-route-live-oracle",
     "sec-research-lab-jwt-lab-route-live-oracle",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T09:06:09.973Z",
+  "updated_at": "2026-08-09T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2928,
-  "total_findings": 30001,
+  "total_sites_scanned": 2930,
+  "total_findings": 30003,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2061,
-  "discovery_findings": 24591,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-09T09:06:09.973Z",
+  "discovery_findings": 24593,
+  "improvements_shipped": 1176,
+  "last_run": "2026-08-09T09:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -48,39 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 (51 findings, full live-oracle set); secret-resend slug still absent"
+      "note": "Primary Heroku 6/6 (51 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 52,
-      "focus": "WSL modules 1200-1204 (new) + drain 1195-1197 from queue head",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 10,
+      "findings": 72,
+      "focus": "WSL modules 1200-1204 + secresearchlab cors-lab/host-header oracle validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, probes=584) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
+      "secresearchlab.web.app/labs/cors-lab: 9→10 findings — sec-research-lab-cors-lab-route-live-oracle shipped",
+      "secresearchlab.web.app/labs/host-header: 9→10 findings — sec-research-lab-host-header-password-reset-poisoning-live-oracle shipped",
       "web-security-learning-labs.vercel.app/module/1200-1203: 8 findings each — WSL catalog shell with ssti-module-route reflexion",
-      "web-security-learning-labs.vercel.app/module/1204: 5 findings — thin catalog shell (no ssti-module-route)",
-      "web-security-learning-labs.vercel.app/module/1195-1197: 5 findings each — prior queue head drained"
+      "web-security-learning-labs.vercel.app/module/1195-1197: 5 findings each — queue head drained"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via security-question oracles)",
       "WSL modules 1200+ are catalog shells — SSTI reflexion fires but route-specific vuln oracles absent",
-      "secresearchlab.web.app/labs/command-injection + idor still at queue tail — not drained this run",
-      "secresearchlab.web.app/labs/cors-lab: route-specific CORS live oracle still absent"
+      "secresearchlab.web.app/labs/host-header: Web Cache Poisoning level not covered by password-reset live oracle",
+      "secresearchlab.web.app/labs/command-injection + idor still at queue tail — not drained this run"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "secresearchlab.web.app/labs/cors-lab": 10,
+    "secresearchlab.web.app/labs/host-header": 10,
     "web-security-learning-labs.vercel.app/module/1200": 8,
     "web-security-learning-labs.vercel.app/module/1201": 8,
     "web-security-learning-labs.vercel.app/module/1202": 8,
     "web-security-learning-labs.vercel.app/module/1203": 8,
-    "web-security-learning-labs.vercel.app/module/1204": 5,
-    "web-security-learning-labs.vercel.app/module/1195": 5,
-    "web-security-learning-labs.vercel.app/module/1196": 5,
-    "web-security-learning-labs.vercel.app/module/1197": 5
+    "secresearchlab.web.app/labs/ssrf-lab": 10,
+    "secresearchlab.web.app/labs/sql-injection": 10
   }
 }
