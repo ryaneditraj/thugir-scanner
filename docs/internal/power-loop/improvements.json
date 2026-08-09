@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-session-cache-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopVerifiedSessionByProbe caches only successful OTP cookies; failed handshakes clear in-flight map so prime retries work; primePwnshopOtpSessionForDeepScan retries 4× with upload-avatar backoff; register 429 backoff; pwnshop.ctfsecurity.com/profile/upload-avatar findings 14→45 with avatar-upload + svg-xss route oracles; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-cart-checkout-route-strict",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopCartCheckoutRouteLiveOracle requires /cart in scannedUrl before pwnshopRouteOracle corpus fallback — removes false PWN-016 cart oracle on /profile/upload-avatar route scans; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "secret-resend-mastodon-tag-corpus",
+      "status": "rejected",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with slackUrl + fosstodon tag timelines (juiceshop, resend, juice-shop); no canonical re_<8>_<24> key in current feeds; benchmark juice-shop-staging 48 findings 6/6 maintained (secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key)"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1301-1350",
       "status": "shipped",

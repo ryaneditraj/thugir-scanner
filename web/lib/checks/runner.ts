@@ -411,6 +411,23 @@ async function fetchJuiceShopSocialFeedBodies(
       });
       if (nft.status >= 200 && nft.status < 400) chunks.push(nft.body);
     }
+
+    const slackUrl = social.slackUrl;
+    if (slackUrl) {
+      const slack = await probe.get(slackUrl, {
+        maxBytes: 96_000,
+        timeoutMs: 12000,
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+      });
+      if (slack.status >= 200 && slack.status < 400) chunks.push(slack.body);
+    }
+
+    // Hashtag timelines on fosstodon (Leaked Resend API Key challenge corpus when keys appear in tagged posts).
+    for (const tag of ["juiceshop", "resend", "juice-shop"]) {
+      const tagUrl = `https://fosstodon.org/api/v1/timelines/tag/${encodeURIComponent(tag)}?limit=40`;
+      const tagDoc = await probe.get(tagUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+      if (tagDoc.status >= 200 && tagDoc.status < 400) chunks.push(tagDoc.body);
+    }
   } catch {
     /* ignore malformed config or feed fetch errors */
   }
@@ -10256,6 +10273,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-avatar")
       )
         return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/upload-avatar/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-mail")
+      )
+        return 2;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
