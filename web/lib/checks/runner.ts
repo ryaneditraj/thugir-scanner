@@ -2569,6 +2569,8 @@ const DEEP_RULES = new Set<string>([
   "secResearchLabPrototypePollutionRouteLiveOracle",
   "secResearchLabIdorRouteLiveOracle",
   "secResearchLabHostHeaderRouteLiveOracle",
+  "secResearchLabCorsLabRouteLiveOracle",
+  "secResearchLabHostHeaderPasswordResetPoisoningLiveOracle",
   "clientSideBrokencrystalsEvidence",
   "clientSideBrokencrystalsPrototypePollutionEvidence",
   "clientSideBrokencrystalsDomXssEvidence",
@@ -7239,7 +7241,8 @@ function extractSecResearchLabSeeds(html: string, pageUrl: string): string[] {
     "/labs/jwt-lab/",
     "/labs/prototype-pollution/",
     "/labs/idor/",
-    "/labs/host-header/"
+    "/labs/host-header/",
+    "/labs/cors-lab/"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -10196,6 +10199,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/idor\/?$/i.test(targetInput) && p.slug === "sec-research-lab-idor-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-password-reset-poisoning-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/cors-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-cors-lab-route-live-oracle") return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&

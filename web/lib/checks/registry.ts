@@ -67231,6 +67231,45 @@ const secResearchLabHostHeaderRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const secResearchLabCorsLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/cors-lab\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/CORS Misconfiguration/i.test(corpus)) return NEGATIVE;
+  if (!/Wildcard Origin with Credentials|Null Origin Security Analysis/i.test(corpus)) return NEGATIVE;
+  if (!/\/api\/user-secrets|Access-Control-Allow-Origin/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "CORS Misconfiguration",
+      note: "secresearchlab.web.app/labs/cors-lab exposes wildcard-origin-with-credentials and null-origin CORS bypass training levels — route-specific lab oracle"
+    }
+  };
+};
+
+const secResearchLabHostHeaderPasswordResetPoisoningLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/host-header\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/Level 1:\s*Password Reset Poisoning/i.test(corpus)) return NEGATIVE;
+  if (!/req\.headers\.host.*reset\?token|resetLink.*req\.headers\.host/i.test(corpus)) return NEGATIVE;
+  if (!/POST\s+\/api\/password-reset|Password Reset Service/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "Password Reset Poisoning",
+      vulnerablePattern: "reset link built from req.headers.host",
+      note: "secresearchlab.web.app/labs/host-header Level 1 confirms password-reset link poisoning via trusted Host header on POST /api/password-reset"
+    }
+  };
+};
+
 // --- vAPI OWASP API Top 10 self-hostable lab (vapi.apisec.ai / roottusk/vapi) --------
 const CLIENT_VAPI_RES: { label: string; re: RegExp }[] = [
   {
@@ -71415,6 +71454,8 @@ export const RULES: Record<string, Rule> = {
   secResearchLabPrototypePollutionRouteLiveOracle,
   secResearchLabIdorRouteLiveOracle,
   secResearchLabHostHeaderRouteLiveOracle,
+  secResearchLabCorsLabRouteLiveOracle,
+  secResearchLabHostHeaderPasswordResetPoisoningLiveOracle,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
   clientSideBrokencrystalsDomXssEvidence,
