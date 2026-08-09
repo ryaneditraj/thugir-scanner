@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1195-1199",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue.json prepends modules 1195-1199 for next-hour drain; extractWebSecurityLearningLabsSeeds already emits /module/1011-1194 from hub crawl; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1190-1194-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS 1125-1189→1125-1194; runner SSTI priority regex adds 119[0-4]; module/1190-1194 findings 4→5 (+web-security-learning-labs-ssti-module-route-live-oracle); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1190-1194",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds extended 1189→1194; WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1194; module/1190-1194 drain-ready with module-route-evidence + client-side markers; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-checkpoint-route-health-retry",
       "status": "shipped",
