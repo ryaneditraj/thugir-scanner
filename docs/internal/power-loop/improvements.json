@@ -2,6 +2,12 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1180-1189",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds + WEB_SECURITY_LEARNING_SSTI_MODULE_IDS extended 1179→1189; SSTI route priority regex adds 118[0-9]; module/1180 findings 7→8 (+web-security-learning-labs-ssti-module-route-live-oracle); modules 1185-1188 prior drain 7 findings each now SSTI-oracle eligible; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-ssti-curated-url-map-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsSstiModuleRouteLiveOracle fires on curated WEB_SECURITY_LEARNING_MODULE_TOPICS when CSR placeholder shells omit reflexion SSTI proof; module/1173 findings 5→8 (+ssti-module-route-live-oracle); module/1174 5→8; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
