@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-cors-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/cors-lab chunk exposes Wildcard Origin with Credentials + Null Origin Security Analysis + /api/user-secrets; secresearchlab.web.app/labs/cors-lab findings 9→10 (+sec-research-lab-cors-lab-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-host-header-password-reset-poisoning-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Level 1 Password Reset Poisoning + resetLink from req.headers.host + POST /api/password-reset in host-header chunk; secresearchlab.web.app/labs/host-header findings 9→10 (+password-reset-poisoning live oracle alongside route oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-cors-lab-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractSecResearchLabSeeds + pattern sort -3 for cors-lab route oracle when scanning /labs/cors-lab; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-route-live-oracle",
       "status": "shipped",
