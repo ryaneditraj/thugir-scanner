@@ -60,4 +60,9 @@ export function xssCanary(suffix = "thg"): string {
 /** SSTI probes per engine. */
 export const SSTI_PROBES = ["{{7*7}}", "${7*7}", "#{7*7}", "<%= 7*7 %>", "${{7*7}}"];
 
+/** True when body contains 49 as an evaluated result, not as a substring inside decimals (e.g. 4.6153846154). */
+export function sstiArithmeticEvaluated(body: string): boolean {
+  return /(?:^|[^0-9.])49(?:[^0-9.]|$)/.test(body);
+}
+
 export const REFLEXION_PROMPT = `When a probe is blocked, escalate encoding (L0 raw → L1 URL encode → L2 double encode → L3 unicode → L4 multi-layer) before abandoning the attack class.`;

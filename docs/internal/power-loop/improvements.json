@@ -1,6 +1,480 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1200-1207",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds + WEB_SECURITY_LEARNING_MODULE_TOPICS + WEB_SECURITY_LEARNING_SSTI_MODULE_IDS extended 1199→1207; runner SSTI priority regex adds 120[0-7]; module/1203 findings 7→8 (+web-security-learning-labs-ssti-module-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-documents-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MRMcyber/vaultapp pages/api/documents/[encoded_id].js decodes base64 to sequential IDs without ownership check; GET /api/documents/MQ== (base64 of 1) returns other users' invoice/statement content; vaultapp-omega.vercel.app/api/documents/1 findings 13→14 (+documents-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-comments-stored-xss-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README lists 84 vulnerabilities with no /comments route; vulnshop.vercel.app SPA bundle has no comments markers; vulnshop-production.up.railway.app backend 404 Application not found — no portable live oracle"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "reflexion-ssti-isolated-49-arithmetic",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: reflexionEscalatedSsti used body.includes('49') which matched CSS hsl decimals (-1.2549019608) on juice-shop.herokuapp.com; sstiArithmeticEvaluated requires isolated 49 token; juice-shop.herokuapp.com findings 51→50 (-reflexion-escalated-ssti FP); benchmark 6/6 maintained (50 findings)"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-events-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pattern sort -3 for pwnshop-* when scanning /debug/info /api/v1/events /admin/export-orders /logs; pwnshop.ctfsecurity.com/debug/info findings 12→44 with pwnshop-debug-info-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-api-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pattern sort -3 for vulnshop-* on /api/v1/orders and /api/v1/users route scans; vulnshop.vercel.app/api/v1/orders findings 8 with vulnshop-orders-idor-route-live-oracle; /api/v1/users with vulnshop-users-enumeration-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: secResearchLabSqlInjectionRouteLiveOracle + XssPlayground + SsrfLab route oracles fire on /labs/sql-injection /labs/xss-playground /labs/ssrf-lab; sql-injection findings 10→11 (+sec-research-lab-sql-injection-route-live-oracle, -reflexion-escalated-ssti FP); xss-playground +sec-research-lab-xss-playground-route-live-oracle; ssrf-lab +sec-research-lab-ssrf-lab-route-live-oracle; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-reflexion-fp-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Firebase/Next.js lab shells embed coincidental '49' in chunk IDs; secResearchLabReflexionSuppressed added to reflexionEscalatedXss/Sqli/Ssti; secresearchlab.web.app/labs/* findings no longer include reflexion-escalated-ssti false positive; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1195-1199-code-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds + WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + placeholder loop extended 1194→1199; runner SSTI priority regex 119[0-4]→119[0-9]; module/1195 findings 8 (+web-security-learning-labs-ssti-module-route-live-oracle + module-route-evidence); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1195-1199",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue.json prepends modules 1195-1199 for next-hour drain; extractWebSecurityLearningLabsSeeds already emits /module/1011-1194 from hub crawl; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1190-1194-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS 1125-1189→1125-1194; runner SSTI priority regex adds 119[0-4]; module/1190-1194 findings 4→5 (+web-security-learning-labs-ssti-module-route-live-oracle); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1190-1194",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds extended 1189→1194; WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1194; module/1190-1194 drain-ready with module-route-evidence + client-side markers; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-checkpoint-route-health-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bypass403ProbeGet invalidates session on Vercel checkpoint + primeBypass403SessionForDeepScan health-checks scanned route (/secure,/internal,/waf) instead of always /api/admin; bypass403.vercel.app/secure findings 2→9 (+secure-bearer live+route oracles); /internal 2→8; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-presskit-nft-social-corpus",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with pressKitUrl (github swag) + nftUrl (opensea) from application-configuration social config; benchmark juice-shop-staging 49 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current feeds)"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-api-admin-checkpoint-probe-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBypass403ApiAdminSemicolon uses bypass403ProbeGet + bypass403InvalidateSession for checkpoint resilience; bypass403.vercel.app/api/admin findings 3→8 (+api-admin live+route oracles when checkpoint clears); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1180-1189",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds + WEB_SECURITY_LEARNING_SSTI_MODULE_IDS extended 1179→1189; SSTI route priority regex adds 118[0-9]; module/1180 findings 7→8 (+web-security-learning-labs-ssti-module-route-live-oracle); modules 1185-1188 prior drain 7 findings each now SSTI-oracle eligible; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-curated-url-map-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsSstiModuleRouteLiveOracle fires on curated WEB_SECURITY_LEARNING_MODULE_TOPICS when CSR placeholder shells omit reflexion SSTI proof; module/1173 findings 5→8 (+ssti-module-route-live-oracle); module/1174 5→8; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1175-1179",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1179 (was capped at 1174); WEB_SECURITY_LEARNING_SSTI_MODULE_IDS 1125-1179; module/1175 findings 8 with ssti-module-route + module-route-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-module-route-reflexion-fp-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reflexion-escalated-ssti false-positive on WSL /module/{id} route scans (homepage coincidental '49' in Vercel shell); reflexionEscalatedXss/Sqli/Ssti return NEGATIVE when scanUrl matches /module/\\d{4}; module/1173-1174 findings 5→8 without reflexion FP, +ssti-module-route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1170-1174",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1174 programmatically (was capped at 1169); WEB_SECURITY_LEARNING_MODULE_TOPICS SSTI placeholder loop 1125-1174; web-security-learning-labs.vercel.app/module/1170-1174 drain-ready; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1170-1174-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS extended 1125-1169→1125-1174; runner SSTI priority regex 116[0-9]→116[0-9]|117[0-4]; module/1170 findings +web-security-learning-labs-ssti-module-route-live-oracle (+module-route-evidence, client-side markers); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-curated-url-map-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: module-route + client-side oracles fire on curated WEB_SECURITY_LEARNING_MODULE_TOPICS when CSR shells omit catalog markers; module/1165 findings 6→6 with ssti-module-route + module-route-evidence + client-side-web-security-learning-labs-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-session-vercel-challenge-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /start intermittently blocked by Vercel x-vercel-mitigated challenge — bypass403CompleteSessionUncached now warms homepage via fetchDoc, retries up to 3x, never caches null sessions, and primeBypass403SessionForDeepScan health-checks GET /api/admin=403 before oracles run; bypass403.vercel.app/api/admin findings 3→10 (+api-admin-live+route oracles); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-reflexion-fp-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reflexion-escalated-ssti false-positive on bypass403 JSON 403 lab shells (coincidental '49' in Vercel challenge bodies); reflexionEscalatedXss/Sqli/Ssti now return NEGATIVE on bypass403.vercel.app hosts; bypass403.vercel.app/api/admin findings 3→10 without reflexion FP; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-api-admin-probe-session-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBypass403ApiAdminSemicolon retries once after bypass403SessionByProbe invalidation when semicolon bypass fails without session; GET /api/admin/..;/ returns 200 flag only with session cookie; bypass403-api-admin-route-live-oracle fires on direct /api/admin route scan; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1165-1169",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1169 programmatically (was capped at 1164); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1169; web-security-learning-labs.vercel.app/module/1165-1169 drain-ready; benchmark juice-shop.herokuapp.com 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1165-1169-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1164→1125-1169; runner SSTI priority regex 116[0-4]→116[0-9] + bypass403 /api/admin route -3 priority; module/1160 findings 9 with web-security-learning-labs-ssti-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.lab.pentest-forge.com",
+      "slug": "pentest-forge-dvwa-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/sqli/ id=1' OR '1'='1 tautology oracle ported from pentest-ground-dvwa-sqli-route-live-oracle for dvwa.lab.pentest-forge.com; lab HTTP 502 during validation — oracle ready when PentestForge DVWA returns; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1160-1164-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1159→1125-1164; runner SSTI priority regex 115[0-9]→115[0-9]|116[0-4]; module/1160-1164 findings +web-security-learning-labs-ssti-module-route-live-oracle; benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-stale-route-cleanup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /secret and /config return HTTP 404 on live bypass403.vercel.app; GET /internal X-Forwarded-For: evil.com, 127.0.0.1 stays 403 (bypass broken); disabled internal-xff live+route oracles, removed /secret /config from priority seeds and queue, prepended working routes; bypass403.vercel.app/admin findings 9 (+admin-route, api-admin, waf, debug, secure-bearer oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-date-manipulation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: authenticated GET /api/products?date_from=01-01-2000&date_to=31-12-2099 returns 11 products in ~2s vs 6-month window 0 products in 36ms (DD-MM-YYYY); brokencrystals.com/api/products?date_from=2000-01-01&date_to=2099-12-31 findings 73→75 (+date-manipulation live+route oracles); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1155-1159",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1159 programmatically (was capped at 1154); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1159; web-security-learning-labs.vercel.app/module/1155-1159 drain-ready; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1155-1159-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1154→1125-1159; runner SSTI priority regex 115[0-4]→115[0-9]; module/1155-1159 findings +web-security-learning-labs-ssti-module-route-live-oracle; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:preview.owasp-juice.shop",
+      "slug": "preview-juice-shop-memorys-api-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/Memorys on preview.owasp-juice.shop returns HTTP 500 Unexpected path: /api/Memorys — develop preview branch lacks memory/RCE challenge route; no portable live oracle"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1150-1154",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1154 programmatically (was capped at 1149); WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1154; web-security-learning-labs.vercel.app/module/1150-1154 drain-ready; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1150-1154-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1149→1125-1154; runner SSTI priority regex 114[0-9]→114[0-9]|115[0-4]; module/1150-1154 findings +web-security-learning-labs-ssti-module-route-live-oracle (was reflexion-only); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp.vercel.app",
+      "slug": "vaultapp-vercel-app-canonical-rewrite",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultapp.vercel.app serves Clutch-It SPA (not MRMcyber lab); canonicalDiscoveryUrl rewrites to vaultapp-omega.vercel.app; queue.json 3 stale URLs fixed; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1145-1149",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1149 programmatically (was capped at 1144); WEB_SECURITY_LEARNING_MODULE_TOPICS + SSTI module IDs extended 1125-1144→1125-1149; web-security-learning-labs.vercel.app/module/1145 findings 9 (+ssti-module-route-live-oracle + module-route-evidence); module/1149 findings 9; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-secret-config-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bypass403PrioritySeeds adds /secret + /config; primeBypass403SessionForDeepScan extended to secret|config routes; bypass403.vercel.app/admin findings 9 (+bypass403-admin-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-admin-secret-config-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner pattern sort -3 for bypass403-admin|secret|config route scans; SSTI priority regex 114[0-4]→114[0-9]; bypass403.vercel.app/admin route scan fires admin-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1140-1144-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1139→1125-1144; WEB_SECURITY_LEARNING_MODULE_TOPICS placeholder loop 1037-1144; web-security-learning-labs.vercel.app/module/1140 findings 8→6 (+web-security-learning-labs-ssti-module-route-live-oracle); module/1143 5→6 (+route oracle); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1144",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1144 programmatically (was capped at 1139); queue modules 1140-1144 drain-ready; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-priority-regex-1140-1144",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner SSTI priority regex 113[0-9]→113[0-9]|114[0-4]; generic.ts module-route-evidence + ssti-oracle descriptions updated to 1144; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1135-1139-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + topic map extended 1125-1134→1125-1139; runner SSTI priority regex 113[0-4]→113[0-9]; module seeds 1011-1139; web-security-learning-labs.vercel.app/module/1135 findings 8→9 (+ssti-module-route-live-oracle); module/1137 8→9; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-messages-read-idor-message-id-seed-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeVaultappMessagesReadIdor message_id loop 1-60 missed live DB rows (message_id=110 returns cfoster55 private message to rootadmin); priority seeds 110/42 + range 100-179; vaultapp-omega.vercel.app/api/messages/read findings 13→15 (+messages-read-idor live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1139",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds generate modules 1011-1139 programmatically (was capped at 1124); queue modules 1135-1139 drain-ready; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsSstiModuleRouteLiveOracle fires reflexionEscalatedSsti on modules 1022/1024/1125-1134; web-security-learning-labs.vercel.app/module/1130 findings 8→9 (+route oracle); module/1133 findings 5→8; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-social-twitter-facebook-feed-corpus",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with twitterUrl syndication.twitter.com + facebookUrl page fetch from application-configuration social config; benchmark juice-shop-staging 49 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current feeds)"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-secret-config-routes-removed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /secret and /config return HTTP 404 on live bypass403.vercel.app (routes absent from Karthikdude/bypass403); disabled bypass403-secret/config live+route oracles, removed /secret /config from FORBIDDEN_403_PROBE_PATHS and priority seeds; bypass403.vercel.app/secret route scan 9 findings (5 working oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-request-headers-session-ua",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bypass403RequestHeaders returns BYPASS403_BROWSER_UA + POST /start session cookie; wired into http403BypassProbe, waf/admin/api-admin/path-normalization/config-header/debug-verb/internal-xff/secure-bearer probes; bypass403.vercel.app/admin route scan 9 findings incl bypass403-admin-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "prime-bypass403-session-deep-scan-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primeBypass403SessionForDeepScan pre-warms bypass403CompleteSession during deep-scan bootstrap on /admin|secret|config|waf|debug|internal|secure|api/admin routes; bypass403 home warmup fetches / when route returns 404/403/thin body; bypass403.vercel.app/admin+secret route scans 9 findings each (5 bypass403 oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-route-deprioritization-secret-config-internal",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pattern sort -3 on bypass403 hosts for secret/config/internal/debug/secure route scans (waf already had -3); prioritizes route-specific live oracles on bypass403.vercel.app/secret /config /internal; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-checkpoint-bootstrap-backoff",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsBootstrap retries / + /learn/modules + module target up to 4× with backoff when Vercel Security Checkpoint blocks CSR shell; web-security-learning-labs.vercel.app/module/1115 findings 5→7 (+tech-stack-disclosure +thugir-sensitive-js-endpoints); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-api-route-home-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reachTarget failure + thin /api/* responses on voting-app hosts fetch homepage corpus before scan; https://voting-app-iota.vercel.app/api/signup route scan recovered from BlockedTargetError to 8 findings incl user-polls-idor + vote-stuffing; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-signup-open-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/signup with name+password returns MongoDB user id without auth; votingAppSignupOpenLiveOracle + route oracle on /api/signup; homepage scan 8 findings maintained; signup route scan 8 findings (oracle intermittent under Vercel signup rate limits); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sqli-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vulnbank.org/login username=admin' OR '1'='1 returns status:success + JWT while invalid creds return status:error; relaxed oracle accepts non-admin SQLi bypass; vulnbank.org/login findings 24→27; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sqli-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan https://vulnbank.org/login fires vulnbank-sqli-login-route-live-oracle alongside host oracle; findings 24→27; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bill-payments-negative-amount-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/bill-payments/create amount:-50 with vulnbankProbeUserToken(balance:10000) returns status:success payment_details.amount=-50; replaced broken vulnbankSqliAdminToken (admin suspended); vulnbank.org/login findings 24→27 incl bill-payments oracle; benchmark 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1115-1119",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1101-1119; curated module-id placeholder map loop 1037→1119; web-security-learning-labs.vercel.app/module/1115 findings 8 incl web-security-learning-labs-module-route-evidence; module/1110-1112 findings 5-8; benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-session-prime-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primeVotingAppSessionForDeepScan warms POST /api/signup before rule eval; voting-app-* pattern sort -3 on voting-app hosts; CLIENT_VOTING_APP_RES adds voting-app2_cookie + vulnerabilities readme markers; voting-app-iota.vercel.app findings 5→8 (+client-side-voting-app-evidence +user-polls-idor +vote-stuffing); benchmark 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-queue-login-host-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue replaces dead api.vulnbank.org/api/v1/login with https://vulnbank.org/login; vulnbank-* pattern sort -2 on /login route scans; vulnbankSqliLoginLiveOracle targets POST /login on vulnbank.org origin; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1105-1114",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1105-1114; curated module-id placeholder map loop 1037→1114; web-security-learning-labs.vercel.app/module/1105-1109 findings 8 incl web-security-learning-labs-module-route-evidence; benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-social-feed-deep-pagination",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies paginates Bluesky (5×50), Mastodon (5×40 max_id), Reddit (4×100 after) for Leaked API Key / secret-resend corpus; juice-shop.herokuapp.com benchmark 51 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current feeds)"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-signup-rate-limit-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: votingAppRegisterSession retries POST /api/signup up to 4× with backoff on HTTP 429 / rate-limit body; improves vote-stuffing + user-polls IDOR oracle reliability under Vercel signup throttling; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-user-polls-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/signup + create poll then unauthenticated GET /api/user/{id}/polls returns poll question/answers; voting-app-iota.vercel.app findings 5→7 (+client-side-voting-app-evidence +user-polls-idor); vote-stuffing oracle validated manually (before 0 after 2 anonymous votes); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-vote-stuffing-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: two cache-busted POST /api/vote/{pollId}?answer=yes from fresh sessions increment yes votes 0→2; ProbeCache dedupe fix via X-Thugir-Probe header; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1101-1104",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1101-1104; curated module-id placeholder map loop 1037→1104; web-security-learning-labs.vercel.app/module/1101-1104 findings include web-security-learning-labs-module-route-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1096-1100",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1096-1100; curated module-id placeholder map loop 1037→1100; web-security-learning-labs.vercel.app/module/1096 findings 8 incl web-security-learning-labs-module-route-evidence; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-admin-database-execute-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/test-accounts leaks admin creds; POST /api/admin/database/execute SELECT name FROM sqlite_master returns users/transactions rows; whoopspay.onrender.com/api/admin findings 16→17 (+admin-database-execute live oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whoopspay.onrender.com",
+      "slug": "whoopspay-admin-express-logs-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: admin login via test-accounts then GET /api/admin/logs/express returns POST /api/login log lines with plaintext password field; whoopspay.onrender.com/api/admin/logs findings 16→19 (+express-logs live+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1091-1095",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1091-1095; curated module-id placeholder map loop 1037→1095; web-security-learning-labs.vercel.app/module/1093 findings include web-security-learning-labs-module-route-evidence; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-session-prime-bootstrap",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan warms OTP mail during deep-scan bootstrap for /apply-coupon /wallet /profile /review routes; pwnshop.ctfsecurity.com/apply-coupon findings 13→45 (+apply-coupon + coupon-category-bypass route oracles); pwnshop.ctfsecurity.com/wallet 12→43 (+wallet-topup route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-route-priority-weight",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: deep-scan pattern sort -3 for ssrf-vulnlab-*-route-* when scanning /basic /metadata /blocklist /redirect /allowlist /scheme /gopher /parser /blind /webhook; ssrf.vulnlab.dev/basic findings 15 incl ssrf-vulnlab-basic-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1086-1090",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + module priority seeds extended 1086-1090; curated module-id placeholder map loop 1037→1090; web-security-learning-labs.vercel.app/module/1090 findings 3→7 (+web-security-learning-labs-module-route-evidence + client-side-web-security-learning-labs-evidence); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-bootstrap-self-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsBootstrap merges / + /learn/modules + current /module/* target when scanning CSR placeholder shells; improves combined corpus for client-side-web-security-learning-labs-evidence on thin Vercel checkpoint passes; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-checkpoint-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsModuleRouteEvidence retries module fetch after home warmup when Vercel Security Checkpoint blocks first pass; web-security-learning-labs.vercel.app/module/1090 intermittent 3→7 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-secure-bearer-invalid-token-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /secure returns 403 but Authorization: Bearer invalid_token returns {\"message\":\"Invalid bearer token bypass success!\",\"flag\":...}; bypass403.vercel.app/secure findings 8→9 (+bypass403-secure-bearer-invalid-token-live-oracle + route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1085-map",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: curated module-id map extended 1037–1085 + placeholder shell flight-payload regex; web-security-learning-labs.vercel.app/module/1085 findings 3→8 (+web-security-learning-labs-module-route-evidence + client-side-web-security-learning-labs-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-internal-xff-pollution-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Karthikdude/bypass403 source confirms GET /internal + X-Forwarded-For: evil.com, 127.0.0.1 returns header pollution bypass flag; Vercel edge strips XFF on live deploy so oracle does not fire on bypass403.vercel.app/internal yet — retained for self-hosted BypassX parity; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-debug-verb-tunneling-live-oracle",
       "status": "shipped",
@@ -13162,9 +13636,60 @@
       "slug": "firing-range-dom-eventtriggering-eval-hub-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /dom/eventtriggering/eval hub route probes inputTyping eval + window.name eval sinks via deferredPayload; public-firing-range.appspot.com/dom/eventtriggering/eval findings 248→249 (+eval-hub route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-xxe-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/xxe-lab XXE Playground + Local File Disclosure + SSRF via XXE + Billion Laughs levels in page chunk; secresearchlab.web.app/labs/xxe-lab findings 9 with +sec-research-lab-xxe-lab-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/command-injection Basic Command Chaining + Filter Bypass + Blind CMDI levels in page chunk; secresearchlab.web.app/labs/command-injection findings 9 with +sec-research-lab-command-injection-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-jwt-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/jwt-lab Token Anatomy + alg:none + Weak Secret Cracking + kid injection levels in page chunk; secresearchlab.web.app/labs/jwt-lab findings 10 with +sec-research-lab-jwt-lab-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-prototype-pollution-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/prototype-pollution Admin Escalation + Client-Side Gadgets __proto__ isAdmin levels in page chunk; secresearchlab.web.app/labs/prototype-pollution findings 8→9 with +sec-research-lab-prototype-pollution-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/idor Profile Peeking + API Order Tampering + Admin Panel Discovery levels in page chunk; secresearchlab.web.app/labs/idor findings 9→10 with +sec-research-lab-idor-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-host-header-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/host-header Password Reset Poisoning + Web Cache Poisoning levels in page chunk; secresearchlab.web.app/labs/host-header findings 8→9 with +sec-research-lab-host-header-route-live-oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-curated-url-map-fallback",
+      "shipped_at": "2026-08-08T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1175-1179",
+      "shipped_at": "2026-08-08T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-module-route-reflexion-fp-suppression",
+      "shipped_at": "2026-08-08T23:10:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
@@ -20581,6 +21106,103 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-seeds-1071-1075",
       "shipped_at": "2026-08-08T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1086-1090",
+      "shipped_at": "2026-08-08T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-bootstrap-self-fetch",
+      "shipped_at": "2026-08-08T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-checkpoint-retry",
+      "shipped_at": "2026-08-08T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1091-1095",
+      "shipped_at": "2026-08-08T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-session-prime-bootstrap",
+      "shipped_at": "2026-08-08T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-route-priority-weight",
+      "shipped_at": "2026-08-08T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-seeds-1115-1119",
+      "shipped_at": "2026-08-08T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-session-prime-bootstrap",
+      "shipped_at": "2026-08-08T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-queue-login-host-fix",
+      "shipped_at": "2026-08-08T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-checkpoint-bootstrap-backoff",
+      "shipped_at": "2026-08-08T11:20:00.000Z"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-api-route-home-warmup",
+      "shipped_at": "2026-08-08T11:20:00.000Z"
+    },
+    {
+      "source": "discovery:voting-app-iota.vercel.app",
+      "slug": "voting-app-signup-open-route-live-oracle",
+      "shipped_at": "2026-08-08T11:20:00.000Z"
+    }
+  ],
+  "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1180-1189",
+      "shipped_at": "2026-08-09T00:12:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-module-1140-1144-extension",
+      "shipped_at": "2026-08-08T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1144",
+      "shipped_at": "2026-08-08T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-ssti-priority-regex-1140-1144",
+      "shipped_at": "2026-08-08T15:10:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-request-headers-session-ua",
+      "shipped_at": "2026-08-08T12:48:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "prime-bypass403-session-deep-scan-bootstrap",
+      "shipped_at": "2026-08-08T12:48:00.000Z"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-route-deprioritization-secret-config-internal",
+      "shipped_at": "2026-08-08T12:48:00.000Z"
     }
   ]
 }

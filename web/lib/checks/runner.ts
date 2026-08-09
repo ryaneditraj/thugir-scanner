@@ -15,7 +15,14 @@ import {
   type FetchedDoc
 } from "./http";
 
-import { FREE_RULES, RULES, type RuleContext } from "./registry";
+import {
+  FREE_RULES,
+  RULES,
+  primeBypass403SessionForDeepScan,
+  primePwnshopOtpSessionForDeepScan,
+  primeVotingAppSessionForDeepScan,
+  type RuleContext
+} from "./registry";
 import { ProbeCache } from "./probe-cache";
 import { fetchScriptsBatched, fetchPagesBatched, expandGithackModuleImports } from "./fetch-scripts";
 
@@ -285,9 +292,20 @@ async function fetchJuiceShopSocialFeedBodies(
     if (bskyUrl) {
       const handle = bskyUrl.match(/profile\/([^/?#]+)/i)?.[1];
       if (handle) {
-        const feedUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${encodeURIComponent(handle)}&limit=20`;
-        const doc = await probe.get(feedUrl, { maxBytes: 96_000, timeoutMs: 12000 });
-        if (doc.status >= 200 && doc.status < 400) chunks.push(doc.body);
+        let cursor: string | undefined;
+        for (let page = 0; page < 5; page++) {
+          const feedUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${encodeURIComponent(handle)}&limit=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`;
+          const doc = await probe.get(feedUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+          if (doc.status < 200 || doc.status >= 400) break;
+          chunks.push(doc.body);
+          try {
+            const parsed = JSON.parse(doc.body) as { cursor?: string };
+            cursor = parsed.cursor;
+            if (!cursor) break;
+          } catch {
+            break;
+          }
+        }
       }
     }
 
@@ -301,9 +319,22 @@ async function fetchJuiceShopSocialFeedBodies(
         if (lookup.status >= 200 && lookup.status < 400) {
           const idMatch = lookup.body.match(/"id"\s*:\s*"(\d+)"/);
           if (idMatch) {
-            const statusesUrl = `${instance}/api/v1/accounts/${idMatch[1]}/statuses?limit=25`;
-            const statuses = await probe.get(statusesUrl, { maxBytes: 96_000, timeoutMs: 12000 });
-            if (statuses.status >= 200 && statuses.status < 400) chunks.push(statuses.body);
+            let maxId: string | null = null;
+            for (let page = 0; page < 5; page++) {
+              const statusesUrl = `${instance}/api/v1/accounts/${idMatch[1]}/statuses?limit=40${maxId ? `&max_id=${maxId}` : ""}`;
+              const statuses = await probe.get(statusesUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+              if (statuses.status < 200 || statuses.status >= 400) break;
+              chunks.push(statuses.body);
+              try {
+                const posts = JSON.parse(statuses.body) as Array<{ id?: string }>;
+                if (!Array.isArray(posts) || posts.length === 0) break;
+                const lastId = posts[posts.length - 1]?.id;
+                if (!lastId || posts.length < 40) break;
+                maxId = lastId;
+              } catch {
+                break;
+              }
+            }
           }
         }
       }
@@ -313,14 +344,71 @@ async function fetchJuiceShopSocialFeedBodies(
     if (redditUrl) {
       const subMatch = redditUrl.match(/reddit\.com\/r\/([^/?#]+)/i);
       if (subMatch) {
-        const feedUrl = `https://www.reddit.com/r/${encodeURIComponent(subMatch[1]!)}/new.json?limit=25`;
-        const feed = await probe.get(feedUrl, {
+        let after: string | undefined;
+        for (let page = 0; page < 4; page++) {
+          const feedUrl = `https://www.reddit.com/r/${encodeURIComponent(subMatch[1]!)}/new.json?limit=100${after ? `&after=${encodeURIComponent(after)}` : ""}`;
+          const feed = await probe.get(feedUrl, {
+            maxBytes: 96_000,
+            timeoutMs: 12000,
+            headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+          });
+          if (feed.status < 200 || feed.status >= 400) break;
+          chunks.push(feed.body);
+          try {
+            const parsed = JSON.parse(feed.body) as {
+              data?: { after?: string; children?: unknown[] };
+            };
+            after = parsed.data?.after;
+            if (!after || !parsed.data?.children?.length) break;
+          } catch {
+            break;
+          }
+        }
+      }
+    }
+
+    const twitterUrl = social.twitterUrl;
+    if (twitterUrl) {
+      const handle = twitterUrl.match(/twitter\.com\/([^/?#]+)/i)?.[1];
+      if (handle) {
+        const syndicationUrl = `https://syndication.twitter.com/srv/timeline-profile/screen-name/${encodeURIComponent(handle)}`;
+        const tw = await probe.get(syndicationUrl, {
           maxBytes: 96_000,
           timeoutMs: 12000,
           headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
         });
-        if (feed.status >= 200 && feed.status < 400) chunks.push(feed.body);
+        if (tw.status >= 200 && tw.status < 400) chunks.push(tw.body);
       }
+    }
+
+    const facebookUrl = social.facebookUrl;
+    if (facebookUrl) {
+      const fb = await probe.get(facebookUrl, {
+        maxBytes: 96_000,
+        timeoutMs: 12000,
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+      });
+      if (fb.status >= 200 && fb.status < 400) chunks.push(fb.body);
+    }
+
+    const pressKitUrl = social.pressKitUrl;
+    if (pressKitUrl) {
+      const pressKit = await probe.get(pressKitUrl, {
+        maxBytes: 96_000,
+        timeoutMs: 12000,
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+      });
+      if (pressKit.status >= 200 && pressKit.status < 400) chunks.push(pressKit.body);
+    }
+
+    const nftUrl = social.nftUrl;
+    if (nftUrl) {
+      const nft = await probe.get(nftUrl, {
+        maxBytes: 96_000,
+        timeoutMs: 12000,
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+      });
+      if (nft.status >= 200 && nft.status < 400) chunks.push(nft.body);
     }
   } catch {
     /* ignore malformed config or feed fetch errors */
@@ -1625,6 +1713,15 @@ const DEEP_RULES = new Set<string>([
   "whoopsPayProfileApiRouteLiveOracle",
   "whoopsPayRegisterOpenLiveOracle",
   "whoopsPayRegisterOpenRouteLiveOracle",
+  "whoopsPayAdminDatabaseExecuteLiveOracle",
+  "whoopsPayAdminDatabaseExecuteRouteLiveOracle",
+  "whoopsPayAdminExpressLogsDisclosureLiveOracle",
+  "whoopsPayAdminExpressLogsDisclosureRouteLiveOracle",
+  "clientSideVotingAppEvidence",
+  "votingAppUserPollsIdorLiveOracle",
+  "votingAppUserPollsIdorRouteLiveOracle",
+  "votingAppVoteStuffingLiveOracle",
+  "votingAppVoteStuffingRouteLiveOracle",
   "appsecCiStoredXssCommentsLiveOracle",
   "appsecCiStoredXssCommentsRouteLiveOracle",
   "appsecCiDjangoAdminLiveOracle",
@@ -1925,6 +2022,7 @@ const DEEP_RULES = new Set<string>([
   "buggybuyApiBolaRouteLiveOracle",
   "clientSideWebSecurityLearningLabsEvidence",
   "webSecurityLearningLabsModuleRouteEvidence",
+  "webSecurityLearningLabsSstiModuleRouteLiveOracle",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
@@ -2352,6 +2450,8 @@ const DEEP_RULES = new Set<string>([
   "vaultappTransactionsIdorRouteLiveOracle",
   "vaultappNotesIdorLiveOracle",
   "vaultappNotesIdorRouteLiveOracle",
+  "vaultappDocumentsIdorLiveOracle",
+  "vaultappDocumentsIdorRouteLiveOracle",
   "wrongsecretsChallengeLiveOracle",
   "wrongsecretsChallengeRouteLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionLiveOracle",
@@ -2459,6 +2559,15 @@ const DEEP_RULES = new Set<string>([
   "clientSideGitagentSecurebotEvidence",
   "clientSideAirtAcademyEvidence",
   "clientSideSecResearchLabEvidence",
+  "secResearchLabSqlInjectionRouteLiveOracle",
+  "secResearchLabXssPlaygroundRouteLiveOracle",
+  "secResearchLabSsrfLabRouteLiveOracle",
+  "secResearchLabXxeLabRouteLiveOracle",
+  "secResearchLabCommandInjectionRouteLiveOracle",
+  "secResearchLabJwtLabRouteLiveOracle",
+  "secResearchLabPrototypePollutionRouteLiveOracle",
+  "secResearchLabIdorRouteLiveOracle",
+  "secResearchLabHostHeaderRouteLiveOracle",
   "clientSideBrokencrystalsEvidence",
   "clientSideBrokencrystalsPrototypePollutionEvidence",
   "clientSideBrokencrystalsDomXssEvidence",
@@ -2567,6 +2676,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsFileRawLfiRouteLiveOracle",
   "brokencrystalsTestimonialsCountSqliRouteLiveOracle",
   "brokencrystalsProductsLatestLimitBypassRouteLiveOracle",
+  "brokencrystalsProductsDateManipulationLiveOracle",
+  "brokencrystalsProductsDateManipulationRouteLiveOracle",
   "crapi2AuthLoginRouteLiveOracle",
   "vulnExposeAuthBypassApiLiveOracle",
   "vulnExposeSqliSearchApiLiveOracle",
@@ -2589,6 +2700,7 @@ const DEEP_RULES = new Set<string>([
   "vulnbankAiAnonymousChatRouteLiveOracle",
   "vulnbankBoplaRegisterLiveOracle",
   "vulnbankSqliLoginLiveOracle",
+  "vulnbankSqliLoginRouteLiveOracle",
   "vulnbankMerchantRegisterLiveOracle",
   "vulnbankBillPaymentsNegativeAmountLiveOracle",
   "vulnbankMerchantPaymentChargeLiveOracle",
@@ -2639,6 +2751,10 @@ const DEEP_RULES = new Set<string>([
   "bypass403WafRouteLiveOracle",
   "bypass403DebugVerbTunnelingLiveOracle",
   "bypass403DebugVerbTunnelingRouteLiveOracle",
+  "bypass403InternalXffPollutionLiveOracle",
+  "bypass403InternalXffPollutionRouteLiveOracle",
+  "bypass403SecureBearerInvalidTokenLiveOracle",
+  "bypass403SecureBearerInvalidTokenRouteLiveOracle",
   "clientSideBypass403LabEvidence",
   "clientSideDevsecopsPipelineVisualizerEvidence",
   "clientSideQamaxAdversaryEvidence",
@@ -6492,9 +6608,9 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (const moduleId of ["1011", "1012", "1013", "1014", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032", "1033", "1034", "1035", "1036", "1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075"]) {
+  for (let moduleNum = 1011; moduleNum <= 1207; moduleNum++) {
     try {
-      out.add(new URL(`/module/${moduleId}`, pageUrl).toString());
+      out.add(new URL(`/module/${moduleNum}`, pageUrl).toString());
     } catch {
       /* ignore */
     }
@@ -7116,7 +7232,13 @@ function extractSecResearchLabSeeds(html: string, pageUrl: string): string[] {
     "/labs/",
     "/labs/sql-injection/",
     "/labs/xss-playground/",
-    "/labs/ssrf-lab/"
+    "/labs/ssrf-lab/",
+    "/labs/xxe-lab/",
+    "/labs/command-injection/",
+    "/labs/jwt-lab/",
+    "/labs/prototype-pollution/",
+    "/labs/idor/",
+    "/labs/host-header/"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -7680,6 +7802,8 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
     "/api/spawn",
     "/api/file",
     "/api/metadata",
+    "/api/products",
+    "/api/products/latest",
     "/api/products/views"
   ]) {
     try {
@@ -8567,6 +8691,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
 
   let home = await reachTarget(target, targetInput);
+  if (
+    home.status === 0 &&
+    /voting-app[\w-]*\.vercel\.app/i.test(targetInput) &&
+    /\/api\//i.test(targetInput)
+  ) {
+    try {
+      const voteHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (voteHome.status >= 200 && voteHome.body.length > 512) {
+        home = { ...voteHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
   if (stubRedirect && home.body.length < 4096) {
@@ -8577,7 +8718,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   home = await warmupJuiceShopHome(target.toString(), home);
   if (
     /pwnshop|ctfsecurity\.com/i.test(targetInput) &&
-    /\/profile\//i.test(targetInput) &&
+    /\/profile\/|\/apply-coupon|\/wallet\b|\/review\b/i.test(targetInput) &&
     (home.status === 404 || home.body.length < 512)
   ) {
     try {
@@ -8587,6 +8728,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       });
       if (pwnHome.status >= 200 && pwnHome.body.length > home.body.length) {
         home = { ...pwnHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
+    /bypass403\.vercel\.app/i.test(targetInput) &&
+    /\/(?:admin|secret|config|waf|debug|internal|secure|api\/admin)\b/i.test(targetInput) &&
+    (home.status === 404 || home.status === 403 || home.body.length < 512)
+  ) {
+    try {
+      const bypassHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (bypassHome.status >= 200 && bypassHome.body.length > home.body.length) {
+        home = { ...bypassHome, finalUrl: targetInput, url: targetInput };
       }
     } catch {
       /* ignore */
@@ -8629,6 +8787,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
   if (
+    /voting-app[\w-]*\.vercel\.app/i.test(targetInput) &&
+    /\/api\//i.test(targetInput) &&
+    (home.status === 404 ||
+      home.status === 0 ||
+      home.body.length < 512 ||
+      !/Voting App|SSbit01/i.test(home.body))
+  ) {
+    try {
+      const voteHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (voteHome.status >= 200 && voteHome.body.length > home.body.length) {
+        home = { ...voteHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
     isJuiceShopHost(home.finalUrl || target.toString()) &&
     (await juiceShopHerokuDown(home.finalUrl || target.toString()))
   ) {
@@ -8642,6 +8820,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const probe = new ProbeCache();
   if (isJuiceShopHost(home.finalUrl || target.toString())) {
     await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
+  }
+  if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
+    await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
+  }
+  if (/bypass403\.vercel\.app/i.test(origin)) {
+    await primeBypass403SessionForDeepScan(probe, origin, targetInput, home);
+  }
+  if (/voting-app[\w-]*\.vercel\.app/i.test(origin)) {
+    await primeVotingAppSessionForDeepScan(probe, origin, home);
   }
   home = await applyWargameBasicAuth(home.finalUrl || target.toString(), home, probe, home.body);
   const owaspGenaiSessionRef: { cookie?: string } = {};
@@ -9155,17 +9342,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://bypass403.vercel.app/secure",
         "https://bypass403.vercel.app/waf",
         "https://bypass403.vercel.app/admin",
-        "https://bypass403.vercel.app/api/admin",
-        "https://bypass403.vercel.app/secret",
-        "https://bypass403.vercel.app/config"
+        "https://bypass403.vercel.app/api/admin"
       ]
     : [];
   const webSecurityLearningModulePrioritySeeds = /web-security-learning-labs\.vercel\.app\/module\/\d{4}/i.test(
     home.finalUrl
   )
-    ? ["1037", "1038", "1039", "1040", "1041", "1042", "1043", "1044", "1045", "1046", "1047", "1048", "1049", "1050", "1051", "1052", "1053", "1054", "1055", "1056", "1057", "1058", "1059", "1060", "1061", "1062", "1063", "1064", "1065", "1066", "1067", "1068", "1069", "1070", "1071", "1072", "1073", "1074", "1075", "1019", "1020", "1021", "1022", "1023"].map(
-        (id) => new URL(`/module/${id}`, home.finalUrl).toString()
-      )
+    ? [
+        ...Array.from({ length: 1207 - 1037 + 1 }, (_, i) => String(1037 + i)),
+        "1019",
+        "1020",
+        "1021",
+        "1022",
+        "1023"
+      ].map((id) => new URL(`/module/${id}`, home.finalUrl).toString())
     : [];
   const grpcGoatPrioritySeeds =
     /vwad\.owasp\.org\/app\/grpc-goat|rootxjs\.github\.io\/blog\/grpc-goat/i.test(home.finalUrl)
@@ -9781,13 +9971,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   if (/web-security-learning-labs\.vercel\.app/i.test(origin) && /\/module\/\d{4}/i.test(targetInput)) {
     const bootUrls = [
       new URL("/", origin).toString(),
-      new URL("/learn/modules", origin).toString()
+      new URL("/learn/modules", origin).toString(),
+      targetInput
     ];
-    const bootDocs = await probe.getMany(bootUrls, { maxBytes: 200_000, timeoutMs: 20000 }, 2);
-    webSecurityLearningLabsBootstrap = [...bootDocs.values()]
-      .filter((d) => d.status >= 200 && d.status < 400 && d.body.length > 500)
-      .map((d) => d.body)
-      .join("\n");
+    const wslCheckpointRe = /Vercel Security Checkpoint|verifying your browser/i;
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const bootDocs = await probe.getMany(bootUrls, { maxBytes: 200_000, timeoutMs: 20000 }, 2);
+      webSecurityLearningLabsBootstrap = [...bootDocs.values()]
+        .filter((d) => d.status >= 200 && d.status < 400 && d.body.length > 500)
+        .map((d) => d.body)
+        .join("\n");
+      if (
+        webSecurityLearningLabsBootstrap.length > 3000 &&
+        !wslCheckpointRe.test(webSecurityLearningLabsBootstrap)
+      ) {
+        break;
+      }
+      if (attempt < 3) {
+        await new Promise((resolve) => setTimeout(resolve, 2500 + attempt * 1500));
+      }
+    }
   }
 
   let vaultappBootstrap = "";
@@ -9821,9 +10024,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const all = patternsForTier("deep").sort((a, b) => {
     const w = (p: Pattern) => {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
+      if (/dvwa\.lab\.pentest-forge\.com/i.test(origin) && p.slug.startsWith("pentest-forge-dvwa")) return -2;
+      if (
+        /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/vulnerabilities\/sqli\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-dvwa-sqli")
+      )
+        return -3;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (
+        /ssrf\.vulnlab\.dev/i.test(origin) &&
+        /\/(basic|metadata(?:-aws|-gcp|-azure)?|blocklist|redirect|allowlist|scheme|gopher|parser|blind|webhook)\b/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("ssrf-vulnlab-") &&
+        /-route-/.test(p.slug)
+      )
+        return -3;
       if (/zerohealth\.aliyu\.dev/i.test(origin) && p.slug.startsWith("zerohealth-")) return -2;
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && /juice-shop-addresss/.test(p.slug)) return -3;
@@ -9876,7 +10095,27 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-")
       )
         return -2;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/(?:orders|users)\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;
+      if (
+        /voting-app[\w-]*\.vercel\.app/i.test(origin) &&
+        /\/api\/(?:signup|vote|poll|user)\b/i.test(targetInput) &&
+        p.slug.startsWith("voting-app-")
+      )
+        return -3;
+      if (/voting-app[\w-]*\.vercel\.app/i.test(origin) && p.slug.startsWith("voting-app-")) return -3;
+      if (/vulnbank\.org/i.test(origin) && /\/login\b/i.test(targetInput) && p.slug.startsWith("vulnbank-")) return -2;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
@@ -9897,6 +10136,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-email-smtp")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/products\b/i.test(targetInput) &&
+        /date_from|date_to/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-products-date-manipulation")
+      )
+        return -3;
       if (/idor-website\.vercel\.app/i.test(origin) && p.slug.startsWith("idor-website-mock-api")) return -2;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
@@ -9921,6 +10167,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/waf\b/i.test(targetInput) && p.slug.startsWith("bypass403-waf")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/internal\b/i.test(targetInput) && p.slug.startsWith("bypass403-internal")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/debug\b/i.test(targetInput) && p.slug.startsWith("bypass403-debug")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/secure\b/i.test(targetInput) && p.slug.startsWith("bypass403-secure")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-admin")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/api\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-api-admin")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/secret\b/i.test(targetInput) && p.slug.startsWith("bypass403-secret")) return -3;
+      if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
+      if (
+        /web-security-learning-labs\.vercel\.app/i.test(origin) &&
+        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9]|117[0-9]|118[0-9]|119[0-9]|120[0-7])\b/i.test(targetInput) &&
+        p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
+      )
+        return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/sql-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-sql-injection-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/xss-playground\/?$/i.test(targetInput) && p.slug === "sec-research-lab-xss-playground-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/ssrf-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-ssrf-lab-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/xxe-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-xxe-lab-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/idor\/?$/i.test(targetInput) && p.slug === "sec-research-lab-idor-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-route-live-oracle") return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
