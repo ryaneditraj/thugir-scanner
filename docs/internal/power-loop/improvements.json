@@ -13618,6 +13618,24 @@
       "slug": "firing-range-dom-eventtriggering-eval-hub-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /dom/eventtriggering/eval hub route probes inputTyping eval + window.name eval sinks via deferredPayload; public-firing-range.appspot.com/dom/eventtriggering/eval findings 248→249 (+eval-hub route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-xxe-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/xxe-lab XXE Playground + Local File Disclosure + SSRF via XXE + Billion Laughs levels in page chunk; secresearchlab.web.app/labs/xxe-lab findings 9 with +sec-research-lab-xxe-lab-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/command-injection Basic Command Chaining + Filter Bypass + Blind CMDI levels in page chunk; secresearchlab.web.app/labs/command-injection findings 9 with +sec-research-lab-command-injection-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-jwt-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/jwt-lab Token Anatomy + alg:none + Weak Secret Cracking + kid injection levels in page chunk; secresearchlab.web.app/labs/jwt-lab findings 10 with +sec-research-lab-jwt-lab-route-live-oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [
