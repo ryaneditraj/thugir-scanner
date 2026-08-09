@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-09T02:03:11.691Z",
-  "total": 2038,
-  "uniqueSlugs": 2034,
+  "generatedAt": "2026-08-09T03:04:52.009Z",
+  "total": 2041,
+  "uniqueSlugs": 2037,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2020,
+    "generic": 2023,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1953,
+    "deep": 1956,
     "continuous": 0
   },
   "byCategory": {
@@ -27,12 +27,12 @@
     "Information disclosure": 106,
     "Security misconfiguration": 147,
     "Broken authentication": 124,
-    "Injection": 291,
-    "Cross-site scripting": 668,
+    "Injection": 292,
+    "Cross-site scripting": 669,
     "Open redirect": 16,
     "general": 20,
     "SSRF": 10,
-    "Server-side request forgery": 59,
+    "Server-side request forgery": 60,
     "Sensitive data exposure": 51,
     "AI security": 50,
     "Business logic": 18,
@@ -1671,6 +1671,9 @@
     "rest-vulnweb-users-bola-live-oracle",
     "rest-vulnweb-users-bola-route-live-oracle",
     "robots-sensitive-paths",
+    "sec-research-lab-sql-injection-route-live-oracle",
+    "sec-research-lab-ssrf-lab-route-live-oracle",
+    "sec-research-lab-xss-playground-route-live-oracle",
     "seclab-nextjs-lab-api-probe",
     "secret-anthropic",
     "secret-aws-akid",
