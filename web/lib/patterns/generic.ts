@@ -29100,6 +29100,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-mcp-execute-command-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "OWASP WrongSecrets MCP execute_command env leak live oracle",
+    description:
+      "POST /mcp tools/list exposes execute_command + forward_env; tools/call execute_command('env') returns process environment variables including WRONGSECRETS_MCP_SECRET — challenge-60 MCP privilege escalation oracle.",
+    impactOneline:
+      "Unauthenticated MCP server executes shell commands and leaks environment secrets to any caller.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsMcpExecuteCommandLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-60 is intentional — never expose MCP execute_command without authentication in production.",
+      steps: [
+        "Disable or authenticate MCP tool endpoints before production deploy.",
+        "Never forward environment variables from MCP tool responses to clients.",
+        "Rotate any secrets that appeared in process environment dumps."
+      ]
+    },
+    fixPrompt:
+      "Our MCP server exposes execute_command that leaks environment variables. Show how to secure MCP tool gateways and prevent env-var exfiltration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-mcp-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "OWASP WrongSecrets /mcp route live oracle",
+    description:
+      "When scanning /mcp, POST tools/call execute_command('env') confirms environment variable leak including WRONGSECRETS_MCP_SECRET — route-specific WrongSecrets challenge-60 oracle.",
+    impactOneline:
+      "Route-specific confirmation that the WrongSecrets MCP endpoint leaks process environment secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsMcpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-60 is intentional — never expose MCP execute_command without authentication in production.",
+      steps: [
+        "Disable or authenticate MCP tool endpoints before production deploy.",
+        "Never forward environment variables from MCP tool responses to clients.",
+        "Rotate any secrets that appeared in process environment dumps."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets /mcp route leaks environment variables via MCP execute_command. Show remediation for MCP tool gateway hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-chat-llm-query-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals chat LLM query live oracle",
+    description:
+      "POST /api/chat/query accepts unauthenticated message arrays and returns LLM assistant responses rendered as HTML — prompt-injection surface.",
+    impactOneline:
+      "Unauthenticated LLM chat proxy accepts arbitrary user prompts and returns assistant output for client-side HTML rendering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsChatLlmQueryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chat endpoints and sanitize LLM output before HTML rendering — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before /api/chat/query accepts messages.",
+        "Sanitize LLM responses before dangerouslySetInnerHTML rendering.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chat/query endpoint accepts unauthenticated LLM prompts. Show how to secure AI chat proxies and prevent prompt-injection abuse.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",

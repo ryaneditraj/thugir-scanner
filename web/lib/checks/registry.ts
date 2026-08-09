@@ -60343,6 +60343,133 @@ const wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle: Rule = async (ctx)
   };
 };
 
+async function wrongsecretsMcpJsonRpc(
+  ctx: RuleContext,
+  method: string,
+  params?: unknown,
+  id = 1
+): Promise<{ body: string; status: number }> {
+  const mcpUrl = new URL("/mcp", ctx.origin).toString();
+  const payload = JSON.stringify({
+    jsonrpc: "2.0",
+    method,
+    ...(params !== undefined ? { params } : {}),
+    id
+  });
+  const doc = await ctx.probe.get(mcpUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  return { body: doc.body, status: doc.status };
+}
+
+const wrongsecretsMcpExecuteCommandLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const listDoc = await wrongsecretsMcpJsonRpc(ctx, "tools/list", undefined, 1);
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let tools: Array<{ name?: string; description?: string }> = [];
+  try {
+    const parsed = JSON.parse(listDoc.body) as {
+      result?: { tools?: Array<{ name?: string; description?: string }> };
+    };
+    tools = parsed.result?.tools ?? [];
+  } catch {
+    return NEGATIVE;
+  }
+  const byName = new Map(tools.map((t) => [t.name ?? "", t]));
+  const executeCommand = byName.get("execute_command");
+  const forwardEnv = byName.get("forward_env");
+  if (
+    !executeCommand ||
+    !forwardEnv ||
+    !/shell command/i.test(executeCommand.description ?? "") ||
+    !/environment (?:variable|diagnostic)/i.test(forwardEnv.description ?? "")
+  ) {
+    return NEGATIVE;
+  }
+  const envDoc = await wrongsecretsMcpJsonRpc(
+    ctx,
+    "tools/call",
+    {
+      name: "execute_command",
+      arguments: { command: "env" }
+    },
+    2
+  );
+  if (envDoc.status < 200 || envDoc.status >= 400) return NEGATIVE;
+  let envText = "";
+  try {
+    const parsed = JSON.parse(envDoc.body) as {
+      result?: { content?: Array<{ text?: string }> };
+    };
+    envText = parsed.result?.content?.map((c) => c.text ?? "").join("\n") ?? "";
+  } catch {
+    envText = envDoc.body;
+  }
+  const envLeakOk =
+    /WRONGSECRETS_MCP_SECRET=/i.test(envText) ||
+    (/ctf_key=/i.test(envText) && /PWD=|HOME=|PATH=/i.test(envText));
+  if (!envLeakOk) return NEGATIVE;
+  const secretMatch = envText.match(/WRONGSECRETS_MCP_SECRET=([^\n]+)/i);
+  return {
+    fired: true,
+    confidence: secretMatch ? 0.96 : 0.94,
+    evidence: {
+      tools: tools.map((t) => t.name).filter(Boolean).slice(0, 4),
+      leakedKey: secretMatch?.[1]?.slice(0, 24),
+      snippet: envText.slice(0, 200).trim(),
+      note: "OWASP WrongSecrets POST /mcp tools/call execute_command('env') returns process environment variables including WRONGSECRETS_MCP_SECRET — challenge-60 MCP privilege escalation oracle"
+    }
+  };
+};
+
+const wrongsecretsMcpRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/mcp\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsMcpExecuteCommandLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets /mcp route scan — unauthenticated MCP execute_command leaks environment variables including WRONGSECRETS_MCP_SECRET"
+    }
+  };
+};
+
+const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/api/chat/query", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify([{ role: "user", content: "hello" }]),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 30000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body.trim();
+  if (!body || /"success"\s*:\s*false|Not Found/i.test(body)) return NEGATIVE;
+  const chatOk =
+    /how can i help|hello|assist you|help you today/i.test(body) ||
+    (body.length >= 8 && !/^\{/.test(body));
+  if (!chatOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: body.slice(0, 160).trim(),
+      note: "Broken Crystals POST /api/chat/query accepts unauthenticated LLM chat messages — prompt-injection surface with HTML assistant responses"
+    }
+  };
+};
+
 // --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
 const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -71582,6 +71709,9 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallengeRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
+  wrongsecretsMcpExecuteCommandLiveOracle,
+  wrongsecretsMcpRouteLiveOracle,
+  brokencrystalsChatLlmQueryLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,

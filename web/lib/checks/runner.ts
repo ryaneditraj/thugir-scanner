@@ -2480,6 +2480,9 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallengeRouteLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle",
+  "wrongsecretsMcpExecuteCommandLiveOracle",
+  "wrongsecretsMcpRouteLiveOracle",
+  "brokencrystalsChatLlmQueryLiveOracle",
   "clientSideDvragLabEvidence",
   "dvragAdminConfigLiveOracle",
   "dvragRagPipelineLiveOracle",
@@ -9344,7 +9347,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-9",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
-        "https://wrongsecrets.herokuapp.com/challenge/8"
+        "https://wrongsecrets.herokuapp.com/challenge/8",
+        "https://wrongsecrets.herokuapp.com/mcp",
+        "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
     : [];
   const ssrfVulnlabPrioritySeeds = /ssrf\.vulnlab\.dev/i.test(home.finalUrl)
