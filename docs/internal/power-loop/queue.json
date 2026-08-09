@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-09T02:15:00.000Z",
+  "updated_at": "2026-08-09T02:07:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://secresearchlab.web.app/labs/sql-injection/",
+      "source": "Sec Research Lab — interactive SQLi training module (secresearchlab.web.app/labs, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/xss-playground/",
+      "source": "Sec Research Lab — XSS playground training module (secresearchlab.web.app/labs, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/ssrf-lab/",
+      "source": "Sec Research Lab — SSRF lab training module (secresearchlab.web.app/labs, 02 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1195",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1195 (public Vercel demo, 02 UTC discovery)",
