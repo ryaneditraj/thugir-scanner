@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T08:04:33.838Z",
+  "updated_at": "2026-08-09T08:07:27.421Z",
   "discovery_urls": [
     {
       "url": "https://secresearchlab.web.app/labs/xxe-lab/",
@@ -14941,11 +14941,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://vulnbank.org/login",
-      "source": "VulnBank — intentionally vulnerable online banking training app login surface (web search)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vuln-demo.vercel.app/",
       "source": "vuln-demo — multi-vulnerability Next.js training sandbox (Vercel OSS deploy, web search)",
       "auth": "oss_deploy"
@@ -14979,11 +14974,6 @@
       "url": "https://brokencrystals.com/testimonials",
       "source": "NeuraLegion/brokencrystals — iframe injection via videosrc URL param (README/Docker docs)",
       "auth": "benchmark"
-    },
-    {
-      "url": "https://vaultapp-omega.vercel.app/",
-      "source": "MRMcyber/vaultapp — 10 IDOR challenges fintech training lab (canonical vaultapp-omega.vercel.app; vaultapp.vercel.app hosts Clutch-It)",
-      "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/forgot-password",
@@ -17121,11 +17111,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vaultapp-omega.vercel.app/api/users/1",
-      "source": "MRMcyber/vaultapp — IDOR users API GET /api/users/:id on vaultapp-omega.vercel.app (canonical; vaultapp.vercel.app hosts Clutch-It)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://vaultapp-omega.vercel.app/login",
       "source": "MRMcyber/vaultapp — lab login with documented test credentials player/player123 (vaultapp-omega.vercel.app)",
       "auth": "oss_deploy"
@@ -17171,15 +17156,14 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://web-security-learning-labs.vercel.app/module/1086",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1086 (public Vercel demo, 07 UTC discovery)",
+      "url": "https://secresearchlab.web.app/labs/command-injection/",
+      "source": "Sec Research Lab — command injection training module (secresearchlab.web.app/labs, 08 UTC discovery)",
       "auth": "public_demo"
     },
     {
-      "url": "https://web-security-learning-labs.vercel.app/module/1087",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1087 (public Vercel demo, 07 UTC discovery)",
+      "url": "https://secresearchlab.web.app/labs/idor/",
+      "source": "Sec Research Lab — IDOR hunter training module (secresearchlab.web.app/labs, 08 UTC discovery)",
       "auth": "public_demo"
     }
-  ],
-  "discovery_urls_added": 40
+  ]
 }
