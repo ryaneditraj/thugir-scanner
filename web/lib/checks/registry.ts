@@ -35074,6 +35074,13 @@ const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   ...Array.from({ length: 83 }, (_, i) => String(1125 + i))
 ]);
 
+/** Curated WSL modules 1011–1036 with named topics (SSTI modules use the dedicated SSTI oracle). */
+const WEB_SECURITY_LEARNING_CURATED_MODULE_IDS = new Set(
+  Array.from({ length: 26 }, (_, i) => String(1011 + i)).filter(
+    (id) => !WEB_SECURITY_LEARNING_SSTI_MODULE_IDS.has(id)
+  )
+);
+
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
 const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1014": /CSRF|Cross-Site Request Forgery/i,
@@ -35226,6 +35233,26 @@ const webSecurityLearningLabsModuleRouteEvidence: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+const webSecurityLearningLabsModuleRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/web-security-learning-labs\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
+  if (!moduleMatch) return NEGATIVE;
+  const moduleId = moduleMatch[1]!;
+  if (!WEB_SECURITY_LEARNING_CURATED_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  const evidenceHit = await webSecurityLearningLabsModuleRouteEvidence(ctx);
+  if (!evidenceHit.fired) return NEGATIVE;
+  const note = String(evidenceHit.evidence.note ?? "").replace(
+    /lab catalog oracle/g,
+    "training-module live oracle"
+  );
+  return {
+    fired: true,
+    confidence: Math.min(0.92, evidenceHit.confidence + 0.02),
+    evidence: { ...evidenceHit.evidence, note }
+  };
 };
 
 const webSecurityLearningLabsSstiModuleRouteLiveOracle: Rule = async (ctx) => {
@@ -70974,6 +71001,7 @@ export const RULES: Record<string, Rule> = {
   buggybuyApiBolaRouteLiveOracle,
   clientSideWebSecurityLearningLabsEvidence,
   webSecurityLearningLabsModuleRouteEvidence,
+  webSecurityLearningLabsModuleRouteLiveOracle,
   webSecurityLearningLabsSstiModuleRouteLiveOracle,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
