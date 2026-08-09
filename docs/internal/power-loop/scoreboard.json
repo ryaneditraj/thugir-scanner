@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T03:04:22.627Z",
+  "updated_at": "2026-08-09T03:07:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,19 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2803,
-  "total_findings": 27710,
+  "total_sites_scanned": 2811,
+  "total_findings": 27757,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1999,
-  "discovery_findings": 23213,
+  "discovery_urls_added": 2004,
+  "discovery_findings": 23260,
   "improvements_shipped": 1170,
-  "last_run": "2026-08-09T03:04:22.627Z",
+  "last_run": "2026-08-09T03:07:30.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "primary_url_error": "https://juice-shop.herokuapp.com — Heroku 503",
       "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
@@ -52,34 +53,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 8,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 56,
-      "focus": "Sec Research Lab /labs/* drain + WSL 1190-1194 SSTI oracle extension; queue 1195-1199",
-      "improvements_shipped_this_run": 3
+      "findings": 47,
+      "focus": "WSL modules 1195-1199 drain + re-scan 1190-1192; queued Sec Research Lab xxe/command-injection/prototype-pollution/idor/jwt-lab",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark category misses",
-      "secresearchlab.web.app/labs/sql-injection/: 11 findings — sql-error-disclosure live + client-side-sql-evidence + reflexion-escalated-ssti",
-      "secresearchlab.web.app/labs/xss-playground/: 10 findings — dangerous-html-sinks + client-side-secresearchlab-evidence",
-      "secresearchlab.web.app/labs/ssrf-lab/: 10 findings — client-side-ssrf-evidence but no route-specific SSRF live oracle",
-      "web-security-learning-labs.vercel.app/module/1190-1194: 4→5 findings — ssti-module-route-live-oracle restored via SSTI module-id extension",
-      "web-security-learning-labs.vercel.app/module/1195-1199: queued for next-hour drain",
-      "teacher_delta: 0 runs — nuclei/engine unavailable in cloud agent"
+      "juice-shop.herokuapp.com: primary oracle 503 — Heroku dyno unavailable",
+      "web-security-learning-labs.vercel.app/module/1195-1198: 7 findings each — module-route-evidence but no ssti-module-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1199: 4 findings — thinner pass without SSTI live oracle",
+      "web-security-learning-labs.vercel.app/module/1190-1192: 5 findings — ssti-module-route-live-oracle on SSTI seed modules",
+      "secresearchlab.web.app/labs/xxe-lab + 4 more modules queued for next-hour drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "secresearchlab.web.app/labs/*: shared Firebase SPA bundle — route-specific SQLi/XSS/SSRF live oracles absent despite module-specific URLs",
-      "WSL modules 1195-1199: queued but not yet drained — need seed cap extension when drained",
-      "bypass403.vercel.app: Vercel checkpoint still intermittently blocks POST /start"
+      "WSL modules 1195-1199: SSTI live oracle absent — generic bundle evidence only (7 findings vs 5 on 1190-1192)",
+      "secresearchlab.web.app/labs/xxe-lab, command-injection, prototype-pollution, idor, jwt-lab: queued but not yet scanned this run",
+      "juice-shop.herokuapp.com primary URL intermittently 503 — rely on staging/demo.escape.tech fallbacks"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 49,
-    "secresearchlab.web.app/labs/sql-injection": 11,
-    "secresearchlab.web.app/labs/xss-playground": 10,
-    "secresearchlab.web.app/labs/ssrf-lab": 10,
+    "web-security-learning-labs.vercel.app/module/1195": 7,
+    "web-security-learning-labs.vercel.app/module/1196": 7,
+    "web-security-learning-labs.vercel.app/module/1197": 7,
+    "web-security-learning-labs.vercel.app/module/1198": 7,
+    "web-security-learning-labs.vercel.app/module/1199": 4,
     "web-security-learning-labs.vercel.app/module/1190": 5,
     "web-security-learning-labs.vercel.app/module/1191": 5,
     "web-security-learning-labs.vercel.app/module/1192": 5
