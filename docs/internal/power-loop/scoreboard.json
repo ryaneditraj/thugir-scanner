@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T07:34:24.904Z",
+  "updated_at": "2026-08-09T08:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2910,
-  "total_findings": 29773,
+  "total_sites_scanned": 2912,
+  "total_findings": 29832,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2051,
-  "discovery_findings": 24464,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-09T07:34:24.904Z",
+  "discovery_urls_added": 2059,
+  "discovery_findings": 24472,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-09T08:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 45,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 177,
+      "probes_run": 512,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,37 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle 6/6 (45 findings, 17 live-oracle slugs); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (51 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 222,
-      "focus": "WSL module/1016-1018 drain + brokencrystals photo BFLA + vulnbank AI chat + juice-shop Escape redirect/file-upload oracles; queued secure-bank-bay login/messages/admin + WSL 1086-1087",
-      "improvements_shipped_this_run": 0
+      "urls_added": 8,
+      "urls_scanned": 3,
+      "findings": 26,
+      "focus": "WSL curated module live oracle (1016 Command Injection, 1017 SSRF) + Sec Research Lab remaining labs queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — juice-shop-login-sqli-live-oracle + juice-shop-file-upload-live-oracle confirmed",
-      "brokencrystals.com/api/users/one/regular_user/photo: 72 findings — BFLA profile-photo delete oracle + mass-assignment hub",
-      "vulnbank.org/api/ai/chat/anonymous: 24 findings — vulnbank-ai-anonymous-chat-live-oracle + BOLA/GraphQL oracles",
-      "juice-shop.demo.escape.tech/redirect: 51 findings — juice-shop-open-redirect-live-oracle on Escape mirror",
-      "juice-shop.demo.escape.tech/file-upload: 51 findings — juice-shop-file-upload-live-oracle on Escape mirror",
-      "web-security-learning-labs.vercel.app/module/1016-1018: 8 findings each — module-route-evidence + reflexion-escalated-ssti"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1016: 7→8 findings — web-security-learning-labs-module-route-live-oracle (Command Injection topic)",
+      "web-security-learning-labs.vercel.app/module/1017: 7→8 findings — web-security-learning-labs-module-route-live-oracle (SSRF topic)",
+      "secresearchlab.web.app/labs/idor: 10 findings — sec-research-lab-idor-route-live-oracle confirmed on queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via security-question oracles)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "api.vulnbank.org unreachable from cloud agent — queue entry errors persist",
-      "secure-bank-bay.vercel.app/login/messages/admin queued but not yet scanned (end of queue)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
       "brokencrystals photo route: mass-assignment adminpermission confirmation still absent without signup flow"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/users/one/regular_user/photo": 72,
-    "juice-shop.demo.escape.tech/redirect": 51,
-    "juice-shop.demo.escape.tech/file-upload": 51,
-    "juice-shop.herokuapp.com": 45,
-    "vulnbank.org/api/ai/chat/anonymous": 24,
+    "juice-shop.herokuapp.com": 51,
     "web-security-learning-labs.vercel.app/module/1016": 8,
     "web-security-learning-labs.vercel.app/module/1017": 8,
-    "web-security-learning-labs.vercel.app/module/1018": 8
+    "secresearchlab.web.app/labs/idor": 10,
+    "brokencrystals.com/api/users/one/regular_user/photo": 72,
+    "vulnbank.org/api/ai/chat/anonymous": 24,
+    "juice-shop.demo.escape.tech/file-upload": 51
   }
 }

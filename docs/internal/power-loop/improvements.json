@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsModuleRouteLiveOracle fires on curated WSL modules 1011-1036 (excl. SSTI 1022/1024); module/1016 findings 7→8 (+module-route-live-oracle Command Injection); module/1017 7→8 (+SSRF topic); no reflexion-escalated-ssti FP; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-remaining-labs-queue",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue prepends xxe-lab, command-injection, jwt-lab, prototype-pollution, idor, host-header; /labs/idor scan fires sec-research-lab-idor-route-live-oracle (10 findings); /labs/prototype-pollution +sec-research-lab-prototype-pollution-route-live-oracle; /labs/xxe-lab +sec-research-lab-xxe-lab-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-curated-module-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner deep-scan sort -3 for web-security-learning-labs-module-route-live-oracle on /module/101[1-9]|102[0135-9]|103[0-6]; pairs with existing SSTI oracle priority for 1022/1024/1125-1207; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-seeds-1200-1207",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds + WEB_SECURITY_LEARNING_MODULE_TOPICS + WEB_SECURITY_LEARNING_SSTI_MODULE_IDS extended 1199→1207; runner SSTI priority regex adds 120[0-7]; module/1203 findings 7→8 (+web-security-learning-labs-ssti-module-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
