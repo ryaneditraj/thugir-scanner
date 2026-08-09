@@ -32215,31 +32215,38 @@ function pwnshopSessionCookieFromDoc(doc: { setCookies: string[] }): string | nu
 async function pwnshopRegisterAndLoginCookie(ctx: RuleContext): Promise<string | null> {
   const username = `thugir_otp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const email = `${username}@probe.local`;
-  const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
-    method: "POST",
-    body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    maxBytes: 4096,
-    timeoutMs: 15000
-  });
-  const registerCookie = pwnshopSessionCookieFromDoc(registerDoc);
-  if (!registerCookie) return null;
-  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
-    method: "POST",
-    body: `username=${encodeURIComponent(username)}&password=ThugirTest123!`,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: registerCookie
-    },
-    maxBytes: 4096,
-    timeoutMs: 15000,
-    redirect: "manual"
-  });
-  const location = loginDoc.headers["location"] || "";
-  if (![301, 302, 303, 307, 308].includes(loginDoc.status) || !/verify-otp/i.test(location)) {
-    return null;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (registerDoc.status === 429 || /rate limit|too many requests/i.test(registerDoc.body)) {
+      await pwnshopSleep(2000 + attempt * 2500);
+      continue;
+    }
+    const registerCookie = pwnshopSessionCookieFromDoc(registerDoc);
+    if (!registerCookie) return null;
+    const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&password=ThugirTest123!`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: registerCookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = loginDoc.headers["location"] || "";
+    if (![301, 302, 303, 307, 308].includes(loginDoc.status) || !/verify-otp/i.test(location)) {
+      return null;
+    }
+    return pwnshopSessionCookieFromDoc(loginDoc) ?? registerCookie;
   }
-  return pwnshopSessionCookieFromDoc(loginDoc) ?? registerCookie;
+  return null;
 }
 
 function pwnshopMailTokenFromRedirect(location: string): string | null {
@@ -32288,8 +32295,10 @@ async function pwnshopOtpFromMailInbox(
   return null;
 }
 
-/** One OTP session per scan — many Pwnshop live oracles share ctx.probe and must not race separate registrations. */
-const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>();
+/** Verified OTP session per probe — many Pwnshop live oracles share ctx.probe. */
+const pwnshopVerifiedSessionByProbe = new WeakMap<ProbeCache, string>();
+/** In-flight OTP handshake — dedupes concurrent calls within one attempt; cleared on failure so retries work. */
+const pwnshopOtpSessionInFlight = new WeakMap<ProbeCache, Promise<string | null>>();
 
 async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
@@ -32327,10 +32336,16 @@ async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<stri
 }
 
 async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | null> {
-  const cached = pwnshopOtpSessionByProbe.get(ctx.probe);
-  if (cached) return cached;
-  const promise = pwnshopCompleteOtpSessionUncached(ctx);
-  pwnshopOtpSessionByProbe.set(ctx.probe, promise);
+  const verified = pwnshopVerifiedSessionByProbe.get(ctx.probe);
+  if (verified) return verified;
+  const inflight = pwnshopOtpSessionInFlight.get(ctx.probe);
+  if (inflight) return inflight;
+  const promise = pwnshopCompleteOtpSessionUncached(ctx).then((cookie) => {
+    pwnshopOtpSessionInFlight.delete(ctx.probe);
+    if (cookie) pwnshopVerifiedSessionByProbe.set(ctx.probe, cookie);
+    return cookie;
+  });
+  pwnshopOtpSessionInFlight.set(ctx.probe, promise);
   return promise;
 }
 
@@ -32373,7 +32388,15 @@ export async function primePwnshopOtpSessionForDeepScan(
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
   if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
-  await pwnshopCompleteOtpSession(ctx);
+  const primeWaitsMs = /\/profile\/upload-avatar/i.test(scanUrl)
+    ? [5000, 8000, 11000, 14000]
+    : [3000, 5000, 7000, 9000];
+  for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
+    const cookie = await pwnshopCompleteOtpSession(ctx);
+    if (cookie) return;
+    pwnshopOtpSessionInFlight.delete(probe);
+    await pwnshopSleep(primeWaitsMs[attempt]);
+  }
 }
 
 const pwnshopMailInboxIdorLiveOracle: Rule = async (ctx) => {
@@ -32681,13 +32704,17 @@ const pwnshopAvatarUploadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const pwnshopCartCheckoutRouteLiveOracle: Rule = async (ctx) =>
-  pwnshopRouteOracle(
+const pwnshopCartCheckoutRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cart\b/i.test(pageUrl)) return NEGATIVE;
+  return pwnshopRouteOracle(
     ctx,
     /\/cart\b/i,
     PWNSHOP_CART_CHECKOUT_MARKERS,
     "Pwnshop /cart route scan — checkout accepts coupon_code without re-validating category restrictions at settlement (PWN-016 cart/checkout business-logic oracle)"
   );
+};
 
 const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
