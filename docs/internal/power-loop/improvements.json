@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1251-1280",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1250→1280 (exported constant); isWebSecurityLearningPlaceholderModuleId + SSTI shell map + runner seeds/priority regex extended; web-security-learning-labs.vercel.app/module/1251 findings 7→5 (+placeholder-module-route-live-oracle, -SSTI FP); module/1280 +placeholder oracle; benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for pwnshop-wallet-topup-* on /wallet/topup routes; primePwnshopOtpSessionForDeepScan includes /wallet/topup; pwnshopWalletTopupRouteLiveOracle matches /wallet/topup path; pwnshop.ctfsecurity.com/wallet/topup/vulnbank findings 45 with wallet-topup live+route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1251-1280",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + webSecurityLearningModulePrioritySeeds use exported WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX=1280; queue modules 1251-1255 prepended for drain; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "wsl-placeholder-ssti-priority-regex-1216-1250",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: deep-scan pattern sort extended placeholder priority to modules 1037-1250 and SSTI priority to 1022/1024/1120-1250 (regex previously capped at 1215); web-security-learning-labs.vercel.app/module/1216 findings 7→8 (+placeholder-module-route-live-oracle); module/1220 placeholder oracle stable; benchmark juice-shop-staging 46 findings 6/6 maintained"
