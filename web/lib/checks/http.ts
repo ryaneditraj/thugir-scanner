@@ -34,7 +34,7 @@ const INSECURE_TLS_LAB_HOSTS = new Set(["bugbait.io", "testfire.net", "demo2.tes
 const insecureTlsAgent = new https.Agent({ rejectUnauthorized: false });
 
 /** Vercel Security Checkpoint blocks the ThugirScanner UA suffix — retry with a plain browser UA. */
-function isVercelSecurityCheckpoint(doc: FetchedDoc): boolean {
+export function isVercelSecurityCheckpoint(doc: FetchedDoc): boolean {
   return (
     doc.headers["x-vercel-mitigated"] === "challenge" ||
     (doc.status === 403 && Boolean(doc.headers["x-vercel-challenge-token"]))

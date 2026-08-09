@@ -33130,6 +33130,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-products-date-manipulation-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals products date-range manipulation live oracle",
+    description:
+      "GET /api/products?date_from=&date_to= accepts multi-year date spans without server-side range limits — returning expanded product sets and significant query latency (README date-manipulation oracle).",
+    impactOneline:
+      "Unbounded date-range queries on marketplace product endpoints enable resource exhaustion and bypass intended catalog window constraints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsDateManipulationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cap date-range spans server-side — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject or clamp date_from/date_to ranges exceeding a business-defined maximum.",
+        "Require pagination for historical catalog exports.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products endpoint accepts unbounded date_from/date_to ranges. Show date-range validation and query performance hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-products-date-manipulation-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /api/products date-range manipulation route live oracle",
+    description:
+      "When scanning /api/products with date_from/date_to, the API accepts multi-year spans without rejection — route-specific date-manipulation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals marketplace product queries allow unbounded historical date ranges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsDateManipulationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cap date-range spans on /api/products route handlers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject or clamp date_from/date_to ranges exceeding a business-defined maximum.",
+        "Add query timeouts and indexes for marketplace date filters.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products route scan confirms unbounded date_from/date_to acceptance. Show route-level date-range validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi2-auth-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -33760,9 +33812,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Vuln Bank SQL injection login bypass oracle",
     description:
-      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
+      "POST /login with username admin' OR '1'='1 bypasses authentication and returns a JWT without valid credentials — the Vuln Bank SQL injection login oracle.",
     impactOneline:
-      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
+      "SQL injection in login endpoints lets attackers authenticate without valid credentials and obtain session tokens.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
     tierRequired: "deep",
@@ -33775,7 +33827,32 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
+      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns a JWT without valid credentials. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sqli-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank /login SQL injection route live oracle",
+    description:
+      "When scanning /login on vulnbank.org, POST with username admin' OR '1'='1 bypasses authentication and returns a JWT — route-specific SQL injection login oracle.",
+    impactOneline:
+      "Route-specific scans confirm SQL injection in login endpoints issues session tokens without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSqliLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for administrative accounts."
+      ]
+    },
+    fixPrompt:
+      "Our /login route scan shows SQLi bypass with admin' OR '1'='1. Show parameterized query remediation for authentication.",
     version: 1,
     enabled: true
   },
@@ -34482,32 +34559,6 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
-    slug: "vulnbank-sqli-login-live-oracle",
-    platform: "generic",
-    category: "Injection",
-    severityDefault: "critical",
-    title: "Vuln Bank SQL injection login bypass oracle",
-    description:
-      "POST /login with username admin' OR '1'='1 bypasses authentication and returns an isAdmin:true JWT — the Vuln Bank SQL injection login oracle.",
-    impactOneline:
-      "SQL injection in login endpoints lets attackers authenticate as any user including administrators without valid credentials.",
-    detectorKind: "rule_ref",
-    detectorConfig: { rule: "vulnbankSqliLoginLiveOracle" },
-    tierRequired: "deep",
-    remediation: {
-      summary: "Use parameterized queries for all authentication SQL — Vuln Bank is intentional training software.",
-      steps: [
-        "Replace string-concatenated login queries with prepared statements or ORM bindings.",
-        "Apply account lockout and MFA for administrative accounts.",
-        "Run Vuln Bank only on isolated pentest training infrastructure."
-      ]
-    },
-    fixPrompt:
-      "Our /login endpoint is bypassed with admin' OR '1'='1 and returns an admin JWT. Show parameterized query remediation for authentication.",
-    version: 1,
-    enabled: true
-  },
-  {
     slug: "burpbounty-dwr-util-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -34712,6 +34763,240 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host Sec Research Lab-style interactive security training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-sql-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Sec Research Lab SQL injection route live oracle",
+    description:
+      "Route scans on /labs/sql-injection confirm auth-bypass, UNION, and blind-boolean SQLi training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public SQL injection training labs document exploitable query patterns for authentication bypass and data extraction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabSqlInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive SQLi modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser SQL injection modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style SQL injection training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-xss-playground-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Sec Research Lab XSS playground route live oracle",
+    description:
+      "Route scans on /labs/xss-playground confirm reflected, stored, and DOM XSS training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public XSS training labs document dangerous HTML sinks and cross-site scripting attack scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabXssPlaygroundRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive XSS modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser XSS modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style XSS training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-ssrf-lab-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Sec Research Lab SSRF lab route live oracle",
+    description:
+      "Route scans on /labs/ssrf-lab confirm basic SSRF and cloud-metadata training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public SSRF training labs document server-side fetch abuse and internal-service access scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabSsrfLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive SSRF modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser SSRF modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style SSRF training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-xxe-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Sec Research Lab XXE lab route live oracle",
+    description:
+      "Route scans on /labs/xxe-lab confirm local file disclosure, SSRF-via-XXE, and billion-laughs DoS training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public XXE training labs document external entity expansion and server-side file read scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabXxeLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive XXE modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser XXE modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style XXE training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Sec Research Lab command injection route live oracle",
+    description:
+      "Route scans on /labs/command-injection confirm command chaining, filter bypass, and blind CMDI training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public command injection training labs document OS command chaining and remote code execution scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive command injection modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser command injection modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style command injection training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-jwt-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Sec Research Lab JWT lab route live oracle",
+    description:
+      "Route scans on /labs/jwt-lab confirm token decoding, alg:none, weak-secret, and kid-injection training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public JWT training labs document token forgery, algorithm confusion, and weak signing key scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabJwtLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive JWT modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser JWT modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style JWT training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-prototype-pollution-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Sec Research Lab prototype pollution route live oracle",
+    description:
+      "Route scans on /labs/prototype-pollution confirm admin-escalation and client-side gadget pollution training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public prototype pollution training labs document __proto__ injection and privilege-escalation attack scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabPrototypePollutionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive prototype pollution modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser prototype pollution modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style prototype pollution training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Sec Research Lab IDOR route live oracle",
+    description:
+      "Route scans on /labs/idor confirm profile-peeking, order-tampering, and admin-panel IDOR training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public IDOR training labs document insecure direct object reference and authorization bypass scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive IDOR modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser IDOR modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style IDOR training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-host-header-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Sec Research Lab host header injection route live oracle",
+    description:
+      "Route scans on /labs/host-header confirm password-reset poisoning and web-cache poisoning training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public host header injection training labs document password-reset poisoning and cache-poisoning attack scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabHostHeaderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive host header injection modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser host header injection modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style host header injection training. Show how to auth-gate browser labs and isolate them from production.",
     version: 1,
     enabled: true
   },
@@ -36074,7 +36359,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1075 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1075) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated).",
+      "When scanning /module/1011–1207 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1207) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated; curated URL-map fallback).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
@@ -36090,6 +36375,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /module/{id} route scan maps to Web Security Learning Labs training topics. This is intentional lab infrastructure — confirm isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-security-learning-labs-ssti-module-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Web Security Learning Labs SSTI module route live oracle",
+    description:
+      "When scanning SSTI modules (1022, 1024, 1125–1207) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (curated module-id URL-map fallback for CSR placeholder shells).",
+    impactOneline:
+      "Route-specific SSTI confirmation on WSL training modules enables targeted scanner calibration for template-injection labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsSstiModuleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training labs are intentional — use sandboxed template engines in production.",
+      steps: [
+        "Never pass user input to server-side template renderers.",
+        "Use logic-less templates or strict context auto-escaping.",
+        "Isolate vulnerability labs from production infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our WSL /module/{id} SSTI route scan confirms template injection via reflexion probe. Show sandboxed template rendering remediation.",
     version: 1,
     enabled: true
   },
@@ -36348,7 +36659,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /secret returns 403 but /secret/ bypasses it on bypass403.vercel.app. Show path canonicalization before authorization.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-secret-route-live-oracle",
@@ -36373,7 +36684,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /secret route scan shows path-normalization bypass. Show path canonicalization before authorization.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-config-live-oracle",
@@ -36424,7 +36735,7 @@ export const genericPatterns: Pattern[] = [
     fixPrompt:
       "Our /config route scan shows header-manipulation bypass. Show header stripping and server-side validation.",
     version: 1,
-    enabled: true
+    enabled: false
   },
   {
     slug: "bypass403-waf-live-oracle",
@@ -36525,6 +36836,108 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /debug route scan shows ?_method=GET bypass. Show method override hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-internal-xff-pollution-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /internal XFF header-pollution bypass live oracle",
+    description:
+      "GET /internal returns 403 but X-Forwarded-For: evil.com, 127.0.0.1 header-pollution chain bypass returns a success flag — the BypassX internal IP-filter 403 bypass training oracle.",
+    impactOneline:
+      "X-Forwarded-For header pollution chains bypass IP-based access controls on internal-only routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403InternalXffPollutionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse X-Forwarded-For from the rightmost trusted hop; reject comma-separated pollution chains.",
+      steps: [
+        "Use a single trusted reverse-proxy hop for client IP resolution.",
+        "Reject requests with multiple X-Forwarded-For values unless from known proxies.",
+        "Apply authorization after resolving the true client IP."
+      ]
+    },
+    fixPrompt:
+      "Our /internal returns 403 but X-Forwarded-For: evil.com, 127.0.0.1 bypasses it on bypass403.vercel.app. Show XFF parsing hardening.",
+    version: 1,
+    enabled: false
+  },
+  {
+    slug: "bypass403-internal-xff-pollution-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /internal route XFF pollution bypass live oracle",
+    description:
+      "When scanning /internal on bypass403.vercel.app, X-Forwarded-For header-pollution chain bypass reaches the protected internal resource — route-specific 403 bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm XFF pollution bypasses on protected internal endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403InternalXffPollutionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parse X-Forwarded-For from the rightmost trusted hop; reject pollution chains.",
+      steps: [
+        "Reject comma-separated X-Forwarded-For pollution before authorization.",
+        "Resolve client IP from trusted proxy headers only."
+      ]
+    },
+    fixPrompt:
+      "Our /internal route scan shows X-Forwarded-For pollution bypass. Show XFF parsing hardening.",
+    version: 1,
+    enabled: false
+  },
+  {
+    slug: "bypass403-secure-bearer-invalid-token-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /secure invalid Bearer token bypass live oracle",
+    description:
+      "GET /secure returns 403 but Authorization: Bearer invalid_token bypass returns a success flag — the BypassX authentication-bypass training oracle.",
+    impactOneline:
+      "Malformed or placeholder Bearer tokens bypass authentication on protected secure routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403SecureBearerInvalidTokenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate Bearer JWTs cryptographically; reject unknown or malformed tokens before authorization.",
+      steps: [
+        "Verify JWT signatures and expiration on every protected route.",
+        "Return 401 for malformed Authorization headers instead of falling through.",
+        "Do not accept literal placeholder tokens in production auth middleware."
+      ]
+    },
+    fixPrompt:
+      "Our /secure returns 403 but Authorization: Bearer invalid_token bypasses it on bypass403.vercel.app. Show Bearer token validation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bypass403-secure-bearer-invalid-token-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "bypass403.vercel.app /secure route invalid Bearer bypass live oracle",
+    description:
+      "When scanning /secure on bypass403.vercel.app, Authorization: Bearer invalid_token bypass reaches the protected secure resource — route-specific authentication-bypass oracle.",
+    impactOneline:
+      "Route-specific scans confirm invalid Bearer token bypasses on protected secure endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bypass403SecureBearerInvalidTokenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate Bearer JWTs cryptographically on every protected route.",
+      steps: [
+        "Reject malformed Authorization headers before route handlers.",
+        "Verify JWT signatures and claims server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /secure route scan shows Bearer invalid_token bypass. Show Bearer validation hardening.",
     version: 1,
     enabled: true
   },
@@ -42661,6 +43074,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Pentest-Ground DVWA /vulnerabilities/open_redirect/ route reflects redirect= into a 302 Location header. Show open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-dvwa-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge DVWA SQL injection route live oracle",
+    description:
+      "When scanning /vulnerabilities/sqli/ on dvwa.lab.pentest-forge.com, POST id=1' OR '1'='1 returns multiple user rows — PentestForge hosted DVWA SQL injection route oracle.",
+    impactOneline:
+      "Unsanitized SQL concatenation on PentestForge DVWA id parameters lets attackers dump every user record with a tautology payload.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — use parameterized queries instead of string concatenation.",
+      steps: [
+        "Bind user input with prepared statements or ORM parameterization.",
+        "Reject unexpected characters in numeric ID fields.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/sqli/ route concatenates id into SQL. Show injection remediation with parameterized queries.",
     version: 1,
     enabled: true
   },
@@ -49549,6 +49988,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vaultapp-documents-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp document IDOR live oracle",
+    description:
+      "GET /api/documents/:encoded_id decodes base64 to sequential document IDs and returns another user's invoice/statement/report content without ownership check — the VaultApp base64-encoded document IDOR training oracle (VULN 5).",
+    impactOneline:
+      "Missing document ownership checks expose financial statements, invoices, and PII from other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappDocumentsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify document owner matches authenticated user before returning content.",
+      steps: [
+        "Check document.user_id === req.user.id before returning document body.",
+        "Do not rely on base64 encoding as an access control mechanism.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/documents/:encoded_id returns other users' documents. Show document ownership authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-documents-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp document route IDOR live oracle",
+    description:
+      "When scanning /api/documents/:encoded_id, GET decodes base64 IDs to sequential document IDs and returns another user's content without ownership check — route-specific VaultApp document IDOR oracle.",
+    impactOneline:
+      "Route scans on document endpoints should confirm missing object-level authorization on financial documents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappDocumentsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify document owner matches authenticated user before returning content.",
+      steps: [
+        "Check document.user_id === req.user.id before returning document body.",
+        "Do not rely on base64 encoding as an access control mechanism.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/documents/:encoded_id route scan confirms document IDOR without ownership check. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnweb-comments-xss-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -50975,6 +51466,292 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /register route scan confirms unverified account creation with wallet access. Show route-level registration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-database-execute-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WhoopsPay admin arbitrary SQL execute live oracle",
+    description:
+      "After logging in with admin credentials leaked via GET /api/test-accounts, POST /api/admin/database/execute runs arbitrary SQL and returns table rows — the WhoopsPay admin database execute oracle.",
+    impactOneline:
+      "Arbitrary SQL execution lets attackers dump or modify the entire WhoopsPay database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminDatabaseExecuteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove raw SQL execution from admin APIs — WhoopsPay is intentional training software.",
+      steps: [
+        "Delete or hard-disable /api/admin/database/execute in production builds.",
+        "Use parameterized queries and strict role checks for any admin data access.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/database/execute endpoint runs arbitrary SQL. Show safe admin data-access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-database-execute-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WhoopsPay admin database execute route live oracle",
+    description:
+      "When scanning /api/admin/database routes, POST /api/admin/database/execute runs arbitrary SQL with admin session — route-specific admin database execute oracle.",
+    impactOneline:
+      "Route-scoped scans should flag WhoopsPay admin database endpoints that accept raw SQL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminDatabaseExecuteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove raw SQL execution from admin APIs.",
+      steps: [
+        "Delete or hard-disable /api/admin/database/execute in production builds.",
+        "Use parameterized queries and strict role checks for any admin data access.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/database route scan confirms arbitrary SQL execution. Show route-level remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-express-logs-disclosure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "WhoopsPay admin express logs password disclosure live oracle",
+    description:
+      "GET /api/admin/logs/express returns Express request logs that include plaintext login passwords from POST /api/login bodies — the WhoopsPay admin express log disclosure oracle.",
+    impactOneline:
+      "Admin log endpoints that echo request bodies leak user passwords and session secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminExpressLogsDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact credentials from admin logs — WhoopsPay is intentional training software.",
+      steps: [
+        "Strip password and token fields before writing request logs.",
+        "Restrict log endpoints to break-glass admin roles with audit trails.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/logs/express endpoint returns passwords from login requests. Show log redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "whoopspay-admin-express-logs-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "WhoopsPay admin express logs route live oracle",
+    description:
+      "When scanning /api/admin/logs routes, GET /api/admin/logs/express returns request logs with plaintext login passwords — route-specific admin log disclosure oracle.",
+    impactOneline:
+      "Route-scoped scans should flag WhoopsPay admin log endpoints that expose credential-bearing request bodies.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "whoopsPayAdminExpressLogsDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact credentials from admin logs.",
+      steps: [
+        "Strip password and token fields before writing request logs.",
+        "Restrict log endpoints to break-glass admin roles with audit trails.",
+        "Run WhoopsPay only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/logs route scan confirms password leakage in express logs. Show route-level log redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-voting-app-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SSbit01 Voting App training platform disclosed",
+    description:
+      "Client bundle or page metadata references the SSbit01 Voting App — an intentionally vulnerable Next.js poll platform with documented user ID exposure and session-only vote tracking.",
+    impactOneline:
+      "Training poll apps with broken access control are useful scanner oracles for IDOR and business-logic flaws.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVotingAppEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not deploy intentionally vulnerable poll apps to production domains.",
+      steps: [
+        "Restrict poll APIs to authenticated owners for user-specific resources.",
+        "Avoid returning MongoDB user IDs to clients when not required.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our scan detected the SSbit01 Voting App training platform. Show broken access control remediation for poll APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-user-polls-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Voting App user polls IDOR live oracle",
+    description:
+      "GET /api/user/{id}/polls returns poll questions and vote tallies without authentication — the SSbit01 Voting App user polls enumeration oracle.",
+    impactOneline:
+      "Unauthenticated poll enumeration exposes private voting data and enables targeted vote manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppUserPollsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and author ownership before returning user polls.",
+      steps: [
+        "Bind /api/user/{id}/polls to the authenticated session user ID.",
+        "Return 401 for unauthenticated requests to user-specific poll listings.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/user/{id}/polls scan returns poll data without authentication. Show user polls IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-user-polls-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Voting App user polls IDOR route live oracle",
+    description:
+      "When scanning /api/user/{id}/polls or /user routes, unauthenticated poll enumeration succeeds — route-specific user polls IDOR oracle.",
+    impactOneline:
+      "Route-scoped scans should flag Voting App poll APIs that leak data without session checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppUserPollsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on route-specific user poll APIs.",
+      steps: [
+        "Bind poll listing routes to authenticated session user IDs.",
+        "Return 401 for cross-user or anonymous poll enumeration.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/user/{id}/polls route scan confirms unauthenticated poll enumeration. Show route-level IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-vote-stuffing-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Voting App vote stuffing live oracle",
+    description:
+      "POST /api/vote/{pollId} accepts multiple anonymous votes from fresh sessions because vote tracking is session-only — the SSbit01 Voting App vote stuffing oracle.",
+    impactOneline:
+      "Session-only vote deduplication allows attackers to inflate poll results with unlimited anonymous votes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppVoteStuffingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-poll vote limits with IP, device, or authenticated identity binding.",
+      steps: [
+        "Track votes by user account or verified identity, not only session cookies.",
+        "Rate-limit POST /api/vote and require CAPTCHA for anonymous voters.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vote endpoint accepts multiple anonymous votes from fresh sessions. Show vote stuffing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-vote-stuffing-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Voting App vote stuffing route live oracle",
+    description:
+      "When scanning /api/vote or /poll routes, multiple anonymous POST /api/vote/{id} requests increment tallies — route-specific vote stuffing oracle.",
+    impactOneline:
+      "Route-scoped scans should confirm Voting App vote endpoints lack durable anti-stuffing controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppVoteStuffingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind votes to durable identity and rate-limit vote routes.",
+      steps: [
+        "Require login or verified identity before accepting votes on sensitive polls.",
+        "Rate-limit vote routes and detect rapid anonymous vote bursts.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/vote route scan confirms vote stuffing via fresh anonymous sessions. Show route-level remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-signup-open-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Voting App open registration live oracle",
+    description:
+      "POST /api/signup creates a MongoDB user without authentication or invite — the SSbit01 Voting App open registration oracle.",
+    impactOneline:
+      "Open registration on poll platforms enables mass account creation for vote manipulation and enumeration attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppSignupOpenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require invite codes or admin approval before creating poll accounts.",
+      steps: [
+        "Disable public signup on production poll deployments.",
+        "Rate-limit POST /api/signup and require email verification.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/signup endpoint creates users without authentication. Show open registration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voting-app-signup-open-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Voting App open registration route live oracle",
+    description:
+      "When scanning /api/signup, POST creates a MongoDB user without authentication — route-specific open registration oracle.",
+    impactOneline:
+      "Route-scoped scans should confirm poll signup endpoints are not open to unauthenticated mass registration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "votingAppSignupOpenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require invite codes or admin approval before creating poll accounts.",
+      steps: [
+        "Disable public signup on production poll deployments.",
+        "Rate-limit POST /api/signup and require email verification.",
+        "Run Voting App only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/signup route scan confirms open registration. Show route-level signup hardening.",
     version: 1,
     enabled: true
   }
