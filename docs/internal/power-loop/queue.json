@@ -1,6 +1,51 @@
 {
-  "updated_at": "2026-08-09T07:30:00.000Z",
+  "updated_at": "2026-08-09T08:00:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://secresearchlab.web.app/labs/xxe-lab/",
+      "source": "Sec Research Lab — XXE playground training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/command-injection/",
+      "source": "Sec Research Lab — command injection training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/jwt-lab/",
+      "source": "Sec Research Lab — JWT security analysis training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/prototype-pollution/",
+      "source": "Sec Research Lab — prototype pollution training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/idor/",
+      "source": "Sec Research Lab — IDOR hunter training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/host-header/",
+      "source": "Sec Research Lab — host header injection training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1016",
+      "source": "Web Security Learning Labs — Command Injection module route live oracle GET /module/1016 (08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1017",
+      "source": "Web Security Learning Labs — SSRF module route live oracle GET /module/1017 (08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/notes/1",
+      "source": "MRMcyber/vaultapp — private-note IDOR oracle GET /api/notes/:id (08 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://secresearchlab.web.app/labs/sql-injection/",
       "source": "Sec Research Lab — interactive SQLi training module (secresearchlab.web.app/labs, 02 UTC discovery)",

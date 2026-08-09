@@ -36379,6 +36379,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "web-security-learning-labs-module-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Web Security Learning Labs curated module route live oracle",
+    description:
+      "When scanning curated modules 1011–1036 (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, Clickjacking, Race Condition, NoSQL, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header) on web-security-learning-labs.vercel.app, confirm the named training topic from the lab catalog — route-specific live oracle (SSTI modules 1022/1024 and 1125–1207 use the dedicated SSTI oracle).",
+    impactOneline:
+      "Route-specific confirmation of named vulnerability training modules enables targeted scanner calibration for WSL labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsModuleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training labs are intentional — isolate from production infrastructure.",
+      steps: [
+        "Run vulnerability labs only on isolated evaluation hosts.",
+        "Do not reuse lab module IDs or routes in production apps.",
+        "Use the lab catalog for security training, not as production API design."
+      ]
+    },
+    fixPrompt:
+      "Our WSL /module/{id} route scan confirms a named vulnerability training topic. Show how to isolate lab infrastructure from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-security-learning-labs-ssti-module-route-live-oracle",
     platform: "generic",
     category: "Injection",
