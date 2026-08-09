@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1351-1360",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1350→1360; isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended; web-security-learning-labs.vercel.app/module/1351 findings 4→5 (+placeholder-module-route-live-oracle); module/1360 8 findings with placeholder oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-placeholder-ssti-priority-regex-1351-1360",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner placeholder priority regex 3[0-4]d|350→3[0-5]d|360 and SSTI priority 13[0-4]d|1350→13[0-5]d|1360; modules 1351-1360 get -3 priority for placeholder/SSTI oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-command-injection-idor-queue-drain-19utc",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue prepends /labs/command-injection + /labs/idor; secresearchlab.web.app/labs/command-injection findings 9 with +sec-research-lab-command-injection-route-live-oracle; /labs/idor findings 9→10 with +sec-research-lab-idor-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-otp-session-cache-retry",
       "status": "shipped",
