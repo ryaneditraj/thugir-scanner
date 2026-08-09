@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-09T07:30:00.000Z",
+  "updated_at": "2026-08-09T08:04:33.838Z",
   "discovery_urls": [
+    {
+      "url": "https://secresearchlab.web.app/labs/xxe-lab/",
+      "source": "Sec Research Lab — XXE file disclosure training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/prototype-pollution/",
+      "source": "Sec Research Lab — JavaScript prototype pollution training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/host-header/",
+      "source": "Sec Research Lab — Host header injection / password-reset poisoning module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/cors-lab/",
+      "source": "Sec Research Lab — CORS misconfiguration training module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/jwt-lab/",
+      "source": "Sec Research Lab — JWT algorithm confusion / signature bypass module (secresearchlab.web.app/labs, 08 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://secresearchlab.web.app/labs/sql-injection/",
       "source": "Sec Research Lab — interactive SQLi training module (secresearchlab.web.app/labs, 02 UTC discovery)",
