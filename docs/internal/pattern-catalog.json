@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-09T06:03:08.449Z",
-  "total": 2047,
-  "uniqueSlugs": 2043,
+  "generatedAt": "2026-08-09T07:08:46.894Z",
+  "total": 2049,
+  "uniqueSlugs": 2045,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2029,
+    "generic": 2031,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1962,
+    "deep": 1964,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 415,
+    "Broken access control": 417,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1867,6 +1867,8 @@
     "vaultapp-admin-audit-logs-idor-route-live-oracle",
     "vaultapp-admin-users-delete-live-oracle",
     "vaultapp-admin-users-delete-route-live-oracle",
+    "vaultapp-documents-idor-live-oracle",
+    "vaultapp-documents-idor-route-live-oracle",
     "vaultapp-lab-guide-route-live-oracle",
     "vaultapp-messages-read-idor-live-oracle",
     "vaultapp-messages-read-idor-route-live-oracle",

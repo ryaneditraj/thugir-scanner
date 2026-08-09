@@ -36359,7 +36359,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1194 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1194) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated; curated URL-map fallback).",
+      "When scanning /module/1011–1207 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1207) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated; curated URL-map fallback).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
@@ -36385,7 +36385,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Web Security Learning Labs SSTI module route live oracle",
     description:
-      "When scanning SSTI modules (1022, 1024, 1125–1194) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (curated module-id URL-map fallback for CSR placeholder shells).",
+      "When scanning SSTI modules (1022, 1024, 1125–1207) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (curated module-id URL-map fallback for CSR placeholder shells).",
     impactOneline:
       "Route-specific SSTI confirmation on WSL training modules enables targeted scanner calibration for template-injection labs.",
     detectorKind: "rule_ref",
@@ -49984,6 +49984,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/notes/:id route scan confirms private-note IDOR without ownership check. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-documents-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp document IDOR live oracle",
+    description:
+      "GET /api/documents/:encoded_id decodes base64 to sequential document IDs and returns another user's invoice/statement/report content without ownership check — the VaultApp base64-encoded document IDOR training oracle (VULN 5).",
+    impactOneline:
+      "Missing document ownership checks expose financial statements, invoices, and PII from other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappDocumentsIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify document owner matches authenticated user before returning content.",
+      steps: [
+        "Check document.user_id === req.user.id before returning document body.",
+        "Do not rely on base64 encoding as an access control mechanism.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/documents/:encoded_id returns other users' documents. Show document ownership authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vaultapp-documents-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VaultApp document route IDOR live oracle",
+    description:
+      "When scanning /api/documents/:encoded_id, GET decodes base64 IDs to sequential document IDs and returns another user's content without ownership check — route-specific VaultApp document IDOR oracle.",
+    impactOneline:
+      "Route scans on document endpoints should confirm missing object-level authorization on financial documents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultappDocumentsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VaultApp is intentional IDOR training — verify document owner matches authenticated user before returning content.",
+      steps: [
+        "Check document.user_id === req.user.id before returning document body.",
+        "Do not rely on base64 encoding as an access control mechanism.",
+        "Run VaultApp only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/documents/:encoded_id route scan confirms document IDOR without ownership check. Show remediation.",
     version: 1,
     enabled: true
   },

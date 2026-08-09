@@ -35055,15 +35055,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1199; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1207; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1199 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1199; moduleNum++) {
+/** CSR placeholder shells 1125–1207 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1207; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35071,7 +35071,7 @@ for (let moduleNum = 1125; moduleNum <= 1199; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 75 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 83 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -69495,6 +69495,86 @@ async function probeVaultappNotesIdor(ctx: RuleContext): Promise<RuleResult | nu
   return null;
 }
 
+function vaultappDocumentsEncodedId(docId: number): string {
+  return Buffer.from(String(docId), "utf-8").toString("base64");
+}
+
+async function probeVaultappDocumentsIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVaultappHost(ctx)) return null;
+  const auth = await vaultappLogin(ctx);
+  if (!auth) return null;
+  const headers = {
+    Authorization: `Bearer ${auth.token}`,
+    Accept: "application/json"
+  };
+  const docIdsToTry = [
+    1, 2, 3, 5, 10, 15, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500,
+    ...Array.from({ length: 40 }, (_, i) => i + 1)
+  ];
+  const seenDocIds = new Set<number>();
+  for (const docId of docIdsToTry) {
+    if (seenDocIds.has(docId)) continue;
+    seenDocIds.add(docId);
+    const encodedId = vaultappDocumentsEncodedId(docId);
+    const docUrl = new URL(`/api/documents/${encodedId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(docUrl, { headers, maxBytes: 8192, timeoutMs: 15000 });
+    if (vaultappCheckpointBlocked(doc.body)) continue;
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as {
+        id?: number;
+        user_id?: number;
+        title?: string;
+        content?: string;
+        doc_type?: string;
+        owner_username?: string;
+      };
+      if (!data.id || !data.content || !data.owner_username) continue;
+      if (data.owner_username === auth.username || data.user_id === auth.userId) continue;
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          docUrl,
+          encodedId,
+          caller: auth.username,
+          docId: data.id,
+          owner: data.owner_username,
+          title: data.title,
+          docType: data.doc_type,
+          snippet: doc.body.slice(0, 280).trim(),
+          note: `VaultApp GET /api/documents/${encodedId} (base64 of ${data.id}) returns "${data.title}" owned by ${data.owner_username} to authenticated ${auth.username} without ownership check — base64-encoded document IDOR oracle (VULN 5)`
+        }
+      };
+    } catch {
+      /* try next id */
+    }
+  }
+  return null;
+}
+
+const vaultappDocumentsIdorLiveOracle: Rule = async (ctx) => {
+  const hit = await probeVaultappDocumentsIdor(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultappDocumentsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultappHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/documents\//i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeVaultappDocumentsIdor(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "VaultApp /api/documents/:encoded_id route scan — base64-encoded document IDs decode to sequential IDs without ownership check — document IDOR oracle"
+    }
+  };
+};
+
 const vaultappNotesIdorLiveOracle: Rule = async (ctx) => {
   const hit = await probeVaultappNotesIdor(ctx);
   return hit?.fired ? hit : NEGATIVE;
@@ -72081,6 +72161,8 @@ export const RULES: Record<string, Rule> = {
   vaultappTransactionsIdorRouteLiveOracle,
   vaultappNotesIdorLiveOracle,
   vaultappNotesIdorRouteLiveOracle,
+  vaultappDocumentsIdorLiveOracle,
+  vaultappDocumentsIdorRouteLiveOracle,
   clientSideArchonTrainingEvidence,
   clientSideArchonApiSecurityCurriculumEvidence,
   clientSideOverthewireBanditEvidence,
