@@ -35290,6 +35290,7 @@ const webSecurityLearningLabsSstiModuleRouteLiveOracle: Rule = async (ctx) => {
   const checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(moduleDoc.body);
   const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
   if (placeholderShell) return NEGATIVE;
+  if (WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS.has(moduleId)) return NEGATIVE;
   if (checkpointBlocked || WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     return {
       fired: true,
@@ -35315,17 +35316,21 @@ const webSecurityLearningLabsPlaceholderModuleRouteLiveOracle: Rule = async (ctx
   let corpus = `${ctx.combined}\n${pageUrl}`;
   const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
   corpus += "\n" + moduleDoc.body;
-  if (!webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus)) return NEGATIVE;
+  const checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(moduleDoc.body);
+  const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
+  if (!placeholderShell && !checkpointBlocked) return NEGATIVE;
   const topic =
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] ?? WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   return {
     fired: true,
-    confidence: 0.87,
+    confidence: placeholderShell ? 0.87 : 0.86,
     evidence: {
       moduleId,
       moduleTopic: topic,
       scannedUrl: pageUrl,
-      note: `web-security-learning-labs.vercel.app/module/${moduleId} is an unreleased CSR placeholder catalog shell (Here is a Module: ${moduleId}) — route-specific placeholder-module live oracle`
+      note: placeholderShell
+        ? `web-security-learning-labs.vercel.app/module/${moduleId} is an unreleased CSR placeholder catalog shell (Here is a Module: ${moduleId}) — route-specific placeholder-module live oracle`
+        : `web-security-learning-labs.vercel.app/module/${moduleId} is an unreleased CSR placeholder catalog shell (Here is a Module: ${moduleId}) — route-specific placeholder-module live oracle (Vercel checkpoint blocked shell fetch; curated module-id map)`
     }
   };
 };
