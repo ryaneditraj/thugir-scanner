@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-09T20:05:20.315Z",
+  "updated_at": "2026-08-09T20:09:40.081Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/redos",
+      "source": "OWASP NodeGoat websec — ReDoS tutorial oracle GET /tutorial/redos (public Heroku demo, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/research",
+      "source": "OWASP NodeGoat websec — SSRF research oracle GET /research?url= (public Heroku demo, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/mcp",
+      "source": "OWASP WrongSecrets — insecure MCP server env-var leak oracle /mcp (challenge-60, public Heroku demo, 20 UTC discovery)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/chat",
+      "source": "NeuraLegion/brokencrystals — AI chatbot LLM prompt-injection oracle GET /chat (public demo, 20 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://huggingface.co/spaces/ctfsec/pwnshop",
+      "source": "ctfsec/pwnshop — Hugging Face Spaces public deploy of intentionally vulnerable e-commerce lab (OSS README, 20 UTC discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1370",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1370 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
@@ -584,16 +609,6 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1219",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1219 (public Vercel demo, 12 UTC discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://secresearchlab.web.app/labs/command-injection/",
-      "source": "Sec Research Lab — command injection training module (queue drain priority, 12 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://secresearchlab.web.app/labs/idor/",
-      "source": "Sec Research Lab — IDOR hunter training module (queue drain priority, 12 UTC)",
       "auth": "public_demo"
     },
     {
@@ -17823,16 +17838,6 @@
     {
       "url": "https://secure-bank-bay.vercel.app/admin",
       "source": "Areeeshaa/SecureBank — RBAC/admin access-control oracle GET /admin (secure-bank-bay.vercel.app OSS deploy, 07 UTC discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://secresearchlab.web.app/labs/command-injection/",
-      "source": "Sec Research Lab — command injection training module (secresearchlab.web.app/labs, 08 UTC discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://secresearchlab.web.app/labs/idor/",
-      "source": "Sec Research Lab — IDOR hunter training module (secresearchlab.web.app/labs, 08 UTC discovery)",
       "auth": "public_demo"
     }
   ]

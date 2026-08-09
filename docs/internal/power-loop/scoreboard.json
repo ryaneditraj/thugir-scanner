@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 3051,
-  "total_findings": 31447,
+  "total_sites_scanned": 3059,
+  "total_findings": 31564,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2170,
-  "discovery_findings": 25122,
+  "discovery_urls_added": 2175,
+  "discovery_findings": 25239,
   "improvements_shipped": 1173,
   "last_run": "2026-08-09T20:10:00.000Z",
   "last_run_summary": {
@@ -54,32 +54,38 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 10,
-      "urls_scanned": 6,
-      "findings": 73,
-      "focus": "WSL catalog 1360→1370 + module/1361-1370 queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 117,
+      "focus": "NodeGoat redos/research + WrongSecrets MCP + BrokenCrystals /chat + HF pwnshop deploy + WSL 1347-1349 queue drain",
+      "improvements_shipped_this_run": 0,
+      "note": "Merged with concurrent WSL 1361-1370 CATALOG_MAX extension on remote"
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1361: 7→5 findings — placeholder-module-route-live-oracle restored (CATALOG_MAX 1360→1370)",
-      "web-security-learning-labs.vercel.app/module/1366-1370: 5 findings each with placeholder oracle",
-      "secresearchlab.web.app/labs/cors-lab: validates 10 findings with sec-research-lab-cors-lab-route-live-oracle",
-      "secresearchlab.web.app/labs/host-header: validates 11 findings with password-reset + cache-poisoning sub-oracles"
+      "brokencrystals.com/chat: 72 findings — full BrokenCrystals oracle hub (LLM chat + mass-assignment + LFI + MCP tools)",
+      "wrongsecrets.herokuapp.com/mcp: 9 findings — client-side wrongsecrets challenge evidence; no MCP execute_command live oracle",
+      "nodegoat-websec.herokuapp.com/tutorial/redos: 8 findings — server-side-eval evidence; redos-route oracle absent",
+      "nodegoat-websec.herokuapp.com/research: 8 findings — SSRF tutorial markers; research-route oracle absent on session-gated Heroku",
+      "huggingface.co/spaces/ctfsec/pwnshop: 5 findings — HF Spaces shell only (no pwnshop app vulns reachable)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL module/1371+ may need future CATALOG_MAX extension as CSR adds shells"
+      "wrongsecrets.herokuapp.com/mcp: route-specific MCP execute_command env-var leak oracle still absent",
+      "nodegoat-websec.herokuapp.com/tutorial/redos: ReDoS route-specific live oracle still absent",
+      "huggingface.co/spaces/ctfsec/pwnshop: HF Spaces wrapper — pwnshop.ctfsecurity.com routes needed for PWN oracles",
+      "Concurrent run extended WSL CATALOG_MAX to 1370 (modules 1361-1370)"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
-    "web-security-learning-labs.vercel.app/module/1370": 5,
-    "web-security-learning-labs.vercel.app/module/1369": 5,
-    "web-security-learning-labs.vercel.app/module/1368": 5,
-    "web-security-learning-labs.vercel.app/module/1367": 5,
-    "web-security-learning-labs.vercel.app/module/1366": 5,
-    "web-security-learning-labs.vercel.app/module/1361": 5
+    "brokencrystals.com/chat": 72,
+    "wrongsecrets.herokuapp.com/mcp": 9,
+    "nodegoat-websec.herokuapp.com/tutorial/redos": 8,
+    "nodegoat-websec.herokuapp.com/research": 8,
+    "huggingface.co/spaces/ctfsec/pwnshop": 5,
+    "web-security-learning-labs.vercel.app/module/1349": 5,
+    "web-security-learning-labs.vercel.app/module/1348": 5
   }
 }
