@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T22:10:00.000Z",
+  "updated_at": "2026-08-09T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3077,
-  "total_findings": 31926,
+  "total_sites_scanned": 3086,
+  "total_findings": 32195,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2185,
   "discovery_findings": 25505,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-09T22:10:00.000Z",
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-09T23:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
@@ -54,39 +54,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 215,
-      "focus": "Queued discovery drain — pwnshop storefront SSTI route + wrongsecrets challenge-60 MCP route + secure-bank messages XSS route; fauxbank /api/register rejected (404)",
+      "findings": 221,
+      "focus": "WSL catalog 1371-1375 extension + queue drain (pwnshop storefront, brokencrystals MCP, wrongsecrets challenge-60, escape track-order)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/seller/storefront: 43→45 findings — pwnshop-seller-storefront-ssti-route-live-oracle shipped",
-      "wrongsecrets.herokuapp.com/challenge/60: 13→14 findings — wrongsecrets-challenge-60-mcp-route-live-oracle shipped",
-      "secure-bank-bay.vercel.app/messages: 8→9 findings — secure-bank-bay-stored-xss-messages-route-live-oracle shipped",
-      "pentest-fauxbank.vercel.app/api/register: rejected — POST /api/register returns 404 on current Vercel deploy",
-      "brokencrystals.com/api/mcp/tools: 78 findings — MCP tool enumeration hub (oracles already fire)",
-      "juice-shop.demo.escape.tech/rest/track-order/1: 49 findings — track-order IDOR oracles already fire"
+      "web-security-learning-labs.vercel.app/module/1371-1373: 8 findings each — web-security-learning-labs-placeholder-module-1371-1375 shipped (CATALOG_MAX 1375)",
+      "brokencrystals.com/api/mcp/tools: 77 findings — MCP tool enumeration hub (oracles already fire)",
+      "juice-shop.demo.escape.tech/rest/track-order/1: 49 findings — track-order IDOR oracles already fire",
+      "pwnshop.ctfsecurity.com/seller/storefront: 43 findings — SSTI route oracle already fires",
+      "wrongsecrets.herokuapp.com/challenge/60: 14 findings — MCP route oracle already fires",
+      "pentest-fauxbank.vercel.app/api/register: 14 findings — mass-assignment oracle rejected (404 on /api/register)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pentest-fauxbank.vercel.app/api/register: rejected — registration endpoint absent on deployed Vercel instance",
-      "web-security-learning-labs.vercel.app/module/1374-1375: queued — catalog extension pending next drain",
+      "web-security-learning-labs.vercel.app/module/1374-1375: queued for next drain (1371-1373 validated at 8 findings)",
       "secresearchlab.web.app/labs/* — route-specific live oracles for xxe/ssrf/sql/xss/jwt/host-header/prototype-pollution/idor/command-injection still pending",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
-    "brokencrystals.com/api/mcp/tools": 78,
+    "brokencrystals.com/api/mcp/tools": 77,
     "juice-shop.demo.escape.tech/rest/track-order/1": 49,
-    "pwnshop.ctfsecurity.com/seller/storefront": 45,
+    "pwnshop.ctfsecurity.com/seller/storefront": 43,
     "wrongsecrets.herokuapp.com/challenge/60": 14,
-    "secure-bank-bay.vercel.app/messages": 9,
-    "web-security-learning-labs.vercel.app/module/1371": 7,
-    "web-security-learning-labs.vercel.app/module/1372": 7,
-    "web-security-learning-labs.vercel.app/module/1373": 7
+    "web-security-learning-labs.vercel.app/module/1371": 8,
+    "web-security-learning-labs.vercel.app/module/1372": 8,
+    "web-security-learning-labs.vercel.app/module/1373": 8
   }
 }
