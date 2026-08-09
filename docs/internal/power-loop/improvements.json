@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1301-1350",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1300→1350; isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended; web-security-learning-labs.vercel.app/module/1301 findings 4→5 (+placeholder-module-route-live-oracle via checkpoint fallback); module/1350 +placeholder oracle; benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-placeholder-ssti-priority-regex-1301-1350",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner placeholder priority regex tail 300→3[0-4]d|350 and SSTI priority 1300→13[0-4]d|1350 (previously matched only module 1300, not 1301-1349); module/1301 no ssti-module-route-live-oracle FP; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1301-1350",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue.json prepended modules 1301-1350 for drain; extractWebSecurityLearningLabsSeeds + webSecurityLearningModulePrioritySeeds use CATALOG_MAX=1350; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1251-1280",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1250→1280 (exported constant); isWebSecurityLearningPlaceholderModuleId + SSTI shell map + runner seeds/priority regex extended; web-security-learning-labs.vercel.app/module/1251 findings 7→5 (+placeholder-module-route-live-oracle, -SSTI FP); module/1280 +placeholder oracle; benchmark juice-shop-staging 47 findings 6/6 maintained"

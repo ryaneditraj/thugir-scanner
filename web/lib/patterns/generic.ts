@@ -36463,7 +36463,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1300 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1300) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated; curated URL-map fallback).",
+      "When scanning /module/1011–1350 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1350) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated; curated URL-map fallback).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
@@ -36489,7 +36489,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Web Security Learning Labs curated module route live oracle",
     description:
-      "When scanning curated modules 1011–1036 (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, Clickjacking, Race Condition, NoSQL, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header) on web-security-learning-labs.vercel.app, confirm the named training topic from the lab catalog — route-specific live oracle (SSTI modules 1022/1024 and 1125–1300 use the dedicated SSTI oracle).",
+      "When scanning curated modules 1011–1036 (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, Clickjacking, Race Condition, NoSQL, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header) on web-security-learning-labs.vercel.app, confirm the named training topic from the lab catalog — route-specific live oracle (SSTI modules 1022/1024 and 1125–1350 use the dedicated SSTI oracle).",
     impactOneline:
       "Route-specific confirmation of named vulnerability training modules enables targeted scanner calibration for WSL labs.",
     detectorKind: "rule_ref",
@@ -36515,7 +36515,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Web Security Learning Labs SSTI module route live oracle",
     description:
-      "When scanning SSTI modules (1022, 1024) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (CSR placeholder shells 1037–1300 use the dedicated placeholder-module oracle).",
+      "When scanning SSTI modules (1022, 1024) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (CSR placeholder shells 1037–1350 use the dedicated placeholder-module oracle).",
     impactOneline:
       "Route-specific SSTI confirmation on WSL training modules enables targeted scanner calibration for template-injection labs.",
     detectorKind: "rule_ref",
@@ -36541,7 +36541,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs placeholder module route live oracle",
     description:
-      "When scanning unreleased CSR placeholder catalog shells (modules 1037–1300) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell — route-specific catalog placeholder oracle (replaces misleading SSTI classification on empty lab stubs).",
+      "When scanning unreleased CSR placeholder catalog shells (modules 1037–1350) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell — route-specific catalog placeholder oracle (replaces misleading SSTI classification on empty lab stubs).",
     impactOneline:
       "Route-specific identification of unreleased WSL catalog placeholder modules prevents false-critical SSTI findings on empty Next.js shells.",
     detectorKind: "rule_ref",
