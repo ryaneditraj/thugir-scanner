@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1361-1370",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1360→1370; isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended; web-security-learning-labs.vercel.app/module/1361 findings 7→5 (+placeholder-module-route-live-oracle via checkpoint fallback); module/1370 5 findings with placeholder oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-placeholder-ssti-priority-regex-1361-1370",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner placeholder priority regex 3[0-5]d|360→3[0-6]d|370 and SSTI priority 13[0-5]d|1360→13[0-6]d|1370; modules 1361-1370 get -3 priority for placeholder/SSTI oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1361-1370",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue.json prepended modules 1361-1370 for drain; extractWebSecurityLearningLabsSeeds + webSecurityLearningModulePrioritySeeds use CATALOG_MAX=1370; module/1366-1370 queue drain 5 findings each with placeholder oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1351-1360",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1350→1360; isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended; web-security-learning-labs.vercel.app/module/1351 findings 4→5 (+placeholder-module-route-live-oracle); module/1360 8 findings with placeholder oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
@@ -21367,6 +21385,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1361-1370",
+      "shipped_at": "2026-08-09T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-placeholder-ssti-priority-regex-1361-1370",
+      "shipped_at": "2026-08-09T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1361-1370",
+      "shipped_at": "2026-08-09T20:10:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-seeds-1180-1189",
