@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T05:11:00.000Z",
+  "updated_at": "2026-08-09T06:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2835,
-  "total_findings": 28035,
+  "total_sites_scanned": 2836,
+  "total_findings": 28083,
   "critical_findings": 53,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2009,
-  "discovery_findings": 23392,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-09T05:11:00.000Z",
+  "discovery_findings": 23440,
+  "improvements_shipped": 1179,
+  "last_run": "2026-08-09T06:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,48 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (50 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (48 findings on staging fallback); primary Heroku 503"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 77,
-      "focus": "Sec Research Lab xxe/command-injection/jwt-lab oracles + WSL module drain (1179-1082) + host-header/vaultapp/vulnshop queue additions",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 28,
+      "focus": "Sec Research Lab prototype-pollution + IDOR + host-header route oracles (queued 05 UTC drain)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
-      "secresearchlab.web.app/labs/xxe-lab: 9 findings with sec-research-lab-xxe-lab-route-live-oracle",
-      "secresearchlab.web.app/labs/command-injection: 9 findings with command-injection-route-live-oracle",
-      "secresearchlab.web.app/labs/jwt-lab: 10 findings with jwt-lab-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1179: 8 findings (WSL module oracle)",
-      "web-security-learning-labs.vercel.app/module/1168: 8 findings",
-      "web-security-learning-labs.vercel.app/module/1169: 8 findings",
-      "web-security-learning-labs.vercel.app/module/1163: 8 findings",
-      "web-security-learning-labs.vercel.app/module/1164: 5 findings",
-      "web-security-learning-labs.vercel.app/module/1086: 4 findings",
-      "web-security-learning-labs.vercel.app/module/1081: 4 findings",
-      "web-security-learning-labs.vercel.app/module/1082: 4 findings"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "secresearchlab.web.app/labs/prototype-pollution: 8→9 findings — sec-research-lab-prototype-pollution-route-live-oracle shipped",
+      "secresearchlab.web.app/labs/idor: 9→10 findings — sec-research-lab-idor-route-live-oracle shipped",
+      "secresearchlab.web.app/labs/host-header: 8→9 findings — sec-research-lab-host-header-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "secresearchlab host-header, vaultapp documents, vulnshop comments/profile, vaultapp transactions query IDOR — queued this run, pending next queue drain",
-      "secresearchlab.web.app/labs/prototype-pollution, idor: queued — route oracles not yet shipped",
+      "vaultapp documents IDOR, vulnshop comments/profile, vaultapp transactions query IDOR — queued 05 UTC, pending next drain",
       "vulnforge-academy hard levels (16-20) return Vercel 403 — cannot queue until checkpoint lifts",
       "juice-shop.herokuapp.com primary URL intermittently 503 — staging fallback available"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop-staging.herokuapp.com": 48,
+    "secresearchlab.web.app/labs/idor": 10,
+    "secresearchlab.web.app/labs/prototype-pollution": 9,
+    "secresearchlab.web.app/labs/host-header": 9,
     "secresearchlab.web.app/labs/jwt-lab": 10,
     "secresearchlab.web.app/labs/xxe-lab": 9,
     "secresearchlab.web.app/labs/command-injection": 9,
-    "web-security-learning-labs.vercel.app/module/1179": 8,
-    "web-security-learning-labs.vercel.app/module/1168": 8,
-    "web-security-learning-labs.vercel.app/module/1169": 8,
-    "web-security-learning-labs.vercel.app/module/1163": 8,
     "pwnshop.ctfsecurity.com/debug/info": 44,
     "vulnshop.vercel.app/api/v1/orders": 8
   }
