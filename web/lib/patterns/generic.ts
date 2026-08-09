@@ -34845,6 +34845,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sec-research-lab-xxe-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Sec Research Lab XXE lab route live oracle",
+    description:
+      "Route scans on /labs/xxe-lab confirm local file disclosure, SSRF-via-XXE, and billion-laughs DoS training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public XXE training labs document external entity expansion and server-side file read scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabXxeLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive XXE modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser XXE modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style XXE training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Sec Research Lab command injection route live oracle",
+    description:
+      "Route scans on /labs/command-injection confirm command chaining, filter bypass, and blind CMDI training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public command injection training labs document OS command chaining and remote code execution scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive command injection modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser command injection modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style command injection training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-jwt-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Sec Research Lab JWT lab route live oracle",
+    description:
+      "Route scans on /labs/jwt-lab confirm token decoding, alg:none, weak-secret, and kid-injection training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public JWT training labs document token forgery, algorithm confusion, and weak signing key scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabJwtLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive JWT modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser JWT modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style JWT training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-overthewire-bandit-evidence",
     platform: "generic",
     category: "Broken authentication",
