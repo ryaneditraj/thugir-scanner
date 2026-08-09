@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T01:05:30.000Z",
+  "updated_at": "2026-08-09T01:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,23 +16,23 @@
     }
   },
   "total_sites_scanned": 2794,
-  "total_findings": 27580,
+  "total_findings": 27605,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1991,
-  "discovery_findings": 23132,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-09T01:05:30.000Z",
+  "discovery_findings": 23157,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-09T01:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 514,
+      "probes_run": 489,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,39 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 (50 findings); no benchmark category misses; secret-resend slug still absent"
+      "note": "Primary Heroku 503; staging fallback 6/6 (49 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 47,
-      "focus": "WSL module catalog extension 1190-1194 + drain 1185-1187",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 72,
+      "focus": "bypass403 /secure + /internal checkpoint resilience; WSL module catalog 1190-1194 drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark category misses",
-      "web-security-learning-labs.vercel.app/module/1190-1193: 7 findings each — module-route + XSS sinks but no ssti-module-route live oracle",
-      "web-security-learning-labs.vercel.app/module/1194: 4 findings — thinnest shell (no dangerous-html-sinks)",
-      "web-security-learning-labs.vercel.app/module/1185-1187: 5 findings each with web-security-learning-labs-ssti-module-route-live-oracle (queue drain)",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark category misses",
+      "bypass403.vercel.app/secure: 2→9 findings — bypass403-checkpoint-route-health-retry shipped (secure-bearer live+route oracles)",
+      "bypass403.vercel.app/internal: 2→8 findings — X-Forwarded-For header-pollution oracles restored after checkpoint retry",
+      "web-security-learning-labs.vercel.app/module/1190-1193: 7 findings each — module-route + XSS sinks",
+      "web-security-learning-labs.vercel.app/module/1189: 8 findings with ssti-module-route-live-oracle confirmed",
       "teacher_delta: 0 runs — nuclei/engine unavailable in cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs; pressKit+nft corpus wired)",
       "WSL modules 1190-1193: catalog shells with XSS sinks but missing ssti-module-route reflexion proof",
       "WSL module 1194: thinnest shell — only 4 findings, no SSTI or XSS sink oracles",
-      "WSL modules 1188-1189 still pending at queue head for next drain"
+      "bypass403.vercel.app: Vercel checkpoint still intermittently blocks POST /start — retry logic mitigates but not 100%"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop-staging.herokuapp.com": 49,
+    "bypass403.vercel.app/secure": 9,
+    "bypass403.vercel.app/internal": 8,
+    "bypass403.vercel.app/api/admin": 8,
     "web-security-learning-labs.vercel.app/module/1190": 7,
-    "web-security-learning-labs.vercel.app/module/1191": 7,
-    "web-security-learning-labs.vercel.app/module/1192": 7,
-    "web-security-learning-labs.vercel.app/module/1193": 7,
-    "web-security-learning-labs.vercel.app/module/1194": 4,
-    "web-security-learning-labs.vercel.app/module/1185": 5,
-    "web-security-learning-labs.vercel.app/module/1186": 5,
-    "web-security-learning-labs.vercel.app/module/1187": 5
+    "web-security-learning-labs.vercel.app/module/1189": 8,
+    "web-security-learning-labs.vercel.app/module/1180": 8
   }
 }
