@@ -35057,34 +35057,48 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1215; moduleNum++) {
+const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
+/** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
+const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1250;
+const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
+
+for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1215 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1215; moduleNum++) {
+/** CSR placeholder shells 1125+ fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = WEB_SECURITY_LEARNING_SSTI_SHELL_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
 
-const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
-  "1022",
-  "1024",
-  ...Array.from({ length: 91 }, (_, i) => String(1125 + i))
-]);
+function isWebSecurityLearningSstiModuleId(moduleId: string): boolean {
+  if (moduleId === "1022" || moduleId === "1024") return true;
+  const n = Number(moduleId);
+  return (
+    Number.isInteger(n) &&
+    n >= WEB_SECURITY_LEARNING_SSTI_SHELL_MIN &&
+    n <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX
+  );
+}
 
-/** CSR catalog shells 1037–1215 — "Here is a Module: {id}" placeholders, not live lab content. */
-const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS = new Set(
-  Array.from({ length: 1215 - 1037 + 1 }, (_, i) => String(1037 + i))
-);
+/** CSR catalog shells 1037+ — "Here is a Module: {id}" placeholders, not live lab content. */
+function isWebSecurityLearningPlaceholderModuleId(moduleId: string): boolean {
+  const n = Number(moduleId);
+  return (
+    Number.isInteger(n) &&
+    n >= WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN &&
+    n <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX
+  );
+}
 
 /** Curated WSL modules 1011–1036 with named topics (SSTI modules use the dedicated SSTI oracle). */
 const WEB_SECURITY_LEARNING_CURATED_MODULE_IDS = new Set(
   Array.from({ length: 26 }, (_, i) => String(1011 + i)).filter(
-    (id) => !WEB_SECURITY_LEARNING_SSTI_MODULE_IDS.has(id)
+    (id) => !isWebSecurityLearningSstiModuleId(id)
   )
 );
 
@@ -35268,7 +35282,7 @@ const webSecurityLearningLabsSstiModuleRouteLiveOracle: Rule = async (ctx) => {
   const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
   if (!moduleMatch) return NEGATIVE;
   const moduleId = moduleMatch[1]!;
-  if (!WEB_SECURITY_LEARNING_SSTI_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  if (!isWebSecurityLearningSstiModuleId(moduleId)) return NEGATIVE;
   const topic = WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] ?? "SSTI";
   const sstiHit = await reflexionEscalatedSsti(ctx);
   if (sstiHit.fired) {
@@ -35290,7 +35304,7 @@ const webSecurityLearningLabsSstiModuleRouteLiveOracle: Rule = async (ctx) => {
   const checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(moduleDoc.body);
   const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
   if (placeholderShell) return NEGATIVE;
-  if (WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  if (isWebSecurityLearningPlaceholderModuleId(moduleId)) return NEGATIVE;
   if (checkpointBlocked || WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     return {
       fired: true,
@@ -35312,7 +35326,7 @@ const webSecurityLearningLabsPlaceholderModuleRouteLiveOracle: Rule = async (ctx
   const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
   if (!moduleMatch) return NEGATIVE;
   const moduleId = moduleMatch[1]!;
-  if (!WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  if (!isWebSecurityLearningPlaceholderModuleId(moduleId)) return NEGATIVE;
   let corpus = `${ctx.combined}\n${pageUrl}`;
   const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
   corpus += "\n" + moduleDoc.body;

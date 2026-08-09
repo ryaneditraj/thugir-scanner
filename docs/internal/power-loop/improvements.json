@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1216-1250",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended 1215→1250 (WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX); web-security-learning-labs.vercel.app/module/1216 findings 4→5 (+placeholder-module-route-live-oracle); module/1219 4→5; benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1216-1250",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + webSecurityLearningModulePrioritySeeds crawl/priority loops extended 1215→1250; queue modules 1216-1219 get placeholder oracle on drain; benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "secret-resend-social-feed-corpus",
+      "status": "rejected",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: Bluesky/Mastodon/Reddit/Twitter/Facebook/pressKit/nft feeds + main.js scanned — no canonical re_<8>_<24> Resend key in current Juice Shop social corpus; sensitive_data category covered via juice-shop-leaked-api-key + security-question-disclosure; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "wsl-placeholder-checkpoint-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsPlaceholderModuleRouteLiveOracle fires on curated PLACEHOLDER_MODULE_IDS when Vercel checkpoint blocks shell fetch; web-security-learning-labs.vercel.app/module/1210 findings 7→5 (+placeholder-module-route-live-oracle, no SSTI FP); benchmark juice-shop 50 findings 6/6 maintained"
