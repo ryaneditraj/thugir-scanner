@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-placeholder-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsPlaceholderModuleRouteLiveOracle fires on curated PLACEHOLDER_MODULE_IDS when Vercel checkpoint blocks shell fetch; web-security-learning-labs.vercel.app/module/1210 findings 7→5 (+placeholder-module-route-live-oracle, no SSTI FP); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-ssti-placeholder-checkpoint-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webSecurityLearningLabsSstiModuleRouteLiveOracle returns NEGATIVE for PLACEHOLDER_MODULE_IDS on curated-map fallback without reflexion SSTI; module/1210 no ssti-module-route-live-oracle mislabel; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-command-injection-idor-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue.json prepends /labs/command-injection + /labs/idor for drain; secresearchlab.web.app/labs/command-injection findings 9 (+command-injection-route-live-oracle); /labs/idor findings 10 (+idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1208-1215",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS + SSTI topic map extended 1207→1215; web-security-learning-labs.vercel.app/module/1208 findings 4→5 (+placeholder-module-route-live-oracle); benchmark juice-shop 31 findings 6/6 maintained"
