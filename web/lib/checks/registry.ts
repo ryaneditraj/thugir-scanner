@@ -35055,15 +35055,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1194; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1199; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1194 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1194; moduleNum++) {
+/** CSR placeholder shells 1125–1199 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1199; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35071,7 +35071,7 @@ for (let moduleNum = 1125; moduleNum <= 1194; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 70 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 75 }, (_, i) => String(1125 + i))
 ]);
 
 /** Topic aliases when catalog chunks use alternate labels (e.g. CSRF vs Cross-Site Request Forgery). */
@@ -67021,6 +67021,81 @@ const clientSideSecResearchLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isSecResearchLabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /secresearchlab\.web\.app/i.test(corpus);
+}
+
+async function secResearchLabRouteCorpus(ctx: RuleContext, pageUrl: string): Promise<string> {
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const doc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  corpus += "\n" + doc.body;
+  const chunkRe = /\/_next\/static\/chunks\/app\/\(platform\)\/labs\/[a-z0-9_-]+\/page-[a-f0-9]+\.js/gi;
+  const chunks = [...new Set(doc.body.match(chunkRe) ?? [])].slice(0, 2);
+  for (const chunkPath of chunks) {
+    const chunkDoc = await fetchDoc(new URL(chunkPath, ctx.origin).toString(), {
+      maxBytes: 262144,
+      timeoutMs: 15000
+    });
+    corpus += "\n" + chunkDoc.body;
+  }
+  return corpus;
+}
+
+const secResearchLabSqlInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/sql-injection\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/SQL Injection Playground/i.test(corpus)) return NEGATIVE;
+  if (!/Authentication Bypass|UNION-Based Data Extraction|Blind Boolean Injection/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "SQL Injection Playground",
+      note: "secresearchlab.web.app/labs/sql-injection exposes auth-bypass, UNION, and blind-boolean SQLi training levels — route-specific lab oracle"
+    }
+  };
+};
+
+const secResearchLabXssPlaygroundRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/xss-playground\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/XSS Playground/i.test(corpus)) return NEGATIVE;
+  if (!/Cross-Site Scripting|dangerous HTML sinks|innerHTML/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "XSS Playground",
+      note: "secresearchlab.web.app/labs/xss-playground exposes reflected/stored/DOM XSS training levels — route-specific lab oracle"
+    }
+  };
+};
+
+const secResearchLabSsrfLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/ssrf-lab\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/SSRF Playground|Server-Side Request Forgery/i.test(corpus)) return NEGATIVE;
+  if (!/Basic SSRF|metadata|internal service/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "SSRF Playground",
+      note: "secresearchlab.web.app/labs/ssrf-lab exposes basic SSRF and cloud-metadata training levels — route-specific lab oracle"
+    }
+  };
+};
+
 // --- vAPI OWASP API Top 10 self-hostable lab (vapi.apisec.ai / roottusk/vapi) --------
 const CLIENT_VAPI_RES: { label: string; re: RegExp }[] = [
   {
@@ -71115,6 +71190,9 @@ export const RULES: Record<string, Rule> = {
   clientSideGitagentSecurebotEvidence,
   clientSideAirtAcademyEvidence,
   clientSideSecResearchLabEvidence,
+  secResearchLabSqlInjectionRouteLiveOracle,
+  secResearchLabXssPlaygroundRouteLiveOracle,
+  secResearchLabSsrfLabRouteLiveOracle,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
   clientSideBrokencrystalsDomXssEvidence,

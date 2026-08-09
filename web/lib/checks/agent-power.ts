@@ -31,11 +31,18 @@ type PowerRule = (ctx: PowerCtx) => Promise<PowerResult>;
 
 const BYPASS403_HOST_RE = /bypass403\.vercel\.app/i;
 const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
+const SECRESEARCHLAB_HOST_RE = /secresearchlab\.web\.app/i;
 
 /** Route scans on WSL /module/{id} shells — generic reflexion probes hit homepage, not the lab route. */
 function wslModuleRouteReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   return WSL_HOST_RE.test(pageUrl) && /\/module\/\d{4}\b/i.test(pageUrl);
+}
+
+/** Firebase/Next.js lab shells embed coincidental '49' in chunk IDs — suppress reflexion SSTI FPs. */
+function secResearchLabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return SECRESEARCHLAB_HOST_RE.test(pageUrl);
 }
 
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
@@ -136,6 +143,7 @@ export const thugirDirEnum: PowerRule = async (ctx) => {
 export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
   if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -174,6 +182,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
 export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
   if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
   const sqlErrors =
@@ -211,6 +220,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
 export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
   if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
