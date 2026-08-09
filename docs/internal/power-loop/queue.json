@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T03:05:23.785Z",
+  "updated_at": "2026-08-09T04:04:00.000Z",
   "discovery_urls": [
     {
       "url": "https://secresearchlab.web.app/labs/sql-injection/",
@@ -17209,7 +17209,32 @@
       "url": "https://secresearchlab.web.app/labs/jwt-lab/",
       "source": "Sec Research Lab — JWT exploitation training module (03 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://donk.unykorn.org/",
+      "source": "FTHTrading/donk-ai — public LLM chatbot demo with intentional auth/SQLi surfaces (donk.unykorn.org README, 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://donk.unykorn.org/api/login",
+      "source": "FTHTrading/donk-ai — POST /api/login SQLi + hardcoded-secret oracle (GitHub README auth_service.js, 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1200",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1200 (public Vercel demo, 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1201",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1201 (public Vercel demo, 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1202",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1202 (public Vercel demo, 04 UTC discovery)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 25
+  "discovery_urls_added": 30
 }
