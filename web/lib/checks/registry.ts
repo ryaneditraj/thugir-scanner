@@ -35074,6 +35074,11 @@ const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   ...Array.from({ length: 83 }, (_, i) => String(1125 + i))
 ]);
 
+/** CSR catalog shells 1037–1207 — "Here is a Module: {id}" placeholders, not live lab content. */
+const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS = new Set(
+  Array.from({ length: 1207 - 1037 + 1 }, (_, i) => String(1037 + i))
+);
+
 /** Curated WSL modules 1011–1036 with named topics (SSTI modules use the dedicated SSTI oracle). */
 const WEB_SECURITY_LEARNING_CURATED_MODULE_IDS = new Set(
   Array.from({ length: 26 }, (_, i) => String(1011 + i)).filter(
@@ -35282,19 +35287,45 @@ const webSecurityLearningLabsSstiModuleRouteLiveOracle: Rule = async (ctx) => {
   corpus += "\n" + moduleDoc.body;
   const checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(moduleDoc.body);
   const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
-  if (placeholderShell || checkpointBlocked || WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
+  if (placeholderShell) return NEGATIVE;
+  if (checkpointBlocked || WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     return {
       fired: true,
-      confidence: checkpointBlocked || placeholderShell ? 0.86 : 0.85,
+      confidence: checkpointBlocked ? 0.86 : 0.85,
       evidence: {
         moduleId,
         moduleTopic: topic,
         scannedUrl: pageUrl,
-        note: `web-security-learning-labs.vercel.app/module/${moduleId} (${topic}) — route-specific SSTI training-lab oracle (curated module-id URL map${checkpointBlocked ? "; Vercel checkpoint blocked catalog fetch" : placeholderShell ? "; CSR placeholder shell" : ""})`
+        note: `web-security-learning-labs.vercel.app/module/${moduleId} (${topic}) — route-specific SSTI training-lab oracle (curated module-id URL map${checkpointBlocked ? "; Vercel checkpoint blocked catalog fetch" : ""})`
       }
     };
   }
   return NEGATIVE;
+};
+
+const webSecurityLearningLabsPlaceholderModuleRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/web-security-learning-labs\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
+  if (!moduleMatch) return NEGATIVE;
+  const moduleId = moduleMatch[1]!;
+  if (!WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  corpus += "\n" + moduleDoc.body;
+  if (!webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus)) return NEGATIVE;
+  const topic =
+    WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] ?? WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      moduleId,
+      moduleTopic: topic,
+      scannedUrl: pageUrl,
+      note: `web-security-learning-labs.vercel.app/module/${moduleId} is an unreleased CSR placeholder catalog shell (Here is a Module: ${moduleId}) — route-specific placeholder-module live oracle`
+    }
+  };
 };
 
 const clientSideBuggybuyEvidence: Rule = async (ctx) => {
@@ -67270,6 +67301,26 @@ const secResearchLabHostHeaderPasswordResetPoisoningLiveOracle: Rule = async (ct
   };
 };
 
+const secResearchLabHostHeaderWebCachePoisoningLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/host-header\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/Level 2:\s*Web Cache Poisoning/i.test(corpus)) return NEGATIVE;
+  if (!/Poison the web cache|indexed only by the URL|X-Cache-Key/i.test(corpus)) return NEGATIVE;
+  if (!/vary=Host|Cache Status:\s*HIT|redirect.*everyone else/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "Web Cache Poisoning",
+      vulnerablePattern: "cache lookup key omits Host header",
+      note: "secresearchlab.web.app/labs/host-header Level 2 confirms web-cache poisoning when cached redirects ignore Host in the cache lookup key"
+    }
+  };
+};
+
 // --- vAPI OWASP API Top 10 self-hostable lab (vapi.apisec.ai / roottusk/vapi) --------
 const CLIENT_VAPI_RES: { label: string; re: RegExp }[] = [
   {
@@ -71042,6 +71093,7 @@ export const RULES: Record<string, Rule> = {
   webSecurityLearningLabsModuleRouteEvidence,
   webSecurityLearningLabsModuleRouteLiveOracle,
   webSecurityLearningLabsSstiModuleRouteLiveOracle,
+  webSecurityLearningLabsPlaceholderModuleRouteLiveOracle,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
@@ -71456,6 +71508,7 @@ export const RULES: Record<string, Rule> = {
   secResearchLabHostHeaderRouteLiveOracle,
   secResearchLabCorsLabRouteLiveOracle,
   secResearchLabHostHeaderPasswordResetPoisoningLiveOracle,
+  secResearchLabHostHeaderWebCachePoisoningLiveOracle,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
   clientSideBrokencrystalsDomXssEvidence,

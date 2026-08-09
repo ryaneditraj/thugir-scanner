@@ -19215,7 +19215,7 @@
       "scanned_at": "2026-08-09T09:05:55.906Z"
     },
     {
-      "run_id": "2026-08-09T10:03:26.263Z",
+      "run_id": "2026-08-09T10:07:44.945Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -19585,7 +19585,7 @@
       "pages_crawled": 6,
       "probes_run": 584,
       "status": "ok",
-      "scanned_at": "2026-08-09T10:03:26.263Z"
+      "scanned_at": "2026-08-09T10:07:44.945Z"
     },
     {
       "run_id": "2026-08-09T10:05:04.948Z",

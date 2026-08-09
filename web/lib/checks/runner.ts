@@ -2024,6 +2024,7 @@ const DEEP_RULES = new Set<string>([
   "webSecurityLearningLabsModuleRouteEvidence",
   "webSecurityLearningLabsModuleRouteLiveOracle",
   "webSecurityLearningLabsSstiModuleRouteLiveOracle",
+  "webSecurityLearningLabsPlaceholderModuleRouteLiveOracle",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
@@ -2571,6 +2572,7 @@ const DEEP_RULES = new Set<string>([
   "secResearchLabHostHeaderRouteLiveOracle",
   "secResearchLabCorsLabRouteLiveOracle",
   "secResearchLabHostHeaderPasswordResetPoisoningLiveOracle",
+  "secResearchLabHostHeaderWebCachePoisoningLiveOracle",
   "clientSideBrokencrystalsEvidence",
   "clientSideBrokencrystalsPrototypePollutionEvidence",
   "clientSideBrokencrystalsDomXssEvidence",
@@ -10186,6 +10188,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|20[0-7]))\b/i.test(targetInput) &&
+        p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
+      )
+        return -3;
+      if (
+        /web-security-learning-labs\.vercel\.app/i.test(origin) &&
         /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9]|117[0-9]|118[0-9]|119[0-9]|120[0-7])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
@@ -10200,6 +10208,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/idor\/?$/i.test(targetInput) && p.slug === "sec-research-lab-idor-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-password-reset-poisoning-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-web-cache-poisoning-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/cors-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-cors-lab-route-live-oracle") return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (

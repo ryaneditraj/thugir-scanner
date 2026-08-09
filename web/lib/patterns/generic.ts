@@ -35053,6 +35053,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sec-research-lab-host-header-web-cache-poisoning-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Sec Research Lab host header web-cache poisoning live oracle",
+    description:
+      "Route scans on /labs/host-header confirm Level 2 web-cache poisoning when cached redirects omit Host from the cache lookup key (X-Cache-Key / vary=Host training scenario).",
+    impactOneline:
+      "Host-header cache poisoning training documents how poisoned cached redirects can hijack traffic for all users until cache expiry.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabHostHeaderWebCachePoisoningLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — include Host in cache vary keys in production.",
+      steps: [
+        "Set Cache-Control: vary=Host on cacheable redirect responses.",
+        "Include Host in CDN cache-key normalization.",
+        "Require login before launching in-browser cache poisoning modules."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style web-cache poisoning training. Show how to include Host in cache lookup keys and auth-gate browser labs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-overthewire-bandit-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -36463,7 +36489,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Web Security Learning Labs SSTI module route live oracle",
     description:
-      "When scanning SSTI modules (1022, 1024, 1125–1207) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (curated module-id URL-map fallback for CSR placeholder shells).",
+      "When scanning SSTI modules (1022, 1024) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (CSR placeholder shells 1037–1207 use the dedicated placeholder-module oracle).",
     impactOneline:
       "Route-specific SSTI confirmation on WSL training modules enables targeted scanner calibration for template-injection labs.",
     detectorKind: "rule_ref",
@@ -36479,6 +36505,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WSL /module/{id} SSTI route scan confirms template injection via reflexion probe. Show sandboxed template rendering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-security-learning-labs-placeholder-module-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Web Security Learning Labs placeholder module route live oracle",
+    description:
+      "When scanning unreleased CSR placeholder catalog shells (modules 1037–1207) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell — route-specific catalog placeholder oracle (replaces misleading SSTI classification on empty lab stubs).",
+    impactOneline:
+      "Route-specific identification of unreleased WSL catalog placeholder modules prevents false-critical SSTI findings on empty Next.js shells.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsPlaceholderModuleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Placeholder catalog modules are not live labs — gate unreleased module routes.",
+      steps: [
+        "Return 404 or auth-gate unreleased /module/{id} catalog entries.",
+        "Do not expose placeholder shells on public Vercel deploys.",
+        "Ship lab content before publishing module routes."
+      ]
+    },
+    fixPrompt:
+      "Our WSL /module/{id} route is an unreleased CSR placeholder shell. Show how to hide catalog stubs until lab content ships.",
     version: 1,
     enabled: true
   },
