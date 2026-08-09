@@ -67096,6 +67096,60 @@ const secResearchLabSsrfLabRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const secResearchLabXxeLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/xxe-lab\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/XXE Playground/i.test(corpus)) return NEGATIVE;
+  if (!/Local File Disclosure|SSRF via XXE|Billion Laughs/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "XXE Playground",
+      note: "secresearchlab.web.app/labs/xxe-lab exposes local file disclosure, SSRF-via-XXE, and billion-laughs DoS training levels — route-specific lab oracle"
+    }
+  };
+};
+
+const secResearchLabCommandInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/command-injection\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/Command Injection/i.test(corpus)) return NEGATIVE;
+  if (!/Basic Command Chaining|Filter Bypass|Blind CMDI/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "Command Injection",
+      note: "secresearchlab.web.app/labs/command-injection exposes command chaining, filter bypass, and blind CMDI training levels — route-specific lab oracle"
+    }
+  };
+};
+
+const secResearchLabJwtLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/jwt-lab\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/JWT Security Analysis/i.test(corpus)) return NEGATIVE;
+  if (!/Token Anatomy|alg.*none|weak secret|kid injection/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "JWT Security Analysis",
+      note: "secresearchlab.web.app/labs/jwt-lab exposes token decoding, alg:none, weak-secret, and kid-injection training levels — route-specific lab oracle"
+    }
+  };
+};
+
 // --- vAPI OWASP API Top 10 self-hostable lab (vapi.apisec.ai / roottusk/vapi) --------
 const CLIENT_VAPI_RES: { label: string; re: RegExp }[] = [
   {
@@ -71193,6 +71247,9 @@ export const RULES: Record<string, Rule> = {
   secResearchLabSqlInjectionRouteLiveOracle,
   secResearchLabXssPlaygroundRouteLiveOracle,
   secResearchLabSsrfLabRouteLiveOracle,
+  secResearchLabXxeLabRouteLiveOracle,
+  secResearchLabCommandInjectionRouteLiveOracle,
+  secResearchLabJwtLabRouteLiveOracle,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
   clientSideBrokencrystalsDomXssEvidence,
