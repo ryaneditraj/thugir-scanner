@@ -1,6 +1,56 @@
 {
-  "updated_at": "2026-08-09T19:06:20.848Z",
+  "updated_at": "2026-08-09T20:05:20.315Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1370",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1370 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1369",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1369 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1368",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1368 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1367",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1367 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1366",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1366 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1365",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1365 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1364",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1364 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1363",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1363 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1362",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1362 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1361",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1361 (public Vercel demo, 20 UTC CATALOG_MAX 1370 extension)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1360",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1360 (public Vercel demo, 19 UTC discovery)",
