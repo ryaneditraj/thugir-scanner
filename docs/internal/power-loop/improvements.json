@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-storefront-ssti-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /seller/preview?template=<%= 7*7 %> evaluates to 49 after seller session; pwnshop.ctfsecurity.com/seller/storefront findings 43→45 (+pwnshop-seller-storefront-ssti-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-60-mcp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/60 route scan confirms POST /mcp tools/call execute_command('env') leaks WRONGSECRETS_MCP_SECRET; wrongsecrets.herokuapp.com/challenge/60 findings 13→14 (+wrongsecrets-challenge-60-mcp-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-stored-xss-messages-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /messages SPA bundle documents POST /api/comments stored XSS via innerHTML in Attack Mode; secure-bank-bay.vercel.app/messages findings 8→9 (+secure-bank-bay-stored-xss-messages-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-open-registration-mass-assignment-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register and /api/auth/register return HTTP 404 on pentest-fauxbank.vercel.app — no registration endpoint on current Vercel deploy; mass-assignment oracle not portable without live API"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-mcp-execute-command-live-oracle",
       "status": "shipped",
@@ -21403,6 +21427,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-storefront-ssti-route-live-oracle",
+      "shipped_at": "2026-08-09T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-60-mcp-route-live-oracle",
+      "shipped_at": "2026-08-09T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-stored-xss-messages-route-live-oracle",
+      "shipped_at": "2026-08-09T22:10:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-mcp-execute-command-live-oracle",
