@@ -13636,6 +13636,24 @@
       "slug": "sec-research-lab-jwt-lab-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /labs/jwt-lab Token Anatomy + alg:none + Weak Secret Cracking + kid injection levels in page chunk; secresearchlab.web.app/labs/jwt-lab findings 10 with +sec-research-lab-jwt-lab-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-prototype-pollution-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/prototype-pollution Admin Escalation + Client-Side Gadgets __proto__ isAdmin levels in page chunk; secresearchlab.web.app/labs/prototype-pollution findings 8→9 with +sec-research-lab-prototype-pollution-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/idor Profile Peeking + API Order Tampering + Admin Panel Discovery levels in page chunk; secresearchlab.web.app/labs/idor findings 9→10 with +sec-research-lab-idor-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-host-header-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/host-header Password Reset Poisoning + Web Cache Poisoning levels in page chunk; secresearchlab.web.app/labs/host-header findings 8→9 with +sec-research-lab-host-header-route-live-oracle; benchmark 6/6 maintained"
     }
   ],
   "shipped": [

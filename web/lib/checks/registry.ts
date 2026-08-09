@@ -67150,6 +67150,60 @@ const secResearchLabJwtLabRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const secResearchLabPrototypePollutionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/prototype-pollution\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/Prototype Pollution/i.test(corpus)) return NEGATIVE;
+  if (!/Admin Escalation|Client-Side Gadgets|__proto__.*isAdmin/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "Prototype Pollution",
+      note: "secresearchlab.web.app/labs/prototype-pollution exposes admin-escalation and client-side gadget pollution training levels — route-specific lab oracle"
+    }
+  };
+};
+
+const secResearchLabIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/idor\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/IDOR Hunter/i.test(corpus)) return NEGATIVE;
+  if (!/Profile Peeking|API Order Tampering|Admin Panel Discovery/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "IDOR Hunter",
+      note: "secresearchlab.web.app/labs/idor exposes profile-peeking, order-tampering, and admin-panel IDOR training levels — route-specific lab oracle"
+    }
+  };
+};
+
+const secResearchLabHostHeaderRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecResearchLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/host-header\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secResearchLabRouteCorpus(ctx, pageUrl);
+  if (!/Host Header Injection/i.test(corpus)) return NEGATIVE;
+  if (!/Password Reset Poisoning|Web Cache Poisoning/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      labTopic: "Host Header Injection",
+      note: "secresearchlab.web.app/labs/host-header exposes password-reset poisoning and web-cache poisoning training levels — route-specific lab oracle"
+    }
+  };
+};
+
 // --- vAPI OWASP API Top 10 self-hostable lab (vapi.apisec.ai / roottusk/vapi) --------
 const CLIENT_VAPI_RES: { label: string; re: RegExp }[] = [
   {
@@ -71250,6 +71304,9 @@ export const RULES: Record<string, Rule> = {
   secResearchLabXxeLabRouteLiveOracle,
   secResearchLabCommandInjectionRouteLiveOracle,
   secResearchLabJwtLabRouteLiveOracle,
+  secResearchLabPrototypePollutionRouteLiveOracle,
+  secResearchLabIdorRouteLiveOracle,
+  secResearchLabHostHeaderRouteLiveOracle,
   clientSideBrokencrystalsEvidence,
   clientSideBrokencrystalsPrototypePollutionEvidence,
   clientSideBrokencrystalsDomXssEvidence,
