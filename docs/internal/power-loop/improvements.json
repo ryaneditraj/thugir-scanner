@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: secResearchLabSqlInjectionRouteLiveOracle + XssPlayground + SsrfLab route oracles fire on /labs/sql-injection /labs/xss-playground /labs/ssrf-lab; sql-injection findings 10→11 (+sec-research-lab-sql-injection-route-live-oracle, -reflexion-escalated-ssti FP); xss-playground +sec-research-lab-xss-playground-route-live-oracle; ssrf-lab +sec-research-lab-ssrf-lab-route-live-oracle; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secresearchlab.web.app",
+      "slug": "sec-research-lab-reflexion-fp-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Firebase/Next.js lab shells embed coincidental '49' in chunk IDs; secResearchLabReflexionSuppressed added to reflexionEscalatedXss/Sqli/Ssti; secresearchlab.web.app/labs/* findings no longer include reflexion-escalated-ssti false positive; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1195-1199-code-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + priority seeds + WEB_SECURITY_LEARNING_SSTI_MODULE_IDS + placeholder loop extended 1194→1199; runner SSTI priority regex 119[0-4]→119[0-9]; module/1195 findings 8 (+web-security-learning-labs-ssti-module-route-live-oracle + module-route-evidence); benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-seeds-1195-1199",
       "status": "shipped",
