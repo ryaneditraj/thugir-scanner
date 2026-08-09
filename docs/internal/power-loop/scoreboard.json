@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T04:05:16.871Z",
+  "updated_at": "2026-08-09T04:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2820,
-  "total_findings": 27856,
-  "critical_findings": 54,
+  "total_sites_scanned": 2824,
+  "total_findings": 27958,
+  "critical_findings": 53,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2009,
-  "discovery_findings": 23289,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-09T04:05:16.871Z",
+  "discovery_urls_added": 2004,
+  "discovery_findings": 23335,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-09T04:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 512,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings); primary Heroku healthy this hour"
+      "note": "Stable 6/6 recall (50 findings); reflexion-escalated-ssti FP removed via isolated-49 arithmetic check"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 49,
-      "focus": "WSL module drain 1178-1194 + donk.unykorn.org LLM demo queued (1200-1202)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 25,
+      "focus": "reflexion SSTI FP fix + pwnshop/vulnshop route-scan priority boosts",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark category misses",
-      "web-security-learning-labs.vercel.app/module/1193: 8 findings — module-route evidence hub",
-      "web-security-learning-labs.vercel.app/module/1194: 8 findings — module-route evidence hub",
-      "web-security-learning-labs.vercel.app/module/1185: 8 findings — module-route evidence hub",
-      "donk.unykorn.org + /api/login: queued (FTHTrading/donk-ai public LLM demo) — not yet scanned (queue tail)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — reflexion-escalated-ssti false positive removed (CSS hsl decimal substring)",
+      "pwnshop.ctfsecurity.com/debug/info: route scan confirms pwnshop-debug-info-route-live-oracle (sessionSecret + CHAT_OVERRIDE_TOKEN in JSON)",
+      "vulnshop.vercel.app/api/v1/orders: vulnshop-orders-idor-route-live-oracle fires on sequential order IDOR",
+      "vulnshop.vercel.app/api/v1/users: vulnshop-users-enumeration-route-live-oracle fires on admin user list"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "donk.unykorn.org, module/1200-1202: newly queued — pending queue drain",
-      "secresearchlab.web.app/labs/xxe-lab, command-injection, prototype-pollution, idor, jwt-lab: queued but not yet scanned",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "secresearchlab.web.app/labs/xxe-lab, command-injection, prototype-pollution, idor, jwt-lab: queued but within 48h rescan window",
+      "pwnshop.ctfsecurity.com/apply-coupon: intermittent OTP session — route oracle needs primePwnshopOtpSession warm-up",
+      "juice-shop.herokuapp.com primary URL intermittently 503 — staging fallback available"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
-    "web-security-learning-labs.vercel.app/module/1193": 8,
-    "web-security-learning-labs.vercel.app/module/1194": 8,
-    "web-security-learning-labs.vercel.app/module/1185": 8,
-    "web-security-learning-labs.vercel.app/module/1196": 7,
-    "web-security-learning-labs.vercel.app/module/1195": 8,
+    "pwnshop.ctfsecurity.com/debug/info": 44,
+    "vulnshop.vercel.app/api/v1/orders": 8,
+    "vulnshop.vercel.app/api/v1/users": 8,
     "secresearchlab.web.app/labs/sql-injection": 11,
+    "web-security-learning-labs.vercel.app/module/1195": 8,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
