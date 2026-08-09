@@ -35001,6 +35001,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sec-research-lab-cors-lab-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Sec Research Lab CORS lab route live oracle",
+    description:
+      "Route scans on /labs/cors-lab confirm wildcard-origin-with-credentials and null-origin CORS bypass training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public CORS misconfiguration training labs document origin reflection and null-origin bypass scenarios attackers can replay against production APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabCorsLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive CORS modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser CORS modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style CORS training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-host-header-password-reset-poisoning-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Sec Research Lab host header password-reset poisoning live oracle",
+    description:
+      "Route scans on /labs/host-header confirm Level 1 password-reset link poisoning via trusted Host header on POST /api/password-reset.",
+    impactOneline:
+      "Host header injection training documents how poisoned reset links can hijack account recovery flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabHostHeaderPasswordResetPoisoningLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — never build password-reset links from untrusted Host headers in production.",
+      steps: [
+        "Use a fixed canonical domain when generating password-reset URLs.",
+        "Validate Host/X-Forwarded-Host against an allowlist server-side.",
+        "Require login before launching in-browser host header injection modules."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style host header injection training. Show how to build password-reset links from a fixed domain and auth-gate browser labs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-overthewire-bandit-evidence",
     platform: "generic",
     category: "Broken authentication",
