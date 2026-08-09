@@ -34767,6 +34767,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sec-research-lab-sql-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Sec Research Lab SQL injection route live oracle",
+    description:
+      "Route scans on /labs/sql-injection confirm auth-bypass, UNION, and blind-boolean SQLi training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public SQL injection training labs document exploitable query patterns for authentication bypass and data extraction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabSqlInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive SQLi modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser SQL injection modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style SQL injection training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-xss-playground-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Sec Research Lab XSS playground route live oracle",
+    description:
+      "Route scans on /labs/xss-playground confirm reflected, stored, and DOM XSS training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public XSS training labs document dangerous HTML sinks and cross-site scripting attack scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabXssPlaygroundRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive XSS modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser XSS modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style XSS training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sec-research-lab-ssrf-lab-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Sec Research Lab SSRF lab route live oracle",
+    description:
+      "Route scans on /labs/ssrf-lab confirm basic SSRF and cloud-metadata training levels in the Sec Research Lab playground.",
+    impactOneline:
+      "Public SSRF training labs document server-side fetch abuse and internal-service access scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secResearchLabSsrfLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sec Research Lab is intentional training — gate interactive SSRF modules behind authentication.",
+      steps: [
+        "Require login before launching in-browser SSRF modules.",
+        "Run labs on isolated subdomains with no production data.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host Sec Research Lab-style SSRF training. Show how to auth-gate browser labs and isolate them from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-overthewire-bandit-evidence",
     platform: "generic",
     category: "Broken authentication",

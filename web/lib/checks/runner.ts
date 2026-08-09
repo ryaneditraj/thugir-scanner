@@ -2557,6 +2557,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideGitagentSecurebotEvidence",
   "clientSideAirtAcademyEvidence",
   "clientSideSecResearchLabEvidence",
+  "secResearchLabSqlInjectionRouteLiveOracle",
+  "secResearchLabXssPlaygroundRouteLiveOracle",
+  "secResearchLabSsrfLabRouteLiveOracle",
   "clientSideBrokencrystalsEvidence",
   "clientSideBrokencrystalsPrototypePollutionEvidence",
   "clientSideBrokencrystalsDomXssEvidence",
@@ -6597,7 +6600,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (let moduleNum = 1011; moduleNum <= 1194; moduleNum++) {
+  for (let moduleNum = 1011; moduleNum <= 1199; moduleNum++) {
     try {
       out.add(new URL(`/module/${moduleNum}`, pageUrl).toString());
     } catch {
@@ -9332,7 +9335,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     home.finalUrl
   )
     ? [
-        ...Array.from({ length: 1194 - 1037 + 1 }, (_, i) => String(1037 + i)),
+        ...Array.from({ length: 1199 - 1037 + 1 }, (_, i) => String(1037 + i)),
         "1019",
         "1020",
         "1021",
@@ -10147,10 +10150,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9]|117[0-9]|118[0-9]|119[0-4])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9]|117[0-9]|118[0-9]|119[0-9])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/sql-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-sql-injection-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/xss-playground\/?$/i.test(targetInput) && p.slug === "sec-research-lab-xss-playground-route-live-oracle") return -3;
+      if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/ssrf-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-ssrf-lab-route-live-oracle") return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
