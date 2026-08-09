@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T21:10:00.000Z",
+  "updated_at": "2026-08-09T22:08:53.505Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3068,
-  "total_findings": 31663,
+  "total_sites_scanned": 3077,
+  "total_findings": 31926,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2180,
-  "discovery_findings": 25290,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-09T21:10:00.000Z",
+  "discovery_urls_added": 2185,
+  "discovery_findings": 25505,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-09T22:08:53.505Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
@@ -55,32 +55,36 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 138,
-      "focus": "WrongSecrets MCP execute_command env leak + BrokenCrystals /api/chat/query LLM oracle + WSL module drain 1361-1365",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 215,
+      "focus": "21 UTC pending oracles (fauxbank register, pwnshop SSTI storefront, brokencrystals MCP tools, wrongsecrets challenge-60, escape track-order) + WSL 1371-1373 catalog extension",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/mcp: 9→12 findings — wrongsecrets-mcp-execute-command-live-oracle + route oracle (WRONGSECRETS_MCP_SECRET via tools/call env)",
-      "brokencrystals.com/chat: 72→75 findings — brokencrystals-chat-llm-query-live-oracle (POST /api/chat/query unauthenticated LLM proxy)",
-      "web-security-learning-labs.vercel.app/module/1365: 8 findings — WSL module catalog + client-side evidence"
+      "brokencrystals.com/api/mcp/tools: 78 findings — MCP tool enumeration hub (render, process_numbers, spawn_process, get_config oracles)",
+      "juice-shop.demo.escape.tech/rest/track-order/1: 49 findings — escape.tech track-order IDOR oracle live",
+      "pwnshop.ctfsecurity.com/seller/storefront: 40 findings — PWN-040 SSTI storefront preview surface",
+      "pentest-fauxbank.vercel.app/api/register: 14 findings — open registration mass-assignment oracle",
+      "wrongsecrets.herokuapp.com/challenge/60: 13 findings — MCP env-var leak challenge route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pentest-fauxbank.vercel.app/api/register: queued — registration mass-assignment oracle not yet scanned",
-      "pwnshop.ctfsecurity.com/seller/storefront: queued — SSTI storefront preview oracle pending",
-      "juice-shop.demo.escape.tech/rest/track-order/1: queued — escape.tech track-order IDOR oracle pending"
+      "web-security-learning-labs.vercel.app/module/1374-1375: queued — catalog extension pending next drain",
+      "secresearchlab.web.app/labs/* — route-specific live oracles for xxe/ssrf/sql/xss/jwt/host-header/prototype-pollution/idor/command-injection still pending",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
-    "brokencrystals.com/chat": 75,
-    "wrongsecrets.herokuapp.com/mcp": 12,
-    "web-security-learning-labs.vercel.app/module/1365": 8,
-    "web-security-learning-labs.vercel.app/module/1364": 8,
-    "web-security-learning-labs.vercel.app/module/1363": 8,
-    "web-security-learning-labs.vercel.app/module/1362": 7
+    "brokencrystals.com/api/mcp/tools": 78,
+    "juice-shop.demo.escape.tech/rest/track-order/1": 49,
+    "pwnshop.ctfsecurity.com/seller/storefront": 40,
+    "pentest-fauxbank.vercel.app/api/register": 14,
+    "wrongsecrets.herokuapp.com/challenge/60": 13,
+    "web-security-learning-labs.vercel.app/module/1371": 7,
+    "web-security-learning-labs.vercel.app/module/1372": 7,
+    "web-security-learning-labs.vercel.app/module/1373": 7
   }
 }
