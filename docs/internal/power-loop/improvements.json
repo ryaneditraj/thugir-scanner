@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp tools/list exposes execute_command+forward_env; tools/call execute_command('env') returns WRONGSECRETS_MCP_SECRET=MCPStolenSecret42! in JSON-RPC content; wrongsecrets.herokuapp.com/mcp findings 9→12 (+wrongsecrets-mcp-execute-command-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-mcp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route wrapper fires when scanning /mcp with scannedUrl evidence; wrongsecrets.herokuapp.com/mcp findings 9→12 with +wrongsecrets-mcp-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-chat-llm-query-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/chat/query with [{role:user,content:hello}] returns LLM assistant response without auth; brokencrystals.com/chat findings 72→75 (+brokencrystals-chat-llm-query-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1361-1370",
       "status": "shipped",
@@ -21385,6 +21403,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+      "shipped_at": "2026-08-09T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-mcp-route-live-oracle",
+      "shipped_at": "2026-08-09T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-chat-llm-query-live-oracle",
+      "shipped_at": "2026-08-09T21:10:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1361-1370",

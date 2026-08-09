@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T21:08:00.000Z",
+  "updated_at": "2026-08-09T21:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,13 +17,13 @@
   },
   "total_sites_scanned": 3068,
   "total_findings": 31663,
-  "critical_findings": 59,
+  "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2180,
   "discovery_findings": 25290,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-09T21:08:00.000Z",
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-09T21:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -55,36 +55,32 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 51,
-      "focus": "WSL module drain 1361-1365 + 1344-1346; queued fauxbank register + pwnshop storefront + brokencrystals MCP + wrongsecrets challenge-60 + escape track-order pending",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 10,
+      "findings": 138,
+      "focus": "WrongSecrets MCP execute_command env leak + BrokenCrystals /api/chat/query LLM oracle + WSL module drain 1361-1365",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1365: 8 findings — WSL module catalog + client-side evidence",
-      "web-security-learning-labs.vercel.app/module/1364: 8 findings — same WSL hub pattern",
-      "web-security-learning-labs.vercel.app/module/1363: 8 findings — module-route evidence oracle",
-      "web-security-learning-labs.vercel.app/module/1362: 7 findings — placeholder module route live oracle"
+      "wrongsecrets.herokuapp.com/mcp: 9→12 findings — wrongsecrets-mcp-execute-command-live-oracle + route oracle (WRONGSECRETS_MCP_SECRET via tools/call env)",
+      "brokencrystals.com/chat: 72→75 findings — brokencrystals-chat-llm-query-live-oracle (POST /api/chat/query unauthenticated LLM proxy)",
+      "web-security-learning-labs.vercel.app/module/1365: 8 findings — WSL module catalog + client-side evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "pentest-fauxbank.vercel.app/api/register: queued — registration mass-assignment oracle not yet scanned",
       "pwnshop.ctfsecurity.com/seller/storefront: queued — SSTI storefront preview oracle pending",
-      "brokencrystals.com/api/mcp/tools: queued — MCP tool enumeration oracle pending",
-      "wrongsecrets.herokuapp.com/challenge/60: queued — MCP env-var leak oracle pending",
       "juice-shop.demo.escape.tech/rest/track-order/1: queued — escape.tech track-order IDOR oracle pending"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
+    "brokencrystals.com/chat": 75,
+    "wrongsecrets.herokuapp.com/mcp": 12,
     "web-security-learning-labs.vercel.app/module/1365": 8,
     "web-security-learning-labs.vercel.app/module/1364": 8,
     "web-security-learning-labs.vercel.app/module/1363": 8,
-    "web-security-learning-labs.vercel.app/module/1362": 7,
-    "web-security-learning-labs.vercel.app/module/1361": 5,
-    "web-security-learning-labs.vercel.app/module/1346": 5,
-    "web-security-learning-labs.vercel.app/module/1345": 5
+    "web-security-learning-labs.vercel.app/module/1362": 7
   }
 }

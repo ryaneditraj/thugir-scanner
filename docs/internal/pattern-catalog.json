@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-09T20:05:36.951Z",
-  "total": 2058,
-  "uniqueSlugs": 2054,
+  "generatedAt": "2026-08-09T21:04:53.546Z",
+  "total": 2061,
+  "uniqueSlugs": 2057,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2040,
+    "generic": 2043,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1973,
+    "deep": 1976,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 418,
-    "Exposed secret": 30,
+    "Broken access control": 419,
+    "Exposed secret": 32,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -75,6 +75,7 @@
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-aws-metadata-ssrf-route-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
+    "brokencrystals-chat-llm-query-live-oracle",
     "brokencrystals-config-live-oracle",
     "brokencrystals-config-route-live-oracle",
     "brokencrystals-delete-emails-live-oracle",
@@ -2051,6 +2052,8 @@
     "wrongsecrets-challenge-route-live-oracle",
     "wrongsecrets-error-demo-database-connection-live-oracle",
     "wrongsecrets-error-demo-database-connection-route-live-oracle",
+    "wrongsecrets-mcp-execute-command-live-oracle",
+    "wrongsecrets-mcp-route-live-oracle",
     "xpath-injection-disclosure",
     "xss-game-level1-reflected-xss-live-oracle",
     "xss-game-level1-reflected-xss-route-live-oracle",
