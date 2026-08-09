@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "benchmark:juice-shop",
+      "slug": "reflexion-ssti-isolated-49-arithmetic",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: reflexionEscalatedSsti used body.includes('49') which matched CSS hsl decimals (-1.2549019608) on juice-shop.herokuapp.com; sstiArithmeticEvaluated requires isolated 49 token; juice-shop.herokuapp.com findings 51→50 (-reflexion-escalated-ssti FP); benchmark 6/6 maintained (50 findings)"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-events-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pattern sort -3 for pwnshop-* when scanning /debug/info /api/v1/events /admin/export-orders /logs; pwnshop.ctfsecurity.com/debug/info findings 12→44 with pwnshop-debug-info-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-api-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pattern sort -3 for vulnshop-* on /api/v1/orders and /api/v1/users route scans; vulnshop.vercel.app/api/v1/orders findings 8 with vulnshop-orders-idor-route-live-oracle; /api/v1/users with vulnshop-users-enumeration-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:secresearchlab.web.app",
       "slug": "sec-research-lab-route-oracles",
       "status": "shipped",

@@ -10081,6 +10081,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-")
       )
         return -2;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/(?:orders|users)\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;
       if (
         /voting-app[\w-]*\.vercel\.app/i.test(origin) &&

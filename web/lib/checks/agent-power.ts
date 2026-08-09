@@ -9,7 +9,8 @@ import {
   escalationLevelFromFailures,
   SQLI_PROBES,
   xssCanary,
-  SSTI_PROBES
+  SSTI_PROBES,
+  sstiArithmeticEvaluated
 } from "../methodology/reflexion";
 
 interface PowerCtx {
@@ -232,7 +233,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
           const u = new URL(path, ctx.origin);
           u.searchParams.set(param, payload);
           const r = await ctx.probe.get(u.toString(), { maxBytes: 8192 });
-          if (r.body.includes("49") && (payload.includes("7*7") || payload.includes("7*7"))) {
+          if (payload.includes("7*7") && sstiArithmeticEvaluated(r.body)) {
             return {
               fired: true,
               confidence: 0.92,
