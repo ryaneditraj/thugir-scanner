@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-checkpoint-route-health-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bypass403ProbeGet invalidates session on Vercel checkpoint + primeBypass403SessionForDeepScan health-checks scanned route (/secure,/internal,/waf) instead of always /api/admin; bypass403.vercel.app/secure findings 2→9 (+secure-bearer live+route oracles); /internal 2→8; benchmark juice-shop-staging 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-presskit-nft-social-corpus",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with pressKitUrl (github swag) + nftUrl (opensea) from application-configuration social config; benchmark juice-shop-staging 49 findings 6/6 maintained (secret-resend slug still absent — Resend key not in current feeds)"
+    },
+    {
+      "source": "discovery:bypass403.vercel.app",
+      "slug": "bypass403-api-admin-checkpoint-probe-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBypass403ApiAdminSemicolon uses bypass403ProbeGet + bypass403InvalidateSession for checkpoint resilience; bypass403.vercel.app/api/admin findings 3→8 (+api-admin live+route oracles when checkpoint clears); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-seeds-1180-1189",
       "status": "shipped",

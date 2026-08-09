@@ -390,6 +390,26 @@ async function fetchJuiceShopSocialFeedBodies(
       });
       if (fb.status >= 200 && fb.status < 400) chunks.push(fb.body);
     }
+
+    const pressKitUrl = social.pressKitUrl;
+    if (pressKitUrl) {
+      const pressKit = await probe.get(pressKitUrl, {
+        maxBytes: 96_000,
+        timeoutMs: 12000,
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+      });
+      if (pressKit.status >= 200 && pressKit.status < 400) chunks.push(pressKit.body);
+    }
+
+    const nftUrl = social.nftUrl;
+    if (nftUrl) {
+      const nft = await probe.get(nftUrl, {
+        maxBytes: 96_000,
+        timeoutMs: 12000,
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" }
+      });
+      if (nft.status >= 200 && nft.status < 400) chunks.push(nft.body);
+    }
   } catch {
     /* ignore malformed config or feed fetch errors */
   }
