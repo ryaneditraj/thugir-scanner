@@ -1,6 +1,41 @@
 {
-  "updated_at": "2026-08-09T18:03:51.377Z",
+  "updated_at": "2026-08-09T19:01:46.413Z",
   "discovery_urls": [
+    {
+      "url": "https://secresearchlab.web.app/labs/command-injection/",
+      "source": "Sec Research Lab — command injection training module (secresearchlab.web.app/labs, 19 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/idor/",
+      "source": "Sec Research Lab — IDOR hunter training module (secresearchlab.web.app/labs, 19 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1360",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1360 (public Vercel demo, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1359",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1359 (public Vercel demo, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1358",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1358 (public Vercel demo, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1357",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1357 (public Vercel demo, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1356",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1356 (public Vercel demo, 19 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1355",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1355 (public Vercel demo, 18 UTC discovery)",
