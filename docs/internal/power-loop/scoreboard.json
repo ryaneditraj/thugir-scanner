@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T13:05:00.000Z",
+  "updated_at": "2026-08-09T13:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,22 +15,22 @@
       ]
     }
   },
-  "total_sites_scanned": 2730,
-  "total_findings": 26610,
-  "critical_findings": 55,
+  "total_sites_scanned": 2960,
+  "total_findings": 30406,
+  "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22543,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-09T13:05:00.000Z",
+  "discovery_urls_added": 2078,
+  "discovery_findings": 24755,
+  "improvements_shipped": 1175,
+  "last_run": "2026-08-09T13:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_status": "503 — Heroku dyno unavailable",
-      "oracle_findings": 46,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -50,45 +50,42 @@
           ]
         }
       },
-      "note": "Primary 503; staging fallback 6/6 recall (46 findings); secret-resend slug still absent"
+      "note": "Primary 503; staging fallback 6/6 recall (47 findings); secret-resend slug still absent — Resend key not in social feeds"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 56,
-      "focus": "WSL modules 1220-1224 + secresearchlab command-injection/idor drain + WSL 1187",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL placeholder catalog 1216-1250 + modules 1220-1224 drain + secresearchlab command-injection/idor",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1216: 4→5 findings — placeholder-module-route-live-oracle via extended 1037–1250 catalog range",
+      "web-security-learning-labs.vercel.app/module/1219: 4→5 findings — placeholder-module-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1220-1223: 7→5 findings each with placeholder oracle (catalog shells)",
       "secresearchlab.web.app/labs/command-injection/: 9 findings — sec-research-lab-command-injection-route-live-oracle",
       "secresearchlab.web.app/labs/idor/: 10 findings — sec-research-lab-idor-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1220-1223: 7 findings each (catalog shells, module-route-evidence oracle)",
-      "web-security-learning-labs.vercel.app/module/1224: 4 findings — thin shell",
-      "web-security-learning-labs.vercel.app/module/1187: 5 findings — placeholder-module drained"
+      "secret-resend: rejected — Resend API key not in Juice Shop social feeds"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs; Resend key not in current social feeds)",
       "juice-shop.herokuapp.com primary Heroku dyno 503 — staging fallback required",
-      "WSL modules 1220-1223: catalog shells — no route-specific SSTI/injection live oracles (7 findings generic only)",
-      "WSL module 1224: thin shell (4 findings) — no module-specific vulnerability oracle",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent (from prior runs)",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "WSL module 1224: thin shell (4 findings) — extend placeholder oracle when catalog shell pattern confirmed"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 46,
-    "secresearchlab.web.app/labs/idor/": 10,
-    "secresearchlab.web.app/labs/command-injection/": 9,
-    "web-security-learning-labs.vercel.app/module/1220": 7,
-    "web-security-learning-labs.vercel.app/module/1221": 7,
-    "web-security-learning-labs.vercel.app/module/1222": 7,
-    "web-security-learning-labs.vercel.app/module/1223": 7,
-    "web-security-learning-labs.vercel.app/module/1224": 4,
-    "web-security-learning-labs.vercel.app/module/1187": 5,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20
+    "juice-shop-staging.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1216": 5,
+    "web-security-learning-labs.vercel.app/module/1219": 5,
+    "web-security-learning-labs.vercel.app/module/1220": 5,
+    "web-security-learning-labs.vercel.app/module/1221": 5,
+    "web-security-learning-labs.vercel.app/module/1222": 5,
+    "web-security-learning-labs.vercel.app/module/1223": 5,
+    "secresearchlab.web.app/labs/idor": 10,
+    "secresearchlab.web.app/labs/command-injection": 9,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 46
   }
 }

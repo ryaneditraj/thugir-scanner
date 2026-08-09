@@ -6616,7 +6616,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (let moduleNum = 1011; moduleNum <= 1215; moduleNum++) {
+  for (let moduleNum = 1011; moduleNum <= 1250; moduleNum++) {
     try {
       out.add(new URL(`/module/${moduleNum}`, pageUrl).toString());
     } catch {
@@ -9358,7 +9358,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     home.finalUrl
   )
     ? [
-        ...Array.from({ length: 1215 - 1037 + 1 }, (_, i) => String(1037 + i)),
+        ...Array.from({ length: 1250 - 1037 + 1 }, (_, i) => String(1037 + i)),
         "1019",
         "1020",
         "1021",
