@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T02:07:00.000Z",
+  "updated_at": "2026-08-09T03:05:23.785Z",
   "discovery_urls": [
     {
       "url": "https://secresearchlab.web.app/labs/sql-injection/",
@@ -17184,7 +17184,32 @@
       "url": "https://juice-shop.lab.pentest-forge.com/rest/admin/application-configuration",
       "source": "PentestForge Lab — Juice Shop admin config oracle (juice-shop.lab.pentest-forge.com, 19 UTC discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/xxe-lab/",
+      "source": "Sec Research Lab — XXE training module (secresearchlab.web.app/labs catalog, 03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/command-injection/",
+      "source": "Sec Research Lab — command injection training module (03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/prototype-pollution/",
+      "source": "Sec Research Lab — prototype pollution training module (03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/idor/",
+      "source": "Sec Research Lab — IDOR Hunter training module (03 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secresearchlab.web.app/labs/jwt-lab/",
+      "source": "Sec Research Lab — JWT exploitation training module (03 UTC discovery)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 20
+  "discovery_urls_added": 25
 }
