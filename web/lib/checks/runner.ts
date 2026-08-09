@@ -2025,6 +2025,9 @@ const DEEP_RULES = new Set<string>([
   "webSecurityLearningLabsModuleRouteLiveOracle",
   "webSecurityLearningLabsSstiModuleRouteLiveOracle",
   "webSecurityLearningLabsPlaceholderModuleRouteLiveOracle",
+  "secureBankBaySqliLoginRouteLiveOracle",
+  "secureBankBayStoredXssCommentsRouteLiveOracle",
+  "secureBankBayAdminRbacRouteLiveOracle",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
@@ -6613,7 +6616,7 @@ function extractWebSecurityLearningLabsSeeds(html: string, pageUrl: string): str
       /* ignore */
     }
   }
-  for (let moduleNum = 1011; moduleNum <= 1207; moduleNum++) {
+  for (let moduleNum = 1011; moduleNum <= 1215; moduleNum++) {
     try {
       out.add(new URL(`/module/${moduleNum}`, pageUrl).toString());
     } catch {
@@ -9355,7 +9358,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     home.finalUrl
   )
     ? [
-        ...Array.from({ length: 1207 - 1037 + 1 }, (_, i) => String(1037 + i)),
+        ...Array.from({ length: 1215 - 1037 + 1 }, (_, i) => String(1037 + i)),
         "1019",
         "1020",
         "1021",
@@ -10188,13 +10191,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|20[0-7]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|20[0-9]|21[0-5]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9]|117[0-9]|118[0-9]|119[0-9]|120[0-7])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|112[5-9]|113[0-9]|114[0-9]|115[0-9]|116[0-9]|117[0-9]|118[0-9]|119[0-9]|120[0-9]|121[0-5])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
@@ -10210,6 +10213,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-password-reset-poisoning-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/host-header\/?$/i.test(targetInput) && p.slug === "sec-research-lab-host-header-web-cache-poisoning-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/cors-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-cors-lab-route-live-oracle") return -3;
+      if (
+        /secure-bank-bay\.vercel\.app/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-bank-bay-sqli")
+      )
+        return -3;
+      if (
+        /secure-bank-bay\.vercel\.app/i.test(origin) &&
+        /\/comments\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-bank-bay-stored-xss")
+      )
+        return -3;
+      if (
+        /secure-bank-bay\.vercel\.app/i.test(origin) &&
+        /\/admin\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-bank-bay-admin")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/upload-avatar/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-avatar")
+      )
+        return -3;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&

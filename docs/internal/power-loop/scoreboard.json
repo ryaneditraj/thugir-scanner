@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T11:05:00.000Z",
+  "updated_at": "2026-08-09T11:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2071,
   "discovery_findings": 24690,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-09T11:05:00.000Z",
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-09T11:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
@@ -48,38 +48,41 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 (51 findings pages=6 probes=584); secret-resend slug still absent"
+      "note": "Primary Heroku 6/6 (51 findings pages=6 probes=584); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 47,
-      "focus": "WSL modules 1210-1214 NEW + drain 1191-1193 placeholder shells",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL placeholder extend 1208-1215 + secure-bank-bay route oracles + pwnshop upload-avatar OTP priority",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1210-1213: 7 findings each — WSL catalog shells (generic misconfig/XSS sinks, no route-specific vuln oracles)",
-      "web-security-learning-labs.vercel.app/module/1214: 4 findings — thin catalog shell",
-      "web-security-learning-labs.vercel.app/module/1191-1193: 5 findings each — placeholder-module-route-live-oracle (drained from queue tail)"
+      "web-security-learning-labs.vercel.app/module/1208: 4→5 findings — placeholder-module oracle extended to modules 1208-1215",
+      "web-security-learning-labs.vercel.app/module/1210-1213: 7 findings each — WSL catalog shells",
+      "secure-bank-bay.vercel.app/login: 8→9 findings — secure-bank-bay-sqli-login-route-live-oracle shipped",
+      "secure-bank-bay.vercel.app/comments: 8→9 findings — stored-xss-comments route oracle shipped",
+      "secure-bank-bay.vercel.app/admin: 8→9 findings — admin-rbac route oracle shipped",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 4→47 findings — upload-avatar OTP pre-wait + avatar oracle priority"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via security-question oracles)",
-      "WSL modules 1210-1213: route-specific vuln oracles absent — catalog shells only",
-      "secresearchlab.web.app/labs/command-injection + idor still at queue tail — not drained this run"
+      "secure-bank-bay.vercel.app API backend targets localhost:5000 — live HTTP oracles require separate backend deploy",
+      "secresearchlab.web.app/labs/command-injection + idor at queue tail — oracles confirmed when scanned directly"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 47,
+    "secure-bank-bay.vercel.app/login": 9,
+    "secure-bank-bay.vercel.app/comments": 9,
+    "secure-bank-bay.vercel.app/admin": 9,
+    "web-security-learning-labs.vercel.app/module/1208": 5,
     "web-security-learning-labs.vercel.app/module/1210": 7,
-    "web-security-learning-labs.vercel.app/module/1211": 7,
     "web-security-learning-labs.vercel.app/module/1212": 7,
-    "web-security-learning-labs.vercel.app/module/1213": 7,
-    "web-security-learning-labs.vercel.app/module/1214": 4,
-    "web-security-learning-labs.vercel.app/module/1191": 5,
-    "web-security-learning-labs.vercel.app/module/1192": 5,
-    "web-security-learning-labs.vercel.app/module/1193": 5
+    "ssrf.vulnlab.dev/basic": 15
   }
 }

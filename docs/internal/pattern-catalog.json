@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-09T10:08:38.168Z",
-  "total": 2054,
-  "uniqueSlugs": 2050,
+  "generatedAt": "2026-08-09T11:12:42.184Z",
+  "total": 2057,
+  "uniqueSlugs": 2053,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2036,
+    "generic": 2039,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1969,
+    "deep": 1972,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 417,
+    "Broken access control": 418,
     "Exposed secret": 30,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,8 +27,8 @@
     "Information disclosure": 106,
     "Security misconfiguration": 152,
     "Broken authentication": 125,
-    "Injection": 296,
-    "Cross-site scripting": 669,
+    "Injection": 297,
+    "Cross-site scripting": 670,
     "Open redirect": 16,
     "general": 20,
     "SSRF": 10,
@@ -1707,6 +1707,9 @@
     "secret-stripe-restricted",
     "secret-supabase-service-role",
     "secret-twilio",
+    "secure-bank-bay-admin-rbac-route-live-oracle",
+    "secure-bank-bay-sqli-login-route-live-oracle",
+    "secure-bank-bay-stored-xss-comments-route-live-oracle",
     "security-question-disclosure",
     "sensitive-api-password-leakage",
     "sensitive-api-token-leakage",
