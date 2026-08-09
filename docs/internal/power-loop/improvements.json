@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1208-1215",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS + SSTI topic map extended 1207→1215; web-security-learning-labs.vercel.app/module/1208 findings 4→5 (+placeholder-module-route-live-oracle); benchmark juice-shop 31 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-route-live-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle Attack Mode SQLi /api/auth/login + stored XSS /api/comments + admin RBAC /api/admin/users; secure-bank-bay.vercel.app/login 8→9 (+sqli), /comments 8→9 (+stored-xss), /admin 8→9 (+rbac); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-upload-avatar-otp-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for pwnshop-avatar-* on /profile/upload-avatar + 3s OTP pre-wait; pwnshop.ctfsecurity.com/profile/upload-avatar findings 4→47 with avatar-upload + svg-xss route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: modules 1037–1207 render Here is a Module: {id} CSR placeholder shells; web-security-learning-labs.vercel.app/module/1200 findings 8→5 (+placeholder-module-route-live-oracle, -ssti-module-route-live-oracle FP); benchmark juice-shop 51 findings 6/6 maintained"

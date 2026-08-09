@@ -32284,6 +32284,8 @@ const pwnshopOtpSessionByProbe = new WeakMap<ProbeCache, Promise<string | null>>
 async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<string | null> {
   // PwnMail OTP delivery is async — retry the full register/login/mail flow when inbox is empty.
   const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
+  const uploadAvatarRoute = /\/profile\/upload-avatar/i.test(ctx.scanUrl || ctx.home.finalUrl || "");
+  if (uploadAvatarRoute) await pwnshopSleep(3000);
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
@@ -35055,15 +35057,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
   "1036": "Host Header Injection"
 };
 
-for (let moduleNum = 1037; moduleNum <= 1207; moduleNum++) {
+for (let moduleNum = 1037; moduleNum <= 1215; moduleNum++) {
   const moduleId = String(moduleNum);
   if (!WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId]) {
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
   }
 }
 
-/** CSR placeholder shells 1125–1207 fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = 1125; moduleNum <= 1207; moduleNum++) {
+/** CSR placeholder shells 1125–1215 fire reflexion SSTI probes — map to advanced SSTI topic. */
+for (let moduleNum = 1125; moduleNum <= 1215; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -35071,12 +35073,12 @@ for (let moduleNum = 1125; moduleNum <= 1207; moduleNum++) {
 const WEB_SECURITY_LEARNING_SSTI_MODULE_IDS = new Set([
   "1022",
   "1024",
-  ...Array.from({ length: 83 }, (_, i) => String(1125 + i))
+  ...Array.from({ length: 91 }, (_, i) => String(1125 + i))
 ]);
 
-/** CSR catalog shells 1037–1207 — "Here is a Module: {id}" placeholders, not live lab content. */
+/** CSR catalog shells 1037–1215 — "Here is a Module: {id}" placeholders, not live lab content. */
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_IDS = new Set(
-  Array.from({ length: 1207 - 1037 + 1 }, (_, i) => String(1037 + i))
+  Array.from({ length: 1215 - 1037 + 1 }, (_, i) => String(1037 + i))
 );
 
 /** Curated WSL modules 1011–1036 with named topics (SSTI modules use the dedicated SSTI oracle). */
@@ -35805,6 +35807,74 @@ const clientSideSecurebankBlogEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "SecureBank educational blog documents live Attack Mode SQLi/XSS/CSRF demos with insecure vs secure code comparisons"
+    }
+  };
+};
+
+function isSecureBankBayHost(ctx: RuleContext): boolean {
+  return /secure-bank-bay\.vercel\.app/i.test(ctx.origin);
+}
+
+const secureBankBaySqliLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const sqliOk =
+    /Vulnerable Mode \(SQL Injection\)/i.test(corpus) &&
+    (/admin' OR '1'='1'/i.test(corpus) || /SELECT \* FROM users WHERE username/i.test(corpus)) &&
+    /\/api\/auth\/login/i.test(corpus);
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "admin' OR '1'='1' # → SELECT * FROM users WHERE username = ...",
+      note: "secure-bank-bay.vercel.app /login bundle exposes Attack Mode SQLi login with admin' OR '1'='1' demo against POST /api/auth/login — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const secureBankBayStoredXssCommentsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/comments\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const xssOk =
+    /\/api\/comments/i.test(corpus) &&
+    (/whatever you type gets stored as raw HTML/i.test(corpus) ||
+      /Comments \(XSS Lab\)/i.test(corpus) ||
+      /rendered directly/i.test(corpus));
+  if (!xssOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/comments stores raw HTML in vulnerable mode",
+      note: "secure-bank-bay.vercel.app /comments bundle documents stored XSS via POST /api/comments in Attack Mode — route-specific XSS training oracle"
+    }
+  };
+};
+
+const secureBankBayAdminRbacRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const adminOk =
+    /\/api\/admin\/users/i.test(corpus) &&
+    (/only accessible to users with the/i.test(corpus) || /role===`admin`/i.test(corpus)) &&
+    /403 Forbidden/i.test(corpus);
+  if (!adminOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "/api/admin/users + admin role gate documented in bundle",
+      note: "secure-bank-bay.vercel.app /admin bundle documents RBAC admin panel with GET /api/admin/users and 403 for non-admin JWT roles — route-specific access-control training oracle"
     }
   };
 };
@@ -71104,6 +71174,9 @@ export const RULES: Record<string, Rule> = {
   clientSideXssVictimBankEvidence,
   clientSideNimbusVaultEvidence,
   clientSideSecurebankBlogEvidence,
+  secureBankBaySqliLoginRouteLiveOracle,
+  secureBankBayStoredXssCommentsRouteLiveOracle,
+  secureBankBayAdminRbacRouteLiveOracle,
   clientSideBugBountyHunterEvidence,
   clientSideBugBountyHunterChallengeScenarioEvidence,
   clientSideBugCollectionEvidence,

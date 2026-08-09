@@ -36437,7 +36437,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs module route evidence oracle",
     description:
-      "When scanning /module/1011–1207 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1207) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated; curated URL-map fallback).",
+      "When scanning /module/1011–1215 on web-security-learning-labs.vercel.app, confirm the module topic (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, SSTI, Clickjacking, SSTI Advanced, Race Condition, NoSQL Injection, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header, or unreleased CSR placeholder shells for 1037–1215) from the lab catalog chunks or curated module-id map — route-specific training-lab oracle (CSR placeholder shells with HTML comments tolerated; curated URL-map fallback).",
     impactOneline:
       "Route-specific identification of interactive vulnerability training modules for targeted scanner coverage.",
     detectorKind: "rule_ref",
@@ -36463,7 +36463,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Web Security Learning Labs curated module route live oracle",
     description:
-      "When scanning curated modules 1011–1036 (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, Clickjacking, Race Condition, NoSQL, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header) on web-security-learning-labs.vercel.app, confirm the named training topic from the lab catalog — route-specific live oracle (SSTI modules 1022/1024 and 1125–1207 use the dedicated SSTI oracle).",
+      "When scanning curated modules 1011–1036 (SQLi, XSS, IDOR, CSRF, JWT, Command Injection, SSRF, Prototype Pollution, Directory Traversal, LDAP, XXE, Clickjacking, Race Condition, NoSQL, Open Redirect, Mass Assignment, File Upload, Deserialization, Session Management, API BFLA, Business Logic, Request Smuggling, Cache Poisoning, Host Header) on web-security-learning-labs.vercel.app, confirm the named training topic from the lab catalog — route-specific live oracle (SSTI modules 1022/1024 and 1125–1215 use the dedicated SSTI oracle).",
     impactOneline:
       "Route-specific confirmation of named vulnerability training modules enables targeted scanner calibration for WSL labs.",
     detectorKind: "rule_ref",
@@ -36489,7 +36489,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Web Security Learning Labs SSTI module route live oracle",
     description:
-      "When scanning SSTI modules (1022, 1024) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (CSR placeholder shells 1037–1207 use the dedicated placeholder-module oracle).",
+      "When scanning SSTI modules (1022, 1024) on web-security-learning-labs.vercel.app, reflexion-escalated SSTI probes confirm server-side template injection on the module route — route-specific training-lab SSTI oracle (CSR placeholder shells 1037–1215 use the dedicated placeholder-module oracle).",
     impactOneline:
       "Route-specific SSTI confirmation on WSL training modules enables targeted scanner calibration for template-injection labs.",
     detectorKind: "rule_ref",
@@ -36515,7 +36515,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs placeholder module route live oracle",
     description:
-      "When scanning unreleased CSR placeholder catalog shells (modules 1037–1207) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell — route-specific catalog placeholder oracle (replaces misleading SSTI classification on empty lab stubs).",
+      "When scanning unreleased CSR placeholder catalog shells (modules 1037–1215) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell — route-specific catalog placeholder oracle (replaces misleading SSTI classification on empty lab stubs).",
     impactOneline:
       "Route-specific identification of unreleased WSL catalog placeholder modules prevents false-critical SSTI findings on empty Next.js shells.",
     detectorKind: "rule_ref",
@@ -36531,6 +36531,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WSL /module/{id} route is an unreleased CSR placeholder shell. Show how to hide catalog stubs until lab content ships.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-bank-bay-sqli-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecureBank Bay SQLi login route live oracle",
+    description:
+      "When scanning /login on secure-bank-bay.vercel.app, the SPA bundle documents Attack Mode SQL injection via POST /api/auth/login with admin' OR '1'='1' — route-specific SQLi training oracle.",
+    impactOneline:
+      "Educational banking SPA exposes intentional SQLi login bypass patterns in client bundle for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBaySqliLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBank Bay is intentional lab software — use parameterized queries in production.",
+      steps: [
+        "Never concatenate user input into SQL queries.",
+        "Use parameterized queries or ORM bindings for all authentication.",
+        "Run Attack Mode labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login route documents Attack Mode SQLi against /api/auth/login. Show parameterized query remediation for Node banking APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-bank-bay-stored-xss-comments-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SecureBank Bay stored XSS comments route live oracle",
+    description:
+      "When scanning /comments on secure-bank-bay.vercel.app, the SPA bundle documents stored XSS via POST /api/comments that renders raw HTML in Attack Mode — route-specific XSS training oracle.",
+    impactOneline:
+      "Educational banking SPA exposes intentional stored XSS comment flows in client bundle for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBayStoredXssCommentsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBank Bay is intentional lab software — sanitize and encode stored user content.",
+      steps: [
+        "Sanitize HTML or use a strict allowlist before storing comments.",
+        "Encode output in templates instead of rendering raw HTML.",
+        "Run Attack Mode labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /comments route stores raw HTML in vulnerable mode. Show stored XSS remediation for comment APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-bank-bay-admin-rbac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecureBank Bay admin RBAC route live oracle",
+    description:
+      "When scanning /admin on secure-bank-bay.vercel.app, the SPA bundle documents admin-only GET /api/admin/users with JWT role checks and 403 for non-admin users — route-specific RBAC training oracle.",
+    impactOneline:
+      "Educational banking SPA documents admin RBAC gating patterns in client bundle for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBayAdminRbacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBank Bay is intentional lab software — enforce server-side RBAC on admin APIs.",
+      steps: [
+        "Authorize admin routes server-side using JWT role claims.",
+        "Never rely on client-side role checks alone.",
+        "Run Attack Mode labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route documents JWT role-based admin panel access. Show server-side RBAC remediation.",
     version: 1,
     enabled: true
   },
