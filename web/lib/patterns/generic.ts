@@ -29152,6 +29152,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-10-csi-driver-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-10 CSI-Driver route live oracle",
+    description:
+      "When scanning /challenge/10 or /challenge/challenge-10, the walkthrough documents AWS Secrets Manager mounted via CSI driver at /mnt/secrets-store — route-specific challenge-10 cloud secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-10 AWS Secrets Manager CSI mount secret-hunt walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge10CsiDriverRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-10 is intentional — restrict CSI secret mounts and AWS Secrets Manager access with least-privilege IAM.",
+      steps: [
+        "Use IRSA/workload identity instead of node-wide AWS admin credentials.",
+        "Restrict kubectl exec and pod filesystem access.",
+        "Audit Secrets Manager and CSI driver mount paths."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-10 route documents AWS Secrets Manager CSI mounts. Show remediation for cloud secret access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-11-iam-escalation-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-11 IAM escalation route live oracle",
+    description:
+      "When scanning /challenge/11 or /challenge/challenge-11, the walkthrough documents IAM privilege escalation via cant-read-secrets role and SSM Parameter Store — route-specific challenge-11 AWS IAM oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-11 IAM privilege escalation walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge11IamEscalationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-11 is intentional — audit IAM policies for privilege escalation paths.",
+      steps: [
+        "Run IAM access analyzer and ScoutSuite on cloud accounts.",
+        "Remove iam:PassRole and sts:AssumeRole chains that enable escalation.",
+        "Restrict SSM Parameter Store read to least-privilege roles."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-11 route documents IAM privilege escalation via cant-read-secrets. Show remediation for AWS IAM least privilege.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-12-docker-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-12 Docker route live oracle",
+    description:
+      "When scanning /challenge/12 or /challenge/challenge-12, the walkthrough documents Docker image layer history and Dockerfile COPY secret exposure — route-specific challenge-12 container image secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-12 docker history/Dockerfile COPY secret-hunt walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge12DockerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-12 is intentional — never embed secrets in Docker image layers or Dockerfiles.",
+      steps: [
+        "Use multi-stage builds and .dockerignore to exclude secrets.",
+        "Scan images with secret scanners before push.",
+        "Inject secrets at runtime via secret managers, not COPY."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-12 route documents secrets in Docker image layers. Show remediation for secure container image builds.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",

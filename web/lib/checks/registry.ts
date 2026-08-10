@@ -35313,7 +35313,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1560;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1580;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -60647,6 +60647,126 @@ const wrongsecretsChallenge9TerraformRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge10CsiDriverLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-10", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*CSI-Driver|CSI-Driver<\/strong>/i.test(body) ||
+    !/AWS Secrets Manager|secrets-store-csi-driver|\/mnt\/secrets-store/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: body.match(/AWS Secrets Manager[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "CSI-Driver challenge",
+      note: "OWASP WrongSecrets challenge-10 documents AWS Secrets Manager mounted via CSI driver at /mnt/secrets-store — cloud secrets CSI oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge10CsiDriverRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?10\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge10CsiDriverLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-10 route scan — CSI-Driver challenge confirms AWS Secrets Manager CSI mount secret-hunt walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge11IamEscalationLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-11", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*IAM privilege escalation|IAM privilege escalation<\/strong>/i.test(body) ||
+    !/cant-read-secrets|SSM Parameter Store|Parameter Store/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: body.match(/cant-read-secrets[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "IAM escalation challenge",
+      note: "OWASP WrongSecrets challenge-11 documents IAM privilege escalation via cant-read-secrets role and SSM Parameter Store — AWS IAM misconfiguration oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge11IamEscalationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?11\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge11IamEscalationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-11 route scan — IAM privilege escalation challenge confirms cant-read-secrets/SSM Parameter Store walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge12DockerLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-12", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Docker|Docker<\/strong>/i.test(body) ||
+    !/docker history|Dockerfile|COPY operations/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: body.match(/docker history[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Docker challenge",
+      note: "OWASP WrongSecrets challenge-12 documents Docker image layer history and Dockerfile COPY secret exposure — container image secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge12DockerRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?12\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge12DockerLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-12 route scan — Docker challenge confirms docker history/Dockerfile COPY secret-hunt walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -72384,6 +72504,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge8LoggingRouteLiveOracle,
   wrongsecretsChallenge9TerraformLiveOracle,
   wrongsecretsChallenge9TerraformRouteLiveOracle,
+  wrongsecretsChallenge10CsiDriverLiveOracle,
+  wrongsecretsChallenge10CsiDriverRouteLiveOracle,
+  wrongsecretsChallenge11IamEscalationLiveOracle,
+  wrongsecretsChallenge11IamEscalationRouteLiveOracle,
+  wrongsecretsChallenge12DockerLiveOracle,
+  wrongsecretsChallenge12DockerRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
