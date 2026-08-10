@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T04:12:00.000Z",
+  "updated_at": "2026-08-10T05:06:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,22 +15,22 @@
       ]
     }
   },
-  "total_sites_scanned": 3148,
-  "total_findings": 33341,
+  "total_sites_scanned": 3157,
+  "total_findings": 33480,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2210,
-  "discovery_findings": 26301,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-10T04:12:00.000Z",
+  "discovery_urls_added": 2215,
+  "discovery_findings": 26346,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-10T05:06:30.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "error — staging fallback used",
-      "oracle_findings": 48,
+      "primary_status": "error — Heroku dyno 503, staging fallback used",
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -50,44 +50,42 @@
           ]
         }
       },
-      "note": "Primary Heroku unreachable; staging 48 findings 6/6 recall — no benchmark misses"
+      "note": "Primary Heroku 503; staging 47 findings 6/6 recall — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 47,
-      "focus": "WSL catalog 1393-1397 extension + brokencrystals /api/secrets and /api/config route oracles",
-      "improvements_shipped_this_run": 3
+      "findings": 45,
+      "focus": "WSL catalog 1401-1405 extension + backlog drain (1391, 1392, 1328)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1393: 8 findings — CATALOG_MAX 1397 placeholder-module-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1394-1396: 8 findings each with placeholder oracle",
-      "brokencrystals.com/api/secrets: route scan fires brokencrystals-secrets-route-live-oracle (83 findings)",
-      "brokencrystals.com/api/config: route scan fires brokencrystals-config-route-live-oracle (81 findings)",
-      "web-security-learning-labs.vercel.app/module/1388-1390: 5 findings each — prior-queue drain"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1401: 7 findings — CATALOG_MAX 1405 placeholder-module-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1402-1403: 7 findings each with placeholder oracle",
+      "web-security-learning-labs.vercel.app/module/1404: 5 findings — catalog shell",
+      "web-security-learning-labs.vercel.app/module/1405: 4 findings — catalog shell",
+      "web-security-learning-labs.vercel.app/module/1391-1392: 5 findings each — backlog drain",
+      "web-security-learning-labs.vercel.app/module/1328: 5 findings — backlog drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "juice-shop.herokuapp.com primary: Heroku dyno error — staging fallback required for live oracles",
+      "juice-shop.herokuapp.com primary: Heroku dyno 503 — staging fallback required for live oracles",
       "web-security-learning-labs.vercel.app/module/1398-1400: queued — pending next queue drain",
-      "ssrf.vulnlab.dev/*: route scans not in this run queue slice — oracles exist but URLs not re-scanned"
+      "brokencrystals.com/api/email/sendSupportEmail + /api/goto + /api/metadata: high-yield oracles still queued unscanned"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 48,
-    "brokencrystals.com/api/secrets": 83,
-    "brokencrystals.com/api/config": 81,
-    "brokencrystals.com/api/mcp/tools": 82,
-    "web-security-learning-labs.vercel.app/module/1393": 8,
-    "web-security-learning-labs.vercel.app/module/1394": 8,
-    "web-security-learning-labs.vercel.app/module/1395": 8,
-    "web-security-learning-labs.vercel.app/module/1396": 8,
-    "web-security-learning-labs.vercel.app/module/1397": 5,
-    "web-security-learning-labs.vercel.app/module/1388": 5,
-    "web-security-learning-labs.vercel.app/module/1389": 5,
-    "web-security-learning-labs.vercel.app/module/1390": 5
+    "juice-shop-staging.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1401": 7,
+    "web-security-learning-labs.vercel.app/module/1402": 7,
+    "web-security-learning-labs.vercel.app/module/1403": 7,
+    "web-security-learning-labs.vercel.app/module/1404": 5,
+    "web-security-learning-labs.vercel.app/module/1405": 4,
+    "web-security-learning-labs.vercel.app/module/1391": 5,
+    "web-security-learning-labs.vercel.app/module/1392": 5,
+    "web-security-learning-labs.vercel.app/module/1328": 5
   }
 }
