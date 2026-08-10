@@ -38424,6 +38424,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-profile-sensitive-data-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "NodeGoat profile sensitive data live oracle",
+    description:
+      "After session login, GET/POST /profile stores SSN, DOB, and bank account fields unencrypted in MongoDB — the NodeGoat A6 sensitive data exposure oracle.",
+    impactOneline:
+      "NodeGoat profile endpoints persist PII in plaintext, demonstrating OWASP A6 sensitive data exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatProfileSensitiveDataLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — encrypt sensitive PII at rest and in transit in production apps.",
+      steps: [
+        "Encrypt SSN, DOB, and bank account numbers before persisting to the database.",
+        "Disable autocomplete on sensitive profile forms and avoid caching profile pages.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat /profile endpoint stores SSN and bank data unencrypted. Show profile PII encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-profile-sensitive-data-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "NodeGoat profile sensitive data route live oracle",
+    description:
+      "When scanning /profile, authenticated GET/POST persists SSN and bank account fields unencrypted — route-specific NodeGoat A6 sensitive data exposure oracle.",
+    impactOneline:
+      "Route scans on /profile should confirm PII fields are encrypted and access-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatProfileSensitiveDataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — encrypt sensitive PII at rest and in transit in production apps.",
+      steps: [
+        "Encrypt SSN, DOB, and bank account numbers before persisting to the database.",
+        "Disable autocomplete on sensitive profile forms and avoid caching profile pages.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route scan confirms unencrypted SSN storage. Show route-specific PII encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-profile-redos-route-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "high",
+    title: "NodeGoat profile ReDoS route live oracle",
+    description:
+      "When scanning /profile, the bankRouting field validates via catastrophic backtracking regex /([0-9]+)+#/ documented on /tutorial/redos — route-specific NodeGoat ReDoS oracle.",
+    impactOneline:
+      "NodeGoat profile bankRouting regex enables regular expression denial of service against the Node.js event loop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatProfileRedosRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — avoid nested quantifiers in regex validators in production apps.",
+      steps: [
+        "Replace /([0-9]+)+#/ with atomic groups or possessive quantifiers like /([0-9]+)#/.",
+        "Set regex execution timeouts on user-supplied input validation.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route scan confirms ReDoS via bankRouting regex. Show safe regex validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnforge-academy-level-ssrf-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",

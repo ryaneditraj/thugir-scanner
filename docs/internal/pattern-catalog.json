@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-09T23:03:51.788Z",
-  "total": 2064,
-  "uniqueSlugs": 2060,
+  "generatedAt": "2026-08-10T00:12:19.612Z",
+  "total": 2067,
+  "uniqueSlugs": 2063,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2046,
+    "generic": 2049,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1979,
+    "deep": 1982,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 10,
     "Server-side request forgery": 60,
-    "Sensitive data exposure": 51,
+    "Sensitive data exposure": 53,
     "AI security": 50,
     "Business logic": 19,
     "Cross-site request forgery": 2,
@@ -42,7 +42,7 @@
     "XML external entity injection": 1,
     "API security": 3,
     "Path traversal": 3,
-    "Denial of service": 3,
+    "Denial of service": 4,
     "Authentication bypass": 2,
     "XSS": 1,
     "Prompt injection": 3,
@@ -1553,6 +1553,9 @@
     "missing-security-headers",
     "nodegoat-benefits-nosql-route-live-oracle",
     "nodegoat-learn-open-redirect-route-live-oracle",
+    "nodegoat-profile-redos-route-live-oracle",
+    "nodegoat-profile-sensitive-data-live-oracle",
+    "nodegoat-profile-sensitive-data-route-live-oracle",
     "nodegoat-research-ssrf-route-live-oracle",
     "nodegoat-signup-open-registration-live-oracle",
     "nodegoat-signup-route-live-oracle",

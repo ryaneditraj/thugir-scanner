@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T23:12:00.000Z",
+  "updated_at": "2026-08-10T00:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3094,
-  "total_findings": 32569,
+  "total_sites_scanned": 3098,
+  "total_findings": 32605,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2190,
-  "discovery_findings": 25803,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-09T23:12:00.000Z",
+  "discovery_findings": 25839,
+  "improvements_shipped": 1176,
+  "last_run": "2026-08-10T00:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
@@ -54,44 +54,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 298,
-      "focus": "brokencrystals MCP child routes (process_numbers/spawn_process/get_config) + WSL catalog 1376-1377 + queue drain; parallel run validated WSL 1371-1375 (8 findings each)",
+      "urls_scanned": 4,
+      "findings": 36,
+      "focus": "nodegoat profile A6 sensitive-data + ReDoS route oracles; WSL 1374-1375 placeholder validation",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "brokencrystals.com/api/mcp/process_numbers: 75 findings — process_numbers server-side JS injection live oracle fires",
-      "brokencrystals.com/api/mcp/spawn_process: 39 findings — MCP spawn_process RCE surface",
-      "brokencrystals.com/api/mcp/get_config: 40 findings — MCP get_config credential-leak surface",
-      "brokencrystals.com/api/mcp/tools: 75 findings — MCP tool enumeration hub",
-      "pwnshop.ctfsecurity.com/seller/storefront: 41 findings — SSTI storefront preview hub",
-      "pentest-fauxbank.vercel.app/api/register: 14 findings — open registration mass-assignment oracle",
-      "web-security-learning-labs.vercel.app/module/1371-1373: 8 findings each — placeholder-module oracles shipped (CATALOG_MAX 1375)",
-      "web-security-learning-labs.vercel.app/module/1376-1377: 7 findings each — catalog shell modules"
+      "nodegoat-websec.herokuapp.com/profile: 7→10 findings — nodegoat-profile-sensitive-data + redos route oracles shipped",
+      "web-security-learning-labs.vercel.app/module/1374-1375: 8 findings each — placeholder oracle validated",
+      "brokencrystals.com/api/mcp/process_numbers: 75 findings — MCP process_numbers oracle fires",
+      "secresearchlab.web.app/labs/cors-lab: 10 findings — cors-lab route oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs; Resend key not in current social feeds)",
       "brokencrystals.com/api/mcp/spawn_process: spawn_process RCE live oracle may need POST body probe tuning",
-      "wrongsecrets.herokuapp.com/challenge/60 + juice-shop.demo.escape.tech/track-order/1: queued but not drained this run (limit=8)",
-      "web-security-learning-labs.vercel.app/module/1374-1375 + 1378: queued — catalog extension pending next drain",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle requires OTP-authenticated session for live probe",
+      "web-security-learning-labs.vercel.app/module/1378: queued — catalog extension pending next drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 47,
+    "nodegoat-websec.herokuapp.com/profile": 10,
     "brokencrystals.com/api/mcp/process_numbers": 75,
     "brokencrystals.com/api/mcp/tools": 75,
-    "pwnshop.ctfsecurity.com/seller/storefront": 41,
-    "brokencrystals.com/api/mcp/get_config": 40,
-    "brokencrystals.com/api/mcp/spawn_process": 39,
-    "pentest-fauxbank.vercel.app/api/register": 14,
-    "web-security-learning-labs.vercel.app/module/1371": 8,
-    "web-security-learning-labs.vercel.app/module/1372": 8,
-    "web-security-learning-labs.vercel.app/module/1373": 8,
-    "web-security-learning-labs.vercel.app/module/1376": 7,
-    "web-security-learning-labs.vercel.app/module/1377": 7
+    "web-security-learning-labs.vercel.app/module/1374": 8,
+    "web-security-learning-labs.vercel.app/module/1375": 8,
+    "secresearchlab.web.app/labs/cors-lab": 10
   }
 }
