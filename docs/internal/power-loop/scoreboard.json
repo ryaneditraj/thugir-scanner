@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T13:15:00.000Z",
+  "updated_at": "2026-08-10T14:06:42.894Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2738,
-  "total_findings": 26608,
+  "total_sites_scanned": 2747,
+  "total_findings": 26706,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1963,
-  "discovery_findings": 22587,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-10T13:15:00.000Z",
+  "discovery_urls_added": 1968,
+  "discovery_findings": 22637,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-10T14:06:42.894Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 590,
+      "probes_run": 572,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 12,
-      "urls_scanned": 12,
-      "findings": 100,
-      "focus": "WSL CATALOG_MAX 1450 (+1443-1450) + wrongsecrets extract seeds 0-66 + ssrf.vulnlab queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 50,
+      "focus": "WSL CATALOG_MAX 1455 (+1451-1455) + backlog drain 1074/1075/1066",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1443-1450: 5 findings each — placeholder-module-route-live-oracle (CATALOG_MAX 1450)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 13 findings — extractWrongSecretsChallengeSeeds aligned to 0-66",
-      "ssrf.vulnlab.dev/basic: 3→15 findings — ssrf-vulnlab-basic-route-live-oracle + host SSRF oracles via queue drain",
-      "ssrf.vulnlab.dev/metadata|blocklist|redirect: 15 findings each — route-specific SSRF live oracles now in results.json"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1451-1455: 7 findings each — placeholder-module-route-live-oracle (CATALOG_MAX 1455)",
+      "web-security-learning-labs.vercel.app/module/1074-1075/1066: 5 findings each — backlog drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "WSL modules 1451-1455: catalog shells only — no route-specific challenge oracles",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
-      "ssrf.vulnlab.dev/allowlist|scheme|gopher|parser|blind|webhook: queued but not yet drained this run"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "web-security-learning-labs.vercel.app/module/1451": 7,
+    "web-security-learning-labs.vercel.app/module/1452": 7,
+    "web-security-learning-labs.vercel.app/module/1453": 7,
+    "web-security-learning-labs.vercel.app/module/1454": 7,
+    "web-security-learning-labs.vercel.app/module/1455": 7,
+    "web-security-learning-labs.vercel.app/module/1074": 5,
+    "web-security-learning-labs.vercel.app/module/1075": 5,
+    "web-security-learning-labs.vercel.app/module/1066": 5,
     "ssrf.vulnlab.dev/basic": 15,
-    "ssrf.vulnlab.dev/metadata": 15,
-    "ssrf.vulnlab.dev/blocklist": 15,
-    "ssrf.vulnlab.dev/redirect": 15,
-    "web-security-learning-labs.vercel.app/module/1443": 5,
-    "web-security-learning-labs.vercel.app/module/1450": 5,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 13,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45,
-    "brokencrystals.com/api/spawn": 84
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45
   }
 }
