@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T23:05:30.000Z",
+  "updated_at": "2026-08-10T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2928,
-  "total_findings": 29042,
+  "total_sites_scanned": 2930,
+  "total_findings": 29192,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2114,
-  "discovery_findings": 23923,
-  "improvements_shipped": 1175,
-  "last_run": "2026-08-10T23:05:30.000Z",
+  "discovery_urls_added": 2127,
+  "discovery_findings": 24022,
+  "improvements_shipped": 1183,
+  "last_run": "2026-08-10T23:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "benchmark_recall": {
@@ -46,34 +46,30 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 (49 findings, probes=598); secret-resend slug still absent"
+      "note": "Primary Heroku awake 6/6 (50 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty",
     "discovery": {
-      "focus": "WSL CATALOG_MAX 1585 extension + queue drain (1564-1566 backlog)",
-      "urls_added": 5,
-      "queue_drained": 8,
-      "discovery_findings": 47
+      "focus": "BurpBountyLab route oracles + hub queue drain + WSL CATALOG_MAX 1600",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
-      "web-security-learning-labs.vercel.app/module/1581-1584: 7 findings each — placeholder module oracle",
-      "web-security-learning-labs.vercel.app/module/1585: 4 findings",
-      "web-security-learning-labs.vercel.app/module/1564-1566: 5 findings each — backlog drain"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings)",
+      "burpbountylab.com: 0→99 findings — first hub scan with 50+ burpbounty-* live oracles",
+      "burpbountylab.com/sqli/status?id=1: 94 findings — burpbounty-sqli-status-route-live-oracle",
+      "burpbountylab.com/ssrf/img: 94 findings — burpbounty-ssrf-img-route-live-oracle"
     ],
     "learning_gaps": [
       "secret-resend slug still absent on juice-shop (sensitive_data covered via juice-shop-leaked-api-key)",
       "teacher_delta blocked — nuclei/engine unavailable",
-      "WSL modules 1567-1580 still queued for future drains"
+      "WSL modules 1564-1580 queued for next drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
-    "pwnshop.ctfsecurity.com/debug/info": 42,
-    "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "web-security-learning-labs.vercel.app/module/1581": 7,
-    "web-security-learning-labs.vercel.app/module/1582": 7,
-    "web-security-learning-labs.vercel.app/module/1583": 7,
-    "web-security-learning-labs.vercel.app/module/1584": 7
+    "juice-shop.herokuapp.com": 50,
+    "burpbountylab.com": 99,
+    "burpbountylab.com/sqli/status?id=1": 94,
+    "burpbountylab.com/ssrf/img?src=http://example.com/img.png": 94,
+    "pwnshop.ctfsecurity.com/debug/info": 42
   }
 }

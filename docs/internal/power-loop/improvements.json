@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-route-live-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: burpBountyRouteLiveOracle wrappers for /sqli/status, /sqli/length, /sqli/user, /ssrf/img, /pt/include, /redirect/meta; burpbountylab.com/sqli/status?id=1 findings 94 (+burpbounty-sqli-status-route-live-oracle); /ssrf/img findings 94 (+burpbounty-ssrf-img-route-live-oracle); hub 0→99 findings; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1581-1600",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1580→1600; placeholder/SSTI priority regex extended 15[3-8][0-9]|15[89]0|1600; queue modules 1581-1600 added; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-hub-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended burpbountylab.com hub + sqli/status, sqli/length, sqli/user, ssrf/img, pt/include, redirect/meta practice routes to discovery queue; hub scan 99 findings with 50+ burpbounty-* live oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-10-12-topic-route-oracles",
       "status": "shipped",
@@ -440,6 +458,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-route-live-oracles",
+      "shipped_at": "2026-08-10T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1581-1600",
+      "shipped_at": "2026-08-10T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-hub-queue-drain",
+      "shipped_at": "2026-08-10T23:10:00.000Z"
+    },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-api-route-queue-drain-17utc",
