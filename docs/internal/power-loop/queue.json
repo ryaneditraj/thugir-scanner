@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T23:05:00.000Z",
+  "updated_at": "2026-08-10T01:40:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/api/mcp/process_numbers",
@@ -17913,6 +17913,31 @@
     {
       "url": "https://secure-bank-bay.vercel.app/admin",
       "source": "Areeeshaa/SecureBank — RBAC/admin access-control oracle GET /admin (secure-bank-bay.vercel.app OSS deploy, 07 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1378",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1378 (public Vercel demo, 01 UTC CATALOG_MAX 1381 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1379",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1379 (public Vercel demo, 01 UTC CATALOG_MAX 1381 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1380",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1380 (public Vercel demo, 01 UTC CATALOG_MAX 1381 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1381",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1381 (public Vercel demo, 01 UTC CATALOG_MAX 1381 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1382",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1382 (public Vercel demo, 01 UTC CATALOG_MAX 1382 extension)",
       "auth": "public_demo"
     }
   ]
