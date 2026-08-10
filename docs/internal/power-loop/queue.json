@@ -1,6 +1,116 @@
 {
-  "updated_at": "2026-08-10T14:05:00.000Z",
+  "updated_at": "2026-08-10T15:02:57.690Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1466",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1466 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1467",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1467 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1468",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1468 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1469",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1469 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1470",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1470 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1471",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1471 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1472",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1472 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1473",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1473 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1474",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1474 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1475",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1475 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1476",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1476 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1477",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1477 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1478",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1478 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1479",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1479 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1480",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1480 (CATALOG_MAX 1480 extension, 15 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/allowlist",
+      "source": "ssrf.vulnlab.dev — allowlist SSRF live oracle queue drain (15 UTC — route-specific oracles absent in results.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/scheme",
+      "source": "ssrf.vulnlab.dev — scheme SSRF live oracle queue drain (15 UTC — route-specific oracles absent in results.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/gopher",
+      "source": "ssrf.vulnlab.dev — gopher SSRF live oracle queue drain (15 UTC — route-specific oracles absent in results.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/parser",
+      "source": "ssrf.vulnlab.dev — parser SSRF live oracle queue drain (15 UTC — route-specific oracles absent in results.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blind",
+      "source": "ssrf.vulnlab.dev — blind SSRF live oracle queue drain (15 UTC — route-specific oracles absent in results.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "source": "ssrf.vulnlab.dev — webhook SSRF live oracle queue drain (15 UTC — route-specific oracles absent in results.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/regular_user/adminpermission",
+      "source": "NeuraLegion/brokencrystals — adminpermission mass-assignment route oracle GET /api/users/one/{email}/adminpermission (15 UTC queue drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1451",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1451 (CATALOG_MAX 1465 extension, 14 UTC discovery)",
@@ -3557,11 +3667,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/webhook",
-      "source": "sampsonc/vulnlab.dev — semi-blind SSRF POST webhook leaks status/headers (README)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://ssrf.vulnlab.dev/metadata-gcp",
       "source": "sampsonc/vulnlab.dev — GCP metadata SSRF with Metadata-Flavor header injection (README)",
       "auth": "public_demo"
@@ -4157,21 +4262,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/scheme",
-      "source": "sampsonc/vulnlab.dev — unrestricted URL scheme SSRF lab (file:// read)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ssrf.vulnlab.dev/gopher",
-      "source": "sampsonc/vulnlab.dev — gopher:// SSRF to non-HTTP TCP service lab",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ssrf.vulnlab.dev/parser",
-      "source": "sampsonc/vulnlab.dev — URL-parser disagreement SSRF bypass lab (userinfo host confusion)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vuln-expose.vercel.app/network-tools",
       "source": "JuaniVeltri/vuln-expose — network ping/SSRF CMDi lab module (Vercel OSS README)",
       "auth": "oss_deploy"
@@ -4489,11 +4579,6 @@
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
       "source": "OWASP WrongSecrets — challenge-66 advanced binary reverse-engineering oracle (public Heroku benchmark)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ssrf.vulnlab.dev/allowlist",
-      "source": "sampsonc/vulnlab.dev — SSRF allowlist bypass lab (vulnlab.dev must contain substring bypass)",
       "auth": "public_demo"
     },
     {
@@ -5294,11 +5379,6 @@
     {
       "url": "https://brokencrystals.com/api/file/azure?path=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals — Azure metadata SSRF oracle /api/file/azure (README cloud endpoints)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/users/one/regular_user/adminpermission",
-      "source": "NeuraLegion/brokencrystals — admin permission probe oracle GET /api/users/one/{email}/adminpermission (README mass-assignment)",
       "auth": "benchmark"
     },
     {
