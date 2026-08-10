@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-send-support-email-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/email/sendSupportEmail?to=... returns {\"error\":\"connect ECONNREFUSED 127.0.0.1:1025\"}; brokencrystals.com/api/email/sendSupportEmail findings 81 incl brokencrystals-send-support-email-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1406-1410",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1405→1410; placeholder/SSTI priority regex extended 140[0-5]→140[0-9]|1410; web-security-learning-labs.vercel.app/module/1406 findings 8 (+placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-heroku-staging-route-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: rewriteJuiceShopStagingFallback rewrites juice-shop.herokuapp.com→juice-shop-staging.herokuapp.com on 503 before BlockedTargetError; juice-shop.herokuapp.com/rest/user/security-question?email=morty@juice-sh.op findings 48 incl juice-shop-security-question-user-live-oracle; benchmark 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-otp-reprime-after-crawl",
       "status": "shipped",
