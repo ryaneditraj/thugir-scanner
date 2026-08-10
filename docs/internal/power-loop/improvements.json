@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1436-1442",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1435→1442; placeholder/SSTI priority regex extended 143[0-5]→143[0-9]|144[0-2]; web-security-learning-labs.vercel.app/module/1436 findings 5 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-64-66-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with /challenge/64-66 + /challenge/challenge-64-66; runner -3 priority for wrongsecrets-challenge on challenge-64/65/66 routes; wrongsecrets.herokuapp.com/challenge/challenge-64 findings 13 incl wrongsecrets-challenge-route-live-oracle (Swift binary); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-spawn-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/spawn?command=echo+thugirSpawnCmdCanary returns canary in body; brokencrystalsSpawnCommandInjectionLiveOracle + brokencrystalsSpawnRouteLiveOracle; brokencrystals.com/api/spawn findings 85 incl brokencrystals-spawn-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-62-63-priority-seeds",
       "status": "shipped",
@@ -21649,6 +21667,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1436-1442",
+      "shipped_at": "2026-08-10T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-64-66-priority-seeds",
+      "shipped_at": "2026-08-10T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-spawn-route-live-oracle",
+      "shipped_at": "2026-08-10T12:10:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
