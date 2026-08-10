@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T04:08:00.000Z",
+  "updated_at": "2026-08-10T04:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3146,
-  "total_findings": 33314,
-  "critical_findings": 65,
+  "total_sites_scanned": 3148,
+  "total_findings": 33341,
+  "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2210,
   "discovery_findings": 26301,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-10T04:08:00.000Z",
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-10T04:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -57,30 +57,35 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 47,
-      "focus": "WSL catalog 1398-1400 extension + vulnforge nightmare L1 + GenAI vector-embedding lesson; queue drain 1393-1397 + 1388-1390",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL catalog 1393-1397 extension + brokencrystals /api/secrets and /api/config route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1393-1396: 7 findings each — stable WSL catalog oracles",
-      "web-security-learning-labs.vercel.app/module/1397: 4 findings — catalog tail module",
+      "web-security-learning-labs.vercel.app/module/1393: 8 findings — CATALOG_MAX 1397 placeholder-module-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1394-1396: 8 findings each with placeholder oracle",
+      "brokencrystals.com/api/secrets: route scan fires brokencrystals-secrets-route-live-oracle (83 findings)",
+      "brokencrystals.com/api/config: route scan fires brokencrystals-config-route-live-oracle (81 findings)",
       "web-security-learning-labs.vercel.app/module/1388-1390: 5 findings each — prior-queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "juice-shop.herokuapp.com primary: Heroku dyno error — staging fallback required for live oracles",
       "web-security-learning-labs.vercel.app/module/1398-1400: queued — pending next queue drain",
-      "vulnforge-academy nightmare/level1 + owaspbased-lessons vector-embedding: queued — pending next queue drain"
+      "ssrf.vulnlab.dev/*: route scans not in this run queue slice — oracles exist but URLs not re-scanned"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
-    "web-security-learning-labs.vercel.app/module/1393": 7,
-    "web-security-learning-labs.vercel.app/module/1394": 7,
-    "web-security-learning-labs.vercel.app/module/1395": 7,
-    "web-security-learning-labs.vercel.app/module/1396": 7,
-    "web-security-learning-labs.vercel.app/module/1397": 4,
+    "brokencrystals.com/api/secrets": 83,
+    "brokencrystals.com/api/config": 81,
+    "brokencrystals.com/api/mcp/tools": 82,
+    "web-security-learning-labs.vercel.app/module/1393": 8,
+    "web-security-learning-labs.vercel.app/module/1394": 8,
+    "web-security-learning-labs.vercel.app/module/1395": 8,
+    "web-security-learning-labs.vercel.app/module/1396": 8,
+    "web-security-learning-labs.vercel.app/module/1397": 5,
     "web-security-learning-labs.vercel.app/module/1388": 5,
     "web-security-learning-labs.vercel.app/module/1389": 5,
     "web-security-learning-labs.vercel.app/module/1390": 5

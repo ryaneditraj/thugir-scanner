@@ -878,7 +878,7 @@ values
    true),
   ('brokencrystals-secrets-route-live-oracle', 'generic', 'Exposed secret', 'critical',
    'Broken Crystals /secrets route live oracle',
-   'When scanning /secrets, GET /api/secrets returns live API tokens (Slack, Facebook, Google OAuth, PayPal, CodeClimate) without authentication — route-specific secrets exposure oracle.',
+   'When scanning /secrets or /api/secrets, GET /api/secrets returns live API tokens (Slack, Facebook, Google OAuth, PayPal, CodeClimate) without authentication — route-specific secrets exposure oracle.',
    'Route-specific confirmation that Broken Crystals exposes third-party API tokens on /secrets scans.',
    'rule_ref',
    '{"rule":"brokencrystalsSecretsRouteLiveOracle"}'::jsonb,
