@@ -35313,7 +35313,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1540;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1560;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -60527,6 +60527,126 @@ const wrongsecretsChallengeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge7VaultLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-7", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Vault|Vault<\/strong>/i.test(body) ||
+    !/Find the Secret in Vault using the logged root token/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: body.match(/Find the Secret in Vault[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Vault metadata challenge",
+      note: "OWASP WrongSecrets challenge-7 documents Vault metadata secret retrieval using a logged root token — HashiCorp Vault secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge7VaultRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?7\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge7VaultLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-7 route scan — Vault metadata challenge confirms root-token Vault secret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge8LoggingLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-8", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Logging|Logging<\/strong>/i.test(body) ||
+    !/docker logs|find the value for challenge\s*8/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: body.match(/docker logs[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Logging challenge",
+      note: "OWASP WrongSecrets challenge-8 documents secrets leaked via docker logs — container logging exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge8LoggingRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?8\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge8LoggingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-8 route scan — Logging challenge confirms docker logs secret-exposure walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge9TerraformLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-9", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Terraform|Terraform<\/strong>/i.test(body) ||
+    !/terraform\.tfstate|Trufflehog|AWS Secrets Manager|kubectl exec/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: body.match(/terraform\.tfstate[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Terraform challenge",
+      note: "OWASP WrongSecrets challenge-9 documents Terraform state, AWS Secrets Manager, and kubectl pod exec secret-hunt walkthroughs — Terraform/IaC secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge9TerraformRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?9\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge9TerraformLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-9 route scan — Terraform challenge confirms tfstate/Secrets Manager/kubectl secret-hunt walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -72258,6 +72378,12 @@ export const RULES: Record<string, Rule> = {
   juiceShopFileUploadRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
+  wrongsecretsChallenge7VaultLiveOracle,
+  wrongsecretsChallenge7VaultRouteLiveOracle,
+  wrongsecretsChallenge8LoggingLiveOracle,
+  wrongsecretsChallenge8LoggingRouteLiveOracle,
+  wrongsecretsChallenge9TerraformLiveOracle,
+  wrongsecretsChallenge9TerraformRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
