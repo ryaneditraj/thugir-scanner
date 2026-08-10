@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-reprime-after-crawl",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clearPwnshopOtpSessionForProbe + post-crawl primePwnshopOtpSessionForDeepScan before pattern loop — PwnMail OTP arrives during crawl; pwnshop.ctfsecurity.com/profile/upload-avatar findings 22→45 with avatar-svg-xss + avatar-upload-route oracles on maxPages=6; benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-apply-coupon-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority -3 for pwnshop coupon/checkout slugs on /apply-coupon and /cart routes; pwnshop.ctfsecurity.com/apply-coupon route scan fires apply-coupon-route + coupon-category-bypass-route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-upload-avatar-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority -3 for pwnshop avatar/upload slugs on /profile/upload-avatar; route scan fires pwnshop-avatar-svg-xss-live-oracle + pwnshop-avatar-upload-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1398-1405",
       "status": "shipped",
