@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T17:15:00.000Z",
+  "updated_at": "2026-08-10T18:05:35.692Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2837,
-  "total_findings": 27612,
+  "total_sites_scanned": 2846,
+  "total_findings": 27713,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2039,
-  "discovery_findings": 23067,
-  "improvements_shipped": 1179,
-  "last_run": "2026-08-10T17:15:00.000Z",
+  "discovery_urls_added": 2044,
+  "discovery_findings": 23119,
+  "improvements_shipped": 1176,
+  "last_run": "2026-08-10T18:05:35.692Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,36 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall on primary (49 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 18,
-      "urls_scanned": 3,
-      "findings": 118,
-      "focus": "WSL CATALOG_MAX 1510 (+1496-1510) + brokencrystals API route oracle reliability + queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 52,
+      "focus": "WSL CATALOG_MAX 1515 (+1511-1515) + backlog drain 1501-1503",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1496: 5 findings — placeholder-module-route-live-oracle (CATALOG_MAX 1510)",
-      "brokencrystals.com/api/products/latest: route scan fires products-latest-limit-bypass-live-oracle (3→11 products via ?limit=100)",
-      "brokencrystals.com/api/testimonials/count: route scan fires testimonials-count-sqli-route-live-oracle (information_schema table count)",
-      "brokencrystals.com/api/goto: route scan fires goto-open-redirect-route-live-oracle (302 to evil-open-redirect-probe.example)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1511: 8 findings — placeholder-module-route-live-oracle + dangerous-html-sinks (CATALOG_MAX 1515)",
+      "web-security-learning-labs.vercel.app/module/1512-1514: 8 findings each — new catalog shells with XSS sink evidence",
+      "web-security-learning-labs.vercel.app/module/1515: 5 findings — catalog tail shell",
+      "web-security-learning-labs.vercel.app/module/1501-1503: 5 findings each — backlog queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "brokencrystals.com/api/goto: route oracle flaky when BC API routes scanned back-to-back (rate limiting)"
+      "WSL modules 1511-1515 are catalog shells — need challenge-specific live oracles when modules ship content",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "web-security-learning-labs.vercel.app/module/1496": 5,
-    "brokencrystals.com/api/products/latest": 75,
-    "brokencrystals.com/api/testimonials/count": 38,
-    "brokencrystals.com/api/goto": 75,
-    "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 83
+    "juice-shop.herokuapp.com": 49,
+    "web-security-learning-labs.vercel.app/module/1511": 8,
+    "web-security-learning-labs.vercel.app/module/1512": 8,
+    "web-security-learning-labs.vercel.app/module/1513": 8,
+    "web-security-learning-labs.vercel.app/module/1514": 8,
+    "web-security-learning-labs.vercel.app/module/1515": 5,
+    "web-security-learning-labs.vercel.app/module/1501": 5,
+    "web-security-learning-labs.vercel.app/module/1502": 5,
+    "web-security-learning-labs.vercel.app/module/1503": 5
   }
 }
