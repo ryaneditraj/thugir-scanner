@@ -31076,6 +31076,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-goto-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Broken Crystals /api/goto route open redirect oracle",
+    description:
+      "When scanning /api/goto, GET ?url= returns HTTP 302 Location to an attacker-controlled URL without validation — route-specific unvalidated redirect oracle.",
+    impactOneline:
+      "Route-scoped scans of /api/goto should confirm unvalidated open redirects with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGotoOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allow-list — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject external URLs in redirect parameters or validate against a fixed allow-list.",
+        "Use relative-path-only redirects where possible.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/goto route scan confirms redirects to arbitrary external URLs. Show route-specific redirect validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-aws-metadata-ssrf-live-oracle",
     platform: "generic",
     category: "SSRF",

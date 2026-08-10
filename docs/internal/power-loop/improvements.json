@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-goto-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/goto?url=https://evil-open-redirect-probe.example returns HTTP 302 Location to attacker URL; brokencrystalsGotoOpenRedirectRouteLiveOracle fires on /api/goto route scans with scannedUrl evidence; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-endpoint-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for brokencrystals-goto on /api/goto, brokencrystals-(metadata|aws-metadata) on /api/metadata, brokencrystals-file on /api/file, brokencrystals-delete-emails on /api/email/deleteEmails, brokencrystals-email-smtp on /api/email/getEmails; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1411-1416",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1410→1416; placeholder/SSTI priority regex extended 1410→141[0-6]; web-security-learning-labs.vercel.app/module/1411-1416 return HTTP 200 placeholder shells; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-send-support-email-ssrf-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/email/sendSupportEmail?to=... returns {\"error\":\"connect ECONNREFUSED 127.0.0.1:1025\"}; brokencrystals.com/api/email/sendSupportEmail findings 81 incl brokencrystals-send-support-email-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
@@ -21583,6 +21601,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-goto-open-redirect-route-live-oracle",
+      "shipped_at": "2026-08-10T08:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-endpoint-route-priority",
+      "shipped_at": "2026-08-10T08:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1411-1416",
+      "shipped_at": "2026-08-10T08:15:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1398-1405",

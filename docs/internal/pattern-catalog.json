@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-10T07:10:58.973Z",
-  "total": 2076,
-  "uniqueSlugs": 2072,
+  "generatedAt": "2026-08-10T08:09:36.262Z",
+  "total": 2077,
+  "uniqueSlugs": 2073,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2058,
+    "generic": 2059,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1991,
+    "deep": 1992,
     "continuous": 0
   },
   "byCategory": {
@@ -29,7 +29,7 @@
     "Broken authentication": 125,
     "Injection": 302,
     "Cross-site scripting": 671,
-    "Open redirect": 16,
+    "Open redirect": 17,
     "general": 20,
     "SSRF": 12,
     "Server-side request forgery": 60,
@@ -94,6 +94,7 @@
     "brokencrystals-fullinfo-disclosure-live-oracle",
     "brokencrystals-fullinfo-disclosure-route-live-oracle",
     "brokencrystals-goto-open-redirect-live-oracle",
+    "brokencrystals-goto-open-redirect-route-live-oracle",
     "brokencrystals-hidden-upload-live-oracle",
     "brokencrystals-home-dom-xss-live-oracle",
     "brokencrystals-home-dom-xss-route-live-oracle",
