@@ -1,6 +1,127 @@
 {
   "runs": [
     {
+      "run_id": "2026-08-09T20:06:46.244Z",
+      "url": "https://nodegoat-websec.herokuapp.com/research",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nosql-evidence",
+          "title": "Client bundle documents NoSQL injection via MongoDB operators",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nodegoat-evidence",
+          "title": "OWASP NodeGoat intentionally insecure Node.js lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "nodegoat-research-ssrf-route-live-oracle",
+          "title": "NodeGoat /research SSRF route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "nodegoat-signup-open-registration-live-oracle",
+          "title": "NodeGoat signup open registration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 570,
+      "status": "ok",
+      "scanned_at": "2026-08-09T20:06:46.244Z"
+    },
+    {
+      "run_id": "2026-08-09T20:07:04.639Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1370",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-09T20:07:04.639Z"
+    },
+    {
       "run_id": "2026-08-09T20:07:18.843Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1369",
       "auth": "public_demo",
@@ -21181,13 +21302,13 @@
       "scanned_at": "2026-08-10T15:10:14.959Z"
     },
     {
-      "run_id": "2026-08-10T16:03:18.727Z",
+      "run_id": "2026-08-10T16:10:23.329Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 49,
+      "finding_count": 50,
       "findings": [
         {
           "slug": "juice-shop-addresss-bola-live-oracle",
@@ -21340,7 +21461,7 @@
           "slug": "juice-shop-deluxe-membership-live-oracle",
           "title": "Juice Shop deluxe membership live oracle",
           "severity": "medium",
-          "confidence": 0.93,
+          "confidence": 0.91,
           "category": "Business logic"
         },
         {
@@ -21426,6 +21547,13 @@
           "severity": "high",
           "confidence": 0.93,
           "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-privacy-requests-bola-live-oracle",
+          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
         },
         {
           "slug": "juice-shop-track-order-idor-live-oracle",
@@ -21535,17 +21663,17 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 6,
-      "probes_run": 592,
+      "probes_run": 585,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:03:18.727Z"
+      "scanned_at": "2026-08-10T16:10:23.329Z"
     },
     {
-      "run_id": "2026-08-10T16:04:43.149Z",
+      "run_id": "2026-08-10T16:11:26.215Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1481",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 7,
+      "finding_count": 8,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -21576,6 +21704,13 @@
           "category": "Security misconfiguration"
         },
         {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
           "slug": "client-side-web-security-learning-labs-evidence",
           "title": "Web Security Learning Labs training platform disclosed",
           "severity": "medium",
@@ -21601,15 +21736,15 @@
       "pages_crawled": 6,
       "probes_run": 385,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:04:43.149Z"
+      "scanned_at": "2026-08-10T16:11:26.215Z"
     },
     {
-      "run_id": "2026-08-10T16:04:48.031Z",
+      "run_id": "2026-08-10T16:11:31.205Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1482",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 7,
+      "finding_count": 8,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -21640,6 +21775,13 @@
           "category": "Security misconfiguration"
         },
         {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
           "slug": "client-side-web-security-learning-labs-evidence",
           "title": "Web Security Learning Labs training platform disclosed",
           "severity": "medium",
@@ -21665,15 +21807,15 @@
       "pages_crawled": 6,
       "probes_run": 385,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:04:48.031Z"
+      "scanned_at": "2026-08-10T16:11:31.205Z"
     },
     {
-      "run_id": "2026-08-10T16:04:52.367Z",
+      "run_id": "2026-08-10T16:11:36.179Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1483",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 7,
+      "finding_count": 8,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -21701,6 +21843,13 @@
           "title": "Web Security Learning Labs module route evidence oracle",
           "severity": "info",
           "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
           "category": "Security misconfiguration"
         },
         {
@@ -21729,15 +21878,15 @@
       "pages_crawled": 6,
       "probes_run": 385,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:04:52.367Z"
+      "scanned_at": "2026-08-10T16:11:36.179Z"
     },
     {
-      "run_id": "2026-08-10T16:04:56.800Z",
+      "run_id": "2026-08-10T16:11:40.691Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1484",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 7,
+      "finding_count": 8,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -21768,6 +21917,13 @@
           "category": "Security misconfiguration"
         },
         {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
           "slug": "client-side-web-security-learning-labs-evidence",
           "title": "Web Security Learning Labs training platform disclosed",
           "severity": "medium",
@@ -21791,17 +21947,17 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 6,
-      "probes_run": 409,
+      "probes_run": 421,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:04:56.800Z"
+      "scanned_at": "2026-08-10T16:11:40.691Z"
     },
     {
-      "run_id": "2026-08-10T16:05:00.971Z",
+      "run_id": "2026-08-10T16:11:44.906Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1485",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 4,
+      "finding_count": 5,
       "findings": [
         {
           "slug": "missing-security-headers",
@@ -21817,35 +21973,6 @@
           "confidence": 0.86,
           "category": "Security misconfiguration"
         },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 398,
-      "status": "ok",
-      "scanned_at": "2026-08-10T16:05:00.971Z"
-    },
-    {
-      "run_id": "2026-08-10T16:05:14.764Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1069",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
         {
           "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
           "title": "Web Security Learning Labs placeholder module route live oracle",
@@ -21854,20 +21981,6 @@
           "category": "Security misconfiguration"
         },
         {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
           "slug": "client-side-web-security-learning-labs-evidence",
           "title": "Web Security Learning Labs training platform disclosed",
           "severity": "medium",
@@ -21886,16 +21999,30 @@
       "pages_crawled": 6,
       "probes_run": 398,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:05:14.764Z"
+      "scanned_at": "2026-08-10T16:11:44.906Z"
     },
     {
-      "run_id": "2026-08-10T16:05:28.655Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1070",
+      "run_id": "2026-08-10T16:11:59.076Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1486",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
       "finding_count": 5,
       "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
         {
           "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
           "title": "Web Security Learning Labs placeholder module route live oracle",
@@ -21904,20 +22031,6 @@
           "category": "Security misconfiguration"
         },
         {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
           "slug": "client-side-web-security-learning-labs-evidence",
           "title": "Web Security Learning Labs training platform disclosed",
           "severity": "medium",
@@ -21936,16 +22049,30 @@
       "pages_crawled": 6,
       "probes_run": 398,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:05:28.655Z"
+      "scanned_at": "2026-08-10T16:11:59.076Z"
     },
     {
-      "run_id": "2026-08-10T16:05:42.629Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1061",
+      "run_id": "2026-08-10T16:12:13.222Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1487",
       "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
       "finding_count": 5,
       "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
         {
           "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
           "title": "Web Security Learning Labs placeholder module route live oracle",
@@ -21954,20 +22081,6 @@
           "category": "Security misconfiguration"
         },
         {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
           "slug": "client-side-web-security-learning-labs-evidence",
           "title": "Web Security Learning Labs training platform disclosed",
           "severity": "medium",
@@ -21986,33 +22099,7 @@
       "pages_crawled": 6,
       "probes_run": 398,
       "status": "ok",
-      "scanned_at": "2026-08-10T16:05:42.629Z"
-    },
-    {
-      "run_id": "2026-08-10T16:06:15.823Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary Heroku 6/6 recall (49 findings, pages=6 probes=592)",
-      "teacher_delta": [],
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      },
-      "notes": "No teacher tools available. 16 UTC: primary awake 6/6. Discovery: +5 WSL modules 1481-1485 (CATALOG_MAX 1485 extension); drained 8 ok → 47 discovery findings. WSL 1481-1484: 7 each; 1485: 4; backlog 1069/1070/1061: 5 each.",
-      "scanned_at": "2026-08-10T16:06:15.823Z"
+      "scanned_at": "2026-08-10T16:12:13.222Z"
     }
   ]
 }

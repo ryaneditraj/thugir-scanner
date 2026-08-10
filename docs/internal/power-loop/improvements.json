@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1481-1495",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1480→1495; placeholder/SSTI priority regex extended 148[0-9]|149[0-5]; web-security-learning-labs.vercel.app/module/1481 findings 8 (+placeholder-module-route-live-oracle); module/1495 findings 5 with placeholder oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-priming-coupon-wallet-routes",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended waits [4000,7000,10000,13000] for apply-coupon/cart/wallet routes; pwnshopCompleteOtpSessionUncached adds 2500ms pre-handshake sleep on coupon/wallet routes; pwnshop.ctfsecurity.com/apply-coupon findings 22→45 with apply-coupon-route + coupon-category-bypass-route oracles; benchmark 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-coupon-queue-drain-16utc",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended pwnshop.ctfsecurity.com/apply-coupon /wallet /wallet/topup/vulnbank to discovery queue front; apply-coupon route scan 45 findings incl coupon + wallet-topup oracles; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1466-1480",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1465→1480; placeholder/SSTI priority regex extended 146[0-5]→146[0-9]|147[0-9]|1480; web-security-learning-labs.vercel.app/module/1466 findings 8 (+placeholder-module-route-live-oracle); module/1480 findings 5 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
@@ -320,6 +338,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-coupon-queue-drain-16utc",
+      "shipped_at": "2026-08-10T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-priming-coupon-wallet-routes",
+      "shipped_at": "2026-08-10T16:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1481-1495",
+      "shipped_at": "2026-08-10T16:15:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-ssti-curated-url-map-fallback",
