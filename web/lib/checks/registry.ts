@@ -10064,6 +10064,65 @@ const burpbountySsrfImgLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function burpBountyRouteLiveOracle(
+  routeRe: RegExp,
+  baseRule: Rule,
+  routeNote: string
+): Rule {
+  return async (ctx) => {
+    if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+    if (!routeRe.test(pageUrl)) return NEGATIVE;
+    const result = await baseRule(ctx);
+    if (!result.fired) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: routeNote
+      }
+    };
+  };
+}
+
+const burpbountySqliStatusRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/sqli\/status\b/i,
+  burpbountySqliStatusLiveOracle,
+  "Burp Bounty Lab /sqli/status route scan — id=1 returns 200 Found 1 users but id=1' returns 500 — status-code SQLi profile oracle"
+);
+
+const burpbountySqliLengthRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/sqli\/length\b/i,
+  burpbountySqliLengthLiveOracle,
+  "Burp Bounty Lab /sqli/length route scan — q=admin' OR 1=1-- returns more user-card rows than q=admin — content-length blind SQLi profile oracle"
+);
+
+const burpbountySsrfImgRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/ssrf\/img\b/i,
+  burpbountySsrfImgLiveOracle,
+  "Burp Bounty Lab /ssrf/img route scan — ?src= fetches attacker image URL and echoes Example Domain HTML — image-proxy SSRF profile oracle"
+);
+
+const burpbountyPtIncludeRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/pt\/include\b/i,
+  burpbountyPtIncludeLiveOracle,
+  "Burp Bounty Lab /pt/include route scan — ?page=../../../etc/passwd returns /etc/passwd via PHP include — local file inclusion profile oracle"
+);
+
+const burpbountyRedirectMetaRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/redirect\/meta\b/i,
+  burpbountyRedirectMetaLiveOracle,
+  "Burp Bounty Lab /redirect/meta route scan — meta refresh and location.replace redirect to attacker URL — open redirect profile oracle"
+);
+
+const burpbountySqliUserRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/sqli\/user\b/i,
+  burpbountySqliUserLiveOracle,
+  "Burp Bounty Lab /sqli/user route scan — id=1 returns admin profile and id=1' triggers MySQL syntax error — SQLi-by-ID profile oracle"
+);
+
 const burpbountySstiPreviewLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/ssti/preview", ctx.origin);
@@ -35313,7 +35372,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1580;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1600;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -73551,11 +73610,17 @@ export const RULES: Record<string, Rule> = {
   burpbountyRceEchoLiveOracle,
   burpbountySourceDisclosureLiveOracle,
   burpbountySqliStatusLiveOracle,
+  burpbountySqliStatusRouteLiveOracle,
   burpbountySqliLengthLiveOracle,
+  burpbountySqliLengthRouteLiveOracle,
   burpbountyPtIncludeLiveOracle,
+  burpbountyPtIncludeRouteLiveOracle,
   burpbountyRedirectMetaLiveOracle,
+  burpbountyRedirectMetaRouteLiveOracle,
   burpbountyXssEncodedLiveOracle,
   burpbountySsrfImgLiveOracle,
+  burpbountySsrfImgRouteLiveOracle,
+  burpbountySqliUserRouteLiveOracle,
   burpbountySstiPreviewLiveOracle,
   burpbountyXssUrlLiveOracle,
   burpbountySqliUserLiveOracle,

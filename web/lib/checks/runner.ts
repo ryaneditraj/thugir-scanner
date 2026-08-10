@@ -3006,11 +3006,17 @@ const DEEP_RULES = new Set<string>([
   "burpbountyRceEchoLiveOracle",
   "burpbountySourceDisclosureLiveOracle",
   "burpbountySqliStatusLiveOracle",
+  "burpbountySqliStatusRouteLiveOracle",
   "burpbountySqliLengthLiveOracle",
+  "burpbountySqliLengthRouteLiveOracle",
   "burpbountyPtIncludeLiveOracle",
+  "burpbountyPtIncludeRouteLiveOracle",
   "burpbountyRedirectMetaLiveOracle",
+  "burpbountyRedirectMetaRouteLiveOracle",
   "burpbountyXssEncodedLiveOracle",
   "burpbountySsrfImgLiveOracle",
+  "burpbountySsrfImgRouteLiveOracle",
+  "burpbountySqliUserRouteLiveOracle",
   "burpbountySstiPreviewLiveOracle",
   "burpbountyXssUrlLiveOracle",
   "burpbountySqliUserLiveOracle",
@@ -10573,13 +10579,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-7][0-9]|1580))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|1600))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-7][0-9]|1580)\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|1600)\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
@@ -10587,6 +10593,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/xss-playground\/?$/i.test(targetInput) && p.slug === "sec-research-lab-xss-playground-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/ssrf-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-ssrf-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/xxe-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-xxe-lab-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/sqli\/status\b/i.test(targetInput) && p.slug === "burpbounty-sqli-status-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/sqli\/length\b/i.test(targetInput) && p.slug === "burpbounty-sqli-length-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/sqli\/user\b/i.test(targetInput) && p.slug === "burpbounty-sqli-user-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ssrf\/img\b/i.test(targetInput) && p.slug === "burpbounty-ssrf-img-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/pt\/include\b/i.test(targetInput) && p.slug === "burpbounty-pt-include-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/redirect\/meta\b/i.test(targetInput) && p.slug === "burpbounty-redirect-meta-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;
