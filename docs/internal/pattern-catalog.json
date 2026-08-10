@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-10T08:09:36.262Z",
-  "total": 2077,
-  "uniqueSlugs": 2073,
+  "generatedAt": "2026-08-10T09:07:03.025Z",
+  "total": 2078,
+  "uniqueSlugs": 2074,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2059,
+    "generic": 2060,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1992,
+    "deep": 1993,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 420,
+    "Broken access control": 421,
     "Exposed secret": 33,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -76,6 +76,7 @@
     "brokencrystals-aws-metadata-ssrf-route-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
     "brokencrystals-chat-llm-query-live-oracle",
+    "brokencrystals-chat-llm-query-route-live-oracle",
     "brokencrystals-config-live-oracle",
     "brokencrystals-config-route-live-oracle",
     "brokencrystals-delete-emails-live-oracle",
