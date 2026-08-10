@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1398-1405",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1397→1405; placeholder/SSTI priority regex extended 139[0-7]→139[0-9]|140[0-5]; web-security-learning-labs.vercel.app/module/1401 findings 5 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-security-question-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for juice-shop-security-question* on /rest/user/security-question and juice-shop-security-questions* on /api/SecurityQuestions; GET /rest/user/security-question?email=morty@juice-sh.op returns question JSON; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-track-order-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for juice-shop-track-order* on /rest/track-order routes; juice-shop.demo.escape.tech/rest/track-order/1 already fires juice-shop-track-order-idor-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1393-1397",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1392→1397; placeholder priority regex extended 38[0-2]→38[0-9]|139[0-7]; SSTI priority 139[0-2]→139[0-7]; web-security-learning-labs.vercel.app/module/1393 findings 8 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
@@ -21529,6 +21547,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1398-1405",
+      "shipped_at": "2026-08-10T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-security-question-route-priority",
+      "shipped_at": "2026-08-10T05:10:00.000Z"
+    },
+    {
+      "source": "discovery:juice-shop",
+      "slug": "juice-shop-track-order-route-priority",
+      "shipped_at": "2026-08-10T05:10:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1393-1397",
