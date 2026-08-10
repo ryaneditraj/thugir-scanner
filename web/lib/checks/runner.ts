@@ -2620,6 +2620,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsMcpProcessNumbersRouteLiveOracle",
   "brokencrystalsMcpSpawnProcessLiveOracle",
   "brokencrystalsMcpSpawnProcessRouteLiveOracle",
+  "brokencrystalsMcpGetConfigLiveOracle",
+  "brokencrystalsMcpGetConfigRouteLiveOracle",
   "brokencrystalsJwtAlgNoneLiveOracle",
   "brokencrystalsJwtRouteLiveOracle",
   "brokencrystalsJwtWeakKeyLiveOracle",
