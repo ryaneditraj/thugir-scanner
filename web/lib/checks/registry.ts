@@ -35253,7 +35253,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1422;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1428;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -60267,6 +60267,10 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
       re: /challenge focuses on.*Secrets<\/strong>/i
     },
     {
+      label: "Telegram channel secrets walkthrough",
+      re: /Telegram Channel Secrets|getBotToken\(\)|Telegram Bot API|t\.me\/WrongsecretsBot/i
+    },
+    {
       label: "Password shucking walkthrough",
       re: /Password [Ss]hucking|password shucking/i
     },
@@ -60618,6 +60622,46 @@ const wrongsecretsChallenge60McpRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "WrongSecrets challenge-60 route scan — MCP Server Environment Variable Exposure challenge confirms unauthenticated execute_command env leak including WRONGSECRETS_MCP_SECRET"
+    }
+  };
+};
+
+const wrongsecretsChallenge61TelegramSecretsLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-61", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/_telegram_channel_secrets|Telegram Channel Secrets/i.test(body) ||
+    !/getBotToken\(\)|BOTID:TOKEN_STRING/i.test(body) ||
+    !/Telegram Bot API|t\.me\/WrongsecretsBot/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: body.match(/<p>For this challenge, the secret is:[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ?? "Telegram Channel Secrets",
+      note: "OWASP WrongSecrets challenge-61 documents hardcoded Telegram bot credentials in getBotToken() with channel access via Telegram Bot API — Telegram channel secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge61TelegramSecretsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?61\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge61TelegramSecretsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-61 route scan — Telegram Channel Secrets challenge confirms hardcoded bot token walkthrough and Telegram Bot API channel access"
     }
   };
 };
@@ -72159,6 +72203,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsMcpExecuteCommandLiveOracle,
   wrongsecretsMcpRouteLiveOracle,
   wrongsecretsChallenge60McpRouteLiveOracle,
+  wrongsecretsChallenge61TelegramSecretsLiveOracle,
+  wrongsecretsChallenge61TelegramSecretsRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
