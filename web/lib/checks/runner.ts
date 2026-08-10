@@ -2622,6 +2622,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideBrokencrystalsPrototypePollutionEvidence",
   "clientSideBrokencrystalsDomXssEvidence",
   "brokencrystalsGotoOpenRedirectLiveOracle",
+  "brokencrystalsGotoOpenRedirectRouteLiveOracle",
   "brokencrystalsAwsMetadataSsrfLiveOracle",
   "brokencrystalsAwsMetadataSsrfRouteLiveOracle",
   "brokencrystalsAzureMetadataSsrfLiveOracle",
@@ -10287,6 +10288,36 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("brokencrystals-send-support-email")
       )
         return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/goto\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-goto")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/metadata\b/i.test(targetInput) &&
+        /brokencrystals-(metadata|aws-metadata)/.test(p.slug)
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/file\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-file")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/email\/deleteEmails\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-delete-emails")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/email\/getEmails\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-email-smtp")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (
@@ -10335,13 +10366,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|1410))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-6]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|1410)\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-6])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;

@@ -35253,7 +35253,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1410;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1416;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -64068,6 +64068,23 @@ const brokencrystalsGotoOpenRedirectLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsGotoOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/goto\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsGotoOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/goto route scan — GET ?url= returns HTTP redirect to attacker-controlled URL — route-specific open redirect oracle"
+    }
+  };
+};
+
 const brokencrystalsAwsMetadataSsrfLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/api/file/aws", ctx.origin);
@@ -72202,6 +72219,7 @@ export const RULES: Record<string, Rule> = {
   clientSideBrokencrystalsPrototypePollutionEvidence,
   clientSideBrokencrystalsDomXssEvidence,
   brokencrystalsGotoOpenRedirectLiveOracle,
+  brokencrystalsGotoOpenRedirectRouteLiveOracle,
   brokencrystalsApiFileHttpbinSsrfLiveOracle,
   brokencrystalsApiFetchRouteLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
