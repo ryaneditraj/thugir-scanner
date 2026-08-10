@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-process-numbers-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/call process_numbers processing_expression=7*7 returns SSJI result: 49; brokencrystals.com/api/mcp/process_numbers findings 74→82 (+brokencrystals-mcp-process-numbers-live-oracle +route); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-spawn-process-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/list spawn_process admin + tools/call returns Unauthorized: tool spawn_process requires authentication; brokencrystals.com/api/mcp/spawn_process findings 74→82 (+brokencrystals-mcp-spawn-process-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1376-1378",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1375→1378; placeholder/SSTI priority regex 137[0-5]→137[0-8]; web-security-learning-labs.vercel.app/module/1376 findings 7→8 (+placeholder-module-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-profile-sensitive-data-route-live-oracle",
       "status": "shipped",

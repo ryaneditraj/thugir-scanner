@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-10T00:12:19.612Z",
-  "total": 2067,
-  "uniqueSlugs": 2063,
+  "generatedAt": "2026-08-10T01:12:06.916Z",
+  "total": 2071,
+  "uniqueSlugs": 2067,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2049,
+    "generic": 2053,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1982,
+    "deep": 1986,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 106,
     "Security misconfiguration": 152,
     "Broken authentication": 125,
-    "Injection": 298,
+    "Injection": 302,
     "Cross-site scripting": 671,
     "Open redirect": 16,
     "general": 20,
@@ -119,7 +119,11 @@
     "brokencrystals-marketplace-route-live-oracle",
     "brokencrystals-mass-assignment-live-oracle",
     "brokencrystals-mass-assignment-put-live-oracle",
+    "brokencrystals-mcp-process-numbers-live-oracle",
+    "brokencrystals-mcp-process-numbers-route-live-oracle",
     "brokencrystals-mcp-route-live-oracle",
+    "brokencrystals-mcp-spawn-process-live-oracle",
+    "brokencrystals-mcp-spawn-process-route-live-oracle",
     "brokencrystals-mcp-tools-live-oracle",
     "brokencrystals-metadata-xxe-live-oracle",
     "brokencrystals-metadata-xxe-route-live-oracle",
