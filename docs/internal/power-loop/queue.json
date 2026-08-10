@@ -18039,6 +18039,31 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1392",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1392 (public Vercel demo, 03 UTC CATALOG_MAX 1392 extension)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1398",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1398 (public Vercel demo, 04 UTC CATALOG_MAX 1400 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1399",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1399 (public Vercel demo, 04 UTC CATALOG_MAX 1400 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1400",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1400 (public Vercel demo, 04 UTC CATALOG_MAX 1400 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/nightmare/level1.php",
+      "source": "webspoilt/vulnforge-academy — Nightmare Level 1 challenge (Vercel OSS deploy, 04 UTC discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/challenges/vector-embedding",
+      "source": "OWASP GenAI Security Lab — LLM08 vector & embedding weakness interactive lesson (owaspbased-lessons.vercel.app, 04 UTC discovery)",
+      "auth": "public_demo"
     }
   ]
 }
