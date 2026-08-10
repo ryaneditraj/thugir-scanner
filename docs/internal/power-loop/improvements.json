@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1516-1525",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1520→1525; placeholder/SSTI priority regex extended 151[0-9]|152[0-5]; web-security-learning-labs.vercel.app/module/1525 findings 5 (+placeholder-module-route-live-oracle); modules 1521-1524 findings 8 each; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-resend-social-corpus-expansion",
+      "status": "rejected",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with Bluesky scoped search (from:handle resend/apikey/re_) + Mastodon v2 account search (resend/re_/apikey); no canonical re_<8>_<24> key in expanded corpus; benchmark juice-shop 47 findings 6/6 maintained (secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key)"
+    },
+    {
+      "source": "discovery:juice-shop.herokuapp.com",
+      "slug": "juice-shop-security-question-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended juice-shop.herokuapp.com/rest/user/security-question?email=admin@juice-sh.op and /api/SecurityQuestions to discovery queue; route scans fire juice-shop-security-question-user-route-live-oracle + juice-shop-security-questions-list-route-live-oracle (48 findings each); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-audit-log-oracle-retry",
       "status": "shipped",
