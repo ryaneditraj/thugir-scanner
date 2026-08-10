@@ -2502,6 +2502,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsMcpExecuteCommandLiveOracle",
   "wrongsecretsMcpRouteLiveOracle",
   "wrongsecretsChallenge60McpRouteLiveOracle",
+  "wrongsecretsChallenge61TelegramSecretsLiveOracle",
+  "wrongsecretsChallenge61TelegramSecretsRouteLiveOracle",
   "brokencrystalsChatLlmQueryLiveOracle",
   "brokencrystalsChatLlmQueryRouteLiveOracle",
   "clientSideDvragLabEvidence",
@@ -9400,6 +9402,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/8",
         "https://wrongsecrets.herokuapp.com/challenge/60",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
+        "https://wrongsecrets.herokuapp.com/challenge/61",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
@@ -10307,7 +10311,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/metadata\b/i.test(targetInput) &&
-        /brokencrystals-(metadata|aws-metadata)/.test(p.slug)
+        /brokencrystals-(metadata|aws-metadata|metadata-xxe)/.test(p.slug)
       )
         return -3;
       if (
@@ -10333,6 +10337,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?60\b/i.test(targetInput) &&
         p.slug.startsWith("wrongsecrets-challenge-60")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?61\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-61")
       )
         return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
@@ -10382,13 +10392,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-2]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-8]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-2])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-8])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;

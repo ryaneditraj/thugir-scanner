@@ -29204,6 +29204,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-61 Telegram secrets route live oracle",
+    description:
+      "When scanning /challenge/61 or /challenge/challenge-61, the walkthrough documents hardcoded Telegram bot credentials in getBotToken() and channel access via Telegram Bot API — route-specific challenge-61 Telegram secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-61 Telegram channel secrets walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge61TelegramSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-61 is intentional — never hardcode Telegram bot tokens in application source code.",
+      steps: [
+        "Store Telegram bot tokens in environment variables or a secrets manager.",
+        "Rotate any bot tokens that were committed to source control.",
+        "Restrict bot permissions to the minimum required channel operations."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-61 route documents hardcoded Telegram bot credentials. Show remediation for Telegram bot token management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-chat-llm-query-live-oracle",
     platform: "generic",
     category: "Broken access control",
