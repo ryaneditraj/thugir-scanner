@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1383-1392",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1382→1392; SSTI priority regex extended to 138[0-9]|139[0-2]; web-security-learning-labs.vercel.app/module/1383 findings 5→8 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP initialize + tools/list exposes get_count public + spawn_process/get_config admin; brokencrystals.com/api/mcp/tools findings 77→82 (+brokencrystals-mcp-tools-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "secret-resend-bluesky-search-corpus",
+      "status": "rejected",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with Bluesky searchPosts from:owasp-juice.shop fallback; no canonical re_<8>_<24> key in author feed or search corpus; benchmark juice-shop-staging 48 findings 6/6 maintained (secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key)"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-mcp-get-config-route-live-oracle",
       "status": "shipped",
@@ -21493,6 +21511,16 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1383-1392",
+      "shipped_at": "2026-08-10T03:45:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-tools-route-live-oracle",
+      "shipped_at": "2026-08-10T03:45:00.000Z"
+    },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-seller-storefront-ssti-route-live-oracle",

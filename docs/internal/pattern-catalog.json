@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-10T02:04:19.738Z",
-  "total": 2073,
-  "uniqueSlugs": 2069,
+  "generatedAt": "2026-08-10T03:05:17.216Z",
+  "total": 2074,
+  "uniqueSlugs": 2070,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2055,
+    "generic": 2056,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1988,
+    "deep": 1989,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 419,
+    "Broken access control": 420,
     "Exposed secret": 33,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -127,6 +127,7 @@
     "brokencrystals-mcp-spawn-process-live-oracle",
     "brokencrystals-mcp-spawn-process-route-live-oracle",
     "brokencrystals-mcp-tools-live-oracle",
+    "brokencrystals-mcp-tools-route-live-oracle",
     "brokencrystals-metadata-xxe-live-oracle",
     "brokencrystals-metadata-xxe-route-live-oracle",
     "brokencrystals-nested-json-dos-live-oracle",
