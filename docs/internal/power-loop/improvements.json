@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1371-1375",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1370→1375; isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended; web-security-learning-labs.vercel.app/module/1371 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1372-1373 8 each; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-placeholder-ssti-priority-regex-1371-1375",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner placeholder priority regex 370→37[0-5] and SSTI priority 1370→137[0-5]; modules 1371-1375 get -3 priority for placeholder/SSTI oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-seeds-1371-1375",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWebSecurityLearningLabsSeeds + webSecurityLearningModulePrioritySeeds use CATALOG_MAX=1375; queue modules 1371-1373 drained 8 findings each with placeholder oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-seller-storefront-ssti-route-live-oracle",
       "status": "shipped",
