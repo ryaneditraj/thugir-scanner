@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-10-12-topic-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge10CsiDriverRouteLiveOracle + 11IamEscalation + 12Docker in DEEP_RULES; challenge/10 GET confirms CSI-Driver/AWS Secrets Manager CSI mount walkthrough (14 findings incl. wrongsecrets-challenge-10-csi-driver-route-live-oracle); challenge/11 IAM cant-read-secrets (13 findings); challenge/12 docker history/Dockerfile COPY (13 findings); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1561-1580",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1560→1580; placeholder/SSTI priority regex extended 15[3-7][0-9]|1580; module/1561-1563 findings 8 each (+placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-info-wrongsecrets-error-demo-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended pwnshop.ctfsecurity.com/debug/info + wrongsecrets.herokuapp.com/error-demo/database-connection to discovery queue; pwnshop debug/info findings 42 (+pwnshop-debug-info-route-live-oracle sessionSecret=weak-secret-123); error-demo findings 12 (+wrongsecrets-error-demo-database-connection-route-live-oracle JDBC password); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1546-1560",
       "status": "shipped",
