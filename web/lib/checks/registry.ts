@@ -35247,7 +35247,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1392;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1397;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -64252,7 +64252,7 @@ const brokencrystalsSecretsLiveOracle: Rule = async (ctx) => {
 const brokencrystalsSecretsRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/secrets\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/)?secrets\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsSecretsLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
