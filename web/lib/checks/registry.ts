@@ -10117,12 +10117,6 @@ const burpbountyRedirectMetaRouteLiveOracle = burpBountyRouteLiveOracle(
   "Burp Bounty Lab /redirect/meta route scan — meta refresh and location.replace redirect to attacker URL — open redirect profile oracle"
 );
 
-const burpbountySqliUserRouteLiveOracle = burpBountyRouteLiveOracle(
-  /\/sqli\/user\b/i,
-  burpbountySqliUserLiveOracle,
-  "Burp Bounty Lab /sqli/user route scan — id=1 returns admin profile and id=1' triggers MySQL syntax error — SQLi-by-ID profile oracle"
-);
-
 const burpbountySstiPreviewLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/ssti/preview", ctx.origin);
@@ -10202,6 +10196,12 @@ const burpbountySqliUserLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const burpbountySqliUserRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/sqli\/user\b/i,
+  burpbountySqliUserLiveOracle,
+  "Burp Bounty Lab /sqli/user route scan — id=1 returns admin profile and id=1' triggers MySQL syntax error — SQLi-by-ID profile oracle"
+);
 
 const burpbountyAiHealthLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
