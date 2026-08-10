@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-10T05:05:00.000Z",
+  "updated_at": "2026-08-10T06:05:34.839Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/email/sendSupportEmail",
+      "source": "NeuraLegion/brokencrystals — prototype pollution + email injection oracle GET /api/email/sendSupportEmail (06 UTC priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/goto",
+      "source": "NeuraLegion/brokencrystals — open redirect oracle GET /api/goto?url= (06 UTC priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/metadata",
+      "source": "NeuraLegion/brokencrystals — sensitive config exposure oracle GET /api/metadata (06 UTC priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/basic",
+      "source": "sampsonc/vulnlab.dev — unfiltered SSRF lab (06 UTC priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file",
+      "source": "NeuraLegion/brokencrystals — SSRF oracle GET /api/file?path= (06 UTC priority drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1401",
       "source": "Web Security Learning Labs — module catalog oracle GET /module/1401 (public Vercel demo, 05 UTC CATALOG_MAX 1405 extension)",
@@ -2460,11 +2485,6 @@
       "url": "https://pwnshop.ctfsecurity.com/seller/preview",
       "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (GitHub README)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/metadata",
-      "source": "NeuraLegion/brokencrystals — XXE + reflective XSS oracle via POST XML/SVG body (README)",
-      "auth": "benchmark"
     },
     {
       "url": "https://juice-shop-staging.herokuapp.com/rest/user/whoami",
@@ -6277,11 +6297,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/basic",
-      "source": "sampsonc/vulnlab.dev — unfiltered SSRF lab requests.get (GitHub README live at ssrf.vulnlab.dev)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://ssrf.vulnlab.dev/metadata-aws",
       "source": "sampsonc/vulnlab.dev — mock AWS IMDSv1 metadata SSRF oracle (cloud-hosted profile fetcher)",
       "auth": "public_demo"
@@ -6714,11 +6729,6 @@
     {
       "url": "https://brokencrystals.com/hidden-upload",
       "source": "NeuraLegion/brokencrystals — DOM XSS + unrestricted SVG upload page /hidden-upload (README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/goto",
-      "source": "NeuraLegion/brokencrystals — unvalidated redirect via url query param (README /api/goto oracle)",
       "auth": "public_demo"
     },
     {
@@ -8254,16 +8264,6 @@
     {
       "url": "https://brokencrystals.com/api/spawn",
       "source": "NeuraLegion/brokencrystals — OS command injection via query param (README oracle)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/file",
-      "source": "NeuraLegion/brokencrystals — SSRF / cloud metadata oracle via /api/file (README)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/email/sendSupportEmail",
-      "source": "NeuraLegion/brokencrystals — email header injection + prototype pollution oracle (README)",
       "auth": "benchmark"
     },
     {
@@ -18088,6 +18088,16 @@
     {
       "url": "https://owaspbased-lessons.vercel.app/challenges/vector-embedding",
       "source": "OWASP GenAI Security Lab — LLM08 vector & embedding weakness interactive lesson (owaspbased-lessons.vercel.app, 04 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/spawn?command=id",
+      "source": "NeuraLegion/brokencrystals — command injection oracle GET /api/spawn?command= (Docker Hub README, 06 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/testimonials/count?query=1",
+      "source": "NeuraLegion/brokencrystals — SQLi via get_count oracle GET /api/testimonials/count?query= (GitHub README, 06 UTC discovery)",
       "auth": "public_demo"
     }
   ]
