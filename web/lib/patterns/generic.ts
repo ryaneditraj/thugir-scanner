@@ -32226,7 +32226,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Broken Crystals /secrets route live oracle",
     description:
-      "When scanning /secrets, GET /api/secrets returns live API tokens (Slack, Facebook, Google OAuth, PayPal, CodeClimate) without authentication — route-specific secrets exposure oracle.",
+      "When scanning /secrets or /api/secrets, GET /api/secrets returns live API tokens (Slack, Facebook, Google OAuth, PayPal, CodeClimate) without authentication — route-specific secrets exposure oracle.",
     impactOneline:
       "Route-specific confirmation that Broken Crystals exposes third-party API tokens on /secrets scans.",
     detectorKind: "rule_ref",
