@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-10T09:07:03.025Z",
-  "total": 2078,
-  "uniqueSlugs": 2074,
+  "generatedAt": "2026-08-10T10:21:03.037Z",
+  "total": 2079,
+  "uniqueSlugs": 2075,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2060,
+    "generic": 2061,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1993,
+    "deep": 1994,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 421,
-    "Exposed secret": 33,
+    "Exposed secret": 34,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -2065,6 +2065,7 @@
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
     "wrongsecrets-challenge-60-mcp-route-live-oracle",
+    "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
     "wrongsecrets-challenge-live-oracle",
     "wrongsecrets-challenge-route-live-oracle",
     "wrongsecrets-error-demo-database-connection-live-oracle",

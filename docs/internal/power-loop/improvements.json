@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:web-security-learning-labs.vercel.app",
-      "slug": "web-security-learning-labs-placeholder-module-1417-1422",
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1416→1422; placeholder/SSTI priority regex extended 141[0-6]→141[0-9]|142[0-2]; web-security-learning-labs.vercel.app/module/1417 findings 8 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-61 documents Telegram Channel Secrets with getBotToken() and t.me/WrongsecretsBot; wrongsecrets.herokuapp.com/challenge/challenge-61 findings 13→14 with wrongsecrets-challenge-61-telegram-secrets-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-metadata-xxe-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for brokencrystals-metadata-xxe on /api/metadata alongside aws-metadata; brokencrystals.com/api/metadata findings 85 incl brokencrystals-metadata-xxe-route-live-oracle with scannedUrl; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1423-1428",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1422→1428; placeholder/SSTI priority regex extended 142[0-2]→142[0-8]; web-security-learning-labs.vercel.app/module/1423 findings 7 with placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
@@ -21620,9 +21632,19 @@
   ],
   "shipped_history": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
+      "shipped_at": "2026-08-10T10:20:00.000Z"
+    },
+    {
       "source": "discovery:brokencrystals.com",
-      "slug": "brokencrystals-goto-open-redirect-route-live-oracle",
-      "shipped_at": "2026-08-10T08:15:00.000Z"
+      "slug": "brokencrystals-metadata-xxe-route-priority",
+      "shipped_at": "2026-08-10T10:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1423-1428",
+      "shipped_at": "2026-08-10T10:20:00.000Z"
     },
     {
       "source": "discovery:brokencrystals.com",
