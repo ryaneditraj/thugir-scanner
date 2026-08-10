@@ -1,6 +1,96 @@
 {
-  "updated_at": "2026-08-10T16:20:06.516Z",
+  "updated_at": "2026-08-10T17:10:31.421Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1496",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1496 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1497",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1497 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1498",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1498 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1499",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1499 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1500",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1500 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1501",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1501 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1502",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1502 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1503",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1503 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1504",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1504 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1505",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1505 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1506",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1506 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1507",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1507 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1508",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1508 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1509",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1509 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1510",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1510 (CATALOG_MAX 1510 extension, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest",
+      "source": "Broken Crystals — API route oracle queue drain (products-latest / testimonials-count / goto, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/testimonials/count",
+      "source": "Broken Crystals — API route oracle queue drain (products-latest / testimonials-count / goto, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/goto",
+      "source": "Broken Crystals — API route oracle queue drain (products-latest / testimonials-count / goto, 17 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1481",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1481 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
@@ -274,21 +364,6 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1465",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1465 (CATALOG_MAX 1465 extension, 14 UTC discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/products/latest",
-      "source": "NeuraLegion/brokencrystals — products latest limit bypass oracle GET /api/products/latest (14 UTC queue drain)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/testimonials/count",
-      "source": "NeuraLegion/brokencrystals — testimonials count SQLi oracle GET /api/testimonials/count (14 UTC queue drain)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/goto",
-      "source": "NeuraLegion/brokencrystals — open redirect oracle GET /api/goto (14 UTC queue drain — prior reach error)",
       "auth": "public_demo"
     },
     {
