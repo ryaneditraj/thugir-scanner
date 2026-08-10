@@ -307,6 +307,10 @@ async function fetchJuiceShopSocialFeedBodies(
             break;
           }
         }
+        // Author feed can be empty while search still indexes historical Leaked API Key posts.
+        const searchUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=${encodeURIComponent(`from:${handle}`)}&limit=50`;
+        const searchDoc = await probe.get(searchUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+        if (searchDoc.status >= 200 && searchDoc.status < 400) chunks.push(searchDoc.body);
       }
     }
 
@@ -2616,6 +2620,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsHiddenUploadLiveOracle",
   "brokencrystalsMcpToolsLiveOracle",
   "brokencrystalsMcpRouteLiveOracle",
+  "brokencrystalsMcpToolsRouteLiveOracle",
   "brokencrystalsMcpProcessNumbersLiveOracle",
   "brokencrystalsMcpProcessNumbersRouteLiveOracle",
   "brokencrystalsMcpSpawnProcessLiveOracle",
@@ -10172,7 +10177,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/mcp\/(?:process_numbers|spawn_process|get_config)\b/i.test(targetInput) &&
+        /\/api\/mcp\/(?:process_numbers|spawn_process|get_config|tools)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-mcp-")
       )
         return -3;
@@ -10256,7 +10261,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-2])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-7])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;

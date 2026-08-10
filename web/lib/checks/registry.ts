@@ -35247,7 +35247,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1382;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1387;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -65976,6 +65976,23 @@ const brokencrystalsMcpRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsMcpToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mcp\/tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMcpToolsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/mcp/tools route scan — MCP initialize + tools/list exposes public SQL get_count and admin spawn_process/get_config tools — route-specific MCP gateway oracle"
+    }
+  };
+};
+
 const brokencrystalsProcessNumbersLiveOracle: Rule = async (ctx) => {
   const result = await probeBrokencrystalsProcessNumbers(ctx);
   return result ?? NEGATIVE;
@@ -72150,6 +72167,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsMcpToolsLiveOracle,
   brokencrystalsMcpRouteLiveOracle,
+  brokencrystalsMcpToolsRouteLiveOracle,
   brokencrystalsProcessNumbersLiveOracle,
   brokencrystalsProcessNumbersRouteLiveOracle,
   brokencrystalsMcpProcessNumbersLiveOracle,
