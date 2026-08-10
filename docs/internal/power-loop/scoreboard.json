@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T08:05:23.114Z",
+  "updated_at": "2026-08-10T08:08:36.544Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3169,
-  "total_findings": 33911,
+  "total_sites_scanned": 3177,
+  "total_findings": 33958,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2217,
-  "discovery_findings": 26682,
+  "discovery_urls_added": 2222,
+  "discovery_findings": 26729,
   "improvements_shipped": 1170,
-  "last_run": "2026-08-10T08:05:23.114Z",
+  "last_run": "2026-08-10T08:08:36.544Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 547,
+      "probes_run": 572,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings on primary heroku); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (47 findings on primary Heroku); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 137,
-      "focus": "brokencrystals sendSupportEmail SSRF + WSL module 1406 catalog + Juice Shop Heroku staging route fallback",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 47,
+      "focus": "WSL modules 1411-1415 (CATALOG_MAX 1415) + drain 1406-1408 backlog",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "brokencrystals.com/api/email/sendSupportEmail: 81 findings — sendSupportEmail SSRF oracle (ECONNREFUSED 127.0.0.1:1025)",
-      "web-security-learning-labs.vercel.app/module/1406: 8 findings (+placeholder-module-route-live-oracle after CATALOG_MAX 1410)",
-      "juice-shop.herokuapp.com/rest/user/security-question: 48 findings — Heroku staging fallback enables security-question route oracle on 503"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1411-1414: 7 findings each — placeholder-module-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1415: 4 findings — catalog shell end-of-range",
+      "web-security-learning-labs.vercel.app/module/1406-1408: 5 findings each — backlog drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "WSL modules 1411-1415 are catalog shells — no route-specific live oracles beyond placeholder-module-route"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/api/email/sendSupportEmail": 81,
-    "web-security-learning-labs.vercel.app/module/1406": 8,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45,
-    "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 81,
-    "ssrf.vulnlab.dev/basic": 15
+    "juice-shop.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1411": 7,
+    "web-security-learning-labs.vercel.app/module/1412": 7,
+    "web-security-learning-labs.vercel.app/module/1413": 7,
+    "web-security-learning-labs.vercel.app/module/1414": 7,
+    "web-security-learning-labs.vercel.app/module/1415": 4,
+    "web-security-learning-labs.vercel.app/module/1406": 5,
+    "web-security-learning-labs.vercel.app/module/1407": 5,
+    "web-security-learning-labs.vercel.app/module/1408": 5
   }
 }
