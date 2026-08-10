@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1393-1397",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1392→1397; placeholder priority regex extended 38[0-2]→38[0-9]|139[0-7]; SSTI priority 139[0-2]→139[0-7]; web-security-learning-labs.vercel.app/module/1393 findings 8 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-api-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsSecretsRouteLiveOracle now matches /api/secrets route scans; GET /api/secrets returns Slack xoxb- + Facebook EAAC tokens; brokencrystals.com/api/secrets findings 83 incl brokencrystals-secrets-route-live-oracle; benchmark 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-config-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for brokencrystals-secrets-* on /api/secrets and brokencrystals-config-* on /api/config; brokencrystals.com/api/config findings 81 incl brokencrystals-config-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1383-1392",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1382→1392; SSTI priority regex extended to 138[0-9]|139[0-2]; web-security-learning-labs.vercel.app/module/1383 findings 5→8 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
@@ -21511,6 +21529,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1393-1397",
+      "shipped_at": "2026-08-10T04:12:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-api-route-oracle",
+      "shipped_at": "2026-08-10T04:12:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-secrets-config-route-priority",
+      "shipped_at": "2026-08-10T04:12:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1383-1392",
