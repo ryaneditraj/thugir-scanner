@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-10T22:10:00.000Z",
+  "updated_at": "2026-08-10T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1581",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1581 (CATALOG_MAX 1585 extension, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1582",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1582 (CATALOG_MAX 1585 extension, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1583",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1583 (CATALOG_MAX 1585 extension, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1584",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1584 (CATALOG_MAX 1585 extension, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1585",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1585 (CATALOG_MAX 1585 extension, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
       "source": "OWASP WrongSecrets — challenge-10 CSI-Driver topic route oracle queue drain (22 UTC discovery)",
