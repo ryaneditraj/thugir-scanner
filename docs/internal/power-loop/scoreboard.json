@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T03:47:00.000Z",
+  "updated_at": "2026-08-10T04:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 3137,
-  "total_findings": 33219,
+  "total_sites_scanned": 3146,
+  "total_findings": 33314,
   "critical_findings": 65,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2205,
-  "discovery_findings": 26254,
-  "improvements_shipped": 1177,
-  "last_run": "2026-08-10T03:47:00.000Z",
+  "discovery_urls_added": 2210,
+  "discovery_findings": 26301,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-10T04:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "503 — staging fallback used",
+      "primary_status": "error — staging fallback used",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 571,
+      "probes_run": 572,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,35 +50,39 @@
           ]
         }
       },
-      "note": "Primary Heroku 503; staging 48 findings 6/6 recall — no benchmark misses"
+      "note": "Primary Heroku unreachable; staging 48 findings 6/6 recall — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 14,
-      "findings": 86,
-      "focus": "WSL catalog 1383-1392 code extension + brokencrystals MCP tools route oracle",
-      "improvements_shipped_this_run": 2
+      "urls_scanned": 8,
+      "findings": 47,
+      "focus": "WSL catalog 1398-1400 extension + vulnforge nightmare L1 + GenAI vector-embedding lesson; queue drain 1393-1397 + 1388-1390",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "brokencrystals.com/api/mcp/tools: 77→82 findings — brokencrystals-mcp-tools-route-live-oracle shipped",
-      "web-security-learning-labs.vercel.app/module/1383: 5→8 findings — CATALOG_MAX 1392 placeholder oracles in code",
-      "web-security-learning-labs.vercel.app/module/1388-1392: queue drain validated (prior docs-only run)"
+      "web-security-learning-labs.vercel.app/module/1393-1396: 7 findings each — stable WSL catalog oracles",
+      "web-security-learning-labs.vercel.app/module/1397: 4 findings — catalog tail module",
+      "web-security-learning-labs.vercel.app/module/1388-1390: 5 findings each — prior-queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs; Bluesky search corpus also empty)",
-      "juice-shop.herokuapp.com primary: Heroku dyno 503 — staging fallback required for live oracles",
-      "web-security-learning-labs.vercel.app/module/1393-1397: queued — pending next queue drain"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "juice-shop.herokuapp.com primary: Heroku dyno error — staging fallback required for live oracles",
+      "web-security-learning-labs.vercel.app/module/1398-1400: queued — pending next queue drain",
+      "vulnforge-academy nightmare/level1 + owaspbased-lessons vector-embedding: queued — pending next queue drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop-staging.herokuapp.com": 48,
-    "brokencrystals.com/api/mcp/tools": 82,
-    "brokencrystals.com/api/mcp/get_config": 80,
-    "web-security-learning-labs.vercel.app/module/1383": 8,
-    "web-security-learning-labs.vercel.app/module/1392": 4,
-    "web-security-learning-labs.vercel.app/module/1388": 7
+    "web-security-learning-labs.vercel.app/module/1393": 7,
+    "web-security-learning-labs.vercel.app/module/1394": 7,
+    "web-security-learning-labs.vercel.app/module/1395": 7,
+    "web-security-learning-labs.vercel.app/module/1396": 7,
+    "web-security-learning-labs.vercel.app/module/1397": 4,
+    "web-security-learning-labs.vercel.app/module/1388": 5,
+    "web-security-learning-labs.vercel.app/module/1389": 5,
+    "web-security-learning-labs.vercel.app/module/1390": 5
   }
 }
