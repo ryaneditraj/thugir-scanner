@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-10T20:16:00.000Z",
+  "updated_at": "2026-08-10T21:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1541",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1541 (CATALOG_MAX 1545 extension, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1542",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1542 (CATALOG_MAX 1545 extension, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1543",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1543 (CATALOG_MAX 1545 extension, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1544",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1544 (CATALOG_MAX 1545 extension, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1545",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1545 (CATALOG_MAX 1545 extension, 21 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1526",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1526 (CATALOG_MAX 1540 extension, 20 UTC discovery)",
@@ -91,6 +116,7 @@
       "source": "OWASP Juice Shop primary — track-order IDOR route queue drain GET /rest/track-order/1 (20 UTC discovery)",
       "auth": "public_benchmark"
     },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1516",
       "source": "Web Security Learning Labs — new module catalog oracle GET /module/1516 (CATALOG_MAX 1525 extension, 19 UTC discovery)",
       "auth": "public_demo"
