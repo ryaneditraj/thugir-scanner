@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1526-1540",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1525→1540; placeholder/SSTI priority regex extended 152[0-9]|153[0-9]|1540; web-security-learning-labs.vercel.app/module/1526 findings 8 (+placeholder-module-route-live-oracle); modules 1527-1529 findings 8 each; module/1540 findings 5; benchmark juice-shop 50 findings 6/6 maintained (escape.tech fallback)"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-upload-oracle-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAvatarSvgXssLiveOracle polls /uploads/ via fetchDoc with 0-2500ms backoff after multipart SVG upload; primePwnshopOtpSession extended to 17000ms on upload-avatar routes; pwnshop.ctfsecurity.com/profile/upload-avatar findings 18→45 (+pwnshop-avatar-svg-xss-live-oracle + pwnshop-avatar-upload-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.herokuapp.com",
+      "slug": "juice-shop-order-history-track-order-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended juice-shop.herokuapp.com/rest/order-history and /rest/track-order/1 to discovery queue; route scans fire juice-shop-order-history-bola-route-live-oracle (46 findings) + juice-shop-track-order-idor-route-live-oracle (48 findings); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1516-1525",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1520→1525; placeholder/SSTI priority regex extended 151[0-9]|152[0-5]; web-security-learning-labs.vercel.app/module/1525 findings 5 (+placeholder-module-route-live-oracle); modules 1521-1524 findings 8 each; benchmark juice-shop 47 findings 6/6 maintained"

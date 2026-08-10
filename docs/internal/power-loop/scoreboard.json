@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T20:08:15.826Z",
+  "updated_at": "2026-08-10T20:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2883,
-  "total_findings": 28370,
+  "total_sites_scanned": 2901,
+  "total_findings": 28590,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2066,
-  "discovery_findings": 23393,
-  "improvements_shipped": 1175,
-  "last_run": "2026-08-10T20:08:15.826Z",
+  "discovery_urls_added": 2079,
+  "discovery_findings": 23561,
+  "improvements_shipped": 1178,
+  "last_run": "2026-08-10T20:16:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 594,
+      "probes_run": 592,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,36 @@
           ]
         }
       },
-      "note": "Primary + staging 503; escape.tech fallback 6/6 (50 findings); secret-resend slug still absent"
+      "note": "Heroku primary 503 — escape.tech fallback 6/6 (50 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 46,
-      "focus": "WSL CATALOG_MAX 1525→1530 + backlog drain 1508-1510",
-      "improvements_shipped_this_run": 0
+      "urls_added": 18,
+      "urls_scanned": 26,
+      "findings": 266,
+      "focus": "WSL CATALOG_MAX 1525→1540 + pwnshop avatar upload retry + juice-shop order-history/track-order queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com + staging: 503 Heroku dyno unavailable",
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings) — no category gaps",
-      "web-security-learning-labs.vercel.app/module/1526-1528: 7 findings each (catalog shells)",
-      "web-security-learning-labs.vercel.app/module/1529: 6 findings; module/1530: 4 findings",
-      "web-security-learning-labs.vercel.app/module/1508-1510: 5 findings each (backlog drain)"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1526-1529: 8 findings each (+placeholder-module-route-live-oracle)",
+      "web-security-learning-labs.vercel.app/module/1540: 5 findings (catalog shell)",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 18→45 findings — pwnshop-avatar-svg-xss-live-oracle + pwnshop-avatar-upload-route-live-oracle shipped",
+      "juice-shop.herokuapp.com/rest/order-history: 46 findings — juice-shop-order-history-bola-route-live-oracle",
+      "juice-shop.herokuapp.com/rest/track-order/1: 48 findings — juice-shop-track-order-idor-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop primary/staging offline — rely on escape.tech fallback for benchmark oracle",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "WSL modules 1526-1540 are catalog shells — need challenge-specific live oracles when modules ship content"
     ]
   },
   "discovery_highlights": {
     "juice-shop.demo.escape.tech": 50,
-    "web-security-learning-labs.vercel.app/module/1526": 7,
-    "web-security-learning-labs.vercel.app/module/1527": 7,
-    "web-security-learning-labs.vercel.app/module/1528": 7,
-    "web-security-learning-labs.vercel.app/module/1529": 6,
-    "web-security-learning-labs.vercel.app/module/1530": 4,
-    "pwnshop.ctfsecurity.com/logs": 43,
-    "brokencrystals.com/api/products/latest": 75
+    "juice-shop.herokuapp.com/rest/track-order/1": 48,
+    "juice-shop.herokuapp.com/rest/order-history": 46,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45,
+    "web-security-learning-labs.vercel.app/module/1526": 8,
+    "web-security-learning-labs.vercel.app/module/1529": 8
   }
 }
