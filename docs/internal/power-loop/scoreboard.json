@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-10T16:06:15.828Z",
-=======
-  "updated_at": "2026-08-10T16:15:00.000Z",
->>>>>>> 042817ac (docs: log 3 discovery improvements — WSL 1495, pwnshop OTP, queue drain)
+  "updated_at": "2026-08-10T17:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,44 +15,24 @@
       ]
     }
   },
-<<<<<<< HEAD
-  "total_sites_scanned": 2836,
-  "total_findings": 27564,
+  "total_sites_scanned": 2837,
+  "total_findings": 27612,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2008,
-  "discovery_findings": 23020,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-10T16:06:15.828Z",
-=======
-  "total_sites_scanned": 2835,
-  "total_findings": 27565,
-  "critical_findings": 55,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2021,
-  "discovery_findings": 23070,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-10T16:15:00.000Z",
->>>>>>> 042817ac (docs: log 3 discovery improvements — WSL 1495, pwnshop OTP, queue drain)
+  "discovery_urls_added": 2039,
+  "discovery_findings": 23067,
+  "improvements_shipped": 1179,
+  "last_run": "2026-08-10T17:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-<<<<<<< HEAD
-      "oracle_findings": 49,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 592,
-=======
-      "oracle_findings": 50,
-      "oracle_recall": "6/6",
-      "gap": [],
-      "pages_crawled": 6,
-      "probes_run": 585,
->>>>>>> 042817ac (docs: log 3 discovery improvements — WSL 1495, pwnshop OTP, queue drain)
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -72,65 +48,36 @@
           ]
         }
       },
-<<<<<<< HEAD
-      "note": "Stable 6/6 first-pass recall (49 findings); secret-resend slug still absent"
-    },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-    "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 47,
-      "focus": "WSL CATALOG_MAX 1485 (+1481-1485) + backlog module drain 1061/1069/1070",
-      "improvements_shipped_this_run": 0
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1481: 7 findings — placeholder-module-route-live-oracle (CATALOG_MAX 1485)",
-      "web-security-learning-labs.vercel.app/module/1485: 4 findings — placeholder-module-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1069: 5 findings — backlog drain",
-      "web-security-learning-labs.vercel.app/module/1070: 5 findings — backlog drain"
-=======
-      "note": "Stable 6/6 first-pass recall (50 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 18,
-      "urls_scanned": 8,
-      "findings": 97,
-      "focus": "WSL CATALOG_MAX 1495 (+1481-1495) + pwnshop OTP priming for coupon/wallet routes + queue drain",
+      "urls_scanned": 3,
+      "findings": 118,
+      "focus": "WSL CATALOG_MAX 1510 (+1496-1510) + brokencrystals API route oracle reliability + queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1481: 8 findings — placeholder-module-route-live-oracle (CATALOG_MAX 1495)",
-      "web-security-learning-labs.vercel.app/module/1495: 5 findings — placeholder-module-route-live-oracle",
-      "pwnshop.ctfsecurity.com/apply-coupon: 22→45 findings — OTP priming + apply-coupon-route + coupon-category-bypass-route oracles",
-      "pwnshop.ctfsecurity.com/wallet: queue drain prepended — wallet-topup oracles fire when OTP session completes"
->>>>>>> 042817ac (docs: log 3 discovery improvements — WSL 1495, pwnshop OTP, queue drain)
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1496: 5 findings — placeholder-module-route-live-oracle (CATALOG_MAX 1510)",
+      "brokencrystals.com/api/products/latest: route scan fires products-latest-limit-bypass-live-oracle (3→11 products via ?limit=100)",
+      "brokencrystals.com/api/testimonials/count: route scan fires testimonials-count-sqli-route-live-oracle (information_schema table count)",
+      "brokencrystals.com/api/goto: route scan fires goto-open-redirect-route-live-oracle (302 to evil-open-redirect-probe.example)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "pwnshop.ctfsecurity.com/wallet: OTP-gated wallet-topup oracle still flaky on some runs (apply-coupon route now reliable at 45 findings)"
+      "brokencrystals.com/api/goto: route oracle flaky when BC API routes scanned back-to-back (rate limiting)"
     ]
   },
   "discovery_highlights": {
-<<<<<<< HEAD
-    "juice-shop.herokuapp.com": 49,
-    "web-security-learning-labs.vercel.app/module/1481": 7,
-    "web-security-learning-labs.vercel.app/module/1485": 4,
-    "web-security-learning-labs.vercel.app/module/1069": 5,
-    "web-security-learning-labs.vercel.app/module/1070": 5,
-    "ssrf.vulnlab.dev/allowlist": 15,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 83
-=======
-    "juice-shop.herokuapp.com": 50,
-    "web-security-learning-labs.vercel.app/module/1481": 8,
-    "web-security-learning-labs.vercel.app/module/1495": 5,
+    "juice-shop.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1496": 5,
+    "brokencrystals.com/api/products/latest": 75,
+    "brokencrystals.com/api/testimonials/count": 38,
+    "brokencrystals.com/api/goto": 75,
     "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 83,
-    "ssrf.vulnlab.dev/allowlist": 15
->>>>>>> 042817ac (docs: log 3 discovery improvements — WSL 1495, pwnshop OTP, queue drain)
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 83
   }
 }
