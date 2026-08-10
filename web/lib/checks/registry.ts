@@ -35247,7 +35247,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1375;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1378;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -65998,6 +65998,117 @@ const brokencrystalsProcessNumbersRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeBrokencrystalsMcpProcessNumbers(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const sessionId = await brokencrystalsMcpSessionId(ctx);
+  if (!sessionId) return null;
+  const callDoc = await brokencrystalsMcpJsonRpc(
+    ctx,
+    sessionId,
+    "tools/call",
+    {
+      name: "process_numbers",
+      arguments: { numbers: [7, 7], processing_expression: "7*7" }
+    },
+    4
+  );
+  if (callDoc.status < 200 || callDoc.status >= 400) return null;
+  if (!/SSJI result:\s*49/i.test(callDoc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      tool: "process_numbers",
+      snippet: callDoc.body.slice(0, 200).trim(),
+      note: "Broken Crystals MCP tools/call process_numbers evaluates processing_expression JavaScript server-side (7*7 → SSJI result: 49) — MCP gateway code injection oracle"
+    }
+  };
+}
+
+const brokencrystalsMcpProcessNumbersLiveOracle: Rule = async (ctx) => {
+  const result = await probeBrokencrystalsMcpProcessNumbers(ctx);
+  return result ?? NEGATIVE;
+};
+
+const brokencrystalsMcpProcessNumbersRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mcp\/process_numbers\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsMcpProcessNumbers(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/mcp/process_numbers route scan — MCP tools/call process_numbers evaluates processing_expression JavaScript server-side — MCP gateway code injection oracle"
+    }
+  };
+};
+
+async function probeBrokencrystalsMcpSpawnProcess(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const sessionId = await brokencrystalsMcpSessionId(ctx);
+  if (!sessionId) return null;
+  const listDoc = await brokencrystalsMcpJsonRpc(ctx, sessionId, "tools/list");
+  if (listDoc.status < 200 || listDoc.status >= 400) return null;
+  let spawnTool: { name?: string; accessLevel?: string; description?: string } | undefined;
+  try {
+    const parsed = JSON.parse(listDoc.body) as {
+      result?: { tools?: Array<{ name?: string; accessLevel?: string; description?: string }> };
+    };
+    spawnTool = parsed.result?.tools?.find((t) => t.name === "spawn_process");
+  } catch {
+    return null;
+  }
+  if (!spawnTool || spawnTool.accessLevel !== "admin") return null;
+  if (!/operating system command|command injection/i.test(spawnTool.description ?? "")) return null;
+  const callDoc = await brokencrystalsMcpJsonRpc(
+    ctx,
+    sessionId,
+    "tools/call",
+    {
+      name: "spawn_process",
+      arguments: { command: "id" }
+    },
+    5
+  );
+  if (!/Unauthorized.*spawn_process.*requires authentication/i.test(callDoc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      tool: "spawn_process",
+      accessLevel: spawnTool.accessLevel,
+      snippet: callDoc.body.slice(0, 200).trim(),
+      note: "Broken Crystals MCP tools/call spawn_process proxies to /api/spawn OS command injection — guest session receives auth challenge confirming admin command-execution surface"
+    }
+  };
+}
+
+const brokencrystalsMcpSpawnProcessLiveOracle: Rule = async (ctx) => {
+  const result = await probeBrokencrystalsMcpSpawnProcess(ctx);
+  return result ?? NEGATIVE;
+};
+
+const brokencrystalsMcpSpawnProcessRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mcp\/spawn_process\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsMcpSpawnProcess(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/mcp/spawn_process route scan — MCP tools/call spawn_process proxies OS command injection with admin auth gate — MCP gateway RCE surface oracle"
+    }
+  };
+};
+
 const brokencrystalsJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const path = "/api/auth/jwt/rsa/signature/validate";
@@ -71978,6 +72089,10 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMcpRouteLiveOracle,
   brokencrystalsProcessNumbersLiveOracle,
   brokencrystalsProcessNumbersRouteLiveOracle,
+  brokencrystalsMcpProcessNumbersLiveOracle,
+  brokencrystalsMcpProcessNumbersRouteLiveOracle,
+  brokencrystalsMcpSpawnProcessLiveOracle,
+  brokencrystalsMcpSpawnProcessRouteLiveOracle,
   brokencrystalsJwtAlgNoneLiveOracle,
   brokencrystalsJwtRouteLiveOracle,
   brokencrystalsJwtWeakKeyLiveOracle,
