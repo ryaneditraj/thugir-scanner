@@ -14464,6 +14464,28 @@ async function probeBrokencrystalsSpawnCommandInjection(ctx: RuleContext): Promi
   };
 }
 
+const brokencrystalsSpawnCommandInjectionLiveOracle: Rule = async (ctx) => {
+  const result = await probeBrokencrystalsSpawnCommandInjection(ctx);
+  return result ?? NEGATIVE;
+};
+
+const brokencrystalsSpawnRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/spawn\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsSpawnCommandInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/spawn route scan — GET command param executes shell and echoes canary output — route-specific OS command injection oracle"
+    }
+  };
+};
+
 const invictiNslookupCommandInjectionProbe: Rule = async (ctx) =>
   (await probeInvictiNslookupCommandInjection(ctx)) ??
   (await probeBrokencrystalsSpawnCommandInjection(ctx)) ??
@@ -35253,7 +35275,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1435;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1442;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -72207,6 +72229,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge61TelegramSecretsRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
+  brokencrystalsSpawnCommandInjectionLiveOracle,
+  brokencrystalsSpawnRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,

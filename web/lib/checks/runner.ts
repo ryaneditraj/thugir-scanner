@@ -2518,6 +2518,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge61TelegramSecretsRouteLiveOracle",
   "brokencrystalsChatLlmQueryLiveOracle",
   "brokencrystalsChatLlmQueryRouteLiveOracle",
+  "brokencrystalsSpawnCommandInjectionLiveOracle",
+  "brokencrystalsSpawnRouteLiveOracle",
   "clientSideDvragLabEvidence",
   "dvragAdminConfigLiveOracle",
   "dvragRagPipelineLiveOracle",
@@ -9442,6 +9444,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
         "https://wrongsecrets.herokuapp.com/challenge/63",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+        "https://wrongsecrets.herokuapp.com/challenge/64",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+        "https://wrongsecrets.herokuapp.com/challenge/65",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+        "https://wrongsecrets.herokuapp.com/challenge/66",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
@@ -10395,6 +10403,36 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("wrongsecrets-challenge")
       )
         return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?65\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?66\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/spawn\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-spawn") || p.slug === "command-injection-form-probe")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/testimonials\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-testimonials")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (
         /brokencrystals\.com/i.test(origin) &&
@@ -10442,13 +10480,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-5]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-2]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-5])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-2])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
