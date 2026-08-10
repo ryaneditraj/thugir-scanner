@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1417-1422",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1416→1422; placeholder/SSTI priority regex extended 141[0-6]→141[0-9]|142[0-2]; web-security-learning-labs.vercel.app/module/1417 findings 8 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-chat-llm-query-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/chat/query accepts unauthenticated LLM prompts; brokencrystals.com/chat findings 80 incl brokencrystals-chat-llm-query-route-live-oracle with scannedUrl evidence; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-60-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with /challenge/60 + /challenge/challenge-60; runner -3 priority for wrongsecrets-challenge-60 on challenge/60 routes; wrongsecrets.herokuapp.com/challenge/60 findings 14 incl wrongsecrets-challenge-60-mcp-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-goto-open-redirect-route-live-oracle",
       "status": "shipped",
