@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1451-1465",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1450→1465; placeholder/SSTI priority regex extended 1450→145[0-9]|146[0-5]; web-security-learning-labs.vercel.app/module/1451 findings 8 (+placeholder-module-route-live-oracle); module/1465 findings 5 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-latest-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for brokencrystals-products-latest on /api/products/latest; GET default 3 products vs ?limit=100 returns 11; brokencrystals.com/api/products/latest route scan fires brokencrystals-products-latest-limit-bypass-live-oracle; benchmark 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-route-queue-drain-14utc",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended brokencrystals.com/api/products/latest /api/testimonials/count /api/goto to discovery queue; testimonials/count GET ?query=select count(table_name) from information_schema.tables returns 216; /api/goto HTTP 302 Location evil-open-redirect-probe.example; route scans fire testimonials-count-sqli-route + goto-open-redirect-route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1443-1450",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1442→1450; placeholder/SSTI priority regex extended 144[0-2]→144[0-9]|1450; web-security-learning-labs.vercel.app/module/1443-1450 findings 5 each with placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
@@ -21685,6 +21703,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1451-1465",
+      "shipped_at": "2026-08-10T14:12:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-latest-route-priority",
+      "shipped_at": "2026-08-10T14:12:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-route-queue-drain-14utc",
+      "shipped_at": "2026-08-10T14:12:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1443-1450",
