@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-62-63-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with /challenge/62-63 + /challenge/challenge-62-63; runner -3 priority for wrongsecrets-challenge on challenge-62/63 routes; wrongsecrets.herokuapp.com/challenge/challenge-63 findings 13 incl wrongsecrets-challenge-route-live-oracle (hardcoded AES key); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-goto-route-scan-reach-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/goto open-redirect follows Location to external hosts — default fetch redirect caused status=0 reach failures; runDeepScan uses redirect=manual + homepage fallback; brokencrystals.com/api/goto findings 0 error→81 incl brokencrystals-goto-open-redirect-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1429-1435",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1428→1435; placeholder/SSTI priority regex extended 142[0-8]→142[0-9]|143[0-5]; web-security-learning-labs.vercel.app/module/1435 findings 7 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-61 documents Telegram Channel Secrets with getBotToken() and t.me/WrongsecretsBot; wrongsecrets.herokuapp.com/challenge/challenge-61 findings 13→14 with wrongsecrets-challenge-61-telegram-secrets-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"

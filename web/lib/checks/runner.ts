@@ -798,7 +798,11 @@ async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
   if (/^brokencrystals\.com$/i.test(apexHost)) {
     for (let attempt = 0; attempt < 3; attempt++) {
       await new Promise((r) => setTimeout(r, 2000 + attempt * 1500));
-      const doc = await fetchDoc(target.toString(), { timeoutMs: 20000, maxBytes: 600_000 });
+      const doc = await fetchDoc(target.toString(), {
+        timeoutMs: 20000,
+        maxBytes: 600_000,
+        redirect: "manual"
+      });
       if (doc.status > 0) return doc;
     }
   }
@@ -8780,6 +8784,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       });
       if (voteHome.status >= 200 && voteHome.body.length > 512) {
         home = { ...voteHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
+    home.status === 0 &&
+    /brokencrystals\.com/i.test(targetInput) &&
+    /\/api\/goto\b/i.test(targetInput)
+  ) {
+    try {
+      const gotoDoc = await fetchDoc(targetInput, { timeoutMs: 20000, redirect: "manual" });
+      if (gotoDoc.status > 0) {
+        home = { ...gotoDoc, finalUrl: targetInput, url: targetInput };
+      } else {
+        const bcHome = await fetchDoc(new URL("/", target.origin).toString(), {
+          timeoutMs: 15000,
+          maxBytes: 600_000
+        });
+        if (bcHome.status >= 200 && bcHome.body.length > 512) {
+          home = { ...bcHome, finalUrl: targetInput, url: targetInput };
+        }
       }
     } catch {
       /* ignore */
