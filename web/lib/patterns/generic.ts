@@ -33156,6 +33156,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-mcp-process-numbers-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals MCP process_numbers server-side JS injection live oracle",
+    description:
+      "POST /api/mcp tools/call process_numbers evaluates processing_expression JavaScript server-side (7*7 returns SSJI result: 49) — the Broken Crystals MCP gateway code injection oracle.",
+    impactOneline:
+      "MCP tools/call proxies user-controlled processing_expression to /api/process_numbers server-side JS evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpProcessNumbersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval() user-supplied expressions via MCP proxies — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP tools/call.",
+        "Replace dynamic expression evaluation with a safe DSL or fixed operation allow-list.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP process_numbers tool evaluates processing_expression as JavaScript. Show MCP gateway code injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mcp-process-numbers-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/mcp/process_numbers route live oracle",
+    description:
+      "When scanning /api/mcp/process_numbers, MCP tools/call process_numbers with processing_expression=7*7 returns SSJI result: 49 — route-specific MCP gateway code injection confirmation.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals MCP gateway proxies server-side JS evaluation on process_numbers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpProcessNumbersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never eval() user-supplied expressions via MCP proxies — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP tools/call.",
+        "Replace dynamic expression evaluation with a safe DSL or fixed operation allow-list.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/mcp/process_numbers route scan confirms MCP gateway code injection. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mcp-spawn-process-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals MCP spawn_process command injection live oracle",
+    description:
+      "MCP tools/list exposes spawn_process (admin, OS command injection) and tools/call returns Unauthorized: tool spawn_process requires authentication — confirms MCP gateway proxies /api/spawn RCE surface.",
+    impactOneline:
+      "Unauthenticated MCP sessions can enumerate an admin OS command-execution tool proxied to /api/spawn.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpSpawnProcessLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose admin command-execution tools via unauthenticated MCP gateways — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/list.",
+        "Remove spawn_process from guest-accessible MCP tool registries.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP spawn_process tool proxies OS command injection. Show MCP gateway hardening for command-execution tools.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mcp-spawn-process-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/mcp/spawn_process route live oracle",
+    description:
+      "When scanning /api/mcp/spawn_process, MCP tools/call spawn_process returns Unauthorized: tool spawn_process requires authentication — route-specific MCP gateway RCE surface confirmation.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals MCP gateway exposes admin OS command-execution tooling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpSpawnProcessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose admin command-execution tools via unauthenticated MCP gateways — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/list.",
+        "Remove spawn_process from guest-accessible MCP tool registries.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/mcp/spawn_process route scan confirms MCP gateway RCE surface. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-file-aws-route-live-oracle",
     platform: "generic",
     category: "SSRF",

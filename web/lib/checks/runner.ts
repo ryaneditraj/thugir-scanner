@@ -2616,6 +2616,10 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsHiddenUploadLiveOracle",
   "brokencrystalsMcpToolsLiveOracle",
   "brokencrystalsMcpRouteLiveOracle",
+  "brokencrystalsMcpProcessNumbersLiveOracle",
+  "brokencrystalsMcpProcessNumbersRouteLiveOracle",
+  "brokencrystalsMcpSpawnProcessLiveOracle",
+  "brokencrystalsMcpSpawnProcessRouteLiveOracle",
   "brokencrystalsJwtAlgNoneLiveOracle",
   "brokencrystalsJwtRouteLiveOracle",
   "brokencrystalsJwtWeakKeyLiveOracle",
@@ -10165,6 +10169,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;
       if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/mcp\/(?:process_numbers|spawn_process|get_config)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-mcp-")
+      )
+        return -3;
+      if (
         /voting-app[\w-]*\.vercel\.app/i.test(origin) &&
         /\/api\/(?:signup|vote|poll|user)\b/i.test(targetInput) &&
         p.slug.startsWith("voting-app-")
@@ -10238,13 +10248,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-5]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-8]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-5])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-8])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
