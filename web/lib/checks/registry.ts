@@ -33265,31 +33265,37 @@ const pwnshopAuditLogPlaintextPasswordLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000
   });
   const eventsUrl = new URL("/api/v1/events", ctx.origin).toString();
-  const eventsDoc = await fetchDoc(eventsUrl, { maxBytes: 16384, timeoutMs: 15000 });
-  if (eventsDoc.status < 200 || eventsDoc.status >= 300) return NEGATIVE;
   const detailRe = new RegExp(
     `"detail"\\s*:\\s*"[^"]*password:\\s*${canaryPassword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`,
     "i"
   );
-  if (!detailRe.test(eventsDoc.body)) return NEGATIVE;
-  const detailMatch = eventsDoc.body.match(detailRe);
-  return {
-    fired: true,
-    confidence: 0.93,
-    evidence: {
-      loginUrl,
-      eventsUrl,
-      username,
-      snippet: detailMatch?.[0]?.slice(0, 200) ?? eventsDoc.body.slice(0, 200),
-      note: "Pwnshop POST /login writes submitted passwords in plaintext to the unauthenticated /api/v1/events audit log detail field — plaintext password logging oracle (PWN-027)"
-    }
-  };
+  // Events API indexes login audit rows asynchronously — use fetchDoc (not probe cache) after each login attempt.
+  const waitsMs = [0, 400, 800, 1200, 1800, 2500];
+  for (const waitMs of waitsMs) {
+    if (waitMs > 0) await pwnshopSleep(waitMs);
+    const eventsDoc = await fetchDoc(eventsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+    if (eventsDoc.status < 200 || eventsDoc.status >= 300) continue;
+    if (!detailRe.test(eventsDoc.body)) continue;
+    const detailMatch = eventsDoc.body.match(detailRe);
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        loginUrl,
+        eventsUrl,
+        username,
+        snippet: detailMatch?.[0]?.slice(0, 200) ?? eventsDoc.body.slice(0, 200),
+        note: "Pwnshop POST /login writes submitted passwords in plaintext to the unauthenticated /api/v1/events audit log detail field — plaintext password logging oracle (PWN-027)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const pwnshopAuditLogPlaintextPasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/logs\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:logs|api\/v1\/events)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopAuditLogPlaintextPasswordLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -33298,10 +33304,32 @@ const pwnshopAuditLogPlaintextPasswordRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /logs route scan — failed login passwords appear in plaintext on unauthenticated /api/v1/events audit log (PWN-027)"
+      note: /\/api\/v1\/events\b/i.test(pageUrl)
+        ? "Pwnshop /api/v1/events route scan — failed login passwords appear in plaintext on unauthenticated audit log (PWN-027)"
+        : "Pwnshop /logs route scan — failed login passwords appear in plaintext on unauthenticated /api/v1/events audit log (PWN-027)"
     }
   };
 };
+
+/** Prime audit-log password oracle during bootstrap on /logs and /api/v1/events route scans. */
+export async function primePwnshopAuditLogOracleForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/(?:logs|api\/v1\/events)\b/i.test(scanUrl)) return;
+  // Warm login path only — events fetch uses fetchDoc in the oracle to avoid stale probe-cache hits.
+  const loginUrl = new URL("/login", origin).toString();
+  await probe.get(loginUrl, {
+    method: "POST",
+    body: `username=thugir_prime_${Date.now()}&password=ThugirPrimeWarmup1`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+}
 
 const pwnshopAdminOtpSessionByProbe = new WeakMap<
   ProbeCache,

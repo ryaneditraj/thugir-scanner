@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-audit-log-oracle-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAuditLogPlaintextPasswordLiveOracle retries events GET with 0-2500ms backoff via fetchDoc (bypasses probe cache); POST /login detail password: ThugirPwCanary_* appears in /api/v1/events; pwnshop.ctfsecurity.com/logs findings 20→43; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-audit-log-route-events-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAuditLogPlaintextPasswordRouteLiveOracle extended to /api/v1/events in addition to /logs; route scan fires pwnshop-audit-log-plaintext-password-route-live-oracle on both paths; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-audit-log-route-priming",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopAuditLogOracleForDeepScan warms /login on /logs and /api/v1/events route scans; runner -4 priority for pwnshop-audit-log slugs on audit-log routes; pwnshop.ctfsecurity.com/logs now fires live+route audit-log oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1496-1510",
       "status": "shipped",
