@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T07:07:15.101Z",
+  "updated_at": "2026-08-10T07:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3174,
-  "total_findings": 33961,
+  "total_sites_scanned": 3168,
+  "total_findings": 33864,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2222,
-  "discovery_findings": 26733,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-10T07:07:15.101Z",
+  "discovery_urls_added": 2217,
+  "discovery_findings": 26682,
+  "improvements_shipped": 1176,
+  "last_run": "2026-08-10T07:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 571,
+      "probes_run": 547,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,34 @@
           ]
         }
       },
-      "note": "Primary heroku 503 → staging fallback; stable 6/6 recall (46 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (48 findings on primary heroku); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 180,
-      "focus": "WSL modules 1406-1410 + brokencrystals sendSupportEmail/goto/metadata priority drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 137,
+      "focus": "brokencrystals sendSupportEmail SSRF + WSL module 1406 catalog + Juice Shop Heroku staging route fallback",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "brokencrystals.com/api/email/sendSupportEmail: 78 findings — email-injection + prototype-pollution route oracles on priority drain",
-      "brokencrystals.com/api/goto: 37 findings — brokencrystals-goto-open-redirect-live-oracle + JWT/SSRF hub",
-      "brokencrystals.com/api/metadata: 33 findings — sensitive config exposure + reflective XSS oracles",
-      "web-security-learning-labs.vercel.app/module/1406-1409: 7 findings each; 1410: 4 — WSL catalog shell oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "brokencrystals.com/api/email/sendSupportEmail: 81 findings — sendSupportEmail SSRF oracle (ECONNREFUSED 127.0.0.1:1025)",
+      "web-security-learning-labs.vercel.app/module/1406: 8 findings (+placeholder-module-route-live-oracle after CATALOG_MAX 1410)",
+      "juice-shop.herokuapp.com/rest/user/security-question: 48 findings — Heroku staging fallback enables security-question route oracle on 503"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com primary Heroku dyno 503 — staging fallback required",
-      "ssrf.vulnlab.dev/basic still queued behind brokencrystals priority drain (48h skip not yet elapsed for prior scans)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 46,
-    "brokencrystals.com/api/email/sendSupportEmail": 78,
-    "brokencrystals.com/api/goto": 37,
-    "brokencrystals.com/api/metadata": 33,
-    "web-security-learning-labs.vercel.app/module/1406": 7,
-    "web-security-learning-labs.vercel.app/module/1407": 7,
-    "web-security-learning-labs.vercel.app/module/1408": 7,
-    "web-security-learning-labs.vercel.app/module/1409": 7
+    "juice-shop.herokuapp.com": 48,
+    "brokencrystals.com/api/email/sendSupportEmail": 81,
+    "web-security-learning-labs.vercel.app/module/1406": 8,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45,
+    "pwnshop.ctfsecurity.com/apply-coupon": 45,
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 81,
+    "ssrf.vulnlab.dev/basic": 15
   }
 }
