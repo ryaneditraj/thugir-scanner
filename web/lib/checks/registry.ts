@@ -32468,6 +32468,12 @@ async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | nul
   return promise;
 }
 
+/** Clear cached OTP session so post-crawl re-prime can establish auth after PwnMail delivery. */
+export function clearPwnshopOtpSessionForProbe(probe: ProbeCache): void {
+  pwnshopVerifiedSessionByProbe.delete(probe);
+  pwnshopOtpSessionInFlight.delete(probe);
+}
+
 /** Pre-warm a signup session during deep-scan bootstrap so live oracles run before Vercel rate limits. */
 export async function primeVotingAppSessionForDeepScan(
   probe: ProbeCache,

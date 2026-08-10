@@ -18,6 +18,7 @@ import {
 import {
   FREE_RULES,
   RULES,
+  clearPwnshopOtpSessionForProbe,
   primeBypass403SessionForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
@@ -10072,6 +10073,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     .filter(Boolean)
     .join("\n");
   const detection = detectPlatform(home, combined);
+  if (
+    /pwnshop|ctfsecurity\.com/i.test(origin) &&
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(targetInput)
+  ) {
+    clearPwnshopOtpSessionForProbe(probe);
+    await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
+  }
   const ctx: RuleContext = { origin, scanUrl: targetInput, home, scripts, combined, probe };
 
   const all = patternsForTier("deep").sort((a, b) => {
@@ -10175,9 +10183,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -2;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
-        /\/cart\b/i.test(targetInput) &&
+        /\/(?:apply-coupon|cart)\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
         /coupon|checkout/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/upload-avatar/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /avatar|upload/.test(p.slug)
       )
         return -3;
       if (
