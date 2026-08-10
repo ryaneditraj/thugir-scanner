@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-10T02:06:00.000Z",
+  "updated_at": "2026-08-10T03:05:15.608Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1388",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1388 (public Vercel demo, 03 UTC CATALOG_MAX 1392 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1389",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1389 (public Vercel demo, 03 UTC CATALOG_MAX 1392 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1390",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1390 (public Vercel demo, 03 UTC CATALOG_MAX 1392 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1391",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1391 (public Vercel demo, 03 UTC CATALOG_MAX 1392 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1392",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1392 (public Vercel demo, 03 UTC CATALOG_MAX 1392 extension)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/mcp/process_numbers",
       "source": "NeuraLegion/brokencrystals — MCP process_numbers command-injection oracle POST /api/mcp/process_numbers (tools hub child route, 23 UTC discovery)",
