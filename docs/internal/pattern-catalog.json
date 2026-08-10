@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-10T20:04:10.515Z",
-  "total": 2081,
-  "uniqueSlugs": 2077,
+  "generatedAt": "2026-08-10T21:17:53.743Z",
+  "total": 2084,
+  "uniqueSlugs": 2080,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2063,
+    "generic": 2066,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 1996,
+    "deep": 1999,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 421,
-    "Exposed secret": 34,
+    "Exposed secret": 37,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -2068,6 +2068,9 @@
     "wizer-ctf-idor-task-manager-probe",
     "wrongsecrets-challenge-60-mcp-route-live-oracle",
     "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
+    "wrongsecrets-challenge-7-vault-route-live-oracle",
+    "wrongsecrets-challenge-8-logging-route-live-oracle",
+    "wrongsecrets-challenge-9-terraform-route-live-oracle",
     "wrongsecrets-challenge-live-oracle",
     "wrongsecrets-challenge-route-live-oracle",
     "wrongsecrets-error-demo-database-connection-live-oracle",

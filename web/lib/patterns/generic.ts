@@ -29074,6 +29074,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-7-vault-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-7 Vault route live oracle",
+    description:
+      "When scanning /challenge/7 or /challenge/challenge-7, the walkthrough documents retrieving secrets from HashiCorp Vault using a logged root token — route-specific challenge-7 Vault metadata oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-7 Vault metadata secret-hunt walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge7VaultRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-7 is intentional — never expose Vault root tokens or unauthenticated metadata APIs in production.",
+      steps: [
+        "Restrict Vault metadata and secret APIs to authenticated principals.",
+        "Rotate root tokens and use least-privilege policies.",
+        "Audit Vault access logs for metadata enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-7 route documents Vault metadata secret retrieval with a root token. Show remediation for Vault access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-8-logging-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-8 logging route live oracle",
+    description:
+      "When scanning /challenge/8 or /challenge/challenge-8, the walkthrough documents finding secrets in docker container logs — route-specific challenge-8 logging exposure oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-8 docker logs secret-exposure walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge8LoggingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-8 is intentional — never log secrets or credentials in container output.",
+      steps: [
+        "Redact secrets from application and container logs.",
+        "Restrict log access to authorized operators.",
+        "Use structured logging with sensitive field filtering."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-8 route documents secrets in docker logs. Show remediation for safe container logging.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-9-terraform-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-9 Terraform route live oracle",
+    description:
+      "When scanning /challenge/9 or /challenge/challenge-9, the walkthrough documents Terraform state, AWS Secrets Manager, and kubectl pod exec secret hunts — route-specific challenge-9 IaC secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-9 Terraform/IaC secret-hunt walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge9TerraformRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-9 is intentional — never store secrets in Terraform state or unencrypted tfstate files.",
+      steps: [
+        "Use remote encrypted Terraform state backends.",
+        "Scan tfstate and IaC repos with secret scanners before commit.",
+        "Restrict kubectl exec and Secrets Manager access with RBAC."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-9 route documents Terraform state and kubectl secret hunts. Show remediation for IaC secret management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
