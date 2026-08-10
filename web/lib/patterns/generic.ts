@@ -33260,6 +33260,60 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-mcp-get-config-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals MCP get_config configuration leak live oracle",
+    description:
+      "MCP tools/list exposes get_config (admin, /api/config proxy) and tools/call returns Unauthorized: tool get_config requires authentication — confirms MCP gateway proxies sensitive configuration disclosure surface.",
+    impactOneline:
+      "Unauthenticated MCP sessions can enumerate an admin configuration-leak tool proxied to /api/config.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpGetConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Do not expose admin configuration tools via unauthenticated MCP gateways — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/list.",
+        "Remove get_config from guest-accessible MCP tool registries.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP get_config tool proxies /api/config secret disclosure. Show MCP gateway hardening for configuration-leak tools.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mcp-get-config-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/mcp/get_config route live oracle",
+    description:
+      "When scanning /api/mcp/get_config, MCP tools/call get_config returns Unauthorized: tool get_config requires authentication — route-specific MCP gateway configuration-disclosure surface confirmation.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals MCP gateway exposes admin /api/config disclosure tooling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpGetConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Do not expose admin configuration tools via unauthenticated MCP gateways — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/list.",
+        "Remove get_config from guest-accessible MCP tool registries.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/mcp/get_config route scan confirms MCP gateway configuration-disclosure surface. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-file-aws-route-live-oracle",
     platform: "generic",
     category: "SSRF",

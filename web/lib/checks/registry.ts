@@ -35247,7 +35247,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1378;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1382;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -66109,6 +66109,69 @@ const brokencrystalsMcpSpawnProcessRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeBrokencrystalsMcpGetConfig(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const sessionId = await brokencrystalsMcpSessionId(ctx);
+  if (!sessionId) return null;
+  const listDoc = await brokencrystalsMcpJsonRpc(ctx, sessionId, "tools/list");
+  if (listDoc.status < 200 || listDoc.status >= 400) return null;
+  let configTool: { name?: string; accessLevel?: string; description?: string } | undefined;
+  try {
+    const parsed = JSON.parse(listDoc.body) as {
+      result?: { tools?: Array<{ name?: string; accessLevel?: string; description?: string }> };
+    };
+    configTool = parsed.result?.tools?.find((t) => t.name === "get_config");
+  } catch {
+    return null;
+  }
+  if (!configTool || configTool.accessLevel !== "admin") return null;
+  if (!/\/api\/config|application configuration|database and cloud settings/i.test(configTool.description ?? ""))
+    return null;
+  const callDoc = await brokencrystalsMcpJsonRpc(
+    ctx,
+    sessionId,
+    "tools/call",
+    {
+      name: "get_config",
+      arguments: { include_sensitive: true }
+    },
+    6
+  );
+  if (!/Unauthorized.*get_config.*requires authentication/i.test(callDoc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      tool: "get_config",
+      accessLevel: configTool.accessLevel,
+      snippet: callDoc.body.slice(0, 200).trim(),
+      note: "Broken Crystals MCP tools/call get_config proxies /api/config secret leak — guest session receives auth challenge confirming admin configuration-disclosure surface"
+    }
+  };
+}
+
+const brokencrystalsMcpGetConfigLiveOracle: Rule = async (ctx) => {
+  const result = await probeBrokencrystalsMcpGetConfig(ctx);
+  return result ?? NEGATIVE;
+};
+
+const brokencrystalsMcpGetConfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mcp\/get_config\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsMcpGetConfig(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/mcp/get_config route scan — MCP tools/call get_config proxies /api/config with admin auth gate — MCP gateway configuration-disclosure surface oracle"
+    }
+  };
+};
+
 const brokencrystalsJwtAlgNoneLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const path = "/api/auth/jwt/rsa/signature/validate";
@@ -72093,6 +72156,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMcpProcessNumbersRouteLiveOracle,
   brokencrystalsMcpSpawnProcessLiveOracle,
   brokencrystalsMcpSpawnProcessRouteLiveOracle,
+  brokencrystalsMcpGetConfigLiveOracle,
+  brokencrystalsMcpGetConfigRouteLiveOracle,
   brokencrystalsJwtAlgNoneLiveOracle,
   brokencrystalsJwtRouteLiveOracle,
   brokencrystalsJwtWeakKeyLiveOracle,
