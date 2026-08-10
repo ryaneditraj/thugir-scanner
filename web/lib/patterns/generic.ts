@@ -29282,6 +29282,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-spawn-command-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/spawn command injection live oracle",
+    description:
+      "GET /api/spawn?command= executes attacker-controlled shell commands and echoes output — a canary echo probe returns command output in the response body.",
+    impactOneline:
+      "OS command injection via the spawn endpoint lets attackers execute arbitrary shell commands on the server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSpawnCommandInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove or disable /api/spawn in any internet-reachable deployment.",
+        "If subprocess use is unavoidable, use argument arrays and strict input validation.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/spawn endpoint executes shell commands from the command query parameter. Show safe subprocess handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-spawn-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/spawn route command injection oracle",
+    description:
+      "When scanning /api/spawn, GET command param executes shell and echoes canary output — route-specific OS command injection oracle.",
+    impactOneline:
+      "Route-scoped scans of /api/spawn should confirm unauthenticated OS command injection with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSpawnRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove or disable /api/spawn in any internet-reachable deployment.",
+        "If subprocess use is unavoidable, use argument arrays and strict input validation.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/spawn route scan confirms OS command injection via the command query parameter. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",
