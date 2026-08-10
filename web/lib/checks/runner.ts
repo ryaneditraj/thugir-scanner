@@ -626,6 +626,32 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
   }
 }
 
+/** Pre-fetch route-oracle probes for Broken Crystals API-only discovery scans. */
+async function primeBrokencrystalsRouteOracleProbes(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string
+): Promise<void> {
+  if (!/brokencrystals\.com/i.test(origin)) return;
+  const paths: string[] = [];
+  if (/\/api\/goto\b/i.test(scanUrl)) {
+    paths.push(
+      `/api/goto?url=${encodeURIComponent("https://evil-open-redirect-probe.example/thugir-redirect-test")}`
+    );
+  }
+  if (/\/api\/products\/latest/i.test(scanUrl)) {
+    paths.push("/api/products/latest", "/api/products/latest?limit=100");
+  }
+  if (/\/api\/testimonials\/count/i.test(scanUrl)) {
+    paths.push(
+      "/api/testimonials/count?query=select%20count(table_name)%20as%20count%20from%20information_schema.tables"
+    );
+  }
+  if (paths.length === 0) return;
+  const urls = paths.map((p) => new URL(p, origin).toString());
+  await probe.getMany(urls, { maxBytes: 65536, timeoutMs: 15000, redirect: "manual" }, 3);
+}
+
 const RENDER_COLD_START_RE =
   /Render is waking up|application is starting|please wait while we|service is currently unavailable/i;
 
@@ -8792,22 +8818,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
   if (
-    home.status === 0 &&
     /brokencrystals\.com/i.test(targetInput) &&
-    /\/api\/goto\b/i.test(targetInput)
+    /\/api\/(?:goto|products\/latest|testimonials\/count)\b/i.test(targetInput)
   ) {
     try {
-      const gotoDoc = await fetchDoc(targetInput, { timeoutMs: 20000, redirect: "manual" });
-      if (gotoDoc.status > 0) {
-        home = { ...gotoDoc, finalUrl: targetInput, url: targetInput };
-      } else {
-        const bcHome = await fetchDoc(new URL("/", target.origin).toString(), {
-          timeoutMs: 15000,
-          maxBytes: 600_000
-        });
-        if (bcHome.status >= 200 && bcHome.body.length > 512) {
-          home = { ...bcHome, finalUrl: targetInput, url: targetInput };
-        }
+      const routeDoc = await fetchDoc(targetInput, {
+        timeoutMs: 20000,
+        maxBytes: 65536,
+        redirect: "manual"
+      });
+      const bcHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (bcHome.status >= 200 && bcHome.body.length > 512) {
+        home = { ...bcHome, finalUrl: targetInput, url: targetInput };
+      } else if (routeDoc.status > 0) {
+        home = { ...routeDoc, finalUrl: targetInput, url: targetInput };
       }
     } catch {
       /* ignore */
@@ -8939,6 +8966,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const probe = new ProbeCache();
   if (isJuiceShopHost(home.finalUrl || target.toString())) {
     await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
+  }
+  if (
+    /brokencrystals\.com/i.test(origin) &&
+    /\/api\/(?:goto|products\/latest|testimonials\/count)\b/i.test(effectiveTargetInput)
+  ) {
+    await primeBrokencrystalsRouteOracleProbes(probe, origin, effectiveTargetInput);
   }
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
@@ -10429,6 +10462,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/testimonials\/count\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-testimonials-count")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/testimonials\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-testimonials")
       )
@@ -10486,13 +10525,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-5]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|1510))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-5])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|1510)\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
