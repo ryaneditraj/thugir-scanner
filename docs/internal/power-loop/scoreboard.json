@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T19:05:00.000Z",
+  "updated_at": "2026-08-10T19:16:05.831Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2857,
-  "total_findings": 27951,
+  "total_sites_scanned": 2874,
+  "total_findings": 28274,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2049,
-  "discovery_findings": 23209,
-  "improvements_shipped": 1175,
-  "last_run": "2026-08-10T19:05:00.000Z",
+  "discovery_urls_added": 2061,
+  "discovery_findings": 23347,
+  "improvements_shipped": 1177,
+  "last_run": "2026-08-10T19:16:05.831Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,34 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 12,
       "urls_scanned": 8,
-      "findings": 47,
-      "focus": "WSL CATALOG_MAX 1515→1520 extension; backlog drain 1504-1506",
-      "improvements_shipped_this_run": 0
+      "findings": 138,
+      "focus": "WSL CATALOG_MAX 1520→1525 + juice-shop security-question route queue drain",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1516-1519: 7 findings each (placeholder-module-route-live-oracle)",
-      "web-security-learning-labs.vercel.app/module/1520: 4 findings (catalog shell)",
-      "web-security-learning-labs.vercel.app/module/1504-1506: backlog drain 5 findings each"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1521-1524: 8 findings each (+placeholder-module-route-live-oracle)",
+      "web-security-learning-labs.vercel.app/module/1525: 5 findings (catalog shell)",
+      "juice-shop.herokuapp.com/rest/user/security-question: 48 findings — route oracles fire (user-route + security-questions-list-route)",
+      "juice-shop.herokuapp.com/api/SecurityQuestions: 48 findings — catalog route oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "WSL modules 1516-1520 are catalog shells — need challenge-specific live oracles when modules ship content"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key; expanded Bluesky/Mastodon search corpus)",
+      "WSL modules 1521-1525 are catalog shells — need challenge-specific live oracles when modules ship content"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
-    "web-security-learning-labs.vercel.app/module/1516": 7,
-    "web-security-learning-labs.vercel.app/module/1517": 7,
-    "web-security-learning-labs.vercel.app/module/1518": 7,
-    "web-security-learning-labs.vercel.app/module/1519": 7,
+    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com/rest/user/security-question": 48,
+    "web-security-learning-labs.vercel.app/module/1525": 5,
+    "web-security-learning-labs.vercel.app/module/1521": 8,
     "pwnshop.ctfsecurity.com/logs": 43,
     "brokencrystals.com/api/products/latest": 75
   }
