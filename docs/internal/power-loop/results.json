@@ -1,653 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-08-08T21:02:36.060Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 21,
-      "findings": [
-        {
-          "slug": "juice-shop-addresss-bola-live-oracle",
-          "title": "Juice Shop shipping addresses BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-addresss-id-bola-live-oracle",
-          "title": "Juice Shop address-by-ID BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-route-live-oracle",
-          "title": "Juice Shop /ftp forgotten-backup route live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-products-search-sqli-route-live-oracle",
-          "title": "Juice Shop /rest/products/search SQLi route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-captcha-bypass-live-oracle",
-          "title": "Juice Shop captcha bypass live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-image-captcha-bypass-live-oracle",
-          "title": "Juice Shop image captcha bypass live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-save-login-ip-live-oracle",
-          "title": "Juice Shop login IP spoofing live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-whoami-unauth-live-oracle",
-          "title": "Juice Shop unauthenticated whoami live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-products-reviews-exposure-live-oracle",
-          "title": "Juice Shop product reviews disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-chatbot-route-live-oracle",
-          "title": "Juice Shop chatbot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 188,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:02:36.060Z"
-    },
-    {
-      "run_id": "2026-08-08T21:31:58.697Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1170",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 500,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:31:58.697Z"
-    },
-    {
-      "run_id": "2026-08-08T21:32:05.748Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1171",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 500,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:32:05.748Z"
-    },
-    {
-      "run_id": "2026-08-08T21:32:11.983Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1172",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 500,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:32:11.983Z"
-    },
-    {
-      "run_id": "2026-08-08T21:32:17.709Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1173",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 513,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:32:17.709Z"
-    },
-    {
-      "run_id": "2026-08-08T21:32:32.621Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1174",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 513,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:32:32.621Z"
-    },
-    {
-      "run_id": "2026-08-08T21:32:47.431Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1165",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "web-security-learning-labs-ssti-module-route-live-oracle",
-          "title": "Web Security Learning Labs SSTI module route live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 513,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:32:47.431Z"
-    },
-    {
-      "run_id": "2026-08-08T21:33:02.314Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1166",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "web-security-learning-labs-ssti-module-route-live-oracle",
-          "title": "Web Security Learning Labs SSTI module route live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 513,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:33:02.314Z"
-    },
-    {
-      "run_id": "2026-08-08T21:33:17.338Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1167",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "web-security-learning-labs-ssti-module-route-live-oracle",
-          "title": "Web Security Learning Labs SSTI module route live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "reflexion-escalated-ssti",
-          "title": "SSTI confirmed via multi-template reflexion probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 513,
-      "status": "ok",
-      "scanned_at": "2026-08-08T21:33:17.338Z"
-    },
-    {
       "run_id": "2026-08-08T22:08:33.921Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -23567,6 +22920,481 @@
       "probes_run": 571,
       "status": "ok",
       "scanned_at": "2026-08-10T03:02:56.200Z"
+    },
+    {
+      "run_id": "2026-08-10T03:05:21.057Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1388",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 385,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:05:21.057Z"
+    },
+    {
+      "run_id": "2026-08-10T03:05:27.744Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1389",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 385,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:05:27.744Z"
+    },
+    {
+      "run_id": "2026-08-10T03:05:32.571Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1390",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 385,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:05:32.571Z"
+    },
+    {
+      "run_id": "2026-08-10T03:05:37.402Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1391",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 421,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:05:37.402Z"
+    },
+    {
+      "run_id": "2026-08-10T03:05:41.791Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1392",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:05:41.791Z"
+    },
+    {
+      "run_id": "2026-08-10T03:05:55.849Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1334",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:05:55.849Z"
+    },
+    {
+      "run_id": "2026-08-10T03:06:09.910Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1333",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:06:09.910Z"
+    },
+    {
+      "run_id": "2026-08-10T03:06:24.073Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1332",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T03:06:24.073Z"
+    },
+    {
+      "run_id": "2026-08-10T03:06:30.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "primary Heroku 503; staging fallback ok: 48 findings, 6/6 recall (pages=6 probes=571; gap=[])",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "03 UTC: no teacher tools. Benchmark 6/6 on staging. Discovery +5 NEW WSL modules 1388-1392; queue drained 8 ok (47 findings incl 1332-1334 backlog).",
+      "scanned_at": "2026-08-10T03:06:30.000Z"
     }
   ]
 }
