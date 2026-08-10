@@ -32538,7 +32538,7 @@ export async function primePwnshopOtpSessionForDeepScan(
   if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   const primeWaitsMs = /\/profile\/upload-avatar/i.test(scanUrl)
-    ? [5000, 8000, 11000, 14000]
+    ? [5000, 8000, 11000, 14000, 17000]
     : /\/(?:apply-coupon|cart|wallet)\b/i.test(scanUrl)
       ? [4000, 7000, 10000, 13000]
       : [3000, 5000, 7000, 9000];
@@ -32711,19 +32711,25 @@ const pwnshopAvatarSvgXssLiveOracle: Rule = async (ctx) => {
   const uploadMatch = uploadDoc.body.match(/"url"\s*:\s*"(\/uploads\/[^"]+)"/);
   if (!uploadMatch) return NEGATIVE;
   const servedUrl = new URL(uploadMatch[1], ctx.origin).toString();
-  const servedDoc = await ctx.probe.get(servedUrl, { maxBytes: 4096, timeoutMs: 15000 });
-  if (servedDoc.status < 200 || servedDoc.status >= 400) return NEGATIVE;
-  if (!/onload\s*=\s*["']alert\(1\)["']/i.test(servedDoc.body)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.93,
-    evidence: {
-      uploadUrl,
-      servedUrl,
-      snippet: servedDoc.body.slice(0, 160).trim(),
-      note: "Pwnshop POST /profile/upload-avatar stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
-    }
-  };
+  // Static /uploads/ can lag behind upload response — poll with fetchDoc (bypasses probe cache).
+  const servedWaitsMs = [0, 400, 800, 1200, 1800, 2500];
+  for (const waitMs of servedWaitsMs) {
+    if (waitMs > 0) await pwnshopSleep(waitMs);
+    const servedDoc = await fetchDoc(servedUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (servedDoc.status < 200 || servedDoc.status >= 400) continue;
+    if (!/onload\s*=\s*["']alert\(1\)["']/i.test(servedDoc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        uploadUrl,
+        servedUrl,
+        snippet: servedDoc.body.slice(0, 160).trim(),
+        note: "Pwnshop POST /profile/upload-avatar stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const pwnshopApplyCouponLiveOracle: Rule = async (ctx) => {
@@ -35307,7 +35313,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1525;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1540;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
