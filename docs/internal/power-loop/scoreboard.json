@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T10:20:00.000Z",
+  "updated_at": "2026-08-10T11:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3197,
-  "total_findings": 34270,
+  "total_sites_scanned": 3205,
+  "total_findings": 34526,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2235,
-  "discovery_findings": 26950,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-10T10:20:00.000Z",
+  "discovery_urls_added": 2240,
+  "discovery_findings": 27157,
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-10T11:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 49,
@@ -48,44 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall on primary Heroku (49 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall on primary Heroku (49 findings, 592 probes); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 147,
-      "focus": "wrongsecrets challenge-61 Telegram oracle + brokencrystals metadata-xxe route priority + WSL CATALOG_MAX 1428 (+1423-1428)",
-      "improvements_shipped_this_run": 3
+      "findings": 207,
+      "focus": "brokencrystals metadata/file priority drain + ssrf.vulnlab.dev/basic + WSL module backlog 1324-1327; queued CATALOG_MAX 1432 (+1428-1432)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-61: 13→14 findings — wrongsecrets-challenge-61-telegram-secrets-route-live-oracle shipped",
-      "brokencrystals.com/api/metadata: 85 findings — brokencrystals-metadata-xxe-route-live-oracle with route priority",
-      "web-security-learning-labs.vercel.app/module/1423-1428: placeholder-module-route-live-oracle (CATALOG_MAX 1428)",
-      "web-security-learning-labs.vercel.app/module/1421-1422: backlog drain (5 findings each)"
+      "brokencrystals.com/api/metadata: 83 findings — SSRF/cloud-metadata hub with live oracle coverage",
+      "brokencrystals.com/api/file: 80 findings — path/SSRF file-fetch oracle surface",
+      "ssrf.vulnlab.dev/basic: 15 findings — unfiltered SSRF lab baseline",
+      "web-security-learning-labs.vercel.app/module/1324-1327: 5-8 findings each — placeholder module catalog drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/goto: intermittent scan errors — retry in next queue drain"
+      "brokencrystals.com/api/goto: reachability error this run — open-redirect oracle blocked by intermittent 503",
+      "web-security-learning-labs module/1428-1432 queued but not drained (limit 8 consumed by earlier pending URLs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 49,
-    "wrongsecrets.herokuapp.com/challenge/challenge-61": 14,
-    "brokencrystals.com/api/metadata": 85,
-    "web-security-learning-labs.vercel.app/module/1423": 7,
-    "web-security-learning-labs.vercel.app/module/1424": 7,
-    "web-security-learning-labs.vercel.app/module/1425": 7,
-    "web-security-learning-labs.vercel.app/module/1426": 7,
-    "web-security-learning-labs.vercel.app/module/1427": 7,
-    "web-security-learning-labs.vercel.app/module/1428": 7,
-    "web-security-learning-labs.vercel.app/module/1421": 5,
-    "web-security-learning-labs.vercel.app/module/1422": 5,
-    "brokencrystals.com/chat": 80,
-    "wrongsecrets.herokuapp.com/challenge/60": 14,
+    "brokencrystals.com/api/metadata": 83,
+    "brokencrystals.com/api/file": 80,
     "ssrf.vulnlab.dev/basic": 15,
+    "web-security-learning-labs.vercel.app/module/1327": 8,
+    "web-security-learning-labs.vercel.app/module/1326": 8,
+    "web-security-learning-labs.vercel.app/module/1325": 8,
+    "web-security-learning-labs.vercel.app/module/1324": 5,
+    "brokencrystals.com/api/goto": 0,
+    "wrongsecrets.herokuapp.com/challenge/challenge-61": 14,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 45
   }
 }
