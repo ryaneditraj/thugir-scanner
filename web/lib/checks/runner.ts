@@ -794,6 +794,14 @@ async function reachTarget(target: URL, rawInput: string): Promise<FetchedDoc> {
     }
     return best;
   }
+  // brokencrystals.com intermittently fails the first TLS/DNS probe during scheduled drains.
+  if (/^brokencrystals\.com$/i.test(apexHost)) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await new Promise((r) => setTimeout(r, 2000 + attempt * 1500));
+      const doc = await fetchDoc(target.toString(), { timeoutMs: 20000, maxBytes: 600_000 });
+      if (doc.status > 0) return doc;
+    }
+  }
   return {
     url: target.toString(),
     finalUrl: target.toString(),
@@ -9404,6 +9412,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
         "https://wrongsecrets.herokuapp.com/challenge/61",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
+        "https://wrongsecrets.herokuapp.com/challenge/62",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
+        "https://wrongsecrets.herokuapp.com/challenge/63",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
@@ -10345,6 +10357,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("wrongsecrets-challenge-61")
       )
         return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?62\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?63\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (
         /brokencrystals\.com/i.test(origin) &&
@@ -10392,13 +10416,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-8]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-5]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-8])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-5])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
