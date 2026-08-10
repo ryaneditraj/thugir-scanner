@@ -33104,6 +33104,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-mcp-tools-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/mcp/tools route live oracle",
+    description:
+      "When scanning /api/mcp/tools, MCP initialize + tools/list exposes public SQL get_count and admin spawn_process/get_config MCP tools without authentication.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals MCP tool enumeration is reachable when scanning /api/mcp/tools paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMcpToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate MCP sessions and restrict tool exposure — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/list.",
+        "Do not expose admin tools to guest MCP sessions.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/mcp/tools route scan confirms unauthenticated MCP tool registry disclosure. Show MCP gateway hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-process-numbers-live-oracle",
     platform: "generic",
     category: "Injection",
