@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T21:19:56.000Z",
+  "updated_at": "2026-08-10T22:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,22 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2910,
-  "total_findings": 28780,
+  "total_sites_scanned": 2919,
+  "total_findings": 28877,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2084,
-  "discovery_findings": 23704,
-  "improvements_shipped": 1177,
-  "last_run": "2026-08-10T21:19:56.000Z",
+  "discovery_urls_added": 2089,
+  "discovery_findings": 23751,
+  "improvements_shipped": 1175,
+  "last_run": "2026-08-10T22:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
+      "pages_crawled": 6,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -45,30 +47,40 @@
             "misconfig"
           ]
         }
-      }
+      },
+      "note": "Primary Heroku awake 6/6 (50 findings); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; teacher_delta arrays empty",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "WSL CATALOG_MAX 1560 + WrongSecrets challenge 7-9 topic route oracles",
-      "improvements_shipped_this_run": 2
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 47,
+      "focus": "WSL CATALOG_MAX 1565 extension (modules 1561-1565) + backlog drain 1541-1543",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings)",
-      "wrongsecrets.herokuapp.com/challenge/7-9: 13\u219214 findings \u2014 Vault/Logging/Terraform topic route oracles",
-      "web-security-learning-labs.vercel.app/module/1545: 8 findings \u2014 catalog shell oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1561-1564: 7 findings each — catalog shell oracle",
+      "web-security-learning-labs.vercel.app/module/1565: 4 findings — catalog shell oracle",
+      "web-security-learning-labs.vercel.app/module/1541-1543: 5 findings each — backlog drain"
     ],
     "learning_gaps": [
-      "secret-resend slug still absent on juice-shop (sensitive_data covered via other slugs)",
-      "teacher_delta blocked \u2014 nuclei/engine unavailable",
-      "WSL modules 1546-1560 are catalog placeholder shells"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "WSL modules 1561-1565 are catalog placeholder shells — no route-specific live oracles",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 50,
+    "web-security-learning-labs.vercel.app/module/1561": 7,
+    "web-security-learning-labs.vercel.app/module/1562": 7,
+    "web-security-learning-labs.vercel.app/module/1563": 7,
+    "web-security-learning-labs.vercel.app/module/1564": 7,
+    "web-security-learning-labs.vercel.app/module/1565": 4,
+    "web-security-learning-labs.vercel.app/module/1541": 5,
     "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "pwnshop.ctfsecurity.com/wallet/topup/vulnbank": 44,
-    "pwnshop.ctfsecurity.com/wallet": 22,
-    "web-security-learning-labs.vercel.app/module/1541": 7,
-    "web-security-learning-labs.vercel.app/module/1544": 7
+    "pwnshop.ctfsecurity.com/wallet/topup/vulnbank": 44
   }
 }
