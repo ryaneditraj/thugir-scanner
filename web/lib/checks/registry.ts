@@ -35253,7 +35253,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1405;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1410;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -64488,6 +64488,46 @@ const brokencrystalsEmailSmtpProxyRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsSendSupportEmailSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/email/sendSupportEmail", ctx.origin);
+  probeUrl.searchParams.set("to", "thugir-probe@thugir.invalid");
+  probeUrl.searchParams.set("subject", "Thugir probe");
+  probeUrl.searchParams.set("body", "Thugir scanner support-email SSRF oracle");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200) return NEGATIVE;
+  const smtpSsrfOk =
+    /ECONNREFUSED\s+127\.0\.0\.1:1025/i.test(doc.body) ||
+    (/127\.0\.0\.1:1025/i.test(doc.body) && /ECONNREFUSED|connect/i.test(doc.body));
+  if (!smtpSsrfOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/email/sendSupportEmail attempts server-side SMTP connection to 127.0.0.1:1025 — support-email SSRF/misconfiguration oracle"
+    }
+  };
+};
+
+const brokencrystalsSendSupportEmailRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/email\/sendSupportEmail\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsSendSupportEmailSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/email/sendSupportEmail route scan — server-side connection attempt to internal SMTP at 127.0.0.1:1025"
+    }
+  };
+};
+
 const brokencrystalsAdminLoginBflaLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const loginUrl = new URL("/api/auth/admin/login", ctx.origin).toString();
@@ -72226,6 +72266,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsUsersIdBolaRouteLiveOracle,
   brokencrystalsEmailSmtpProxyLiveOracle,
   brokencrystalsEmailSmtpProxyRouteLiveOracle,
+  brokencrystalsSendSupportEmailSsrfLiveOracle,
+  brokencrystalsSendSupportEmailRouteLiveOracle,
   brokencrystalsAdminLoginBflaLiveOracle,
   brokencrystalsAdminLoginBflaRouteLiveOracle,
   brokencrystalsDeleteEmailsLiveOracle,
