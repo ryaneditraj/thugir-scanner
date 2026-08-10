@@ -29230,6 +29230,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-chat-llm-query-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /chat route LLM query oracle",
+    description:
+      "When scanning /chat, POST /api/chat/query accepts unauthenticated message arrays and returns LLM assistant HTML — route-specific prompt-injection oracle.",
+    impactOneline:
+      "Route-scoped scans of /chat should confirm unauthenticated LLM chat proxy with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsChatLlmQueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chat endpoints and sanitize LLM output before HTML rendering — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before /api/chat/query accepts messages.",
+        "Sanitize LLM responses before dangerouslySetInnerHTML rendering.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /chat route scan confirms unauthenticated LLM prompts via /api/chat/query. Show route-specific chat proxy hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",

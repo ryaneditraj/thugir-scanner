@@ -35253,7 +35253,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1416;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1422;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -60650,6 +60650,23 @@ const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsChatLlmQueryRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/chat\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsChatLlmQueryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /chat route scan — POST /api/chat/query accepts unauthenticated LLM prompts — route-specific prompt-injection oracle"
+    }
+  };
+};
+
 // --- VulnLab Academy API testing labs (hack-this-site-eta.vercel.app/api-labs/*) ----
 const CLIENT_VULNLAB_API_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -72143,6 +72160,7 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsMcpRouteLiveOracle,
   wrongsecretsChallenge60McpRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
+  brokencrystalsChatLlmQueryRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,
