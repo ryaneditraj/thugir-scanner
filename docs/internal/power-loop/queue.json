@@ -1,29 +1,64 @@
 {
-  "updated_at": "2026-08-10T13:05:00.000Z",
+  "updated_at": "2026-08-10T13:15:00.000Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1443",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1443 (public Vercel demo, 13 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1443 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1444",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1444 (public Vercel demo, 13 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1444 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1445",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1445 (public Vercel demo, 13 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1445 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1446",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1446 (public Vercel demo, 13 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1446 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1447",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1447 (public Vercel demo, 13 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1447 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1448",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1448 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1449",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1449 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1450",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1450 (CATALOG_MAX 1450 extension, 13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/basic",
+      "source": "ssrf.vulnlab.dev — basic SSRF live oracle queue drain (13 UTC — route oracles absent in results.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata",
+      "source": "ssrf.vulnlab.dev — AWS metadata SSRF live oracle queue drain (13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blocklist",
+      "source": "ssrf.vulnlab.dev — blocklist bypass SSRF live oracle queue drain (13 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/redirect",
+      "source": "ssrf.vulnlab.dev — redirect-chain SSRF live oracle queue drain (13 UTC discovery)",
       "auth": "public_demo"
     },
     {
