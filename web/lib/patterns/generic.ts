@@ -23046,7 +23046,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pwnshop audit log plaintext password route live oracle (PWN-027)",
     description:
-      "When scanning /logs, failed login passwords appear in plaintext on unauthenticated /api/v1/events — route-specific plaintext password logging oracle.",
+      "When scanning /logs or /api/v1/events, failed login passwords appear in plaintext on unauthenticated /api/v1/events — route-specific plaintext password logging oracle.",
     impactOneline:
       "Route scans on audit-log pages need live confirmation that passwords are written in cleartext.",
     detectorKind: "rule_ref",

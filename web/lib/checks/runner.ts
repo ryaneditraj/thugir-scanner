@@ -20,6 +20,7 @@ import {
   RULES,
   clearPwnshopOtpSessionForProbe,
   primeBypass403SessionForDeepScan,
+  primePwnshopAuditLogOracleForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
   WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX,
@@ -8975,6 +8976,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (/bypass403\.vercel\.app/i.test(origin)) {
     await primeBypass403SessionForDeepScan(probe, origin, targetInput, home);
@@ -10197,6 +10199,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     clearPwnshopOtpSessionForProbe(probe);
     await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
   }
+  if (
+    /pwnshop|ctfsecurity\.com/i.test(origin) &&
+    /\/(?:logs|api\/v1\/events)\b/i.test(targetInput)
+  ) {
+    await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
+  }
   const ctx: RuleContext = { origin, scanUrl: effectiveTargetInput, home, scripts, combined, probe };
 
   const all = patternsForTier("deep").sort((a, b) => {
@@ -10318,6 +10326,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-")
       )
         return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:logs|api\/v1\/events)\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-audit-log")
+      )
+        return -4;
       if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/v1\/(?:orders|users)\b/i.test(targetInput) &&

@@ -13268,7 +13268,7 @@ values
    true),
   ('pwnshop-audit-log-plaintext-password-route-live-oracle', 'generic', 'Sensitive data exposure', 'high',
    'Pwnshop audit log plaintext password route live oracle (PWN-027)',
-   'When scanning /logs, failed login passwords appear in plaintext on unauthenticated /api/v1/events — route-specific plaintext password logging oracle.',
+   'When scanning /logs or /api/v1/events, failed login passwords appear in plaintext on unauthenticated /api/v1/events — route-specific plaintext password logging oracle.',
    'Route scans on audit-log pages need live confirmation that passwords are written in cleartext.',
    'rule_ref',
    '{"rule":"pwnshopAuditLogPlaintextPasswordRouteLiveOracle"}'::jsonb,
