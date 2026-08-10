@@ -1,29 +1,94 @@
 {
-  "updated_at": "2026-08-10T16:04:38.947Z",
+  "updated_at": "2026-08-10T16:20:06.516Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1481",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1481 (CATALOG_MAX 1485 extension, 16 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1481 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1482",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1482 (CATALOG_MAX 1485 extension, 16 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1482 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1483",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1483 (CATALOG_MAX 1485 extension, 16 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1483 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1484",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1484 (CATALOG_MAX 1485 extension, 16 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1484 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1485",
-      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1485 (CATALOG_MAX 1485 extension, 16 UTC discovery)",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1485 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1486",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1486 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1487",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1487 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1488",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1488 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1489",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1489 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1490",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1490 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1491",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1491 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1492",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1492 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1493",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1493 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1494",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1494 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1495",
+      "source": "Web Security Learning Labs — new module catalog oracle GET /module/1495 (CATALOG_MAX 1495 extension, 16 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
+      "source": "ctfsec/pwnshop — coupon route queue drain (PWN-016 apply-coupon + category-bypass live oracles, 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wallet",
+      "source": "ctfsec/pwnshop — wallet route queue drain (PWN-042 credited_amount top-up live oracle, 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wallet/topup/vulnbank",
+      "source": "ctfsec/pwnshop — Vulnbank wallet top-up route queue drain (PWN-042, 16 UTC)",
       "auth": "public_demo"
     },
     {
@@ -794,11 +859,6 @@
     {
       "url": "https://pwnshop.ctfsecurity.com/account/delete",
       "source": "ctfsec/pwnshop — CSRF account self-deletion oracle POST /account/delete (PWN-026 vulnerabilities index)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/wallet/topup/vulnbank",
-      "source": "ctfsec/pwnshop — Vulnbank wallet funding credited-amount override oracle POST /wallet/topup/vulnbank (PWN-042 vulnerabilities index)",
       "auth": "public_demo"
     },
     {
@@ -1815,11 +1875,6 @@
       "url": "https://preview.owasp-juice.shop/api/Products",
       "source": "OWASP Juice Shop preview — product catalog exposure oracle GET /api/Products (preview.owasp-juice.shop)",
       "auth": "benchmark"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/debug/info",
-      "source": "ctfsec/pwnshop — PWN-018 debug endpoint exposes session secret + DB credentials (GitHub README Key URLs)",
-      "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
@@ -3014,11 +3069,6 @@
     {
       "url": "https://juice-shop.demo.escape.tech/api/Hints",
       "source": "Escape.tech Juice Shop demo — challenge hints exposure oracle GET /api/Hints (juice-shop.demo.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ssrf.vulnlab.dev/metadata",
-      "source": "sampsonc/vulnlab.dev — AWS mock IMDSv1 SSRF lab at /metadata (ssrf.vulnlab.dev README)",
       "auth": "public_demo"
     },
     {
@@ -5082,28 +5132,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/basic",
-      "source": "sampsonc/vulnlab.dev — unfiltered SSRF lab requests.get (GitHub README live at ssrf.vulnlab.dev)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://ssrf.vulnlab.dev/metadata-aws",
       "source": "sampsonc/vulnlab.dev — mock AWS IMDSv1 metadata SSRF oracle (cloud-hosted profile fetcher)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ssrf.vulnlab.dev/blocklist",
-      "source": "sampsonc/vulnlab.dev — SSRF substring blocklist bypass lab (localhost/127.0.0.1 deny-list)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ssrf.vulnlab.dev/redirect",
-      "source": "sampsonc/vulnlab.dev — SSRF follow-redirect on trusted host lab (302 chase bypass)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
-      "source": "ctfsec/pwnshop vulnerabilities — coupon category-restriction bypass oracle POST /apply-coupon (PWN-016)",
       "auth": "public_demo"
     },
     {
@@ -5254,11 +5284,6 @@
     {
       "url": "https://pwnshop.ctfsecurity.com/order/1",
       "source": "pwnshop vulnerabilities page — IDOR oracle GET /order/:id (PWN-001)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/wallet",
-      "source": "ctfsec/pwnshop README — wallet top-up / payment-card funding business-logic oracle",
       "auth": "oss_deploy"
     },
     {
@@ -5514,11 +5539,6 @@
     {
       "url": "https://brokencrystals.com/hidden-upload",
       "source": "NeuraLegion/brokencrystals — DOM XSS + unrestricted SVG upload page /hidden-upload (README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/goto",
-      "source": "NeuraLegion/brokencrystals — unvalidated redirect via url query param (README /api/goto oracle)",
       "auth": "public_demo"
     },
     {
@@ -7040,11 +7060,6 @@
       "url": "https://pentest-fauxbank.vercel.app/login",
       "source": "FauxBank — fictional banking pentest training login surface (web search)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/testimonials/count",
-      "source": "NeuraLegion/brokencrystals — SQLi via query param oracle (README)",
-      "auth": "benchmark"
     },
     {
       "url": "https://brokencrystals.com/api/render",

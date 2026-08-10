@@ -32447,8 +32447,10 @@ async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<stri
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const uploadAvatarRoute = /\/profile\/upload-avatar/i.test(pageUrl);
   const cartRoute = /\/cart\b/i.test(pageUrl);
+  const couponRoute = /\/apply-coupon/i.test(pageUrl);
+  const walletRoute = /\/wallet\b/i.test(pageUrl);
   if (uploadAvatarRoute) await pwnshopSleep(3000);
-  if (cartRoute) await pwnshopSleep(2000);
+  if (cartRoute || couponRoute || walletRoute) await pwnshopSleep(2500);
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
     if (!cookie) continue;
@@ -32537,7 +32539,9 @@ export async function primePwnshopOtpSessionForDeepScan(
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   const primeWaitsMs = /\/profile\/upload-avatar/i.test(scanUrl)
     ? [5000, 8000, 11000, 14000]
-    : [3000, 5000, 7000, 9000];
+    : /\/(?:apply-coupon|cart|wallet)\b/i.test(scanUrl)
+      ? [4000, 7000, 10000, 13000]
+      : [3000, 5000, 7000, 9000];
   for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
     const cookie = await pwnshopCompleteOtpSession(ctx);
     if (cookie) return;
@@ -35275,7 +35279,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1480;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1495;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
