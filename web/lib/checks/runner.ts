@@ -10109,7 +10109,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     clearPwnshopOtpSessionForProbe(probe);
     await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
   }
-  const ctx: RuleContext = { origin, scanUrl: targetInput, home, scripts, combined, probe };
+  const ctx: RuleContext = { origin, scanUrl: effectiveTargetInput, home, scripts, combined, probe };
 
   const all = patternsForTier("deep").sort((a, b) => {
     const w = (p: Pattern) => {
