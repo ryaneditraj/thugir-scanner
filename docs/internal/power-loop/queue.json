@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-09T22:04:09.472Z",
+  "updated_at": "2026-08-09T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/mcp/process_numbers",
+      "source": "NeuraLegion/brokencrystals — MCP process_numbers command-injection oracle POST /api/mcp/process_numbers (tools hub child route, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/mcp/spawn_process",
+      "source": "NeuraLegion/brokencrystals — MCP spawn_process RCE oracle POST /api/mcp/spawn_process (tools hub child route, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/mcp/get_config",
+      "source": "NeuraLegion/brokencrystals — MCP get_config secret-leak oracle POST /api/mcp/get_config (tools hub child route, 23 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1376",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1376 (public Vercel demo, 23 UTC CATALOG_MAX 1378 extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1377",
+      "source": "Web Security Learning Labs — module catalog oracle GET /module/1377 (public Vercel demo, 23 UTC CATALOG_MAX 1378 extension)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pentest-fauxbank.vercel.app/api/register",
       "source": "alfredang/pentest FauxBank — open registration mass-assignment oracle POST /api/register (pentest-fauxbank Vercel OSS banking lab, 21 UTC discovery)",
