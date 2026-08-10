@@ -2858,6 +2858,9 @@ const DEEP_RULES = new Set<string>([
   "nodegoatBenefitsNosqlRouteLiveOracle",
   "nodegoatSignupOpenRegistrationLiveOracle",
   "nodegoatSignupRouteLiveOracle",
+  "nodegoatProfileSensitiveDataLiveOracle",
+  "nodegoatProfileSensitiveDataRouteLiveOracle",
+  "nodegoatProfileRedosRouteLiveOracle",
   "vulnforgeAcademyLevelSqliRouteLiveOracle",
   "vulnforgeAcademyLevelXssRouteLiveOracle",
   "vulnforgeAcademyLevelSsrfRouteLiveOracle",
@@ -10293,6 +10296,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/(?:api\/)?support\b/i.test(targetInput) &&
         p.slug.startsWith("fauxbank-") &&
         /support/.test(p.slug)
+      )
+        return -3;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/profile\/?$/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-profile-")
       )
         return -3;
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;

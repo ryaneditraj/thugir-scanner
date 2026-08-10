@@ -7955,6 +7955,125 @@ const nodegoatSignupRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function nodegoatAuthenticatedSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  for (const { userName, password } of [
+    { userName: "user1", password: "User1_123" },
+    { userName: "admin", password: "Admin_123" }
+  ]) {
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: `userName=${encodeURIComponent(userName)}&password=${encodeURIComponent(password)}`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = doc.headers["location"] || "";
+    if ([301, 302, 303, 307, 308].includes(doc.status) && location && !/login/i.test(location)) {
+      return nodegoatSessionCookieFromDoc(doc);
+    }
+  }
+  let cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
+  return cookie;
+}
+
+async function nodegoatProfileSensitiveDataLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/profile", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(profileUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  if (!/Edit Profile/i.test(getDoc.body)) return NEGATIVE;
+  if (!/name="ssn"|id="ssn"/i.test(getDoc.body)) return NEGATIVE;
+  if (!/name="dob"|id="dob"/i.test(getDoc.body)) return NEGATIVE;
+  if (!/name="bankAcc"|name="bankRouting"/i.test(getDoc.body)) return NEGATIVE;
+  const marker = `123-45-${String(Date.now()).slice(-4)}`;
+  const postDoc = await fetchDoc(profileUrl, {
+    method: "POST",
+    body: `firstName=Thugir&lastName=Probe&address=1+Main&ssn=${encodeURIComponent(marker)}&dob=1990-01-15&bankAcc=987654&bankRouting=123456%23`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 32768,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
+  const verifyDoc = await fetchDoc(profileUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  const persisted =
+    verifyDoc.body.includes(`value="${marker}"`) ||
+    new RegExp(`value="${marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`).test(verifyDoc.body);
+  if (!persisted) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      profileUrl,
+      ssnMarker: marker,
+      snippet: verifyDoc.body.slice(0, 240).trim(),
+      note: "NodeGoat GET/POST /profile stores SSN, DOB, and bank account fields unencrypted — A6 sensitive data exposure oracle"
+    }
+  };
+}
+
+const nodegoatProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatProfileSensitiveDataLiveProbe(ctx);
+};
+
+const nodegoatProfileSensitiveDataRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatProfileSensitiveDataLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /profile route scan — SSN/DOB/bank fields persist unencrypted after POST — A6 sensitive data exposure oracle"
+    }
+  };
+};
+
+const nodegoatProfileRedosRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/?$/i.test(pageUrl)) return NEGATIVE;
+  const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/profile", ctx.origin).toString();
+  const profileDoc = await ctx.probe.get(profileUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (!/name="bankRouting"|id="bankRouting"/i.test(profileDoc.body)) return NEGATIVE;
+  const redosUrl = new URL("/tutorial/redos", ctx.origin).toString();
+  const redosDoc = await ctx.probe.get(redosUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const corpus = redosDoc.body;
+  if (!/Bank Routing number in the Profile form/i.test(corpus)) return NEGATIVE;
+  if (!/regexPattern\.test\(bankRouting\)|\(\[0-9\]\+\)\+/.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      redosTutorialUrl: redosUrl,
+      note: "NodeGoat /profile bankRouting validates via catastrophic backtracking regex documented on /tutorial/redos — ReDoS oracle"
+    }
+  };
+};
+
 // --- Lakera Gandalf prompt-injection CTF (gandalf.lakera.ai) ----------------------
 const CLIENT_GANDALF_RES: { label: string; re: RegExp }[] = [
   {
@@ -72729,6 +72848,9 @@ export const RULES: Record<string, Rule> = {
   nodegoatBenefitsNosqlRouteLiveOracle,
   nodegoatSignupOpenRegistrationLiveOracle,
   nodegoatSignupRouteLiveOracle,
+  nodegoatProfileSensitiveDataLiveOracle,
+  nodegoatProfileSensitiveDataRouteLiveOracle,
+  nodegoatProfileRedosRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnforgeAcademyLevelSsrfRouteLiveOracle,

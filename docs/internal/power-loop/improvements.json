@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-sensitive-data-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: user1 session GET/POST /profile persists SSN marker in value attribute unencrypted; nodegoat-websec.herokuapp.com/profile findings 7→10 (+nodegoat-profile-sensitive-data-live-oracle +route); benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-redos-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile bankRouting field + /tutorial/redos documents regexPattern.test(bankRouting) catastrophic backtracking; nodegoat-websec.herokuapp.com/profile findings 7→10 (+nodegoat-profile-redos-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-route-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner pattern sort -3 for nodegoat-websec.herokuapp.com /profile + nodegoat-profile-* slugs; profile route oracles prioritized on queue drain; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1371-1375",
       "status": "shipped",
