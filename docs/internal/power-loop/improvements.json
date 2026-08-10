@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1496-1510",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1495→1510; placeholder/SSTI priority regex extended 149[0-9]|150[0-9]|1510; web-security-learning-labs.vercel.app/module/1496 findings 5 (+placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-route-oracle-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystals API route home warmup + primeBrokencrystalsRouteOracleProbes for /api/goto /api/products/latest /api/testimonials/count; brokencrystals.com/api/products/latest fires products-latest-limit-bypass-route oracle (3→11 products); /api/testimonials/count fires testimonials-count-sqli-route oracle (query param returns 216); /api/goto fires goto-open-redirect-route oracle (302 Location evil-open-redirect-probe.example); benchmark 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-route-queue-drain-17utc",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended brokencrystals.com/api/products/latest /api/testimonials/count /api/goto to discovery queue front; route scans now consistently fire route-specific oracles vs prior 1-finding hubs; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1481-1495",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1480→1495; placeholder/SSTI priority regex extended 148[0-9]|149[0-5]; web-security-learning-labs.vercel.app/module/1481 findings 8 (+placeholder-module-route-live-oracle); module/1495 findings 5 with placeholder oracle; benchmark juice-shop 50 findings 6/6 maintained"
@@ -339,9 +357,19 @@
   ],
   "shipped": [
     {
-      "source": "discovery:pwnshop.ctfsecurity.com",
-      "slug": "pwnshop-wallet-coupon-queue-drain-16utc",
-      "shipped_at": "2026-08-10T16:15:00.000Z"
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-route-queue-drain-17utc",
+      "shipped_at": "2026-08-10T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-route-oracle-reliability",
+      "shipped_at": "2026-08-10T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1496-1510",
+      "shipped_at": "2026-08-10T17:15:00.000Z"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
