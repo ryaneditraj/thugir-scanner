@@ -40454,6 +40454,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-sqli-status-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /sqli/status route SQLi live oracle",
+    description:
+      "When scanning /sqli/status, id=1 returns 200 Found 1 users but id=1' returns 500 Internal Server Error — route-specific status-code SQLi profile oracle.",
+    impactOneline:
+      "Route-specific status-code differential probe confirms SQLi oracle when scanning the Burp Bounty Lab /sqli/status practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliStatusRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and return consistent HTTP status codes for invalid input.",
+      steps: [
+        "Bind id parameters with prepared statements.",
+        "Return generic 400 responses instead of 500 database errors.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/status endpoint returns HTTP 500 on id=1' but 200 on id=1. Show parameterized queries and consistent error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-sqli-length-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -40465,6 +40491,32 @@ export const genericPatterns: Pattern[] = [
       "Live response-length differential confirms blind SQLi oracle when error messages and timing probes are unavailable.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountySqliLengthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries so injected SQL cannot change result-set cardinality.",
+      steps: [
+        "Bind search parameters with prepared statements.",
+        "Normalize response sizes or paginate results to reduce length-based oracles.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/length endpoint returns different response sizes for q=admin vs q=admin'. Show how to prevent blind SQLi via length differentials.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-length-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /sqli/length route blind SQLi live oracle",
+    description:
+      "When scanning /sqli/length, q=admin' OR 1=1-- returns more user-card rows than q=admin — route-specific content-length blind SQLi profile oracle.",
+    impactOneline:
+      "Route-specific response-length differential confirms blind SQLi oracle on the Burp Bounty Lab /sqli/length practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliLengthRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Use parameterized queries so injected SQL cannot change result-set cardinality.",
@@ -40506,6 +40558,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-pt-include-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /pt/include route LFI live oracle",
+    description:
+      "When scanning /pt/include, ?page=../../../etc/passwd returns Linux passwd file contents via PHP include — route-specific local file inclusion profile oracle.",
+    impactOneline:
+      "Route-specific PHP include probe confirms LFI oracle on the Burp Bounty Lab /pt/include practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPtIncludeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to PHP include/require and deny parent-directory traversal.",
+      steps: [
+        "Use a fixed allow-list of includable templates instead of user-supplied page paths.",
+        "Resolve paths against a base directory and reject .. segments.",
+        "Isolate Burp Bounty Lab LFI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /pt/include endpoint includes ../../../etc/passwd via the page parameter. Show how to prevent PHP local file inclusion.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-redirect-meta-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -40517,6 +40595,32 @@ export const genericPatterns: Pattern[] = [
       "Live meta-refresh probe confirms open redirect via HTML refresh headers distinct from HTTP 302 /redirect/goto and form-action routes.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountyRedirectMetaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets before embedding them in meta-refresh or JavaScript location.replace calls.",
+      steps: [
+        "Allowlist permitted redirect hosts and reject external absolute URLs.",
+        "Prefer server-side redirects with strict target validation over client-side meta-refresh.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect/meta endpoint issues meta-refresh and location.replace to attacker URLs. Show redirect validation mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-redirect-meta-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /redirect/meta route open redirect live oracle",
+    description:
+      "When scanning /redirect/meta, ?url= returns HTML with meta-refresh and location.replace to attacker URLs — route-specific meta-redirect profile oracle.",
+    impactOneline:
+      "Route-specific meta-refresh probe confirms open redirect oracle on the Burp Bounty Lab /redirect/meta practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRedirectMetaRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Validate redirect targets before embedding them in meta-refresh or JavaScript location.replace calls.",
@@ -40569,6 +40673,32 @@ export const genericPatterns: Pattern[] = [
       "Live image-proxy probe confirms SSRF via src parameter distinct from /ssrf/fetch url= and /ssrf/proxy target= routes.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountySsrfImgLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to arbitrary image URLs and validate src hosts against an allowlist.",
+      steps: [
+        "Proxy images only from trusted CDN hosts.",
+        "Reject file://, metadata, and internal IP ranges in image-proxy handlers.",
+        "Isolate Burp Bounty Lab SSRF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/img endpoint fetches arbitrary src URLs server-side. Show image-proxy SSRF mitigations and URL allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ssrf-img-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /ssrf/img route SSRF live oracle",
+    description:
+      "When scanning /ssrf/img, ?src= fetches attacker image URLs and echoes remote HTML — route-specific image-proxy SSRF profile oracle.",
+    impactOneline:
+      "Route-specific image-proxy probe confirms SSRF oracle on the Burp Bounty Lab /ssrf/img practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySsrfImgRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Block server-side fetches to arbitrary image URLs and validate src hosts against an allowlist.",
@@ -40647,6 +40777,32 @@ export const genericPatterns: Pattern[] = [
       "Live SQLi user-profile oracle on Burp Bounty Lab confirms ID-parameter injection profile coverage beyond login-form and search routes.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountySqliUserLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all ID lookups — never concatenate user input into SQL.",
+      steps: [
+        "Replace string-concatenated ID filters with prepared statements.",
+        "Return generic errors instead of database syntax details.",
+        "Isolate Burp Bounty Lab SQLi routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/user endpoint builds SQL from the id query parameter. Show parameterized queries and safe error handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sqli-user-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /sqli/user route SQLi live oracle",
+    description:
+      "When scanning /sqli/user, id=1 returns admin profile and id=1' triggers MySQL syntax errors — route-specific SQLi-by-ID profile oracle.",
+    impactOneline:
+      "Route-specific SQLi user-profile oracle on Burp Bounty Lab /sqli/user confirms ID-parameter injection when scanning the practice endpoint URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySqliUserRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Use parameterized queries for all ID lookups — never concatenate user input into SQL.",
