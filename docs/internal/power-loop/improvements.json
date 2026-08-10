@@ -2,6 +2,18 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-get-config-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/list get_config admin + tools/call returns Unauthorized: tool get_config requires authentication; brokencrystals.com/api/mcp/get_config findings 58→80 (+brokencrystals-mcp-get-config-live-oracle +route); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1378-1382",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1378→1382; placeholder/SSTI priority regex extended to 137[0-9]|138[0-2]; web-security-learning-labs.vercel.app/module/1378-1382 findings 8 each with placeholder-module-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-mcp-process-numbers-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/call process_numbers processing_expression=7*7 returns SSJI result: 49; brokencrystals.com/api/mcp/process_numbers findings 74→82 (+brokencrystals-mcp-process-numbers-live-oracle +route); benchmark juice-shop-staging 48 findings 6/6 maintained"

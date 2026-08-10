@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-08-10T02:08:00.000Z",
+=======
+  "updated_at": "2026-08-10T02:10:00.000Z",
+>>>>>>> e9563d43 (engine: register get_config in DEEP_RULES + power-loop validation logs)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 3119,
   "total_findings": 33029,
   "critical_findings": 63,
@@ -24,6 +29,17 @@
   "discovery_findings": 26167,
   "improvements_shipped": 1170,
   "last_run": "2026-08-10T02:08:00.000Z",
+=======
+  "total_sites_scanned": 3113,
+  "total_findings": 32961,
+  "critical_findings": 65,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2195,
+  "discovery_findings": 26145,
+  "improvements_shipped": 1175,
+  "last_run": "2026-08-10T02:10:00.000Z",
+>>>>>>> e9563d43 (engine: register get_config in DEEP_RULES + power-loop validation logs)
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -54,6 +70,7 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+<<<<<<< HEAD
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 50,
@@ -66,10 +83,23 @@
       "web-security-learning-labs.vercel.app/module/1341: 8 findings — catalog placeholder oracles validated",
       "web-security-learning-labs.vercel.app/module/1340: 8 findings — catalog placeholder oracles validated",
       "web-security-learning-labs.vercel.app/module/1339-1335: 5-6 findings each — WSL catalog drain continuing"
+=======
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 96,
+      "focus": "brokencrystals MCP get_config route oracle + WSL catalog 1378-1382 drain",
+      "improvements_shipped_this_run": 2
+    },
+    "notable_findings": [
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "brokencrystals.com/api/mcp/get_config: 58→80 findings — brokencrystals-mcp-get-config live+route oracles shipped",
+      "web-security-learning-labs.vercel.app/module/1378-1382: 8 findings each — CATALOG_MAX 1382 placeholder oracles validated"
+>>>>>>> e9563d43 (engine: register get_config in DEEP_RULES + power-loop validation logs)
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+<<<<<<< HEAD
       "juice-shop.herokuapp.com primary: Heroku dyno 503 — staging fallback required for live oracles",
       "web-security-learning-labs.vercel.app/module/1383-1387: queued this run — pending next queue drain",
       "web-security-learning-labs.vercel.app/module/1334-1331: next unscanned queue slice after 1335-1342 drain"
@@ -85,5 +115,16 @@
     "web-security-learning-labs.vercel.app/module/1337": 5,
     "web-security-learning-labs.vercel.app/module/1336": 5,
     "web-security-learning-labs.vercel.app/module/1335": 5
+=======
+      "juice-shop.herokuapp.com primary: Heroku dyno 503 — staging fallback required for live oracles"
+    ]
+  },
+  "discovery_highlights": {
+    "juice-shop-staging.herokuapp.com": 48,
+    "brokencrystals.com/api/mcp/get_config": 80,
+    "brokencrystals.com/api/mcp/process_numbers": 78,
+    "web-security-learning-labs.vercel.app/module/1378": 8,
+    "web-security-learning-labs.vercel.app/module/1382": 8
+>>>>>>> e9563d43 (engine: register get_config in DEEP_RULES + power-loop validation logs)
   }
 }
