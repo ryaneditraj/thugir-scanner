@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1443-1450",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1442→1450; placeholder/SSTI priority regex extended 144[0-2]→144[0-9]|1450; web-security-learning-labs.vercel.app/module/1443-1450 findings 5 each with placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-extract-seeds-66",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWrongSecretsChallengeSeeds extended 0–61→0–66 aligning crawl seeds with hub priority seeds; wrongsecrets.herokuapp.com/challenge/challenge-66 findings 13 incl wrongsecrets-challenge-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-queue-drain-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/basic /metadata /blocklist /redirect to discovery queue front; ssrf.vulnlab.dev/basic findings 3→15 (+basic-route + host SSRF oracles); /metadata /blocklist /redirect each 15 findings; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1436-1442",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1435→1442; placeholder/SSTI priority regex extended 143[0-5]→143[0-9]|144[0-2]; web-security-learning-labs.vercel.app/module/1436 findings 5 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
@@ -21667,6 +21685,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-1443-1450",
+      "shipped_at": "2026-08-10T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-extract-seeds-66",
+      "shipped_at": "2026-08-10T13:15:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-queue-drain-priority",
+      "shipped_at": "2026-08-10T13:15:00.000Z"
+    },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1436-1442",
