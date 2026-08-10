@@ -2503,6 +2503,7 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsMcpRouteLiveOracle",
   "wrongsecretsChallenge60McpRouteLiveOracle",
   "brokencrystalsChatLlmQueryLiveOracle",
+  "brokencrystalsChatLlmQueryRouteLiveOracle",
   "clientSideDvragLabEvidence",
   "dvragAdminConfigLiveOracle",
   "dvragRagPipelineLiveOracle",
@@ -7852,6 +7853,7 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
     "/newuserlogin",
     "/api/config",
     "/api/goto",
+    "/chat",
     "/users/register",
     "/swagger",
     "/swagger-json",
@@ -9396,6 +9398,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-9",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
         "https://wrongsecrets.herokuapp.com/challenge/8",
+        "https://wrongsecrets.herokuapp.com/challenge/60",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
@@ -10290,6 +10294,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/chat\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-chat")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/goto\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-goto")
       )
@@ -10319,6 +10329,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?60\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-60")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (
         /brokencrystals\.com/i.test(origin) &&
@@ -10366,13 +10382,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-6]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-2]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-6])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-2])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;
