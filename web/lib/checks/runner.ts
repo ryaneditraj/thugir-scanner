@@ -533,6 +533,18 @@ async function juiceShopBenchmarkOracleReady(pageUrl: string): Promise<boolean> 
   return ready.has("admin") && ready.has("idor") && ready.has("sqli") && ready.has("sensitive");
 }
 
+/** Rewrite juice-shop.herokuapp.com URLs to staging when primary dyno is asleep. */
+function rewriteJuiceShopStagingFallback(targetInput: string): string | null {
+  try {
+    const u = new URL(targetInput);
+    if (!/^juice-shop\.herokuapp\.com$/i.test(u.hostname)) return null;
+    u.hostname = "juice-shop-staging.herokuapp.com";
+    return u.toString();
+  } catch {
+    return null;
+  }
+}
+
 /** Heroku Application Error / 503 — dyno asleep; avoid long wake loops. */
 async function juiceShopHerokuDown(pageUrl: string): Promise<boolean> {
   try {
@@ -2688,6 +2700,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsUsersIdBolaRouteLiveOracle",
   "brokencrystalsEmailSmtpProxyLiveOracle",
   "brokencrystalsEmailSmtpProxyRouteLiveOracle",
+  "brokencrystalsSendSupportEmailSsrfLiveOracle",
+  "brokencrystalsSendSupportEmailRouteLiveOracle",
   "brokencrystalsAdminLoginBflaLiveOracle",
   "brokencrystalsAdminLoginBflaRouteLiveOracle",
   "brokencrystalsDeleteEmailsLiveOracle",
@@ -8730,7 +8744,8 @@ function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): st
 // the homepage AND a shallow same-origin crawl. No verified-domain requirement. Heavier active
 // probing (forged webhooks, multi-step IDOR) still belongs to the Python worker in production.
 export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {}): Promise<DeepScanResult> {
-  const target = normalizeTarget(targetInput);
+  let target = normalizeTarget(targetInput);
+  let effectiveTargetInput = targetInput;
 
   const extra = (opts.extraBlockedDomains ?? []).map((d) => d.toLowerCase());
   if (extra.length) {
@@ -8856,10 +8871,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
   if (
-    isJuiceShopHost(home.finalUrl || target.toString()) &&
-    (await juiceShopHerokuDown(home.finalUrl || target.toString()))
+    isJuiceShopHost(home.finalUrl || effectiveTargetInput) &&
+    (await juiceShopHerokuDown(home.finalUrl || effectiveTargetInput))
   ) {
-    throw new BlockedTargetError("Juice Shop Heroku dyno unavailable (503) — use staging fallback.");
+    const stagingFallback = rewriteJuiceShopStagingFallback(effectiveTargetInput);
+    if (stagingFallback) {
+      const stagingTarget = normalizeTarget(stagingFallback);
+      let stagingHome = await reachTarget(stagingTarget, stagingFallback);
+      stagingHome = await warmupJuiceShopHome(stagingFallback, stagingHome);
+      if (!(await juiceShopHerokuDown(stagingHome.finalUrl || stagingFallback))) {
+        target = stagingTarget;
+        effectiveTargetInput = stagingFallback;
+        home = stagingHome;
+      } else {
+        throw new BlockedTargetError("Juice Shop Heroku dyno unavailable (503) — use staging fallback.");
+      }
+    } else {
+      throw new BlockedTargetError("Juice Shop Heroku dyno unavailable (503) — use staging fallback.");
+    }
   }
   const origin = target.origin;
   const crawlOrigin = new URL(home.finalUrl).origin;
@@ -10252,6 +10281,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-fullinfo")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-users-id")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-email-smtp")) return -2;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/email\/sendSupportEmail\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-send-support-email")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
       if (
@@ -10300,13 +10335,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-5]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|1410))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-5])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|1410)\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;

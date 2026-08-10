@@ -32454,6 +32454,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-send-support-email-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/email/sendSupportEmail SSRF oracle",
+    description:
+      "GET /api/email/sendSupportEmail triggers a server-side connection to 127.0.0.1:1025 and returns ECONNREFUSED — the Broken Crystals support-email SSRF oracle.",
+    impactOneline:
+      "Server-side support-email endpoints that connect to internal SMTP services can be abused for SSRF and internal network reconnaissance.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSendSupportEmailSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side connections to internal addresses from email APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Validate and allowlist outbound SMTP destinations.",
+        "Never expose support-email send endpoints without authentication.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email/sendSupportEmail endpoint attempts connections to 127.0.0.1:1025. Show SSRF hardening for support-email APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-send-support-email-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/email/sendSupportEmail route SSRF oracle",
+    description:
+      "When scanning /api/email/sendSupportEmail, GET reveals server-side connection attempts to internal SMTP at 127.0.0.1:1025 — route-specific SSRF/misconfiguration oracle.",
+    impactOneline:
+      "Route-scoped scans should flag support-email APIs that trigger internal network connections.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSendSupportEmailRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side connections to internal addresses from email APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Validate and allowlist outbound SMTP destinations.",
+        "Never expose support-email send endpoints without authentication.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email/sendSupportEmail route scan confirms internal SMTP connection attempts. Show SSRF hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-admin-login-bfla-live-oracle",
     platform: "generic",
     category: "Broken access control",
