@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T20:16:00.000Z",
+  "updated_at": "2026-08-10T21:09:21.597Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2901,
-  "total_findings": 28590,
+  "total_sites_scanned": 2910,
+  "total_findings": 28780,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2079,
-  "discovery_findings": 23561,
-  "improvements_shipped": 1178,
-  "last_run": "2026-08-10T20:16:00.000Z",
+  "discovery_urls_added": 2084,
+  "discovery_findings": 23704,
+  "improvements_shipped": 1175,
+  "last_run": "2026-08-10T21:09:21.597Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
-      "oracle_url": "https://juice-shop.demo.escape.tech",
-      "oracle_findings": 50,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 592,
+      "probes_run": 578,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,36 @@
           ]
         }
       },
-      "note": "Heroku primary 503 — escape.tech fallback 6/6 (50 findings); secret-resend slug still absent"
+      "note": "Heroku primary awake 6/6 (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 18,
-      "urls_scanned": 26,
-      "findings": 266,
-      "focus": "WSL CATALOG_MAX 1525→1540 + pwnshop avatar upload retry + juice-shop order-history/track-order queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 143,
+      "focus": "WSL CATALOG_MAX 1540→1545 + pwnshop apply-coupon/wallet/topup queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1526-1529: 8 findings each (+placeholder-module-route-live-oracle)",
-      "web-security-learning-labs.vercel.app/module/1540: 5 findings (catalog shell)",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: 18→45 findings — pwnshop-avatar-svg-xss-live-oracle + pwnshop-avatar-upload-route-live-oracle shipped",
-      "juice-shop.herokuapp.com/rest/order-history: 46 findings — juice-shop-order-history-bola-route-live-oracle",
-      "juice-shop.herokuapp.com/rest/track-order/1: 48 findings — juice-shop-track-order-idor-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1541-1544: 7 findings each (catalog shells)",
+      "web-security-learning-labs.vercel.app/module/1545: 4 findings (catalog shell)",
+      "pwnshop.ctfsecurity.com/apply-coupon: 45 findings — pwnshop-coupon-category-bypass-route-live-oracle",
+      "pwnshop.ctfsecurity.com/wallet/topup/vulnbank: 44 findings — pwnshop-wallet-topup-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "WSL modules 1526-1540 are catalog shells — need challenge-specific live oracles when modules ship content"
+      "WSL modules 1541-1545 are catalog shells — need challenge-specific live oracles when modules ship content",
+      "pwnshop.ctfsecurity.com/wallet: 22 findings — wallet-top-up credited_amount oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.demo.escape.tech": 50,
-    "juice-shop.herokuapp.com/rest/track-order/1": 48,
-    "juice-shop.herokuapp.com/rest/order-history": 46,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45,
-    "web-security-learning-labs.vercel.app/module/1526": 8,
-    "web-security-learning-labs.vercel.app/module/1529": 8
+    "juice-shop.herokuapp.com": 47,
+    "pwnshop.ctfsecurity.com/apply-coupon": 45,
+    "pwnshop.ctfsecurity.com/wallet/topup/vulnbank": 44,
+    "pwnshop.ctfsecurity.com/wallet": 22,
+    "web-security-learning-labs.vercel.app/module/1541": 7,
+    "web-security-learning-labs.vercel.app/module/1544": 7
   }
 }
