@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T11:05:43.789Z",
+  "updated_at": "2026-08-11T11:09:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2795,
-  "total_findings": 27837,
+  "total_sites_scanned": 2803,
+  "total_findings": 27906,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2003,
-  "discovery_findings": 23374,
+  "discovery_urls_added": 2008,
+  "discovery_findings": 23443,
   "improvements_shipped": 1181,
-  "last_run": "2026-08-11T11:05:43.789Z",
+  "last_run": "2026-08-11T11:09:30.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 72,
-      "focus": "ai-security rate-limiting brute-force + IST Edu CSRF state-change + supply-chain route oracles",
-      "improvements_shipped_this_run": 3
+      "findings": 69,
+      "focus": "WrongSecrets challenge-38/39 Git-notes + AES crypto oracles; WSL modules 1027-1028; AI Security ai-phishing route",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category misses",
-      "ai-security-platform-iota.vercel.app/challenges/rate-limiting: 3→4 findings — ai-security-rate-limiting-bruteforce-live-oracle shipped (6 rapid signIn attempts, no 429)",
-      "ist-edu-bd.vercel.app/labs/csrf: 10→11 findings — ist-edu-csrf-state-change-live-oracle shipped (POST /api/newsletter without CSRF token)",
-      "ai-security-platform-iota.vercel.app/challenges/supply-chain: supply-chain route oracle + discovery seeds for vulnerable-deps/hacked-npm-packages",
-      "ai-security-platform-iota.vercel.app/challenges/leaked-config: 7 findings — leaked-config route live oracle",
-      "web-security-learning-labs.vercel.app/module/1025: 9 findings — curated module route live oracle surfaced"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark category misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-38: 13 findings — generic WrongSecrets oracles only (Git-notes topic oracle absent)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-39: 13 findings — generic WrongSecrets oracles only (AES filename-key crypto oracle absent)",
+      "web-security-learning-labs.vercel.app/module/1027: 9 findings — curated module route live oracle surfaced",
+      "web-security-learning-labs.vercel.app/module/1028: 9 findings — curated module route live oracle surfaced",
+      "ai-security-platform-iota.vercel.app/challenges/ai-phishing: 6 findings — catalog evidence only (phishing clone oracle absent)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ai-security-platform-iota.vercel.app/challenges/insecure-passwords and /challenges/security-headers: catalog oracles added but routes not re-scanned this pass",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "wrongsecrets challenge-38: Git-notes metadata oracle absent (generic 13-finding hub)",
+      "wrongsecrets challenge-39: AES filename-key crypto oracle absent (generic 13-finding hub)",
+      "ai-security-platform-iota.vercel.app/challenges/ai-phishing: route-specific phishing-clone oracle absent",
+      "ai-security-platform-iota.vercel.app/challenges/insecure-passwords and /challenges/security-headers: queued at tail, not drained this pass"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "ai-security-platform-iota.vercel.app/challenges/rate-limiting": 4,
-    "ist-edu-bd.vercel.app/labs/csrf": 11,
-    "ai-security-platform-iota.vercel.app/challenges/leaked-config": 7,
-    "ai-security-platform-iota.vercel.app/challenges/supabase-data": 7,
-    "web-security-learning-labs.vercel.app/module/1025": 9,
-    "ist-edu-bd.vercel.app/labs/ssrf": 10,
-    "brokencrystals.com/api/goto": 72
+    "juice-shop.herokuapp.com": 48,
+    "wrongsecrets.herokuapp.com/challenge/challenge-38": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-39": 13,
+    "web-security-learning-labs.vercel.app/module/1027": 9,
+    "web-security-learning-labs.vercel.app/module/1028": 9,
+    "ai-security-platform-iota.vercel.app/challenges/ai-phishing": 6,
+    "web-security-learning-labs.vercel.app/module/1025": 8,
+    "web-security-learning-labs.vercel.app/module/1024": 5
   }
 }
