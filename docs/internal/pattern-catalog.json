@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-11T07:38:56.756Z",
-  "total": 2116,
-  "uniqueSlugs": 2112,
+  "generatedAt": "2026-08-11T08:22:19.892Z",
+  "total": 2118,
+  "uniqueSlugs": 2114,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2098,
+    "generic": 2100,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2031,
+    "deep": 2033,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 425,
+    "Broken access control": 427,
     "Exposed secret": 59,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1967,6 +1967,8 @@
     "vulnbank-merchant-register-live-oracle",
     "vulnbank-request-loan-live-oracle",
     "vulnbank-request-loan-negative-amount-live-oracle",
+    "vulnbank-request-loan-negative-amount-route-live-oracle",
+    "vulnbank-request-loan-route-live-oracle",
     "vulnbank-sqli-login-live-oracle",
     "vulnbank-sqli-login-route-live-oracle",
     "vulnbank-sup3r-secret-admin-live-oracle",
