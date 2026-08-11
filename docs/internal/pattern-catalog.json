@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-11T11:04:38.223Z",
-  "total": 2127,
-  "uniqueSlugs": 2123,
+  "generatedAt": "2026-08-11T12:05:18.791Z",
+  "total": 2130,
+  "uniqueSlugs": 2126,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2109,
+    "generic": 2112,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2042,
+    "deep": 2045,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 428,
-    "Exposed secret": 65,
+    "Exposed secret": 67,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -34,7 +34,7 @@
     "SSRF": 12,
     "Server-side request forgery": 61,
     "Sensitive data exposure": 55,
-    "AI security": 50,
+    "AI security": 51,
     "Business logic": 19,
     "Cross-site request forgery": 2,
     "Insecure file upload": 2,
@@ -53,6 +53,7 @@
     "agentpwn-context-window-route-live-oracle",
     "agentpwn-mcp-exploitation-route-live-oracle",
     "ai-security-admin-console-route-live-oracle",
+    "ai-security-ai-phishing-route-live-oracle",
     "ai-security-api-security-route-live-oracle",
     "ai-security-idor-route-live-oracle",
     "ai-security-leaked-config-route-live-oracle",
@@ -2106,6 +2107,8 @@
     "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
     "wrongsecrets-challenge-3-docker-env-route-live-oracle",
     "wrongsecrets-challenge-30-localstorage-route-live-oracle",
+    "wrongsecrets-challenge-38-git-notes-route-live-oracle",
+    "wrongsecrets-challenge-39-aes-filename-key-route-live-oracle",
     "wrongsecrets-challenge-4-docker-build-arg-route-live-oracle",
     "wrongsecrets-challenge-5-configmap-route-live-oracle",
     "wrongsecrets-challenge-6-k8s-secret-route-live-oracle",
