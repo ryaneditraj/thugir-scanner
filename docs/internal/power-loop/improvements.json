@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-40-aes-json-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-40 confirms AES-128-ECB secrchallenge.json with key stored alongside ciphertext (Insecure Encryption Key Part 2); wrongsecrets.herokuapp.com/challenge/challenge-40 findings 13→14 (+wrongsecrets-challenge-40-aes-json-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-41-password-shucking-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-41 confirms bcrypt-to-md5 password shucking walkthrough (bcrypt hash mapped to md5 hash); wrongsecrets.herokuapp.com/challenge/challenge-41 findings 13→14 (+wrongsecrets-challenge-41-password-shucking-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-42-actuator-audit-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-42 confirms /actuator/auditevents audit event exposure walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-42 findings 13→14 (+wrongsecrets-challenge-42-actuator-audit-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-search-xss-route-live-oracle",
       "status": "shipped",
@@ -716,6 +734,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-40-aes-json-route-live-oracle",
+      "shipped_at": "2026-08-11T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-41-password-shucking-route-live-oracle",
+      "shipped_at": "2026-08-11T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-42-actuator-audit-route-live-oracle",
+      "shipped_at": "2026-08-11T14:15:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-16-frontend-route-live-oracle",
@@ -8265,6 +8298,21 @@
     }
   ],
   "shipped_history": [
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-40-aes-json-route-live-oracle",
+      "shipped_at": "2026-08-11T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-41-password-shucking-route-live-oracle",
+      "shipped_at": "2026-08-11T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-42-actuator-audit-route-live-oracle",
+      "shipped_at": "2026-08-11T14:15:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-38-git-notes-route-live-oracle",

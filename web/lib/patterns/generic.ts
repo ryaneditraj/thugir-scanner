@@ -29834,6 +29834,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-40-aes-json-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-40 AES JSON route live oracle",
+    description:
+      "When scanning /challenge/40 or /challenge/challenge-40, the walkthrough documents AES-128-ECB secrets in secrchallenge.json with the encryption key stored alongside ciphertext — route-specific challenge-40 insecure encryption key part 2 oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-40 AES secrchallenge.json walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge40AesJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-40 is intentional — never store encryption keys alongside ciphertext files.",
+      steps: [
+        "Store encryption keys in a secrets manager separate from encrypted data.",
+        "Use authenticated encryption (AES-GCM) with per-file random IVs.",
+        "Rotate keys and avoid ECB mode for structured data."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-40 route documents AES secrets in secrchallenge.json with keys stored alongside ciphertext. Show remediation for secure key management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-41-password-shucking-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-41 password shucking route live oracle",
+    description:
+      "When scanning /challenge/41 or /challenge/challenge-41, the walkthrough documents bcrypt-to-md5 password shucking where legacy md5 hashes enable offline cracking — route-specific challenge-41 cryptography oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-41 password shucking walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge41PasswordShuckingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-41 is intentional — never retain legacy password hashes alongside modern bcrypt digests.",
+      steps: [
+        "Re-hash all passwords with a single modern algorithm (Argon2id or bcrypt).",
+        "Delete legacy md5/sha1 password columns after migration.",
+        "Invalidate sessions after password hash algorithm upgrades."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-41 route documents bcrypt-to-md5 password shucking. Show remediation for legacy hash migration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-42-actuator-audit-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-42 actuator audit route live oracle",
+    description:
+      "When scanning /challenge/42 or /challenge/challenge-42, the walkthrough documents sensitive audit events exposed at /actuator/auditevents — route-specific challenge-42 Spring Boot actuator logging oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-42 Spring Boot actuator audit event walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge42ActuatorAuditRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-42 is intentional — restrict Spring Boot actuator endpoints and redact audit events.",
+      steps: [
+        "Disable or authenticate /actuator/auditevents in production.",
+        "Redact sensitive fields from audit event payloads.",
+        "Expose actuator endpoints only on internal networks."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-42 route documents secrets in /actuator/auditevents. Show remediation for Spring Boot actuator hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
