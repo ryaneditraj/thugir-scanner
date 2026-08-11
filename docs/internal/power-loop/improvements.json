@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-58-database-connection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-58 confirms Database Connection String Exposure walkthrough with /error-demo/database-connection JDBC credential leak hints; wrongsecrets.herokuapp.com/challenge/challenge-58 findings 13→15 (+wrongsecrets-challenge-58-database-connection-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-65 confirms Hiding in binaries part 6 plain Java CLI walkthrough (wrongsecrets-java.jar WrongSecretsPlain getSecret ldc bytecode); wrongsecrets.herokuapp.com/challenge/challenge-65 findings 13→15 (+wrongsecrets-challenge-65-java-plain-cli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-66 confirms Hiding in binaries part 7 obfuscated Java CLI walkthrough (wrongsecrets-java-obfuscated.jar WrongSecretsObfuscated javap); wrongsecrets.herokuapp.com/challenge/challenge-66 findings 13→15 (+wrongsecrets-challenge-66-java-obfuscated-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp62 tools/call read_google_drive_document returns <secret>I-misused-the-SA-in-the-MCP-to-crack-the-code</secret> via over-privileged Google SA; wrongsecrets.herokuapp.com/challenge/challenge-62 findings 13→15 (+wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle, +wrongsecrets-mcp62-google-sa-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
