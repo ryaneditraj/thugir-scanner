@@ -29990,6 +29990,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-46-vault-template-injection-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-46 Vault template injection route live oracle",
+    description:
+      "When scanning /challenge/46 or /challenge/challenge-46, the walkthrough documents Vault Agent sidecar template injection echoing secrets into pod logs via vault/secrets/challenge46 — route-specific challenge-46 HashiCorp Vault template injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-46 Vault template injection walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge46VaultTemplateInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-46 is intentional — never echo Vault-injected secrets to stdout or logs.",
+      steps: [
+        "Export Vault Agent secrets as environment variables instead of echoing them for debugging.",
+        "Restrict Vault Agent template permissions and audit rendered secret files.",
+        "Treat pod logs as sensitive data and restrict log access with RBAC."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-46 route documents Vault Agent template injection leaking secrets via echo. Show remediation for Vault Agent sidecar hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-47-vault-template-hardcoded-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-47 Vault template hardcoded secret route live oracle",
+    description:
+      "When scanning /challenge/47 or /challenge/challenge-47, the walkthrough documents secrets hardcoded in Vault Agent templates at vault/secrets/challenge47 — route-specific challenge-47 Vault template hardcoding oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-47 Vault template hardcoding walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge47VaultTemplateHardcodedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-47 is intentional — never hardcode secrets in Vault Agent templates even temporarily.",
+      steps: [
+        "Use Vault dynamic secrets or KV references instead of literal values in templates.",
+        "Scan Vault Agent config files for hardcoded credentials in CI/CD pipelines.",
+        "Rotate any secret that was ever embedded in a template file."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-47 route documents hardcoded secrets in Vault Agent templates. Show remediation for Vault template secret management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-48-sealed-secret-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-48 Sealed Secret route live oracle",
+    description:
+      "When scanning /challenge/48 or /challenge/challenge-48, the walkthrough documents Kubernetes Sealed Secrets with decryption key main.key stored alongside sealed-challenge48.json — route-specific challenge-48 Sealed Secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-48 Sealed Secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge48SealedSecretRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-48 is intentional — never store Sealed Secrets decryption keys in the same repository.",
+      steps: [
+        "Store sealing private keys in a dedicated secrets manager with strict RBAC.",
+        "Use per-environment sealing keys and rotate them on a schedule.",
+        "Audit repositories for kubeseal recovery keys committed alongside sealed secrets."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-48 route documents Sealed Secrets with an accessible decryption key. Show remediation for Kubernetes Sealed Secrets key management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
