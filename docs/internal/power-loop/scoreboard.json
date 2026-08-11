@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T19:30:00.000Z",
+  "updated_at": "2026-08-11T20:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2725,
-  "total_findings": 26511,
+  "total_sites_scanned": 2727,
+  "total_findings": 26604,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1951,
   "discovery_findings": 22490,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-11T19:30:00.000Z",
+  "improvements_shipped": 1193,
+  "last_run": "2026-08-11T20:35:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (46 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 3,
-      "focus": "wrongsecrets challenges 55-57 route oracles (SSH bastion, project spec, in-browser LLM)",
+      "findings": 45,
+      "focus": "wrongsecrets challenges 62-64 route oracles (MCP Google SA, hardcoded AES key, Swift binary)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-55: 13→14 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle shipped (.ssh/wrongsecrets.keys bastion SSH keypair)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 13→14 findings — wrongsecrets-challenge-56-project-spec-route-live-oracle shipped (cursor/rules/project-specification.mdc agentic plan secret)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-57: 13→14 findings — wrongsecrets-challenge-57-browser-llm-route-live-oracle shipped (in-browser LLM system-prompt prompt injection)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-62: 13→15 findings — wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle shipped (POST /mcp62 read_google_drive_document leaks Google Drive secret via over-privileged SA)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-63: 13→15 findings — wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle shipped (SuperSecretKey12 hardcoded AES key in Java source)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-64: 13→15 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle shipped (wrongsecrets-swift getSecret character array)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "wrongsecrets challenges 58-59, 62-66: route-specific oracles still absent",
+      "wrongsecrets challenges 58-59, 65-66: route-specific oracles still absent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 46,
+    "wrongsecrets.herokuapp.com/challenge/challenge-62": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-63": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-55": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-56": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-57": 14,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 23,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }
