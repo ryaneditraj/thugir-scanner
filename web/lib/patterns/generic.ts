@@ -29834,6 +29834,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-36 advanced C route live oracle",
+    description:
+      "When scanning /challenge/36 or /challenge/challenge-36, the walkthrough documents reverse-engineering wrongsecrets-advanced-c binaries with GDB/Radare2 to extract register strings — route-specific challenge-36 advanced C markers oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-36 binary reverse-engineering walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge36AdvancedCRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-36 is intentional — strip debug symbols and obfuscate secrets in compiled binaries.",
+      steps: [
+        "Avoid storing plaintext secrets in binary register strings or static data sections.",
+        "Strip symbols and use runtime secret injection for production binaries.",
+        "Run reverse-engineering training only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-36 route documents secrets in wrongsecrets-advanced-c register strings. Show remediation for binary secret hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-37-cicd-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-37 CI/CD route live oracle",
+    description:
+      "When scanning /challenge/37 or /challenge/challenge-37, the walkthrough documents ZAP_AUTH_HEADER_VALUE basic-auth credentials in dast-zap-test.yml and GET /authenticated/challenge37 returns a live secret — route-specific CI/CD credential exposure oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-37 CI/CD workflow credentials expose authenticated endpoint secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge37CiCdRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-37 is intentional — never store scanner credentials in plaintext CI/CD workflow files.",
+      steps: [
+        "Move ZAP and DAST credentials to encrypted CI/CD secrets stores.",
+        "Rotate credentials exposed in workflow YAML or build logs.",
+        "Restrict authenticated challenge endpoints to isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-37 route documents ZAP basic-auth credentials in GitHub Actions. Show remediation for CI/CD secret management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-28-github-issue-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
