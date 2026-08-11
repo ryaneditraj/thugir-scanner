@@ -2,6 +2,21 @@
   "updated_at": "2026-08-11T08:00:00.000Z",
   "discovery_urls": [
     {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
+      "source": "OWASP WrongSecrets — Challenge 1 grep/git-secrets hardcoded password route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-2",
+      "source": "OWASP WrongSecrets — Challenge 2 Spring Boot application.properties route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-3",
+      "source": "OWASP WrongSecrets — Challenge 3 Docker ENV password route oracle",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
       "source": "AI Security Platform — IDOR CWE-639 challenge route oracle",
       "auth": "public_demo"
@@ -257,7 +272,7 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/1",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
       "source": "OWASP WrongSecrets — Challenge 1 git-secrets oracle on official Heroku demo (README)",
       "auth": "public_demo"
     },
