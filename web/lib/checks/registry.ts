@@ -61255,6 +61255,89 @@ const wrongsecretsChallenge22RustBinaryRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge23Base64FrontendLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-23", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Front-end|Front-end<\/strong>/i.test(body) ||
+    !/Secrets in front-end code part 2|Base64 encoded secret|Base64 encoding is no encryption/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Secrets in front-end code part 2[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Base64 front-end secrets challenge",
+      note: "OWASP WrongSecrets challenge-23 documents Base64-obfuscated secrets in front-end code — client-side secret exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge23Base64FrontendRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?23\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge23Base64FrontendLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-23 route scan — Base64 front-end secrets challenge confirms client-side obfuscation walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge24HmacCryptographyLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-24", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography|Cryptography<\/strong>/i.test(body) ||
+    !/find the HMAC key|HMAC_SHA1\.pdf|provide us the HMAC-key/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/find the HMAC key[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "HMAC cryptography challenge",
+      note: "OWASP WrongSecrets challenge-24 documents HMAC key recovery from weak cryptography — HMAC-SHA1 walkthrough oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge24HmacCryptographyRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?24\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge24HmacCryptographyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-24 route scan — HMAC cryptography challenge confirms weak HMAC key walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -70166,6 +70249,38 @@ async function istEduVulnPortalBundleCorpus(ctx: RuleContext): Promise<string> {
   return bundleDoc.body;
 }
 
+const istEduRegisterAuthSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:register|login|portal)\/?$/i.test(pathname)) return NEGATIVE;
+  const portalUrl = new URL("/api/portal", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Authentication Bypass Successful/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      portalUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "IST Edu /register or /login route scan — POST /api/portal with SQLi payload bypasses authentication"
+    }
+  };
+};
+
 const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -73018,6 +73133,10 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge21GolangBinaryRouteLiveOracle,
   wrongsecretsChallenge22RustBinaryLiveOracle,
   wrongsecretsChallenge22RustBinaryRouteLiveOracle,
+  wrongsecretsChallenge23Base64FrontendLiveOracle,
+  wrongsecretsChallenge23Base64FrontendRouteLiveOracle,
+  wrongsecretsChallenge24HmacCryptographyLiveOracle,
+  wrongsecretsChallenge24HmacCryptographyRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
@@ -73858,6 +73977,7 @@ export const RULES: Record<string, Rule> = {
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
+  istEduRegisterAuthSqliRouteLiveOracle,
   istEduDashboardIdorRouteLiveOracle,
   dvwuDashboardIdorRouteLiveOracle,
   istEduNewsletterCrlfRouteLiveOracle,
