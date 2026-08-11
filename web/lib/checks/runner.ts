@@ -2861,6 +2861,8 @@ const DEEP_RULES = new Set<string>([
   "vulnbankSup3rSecretAdminLiveOracle",
   "vulnbankRequestLoanLiveOracle",
   "vulnbankRequestLoanNegativeAmountLiveOracle",
+  "vulnbankRequestLoanRouteLiveOracle",
+  "vulnbankRequestLoanNegativeAmountRouteLiveOracle",
   "vulnbankCheckBalanceIdorLiveOracle",
   "vulnbankTransactionsBolaLiveOracle",
   "vulnbankTransactionsBolaRouteLiveOracle",
