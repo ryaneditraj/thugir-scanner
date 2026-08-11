@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T02:08:00.000Z",
+  "updated_at": "2026-08-11T02:17:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2726,
-  "total_findings": 26598,
+  "total_sites_scanned": 2734,
+  "total_findings": 26678,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1954,
-  "discovery_findings": 22529,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-11T02:08:00.000Z",
+  "discovery_urls_added": 1957,
+  "discovery_findings": 22609,
+  "improvements_shipped": 1181,
+  "last_run": "2026-08-11T02:17:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 546,
+      "probes_run": 578,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,24 +53,24 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 42,
-      "focus": "wrongsecrets challenge-19 C binary + challenge-20 C++ binary + challenge-21 Go binary route oracles",
+      "urls_scanned": 8,
+      "findings": 80,
+      "focus": "WSL modules 1015-1016 catalog drain + WrongSecrets challenge-22 Swift binary (supplemental queue run)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-19: 13→14 findings — wrongsecrets-challenge-19-c-binary-route-live-oracle shipped (Hiding in binaries part 1: wrongsecrets-c)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-20: 13→14 findings — wrongsecrets-challenge-20-cplus-binary-route-live-oracle shipped (Hiding in binaries part 2: wrongsecrets-cplus)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-21: 13→14 findings — wrongsecrets-challenge-21-golang-binary-route-live-oracle shipped (Hiding in binaries part 3: wrongsecrets-golang)"
+      "wrongsecrets.herokuapp.com/challenge/challenge-19..21: 14 findings each — C/C++/Go binary route oracles shipped (prior commit)",
+      "web-security-learning-labs.vercel.app/module/1015: 8 findings — WSL catalog shell",
+      "web-security-learning-labs.vercel.app/module/1016: 7 findings — WSL catalog shell",
+      "wrongsecrets.herokuapp.com/challenge/challenge-22: 13 findings — generic oracles only, Swift binary topic oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "wrongsecrets challenge-22+ binary series (Swift, Java, .NET) still without route-specific oracles",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)"
+      "wrongsecrets challenge-22 Swift binary route oracle still absent (13 generic findings)",
+      "wrongsecrets challenge-23+ binary series (Java, .NET) still without route-specific oracles",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
@@ -78,11 +78,11 @@
     "wrongsecrets.herokuapp.com/challenge/challenge-19": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-20": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-21": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-22": 13,
+    "web-security-learning-labs.vercel.app/module/1015": 8,
+    "web-security-learning-labs.vercel.app/module/1016": 7,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 23,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 45,
-    "ssrf.vulnlab.dev/basic": 15,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "burpbountylab.com": 99
   }
 }

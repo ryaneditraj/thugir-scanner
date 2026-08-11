@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-11T02:05:00.000Z",
+  "updated_at": "2026-08-11T02:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1015",
+      "source": "web-security-learning-labs catalog shell — module 1015 (WSL catalog expansion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1016",
+      "source": "web-security-learning-labs catalog shell — module 1016 (WSL catalog expansion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-22",
+      "source": "OWASP WrongSecrets — challenge-22 Swift binary reverse-engineering (Heroku demo README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-19",
       "source": "OWASP WrongSecrets — challenge-19 C binary reverse-engineering (Heroku demo)",
