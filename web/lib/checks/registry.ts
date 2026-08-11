@@ -60354,6 +60354,18 @@ const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
       re: /Secrets in front-end code|Development Tools in the browser/i
     },
     {
+      label: "localStorage front-end secret walkthrough",
+      re: /localStorage for secret information|localStorage\.setItem\(['"]secret['"]|Applications section of the developer console/i
+    },
+    {
+      label: "closed GitHub issue secret walkthrough",
+      re: /closed GitHub issue|secret in a closed GitHub issue|AWS Secret key/i
+    },
+    {
+      label: "screenshot log GitHub issue walkthrough",
+      re: /screenshot of a secret|screenshots of logs in a GitHub issue/i
+    },
+    {
       label: "Docker bash history walkthrough",
       re: /\.bash_history|bash_history file within a running container/i
     },
@@ -63843,11 +63855,14 @@ function isAiSecurityPlatformHost(ctx: RuleContext): boolean {
 }
 
 async function aiSecurityPlatformFetchCatalog(ctx: RuleContext): Promise<string> {
-  const doc = await ctx.probe.get(AI_SECURITY_PLATFORM_HOME, {
-    maxBytes: 65536,
-    timeoutMs: 12000
-  });
-  if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) return doc.body;
+  const origins = [AI_SECURITY_PLATFORM_HOME, new URL("/login", AI_SECURITY_PLATFORM_HOME).toString()];
+  for (const url of origins) {
+    const doc = await ctx.probe.get(url, {
+      maxBytes: 65536,
+      timeoutMs: 12000
+    });
+    if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) return doc.body;
+  }
   return "";
 }
 
@@ -63925,6 +63940,37 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
       { label: "Client-side challenge category", re: /Client-side/i }
     ],
     note: "AI Security Platform xss challenge — reflected/stored script injection into pages viewed by other users (CWE-79)"
+  },
+  "leaked-config": {
+    routeRe: /\/challenges\/leaked-config\b/i,
+    markers: [
+      { label: "Leaked Secrets challenge route", re: /\/challenges\/leaked-config/i },
+      { label: "Leaked Secrets CWE-200 training module", re: /Leaked Secrets[\s\S]{0,48}CWE-200/i },
+      {
+        label: "environment variables and API keys exposed",
+        re: /Environment variables and API keys exposed|NEXT_PUBLIC_.*KEY|\.env/i
+      },
+      { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
+    ],
+    note: "AI Security Platform leaked-config challenge — environment variables and API keys exposed in client bundles (CWE-200)"
+  },
+  "supabase-data": {
+    routeRe: /\/challenges\/supabase-data\b/i,
+    markers: [
+      { label: "Supabase RLS challenge route", re: /\/challenges\/supabase-data/i },
+      { label: "Supabase RLS training module", re: /Supabase RLS/i },
+      { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
+    ],
+    note: "AI Security Platform supabase-data challenge — Supabase Row Level Security bypass exposes data without auth"
+  },
+  "admin-console": {
+    routeRe: /\/challenges\/admin-console\b/i,
+    markers: [
+      { label: "Cookie Auth Bypass challenge route", re: /\/challenges\/admin-console/i },
+      { label: "Cookie Auth Bypass training module", re: /Cookie Auth Bypass/i },
+      { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
+    ],
+    note: "AI Security Platform admin-console challenge — cookie-based admin authentication bypass without valid credentials"
   }
 };
 
@@ -63975,6 +64021,15 @@ const aiSecurityOpenRedirectRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityXssRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "xss");
+
+const aiSecurityLeakedConfigRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "leaked-config");
+
+const aiSecuritySupabaseDataRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "supabase-data");
+
+const aiSecurityAdminConsoleRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "admin-console");
 
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
@@ -73449,6 +73504,9 @@ export const RULES: Record<string, Rule> = {
   aiSecurityIdorRouteLiveOracle,
   aiSecurityOpenRedirectRouteLiveOracle,
   aiSecurityXssRouteLiveOracle,
+  aiSecurityLeakedConfigRouteLiveOracle,
+  aiSecuritySupabaseDataRouteLiveOracle,
+  aiSecurityAdminConsoleRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
   juiceShopForgottenBackupRouteLiveOracle,
   juiceShopProductsSearchSqliRouteLiveOracle,

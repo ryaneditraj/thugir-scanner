@@ -2640,6 +2640,9 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityIdorRouteLiveOracle",
   "aiSecurityOpenRedirectRouteLiveOracle",
   "aiSecurityXssRouteLiveOracle",
+  "aiSecurityLeakedConfigRouteLiveOracle",
+  "aiSecuritySupabaseDataRouteLiveOracle",
+  "aiSecurityAdminConsoleRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
   "juiceShopForgottenBackupRouteLiveOracle",
   "juiceShopProductsSearchSqliRouteLiveOracle",
@@ -7308,7 +7311,17 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
   }
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/portal", "/search", "/dashboard", "/notices", "/login", "/register"]) {
+  for (const p of [
+    "/portal",
+    "/search",
+    "/dashboard",
+    "/notices",
+    "/login",
+    "/register",
+    "/labs/csrf",
+    "/labs/ssrf",
+    "/newsletter"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -8098,7 +8111,13 @@ function extractAiSecurityPlatformChallengeSeeds(html: string, pageUrl: string):
       /* ignore */
     }
   }
-  for (const p of ["/challenges/xss", "/challenges/idor", "/challenges/admin-console"]) {
+  for (const p of [
+    "/challenges/xss",
+    "/challenges/idor",
+    "/challenges/admin-console",
+    "/challenges/leaked-config",
+    "/challenges/supabase-data"
+  ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
     } catch {
@@ -10419,6 +10438,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (/voting-app[\w-]*\.vercel\.app/i.test(origin) && p.slug.startsWith("voting-app-")) return -3;
       if (/vulnbank\.org/i.test(origin) && /\/login\b/i.test(targetInput) && p.slug.startsWith("vulnbank-")) return -2;
+      if (
+        /ist-edu-bd\.vercel\.app/i.test(origin) &&
+        /\/(?:register|login|labs\/csrf|labs\/ssrf|newsletter)\b/i.test(targetInput) &&
+        p.slug.startsWith("ist-edu-")
+      )
+        return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;

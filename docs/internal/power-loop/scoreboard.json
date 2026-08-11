@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T07:12:10.462Z",
+  "updated_at": "2026-08-11T07:40:37.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2773,
-  "total_findings": 27423,
+  "total_sites_scanned": 2774,
+  "total_findings": 27470,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1975,
-  "discovery_findings": 23195,
-  "improvements_shipped": 1181,
-  "last_run": "2026-08-11T07:12:10.462Z",
+  "discovery_urls_added": 1982,
+  "discovery_findings": 23240,
+  "improvements_shipped": 1184,
+  "last_run": "2026-08-11T07:40:37.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 577,
+      "probes_run": 594,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (46 findings, 30+ juice-shop live oracles); no benchmark category misses"
+      "note": "Stable 6/6 recall (46 findings); no benchmark category misses"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "urls_attempted": 8,
-      "findings": 86,
-      "focus": "wrongsecrets challenges 28-30 queue drain + ssrf.vulnlab.dev basic/blocklist/redirect live oracles + wrongsecrets 31-35 seeded for next run",
-      "errors": [
-        "demo.owasp-juice.shop/rest/basket/1",
-        "demo.owasp-juice.shop/rest/user/whoami"
-      ]
+      "focus": "WrongSecrets-30 generic oracle fix + IST Edu CRLF/SSRF queue drain + AI Security Platform leaked-config/supabase/admin-console route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "ssrf.vulnlab.dev/basic: 15 findings — ssrf-vulnlab-basic-live-oracle + metadata-aws + blocklist-bypass oracles",
-      "ssrf.vulnlab.dev/blocklist: 16 findings — route-specific SSRF live oracle cluster",
-      "ssrf.vulnlab.dev/redirect: 15 findings — redirect-chain SSRF live oracle cluster",
-      "wrongsecrets.herokuapp.com/challenge/challenge-28: 14 findings — AWS secret challenge route",
-      "wrongsecrets.herokuapp.com/challenge/challenge-29: 14 findings — screenshot log-leak challenge route",
-      "wrongsecrets.herokuapp.com/challenge/challenge-30: 12 findings — localStorage front-end secret route"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) \u2014 no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-30: 12\u219214 findings \u2014 wrongsecrets-challenge-live-oracle generic marker fix",
+      "ist-edu-bd.vercel.app/labs/csrf: 10 findings \u2014 ist-edu-newsletter-crlf-route-live-oracle",
+      "ist-edu-bd.vercel.app/labs/ssrf: 10 findings \u2014 ist-edu-ssrf-redirect-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/leaked-config: +ai-security-leaked-config-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/supabase-data: +ai-security-supabase-data-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/admin-console: +ai-security-admin-console-route-live-oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/* REST routes error — oracle offline or blocked",
-      "wrongsecrets.herokuapp.com/challenge/challenge-31 through challenge-35 queued but not scanned this run (queue FIFO ahead of new seeds)",
-      "ssrf.vulnlab.dev/metadata and /allowlist /webhook still pending in queue — not in this 8-URL slice"
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "ai-security-platform Vercel checkpoint intermittently blocks catalog fetch \u2014 /login fallback mitigates",
+      "frontend-xss-demo.vercel.app deployment not found \u2014 dead queue URL"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 46,
+    "wrongsecrets.herokuapp.com/challenge/challenge-30": 14,
+    "ist-edu-bd.vercel.app/labs/csrf": 10,
+    "ist-edu-bd.vercel.app/labs/ssrf": 10,
+    "ai-security-platform-iota.vercel.app/challenges/leaked-config": 3,
+    "ai-security-platform-iota.vercel.app/challenges/supabase-data": 7,
+    "ai-security-platform-iota.vercel.app/challenges/admin-console": 6,
     "ssrf.vulnlab.dev/blocklist": 16,
-    "ssrf.vulnlab.dev/basic": 15,
-    "ssrf.vulnlab.dev/redirect": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-28": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-29": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-30": 12,
-    "brokencrystals.com/api/auth/signup": 70,
-    "pwnshop.ctfsecurity.com/search/filters": 46
+    "brokencrystals.com/api/goto": 72
   }
 }
