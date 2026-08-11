@@ -61766,6 +61766,91 @@ const wrongsecretsChallenge27Web3SmartContractRouteLiveOracle: Rule = async (ctx
   };
 };
 
+const wrongsecretsChallenge38GitNotesLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-38", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Git<\/strong>/i.test(body) ||
+    !/Git Notes|git notes show/i.test(body) ||
+    !/secret scanners do not check them|extra metadata about the commit/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Git Notes[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Git notes metadata challenge",
+      note: "OWASP WrongSecrets challenge-38 documents secrets hidden in Git notes metadata overlooked by secret scanners — Git notes oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge38GitNotesRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?38\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge38GitNotesLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-38 route scan — Git notes metadata challenge confirms overlooked git-notes secret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge39AesFilenameKeyLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-39", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography<\/strong>/i.test(body) ||
+    !/Insecure Encryption Key|filename as the encryption key/i.test(body) ||
+    !/secrchallenge\.md|aes-128-ecb/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/filename as the encryption key[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "AES filename-key challenge",
+      note: "OWASP WrongSecrets challenge-39 documents AES secrets encrypted with the filename as key (secrchallenge.md) — insecure encryption key oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?39\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge39AesFilenameKeyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-39 route scan — AES filename-as-key cryptography challenge confirms secrchallenge.md walkthrough"
+    }
+  };
+};
+
 const wrongsecretsChallenge28GithubIssueLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-28", ctx.origin).toString();
@@ -64147,6 +64232,7 @@ Auth & API Password Storage /challenges/insecure-passwords
 Backend & Config Leaked Secrets /challenges/leaked-config CWE-200 Environment variables and API keys exposed
 Backend & Config Supabase RLS /challenges/supabase-data
 Backend & Config Security Headers /challenges/security-headers
+Legal / Social AI-Assisted Phishing /challenges/ai-phishing Phishing CWE-1021 AI-generated cloned login pages and email spoofing attacks
 Legal / Social Deceptive Privacy Policy /challenges/privacy-policy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
 Supply Chain /challenges/supply-chain /challenges/vulnerable-deps /challenges/hacked-npm-packages
 14 challenges · OWASP Top 10 aligned
@@ -64310,6 +64396,20 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
     ],
     note: "AI Security Platform insecure-passwords challenge — plaintext or weak password storage in the Next.js workshop"
+  },
+  "ai-phishing": {
+    routeRe: /\/challenges\/ai-phishing\b/i,
+    markers: [
+      { label: "AI-Assisted Phishing challenge route", re: /\/challenges\/ai-phishing/i },
+      { label: "AI-Assisted Phishing training module", re: /AI-Assisted Phishing/i },
+      {
+        label: "cloned login pages and email spoofing",
+        re: /AI-generated cloned login pages and email spoofing attacks/i
+      },
+      { label: "Phishing CWE-1021 training module", re: /Phishing[\s\S]{0,24}CWE-1021/i },
+      { label: "Legal / Social challenge category", re: /Legal\s*\/\s*Social/i }
+    ],
+    note: "AI Security Platform ai-phishing challenge — AI-generated cloned login pages and email spoofing attacks (CWE-1021)"
   }
 };
 
@@ -64378,6 +64478,9 @@ const aiSecuritySecurityHeadersRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityInsecurePasswordsRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "insecure-passwords");
+
+const aiSecurityAiPhishingRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "ai-phishing");
 
 async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
@@ -73944,6 +74047,10 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge26Web3SmartContractRouteLiveOracle,
   wrongsecretsChallenge27Web3SmartContractLiveOracle,
   wrongsecretsChallenge27Web3SmartContractRouteLiveOracle,
+  wrongsecretsChallenge38GitNotesLiveOracle,
+  wrongsecretsChallenge38GitNotesRouteLiveOracle,
+  wrongsecretsChallenge39AesFilenameKeyLiveOracle,
+  wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle,
   wrongsecretsChallenge28GithubIssueLiveOracle,
   wrongsecretsChallenge28GithubIssueRouteLiveOracle,
   wrongsecretsChallenge29ScreenshotLogLiveOracle,
@@ -73981,6 +74088,7 @@ export const RULES: Record<string, Rule> = {
   aiSecuritySupplyChainRouteLiveOracle,
   aiSecuritySecurityHeadersRouteLiveOracle,
   aiSecurityInsecurePasswordsRouteLiveOracle,
+  aiSecurityAiPhishingRouteLiveOracle,
   aiSecurityRateLimitingBruteforceLiveOracle,
   juiceShopForgottenBackupDisclosure,
   juiceShopForgottenBackupRouteLiveOracle,

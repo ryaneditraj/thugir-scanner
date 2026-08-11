@@ -29782,6 +29782,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-38-git-notes-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-38 Git notes route live oracle",
+    description:
+      "When scanning /challenge/38 or /challenge/challenge-38, the walkthrough documents secrets hidden in Git notes metadata overlooked by secret scanners — route-specific challenge-38 Git notes oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-38 Git notes metadata secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge38GitNotesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-38 is intentional — audit Git notes and extend secret scanners to cover git-notes metadata.",
+      steps: [
+        "Run git notes list and git notes show during repository secret audits.",
+        "Extend CI secret scanners to include Git notes attachments and metadata.",
+        "Avoid storing secrets in rarely-scanned Git metadata features."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-38 route documents secrets in Git notes metadata. Show remediation for git-notes secret scanning coverage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-39-aes-filename-key-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-39 AES filename-key route live oracle",
+    description:
+      "When scanning /challenge/39 or /challenge/challenge-39, the walkthrough documents AES secrets encrypted using the filename as key (secrchallenge.md) — route-specific challenge-39 cryptography oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-39 insecure filename-as-key AES walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-39 is intentional — never derive encryption keys from filenames or predictable strings.",
+      steps: [
+        "Generate cryptographically random keys and store them in a secrets manager.",
+        "Never reuse filename-derived keys across encrypted files.",
+        "Use authenticated encryption (AES-GCM) with per-file random IVs."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-39 route documents AES encryption with filename-derived keys. Show remediation for secure key management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-28-github-issue-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -31104,6 +31156,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/supply-chain route documents compromised npm dependencies. Show dependency pinning and integrity verification.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-ai-phishing-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "AI Security Platform ai-phishing challenge route live oracle",
+    description:
+      "When scanning /challenges/ai-phishing, the platform catalog documents AI-generated cloned login pages and email spoofing attacks (CWE-1021) — route-specific phishing clone oracle.",
+    impactOneline:
+      "Route-specific oracle confirms AI-assisted phishing training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityAiPhishingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — train users to verify login page origins and detect AI-cloned phishing sites.",
+      steps: [
+        "Verify login URLs against known bookmarks before entering credentials.",
+        "Deploy email authentication (DMARC/DKIM) and phishing simulation training.",
+        "Use FIDO2/WebAuthn where possible to resist cloned login pages."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/ai-phishing route documents AI-generated cloned login pages. Show phishing-resistant authentication and user verification training.",
     version: 1,
     enabled: true
   },
