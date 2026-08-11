@@ -62247,6 +62247,138 @@ const wrongsecretsChallenge48SealedSecretRouteLiveOracle: Rule = async (ctx) => 
   };
 };
 
+const wrongsecretsChallenge49AesWeakMd5LiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-49", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography<\/strong>/i.test(body) ||
+    !/Cracking AES Encryption with a Weak MD5 Key/i.test(body) ||
+    !/k800mdwu8vlQoqeAgRMHDQ==/i.test(body) ||
+    !/MD5 hash of a PIN/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/k800mdwu8vlQoqeAgRMHDQ==[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "AES weak MD5 PIN challenge",
+      note: "OWASP WrongSecrets challenge-49 documents AES encryption with MD5-derived PIN keys and ciphertext k800mdwu8vlQoqeAgRMHDQ== — weak KDF cryptography oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge49AesWeakMd5RouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?49\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge49AesWeakMd5LiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-49 route scan — AES weak MD5 PIN brute-force walkthrough confirms k800mdwu8vlQoqeAgRMHDQ== ciphertext oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge50DotnetBinaryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-50", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary<\/strong>/i.test(body) ||
+    !/secret in a \.NET8 binary/i.test(body) ||
+    !/wrongsecrets-dotnet/i.test(body) ||
+    !/ILSpy/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/wrongsecrets-dotnet[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        ".NET8 binary challenge",
+      note: "OWASP WrongSecrets challenge-50 documents secrets embedded in wrongsecrets-dotnet self-contained .NET8 binaries extractable via ILSpy — binary reverse-engineering oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge50DotnetBinaryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?50\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge50DotnetBinaryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-50 route scan — .NET8 wrongsecrets-dotnet binary secret walkthrough confirms ILSpy reverse-engineering oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge51DockerSecretsLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-51", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Secrets<\/strong>/i.test(body) ||
+    !/Exposed Docker Secrets Challenge/i.test(body) ||
+    !/challenge51docker-compose\.yml/i.test(body) ||
+    !/db_password/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/challenge51docker-compose\.yml[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Docker secrets compose challenge",
+      note: "OWASP WrongSecrets challenge-51 documents exposed database credentials in challenge51docker-compose.yml with plaintext db_password — Docker secrets misconfiguration oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge51DockerSecretsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?51\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge51DockerSecretsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-51 route scan — Exposed Docker Secrets challenge confirms challenge51docker-compose.yml db_password walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
 
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
@@ -74567,6 +74699,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge47VaultTemplateHardcodedRouteLiveOracle,
   wrongsecretsChallenge48SealedSecretLiveOracle,
   wrongsecretsChallenge48SealedSecretRouteLiveOracle,
+  wrongsecretsChallenge49AesWeakMd5LiveOracle,
+  wrongsecretsChallenge49AesWeakMd5RouteLiveOracle,
+  wrongsecretsChallenge50DotnetBinaryLiveOracle,
+  wrongsecretsChallenge50DotnetBinaryRouteLiveOracle,
+  wrongsecretsChallenge51DockerSecretsLiveOracle,
+  wrongsecretsChallenge51DockerSecretsRouteLiveOracle,
   wrongsecretsChallenge36AdvancedCLiveOracle,
   wrongsecretsChallenge36AdvancedCRouteLiveOracle,
   wrongsecretsChallenge37CiCdLiveOracle,
