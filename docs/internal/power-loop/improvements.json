@@ -2,6 +2,18 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-22-rust-binary-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-22 confirms Hiding in binaries part 4 Rust binary walkthrough (wrongsecrets-rust + ghidra/r2 string search); wrongsecrets.herokuapp.com/challenge/challenge-22 findings 13→14 (+wrongsecrets-challenge-22-rust-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-curated-placeholder-module-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: modules 1011-1036 CSR shells (Here is a Module: {id}) now fire placeholder-module oracle when scanned directly; web-security-learning-labs.vercel.app/module/1013 findings 5→6 and module/1015 findings 8→9 with +placeholder-module-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-19-c-binary-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-19 confirms Hiding in binaries part 1 C binary walkthrough (wrongsecrets-c + ghidra/r2); wrongsecrets.herokuapp.com/challenge/challenge-19 findings 13→14 (+wrongsecrets-challenge-19-c-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"

@@ -2561,6 +2561,7 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge19CBinaryRouteLiveOracle",
   "wrongsecretsChallenge20CplusBinaryRouteLiveOracle",
   "wrongsecretsChallenge21GolangBinaryRouteLiveOracle",
+  "wrongsecretsChallenge22RustBinaryRouteLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle",
   "wrongsecretsMcpExecuteCommandLiveOracle",
