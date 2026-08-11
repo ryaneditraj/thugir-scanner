@@ -30068,6 +30068,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-49 AES weak MD5 route live oracle",
+    description:
+      "When scanning /challenge/49 or /challenge/challenge-49, the walkthrough documents AES encryption with MD5-derived PIN keys and ciphertext k800mdwu8vlQoqeAgRMHDQ== — route-specific challenge-49 weak KDF cryptography oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-49 AES weak MD5 PIN brute-force walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge49AesWeakMd5RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-49 is intentional — never use MD5 or fast hashes as a KDF for encryption keys.",
+      steps: [
+        "Use PBKDF2, bcrypt, or Argon2 with sufficient iterations for key derivation.",
+        "Avoid numeric PINs as sole entropy for encryption keys.",
+        "Audit mobile and backend code for MD5-based key derivation patterns."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-49 route documents AES encryption with MD5-derived PIN keys. Show remediation for secure key derivation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-50-dotnet-binary-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-50 .NET binary route live oracle",
+    description:
+      "When scanning /challenge/50 or /challenge/challenge-50, the walkthrough documents secrets embedded in wrongsecrets-dotnet self-contained .NET8 binaries extractable via ILSpy — route-specific challenge-50 binary reverse-engineering oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-50 .NET8 binary secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge50DotnetBinaryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-50 is intentional — never embed secrets in self-contained .NET binaries.",
+      steps: [
+        "Inject secrets at runtime via environment variables or secret managers.",
+        "Obfuscate is not encryption — assume binaries can be decompiled with ILSpy.",
+        "Rotate credentials that were ever embedded in compiled artifacts."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-50 route documents secrets in wrongsecrets-dotnet binaries. Show remediation for .NET binary secret hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-51-docker-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-51 Docker secrets route live oracle",
+    description:
+      "When scanning /challenge/51 or /challenge/challenge-51, the walkthrough documents exposed database credentials in challenge51docker-compose.yml with plaintext db_password — route-specific challenge-51 Docker secrets misconfiguration oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-51 Exposed Docker Secrets walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge51DockerSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-51 is intentional — never commit Docker Compose files with plaintext db_password credentials.",
+      steps: [
+        "Use Docker secrets or external secret managers instead of environment plaintext.",
+        "Keep secret files out of version control with .gitignore and pre-commit scanning.",
+        "Rotate database credentials exposed in compose files or containers."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-51 route documents exposed Docker secrets in challenge51docker-compose.yml. Show remediation for Docker secrets management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
