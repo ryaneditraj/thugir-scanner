@@ -29773,6 +29773,32 @@
       "probes_run": 578,
       "status": "ok",
       "scanned_at": "2026-08-11T20:20:10.804Z"
+    },
+    {
+      "run_id": "2026-08-11T20:23:00.695Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — primary Heroku 6/6 recall (47 findings, pages=6 probes=578)",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 20 UTC: primary awake 6/6.",
+      "scanned_at": "2026-08-11T20:23:00.695Z"
     }
   ]
 }
