@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-38-git-notes-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-38 confirms Git notes metadata walkthrough (git notes show, secret scanners do not check them); wrongsecrets.herokuapp.com/challenge/challenge-38 findings 13→14 (+wrongsecrets-challenge-38-git-notes-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-39-aes-filename-key-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-39 confirms AES filename-as-key walkthrough (secrchallenge.md, aes-128-ecb); wrongsecrets.herokuapp.com/challenge/challenge-39 findings 13→14 (+wrongsecrets-challenge-39-aes-filename-key-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-ai-phishing-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/ai-phishing catalog oracle — AI-generated cloned login pages and email spoofing (CWE-1021); ai-security-platform-iota.vercel.app/challenges/ai-phishing findings 6→7 (+ai-security-ai-phishing-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-4-docker-build-arg-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-4 confirms Docker build-arg password layer walkthrough (docker container build argument); wrongsecrets.herokuapp.com/challenge/challenge-4 findings 13→14 (+wrongsecrets-challenge-4-docker-build-arg-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
