@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T12:05:00.000Z",
+  "updated_at": "2026-08-11T13:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-40",
+      "source": "OWASP WrongSecrets — challenge-40 AES key-in-JSON crypto oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-41",
+      "source": "OWASP WrongSecrets — challenge-41 cryptography oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-42",
+      "source": "OWASP WrongSecrets — challenge-42 logging oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
+      "source": "OWASP WrongSecrets — challenge-43 documentation oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/track-order/1",
+      "source": "OWASP Juice Shop official demo — track-order IDOR oracle GET /rest/track-order/:id",
+      "auth": "benchmark"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/labs/xss",
       "source": "zahidoverflow/damn-vulnerable-web-university \u2014 reflected XSS training lab (Vercel live demo README)",
@@ -20,11 +45,6 @@
       "url": "https://ist-edu-bd.vercel.app/labs/xxe",
       "source": "zahidoverflow/damn-vulnerable-web-university \u2014 XXE injection lab (Vercel live demo README)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/rest/track-order/1",
-      "source": "OWASP Juice Shop official demo \u2014 track-order IDOR oracle GET /rest/track-order/:id",
-      "auth": "benchmark"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-38",
