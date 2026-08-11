@@ -10691,19 +10691,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?62\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge")
+        p.slug.startsWith("wrongsecrets-challenge-62")
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?63\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge")
+        p.slug.startsWith("wrongsecrets-challenge-63")
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge")
+        p.slug.startsWith("wrongsecrets-challenge-64")
       )
         return -3;
       if (

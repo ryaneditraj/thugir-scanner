@@ -63073,6 +63073,217 @@ const wrongsecretsChallenge61TelegramSecretsRouteLiveOracle: Rule = async (ctx) 
   };
 };
 
+async function wrongsecretsMcp62JsonRpc(
+  ctx: RuleContext,
+  method: string,
+  params?: unknown,
+  id = 1
+): Promise<{ body: string; status: number }> {
+  const mcpUrl = new URL("/mcp62", ctx.origin).toString();
+  const payload = JSON.stringify({
+    jsonrpc: "2.0",
+    method,
+    ...(params !== undefined ? { params } : {}),
+    id
+  });
+  const doc = await ctx.probe.get(mcpUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  return { body: doc.body, status: doc.status };
+}
+
+const wrongsecretsMcp62GoogleSaLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const listDoc = await wrongsecretsMcp62JsonRpc(ctx, "tools/list", undefined, 1);
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let tools: Array<{ name?: string; description?: string }> = [];
+  try {
+    const parsed = JSON.parse(listDoc.body) as {
+      result?: { tools?: Array<{ name?: string; description?: string }> };
+    };
+    tools = parsed.result?.tools ?? [];
+  } catch {
+    return NEGATIVE;
+  }
+  const readDrive = tools.find((t) => t.name === "read_google_drive_document");
+  if (
+    !readDrive ||
+    !/Google Drive document/i.test(readDrive.description ?? "") ||
+    !/service account/i.test(readDrive.description ?? "")
+  ) {
+    return NEGATIVE;
+  }
+  const docCall = await wrongsecretsMcp62JsonRpc(
+    ctx,
+    "tools/call",
+    {
+      name: "read_google_drive_document",
+      arguments: {}
+    },
+    2
+  );
+  if (docCall.status < 200 || docCall.status >= 400) return NEGATIVE;
+  let docText = "";
+  try {
+    const parsed = JSON.parse(docCall.body) as {
+      result?: { content?: Array<{ text?: string }> };
+    };
+    docText = parsed.result?.content?.map((c) => c.text ?? "").join("\n") ?? "";
+  } catch {
+    docText = docCall.body;
+  }
+  if (!/<secret>[\s\S]+<\/secret>/i.test(docText) && !/Top secret document/i.test(docText)) {
+    return NEGATIVE;
+  }
+  const secretMatch = docText.match(/<secret>([^<]+)<\/secret>/i);
+  return {
+    fired: true,
+    confidence: secretMatch ? 0.96 : 0.94,
+    evidence: {
+      tools: tools.map((t) => t.name).filter(Boolean).slice(0, 4),
+      leakedSecret: secretMatch?.[1]?.slice(0, 32),
+      snippet: docText.slice(0, 200).trim(),
+      note: "OWASP WrongSecrets POST /mcp62 tools/call read_google_drive_document returns Google Drive document contents via over-privileged service account — challenge-62 MCP Google SA privilege escalation oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge62McpGoogleSaLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-62", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*AI<\/strong>/i.test(body) ||
+    !/MCP Server Privilege Escalation via Google Service Account/i.test(body) ||
+    !/read_google_drive_document/i.test(body) ||
+    !/\/mcp62/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  const mcpResult = await wrongsecretsMcp62GoogleSaLiveOracle(ctx);
+  if (!mcpResult.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: mcpResult.confidence,
+    evidence: {
+      url: probeUrl,
+      ...mcpResult.evidence,
+      note: "OWASP WrongSecrets challenge-62 documents MCP server with Google Service Account read_google_drive_document tool exposing restricted Drive document — MCP Google SA privilege escalation oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge62McpGoogleSaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?62\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge62McpGoogleSaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-62 route scan — MCP Google Service Account privilege escalation confirms read_google_drive_document leaks restricted document via /mcp62"
+    }
+  };
+};
+
+const wrongsecretsChallenge63HardcodedAesKeyLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-63", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography<\/strong>/i.test(body) ||
+    !/Hardcoded Encryption Key Challenge/i.test(body) ||
+    !/SuperSecretKey12/i.test(body) ||
+    !/TDPwOvcLsbCWV5erlk6OHFnlFoXNtdQOt2JQeq\+i4Ho=/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/SuperSecretKey12[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "hardcoded AES key SuperSecretKey12 with ciphertext in Java source",
+      note: "OWASP WrongSecrets challenge-63 documents hardcoded AES-128-CBC key and IV alongside ciphertext in Java source — hardcoded encryption key oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge63HardcodedAesKeyRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?63\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge63HardcodedAesKeyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-63 route scan — Hardcoded Encryption Key challenge confirms AES key SuperSecretKey12 and ciphertext in same Java source file"
+    }
+  };
+};
+
+const wrongsecretsChallenge64SwiftBinaryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-64", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary<\/strong>/i.test(body) ||
+    !/Hiding in binaries part 5: the Swift binary/i.test(body) ||
+    !/wrongsecrets-swift/i.test(body) ||
+    !/getSecret/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/wrongsecrets-swift[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "wrongsecrets-swift binary with getSecret character array",
+      note: "OWASP WrongSecrets challenge-64 documents secret embedded as character array in wrongsecrets-swift binary — Swift binary reverse-engineering oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge64SwiftBinaryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?64\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge64SwiftBinaryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-64 route scan — Swift binary challenge confirms wrongsecrets-swift getSecret character-array walkthrough"
+    }
+  };
+};
+
 const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/chat/query", ctx.origin).toString();
@@ -74998,6 +75209,13 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge60McpRouteLiveOracle,
   wrongsecretsChallenge61TelegramSecretsLiveOracle,
   wrongsecretsChallenge61TelegramSecretsRouteLiveOracle,
+  wrongsecretsMcp62GoogleSaLiveOracle,
+  wrongsecretsChallenge62McpGoogleSaLiveOracle,
+  wrongsecretsChallenge62McpGoogleSaRouteLiveOracle,
+  wrongsecretsChallenge63HardcodedAesKeyLiveOracle,
+  wrongsecretsChallenge63HardcodedAesKeyRouteLiveOracle,
+  wrongsecretsChallenge64SwiftBinaryLiveOracle,
+  wrongsecretsChallenge64SwiftBinaryRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,
