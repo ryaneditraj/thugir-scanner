@@ -60951,6 +60951,130 @@ const wrongsecretsChallenge15GitHistoryRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge16FrontendLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-16", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Front-end|Front-end<\/strong>/i.test(body) ||
+    !/Secrets in front-end code|secrets in front-end code is a bad idea/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Secrets in front-end code[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Front-end secrets challenge",
+      note: "OWASP WrongSecrets challenge-16 documents client-side secret storage in front-end code — front-end secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge16FrontendRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?16\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge16FrontendLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-16 route scan — Front-end challenge confirms client-side secret storage walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge17BashHistoryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-17", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Docker|Docker<\/strong>/i.test(body) ||
+    !/Bash history|entering secrets in bash is a bad idea/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Bash history[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Bash history challenge",
+      note: "OWASP WrongSecrets challenge-17 documents secrets leaked via bash history in Docker containers — shell history secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge17BashHistoryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?17\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge17BashHistoryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-17 route scan — Bash history challenge confirms shell history secret exposure walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge18BadHashingLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-18", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography|Cryptography<\/strong>/i.test(body) ||
+    !/Bad hashing|MD5 and SHA1 hashing alone are not enough/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Bad hashing[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Bad hashing challenge",
+      note: "OWASP WrongSecrets challenge-18 documents unsalted MD5/SHA1 password hashes — weak cryptography oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge18BadHashingRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?18\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge18BadHashingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-18 route scan — Bad hashing challenge confirms unsalted MD5/SHA1 password hash walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -72700,6 +72824,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge14PasswordManagerRouteLiveOracle,
   wrongsecretsChallenge15GitHistoryLiveOracle,
   wrongsecretsChallenge15GitHistoryRouteLiveOracle,
+  wrongsecretsChallenge16FrontendLiveOracle,
+  wrongsecretsChallenge16FrontendRouteLiveOracle,
+  wrongsecretsChallenge17BashHistoryLiveOracle,
+  wrongsecretsChallenge17BashHistoryRouteLiveOracle,
+  wrongsecretsChallenge18BadHashingLiveOracle,
+  wrongsecretsChallenge18BadHashingRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
