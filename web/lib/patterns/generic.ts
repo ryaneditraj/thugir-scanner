@@ -30816,6 +30816,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-leaked-config-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "AI Security Platform leaked-config challenge route live oracle",
+    description:
+      "When scanning /challenges/leaked-config, the platform catalog documents CWE-200 environment variables and API keys exposed in client bundles — route-specific leaked secrets training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms leaked secrets training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityLeakedConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — never expose API keys or service-role tokens in client bundles.",
+      steps: [
+        "Keep secrets server-side only; use NEXT_PUBLIC_ prefix only for non-sensitive config.",
+        "Rotate any keys that appeared in client-side JavaScript.",
+        "Use environment-specific secret managers for production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/leaked-config route documents API keys in client bundles. Show server-side secret management for Next.js.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-supabase-data-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "AI Security Platform supabase-data challenge route live oracle",
+    description:
+      "When scanning /challenges/supabase-data, the platform catalog documents Supabase Row Level Security bypass exposing data without authentication — route-specific RLS training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms Supabase RLS training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecuritySupabaseDataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enable RLS on every Supabase table and test with the anon key.",
+      steps: [
+        "Enable Row Level Security on all public tables.",
+        "Write policies that bind rows to auth.uid() or tenant IDs.",
+        "Never use the service_role key in browser code."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/supabase-data route documents unauthenticated PostgREST access. Show Supabase RLS policy hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-admin-console-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "AI Security Platform admin-console challenge route live oracle",
+    description:
+      "When scanning /challenges/admin-console, the platform catalog documents cookie-based admin authentication bypass — route-specific cookie auth bypass training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms cookie auth bypass training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityAdminConsoleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — use server-side sessions with signed HttpOnly cookies.",
+      steps: [
+        "Never trust client-set admin flags in cookies without server-side validation.",
+        "Use signed, HttpOnly, Secure session cookies.",
+        "Enforce role checks on every admin route server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/admin-console route documents forged admin cookie bypass. Show secure session-based admin authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-forgotten-backup-disclosure",
     platform: "generic",
     category: "Information disclosure",

@@ -1,100 +1,118 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-30-generic-oracle-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallengeLiveOracle extended with localStorage/GitHub-issue/screenshot markers; wrongsecrets.herokuapp.com/challenge/challenge-30 findings 12\u219214 (+wrongsecrets-challenge-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-csrf-ssrf-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ist-edu-bd.vercel.app/labs/csrf /newsletter /labs/ssrf to discovery queue + runner -3 priority; labs/csrf findings 10 (+ist-edu-newsletter-crlf-route-live-oracle); labs/ssrf findings 10 (+ist-edu-ssrf-redirect-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-leaked-config-supabase-admin-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityPlatformFetchCatalog /login fallback + leaked-config/supabase-data/admin-console route oracles; /challenges/leaked-config findings 6\u21923 with oracle; /supabase-data 5\u21927; /admin-console 3\u21926; replaced dead /challenges/sqli queue URL; benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-signup-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + GET adminpermission returns isAdmin:true when scanning /api/auth/signup; brokencrystals.com/api/auth/signup findings 69→70 (+brokencrystals-signup-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + GET adminpermission returns isAdmin:true when scanning /api/auth/signup; brokencrystals.com/api/auth/signup findings 69\u219270 (+brokencrystals-signup-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-search-filters-otp-priming",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended to /search/filters; POST /search/filters constructor.prototype pollutes thugirProbePP key; pwnshop.ctfsecurity.com/search/filters findings 21→46 (+pwnshop-prototype-pollution-search-filters-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended to /search/filters; POST /search/filters constructor.prototype pollutes thugirProbePP key; pwnshop.ctfsecurity.com/search/filters findings 21\u219246 (+pwnshop-prototype-pollution-search-filters-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-28-github-issue-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-28 confirms closed GitHub issue AWS Secret key walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 13→14; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-28 confirms closed GitHub issue AWS Secret key walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 13\u219214; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-29 confirms screenshot log leak in closed GitHub issue walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-29 findings 13→14; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-29 confirms screenshot log leak in closed GitHub issue walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-29 findings 13\u219214; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-30-localstorage-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-30 confirms localStorage secret walkthrough (Applications tab key secret); wrongsecrets.herokuapp.com/challenge/challenge-30 findings 11→12; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-30 confirms localStorage secret walkthrough (Applications tab key secret); wrongsecrets.herokuapp.com/challenge/challenge-30 findings 11\u219212; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-25 confirms Secrets in smart contracts part 1 + contract 0x8b72f7cbAD50620c46219ad676Ad9d3a5A273587 Web3 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-25 findings 13→14 (+wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-25 confirms Secrets in smart contracts part 1 + contract 0x8b72f7cbAD50620c46219ad676Ad9d3a5A273587 Web3 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-25 findings 13\u219214 (+wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-26 confirms Secrets in smart contracts part 2 + eth_getStorageAt + contract 0xCe793D588cd1Ee091290b4A1aE1D586B2a748eB4 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-26 findings 13→14 (+wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-26 confirms Secrets in smart contracts part 2 + eth_getStorageAt + contract 0xCe793D588cd1Ee091290b4A1aE1D586B2a748eB4 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-26 findings 13\u219214 (+wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-27 confirms Secrets in smart contracts part 3 + guess method + contract 0x8318d477f4BCae5a80BEA22E3c040cf8BaaFFe8B walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-27 findings 13→14 (+wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-27 confirms Secrets in smart contracts part 3 + guess method + contract 0x8318d477f4BCae5a80BEA22E3c040cf8BaaFFe8B walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-27 findings 13\u219214 (+wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-register-auth-sqli-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful when scanning /register; ist-edu-bd.vercel.app/register findings 8→9 (+ist-edu-register-auth-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful when scanning /register; ist-edu-bd.vercel.app/register findings 8\u21929 (+ist-edu-register-auth-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-23 confirms Secrets in front-end code part 2 Base64 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-23 findings 13→14 (+wrongsecrets-challenge-23-base64-frontend-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-23 confirms Secrets in front-end code part 2 Base64 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-23 findings 13\u219214 (+wrongsecrets-challenge-23-base64-frontend-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-24 confirms find the HMAC key / HMAC_SHA1.pdf walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-24 findings 13→14 (+wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-24 confirms find the HMAC key / HMAC_SHA1.pdf walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-24 findings 13\u219214 (+wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-22-rust-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-22 confirms Hiding in binaries part 4 Rust binary walkthrough (wrongsecrets-rust + ghidra/r2 string search); wrongsecrets.herokuapp.com/challenge/challenge-22 findings 13→14 (+wrongsecrets-challenge-22-rust-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-22 confirms Hiding in binaries part 4 Rust binary walkthrough (wrongsecrets-rust + ghidra/r2 string search); wrongsecrets.herokuapp.com/challenge/challenge-22 findings 13\u219214 (+wrongsecrets-challenge-22-rust-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-curated-placeholder-module-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: modules 1011-1036 CSR shells (Here is a Module: {id}) now fire placeholder-module oracle when scanned directly; web-security-learning-labs.vercel.app/module/1013 findings 5→6 and module/1015 findings 8→9 with +placeholder-module-route-live-oracle; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: modules 1011-1036 CSR shells (Here is a Module: {id}) now fire placeholder-module oracle when scanned directly; web-security-learning-labs.vercel.app/module/1013 findings 5\u21926 and module/1015 findings 8\u21929 with +placeholder-module-route-live-oracle; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-19-c-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-19 confirms Hiding in binaries part 1 C binary walkthrough (wrongsecrets-c + ghidra/r2); wrongsecrets.herokuapp.com/challenge/challenge-19 findings 13→14 (+wrongsecrets-challenge-19-c-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-19 confirms Hiding in binaries part 1 C binary walkthrough (wrongsecrets-c + ghidra/r2); wrongsecrets.herokuapp.com/challenge/challenge-19 findings 13\u219214 (+wrongsecrets-challenge-19-c-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-20-cplus-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-20 confirms Hiding in binaries part 2 C++ binary walkthrough (wrongsecrets-cplus + __Z6secretv); wrongsecrets.herokuapp.com/challenge/challenge-20 findings 13→14 (+wrongsecrets-challenge-20-cplus-binary-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-20 confirms Hiding in binaries part 2 C++ binary walkthrough (wrongsecrets-cplus + __Z6secretv); wrongsecrets.herokuapp.com/challenge/challenge-20 findings 13\u219214 (+wrongsecrets-challenge-20-cplus-binary-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-21-golang-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-21 confirms Hiding in binaries part 3 Go binary walkthrough (wrongsecrets-golang + string search); wrongsecrets.herokuapp.com/challenge/challenge-21 findings 13→14 (+wrongsecrets-challenge-21-golang-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-21 confirms Hiding in binaries part 3 Go binary walkthrough (wrongsecrets-golang + string search); wrongsecrets.herokuapp.com/challenge/challenge-21 findings 13\u219214 (+wrongsecrets-challenge-21-golang-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
@@ -136,13 +154,13 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-route-live-oracles",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: burpBountyRouteLiveOracle wrappers for /sqli/status, /sqli/length, /sqli/user, /ssrf/img, /pt/include, /redirect/meta; burpbountylab.com/sqli/status?id=1 findings 94 (+burpbounty-sqli-status-route-live-oracle); /ssrf/img findings 94 (+burpbounty-ssrf-img-route-live-oracle); hub 0→99 findings; benchmark juice-shop 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: burpBountyRouteLiveOracle wrappers for /sqli/status, /sqli/length, /sqli/user, /ssrf/img, /pt/include, /redirect/meta; burpbountylab.com/sqli/status?id=1 findings 94 (+burpbounty-sqli-status-route-live-oracle); /ssrf/img findings 94 (+burpbounty-ssrf-img-route-live-oracle); hub 0\u219299 findings; benchmark juice-shop 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1581-1600",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1580→1600; placeholder/SSTI priority regex extended 15[3-8][0-9]|15[89]0|1600; queue modules 1581-1600 added; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1580\u21921600; placeholder/SSTI priority regex extended 15[3-8][0-9]|15[89]0|1600; queue modules 1581-1600 added; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:burpbountylab.com",
@@ -160,7 +178,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1561-1580",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1560→1580; placeholder/SSTI priority regex extended 15[3-7][0-9]|1580; module/1561-1563 findings 8 each (+placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1560\u21921580; placeholder/SSTI priority regex extended 15[3-7][0-9]|1580; module/1561-1563 findings 8 each (+placeholder-module-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
