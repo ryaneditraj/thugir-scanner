@@ -2072,6 +2072,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopSellerPreviewSstiLiveOracle",
   "pwnshopSellerPreviewSstiRouteLiveOracle",
   "pwnshopSellerStorefrontSstiRouteLiveOracle",
+  "pwnshopRegisterSellerSstiRouteLiveOracle",
   "pwnshopDownloadPathTraversalLiveOracle",
   "pwnshopDownloadPathTraversalRouteLiveOracle",
   "pwnshopAccountDeleteCsrfLiveOracle",
@@ -2615,6 +2616,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge56ProjectSpecRouteLiveOracle",
   "wrongsecretsChallenge57BrowserLlmLiveOracle",
   "wrongsecretsChallenge57BrowserLlmRouteLiveOracle",
+  "wrongsecretsChallenge59SlackWebhookLiveOracle",
+  "wrongsecretsChallenge59SlackWebhookRouteLiveOracle",
   "wrongsecretsChallenge36AdvancedCLiveOracle",
   "wrongsecretsChallenge36AdvancedCRouteLiveOracle",
   "wrongsecretsChallenge37CiCdLiveOracle",
@@ -9626,6 +9629,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-21",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-22",
         "https://wrongsecrets.herokuapp.com/challenge/8",
+        "https://wrongsecrets.herokuapp.com/challenge/59",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
         "https://wrongsecrets.herokuapp.com/challenge/60",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
         "https://wrongsecrets.herokuapp.com/challenge/61",
@@ -10457,6 +10462,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/register-seller\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /ssti|seller/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/search\/filters/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
@@ -10723,6 +10735,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
         p.slug.startsWith("wrongsecrets-challenge-58")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?59\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-59")
       )
         return -3;
       if (

@@ -33105,6 +33105,23 @@ const pwnshopSellerStorefrontSstiRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopRegisterSellerSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/register-seller\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopSellerPreviewSstiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /register-seller route scan — seller registration flow enables SSTI via GET /seller/preview?template= evaluates <%= 7*7 %> to 49 (PWN-040)"
+    }
+  };
+};
+
 const pwnshopDownloadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -62643,6 +62660,50 @@ const wrongsecretsChallenge57BrowserLlmRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge59SlackWebhookLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-59", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*CI\/CD<\/strong>/i.test(body) ||
+    !/Find the Slack Webhook URL/i.test(body) ||
+    !/CHALLENGE59_SLACK_WEBHOOK_URL/i.test(body) ||
+    !/double base64 encoding/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/CHALLENGE59_SLACK_WEBHOOK_URL[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "CHALLENGE59_SLACK_WEBHOOK_URL double base64 obfuscation",
+      note: "OWASP WrongSecrets challenge-59 documents obfuscated Slack webhook URL in CHALLENGE59_SLACK_WEBHOOK_URL environment variable — CI/CD Slack webhook oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge59SlackWebhookRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?59\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge59SlackWebhookLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-59 route scan — Slack Webhook URL challenge confirms CHALLENGE59_SLACK_WEBHOOK_URL double base64 obfuscation walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
 
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
@@ -74822,6 +74883,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopDownloadPathTraversalLiveOracle,
   pwnshopSellerPreviewSstiRouteLiveOracle,
   pwnshopSellerStorefrontSstiRouteLiveOracle,
+  pwnshopRegisterSellerSstiRouteLiveOracle,
   pwnshopDownloadPathTraversalRouteLiveOracle,
   pwnshopPrototypePollutionSearchFiltersLiveOracle,
   pwnshopPrototypePollutionSearchFiltersRouteLiveOracle,
@@ -75325,6 +75387,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge56ProjectSpecRouteLiveOracle,
   wrongsecretsChallenge57BrowserLlmLiveOracle,
   wrongsecretsChallenge57BrowserLlmRouteLiveOracle,
+  wrongsecretsChallenge59SlackWebhookLiveOracle,
+  wrongsecretsChallenge59SlackWebhookRouteLiveOracle,
   wrongsecretsChallenge36AdvancedCLiveOracle,
   wrongsecretsChallenge36AdvancedCRouteLiveOracle,
   wrongsecretsChallenge37CiCdLiveOracle,
