@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-11T01:05:30.085Z",
-  "total": 2099,
-  "uniqueSlugs": 2095,
+  "generatedAt": "2026-08-11T02:04:16.502Z",
+  "total": 2102,
+  "uniqueSlugs": 2098,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2081,
+    "generic": 2084,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2014,
+    "deep": 2017,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 423,
-    "Exposed secret": 46,
+    "Exposed secret": 49,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -2081,6 +2081,9 @@
     "wrongsecrets-challenge-16-frontend-route-live-oracle",
     "wrongsecrets-challenge-17-bash-history-route-live-oracle",
     "wrongsecrets-challenge-18-bad-hashing-route-live-oracle",
+    "wrongsecrets-challenge-19-c-binary-route-live-oracle",
+    "wrongsecrets-challenge-20-cplus-binary-route-live-oracle",
+    "wrongsecrets-challenge-21-golang-binary-route-live-oracle",
     "wrongsecrets-challenge-60-mcp-route-live-oracle",
     "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
     "wrongsecrets-challenge-7-vault-route-live-oracle",
