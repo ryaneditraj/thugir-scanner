@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-4-docker-build-arg-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-4 confirms Docker build-arg password layer walkthrough (docker container build argument); wrongsecrets.herokuapp.com/challenge/challenge-4 findings 13→14 (+wrongsecrets-challenge-4-docker-build-arg-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-5-configmap-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-5 confirms Kubernetes ConfigMap without RBAC walkthrough (config-map in the default namespace, kubectl get configmap); wrongsecrets.herokuapp.com/challenge/challenge-5 findings 13→14 (+wrongsecrets-challenge-5-configmap-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-6-k8s-secret-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-6 confirms Kubernetes Secret base64 mount walkthrough (base64 encoded before mounted, kubectl get secret); wrongsecrets.herokuapp.com/challenge/challenge-6 findings 13→14 (+wrongsecrets-challenge-6-k8s-secret-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ai-security-platform-iota.vercel.app",
       "slug": "ai-security-rate-limiting-bruteforce-live-oracle",
       "status": "shipped",
