@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T01:06:00.000Z",
+  "updated_at": "2026-08-11T01:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2135,
   "discovery_findings": 24125,
-  "improvements_shipped": 1178,
-  "last_run": "2026-08-11T01:06:00.000Z",
+  "improvements_shipped": 1181,
+  "last_run": "2026-08-11T01:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 (48 findings); secret-resend slug still absent"
+      "note": "Primary Heroku awake 6/6 (49 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 65,
-      "focus": "WrongSecrets challenge-16..18 front-end/K8s/Docker + WSL modules 1013-1014; backlog frontend-xss-demo + ist-edu-bd/register",
-      "improvements_shipped_this_run": 0
+      "focus": "WrongSecrets challenge-16..18 topic route oracles shipped + WSL modules 1013-1014 queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-16: 13 findings — generic wrongsecrets route oracles; no challenge-16 OAuth client_secret live oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-17: 13 findings — generic wrongsecrets route oracles; no K8s-manifest topic oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-18: 13 findings — generic wrongsecrets route oracles; no Docker-secrets topic oracle",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-16: 13→14 findings — wrongsecrets-challenge-16-frontend-route-live-oracle (client-side secrets)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-17: 13→14 findings — wrongsecrets-challenge-17-bash-history-route-live-oracle (Docker bash history)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-18: 13→14 findings — wrongsecrets-challenge-18-bad-hashing-route-live-oracle (unsalted MD5/SHA1)",
       "web-security-learning-labs.vercel.app/module/1013: 8 findings — WSL catalog shell",
-      "web-security-learning-labs.vercel.app/module/1014: 8 findings — WSL catalog shell",
-      "ist-edu-bd.vercel.app/register: 8 findings — rich LFI/SQLi client evidence hub (backlog drain)"
+      "web-security-learning-labs.vercel.app/module/1014: 8 findings — WSL catalog shell"
     ],
     "learning_gaps": [
       "secret-resend slug still absent on juice-shop (sensitive_data covered via juice-shop-leaked-api-key)",
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "WrongSecrets challenge-16..18: topic-specific live oracles absent (OAuth client_secret, K8s manifests, Docker secrets)",
-      "frontend-xss-demo.vercel.app/insecure: no reflected XSS oracle despite intentional innerHTML sink (1 finding each route)",
-      "WSL modules 1015+ catalog extension pending"
+      "WrongSecrets challenge-19+ topic route oracles still absent",
+      "frontend-xss-demo.vercel.app/insecure: deployment unreachable (DEPLOYMENT_NOT_FOUND)",
+      "WSL modules 1601+ placeholder catalog extension pending"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "wrongsecrets.herokuapp.com/challenge/challenge-16": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-17": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-18": 13,
+    "juice-shop.herokuapp.com": 49,
+    "wrongsecrets.herokuapp.com/challenge/challenge-16": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-17": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-18": 14,
     "web-security-learning-labs.vercel.app/module/1013": 8,
     "web-security-learning-labs.vercel.app/module/1014": 8,
-    "ist-edu-bd.vercel.app/register": 8,
     "burpbountylab.com": 99,
     "pwnshop.ctfsecurity.com/debug/info": 42
   }
