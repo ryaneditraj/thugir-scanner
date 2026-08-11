@@ -60767,6 +60767,132 @@ const wrongsecretsChallenge3DockerEnvRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge4DockerBuildArgLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-4", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Docker<\/strong>/i.test(body) ||
+    !/docker container build argument|layers got constructed/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/docker container build argument[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Docker build argument challenge",
+      note: "OWASP WrongSecrets challenge-4 documents Docker build-arg password exposure discoverable via image layer inspection — container build-arg secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge4DockerBuildArgRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?4\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge4DockerBuildArgLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-4 route scan — Docker challenge confirms build-arg password layer walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge5ConfigmapLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-5", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Configmaps<\/strong>/i.test(body) ||
+    !/config-map in the default namespace|kubectl get configmap/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/config-map in the default namespace[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Kubernetes ConfigMap challenge",
+      note: "OWASP WrongSecrets challenge-5 documents secrets stored in Kubernetes ConfigMaps without RBAC — K8s configmap exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge5ConfigmapRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?5\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge5ConfigmapLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-5 route scan — Configmaps challenge confirms default-namespace configmap secret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge6K8sSecretLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-6", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Secrets<\/strong>/i.test(body) ||
+    !/base64 encoded before mounted|kubectl get secret/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/base64 encoded before mounted[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Kubernetes Secret challenge",
+      note: "OWASP WrongSecrets challenge-6 documents Kubernetes Secret base64 exposure via kubectl — K8s secret mount oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge6K8sSecretRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?6\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge6K8sSecretLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-6 route scan — Secrets challenge confirms base64 K8s secret walkthrough"
+    }
+  };
+};
+
 const wrongsecretsChallenge7VaultLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-7", ctx.origin).toString();
@@ -73770,6 +73896,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle,
   wrongsecretsChallenge3DockerEnvLiveOracle,
   wrongsecretsChallenge3DockerEnvRouteLiveOracle,
+  wrongsecretsChallenge4DockerBuildArgLiveOracle,
+  wrongsecretsChallenge4DockerBuildArgRouteLiveOracle,
+  wrongsecretsChallenge5ConfigmapLiveOracle,
+  wrongsecretsChallenge5ConfigmapRouteLiveOracle,
+  wrongsecretsChallenge6K8sSecretLiveOracle,
+  wrongsecretsChallenge6K8sSecretRouteLiveOracle,
   wrongsecretsChallenge7VaultLiveOracle,
   wrongsecretsChallenge7VaultRouteLiveOracle,
   wrongsecretsChallenge8LoggingLiveOracle,

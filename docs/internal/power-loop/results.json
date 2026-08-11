@@ -1,6 +1,826 @@
 {
   "runs": [
     {
+      "run_id": "2026-08-10T15:07:02.643Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1479",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:02.643Z"
+    },
+    {
+      "run_id": "2026-08-10T15:07:16.514Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1480",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:16.514Z"
+    },
+    {
+      "run_id": "2026-08-10T15:07:30.365Z",
+      "url": "https://ssrf.vulnlab.dev/allowlist",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /allowlist route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 140,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:30.365Z"
+    },
+    {
+      "run_id": "2026-08-10T15:07:45.873Z",
+      "url": "https://ssrf.vulnlab.dev/scheme",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /scheme route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 127,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:45.873Z"
+    },
+    {
+      "run_id": "2026-08-10T15:08:02.660Z",
+      "url": "https://ssrf.vulnlab.dev/gopher",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /gopher route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 158,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:08:02.660Z"
+    },
+    {
+      "run_id": "2026-08-10T15:08:22.849Z",
+      "url": "https://ssrf.vulnlab.dev/parser",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /parser route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 174,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:08:22.849Z"
+    },
+    {
+      "run_id": "2026-08-10T15:08:43.528Z",
+      "url": "https://ssrf.vulnlab.dev/blind",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /blind route SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 163,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:08:43.528Z"
+    },
+    {
+      "run_id": "2026-08-10T15:09:01.706Z",
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /webhook route SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 102,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:09:01.706Z"
+    },
+    {
       "run_id": "2026-08-10T15:09:20.577Z",
       "url": "https://brokencrystals.com/api/users/one/regular_user/adminpermission",
       "auth": "public_demo",
@@ -472,7 +1292,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -493,7 +1313,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
+          "title": "SSRF \u2014 server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -5724,7 +6544,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-10T20:04:15.099Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-10T20:04:56.008Z",
@@ -5740,7 +6560,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-10T20:04:56.008Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-10T20:05:16.339Z",
@@ -9778,7 +10598,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9884,7 +10704,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -9990,7 +10810,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -10096,7 +10916,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -11507,7 +12327,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary Heroku 6/6 recall (49 findings, pages=6 probes=598)",
+      "benchmark_status": "ok \u2014 primary Heroku 6/6 recall (49 findings, pages=6 probes=598)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -11524,7 +12344,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 23 UTC: primary awake 6/6. Discovery: +5 WSL modules 1581-1585 (CATALOG_MAX 1585 extension); drained 8 ok → 47 findings. WSL 1581-1584: 7 each; 1585: 4; backlog 1564-1566: 5 each.",
+      "notes": "No teacher tools available. 23 UTC: primary awake 6/6. Discovery: +5 WSL modules 1581-1585 (CATALOG_MAX 1585 extension); drained 8 ok \u2192 47 findings. WSL 1581-1584: 7 each; 1585: 4; backlog 1564-1566: 5 each.",
       "scanned_at": "2026-08-10T23:05:15.000Z"
     },
     {
@@ -12642,7 +13462,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12755,7 +13575,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -12868,7 +13688,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -13685,7 +14505,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -13798,7 +14618,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -13911,7 +14731,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -14159,7 +14979,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -14265,7 +15085,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -14378,7 +15198,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -14491,7 +15311,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15198,7 +16018,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15304,7 +16124,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -15410,7 +16230,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -16153,7 +16973,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -17194,7 +18014,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -17588,7 +18408,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary Heroku 6/6 recall (49 findings, 38 live-oracles, pages=6 probes=598)",
+      "benchmark_status": "ok \u2014 primary Heroku 6/6 recall (49 findings, 38 live-oracles, pages=6 probes=598)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -17605,7 +18425,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 04 UTC: primary awake 6/6 (49 findings, 38 live-oracles). Discovery: +5 WSL modules 1586-1590; drained 13 ok → 202 findings (backlog 8 + new 5). pwnshop apply-coupon 45 with coupon-category-bypass oracle.",
+      "notes": "No teacher tools available. 04 UTC: primary awake 6/6 (49 findings, 38 live-oracles). Discovery: +5 WSL modules 1586-1590; drained 13 ok \u2192 202 findings (backlog 8 + new 5). pwnshop apply-coupon 45 with coupon-category-bypass oracle.",
       "scanned_at": "2026-08-11T04:09:00.000Z"
     },
     {
@@ -17952,7 +18772,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T05:07:10.843Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T05:07:31.872Z",
@@ -18579,7 +19399,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T05:10:05.347Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T05:10:26.319Z",
@@ -18594,7 +19414,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T05:10:26.319Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T05:10:47.260Z",
@@ -18609,7 +19429,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T05:10:47.260Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T05:11:08.185Z",
@@ -19027,7 +19847,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T06:29:03.645Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T06:29:44.491Z",
@@ -19043,7 +19863,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T06:29:44.491Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T06:30:04.825Z",
@@ -20118,7 +20938,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -20231,7 +21051,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -20344,7 +21164,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -20799,7 +21619,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T07:11:28.565Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T07:11:49.555Z",
@@ -20814,7 +21634,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-11T07:11:49.555Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+      "error": "Juice Shop Heroku dyno unavailable (503) \u2014 use staging fallback."
     },
     {
       "run_id": "2026-08-11T08:03:28.893Z",
@@ -21334,7 +22154,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -22312,7 +23132,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -22770,7 +23590,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -22883,7 +23703,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -22996,7 +23816,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -24090,7 +24910,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary Heroku 6/6 recall (47 findings, pages=6 probes=578)",
+      "benchmark_status": "ok \u2014 primary Heroku 6/6 recall (47 findings, pages=6 probes=578)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -24455,7 +25275,7 @@
       "scanned_at": "2026-08-11T10:09:45.540Z"
     },
     {
-      "run_id": "2026-08-11T11:04:25.332Z",
+      "run_id": "2026-08-11T11:04:39.386Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -24804,7 +25624,7 @@
       "pages_crawled": 6,
       "probes_run": 578,
       "status": "ok",
-      "scanned_at": "2026-08-11T11:04:25.332Z"
+      "scanned_at": "2026-08-11T11:04:39.386Z"
     },
     {
       "run_id": "2026-08-11T11:07:15.941Z",
@@ -24830,7 +25650,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -24936,7 +25756,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
+          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -25415,7 +26235,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary Heroku 6/6 recall (48 findings, pages=6 probes=578)",
+      "benchmark_status": "ok \u2014 primary Heroku 6/6 recall (48 findings, pages=6 probes=578)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
