@@ -2515,6 +2515,7 @@ const DEEP_RULES = new Set<string>([
   "istEduDashboardIdorRouteLiveOracle",
   "dvwuDashboardIdorRouteLiveOracle",
   "istEduNewsletterCrlfRouteLiveOracle",
+  "istEduCsrfStateChangeLiveOracle",
   "dvwuPortalSqliRouteLiveOracle",
   "dvwuSearchXssRouteLiveOracle",
   "dvwuNoticesLfiRouteLiveOracle",
@@ -2646,6 +2647,10 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityLeakedConfigRouteLiveOracle",
   "aiSecuritySupabaseDataRouteLiveOracle",
   "aiSecurityAdminConsoleRouteLiveOracle",
+  "aiSecuritySupplyChainRouteLiveOracle",
+  "aiSecuritySecurityHeadersRouteLiveOracle",
+  "aiSecurityInsecurePasswordsRouteLiveOracle",
+  "aiSecurityRateLimitingBruteforceLiveOracle",
   "juiceShopForgottenBackupDisclosure",
   "juiceShopForgottenBackupRouteLiveOracle",
   "juiceShopProductsSearchSqliRouteLiveOracle",
@@ -8121,7 +8126,13 @@ function extractAiSecurityPlatformChallengeSeeds(html: string, pageUrl: string):
     "/challenges/idor",
     "/challenges/admin-console",
     "/challenges/leaked-config",
-    "/challenges/supabase-data"
+    "/challenges/supabase-data",
+    "/challenges/rate-limiting",
+    "/challenges/insecure-passwords",
+    "/challenges/security-headers",
+    "/challenges/supply-chain",
+    "/challenges/vulnerable-deps",
+    "/challenges/hacked-npm-packages"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());

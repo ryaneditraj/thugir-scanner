@@ -30975,6 +30975,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-rate-limiting-bruteforce-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "AI Security Platform login brute-force live oracle",
+    description:
+      "When scanning /challenges/rate-limiting, rapid signIn server-action POSTs with wrong passwords all return HTTP 200 without 429 or lockout — live missing rate-limiting oracle.",
+    impactOneline:
+      "Unlimited login attempts let attackers brute-force credentials without throttling or account lockout.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityRateLimitingBruteforceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce per-IP and per-account rate limits on authentication.",
+      steps: [
+        "Apply exponential backoff after failed login attempts.",
+        "Return HTTP 429 after a threshold of failures from the same IP or account.",
+        "Log and alert on credential-stuffing patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/rate-limiting signIn action accepts unlimited failed logins. Show server-side rate limiting for Next.js auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-supply-chain-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform supply-chain challenge route live oracle",
+    description:
+      "When scanning /challenges/supply-chain, /challenges/vulnerable-deps, or /challenges/hacked-npm-packages, the platform catalog documents dependency tampering and compromised npm package training modules.",
+    impactOneline:
+      "Route-specific oracle confirms supply-chain training modules without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecuritySupplyChainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — pin dependencies, verify package integrity, and audit transitive deps.",
+      steps: [
+        "Use lockfiles and commit dependency integrity hashes.",
+        "Enable npm audit and Dependabot in CI.",
+        "Review transitive dependencies for typosquatting and postinstall scripts."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/supply-chain route documents compromised npm dependencies. Show dependency pinning and integrity verification.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-forgotten-backup-disclosure",
     platform: "generic",
     category: "Information disclosure",
@@ -51393,6 +51445,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/newsletter route accepts CRLF in the email field causing HTTP response splitting. Show header injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-csrf-state-change-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "IST Edu CSRF state-change route live oracle",
+    description:
+      "When scanning /labs/csrf, POST /api/newsletter subscribes an email without anti-CSRF token or session — IST Edu cross-site request forgery state-change oracle.",
+    impactOneline:
+      "Missing CSRF protections let attackers trick visitors into performing unwanted newsletter subscriptions or other state changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduCsrfStateChangeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — require anti-CSRF tokens on all state-changing POST requests.",
+      steps: [
+        "Issue and validate CSRF tokens on every state-changing form and API call.",
+        "Use SameSite cookies and verify Origin/Referer headers.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/csrf route documents POST /api/newsletter without CSRF protection. Show anti-CSRF token and SameSite cookie remediation.",
     version: 1,
     enabled: true
   },
