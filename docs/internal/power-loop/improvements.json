@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp62 tools/call read_google_drive_document returns <secret>I-misused-the-SA-in-the-MCP-to-crack-the-code</secret> via over-privileged Google SA; wrongsecrets.herokuapp.com/challenge/challenge-62 findings 13→15 (+wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle, +wrongsecrets-mcp62-google-sa-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-63 confirms Hardcoded Encryption Key walkthrough (SuperSecretKey12 AES-128-CBC key + TDPwOvcLsbCWV5erlk6OHFnlFoXNtdQOt2JQeq+i4Ho= ciphertext in Java source); wrongsecrets.herokuapp.com/challenge/challenge-63 findings 13→15 (+wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-64-swift-binary-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-64 confirms Swift binary walkthrough (wrongsecrets-swift getSecret character array, Ghidra/radare2); wrongsecrets.herokuapp.com/challenge/challenge-64 findings 13→15 (+wrongsecrets-challenge-64-swift-binary-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-55 confirms .ssh Bastion walkthrough (.ssh/wrongsecrets.keys SSH keypair committed to git); wrongsecrets.herokuapp.com/challenge/challenge-55 findings 13→14 (+wrongsecrets-challenge-55-ssh-bastion-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
