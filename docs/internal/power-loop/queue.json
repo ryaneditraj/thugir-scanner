@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T20:23:09.430Z",
+  "updated_at": "2026-08-11T22:28:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/user/whoami",
+      "source": "Juice Shop staging mirror — unauthenticated whoami oracle GET /rest/user/whoami (Heroku primary 503 thin pass fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/admin/application-configuration",
+      "source": "Juice Shop staging mirror — admin application-configuration oracle (benchmark staging 47-finding pass)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/track-order/1",
+      "source": "Juice Shop staging mirror — track-order IDOR oracle GET /rest/track-order/1 (demo.owasp-juice.shop parity)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop-staging.herokuapp.com/rest/basket/1",
+      "source": "Juice Shop staging mirror — basket IDOR oracle GET /rest/basket/1 (401-gated BOLA hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/wallet/balance",
+      "source": "Escape.tech Juice Shop mirror — wallet balance BOLA oracle GET /rest/wallet/balance (benchmarks.json fallback_urls)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://juice-shop.herokuapp.com/rest/products/search?q=test",
       "source": "OWASP Juice Shop — SQLi product search oracle GET /rest/products/search (public benchmark)",
