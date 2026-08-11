@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T06:40:00.000Z",
+  "updated_at": "2026-08-11T07:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-28",
@@ -9973,6 +9973,31 @@
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
       "source": "AI Security Platform — IDOR CWE-639 challenge demo (Vercel challenges hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
+      "source": "OWASP WrongSecrets — challenge-31 front-end secret oracle (Heroku demo README 0–64 set)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-32",
+      "source": "OWASP WrongSecrets — challenge-32 secrets-management oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-33",
+      "source": "OWASP WrongSecrets — challenge-33 K8s secrets oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-34",
+      "source": "OWASP WrongSecrets — challenge-34 secrets oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-35",
+      "source": "OWASP WrongSecrets — challenge-35 secrets oracle (Heroku demo README)",
       "auth": "public_demo"
     }
   ]
