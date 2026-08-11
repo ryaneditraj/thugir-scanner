@@ -2579,6 +2579,10 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge38GitNotesRouteLiveOracle",
   "wrongsecretsChallenge39AesFilenameKeyLiveOracle",
   "wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle",
+  "wrongsecretsChallenge36AdvancedCLiveOracle",
+  "wrongsecretsChallenge36AdvancedCRouteLiveOracle",
+  "wrongsecretsChallenge37CiCdLiveOracle",
+  "wrongsecretsChallenge37CiCdRouteLiveOracle",
   "wrongsecretsChallenge28GithubIssueRouteLiveOracle",
   "wrongsecretsChallenge29ScreenshotLogRouteLiveOracle",
   "wrongsecretsChallenge30LocalStorageRouteLiveOracle",
@@ -7338,6 +7342,11 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/register",
     "/labs/csrf",
     "/labs/ssrf",
+    "/labs/xss",
+    "/labs/sqli",
+    "/labs/lfi",
+    "/labs/xxe",
+    "/labs/idor",
     "/newsletter"
   ]) {
     try {
