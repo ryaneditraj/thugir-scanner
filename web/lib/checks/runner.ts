@@ -2579,6 +2579,12 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge38GitNotesRouteLiveOracle",
   "wrongsecretsChallenge39AesFilenameKeyLiveOracle",
   "wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle",
+  "wrongsecretsChallenge40AesJsonLiveOracle",
+  "wrongsecretsChallenge40AesJsonRouteLiveOracle",
+  "wrongsecretsChallenge41PasswordShuckingLiveOracle",
+  "wrongsecretsChallenge41PasswordShuckingRouteLiveOracle",
+  "wrongsecretsChallenge42ActuatorAuditLiveOracle",
+  "wrongsecretsChallenge42ActuatorAuditRouteLiveOracle",
   "wrongsecretsChallenge36AdvancedCLiveOracle",
   "wrongsecretsChallenge36AdvancedCRouteLiveOracle",
   "wrongsecretsChallenge37CiCdLiveOracle",
@@ -10473,7 +10479,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vulnbank\.org/i.test(origin) && /\/login\b/i.test(targetInput) && p.slug.startsWith("vulnbank-")) return -2;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:register|login|labs\/csrf|labs\/ssrf|newsletter)\b/i.test(targetInput) &&
+        /\/(?:register|login|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe)|newsletter)\b/i.test(targetInput) &&
         p.slug.startsWith("ist-edu-")
       )
         return -3;

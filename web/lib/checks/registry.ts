@@ -61851,6 +61851,137 @@ const wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const wrongsecretsChallenge40AesJsonLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-40", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography<\/strong>/i.test(body) ||
+    !/Insecure Encryption Key - Part 2/i.test(body) ||
+    !/secrchallenge\.json/i.test(body) ||
+    !/aes-128-ecb/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/secrchallenge\.json[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "AES secrchallenge.json challenge",
+      note: "OWASP WrongSecrets challenge-40 documents AES-128-ECB secrets in secrchallenge.json with key stored alongside ciphertext — insecure encryption key part 2 oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge40AesJsonRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?40\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge40AesJsonLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-40 route scan — AES secrchallenge.json challenge confirms insecure encryption key part 2 walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge41PasswordShuckingLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-41", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography<\/strong>/i.test(body) ||
+    !/Password Shucking/i.test(body) ||
+    !/bcrypt hash mapped to a md5 hash/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/bcrypt hash mapped to a md5 hash[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Password shucking challenge",
+      note: "OWASP WrongSecrets challenge-41 documents bcrypt-to-md5 password shucking where legacy md5 hashes enable offline cracking — password shucking oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge41PasswordShuckingRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?41\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge41PasswordShuckingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-41 route scan — password shucking challenge confirms bcrypt-to-md5 legacy hash walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge42ActuatorAuditLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-42", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Logging<\/strong>/i.test(body) ||
+    !/Spring Boot Actuator Audit Event/i.test(body) ||
+    !/actuator\/auditevents/i.test(body) ||
+    !/audit events exposed/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/actuator\/auditevents[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Spring Boot actuator audit events challenge",
+      note: "OWASP WrongSecrets challenge-42 documents sensitive audit events exposed at /actuator/auditevents — Spring Boot actuator audit event oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge42ActuatorAuditRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?42\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge42ActuatorAuditLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-42 route scan — Spring Boot actuator audit events challenge confirms /actuator/auditevents exposure walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
 
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
@@ -74153,6 +74284,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge38GitNotesRouteLiveOracle,
   wrongsecretsChallenge39AesFilenameKeyLiveOracle,
   wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle,
+  wrongsecretsChallenge40AesJsonLiveOracle,
+  wrongsecretsChallenge40AesJsonRouteLiveOracle,
+  wrongsecretsChallenge41PasswordShuckingLiveOracle,
+  wrongsecretsChallenge41PasswordShuckingRouteLiveOracle,
+  wrongsecretsChallenge42ActuatorAuditLiveOracle,
+  wrongsecretsChallenge42ActuatorAuditRouteLiveOracle,
   wrongsecretsChallenge36AdvancedCLiveOracle,
   wrongsecretsChallenge36AdvancedCRouteLiveOracle,
   wrongsecretsChallenge37CiCdLiveOracle,
