@@ -35575,6 +35575,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-request-loan-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank loan request route business-logic oracle",
+    description:
+      "When scanning /request_loan or /api/v1/loans/apply, POST accepts authenticated loan amount requests and returns status:success — route-specific loan-module business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that loan endpoints accept unvalidated loan requests on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankRequestLoanRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce loan eligibility, limits, and approval workflows — Vuln Bank is intentional training software.",
+      steps: [
+        "Validate loan amounts against account history and credit policies.",
+        "Queue loan requests for manual or automated underwriting before approval.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /request_loan route scan confirms authenticated loan requests succeed without underwriting. Show loan validation and approval workflow hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-request-loan-negative-amount-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank loan route negative-amount business-logic oracle",
+    description:
+      "When scanning /request_loan or /api/v1/loans/apply, POST accepts negative loan amounts and returns status:success — route-specific loan negative-amount business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that loan endpoints lack positive-amount validation on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankRequestLoanNegativeAmountRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate loan amounts are positive before accepting requests — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero loan amounts at the API layer.",
+        "Enforce credit checks and staff approval workflows.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /request_loan route scan confirms amount:-5000 returns status:success. Show business-logic validation for loan amounts.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-swagger-json-live-oracle",
     platform: "generic",
     category: "Information disclosure",
