@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T16:04:51.771Z",
+  "updated_at": "2026-08-11T17:40:36.183Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
+      "source": "OWASP WrongSecrets — challenge-58 secrets oracle (Heroku demo README 54-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
+      "source": "OWASP WrongSecrets — challenge-59 secrets oracle (Heroku demo README 54-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
+      "source": "OWASP WrongSecrets — challenge-60 secrets oracle (Heroku demo README 54-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
+      "source": "OWASP WrongSecrets — challenge-61 secrets oracle (Heroku demo README 54-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
+      "source": "OWASP WrongSecrets — challenge-62 secrets oracle (Heroku demo README 54-66 range)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-49",
       "source": "OWASP WrongSecrets — challenge-49 .NET secrets oracle (Heroku demo README 49-52)",
