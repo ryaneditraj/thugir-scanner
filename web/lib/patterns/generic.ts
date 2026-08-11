@@ -29386,6 +29386,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-19-c-binary-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-19 C binary route live oracle",
+    description:
+      "When scanning /challenge/19 or /challenge/challenge-19, the walkthrough documents secrets embedded in a C native binary (wrongsecrets-c) — route-specific challenge-19 reverse-engineering oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-19 C binary secret extraction walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge19CBinaryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-19 is intentional — never embed secrets in compiled binaries.",
+      steps: [
+        "Store secrets in secure vaults or environment variables at runtime, not in binaries.",
+        "Assume compiled binaries can be reverse-engineered with Ghidra, radare2, or strings.",
+        "Rotate any credentials that were ever embedded in shipped binaries."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-19 route documents secrets in a C binary. Show remediation for secrets in native compiled applications.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-20-cplus-binary-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-20 C++ binary route live oracle",
+    description:
+      "When scanning /challenge/20 or /challenge/challenge-20, the walkthrough documents secrets embedded in a C++ native binary (wrongsecrets-cplus) — route-specific challenge-20 reverse-engineering oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-20 C++ binary secret extraction walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge20CplusBinaryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-20 is intentional — never embed secrets in compiled binaries.",
+      steps: [
+        "Store secrets in secure vaults or environment variables at runtime, not in binaries.",
+        "Assume C++ binaries expose secrets via Ghidra symbol analysis (e.g. __Z6secretv).",
+        "Rotate any credentials that were ever embedded in shipped binaries."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-20 route documents secrets in a C++ binary. Show remediation for secrets in native compiled applications.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-21-golang-binary-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-21 Go binary route live oracle",
+    description:
+      "When scanning /challenge/21 or /challenge/challenge-21, the walkthrough documents secrets embedded in a Go native binary (wrongsecrets-golang) — route-specific challenge-21 reverse-engineering oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-21 Go binary secret extraction walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge21GolangBinaryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-21 is intentional — never embed secrets in compiled binaries.",
+      steps: [
+        "Store secrets in secure vaults or environment variables at runtime, not in binaries.",
+        "Assume Go binaries expose string literals discoverable via Ghidra or radare2.",
+        "Rotate any credentials that were ever embedded in shipped binaries."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-21 route documents secrets in a Go binary. Show remediation for secrets in native compiled applications.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
