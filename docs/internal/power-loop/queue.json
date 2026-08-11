@@ -61,6 +61,7 @@
       "source": "OWASP WrongSecrets — challenge-10 CSI-Driver topic route oracle queue drain (22 UTC discovery)",
       "auth": "public_demo"
     },
+    {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-11",
       "source": "OWASP WrongSecrets — challenge-11 IAM privilege escalation topic route oracle queue drain (22 UTC discovery)",
       "auth": "public_demo"
