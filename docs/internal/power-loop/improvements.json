@@ -760,6 +760,21 @@
   "shipped": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-43-reddit-blunder-route-live-oracle",
+      "shipped_at": "2026-08-11T15:20:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-44-vault-metadata-route-live-oracle",
+      "shipped_at": "2026-08-11T15:20:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-45-vault-subkey-route-live-oracle",
+      "shipped_at": "2026-08-11T15:20:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-40-aes-json-route-live-oracle",
       "shipped_at": "2026-08-11T14:15:00.000Z"
     },
