@@ -63284,6 +63284,139 @@ const wrongsecretsChallenge64SwiftBinaryRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge58DatabaseConnectionLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-58", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Logging<\/strong>/i.test(body) ||
+    !/Database Connection String Exposure in Error Messages/i.test(body) ||
+    !/\/error-demo\/database-connection/i.test(body) ||
+    !/jdbc:postgresql/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Database Connection String Exposure[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "challenge-58 walkthrough documents JDBC credentials in error-demo endpoint",
+      note: "OWASP WrongSecrets challenge-58 documents database connection string exposure via /error-demo/database-connection — logging credential exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge58DatabaseConnectionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?58\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge58DatabaseConnectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-58 route scan — Database Connection String Exposure walkthrough confirms /error-demo/database-connection JDBC credential leak"
+    }
+  };
+};
+
+const wrongsecretsChallenge65JavaPlainCliLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-65", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary<\/strong>/i.test(body) ||
+    !/Hiding in binaries part 6: the plain Java CLI/i.test(body) ||
+    !/wrongsecrets-java\.jar/i.test(body) ||
+    !/WrongSecretsPlain/i.test(body) ||
+    !/getSecret/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/wrongsecrets-java\.jar[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "wrongsecrets-java.jar with WrongSecretsPlain getSecret ldc bytecode walkthrough",
+      note: "OWASP WrongSecrets challenge-65 documents secret embedded as ldc constant in wrongsecrets-java.jar WrongSecretsPlain.getSecret() — plain Java CLI binary oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge65JavaPlainCliRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?65\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge65JavaPlainCliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-65 route scan — plain Java CLI challenge confirms wrongsecrets-java.jar WrongSecretsPlain getSecret bytecode walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge66JavaObfuscatedLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-66", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary<\/strong>/i.test(body) ||
+    !/Hiding in binaries part 7: the obfuscated Java CLI/i.test(body) ||
+    !/wrongsecrets-java-obfuscated\.jar/i.test(body) ||
+    !/WrongSecretsObfuscated/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/wrongsecrets-java-obfuscated\.jar[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "wrongsecrets-java-obfuscated.jar with WrongSecretsObfuscated javap decompilation walkthrough",
+      note: "OWASP WrongSecrets challenge-66 documents secret recoverable from obfuscated wrongsecrets-java-obfuscated.jar via javap — obfuscated Java CLI binary oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?66\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge66JavaObfuscatedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-66 route scan — obfuscated Java CLI challenge confirms wrongsecrets-java-obfuscated.jar WrongSecretsObfuscated javap walkthrough"
+    }
+  };
+};
+
 const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/chat/query", ctx.origin).toString();
@@ -75216,6 +75349,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge63HardcodedAesKeyRouteLiveOracle,
   wrongsecretsChallenge64SwiftBinaryLiveOracle,
   wrongsecretsChallenge64SwiftBinaryRouteLiveOracle,
+  wrongsecretsChallenge58DatabaseConnectionLiveOracle,
+  wrongsecretsChallenge58DatabaseConnectionRouteLiveOracle,
+  wrongsecretsChallenge65JavaPlainCliLiveOracle,
+  wrongsecretsChallenge65JavaPlainCliRouteLiveOracle,
+  wrongsecretsChallenge66JavaObfuscatedLiveOracle,
+  wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,
