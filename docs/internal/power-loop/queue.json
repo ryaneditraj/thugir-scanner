@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T14:05:00.000Z",
+  "updated_at": "2026-08-11T15:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-49",
+      "source": "OWASP WrongSecrets — challenge-49 .NET secrets oracle (Heroku demo README 49-52)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-50",
+      "source": "OWASP WrongSecrets — challenge-50 ILSpy/.NET decompilation oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-51",
+      "source": "OWASP WrongSecrets — challenge-51 secrets-in-build oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-52",
+      "source": "OWASP WrongSecrets — challenge-52 configuration oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/register-seller",
+      "source": "ctfsec/pwnshop — seller registration SSTI entry point PWN-040 (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
       "source": "OWASP WrongSecrets — challenge-44 Vault metadata oracle (Heroku demo README)",
