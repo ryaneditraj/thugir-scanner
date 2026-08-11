@@ -29308,6 +29308,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-16-frontend-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-16 front-end route live oracle",
+    description:
+      "When scanning /challenge/16 or /challenge/challenge-16, the walkthrough documents secrets stored in front-end code — route-specific challenge-16 client-side secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-16 front-end secret storage walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge16FrontendRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-16 is intentional — never embed secrets in client-side code or mobile apps.",
+      steps: [
+        "Keep API keys and secrets on the server; use backend proxies for privileged calls.",
+        "Treat obfuscated front-end secrets as public and rotate them.",
+        "Use OAuth or short-lived tokens instead of static client secrets."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-16 route documents secrets in front-end code. Show remediation for client-side secret storage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-17-bash-history-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-17 bash history route live oracle",
+    description:
+      "When scanning /challenge/17 or /challenge/challenge-17, the walkthrough documents secrets leaked via bash history in Docker containers — route-specific challenge-17 shell history oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-17 bash history secret exposure walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge17BashHistoryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-17 is intentional — never type secrets into interactive shells on shared systems.",
+      steps: [
+        "Use secret managers or env files instead of typing credentials in shells.",
+        "Disable or clear bash history in container images and CI runners.",
+        "Rotate any credentials that may have been recorded in shell history."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-17 route documents secrets in bash history. Show remediation for shell history secret exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-18-bad-hashing-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-18 bad hashing route live oracle",
+    description:
+      "When scanning /challenge/18 or /challenge/challenge-18, the walkthrough documents unsalted MD5/SHA1 password hashes — route-specific challenge-18 weak cryptography oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-18 unsalted hash cracking walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge18BadHashingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-18 is intentional — use slow password hashes with per-user salts.",
+      steps: [
+        "Replace MD5/SHA1 password storage with bcrypt, scrypt, or Argon2.",
+        "Add a unique salt per password hash.",
+        "Re-hash legacy passwords on next successful login."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-18 route documents unsalted MD5/SHA1 hashes. Show remediation for weak password hashing.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
