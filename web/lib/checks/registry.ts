@@ -61851,6 +61851,108 @@ const wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
+
+const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-36", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary<\/strong>/i.test(body) ||
+    !/wrongsecrets-advanced-c/i.test(body) ||
+    !/retrieving the strings stored in the registers|GDB and Radare2/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/wrongsecrets-advanced-c[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Advanced C binary challenge",
+      note: "OWASP WrongSecrets challenge-36 documents reverse-engineering wrongsecrets-advanced-c binaries with GDB/Radare2 register strings — advanced C markers oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge36AdvancedCRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?36\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge36AdvancedCLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-36 route scan — advanced C binary reverse-engineering challenge confirms GDB/Radare2 register-string walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge37CiCdLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-37", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*CI\/CD<\/strong>/i.test(body) ||
+    !/ZAP_AUTH_HEADER_VALUE|authenticated\/challenge37/i.test(body) ||
+    !/security credentials in CI\/CD|dast-zap-test\.yml/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  const authUrl = new URL("/authenticated/challenge37", ctx.origin).toString();
+  const authDoc = await ctx.probe.get(authUrl, {
+    headers: { Authorization: WRONGSECRETS_CHALLENGE37_BASIC_AUTH },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const liveSecret =
+    authDoc.status >= 200 &&
+    authDoc.status < 400 &&
+    /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(authDoc.body);
+  return {
+    fired: true,
+    confidence: liveSecret ? 0.94 : 0.93,
+    evidence: {
+      url: probeUrl,
+      authUrl,
+      liveSecret: liveSecret ? authDoc.body.trim().slice(0, 80) : undefined,
+      snippet:
+        body.match(/ZAP_AUTH_HEADER_VALUE[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "CI/CD ZAP basic auth challenge",
+      note: liveSecret
+        ? "OWASP WrongSecrets challenge-37 documents CI/CD ZAP_AUTH_HEADER_VALUE in dast-zap-test.yml — GET /authenticated/challenge37 with decoded Basic auth returns live secret"
+        : "OWASP WrongSecrets challenge-37 documents CI/CD ZAP_AUTH_HEADER_VALUE credentials in GitHub workflow — CI/CD secret exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge37CiCdRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?37\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge37CiCdLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-37 route scan — CI/CD ZAP basic-auth challenge confirms workflow credential exposure and /authenticated/challenge37 live secret"
+    }
+  };
+};
+
 const wrongsecretsChallenge28GithubIssueLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-28", ctx.origin).toString();
@@ -70973,7 +71075,7 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/(?:xss|search)\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:labs\/xss|xss|search)\/?$/i.test(pathname)) return NEGATIVE;
   const searchUrl = new URL("/api/search", ctx.origin);
   searchUrl.searchParams.set("q", IST_EDU_XSS_PROBE);
   const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096 });
@@ -70994,7 +71096,7 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
 const istEduNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf))\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf|lfi|xxe))\b/i.test(pageUrl)) return NEGATIVE;
   for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
     const url = new URL("/api/notices", ctx.origin);
     url.searchParams.set("file", payload);
@@ -74051,6 +74153,10 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge38GitNotesRouteLiveOracle,
   wrongsecretsChallenge39AesFilenameKeyLiveOracle,
   wrongsecretsChallenge39AesFilenameKeyRouteLiveOracle,
+  wrongsecretsChallenge36AdvancedCLiveOracle,
+  wrongsecretsChallenge36AdvancedCRouteLiveOracle,
+  wrongsecretsChallenge37CiCdLiveOracle,
+  wrongsecretsChallenge37CiCdRouteLiveOracle,
   wrongsecretsChallenge28GithubIssueLiveOracle,
   wrongsecretsChallenge28GithubIssueRouteLiveOracle,
   wrongsecretsChallenge29ScreenshotLogLiveOracle,
