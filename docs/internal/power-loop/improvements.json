@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=<script>thugirXssProbe</script> reflects unescaped on /labs/xss route scan (pathname fix labs/xss); ist-edu-bd.vercel.app/labs/xss findings 10 (+ist-edu-search-xss-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-36 confirms wrongsecrets-advanced-c GDB/Radare2 register-string walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-36 findings 13→14 (+wrongsecrets-challenge-36-advanced-c-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-37-cicd-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ZAP_AUTH_HEADER_VALUE in dast-zap-test.yml + GET /authenticated/challenge37 with Basic auth returns live UUID secret; wrongsecrets.herokuapp.com/challenge/challenge-37 findings 13→14 (+wrongsecrets-challenge-37-cicd-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-38-git-notes-route-live-oracle",
       "status": "shipped",
