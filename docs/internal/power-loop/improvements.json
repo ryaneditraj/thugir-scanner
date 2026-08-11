@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-register-auth-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful when scanning /register; ist-edu-bd.vercel.app/register findings 8→9 (+ist-edu-register-auth-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-23 confirms Secrets in front-end code part 2 Base64 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-23 findings 13→14 (+wrongsecrets-challenge-23-base64-frontend-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-24 confirms find the HMAC key / HMAC_SHA1.pdf walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-24 findings 13→14 (+wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-22-rust-binary-route-live-oracle",
       "status": "shipped",
