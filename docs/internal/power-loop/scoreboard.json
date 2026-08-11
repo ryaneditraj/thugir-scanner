@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T23:11:00.000Z",
+  "updated_at": "2026-08-11T23:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2743,
-  "total_findings": 27281,
-  "critical_findings": 55,
+  "total_sites_scanned": 2746,
+  "total_findings": 27374,
+  "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1955,
-  "discovery_findings": 23119,
-  "improvements_shipped": 1190,
-  "last_run": "2026-08-11T23:11:00.000Z",
+  "discovery_findings": 23165,
+  "improvements_shipped": 1192,
+  "last_run": "2026-08-11T23:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -48,43 +48,35 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 (47 findings, 33 juice-shop-* live oracles); no benchmark category misses"
+      "note": "Stable 6/6 first-pass recall (47 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 8,
-      "findings": 239,
-      "focus": "demo.owasp-juice.shop REST oracles (503) + staging products/search + ssrf.vulnlab metadata-gcp + queue drain (vulnbank, brokencrystals, pwnshop)",
-      "new_urls_queued": [
-        "demo.owasp-juice.shop/rest/chatbot/respond",
-        "demo.owasp-juice.shop/rest/memories",
-        "juice-shop-staging.herokuapp.com/rest/products/search?q=test",
-        "ssrf.vulnlab.dev/metadata-gcp"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 62,
+      "focus": "WrongSecrets challenge-59 Slack webhook + Pwnshop register-seller SSTI route oracles",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — primary Heroku awake, no category gaps",
-      "juice-shop-staging.herokuapp.com/rest/products/search?q=test: 48 findings incl juice-shop-products-search-sqli-route-live-oracle",
-      "ssrf.vulnlab.dev/metadata-gcp: 16 findings incl ssrf-vulnlab-metadata-gcp-route-live-oracle (new GCP metadata lab)",
-      "vulnbank.org/api/v2/forgot-password: 25 findings with forgot-password oracle suite",
-      "vulnbank.org/merchant/register: 26 findings with vulnbank-merchant-register-live-oracle",
-      "brokencrystals.com/userlogin?logobgcolor=red: 80 findings with full API oracle suite",
-      "pwnshop.ctfsecurity.com/order/1: 44 findings incl pwnshop-order-idor-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-59: 13→16 findings — wrongsecrets-challenge-59-slack-webhook-route-live-oracle shipped (CHALLENGE59_SLACK_WEBHOOK_URL double base64)",
+      "pwnshop.ctfsecurity.com/register-seller: 45→46 findings — pwnshop-register-seller-ssti-route-live-oracle shipped (PWN-040 seller preview SSTI via register-seller flow)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/rest/chatbot/respond + /rest/memories: 503 Heroku dyno unavailable — use staging mirror for route oracles",
+      "wrongsecrets challenge-55..66 range now complete except any new upstream challenges",
       "ginandjuice.shop/order/details?orderId=1: queued but not reached in 8-URL limit (48h skip on head URLs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "wrongsecrets.herokuapp.com/challenge/challenge-59": 16,
+    "pwnshop.ctfsecurity.com/register-seller": 46,
     "juice-shop-staging.herokuapp.com/rest/products/search?q=test": 48,
     "ssrf.vulnlab.dev/metadata-gcp": 16,
     "vulnbank.org/api/v2/forgot-password": 25,
-    "vulnbank.org/merchant/register": 26,
     "brokencrystals.com/userlogin?logobgcolor=red": 80,
     "pwnshop.ctfsecurity.com/order/1": 44
   }
