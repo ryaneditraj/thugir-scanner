@@ -1,6 +1,36 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-signup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + GET adminpermission returns isAdmin:true when scanning /api/auth/signup; brokencrystals.com/api/auth/signup findings 69→70 (+brokencrystals-signup-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-search-filters-otp-priming",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended to /search/filters; POST /search/filters constructor.prototype pollutes thugirProbePP key; pwnshop.ctfsecurity.com/search/filters findings 21→46 (+pwnshop-prototype-pollution-search-filters-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-28-github-issue-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-28 confirms closed GitHub issue AWS Secret key walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 13→14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-29 confirms screenshot log leak in closed GitHub issue walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-29 findings 13→14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-30-localstorage-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-30 confirms localStorage secret walkthrough (Applications tab key secret); wrongsecrets.herokuapp.com/challenge/challenge-30 findings 11→12; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle",
       "status": "shipped",
