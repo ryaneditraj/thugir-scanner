@@ -29074,6 +29074,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-1 Git hardcoded route live oracle",
+    description:
+      "When scanning /challenge/1 or /challenge/challenge-1, the walkthrough documents hardcoded password strings in Java source discoverable via grep or git-secrets — route-specific challenge-1 Git secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-1 grep/git-secrets hardcoded password walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge1GitHardcodedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-1 is intentional — never hardcode passwords in source code; scan repos with git-secrets before commit.",
+      steps: [
+        "Run git-secrets or truffleHog on every repository before merge.",
+        "Use secret managers instead of hardcoded credentials in application code.",
+        "Rotate any secrets that appeared in Git history."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-1 route documents hardcoded passwords in Java source. Show remediation for source-code secret scanning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-2-application-properties-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-2 application.properties route live oracle",
+    description:
+      "When scanning /challenge/2 or /challenge/challenge-2, the walkthrough documents secrets hidden in Spring Boot application.properties — route-specific challenge-2 configuration secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-2 Spring Boot application.properties secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-2 is intentional — never store secrets in application.properties or committed config files.",
+      steps: [
+        "Inject secrets at runtime via environment variables or secret managers.",
+        "Scan application.properties with SAST and truffleHog before deploy.",
+        "Rotate credentials exposed in configuration files."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-2 route documents secrets in application.properties. Show remediation for Spring Boot configuration secret hygiene.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-3-docker-env-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-3 Docker ENV route live oracle",
+    description:
+      "When scanning /challenge/3 or /challenge/challenge-3, the walkthrough documents Docker ENV-based password exposure via docker history --no-trunc — route-specific challenge-3 container ENV secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-3 Docker ENV password walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge3DockerEnvRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-3 is intentional — never embed secrets in Docker ENV instructions or image layers.",
+      steps: [
+        "Use multi-stage builds and runtime secret injection instead of ENV passwords.",
+        "Scan images with docker history and secret scanners before push.",
+        "Rotate credentials exposed in container image layers."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-3 route documents Docker ENV password exposure. Show remediation for secure container image builds.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-7-vault-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",

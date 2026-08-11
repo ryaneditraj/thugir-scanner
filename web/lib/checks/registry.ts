@@ -60640,6 +60640,133 @@ const wrongsecretsChallengeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge1GitHardcodedLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-1", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Git<\/strong>/i.test(body) ||
+    !/grep -r password|git-secrets|Trufflehog/i.test(body) ||
+    !/secret called.*password|hardcoded string/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/grep -r password[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "Git hardcoded password challenge",
+      note: "OWASP WrongSecrets challenge-1 documents hardcoded password strings in Java source discoverable via grep or git-secrets — Git hardcoded secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge1GitHardcodedRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?1\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge1GitHardcodedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-1 route scan — Git challenge confirms grep/git-secrets hardcoded password walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge2ApplicationPropertiesLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-2", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Git<\/strong>/i.test(body) ||
+    !/application\.properties|Application\.properties/i.test(body) ||
+    !/Spring Boot application|truffleHog|git-secrets/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/application\.properties[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Spring Boot application.properties challenge",
+      note: "OWASP WrongSecrets challenge-2 documents secrets hidden in Spring Boot application.properties discoverable via truffleHog or manual inspection — configuration file secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?2\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge2ApplicationPropertiesLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-2 route scan — Git/Spring Boot challenge confirms application.properties secret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge3DockerEnvLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-3", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Docker<\/strong>/i.test(body) ||
+    !/Docker ENV based password|docker history --no-trunc/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Docker ENV based password[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Docker ENV based password challenge",
+      note: "OWASP WrongSecrets challenge-3 documents Docker ENV-based password exposure discoverable via docker history --no-trunc — container image ENV secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge3DockerEnvRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?3\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge3DockerEnvLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-3 route scan — Docker challenge confirms ENV-based password docker history walkthrough"
+    }
+  };
+};
+
 const wrongsecretsChallenge7VaultLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-7", ctx.origin).toString();
@@ -73488,6 +73615,12 @@ export const RULES: Record<string, Rule> = {
   juiceShopFileUploadRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
+  wrongsecretsChallenge1GitHardcodedLiveOracle,
+  wrongsecretsChallenge1GitHardcodedRouteLiveOracle,
+  wrongsecretsChallenge2ApplicationPropertiesLiveOracle,
+  wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle,
+  wrongsecretsChallenge3DockerEnvLiveOracle,
+  wrongsecretsChallenge3DockerEnvRouteLiveOracle,
   wrongsecretsChallenge7VaultLiveOracle,
   wrongsecretsChallenge7VaultRouteLiveOracle,
   wrongsecretsChallenge8LoggingLiveOracle,
