@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-rate-limiting-bruteforce-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: 6 rapid signIn Next-Action POSTs to /login all HTTP 200 with error/fetch failed and no 429; ai-security-platform-iota.vercel.app/challenges/rate-limiting findings 3→4 (+ai-security-rate-limiting-bruteforce-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-csrf-state-change-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter with probe email returns Subscribed without CSRF token on /labs/csrf; ist-edu-bd.vercel.app/labs/csrf findings 10→11 (+ist-edu-csrf-state-change-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-supply-chain-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/supply-chain catalog oracle via AI_SECURITY_PLATFORM_CATALOG_FALLBACK + discovery seeds for supply-chain/vulnerable-deps/hacked-npm-packages; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
       "status": "shipped",
