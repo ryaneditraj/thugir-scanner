@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T03:10:00.000Z",
+  "updated_at": "2026-08-11T04:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2735,
-  "total_findings": 26729,
+  "total_sites_scanned": 2749,
+  "total_findings": 26980,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1957,
-  "discovery_findings": 22612,
-  "improvements_shipped": 1183,
-  "last_run": "2026-08-11T03:10:00.000Z",
+  "discovery_urls_added": 1962,
+  "discovery_findings": 22814,
+  "improvements_shipped": 1181,
+  "last_run": "2026-08-11T04:09:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
+      "live_oracle_slugs": 38,
       "pages_crawled": 6,
-      "probes_run": 578,
+      "probes_run": 598,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +49,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live-oracles); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 35,
-      "focus": "WrongSecrets challenge-22 Rust binary + WSL curated CSR placeholder shells 1011-1036",
-      "improvements_shipped_this_run": 2
+      "urls_added": 5,
+      "urls_scanned": 13,
+      "findings": 202,
+      "focus": "WSL modules 1586-1590 (CATALOG_MAX 1600 extension) + backlog drain (pwnshop coupon oracle, ssrf metadata-aws, wrongsecrets challenges)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-22: 13→14 findings — wrongsecrets-challenge-22-rust-binary-route-live-oracle shipped (Hiding in binaries part 4 / wrongsecrets-rust)",
-      "web-security-learning-labs.vercel.app/module/1013: 5→6 findings — curated CSR placeholder shell now fires placeholder-module-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1015: 8→9 findings — curated CSR placeholder shell (JWT topic) now fires placeholder-module-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1017: 8 findings — dangerous-html-sinks + module live oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-23: 13 findings — generic WrongSecrets oracles only; no front-end Base64 credential oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live-oracles) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/apply-coupon: 45 findings — pwnshop-coupon-category-bypass-live-oracle fires (PWN-016)",
+      "pwnshop.ctfsecurity.com/admin/security?search=test: 45 findings — admin security search hub",
+      "pwnshop.ctfsecurity.com/verify-otp: 20 findings — OTP brute-force oracle",
+      "ssrf.vulnlab.dev/metadata-aws: 15 findings — metadata SSRF route hub",
+      "web-security-learning-labs.vercel.app/module/1586-1587: 8 findings each with placeholder-module-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1588: 7 findings; 1589-1590: 5 each"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "wrongsecrets challenge-23: front-end Base64 test-credential oracle absent (generic challenge oracles only)",
-      "wrongsecrets challenge-24: cryptography-topic route oracle absent",
-      "wrongsecrets challenge-25: Web3-topic route oracle absent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles may still be thin on basic/blocklist routes",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
+      "wrongsecrets challenge-23/24/25: topic-specific route oracles absent (generic challenge oracles only)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "wrongsecrets.herokuapp.com/challenge/challenge-22": 14,
-    "web-security-learning-labs.vercel.app/module/1015": 9,
-    "web-security-learning-labs.vercel.app/module/1017": 8,
-    "web-security-learning-labs.vercel.app/module/1018": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-23": 13,
-    "ist-edu-bd.vercel.app/register": 8,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop.herokuapp.com": 49,
+    "pwnshop.ctfsecurity.com/apply-coupon": 45,
+    "pwnshop.ctfsecurity.com/admin/security?search=test": 45,
+    "pwnshop.ctfsecurity.com/verify-otp": 20,
+    "ssrf.vulnlab.dev/metadata-aws": 15,
+    "wrongsecrets.herokuapp.com/challenge/2": 13,
+    "wrongsecrets.herokuapp.com/challenge/1": 13,
+    "web-security-learning-labs.vercel.app/module/1586": 8,
+    "web-security-learning-labs.vercel.app/module/1587": 8
   }
 }

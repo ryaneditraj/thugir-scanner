@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T03:05:05.003Z",
+  "updated_at": "2026-08-11T04:07:59.039Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1586",
+      "source": "web-security-learning-labs catalog shell — module 1586 (WSL catalog expansion CATALOG_MAX 1600)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1587",
+      "source": "web-security-learning-labs catalog shell — module 1587 (WSL catalog expansion CATALOG_MAX 1600)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1588",
+      "source": "web-security-learning-labs catalog shell — module 1588 (WSL catalog expansion CATALOG_MAX 1600)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1589",
+      "source": "web-security-learning-labs catalog shell — module 1589 (WSL catalog expansion CATALOG_MAX 1600)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1590",
+      "source": "web-security-learning-labs catalog shell — module 1590 (WSL catalog expansion CATALOG_MAX 1600)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1017",
       "source": "web-security-learning-labs catalog shell — module 1017 (WSL catalog expansion)",
