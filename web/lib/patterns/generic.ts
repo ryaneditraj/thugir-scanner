@@ -30311,6 +30311,59 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-59-slack-webhook-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-59 Slack webhook route live oracle",
+    description:
+      "When scanning /challenge/59 or /challenge/challenge-59, the walkthrough documents CHALLENGE59_SLACK_WEBHOOK_URL with double base64 obfuscation to bypass secret scanning — route-specific challenge-59 CI/CD Slack webhook oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-59 Slack Webhook URL walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge59SlackWebhookRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-59 is intentional — never store Slack webhook URLs in environment variables, even when obfuscated.",
+      steps: [
+        "Store webhook URLs in a secrets manager, not plaintext environment variables.",
+        "Rotate Slack webhooks when employees leave or credentials may be exposed.",
+        "Do not rely on base64 encoding as protection against secret scanners."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-59 route documents obfuscated Slack webhook URLs in CHALLENGE59_SLACK_WEBHOOK_URL. Show remediation for CI/CD webhook secret management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-register-seller-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop register-seller SSTI route live oracle (PWN-040)",
+    description:
+      "When scanning /register-seller, seller registration enables SSTI via GET /seller/preview?template= — route-specific PWN-040 seller preview template injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop seller registration leads to exploitable EJS template injection on /seller/preview.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopRegisterSellerSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to template render functions — Pwnshop PWN-040 is intentional lab software.",
+      steps: [
+        "Use a logic-less template engine or sandbox EJS without arbitrary code execution.",
+        "Validate and sanitize all template inputs server-side.",
+        "Require authentication and authorization before seller preview endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our Pwnshop /register-seller route enables seller SSTI via /seller/preview?template=. Show EJS template injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
