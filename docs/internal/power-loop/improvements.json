@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-catalog-fallback-oracle-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: AI_SECURITY_PLATFORM_CATALOG_FALLBACK when Vercel 403 blocks /login; api-security routeRe maps to /challenges/rate-limiting|insecure-passwords; open-redirect findings 2→3 (+ai-security-open-redirect-route-live-oracle); privacy-policy 2→3; rate-limiting 2→3 (+ai-security-api-security-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-request-loan-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankRequestLoanRouteLiveOracle + negative-amount-route on /request_loan|/api/v1/loans/apply; vulnbank.org/api/v1/loans/apply findings 25→27 (+route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-idor-xss-open-redirect-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ai-security idor/xss/open-redirect/privacy-policy/rate-limiting + vulnbank loans/apply + ist-edu register to discovery queue front; benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-30-generic-oracle-fix",
       "status": "shipped",
