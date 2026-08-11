@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T10:05:00.000Z",
+  "updated_at": "2026-08-11T11:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-38",
+      "source": "OWASP WrongSecrets — challenge-38 Git notes metadata oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-39",
+      "source": "OWASP WrongSecrets — challenge-39 AES filename-key crypto oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1027",
+      "source": "Web Security Learning Labs — public CSR training modules (catalog extension past 1026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1028",
+      "source": "Web Security Learning Labs — public CSR training modules (catalog extension past 1026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/ai-phishing",
+      "source": "AI Security Platform — AI-assisted phishing CWE-1021 challenge route (challenges hub)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1024",
       "source": "Web Security Learning Labs — public CSR training modules (catalog extension past 1023)",
