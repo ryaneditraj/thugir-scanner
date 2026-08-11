@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-1 confirms Git hardcoded password walkthrough (grep -r password, git-secrets); wrongsecrets.herokuapp.com/challenge/challenge-1 findings 13→14 (+wrongsecrets-challenge-1-git-hardcoded-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-2-application-properties-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-2 confirms Spring Boot application.properties secret walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-2 findings 13→14 (+wrongsecrets-challenge-2-application-properties-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-3-docker-env-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-3 confirms Docker ENV based password + docker history --no-trunc walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-3 findings 13→14 (+wrongsecrets-challenge-3-docker-env-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ai-security-platform-iota.vercel.app",
       "slug": "ai-security-catalog-fallback-oracle-reliability",
       "status": "shipped",

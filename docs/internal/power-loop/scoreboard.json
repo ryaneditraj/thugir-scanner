@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T08:30:00.000Z",
+  "updated_at": "2026-08-11T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2775,
-  "total_findings": 27516,
+  "total_sites_scanned": 2781,
+  "total_findings": 27619,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1989,
-  "discovery_findings": 23240,
-  "improvements_shipped": 1187,
-  "last_run": "2026-08-11T08:30:00.000Z",
+  "discovery_urls_added": 1992,
+  "discovery_findings": 23347,
+  "improvements_shipped": 1190,
+  "last_run": "2026-08-11T09:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,19 +48,20 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (46 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (47 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "focus": "AI Security catalog fallback for Vercel 403 + vulnbank loan route oracles + idor/xss/open-redirect queue drain",
+      "focus": "WrongSecrets challenge 1-3 route oracles + ai-security idor/xss first queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "ai-security-platform-iota.vercel.app/challenges/open-redirect: 2→3 findings — ai-security-catalog-fallback-oracle-reliability",
-      "ai-security-platform-iota.vercel.app/challenges/privacy-policy: 2→3 findings — ai-security-privacy-policy-route-live-oracle via catalog fallback",
-      "ai-security-platform-iota.vercel.app/challenges/rate-limiting: 2→3 findings — ai-security-api-security-route-live-oracle (rate-limiting hub)",
-      "vulnbank.org/api/v1/loans/apply: 25→27 findings — vulnbank-request-loan-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-1: 13→14 findings — wrongsecrets-challenge-1-git-hardcoded-route-live-oracle shipped",
+      "wrongsecrets.herokuapp.com/challenge/challenge-2: 13→14 findings — wrongsecrets-challenge-2-application-properties-route-live-oracle shipped",
+      "wrongsecrets.herokuapp.com/challenge/challenge-3: 13→14 findings — wrongsecrets-challenge-3-docker-env-route-live-oracle shipped",
+      "ai-security-platform-iota.vercel.app/challenges/idor: 7 findings (+ai-security-idor-route-live-oracle via catalog fallback)",
+      "ai-security-platform-iota.vercel.app/challenges/xss: 7 findings (+ai-security-xss-route-live-oracle via catalog fallback)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -70,14 +71,13 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
-    "ai-security-platform-iota.vercel.app/challenges/open-redirect": 3,
-    "ai-security-platform-iota.vercel.app/challenges/privacy-policy": 3,
-    "ai-security-platform-iota.vercel.app/challenges/rate-limiting": 3,
+    "juice-shop.herokuapp.com": 47,
+    "wrongsecrets.herokuapp.com/challenge/challenge-1": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-2": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-3": 14,
+    "ai-security-platform-iota.vercel.app/challenges/idor": 7,
+    "ai-security-platform-iota.vercel.app/challenges/xss": 7,
     "vulnbank.org/api/v1/loans/apply": 27,
-    "wrongsecrets.herokuapp.com/challenge/challenge-30": 14,
-    "ist-edu-bd.vercel.app/labs/csrf": 10,
-    "brokencrystals.com/api/goto": 72,
     "pwnshop.ctfsecurity.com/admin/security": 46,
     "ssrf.vulnlab.dev/metadata-aws": 15
   }
