@@ -30149,6 +30149,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-52-buildx-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-52 Docker Buildx secrets route live oracle",
+    description:
+      "When scanning /challenge/52 or /challenge/challenge-52, the walkthrough documents Docker Buildx --secret misconfiguration with exposed secrets in docker-create.sh and var/run/secrets2/secret.txt — route-specific challenge-52 Buildx secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-52 Exposed Buildx Secrets walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge52BuildxSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-52 is intentional — never persist Docker Buildx --secret values into the container filesystem.",
+      steps: [
+        "Use BuildKit secrets only during build steps without writing to image layers.",
+        "Avoid hardcoding $SECRET_VALUE in docker-create.sh or build scripts.",
+        "Rotate credentials exposed in container filesystems or build artifacts."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-52 route documents Docker Buildx --secret exposure in docker-create.sh. Show remediation for secure Buildx secret handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-53-debugging-container-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-53 debugging container route live oracle",
+    description:
+      "When scanning /challenge/53 or /challenge/challenge-53, the walkthrough documents Kubernetes debugging sidecar misconfiguration with secret-challenge53.yml and GDB memory extraction — route-specific challenge-53 debugging container leak oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-53 Debugging Container Leak walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge53DebuggingContainerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-53 is intentional — disable debugging sidecars and memory inspection in production Kubernetes pods.",
+      steps: [
+        "Restrict kubectl debug/ephemeral container permissions in production namespaces.",
+        "Avoid storing secrets in process memory when debugging tools are accessible.",
+        "Use pod security standards to block privileged debugging containers."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-53 route documents debugging sidecar secret extraction via GDB. Show remediation for Kubernetes debugging access controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-54-gitignore-secret-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-54 .gitignore secret route live oracle",
+    description:
+      "When scanning /challenge/54 or /challenge/challenge-54, the walkthrough documents AES-256-CBC encrypted secrets hidden in .gitignore file comments — route-specific challenge-54 gitignore secret oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-54 .gitignore Secret Challenge walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge54GitignoreSecretRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-54 is intentional — never store secrets (even encrypted) in .gitignore comments or config files.",
+      steps: [
+        "Use secret managers instead of embedding keys in repository files.",
+        "Scan .gitignore and dotfiles for accidental secret comments in CI.",
+        "Rotate any credentials that were ever committed or commented in source control."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-54 route documents AES-256-CBC secrets in .gitignore comments. Show remediation for preventing secrets in configuration files.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
