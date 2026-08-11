@@ -64153,6 +64153,37 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
     ],
     note: "AI Security Platform admin-console challenge — cookie-based admin authentication bypass without valid credentials"
+  },
+  "supply-chain": {
+    routeRe: /\/challenges\/(?:supply-chain|vulnerable-deps|hacked-npm-packages)\b/i,
+    markers: [
+      { label: "Supply Chain challenge route", re: /\/challenges\/(?:supply-chain|vulnerable-deps|hacked-npm-packages)/i },
+      { label: "Supply Chain Attack training module", re: /Supply Chain Attack|Hacked npm Packages|Vulnerable npm Deps/i },
+      { label: "Supply Chain challenge category", re: /Supply Chain/i },
+      {
+        label: "typosquatting or dependency tampering",
+        re: /typosquat|dependency confusion|malicious package|compromised npm/i
+      }
+    ],
+    note: "AI Security Platform supply-chain challenge — dependency tampering, typosquatting, and compromised npm package training modules"
+  },
+  "security-headers": {
+    routeRe: /\/challenges\/security-headers\b/i,
+    markers: [
+      { label: "Security Headers challenge route", re: /\/challenges\/security-headers/i },
+      { label: "Security Headers training module", re: /Security Headers|CSP|X-Frame-Options|HSTS/i },
+      { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
+    ],
+    note: "AI Security Platform security-headers challenge — missing or misconfigured CSP, HSTS, and frame-busting headers"
+  },
+  "insecure-passwords": {
+    routeRe: /\/challenges\/insecure-passwords\b/i,
+    markers: [
+      { label: "Password Storage challenge route", re: /\/challenges\/insecure-passwords/i },
+      { label: "Password Storage training module", re: /Password Storage|plaintext password|weak hash/i },
+      { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
+    ],
+    note: "AI Security Platform insecure-passwords challenge — plaintext or weak password storage in the Next.js workshop"
   }
 };
 
@@ -64212,6 +64243,82 @@ const aiSecuritySupabaseDataRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityAdminConsoleRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "admin-console");
+
+const aiSecuritySupplyChainRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "supply-chain");
+
+const aiSecuritySecurityHeadersRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "security-headers");
+
+const aiSecurityInsecurePasswordsRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "insecure-passwords");
+
+async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
+  const doc = await ctx.probe.get(loginUrl, { maxBytes: 65536, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const chunks = [...doc.body.matchAll(/src="(\/_next\/static\/chunks\/[^"]+)"/g)].map((m) => m[1]);
+  for (const chunk of chunks) {
+    const chunkUrl = new URL(chunk, AI_SECURITY_PLATFORM_HOME).toString();
+    const chunkDoc = await ctx.probe.get(chunkUrl, { maxBytes: 65536, timeoutMs: 12000 });
+    if (chunkDoc.status < 200 || chunkDoc.status >= 400) continue;
+    const m = chunkDoc.body.match(/createServerReference\("([a-f0-9]+)"[^"]*"signIn"/);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+const aiSecurityRateLimitingBruteforceLiveOracle: Rule = async (ctx) => {
+  if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/rate-limiting|\/login\b/i.test(pageUrl)) return NEGATIVE;
+
+  const actionId = await aiSecurityExtractSignInActionId(ctx);
+  if (!actionId) return NEGATIVE;
+
+  const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
+  const attempts = 6;
+  let acceptedAttempts = 0;
+
+  for (let i = 0; i < attempts; i++) {
+    const body = JSON.stringify([
+      { email: `thugir-brute-${i}@probe.example`, password: `wrong${i}` }
+    ]);
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body,
+      headers: {
+        "Content-Type": "text/plain;charset=UTF-8",
+        Accept: "text/x-component",
+        "Next-Action": actionId
+      },
+      maxBytes: 4096,
+      timeoutMs: 12000
+    });
+    if (doc.status === 429) return NEGATIVE;
+    if (/too many|rate.?limit|locked out|try again later/i.test(doc.body)) return NEGATIVE;
+    if (
+      doc.status >= 200 &&
+      doc.status < 500 &&
+      /error|invalid|fetch failed|incorrect/i.test(doc.body)
+    ) {
+      acceptedAttempts++;
+    }
+  }
+
+  if (acceptedAttempts < attempts) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: loginUrl,
+      attempts,
+      actionId: actionId.slice(0, 12) + "…",
+      scannedUrl: pageUrl,
+      note: "AI Security Platform signIn server action accepts rapid failed login attempts without HTTP 429 or lockout — brute-force rate-limiting oracle"
+    }
+  };
+};
 
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
@@ -70728,6 +70835,48 @@ const istEduNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeNewsletterCsrfStateChange(ctx: RuleContext): Promise<RuleResult | null> {
+  const newsletterUrl = new URL("/api/newsletter", ctx.origin).toString();
+  const probeEmail = `thugir-csrf-probe-${Date.now()}@example.com`;
+  const doc = await ctx.probe.get(newsletterUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: probeEmail }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/Subscribed|Thank you for subscribing/i.test(doc.body)) return null;
+  if (!doc.body.includes(probeEmail)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: newsletterUrl,
+      probeEmail,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "POST /api/newsletter subscribes email without CSRF token or session — state-changing CSRF training oracle"
+    }
+  };
+}
+
+const istEduCsrfStateChangeLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/csrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeNewsletterCsrfStateChange(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /labs/csrf route scan — POST /api/newsletter subscribes without anti-CSRF token — cross-site request forgery state-change oracle"
+    }
+  };
+};
+
 const dvwuCsrfNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -73697,6 +73846,10 @@ export const RULES: Record<string, Rule> = {
   aiSecurityLeakedConfigRouteLiveOracle,
   aiSecuritySupabaseDataRouteLiveOracle,
   aiSecurityAdminConsoleRouteLiveOracle,
+  aiSecuritySupplyChainRouteLiveOracle,
+  aiSecuritySecurityHeadersRouteLiveOracle,
+  aiSecurityInsecurePasswordsRouteLiveOracle,
+  aiSecurityRateLimitingBruteforceLiveOracle,
   juiceShopForgottenBackupDisclosure,
   juiceShopForgottenBackupRouteLiveOracle,
   juiceShopProductsSearchSqliRouteLiveOracle,
@@ -74517,6 +74670,7 @@ export const RULES: Record<string, Rule> = {
   istEduDashboardIdorRouteLiveOracle,
   dvwuDashboardIdorRouteLiveOracle,
   istEduNewsletterCrlfRouteLiveOracle,
+  istEduCsrfStateChangeLiveOracle,
   dvwuPortalSqliRouteLiveOracle,
   dvwuSearchXssRouteLiveOracle,
   dvwuNoticesLfiRouteLiveOracle,
