@@ -29464,6 +29464,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-22-rust-binary-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-22 Rust binary route live oracle",
+    description:
+      "When scanning /challenge/22 or /challenge/challenge-22, the walkthrough documents secrets embedded in a Rust native binary (wrongsecrets-rust) — route-specific challenge-22 reverse-engineering oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-22 Rust binary secret extraction walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge22RustBinaryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-22 is intentional — never embed secrets in compiled binaries.",
+      steps: [
+        "Store secrets in secure vaults or environment variables at runtime, not in binaries.",
+        "Assume Rust release binaries expose string literals discoverable via Ghidra or radare2.",
+        "Rotate any credentials that were ever embedded in shipped binaries."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-22 route documents secrets in a Rust binary. Show remediation for secrets in native compiled applications.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
