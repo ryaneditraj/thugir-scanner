@@ -2511,6 +2511,7 @@ const DEEP_RULES = new Set<string>([
   "istEduSearchXssRouteLiveOracle",
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
+  "istEduRegisterAuthSqliRouteLiveOracle",
   "istEduDashboardIdorRouteLiveOracle",
   "dvwuDashboardIdorRouteLiveOracle",
   "istEduNewsletterCrlfRouteLiveOracle",
@@ -2562,6 +2563,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge20CplusBinaryRouteLiveOracle",
   "wrongsecretsChallenge21GolangBinaryRouteLiveOracle",
   "wrongsecretsChallenge22RustBinaryRouteLiveOracle",
+  "wrongsecretsChallenge23Base64FrontendRouteLiveOracle",
+  "wrongsecretsChallenge24HmacCryptographyRouteLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle",
   "wrongsecretsMcpExecuteCommandLiveOracle",
@@ -7298,7 +7301,7 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
   }
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/portal", "/search", "/dashboard", "/notices", "/login"]) {
+  for (const p of ["/portal", "/search", "/dashboard", "/notices", "/login", "/register"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;

@@ -29490,6 +29490,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-23 Base64 front-end route live oracle",
+    description:
+      "When scanning /challenge/23 or /challenge/challenge-23, the walkthrough documents Base64-obfuscated secrets in front-end code (Secrets in front-end code part 2) — route-specific challenge-23 client-side secret oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-23 Base64 front-end secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge23Base64FrontendRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-23 is intentional — never obfuscate secrets with Base64 in client-side code.",
+      steps: [
+        "Never store secrets in front-end bundles or HTML, even with Base64 encoding.",
+        "Fetch sensitive credentials only after authentication from server-side vaults.",
+        "Rotate any credentials that were ever embedded in client-side code."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-23 route documents Base64-encoded secrets in front-end HTML. Show remediation for client-side secret storage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-24 HMAC cryptography route live oracle",
+    description:
+      "When scanning /challenge/24 or /challenge/challenge-24, the walkthrough documents HMAC key recovery from weak cryptography (NIST HMAC_SHA1 spec) — route-specific challenge-24 cryptography oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-24 HMAC key walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge24HmacCryptographyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-24 is intentional — use strong HMAC keys and never expose key material in source.",
+      steps: [
+        "Generate HMAC keys with cryptographically secure random sources.",
+        "Store HMAC keys in secret managers, not application source or configs.",
+        "Rotate HMAC keys if they were ever committed or logged."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-24 route documents recoverable HMAC keys. Show remediation for weak cryptography in HMAC implementations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -37287,6 +37339,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/portal route accepts SQL injection in the username field for authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-register-auth-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu register/login SQLi auth bypass route live oracle",
+    description:
+      "When scanning /register or /login on ist-edu-bd.vercel.app, POST /api/portal with admin' OR '1'='1 bypasses authentication — route-specific SQL injection login oracle for auth pages.",
+    impactOneline:
+      "Auth registration and login pages on vulnerable training portals still expose SQLi on backend /api/portal without route-specific confirmation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduRegisterAuthSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on /api/portal.",
+        "Return generic login failure messages without SQL error details.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register page links to a /api/portal endpoint vulnerable to SQL injection auth bypass. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },
