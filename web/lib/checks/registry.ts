@@ -61338,6 +61338,135 @@ const wrongsecretsChallenge24HmacCryptographyRouteLiveOracle: Rule = async (ctx)
   };
 };
 
+const wrongsecretsChallenge25Web3SmartContractLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-25", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Web3|Web3<\/strong>/i.test(body) ||
+    !/Secrets in smart contracts part 1|read the variable named secret from the contract/i.test(body) ||
+    !/0x8b72f7cbAD50620c46219ad676Ad9d3a5A273587/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Secrets in smart contracts part 1[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Web3 smart contract secrets challenge",
+      note: "OWASP WrongSecrets challenge-25 documents on-chain public secret storage — Web3 smart contract oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge25Web3SmartContractRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?25\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge25Web3SmartContractLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-25 route scan — Web3 smart contract part 1 confirms on-chain secret exposure walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge26Web3SmartContractLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-26", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Web3|Web3<\/strong>/i.test(body) ||
+    !/Secrets in smart contracts part 2|eth_getStorageAt/i.test(body) ||
+    !/0xCe793D588cd1Ee091290b4A1aE1D586B2a748eB4/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Secrets in smart contracts part 2[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Web3 overwritten smart contract secrets challenge",
+      note: "OWASP WrongSecrets challenge-26 documents recoverable overwritten on-chain secrets — Web3 storage history oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge26Web3SmartContractRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?26\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge26Web3SmartContractLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-26 route scan — Web3 smart contract part 2 confirms overwritten on-chain secret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge27Web3SmartContractLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-27", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Web3|Web3<\/strong>/i.test(body) ||
+    !/Secrets in smart contracts part 3|guess method/i.test(body) ||
+    !/0x8318d477f4BCae5a80BEA22E3c040cf8BaaFFe8B/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Secrets in smart contracts part 3[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Web3 hashed smart contract input secrets challenge",
+      note: "OWASP WrongSecrets challenge-27 documents guessable hashed contract inputs — Web3 transaction input oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge27Web3SmartContractRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?27\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge27Web3SmartContractLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-27 route scan — Web3 smart contract part 3 confirms hashed input secret walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -73137,6 +73266,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge23Base64FrontendRouteLiveOracle,
   wrongsecretsChallenge24HmacCryptographyLiveOracle,
   wrongsecretsChallenge24HmacCryptographyRouteLiveOracle,
+  wrongsecretsChallenge25Web3SmartContractLiveOracle,
+  wrongsecretsChallenge25Web3SmartContractRouteLiveOracle,
+  wrongsecretsChallenge26Web3SmartContractLiveOracle,
+  wrongsecretsChallenge26Web3SmartContractRouteLiveOracle,
+  wrongsecretsChallenge27Web3SmartContractLiveOracle,
+  wrongsecretsChallenge27Web3SmartContractRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
