@@ -29542,6 +29542,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-25 Web3 smart contract route live oracle",
+    description:
+      "When scanning /challenge/25 or /challenge/challenge-25, the walkthrough documents reading a public on-chain secret variable from an EVM smart contract — route-specific challenge-25 Web3 oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-25 on-chain secret storage walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge25Web3SmartContractRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-25 is intentional — never store secrets in public smart contract state.",
+      steps: [
+        "Keep secrets off-chain in secret managers or encrypted off-chain storage.",
+        "Treat all on-chain data as permanently public and world-readable.",
+        "Rotate any credentials that were ever committed to a blockchain."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-25 route documents secrets stored in public smart contract variables. Show remediation for Web3 secret management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-26 Web3 smart contract route live oracle",
+    description:
+      "When scanning /challenge/26 or /challenge/challenge-26, the walkthrough documents recovering overwritten on-chain secrets via historical storage (eth_getStorageAt) — route-specific challenge-26 Web3 oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-26 overwritten on-chain secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge26Web3SmartContractRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-26 is intentional — overwriting on-chain secrets does not erase historical storage.",
+      steps: [
+        "Never rely on overwriting blockchain storage to remove secrets.",
+        "Assume all prior contract state is permanently queryable via archive nodes.",
+        "Rotate compromised secrets and move sensitive logic off-chain."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-26 route documents recoverable overwritten smart contract secrets. Show remediation for Web3 storage history risks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-27 Web3 smart contract route live oracle",
+    description:
+      "When scanning /challenge/27 or /challenge/challenge-27, the walkthrough documents guessable secrets passed as smart contract inputs (guess method) — route-specific challenge-27 Web3 oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-27 hashed input secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge27Web3SmartContractRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-27 is intentional — transaction inputs to smart contracts are permanently public.",
+      steps: [
+        "Never pass raw secrets as smart contract function arguments.",
+        "Use off-chain authorization with signed attestations instead of on-chain secret checks.",
+        "Rotate any secrets that were ever submitted in contract transactions."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-27 route documents guessable secrets in smart contract inputs. Show remediation for Web3 transaction input exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
