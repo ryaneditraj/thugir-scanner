@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T06:12:00.000Z",
+  "updated_at": "2026-08-11T06:40:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -20,10 +20,10 @@
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1967,
-  "discovery_findings": 23029,
-  "improvements_shipped": 1190,
-  "last_run": "2026-08-11T06:12:00.000Z",
+  "discovery_urls_added": 1970,
+  "discovery_findings": 23091,
+  "improvements_shipped": 1195,
+  "last_run": "2026-08-11T06:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 580,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark category gaps"
+      "note": "Stable 6/6 recall (47 findings); no benchmark misses — teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 8,
-      "findings": 126,
-      "focus": "queue drain — brokencrystals signup mass-assignment + pwnshop CSS settings + fauxbank transactions; demo.owasp-juice.shop routes unreachable (5 errors)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 5,
+      "findings": 62,
+      "focus": "brokencrystals signup mass-assignment route + pwnshop search/filters PP OTP priming + wrongsecrets challenges 28-30",
+      "improvements_shipped_this_run": 5
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "brokencrystals.com/api/auth/signup: 68 findings — signup mass-assignment / broken auth oracle surface",
-      "pwnshop.ctfsecurity.com/api/settings/css: 44 findings — CSS injection / settings API hub",
-      "pentest-fauxbank.vercel.app/transactions: 14 findings — IDOR transaction history training surface",
-      "demo.owasp-juice.shop/*: 5 queue URLs unreachable this run (cold start / rate limit)"
+      "brokencrystals.com/api/auth/signup: 69→70 findings — brokencrystals-signup-route-live-oracle shipped (isAdmin:true mass-assignment on signup API route)",
+      "pwnshop.ctfsecurity.com/search/filters: 21→46 findings — OTP priming enables pwnshop-prototype-pollution-search-filters-route-live-oracle (PWN-041)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-28: 13→14 findings — closed GitHub issue AWS secret route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-29: 13→14 findings — screenshot log leak in GitHub issue route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-30: 11→12 findings — localStorage front-end secret route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "demo.owasp-juice.shop REST routes: unreachable in cloud agent (5 discovery errors)",
-      "testphp.vulnweb.com route oracles queued (listproducts/showimage/userinfo) — pending queue drain",
-      "juice-shop.demo.escape.tech REST route oracles queued — pending queue drain",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "pwnshop.ctfsecurity.com/api/settings/css: endpoint 404 on live deploy — SSTI chain oracle deferred",
+      "pwnshop.ctfsecurity.com/wishlist/1: 404 without auth — wishlist IDOR route oracle still absent",
+      "pentest-fauxbank.vercel.app/transactions: route 404 — transactions IDOR oracle deferred"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "brokencrystals.com/api/auth/signup": 68,
-    "pwnshop.ctfsecurity.com/api/settings/css": 44,
-    "pentest-fauxbank.vercel.app/transactions": 14,
+    "brokencrystals.com/api/auth/signup": 70,
+    "pwnshop.ctfsecurity.com/search/filters": 46,
+    "wrongsecrets.herokuapp.com/challenge/challenge-28": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-29": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-30": 12,
     "pwnshop.ctfsecurity.com/apply-coupon": 45,
-    "wrongsecrets.herokuapp.com/challenge/challenge-25": 14
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }

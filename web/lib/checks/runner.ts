@@ -2568,6 +2568,9 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge25Web3SmartContractRouteLiveOracle",
   "wrongsecretsChallenge26Web3SmartContractRouteLiveOracle",
   "wrongsecretsChallenge27Web3SmartContractRouteLiveOracle",
+  "wrongsecretsChallenge28GithubIssueRouteLiveOracle",
+  "wrongsecretsChallenge29ScreenshotLogRouteLiveOracle",
+  "wrongsecretsChallenge30LocalStorageRouteLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle",
   "wrongsecretsMcpExecuteCommandLiveOracle",
@@ -2800,6 +2803,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsFileLfiLiveOracle",
   "brokencrystalsMassAssignmentLiveOracle",
   "brokencrystalsMassAssignmentPutLiveOracle",
+  "brokencrystalsSignupRouteLiveOracle",
   "brokencrystalsAdminpermissionRouteLiveOracle",
   "brokencrystalsSearchAdminMassAssignmentRouteLiveOracle",
   "brokencrystalsProcessNumbersLiveOracle",
@@ -8889,7 +8893,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   home = await warmupJuiceShopHome(target.toString(), home);
   if (
     /pwnshop|ctfsecurity\.com/i.test(targetInput) &&
-    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(targetInput) &&
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput) &&
     (home.status === 404 || home.body.length < 512)
   ) {
     try {
@@ -10175,7 +10179,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let pwnshopBootstrap = "";
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     const needsBootstrap =
-      /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(targetInput) ||
+      /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput) ||
       !/PWN-\d{3}|OWASP Top 10 2025/i.test(`${home.body}\n${[...pages, ...scripts].map((p) => p.body).join("\n")}`);
     if (needsBootstrap) {
       const bootstrapUrls = [
@@ -10244,7 +10248,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const detection = detectPlatform(home, combined);
   if (
     /pwnshop|ctfsecurity\.com/i.test(origin) &&
-    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b/i.test(targetInput)
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput)
   ) {
     clearPwnshopOtpSessionForProbe(probe);
     await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
@@ -10352,7 +10356,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
-        /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b/i.test(targetInput) &&
+        /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/search\/filters/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
         return -2;
@@ -10389,6 +10393,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/signup\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-signup")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/search\/filters/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-prototype-pollution-search-filters")
+      )
+        return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/mcp\/(?:process_numbers|spawn_process|get_config|tools)\b/i.test(targetInput) &&

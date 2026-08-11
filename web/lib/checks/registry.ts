@@ -32594,7 +32594,7 @@ export async function primePwnshopOtpSessionForDeepScan(
   home: FetchedDoc
 ): Promise<void> {
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
-  if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b/i.test(scanUrl)) return;
+  if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b|\/search\/filters/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   const primeWaitsMs = /\/profile\/upload-avatar/i.test(scanUrl)
     ? [5000, 8000, 11000, 14000, 17000]
@@ -61467,6 +61467,135 @@ const wrongsecretsChallenge27Web3SmartContractRouteLiveOracle: Rule = async (ctx
   };
 };
 
+const wrongsecretsChallenge28GithubIssueLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-28", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Documentation|Documentation<\/strong>/i.test(body) ||
+    !/closed GitHub issue|secret in a closed GitHub issue/i.test(body) ||
+    !/AWS Secret key|new <code>AWS Secret key<\/code>/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/closed GitHub issue[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "GitHub issue secret exposure challenge",
+      note: "OWASP WrongSecrets challenge-28 documents AWS secret key leaked in a closed GitHub issue — documentation secret exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge28GithubIssueRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?28\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge28GithubIssueLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-28 route scan — closed GitHub issue AWS secret key walkthrough confirms documentation secret exposure"
+    }
+  };
+};
+
+const wrongsecretsChallenge29ScreenshotLogLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-29", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Documentation|Documentation<\/strong>/i.test(body) ||
+    !/screenshot of a secret|screenshots of logs in a GitHub issue/i.test(body) ||
+    !/closed GitHub issue/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/screenshot of a secret[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "GitHub screenshot log leak challenge",
+      note: "OWASP WrongSecrets challenge-29 documents secret leaked via screenshot in a closed GitHub issue — documentation log exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge29ScreenshotLogRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?29\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge29ScreenshotLogLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-29 route scan — screenshot log leak in closed GitHub issue walkthrough confirms documentation secret exposure"
+    }
+  };
+};
+
+const wrongsecretsChallenge30LocalStorageLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-30", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Front-end|Front-end<\/strong>/i.test(body) ||
+    !/localStorage for secret information|key "secret"/i.test(body) ||
+    !/Applications section of the developer console/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/localStorage for secret information[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "localStorage secret exposure challenge",
+      note: "OWASP WrongSecrets challenge-30 documents secrets stored in browser localStorage — front-end client-side secret exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge30LocalStorageRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?30\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge30LocalStorageLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-30 route scan — localStorage secret walkthrough confirms front-end client-side secret exposure"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -66932,6 +67061,23 @@ const brokencrystalsSearchAdminMassAssignmentRouteLiveOracle: Rule = async (ctx)
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Broken Crystals /api/users/search/admin route scan — POST /api/users/basic isAdmin:true then GET adminpermission confirms mass-assignment privilege escalation"
+    }
+  };
+};
+
+const brokencrystalsSignupRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/signup\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/signup route scan — POST /api/users/basic isAdmin:true then GET adminpermission confirms mass-assignment privilege escalation on signup API route"
     }
   };
 };
@@ -73272,6 +73418,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge26Web3SmartContractRouteLiveOracle,
   wrongsecretsChallenge27Web3SmartContractLiveOracle,
   wrongsecretsChallenge27Web3SmartContractRouteLiveOracle,
+  wrongsecretsChallenge28GithubIssueLiveOracle,
+  wrongsecretsChallenge28GithubIssueRouteLiveOracle,
+  wrongsecretsChallenge29ScreenshotLogLiveOracle,
+  wrongsecretsChallenge29ScreenshotLogRouteLiveOracle,
+  wrongsecretsChallenge30LocalStorageLiveOracle,
+  wrongsecretsChallenge30LocalStorageRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
@@ -73447,6 +73599,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileLfiLiveOracle,
   brokencrystalsMassAssignmentLiveOracle,
   brokencrystalsMassAssignmentPutLiveOracle,
+  brokencrystalsSignupRouteLiveOracle,
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsSearchAdminMassAssignmentRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,

@@ -29620,6 +29620,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-28-github-issue-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-28 GitHub issue route live oracle",
+    description:
+      "When scanning /challenge/28 or /challenge/challenge-28, the walkthrough documents an AWS secret key leaked in a closed GitHub issue — route-specific challenge-28 documentation secret exposure oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-28 closed GitHub issue secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge28GithubIssueRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-28 is intentional — never post secrets in GitHub issues, even when closed.",
+      steps: [
+        "Rotate any credentials that appeared in issue comments or attachments.",
+        "Use private secret managers instead of issue trackers for credential sharing.",
+        "Scan closed issues for accidental secret leaks before archiving."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-28 route documents AWS keys leaked in closed GitHub issues. Show remediation for issue-tracker secret hygiene.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-29 screenshot log route live oracle",
+    description:
+      "When scanning /challenge/29 or /challenge/challenge-29, the walkthrough documents secrets leaked via log screenshots in closed GitHub issues — route-specific challenge-29 documentation oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-29 screenshot log leak walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge29ScreenshotLogRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-29 is intentional — never post log screenshots containing secrets in GitHub issues.",
+      steps: [
+        "Redact secrets from logs before attaching screenshots to issues.",
+        "Use markdown code blocks with redaction for log excerpts instead of screenshots.",
+        "Rotate credentials that appeared in any posted log images."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-29 route documents secrets in log screenshots on GitHub issues. Show remediation for safe log sharing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-30-localstorage-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-30 localStorage route live oracle",
+    description:
+      "When scanning /challenge/30 or /challenge/challenge-30, the walkthrough documents secrets stored in browser localStorage — route-specific challenge-30 front-end secret exposure oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-30 localStorage secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge30LocalStorageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-30 is intentional — never store secrets in localStorage or other client-side persistence.",
+      steps: [
+        "Keep session secrets server-side with HttpOnly cookies.",
+        "Avoid storing API keys or tokens in localStorage, sessionStorage, or IndexedDB.",
+        "Rotate any credentials that were ever persisted in browser storage."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-30 route documents secrets in browser localStorage. Show remediation for client-side secret storage.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -33750,6 +33828,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/users/one/{email}/adminpermission endpoint confirms mass-assignment escalation. Show remediation for NestJS user creation and admin probes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-signup-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals signup API mass-assignment route live oracle",
+    description:
+      "When scanning /api/auth/signup, POST /api/users/basic with isAdmin:true and GET adminpermission confirms privilege escalation — route-specific signup mass-assignment oracle.",
+    impactOneline:
+      "Route scans on /api/auth/signup need live mass-assignment confirmation, not just generic API hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSignupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable user attributes on signup — Broken Crystals is intentional lab software.",
+      steps: [
+        "Use DTOs or strong-parameter filtering to block isAdmin on create/update.",
+        "Require authentication and authorization before exposing adminpermission endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/signup route scan confirms mass-assignment privilege escalation via isAdmin:true. Show NestJS signup hardening.",
     version: 1,
     enabled: true
   },
