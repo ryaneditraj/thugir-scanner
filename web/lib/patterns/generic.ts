@@ -30718,7 +30718,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform broken API security challenge route live oracle",
     description:
-      "When scanning /challenges/api-security, the platform Auth & API catalog documents IDOR (CWE-639), cookie auth bypass, missing rate limiting, and leaked secrets (CWE-200) — route-specific broken API security oracle.",
+      "When scanning /challenges/rate-limiting, /challenges/insecure-passwords, or Auth & API hub routes, the platform catalog documents IDOR (CWE-639), cookie auth bypass, missing rate limiting, and password storage flaws — route-specific broken API security oracle.",
     impactOneline:
       "Route-specific oracle confirms Auth & API training modules without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
