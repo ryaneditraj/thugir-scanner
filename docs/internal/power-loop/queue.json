@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T19:10:00.000Z",
+  "updated_at": "2026-08-11T20:23:09.430Z",
   "discovery_urls": [
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/products/search?q=test",
+      "source": "OWASP Juice Shop — SQLi product search oracle GET /rest/products/search (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/user/login",
+      "source": "OWASP Juice Shop — login SQLi oracle POST /rest/user/login (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/memories",
+      "source": "OWASP Juice Shop — memories BOLA oracle GET /rest/memories (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/chatbot/respond",
+      "source": "OWASP Juice Shop — chatbot prompt-injection oracle POST /rest/chatbot/respond (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/wallet/balance",
+      "source": "OWASP Juice Shop — wallet balance BOLA oracle GET /rest/wallet/balance (public benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
       "source": "OWASP WrongSecrets — challenge-63 cryptography oracle (Heroku demo README 63-66 range)",
