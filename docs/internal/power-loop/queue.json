@@ -1,6 +1,41 @@
 {
-  "updated_at": "2026-08-11T07:40:37.000Z",
+  "updated_at": "2026-08-11T08:00:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
+      "source": "AI Security Platform — IDOR CWE-639 challenge route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/xss",
+      "source": "AI Security Platform — XSS CWE-79 challenge route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/open-redirect",
+      "source": "AI Security Platform — open-redirect CWE-601 challenge route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/privacy-policy",
+      "source": "AI Security Platform — deceptive privacy policy CWE-1021 challenge route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/rate-limiting",
+      "source": "AI Security Platform — Auth & API brute-force rate-limiting challenge hub",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/loans/apply",
+      "source": "Vuln Bank — /api/v1/loans/apply loan request route oracle (POST /request_loan)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/register",
+      "source": "IST Edu vulnerable portal — /register SQLi auth bypass route oracle (POST /api/portal)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/labs/csrf",
       "source": "IST Edu vulnerable portal — /labs/csrf newsletter CRLF injection oracle (POST /api/newsletter)",
