@@ -61075,6 +61075,134 @@ const wrongsecretsChallenge18BadHashingRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge19CBinaryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-19", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary|Binary<\/strong>/i.test(body) ||
+    !/Hiding in binaries part 1|wrongsecrets-c(?:-arm|-linux)?|secret in a C binary/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Hiding in binaries part 1[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "C binary challenge",
+      note: "OWASP WrongSecrets challenge-19 documents secrets embedded in a C native binary — reverse-engineering secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge19CBinaryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?19\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge19CBinaryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-19 route scan — C binary challenge confirms native binary secret extraction walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge20CplusBinaryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-20", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary|Binary<\/strong>/i.test(body) ||
+    !/Hiding in binaries part 2|wrongsecrets-cplus(?:-arm|-linux)?|secret in a C\+\+ binary/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Hiding in binaries part 2[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "C++ binary challenge",
+      note: "OWASP WrongSecrets challenge-20 documents secrets embedded in a C++ native binary — reverse-engineering secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge20CplusBinaryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?20\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge20CplusBinaryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-20 route scan — C++ binary challenge confirms native binary secret extraction walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge21GolangBinaryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-21", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary|Binary<\/strong>/i.test(body) ||
+    !/Hiding in binaries part 3|wrongsecrets-golang(?:-arm|-linux)?|secret in a Go binary|the Go binary/i.test(
+      body
+    ) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Hiding in binaries part 3[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Go binary challenge",
+      note: "OWASP WrongSecrets challenge-21 documents secrets embedded in a Go native binary — reverse-engineering secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge21GolangBinaryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?21\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge21GolangBinaryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-21 route scan — Go binary challenge confirms native binary secret extraction walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -72830,6 +72958,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge17BashHistoryRouteLiveOracle,
   wrongsecretsChallenge18BadHashingLiveOracle,
   wrongsecretsChallenge18BadHashingRouteLiveOracle,
+  wrongsecretsChallenge19CBinaryLiveOracle,
+  wrongsecretsChallenge19CBinaryRouteLiveOracle,
+  wrongsecretsChallenge20CplusBinaryLiveOracle,
+  wrongsecretsChallenge20CplusBinaryRouteLiveOracle,
+  wrongsecretsChallenge21GolangBinaryLiveOracle,
+  wrongsecretsChallenge21GolangBinaryRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
