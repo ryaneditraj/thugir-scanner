@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T22:26:11.457Z",
+  "updated_at": "2026-08-11T22:36:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,19 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2731,
-  "total_findings": 26802,
+  "total_sites_scanned": 2736,
+  "total_findings": 26995,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22687,
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22880,
   "improvements_shipped": 1190,
-  "last_run": "2026-08-11T22:26:11.457Z",
+  "last_run": "2026-08-11T22:36:30.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
@@ -48,44 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku thin pass (10 findings, 1 live oracle) → staging fallback 47 findings with 33 juice-shop-* live oracles"
+      "note": "Primary Heroku awake 6/6 (47 findings, 33 juice-shop-* live oracles); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 200,
-      "focus": "pwnshop avatar/mail/orders/less/track + pentest-fauxbank register/loans/profile queue drain",
+      "urls_scanned": 5,
+      "findings": 193,
+      "focus": "juice-shop-staging REST route oracles (whoami, admin-config, track-order, basket) + escape.tech wallet/balance mirror",
       "new_urls_queued": [
-        "brokencrystals.com/api/products/latest?limit=999",
-        "juice-shop.demo.escape.tech/rest/user/login",
-        "juice-shop.demo.escape.tech/rest/products/search?q=test",
-        "juice-shop.demo.escape.tech/rest/memories",
-        "ginandjuice.shop/order/details?orderId=1"
+        "juice-shop-staging.herokuapp.com/rest/user/whoami",
+        "juice-shop-staging.herokuapp.com/rest/admin/application-configuration",
+        "juice-shop-staging.herokuapp.com/rest/track-order/1",
+        "juice-shop-staging.herokuapp.com/rest/basket/1",
+        "juice-shop.demo.escape.tech/rest/wallet/balance"
       ]
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) after Heroku primary thin pass",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: 46 findings — stored-XSS SVG upload hub",
-      "pwnshop.ctfsecurity.com/track/1: 44 findings — unauthenticated order tracking IDOR hub",
-      "pwnshop.ctfsecurity.com/api/orders/submit: 34 findings — XXE order submission hub",
-      "pentest-fauxbank.vercel.app/loans: 16 findings — loan application oracle hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — primary Heroku awake, no category gaps",
+      "juice-shop-staging.herokuapp.com/rest/user/whoami: 48 findings incl juice-shop-whoami-unauth-live-oracle",
+      "juice-shop-staging.herokuapp.com/rest/track-order/1: 48 findings incl juice-shop-track-order-idor-route-live-oracle",
+      "juice-shop-staging.herokuapp.com/rest/basket/1: 48 findings incl juice-shop-basket-idor-route-live-oracle",
+      "juice-shop.demo.escape.tech/rest/wallet/balance: 2 findings — wallet-balance-bola live oracle absent on escape.tech mirror"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "Primary juice-shop.herokuapp.com still thin on cold start (10 findings, 1 live oracle) — staging fallback required for rich oracle pass",
-      "5 new discovery URLs queued at tail — brokencrystals products/latest limit bypass + escape.tech Juice Shop mirrors + ginandjuice orderId IDOR param"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "juice-shop.demo.escape.tech/rest/wallet/balance: thin 2-finding hub — wallet-balance-bola live oracle fires on staging (48) but not escape.tech mirror",
+      "queue drain timed out at 540s on juice-shop.herokuapp.com/rest/products/search (503 primary) — staging REST routes prioritized at queue head"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 47,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 46,
-    "pwnshop.ctfsecurity.com/track/1": 44,
-    "pwnshop.ctfsecurity.com/api/orders/submit": 34,
-    "pwnshop.ctfsecurity.com/mail/1": 20,
-    "pwnshop.ctfsecurity.com/api/settings/less/imports": 20,
-    "pentest-fauxbank.vercel.app/loans": 16,
-    "pentest-fauxbank.vercel.app/register": 14,
-    "pentest-fauxbank.vercel.app/profile": 6
+    "juice-shop.herokuapp.com": 47,
+    "juice-shop-staging.herokuapp.com/rest/user/whoami": 48,
+    "juice-shop-staging.herokuapp.com/rest/track-order/1": 48,
+    "juice-shop-staging.herokuapp.com/rest/basket/1": 48,
+    "juice-shop-staging.herokuapp.com/rest/admin/application-configuration": 47,
+    "juice-shop.demo.escape.tech/rest/wallet/balance": 2
   }
 }
