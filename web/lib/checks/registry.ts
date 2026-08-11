@@ -61982,6 +61982,138 @@ const wrongsecretsChallenge42ActuatorAuditRouteLiveOracle: Rule = async (ctx) =>
   };
 };
 
+const wrongsecretsChallenge43RedditBlunderLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-43", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Documentation<\/strong>/i.test(body) ||
+    !/Reddit Blunder/i.test(body) ||
+    !/r\/owasp subreddit/i.test(body) ||
+    !/keyword ['']developer['']/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/r\/owasp subreddit[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Reddit Blunder challenge",
+      note: "OWASP WrongSecrets challenge-43 documents a secret leaked on r/owasp via Reddit search for 'developer' — documentation social-engineering oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge43RedditBlunderRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?43\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge43RedditBlunderLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-43 route scan — Reddit Blunder challenge confirms r/owasp developer-keyword documentation walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge44VaultMetadataLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-44", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Vault<\/strong>/i.test(body) ||
+    !/Vault Metadata Challenge/i.test(body) ||
+    !/secret metadata on a <code>wrongsecret<\/code> in Vault/i.test(body) ||
+    !/kv metadata get/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/kv metadata get[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Vault metadata challenge",
+      note: "OWASP WrongSecrets challenge-44 documents confidential data stored in Vault KV secret metadata for wrongsecret — Vault metadata oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge44VaultMetadataRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?44\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge44VaultMetadataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-44 route scan — Vault metadata challenge confirms kv metadata get wrongsecret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge45VaultSubkeyLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-45", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Vault<\/strong>/i.test(body) ||
+    !/Vault subkey challenge/i.test(body) ||
+    !/Hashicorp Vault/i.test(body) ||
+    !/vault kv get secret\/wrongsecret/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/vault kv get secret\/wrongsecret[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Vault subkey challenge",
+      note: "OWASP WrongSecrets challenge-45 documents Vault KV subkey policies exposing nested secret fields — Vault subkey oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge45VaultSubkeyRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?45\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge45VaultSubkeyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-45 route scan — Vault subkey challenge confirms kv get secret/wrongsecret policy walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
 
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
@@ -74290,6 +74422,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge41PasswordShuckingRouteLiveOracle,
   wrongsecretsChallenge42ActuatorAuditLiveOracle,
   wrongsecretsChallenge42ActuatorAuditRouteLiveOracle,
+  wrongsecretsChallenge43RedditBlunderLiveOracle,
+  wrongsecretsChallenge43RedditBlunderRouteLiveOracle,
+  wrongsecretsChallenge44VaultMetadataLiveOracle,
+  wrongsecretsChallenge44VaultMetadataRouteLiveOracle,
+  wrongsecretsChallenge45VaultSubkeyLiveOracle,
+  wrongsecretsChallenge45VaultSubkeyRouteLiveOracle,
   wrongsecretsChallenge36AdvancedCLiveOracle,
   wrongsecretsChallenge36AdvancedCRouteLiveOracle,
   wrongsecretsChallenge37CiCdLiveOracle,
