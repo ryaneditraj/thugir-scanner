@@ -30597,6 +30597,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-mcp62-google-sa-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "OWASP WrongSecrets MCP62 Google SA live oracle",
+    description:
+      "POST /mcp62 tools/list exposes read_google_drive_document; tools/call returns Google Drive document contents via over-privileged service account including <secret> tag — challenge-62 MCP Google SA privilege escalation oracle.",
+    impactOneline:
+      "Unauthenticated MCP server reads restricted Google Drive documents using a service account with broader permissions than the caller.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsMcp62GoogleSaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-62 is intentional — never configure MCP servers with service accounts that exceed caller authorization.",
+      steps: [
+        "Authenticate MCP tool endpoints and verify caller authorization before document access.",
+        "Scope Google Service Account permissions to the minimum required documents.",
+        "Rotate any service account keys exposed via MCP tool responses."
+      ]
+    },
+    fixPrompt:
+      "Our MCP62 server exposes read_google_drive_document with an over-privileged Google Service Account. Show remediation for MCP tool gateway authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "OWASP WrongSecrets challenge-62 MCP Google SA route live oracle",
+    description:
+      "When scanning /challenge/62 or /challenge/challenge-62, POST /mcp62 tools/call read_google_drive_document confirms Google Drive document leak via over-privileged service account — route-specific challenge-62 MCP Google SA oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-62 MCP Google Service Account privilege escalation is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge62McpGoogleSaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-62 is intentional — never configure MCP servers with service accounts that exceed caller authorization.",
+      steps: [
+        "Authenticate MCP tool endpoints and verify caller authorization before document access.",
+        "Scope Google Service Account permissions to the minimum required documents.",
+        "Rotate any service account keys exposed via MCP tool responses."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-62 route links to an MCP server that leaks Google Drive documents via service account. Show remediation for MCP authorization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-63 hardcoded AES key route live oracle",
+    description:
+      "When scanning /challenge/63 or /challenge/challenge-63, the walkthrough documents hardcoded AES-128-CBC key SuperSecretKey12 and ciphertext in the same Java source file — route-specific challenge-63 hardcoded encryption key oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-63 Hardcoded Encryption Key walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge63HardcodedAesKeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-63 is intentional — never hardcode encryption keys alongside ciphertext in source code.",
+      steps: [
+        "Store encryption keys in a secrets manager, not in application source files.",
+        "Use envelope encryption with per-secret data keys managed by KMS.",
+        "Rotate any keys that were ever hardcoded in source control."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-63 route documents hardcoded AES key SuperSecretKey12 in Java source. Show remediation for encryption key management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-64-swift-binary-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-64 Swift binary route live oracle",
+    description:
+      "When scanning /challenge/64 or /challenge/challenge-64, the walkthrough documents secret embedded as character array in wrongsecrets-swift binary recoverable via Ghidra — route-specific challenge-64 Swift binary oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-64 Swift binary walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge64SwiftBinaryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-64 is intentional — never embed secrets as string constants in compiled binaries.",
+      steps: [
+        "Fetch secrets from a secure runtime source instead of embedding in native binaries.",
+        "Use binary obfuscation only as defense-in-depth, not as a secret store.",
+        "Rotate any secrets recoverable from shipped binaries via strings or decompilation."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-64 route documents secrets in wrongsecrets-swift binary. Show remediation for native binary secret handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-chat-llm-query-live-oracle",
     platform: "generic",
     category: "Broken access control",
