@@ -29230,6 +29230,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-13-cicd-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-13 CI/CD route live oracle",
+    description:
+      "When scanning /challenge/13 or /challenge/challenge-13, the walkthrough documents CI/CD secret exfiltration via Github Actions workflow runs — route-specific challenge-13 pipeline secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-13 Github Actions secret exfiltration walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge13CicdRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-13 is intentional — restrict CI/CD secret visibility and fork PR workflows.",
+      steps: [
+        "Never expose secrets in workflow logs or debug output.",
+        "Restrict fork PR workflows from accessing repository secrets.",
+        "Audit Github Actions permissions and secret scopes regularly."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-13 route documents CI/CD secret exfiltration via Github Actions. Show remediation for pipeline secret hygiene.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-14-password-manager-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-14 Password Manager route live oracle",
+    description:
+      "When scanning /challenge/14 or /challenge/challenge-14, the walkthrough documents KeePass credentials stored in a Docker container — route-specific challenge-14 password manager oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-14 KeePass container secret-hunt walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge14PasswordManagerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-14 is intentional — never store password vault files in container images.",
+      steps: [
+        "Use external secret managers instead of KeePass files in containers.",
+        "Encrypt password vaults and restrict filesystem access.",
+        "Rotate vault master passwords when exposure is suspected."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-14 route documents KeePass secrets in a Docker container. Show remediation for password manager secret storage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-15-git-history-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-15 Git history route live oracle",
+    description:
+      "When scanning /challenge/15 or /challenge/challenge-15, the walkthrough documents AWS access keys committed to git history without rotation — route-specific challenge-15 git history secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-15 git history AWS credential walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge15GitHistoryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-15 is intentional — rotate secrets after git exposure and purge history safely.",
+      steps: [
+        "Rotate any credentials that were ever committed to git.",
+        "Use git-filter-repo or BFG to remove secrets from history after rotation.",
+        "Run secret scanners on repositories before merge."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-15 route documents AWS keys in git history. Show remediation for git secret exposure and rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",

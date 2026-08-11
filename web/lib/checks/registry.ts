@@ -60826,6 +60826,131 @@ const wrongsecretsChallenge12DockerRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge13CicdLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-13", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*CI\/CD|CI\/CD<\/strong>/i.test(body) ||
+    !/Github Actions|Exfiltrate the secret using Github|Get the challenge code 13/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Exfiltrate the secret using Github[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "CI/CD challenge",
+      note: "OWASP WrongSecrets challenge-13 documents CI/CD secret exfiltration via Github Actions workflow runs — pipeline secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge13CicdRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?13\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge13CicdLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-13 route scan — CI/CD challenge confirms Github Actions secret exfiltration walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge14PasswordManagerLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-14", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Password Manager|Password Manager<\/strong>/i.test(body) ||
+    !/Keepass|KeePass|password manager challenge/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Keepass file in the Docker[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Password Manager challenge",
+      note: "OWASP WrongSecrets challenge-14 documents KeePass credentials stored in a Docker container — password manager secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge14PasswordManagerRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?14\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge14PasswordManagerLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-14 route scan — Password Manager challenge confirms KeePass container secret-hunt walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge15GitHistoryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-15", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Git[^h]|Git<\/strong>/i.test(body) ||
+    !/Git history|AWS access-keys in git|commit secrets to Git/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/AWS access-keys in git[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Git history challenge",
+      note: "OWASP WrongSecrets challenge-15 documents AWS access keys committed to git history without rotation — git history secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge15GitHistoryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?15\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge15GitHistoryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-15 route scan — Git history challenge confirms committed AWS credential walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -72569,6 +72694,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge11IamEscalationRouteLiveOracle,
   wrongsecretsChallenge12DockerLiveOracle,
   wrongsecretsChallenge12DockerRouteLiveOracle,
+  wrongsecretsChallenge13CicdLiveOracle,
+  wrongsecretsChallenge13CicdRouteLiveOracle,
+  wrongsecretsChallenge14PasswordManagerLiveOracle,
+  wrongsecretsChallenge14PasswordManagerRouteLiveOracle,
+  wrongsecretsChallenge15GitHistoryLiveOracle,
+  wrongsecretsChallenge15GitHistoryRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,

@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-10T23:10:00.000Z",
+  "updated_at": "2026-08-11T00:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-13",
+      "source": "OWASP WrongSecrets — challenge-13 CI/CD Github Actions topic route oracle queue drain (00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-14",
+      "source": "OWASP WrongSecrets — challenge-14 Password Manager KeePass topic route oracle queue drain (00 UTC discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-15",
+      "source": "OWASP WrongSecrets — challenge-15 Git history AWS keys topic route oracle queue drain (00 UTC discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/",
       "source": "BountySecurity/BurpBountyLab — hub XSS/SQLi/SSRF/SSTI profile testbed queue drain (23 UTC discovery)",
@@ -44,7 +59,8 @@
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
       "source": "OWASP WrongSecrets — challenge-10 CSI-Driver topic route oracle queue drain (22 UTC discovery)",
-    {
+      "auth": "public_demo"
+    },
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-11",
       "source": "OWASP WrongSecrets — challenge-11 IAM privilege escalation topic route oracle queue drain (22 UTC discovery)",
       "auth": "public_demo"
