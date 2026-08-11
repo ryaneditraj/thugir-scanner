@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-11T08:22:19.892Z",
-  "total": 2118,
-  "uniqueSlugs": 2114,
+  "generatedAt": "2026-08-11T09:06:41.859Z",
+  "total": 2121,
+  "uniqueSlugs": 2117,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2100,
+    "generic": 2103,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2033,
+    "deep": 2036,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 427,
-    "Exposed secret": 59,
+    "Exposed secret": 62,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -2079,6 +2079,7 @@
     "whoopspay-transactions-bola-route-live-oracle",
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
+    "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
     "wrongsecrets-challenge-10-csi-driver-route-live-oracle",
     "wrongsecrets-challenge-11-iam-escalation-route-live-oracle",
     "wrongsecrets-challenge-12-docker-route-live-oracle",
@@ -2089,6 +2090,7 @@
     "wrongsecrets-challenge-17-bash-history-route-live-oracle",
     "wrongsecrets-challenge-18-bad-hashing-route-live-oracle",
     "wrongsecrets-challenge-19-c-binary-route-live-oracle",
+    "wrongsecrets-challenge-2-application-properties-route-live-oracle",
     "wrongsecrets-challenge-20-cplus-binary-route-live-oracle",
     "wrongsecrets-challenge-21-golang-binary-route-live-oracle",
     "wrongsecrets-challenge-22-rust-binary-route-live-oracle",
@@ -2099,6 +2101,7 @@
     "wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle",
     "wrongsecrets-challenge-28-github-issue-route-live-oracle",
     "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
+    "wrongsecrets-challenge-3-docker-env-route-live-oracle",
     "wrongsecrets-challenge-30-localstorage-route-live-oracle",
     "wrongsecrets-challenge-60-mcp-route-live-oracle",
     "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
