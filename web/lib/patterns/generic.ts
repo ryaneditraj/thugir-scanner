@@ -30701,6 +30701,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-58-database-connection-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-58 database connection route live oracle",
+    description:
+      "When scanning /challenge/58 or /challenge/challenge-58, the walkthrough documents JDBC credential exposure via /error-demo/database-connection error messages — route-specific challenge-58 logging oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-58 Database Connection String Exposure walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge58DatabaseConnectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-58 is intentional — never return connection strings or passwords in production error pages.",
+      steps: [
+        "Return generic database error messages to clients.",
+        "Store connection strings only in server-side secret managers.",
+        "Rotate any credentials that appeared in error logs or responses."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-58 route documents JDBC credentials in /error-demo/database-connection errors. Show remediation for error message sanitization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-65 plain Java CLI route live oracle",
+    description:
+      "When scanning /challenge/65 or /challenge/challenge-65, the walkthrough documents secret embedded as ldc constant in wrongsecrets-java.jar WrongSecretsPlain.getSecret() recoverable via javap — route-specific challenge-65 plain Java CLI oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-65 plain Java CLI binary walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge65JavaPlainCliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-65 is intentional — never embed secrets as string constants in shipped JAR artifacts.",
+      steps: [
+        "Fetch secrets from a secure runtime source instead of embedding in client-side JARs.",
+        "Assume any secret needed by a downloadable artifact can be extracted via javap or strings.",
+        "Rotate any secrets recoverable from shipped Java binaries."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-65 route documents secrets in wrongsecrets-java.jar WrongSecretsPlain. Show remediation for Java CLI secret handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-66 obfuscated Java CLI route live oracle",
+    description:
+      "When scanning /challenge/66 or /challenge/challenge-66, the walkthrough documents secret recoverable from wrongsecrets-java-obfuscated.jar WrongSecretsObfuscated via javap decompilation — route-specific challenge-66 obfuscated Java CLI oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-66 obfuscated Java CLI binary walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-66 is intentional — obfuscation does not protect secrets in downloadable JAR artifacts.",
+      steps: [
+        "Fetch secrets from a secure backend instead of embedding in obfuscated client JARs.",
+        "Treat bytecode obfuscation as defense-in-depth, not a secret store.",
+        "Rotate any secrets recoverable from shipped Java binaries via decompilation."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-66 route documents secrets in wrongsecrets-java-obfuscated.jar. Show remediation for obfuscated Java CLI secret handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-chat-llm-query-live-oracle",
     platform: "generic",
     category: "Broken access control",

@@ -2636,6 +2636,12 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge63HardcodedAesKeyRouteLiveOracle",
   "wrongsecretsChallenge64SwiftBinaryLiveOracle",
   "wrongsecretsChallenge64SwiftBinaryRouteLiveOracle",
+  "wrongsecretsChallenge58DatabaseConnectionLiveOracle",
+  "wrongsecretsChallenge58DatabaseConnectionRouteLiveOracle",
+  "wrongsecretsChallenge65JavaPlainCliLiveOracle",
+  "wrongsecretsChallenge65JavaPlainCliRouteLiveOracle",
+  "wrongsecretsChallenge66JavaObfuscatedLiveOracle",
+  "wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle",
   "brokencrystalsChatLlmQueryLiveOracle",
   "brokencrystalsChatLlmQueryRouteLiveOracle",
   "brokencrystalsSpawnCommandInjectionLiveOracle",
@@ -10715,14 +10721,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-58")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?65\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge")
+        p.slug.startsWith("wrongsecrets-challenge-65")
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?66\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge")
+        p.slug.startsWith("wrongsecrets-challenge-66")
       )
         return -3;
       if (
