@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2037,
   "discovery_findings": 24294,
-  "improvements_shipped": 1190,
+  "improvements_shipped": 1193,
   "last_run": "2026-08-11T17:48:01.053Z",
   "last_run_summary": {
     "hour_utc": "17",
@@ -55,12 +55,15 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 177,
-      "focus": "WrongSecrets challenge-58..62 (Heroku README 54-66 range) + demo.owasp-juice.shop REST routes + pentest-fauxbank transactions",
-      "improvements_shipped_this_run": 0
+      "focus": "WrongSecrets challenge-58..62 (Heroku README 54-66) + demo.owasp-juice.shop REST routes + pentest-fauxbank transactions; parallel run shipped challenge-49..51 route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-58..62: 13-14 findings each — MCP execute_command + database-connection live oracles on 58-61; challenge-60-mcp-route oracle on 60",
+      "wrongsecrets.herokuapp.com/challenge/challenge-49: 13→14 findings — wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle shipped (parallel run)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-50: 13→14 findings — wrongsecrets-challenge-50-dotnet-binary-route-live-oracle shipped (parallel run)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-51: 13→14 findings — wrongsecrets-challenge-51-docker-secrets-route-live-oracle shipped (parallel run)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-58..62: 13-14 findings each — MCP execute_command + database-connection live oracles; challenge-60-mcp-route oracle on 60",
       "demo.owasp-juice.shop/rest/products/search?q=test: 48 findings — official Juice Shop demo SQLi/search oracle route",
       "demo.owasp-juice.shop/rest/user/login: 47 findings — login SQLi live oracle on official demo instance",
       "pentest-fauxbank.vercel.app/transactions: 14 findings — training-bank transaction route hub"
@@ -68,6 +71,7 @@
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "wrongsecrets challenge-52: Docker build --secret route oracle still absent (13-finding generic hub)",
       "wrongsecrets challenge-58..62: topic-specific route oracles absent beyond generic MCP/database oracles (13-14 finding hubs)",
       "wrongsecrets challenge-53..57: queued but not drained this run (awaiting queue head after 48h skip window)",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
@@ -77,6 +81,9 @@
     "juice-shop.herokuapp.com": 47,
     "demo.owasp-juice.shop/rest/products/search?q=test": 48,
     "demo.owasp-juice.shop/rest/user/login": 47,
+    "wrongsecrets.herokuapp.com/challenge/challenge-49": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-50": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-51": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-59": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-60": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-61": 14,
