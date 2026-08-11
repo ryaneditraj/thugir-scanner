@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T05:12:00.000Z",
+  "updated_at": "2026-08-11T05:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,19 +16,19 @@
     }
   },
   "total_sites_scanned": 2757,
-  "total_findings": 27115,
+  "total_findings": 27118,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1967,
-  "discovery_findings": 22900,
-  "improvements_shipped": 1181,
-  "last_run": "2026-08-11T05:12:00.000Z",
+  "discovery_findings": 22903,
+  "improvements_shipped": 1190,
+  "last_run": "2026-08-11T05:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 45,
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (45 findings, 30 juice-shop live oracles); no benchmark category misses"
+      "note": "Stable 6/6 first-pass recall (46 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 87,
-      "focus": "ssrf.vulnlab.dev/metadata+allowlist+webhook queue add + ai-security-platform open-redirect/idor; drain pwnshop chat + vulnbank loans + fauxbank admin",
-      "improvements_shipped_this_run": 0
+      "focus": "WrongSecrets challenge-25/26/27 Web3 smart contract route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings, 30 live oracles) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/api/chat: 41 findings — LLM chatbot / prompt-injection hub (new route scan)",
-      "vulnbank.org/api/v1/loans/apply: 25 findings — loan application BOLA/API oracle surface",
-      "pentest-fauxbank.vercel.app/admin: 15 findings — fictional bank admin panel training module",
-      "ai-security-platform-iota.vercel.app/challenges/sqli: 6 findings — SQLi challenge demo (queued ahead of new open-redirect/idor URLs)",
-      "demo.owasp-juice.shop/rest/*: 4 deep-route scans errored (0 findings) — official demo REST oracle cold/degraded"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-25: 13→14 findings — wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle shipped (Secrets in smart contracts part 1)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-26: 13→14 findings — wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle shipped (overwritten on-chain storage / eth_getStorageAt)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-27: 13→14 findings — wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle shipped (guess method hashed input secrets)",
+      "pwnshop.ctfsecurity.com/api/chat: 41 findings — LLM chatbot / prompt-injection hub",
+      "vulnbank.org/api/v1/loans/apply: 25 findings — loan application BOLA/API oracle surface"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ssrf.vulnlab.dev/metadata, /allowlist, /webhook: queued this run but not yet scanned (behind 1900+ pending queue URLs)",
-      "ai-security-platform-iota.vercel.app/challenges/open-redirect + /idor: queued but not yet scanned",
-      "demo.owasp-juice.shop REST slugs: basket/whoami/login/search all returned scan errors — need fallback to herokuapp oracle",
-      "pwnshop.ctfsecurity.com/api/chat: 41-finding hub without route-specific prompt-injection live oracle"
+      "wrongsecrets challenge-28+: additional Web3 route oracles still absent",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login blocks authenticated probes)",
+      "frontend-xss-demo.vercel.app: deployment not found — XSS demo live oracle blocked"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 45,
+    "juice-shop.herokuapp.com": 46,
+    "wrongsecrets.herokuapp.com/challenge/challenge-25": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-26": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-27": 14,
     "pwnshop.ctfsecurity.com/api/chat": 41,
-    "vulnbank.org/api/v1/loans/apply": 25,
-    "pentest-fauxbank.vercel.app/admin": 15,
-    "ai-security-platform-iota.vercel.app/challenges/sqli": 6,
     "pwnshop.ctfsecurity.com/apply-coupon": 45,
     "ssrf.vulnlab.dev/metadata-aws": 15
   }
