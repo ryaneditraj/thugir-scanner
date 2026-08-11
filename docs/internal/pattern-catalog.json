@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-11T14:10:12.211Z",
-  "total": 2135,
-  "uniqueSlugs": 2131,
+  "generatedAt": "2026-08-11T15:20:22.545Z",
+  "total": 2138,
+  "uniqueSlugs": 2134,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2117,
+    "generic": 2120,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2050,
+    "deep": 2053,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 428,
-    "Exposed secret": 72,
+    "Exposed secret": 75,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -2115,6 +2115,9 @@
     "wrongsecrets-challenge-40-aes-json-route-live-oracle",
     "wrongsecrets-challenge-41-password-shucking-route-live-oracle",
     "wrongsecrets-challenge-42-actuator-audit-route-live-oracle",
+    "wrongsecrets-challenge-43-reddit-blunder-route-live-oracle",
+    "wrongsecrets-challenge-44-vault-metadata-route-live-oracle",
+    "wrongsecrets-challenge-45-vault-subkey-route-live-oracle",
     "wrongsecrets-challenge-5-configmap-route-live-oracle",
     "wrongsecrets-challenge-6-k8s-secret-route-live-oracle",
     "wrongsecrets-challenge-60-mcp-route-live-oracle",
