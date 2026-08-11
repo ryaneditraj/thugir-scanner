@@ -35639,12 +35639,20 @@ const webSecurityLearningLabsPlaceholderModuleRouteLiveOracle: Rule = async (ctx
   const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
   if (!moduleMatch) return NEGATIVE;
   const moduleId = moduleMatch[1]!;
-  if (!isWebSecurityLearningPlaceholderModuleId(moduleId)) return NEGATIVE;
   let corpus = `${ctx.combined}\n${pageUrl}`;
   const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
   corpus += "\n" + moduleDoc.body;
   const checkpointBlocked = webSecurityLearningLabsCheckpointBlocked(moduleDoc.body);
   const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
+  const curatedPlaceholderShell =
+    WEB_SECURITY_LEARNING_CURATED_MODULE_IDS.has(moduleId) && placeholderShell;
+  if (
+    !isWebSecurityLearningPlaceholderModuleId(moduleId) &&
+    !curatedPlaceholderShell &&
+    !checkpointBlocked
+  ) {
+    return NEGATIVE;
+  }
   if (!placeholderShell && !checkpointBlocked) return NEGATIVE;
   const topic =
     WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] ?? WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
@@ -61203,6 +61211,50 @@ const wrongsecretsChallenge21GolangBinaryRouteLiveOracle: Rule = async (ctx) => 
   };
 };
 
+const wrongsecretsChallenge22RustBinaryLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-22", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Binary|Binary<\/strong>/i.test(body) ||
+    !/Hiding in binaries part 4|wrongsecrets-rust(?:-arm|-linux)?|secret in a Rust binary|the Rust binary/i.test(
+      body
+    ) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Hiding in binaries part 4[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "Rust binary challenge",
+      note: "OWASP WrongSecrets challenge-22 documents secrets embedded in a Rust native binary — reverse-engineering secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge22RustBinaryRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?22\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge22RustBinaryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-22 route scan — Rust binary challenge confirms native binary secret extraction walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -72964,6 +73016,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge20CplusBinaryRouteLiveOracle,
   wrongsecretsChallenge21GolangBinaryLiveOracle,
   wrongsecretsChallenge21GolangBinaryRouteLiveOracle,
+  wrongsecretsChallenge22RustBinaryLiveOracle,
+  wrongsecretsChallenge22RustBinaryRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
