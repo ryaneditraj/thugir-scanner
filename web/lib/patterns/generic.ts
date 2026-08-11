@@ -29912,6 +29912,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-43-reddit-blunder-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-43 Reddit blunder route live oracle",
+    description:
+      "When scanning /challenge/43 or /challenge/challenge-43, the walkthrough documents a secret leaked on r/owasp via Reddit search for 'developer' — route-specific challenge-43 documentation social-engineering oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-43 Reddit Blunder walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge43RedditBlunderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-43 is intentional — never post secrets on public forums or social media.",
+      steps: [
+        "Treat all public posts as permanently archived and searchable.",
+        "Use secret scanning on repositories and monitor brand mentions on social platforms.",
+        "Rotate any credential that was ever shared in a public channel."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-43 route documents a secret posted on r/owasp. Show remediation for social-media secret exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-44-vault-metadata-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-44 Vault metadata route live oracle",
+    description:
+      "When scanning /challenge/44 or /challenge/challenge-44, the walkthrough documents confidential data stored in Vault KV secret metadata for wrongsecret — route-specific challenge-44 HashiCorp Vault metadata oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-44 Vault metadata walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge44VaultMetadataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-44 is intentional — never store secret values in Vault KV metadata fields.",
+      steps: [
+        "Restrict metadata write permissions to least-privilege service accounts.",
+        "Audit Vault policies for metadata read access separate from secret data.",
+        "Use structured non-sensitive labels in metadata instead of secret values."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-44 route documents secrets in Vault KV metadata. Show remediation for Vault metadata hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-45-vault-subkey-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-45 Vault subkey route live oracle",
+    description:
+      "When scanning /challenge/45 or /challenge/challenge-45, the walkthrough documents Vault KV subkey policies exposing nested secret fields via vault kv get secret/wrongsecret — route-specific challenge-45 Vault subkey oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-45 Vault subkey walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge45VaultSubkeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-45 is intentional — scope Vault policies to the minimum subkey paths required.",
+      steps: [
+        "Use fine-grained Vault policies instead of broad secret path access.",
+        "Separate read access for individual subkeys from full secret object reads.",
+        "Audit Vault policy templates for over-permissive subkey grants."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-45 route documents Vault subkey policy over-permission. Show remediation for least-privilege Vault policies.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
