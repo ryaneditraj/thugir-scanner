@@ -62511,6 +62511,138 @@ const wrongsecretsChallenge54GitignoreSecretRouteLiveOracle: Rule = async (ctx) 
   };
 };
 
+const wrongsecretsChallenge55SshBastionLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-55", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Secrets<\/strong>/i.test(body) ||
+    !/\.ssh Bastion\?/i.test(body) ||
+    !/\.ssh\/wrongsecrets\.keys/i.test(body) ||
+    !/SSH keypair used to authenticate/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/\.ssh Bastion\?[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        ".ssh/wrongsecrets.keys bastion container SSH keypair",
+      note: "OWASP WrongSecrets challenge-55 documents SSH private keypair committed to git in .ssh/wrongsecrets.keys bastion container — SSH bastion secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge55SshBastionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?55\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge55SshBastionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-55 route scan — .ssh Bastion challenge confirms wrongsecrets.keys SSH keypair walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge56ProjectSpecLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-56", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*AI<\/strong>/i.test(body) ||
+    !/Find the Secret in the Project Specification/i.test(body) ||
+    !/cursor\/rules\/project-specification\.mdc/i.test(body) ||
+    !/agentic plan/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/project-specification\.mdc[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "cursor/rules/project-specification.mdc agentic plan secret",
+      note: "OWASP WrongSecrets challenge-56 documents secret hidden in cursor/rules/project-specification.mdc agentic plan example configuration — AI-generated project specification oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge56ProjectSpecRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?56\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge56ProjectSpecLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-56 route scan — Project Specification challenge confirms cursor/rules/project-specification.mdc agentic plan secret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge57BrowserLlmLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-57", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*AI<\/strong>/i.test(body) ||
+    !/JavaScript-based In-Browser LLM Challenge/i.test(body) ||
+    !/System Prompt Exposure/i.test(body) ||
+    !/Prompt Injection/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/In-Browser LLM Challenge[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "JavaScript-based in-browser LLM prompt injection challenge",
+      note: "OWASP WrongSecrets challenge-57 documents in-browser LLM with system-prompt secret extractable via prompt injection — JavaScript LLM challenge oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge57BrowserLlmRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?57\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge57BrowserLlmLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-57 route scan — In-Browser LLM Challenge confirms system-prompt secret and prompt injection walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
 
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
@@ -74843,6 +74975,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge53DebuggingContainerRouteLiveOracle,
   wrongsecretsChallenge54GitignoreSecretLiveOracle,
   wrongsecretsChallenge54GitignoreSecretRouteLiveOracle,
+  wrongsecretsChallenge55SshBastionLiveOracle,
+  wrongsecretsChallenge55SshBastionRouteLiveOracle,
+  wrongsecretsChallenge56ProjectSpecLiveOracle,
+  wrongsecretsChallenge56ProjectSpecRouteLiveOracle,
+  wrongsecretsChallenge57BrowserLlmLiveOracle,
+  wrongsecretsChallenge57BrowserLlmRouteLiveOracle,
   wrongsecretsChallenge36AdvancedCLiveOracle,
   wrongsecretsChallenge36AdvancedCRouteLiveOracle,
   wrongsecretsChallenge37CiCdLiveOracle,
