@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-52-buildx-secrets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-52 confirms Exposed Buildx Secrets walkthrough (docker-create.sh --secret, var/run/secrets2/secret.txt); wrongsecrets.herokuapp.com/challenge/challenge-52 findings 13→14 (+wrongsecrets-challenge-52-buildx-secrets-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-53-debugging-container-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-53 confirms Debugging Container Leak walkthrough (secret-challenge53.yml, gdb wrongsecrets-challenge53-c-linux); wrongsecrets.herokuapp.com/challenge/challenge-53 findings 13→14 (+wrongsecrets-challenge-53-debugging-container-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-54-gitignore-secret-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-54 confirms .gitignore Secret Challenge walkthrough (AES-256-CBC encrypted secret in .gitignore comments); wrongsecrets.herokuapp.com/challenge/challenge-54 findings 13→14 (+wrongsecrets-challenge-54-gitignore-secret-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-49 confirms AES weak MD5 PIN brute-force walkthrough (ciphertext k800mdwu8vlQoqeAgRMHDQ==); wrongsecrets.herokuapp.com/challenge/challenge-49 findings 13→14 (+wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
