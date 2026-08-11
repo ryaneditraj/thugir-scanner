@@ -62379,6 +62379,138 @@ const wrongsecretsChallenge51DockerSecretsRouteLiveOracle: Rule = async (ctx) =>
   };
 };
 
+const wrongsecretsChallenge52BuildxSecretsLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-52", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Secrets<\/strong>/i.test(body) ||
+    !/Exposed Buildx Secrets Challenge/i.test(body) ||
+    !/docker-create\.sh/i.test(body) ||
+    !/(?:--secret|var\/run\/secrets2\/secret\.txt|\$SECRET_VALUE)/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/docker-create\.sh[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Docker Buildx secrets challenge",
+      note: "OWASP WrongSecrets challenge-52 documents Docker Buildx --secret misconfiguration with exposed secret in docker-create.sh and var/run/secrets2/secret.txt — Buildx secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge52BuildxSecretsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?52\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge52BuildxSecretsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-52 route scan — Exposed Buildx Secrets challenge confirms docker-create.sh --secret walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge53DebuggingContainerLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-53", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Secrets<\/strong>/i.test(body) ||
+    !/Debugging Container Leak/i.test(body) ||
+    !/secret-challenge53\.yml/i.test(body) ||
+    !/wrongsecrets-challenge53-c-linux/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/secret-challenge53\.yml[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Debugging container leak challenge",
+      note: "OWASP WrongSecrets challenge-53 documents Kubernetes debugging sidecar misconfiguration with secret-challenge53.yml and GDB memory extraction — debugging container leak oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge53DebuggingContainerRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?53\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge53DebuggingContainerLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-53 route scan — Debugging Container Leak challenge confirms secret-challenge53.yml GDB walkthrough"
+    }
+  };
+};
+
+const wrongsecretsChallenge54GitignoreSecretLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-54", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Secrets<\/strong>/i.test(body) ||
+    !/\.gitignore Secret Challenge/i.test(body) ||
+    !/AES-256-CBC/i.test(body) ||
+    !/\.gitignore/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/\.gitignore Secret Challenge[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        ".gitignore encrypted secret challenge",
+      note: "OWASP WrongSecrets challenge-54 documents AES-256-CBC encrypted secret hidden in .gitignore file comments — gitignore secret oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge54GitignoreSecretRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?54\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge54GitignoreSecretLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-54 route scan — .gitignore Secret Challenge confirms AES-256-CBC encrypted comment walkthrough"
+    }
+  };
+};
+
 const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
 
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
@@ -74705,6 +74837,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge50DotnetBinaryRouteLiveOracle,
   wrongsecretsChallenge51DockerSecretsLiveOracle,
   wrongsecretsChallenge51DockerSecretsRouteLiveOracle,
+  wrongsecretsChallenge52BuildxSecretsLiveOracle,
+  wrongsecretsChallenge52BuildxSecretsRouteLiveOracle,
+  wrongsecretsChallenge53DebuggingContainerLiveOracle,
+  wrongsecretsChallenge53DebuggingContainerRouteLiveOracle,
+  wrongsecretsChallenge54GitignoreSecretLiveOracle,
+  wrongsecretsChallenge54GitignoreSecretRouteLiveOracle,
   wrongsecretsChallenge36AdvancedCLiveOracle,
   wrongsecretsChallenge36AdvancedCRouteLiveOracle,
   wrongsecretsChallenge37CiCdLiveOracle,
