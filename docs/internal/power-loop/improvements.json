@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-16-frontend-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-16 confirms Front-end secrets walkthrough (Secrets in front-end code + answer-textbox); wrongsecrets.herokuapp.com/challenge/challenge-16 findings 14 (+wrongsecrets-challenge-16-frontend-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-17-bash-history-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-17 confirms Bash history Docker walkthrough (entering secrets in bash is a bad idea); wrongsecrets.herokuapp.com/challenge/challenge-17 findings 14 (+wrongsecrets-challenge-17-bash-history-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-18-bad-hashing-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-18 confirms unsalted MD5/SHA1 Bad hashing walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-18 findings 14 (+wrongsecrets-challenge-18-bad-hashing-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-13-cicd-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-13 confirms CI/CD Github Actions exfiltration walkthrough (Exfiltrate the secret using Github Actions); wrongsecrets.herokuapp.com/challenge/challenge-13 findings 14 (+wrongsecrets-challenge-13-cicd-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
@@ -476,6 +494,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-16-frontend-route-live-oracle",
+      "shipped_at": "2026-08-11T01:12:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-17-bash-history-route-live-oracle",
+      "shipped_at": "2026-08-11T01:12:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-18-bad-hashing-route-live-oracle",
+      "shipped_at": "2026-08-11T01:12:00.000Z"
+    },
     {
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-route-live-oracles",
