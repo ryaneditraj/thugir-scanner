@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-19-c-binary-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-19 confirms Hiding in binaries part 1 C binary walkthrough (wrongsecrets-c + ghidra/r2); wrongsecrets.herokuapp.com/challenge/challenge-19 findings 13→14 (+wrongsecrets-challenge-19-c-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-20-cplus-binary-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-20 confirms Hiding in binaries part 2 C++ binary walkthrough (wrongsecrets-cplus + __Z6secretv); wrongsecrets.herokuapp.com/challenge/challenge-20 findings 13→14 (+wrongsecrets-challenge-20-cplus-binary-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-21-golang-binary-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-21 confirms Hiding in binaries part 3 Go binary walkthrough (wrongsecrets-golang + string search); wrongsecrets.herokuapp.com/challenge/challenge-21 findings 13→14 (+wrongsecrets-challenge-21-golang-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-16-frontend-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-16 confirms Front-end secrets walkthrough (Secrets in front-end code + answer-textbox); wrongsecrets.herokuapp.com/challenge/challenge-16 findings 14 (+wrongsecrets-challenge-16-frontend-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
