@@ -1,6 +1,756 @@
 {
   "runs": [
     {
+      "run_id": "2026-08-10T15:06:48.704Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1478",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:06:48.704Z"
+    },
+    {
+      "run_id": "2026-08-10T15:07:02.643Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1479",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:02.643Z"
+    },
+    {
+      "run_id": "2026-08-10T15:07:16.514Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1480",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:16.514Z"
+    },
+    {
+      "run_id": "2026-08-10T15:07:30.365Z",
+      "url": "https://ssrf.vulnlab.dev/allowlist",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /allowlist route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 140,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:30.365Z"
+    },
+    {
+      "run_id": "2026-08-10T15:07:45.873Z",
+      "url": "https://ssrf.vulnlab.dev/scheme",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /scheme route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 127,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:07:45.873Z"
+    },
+    {
+      "run_id": "2026-08-10T15:08:02.660Z",
+      "url": "https://ssrf.vulnlab.dev/gopher",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /gopher route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 158,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:08:02.660Z"
+    },
+    {
+      "run_id": "2026-08-10T15:08:22.849Z",
+      "url": "https://ssrf.vulnlab.dev/parser",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /parser route SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 174,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:08:22.849Z"
+    },
+    {
+      "run_id": "2026-08-10T15:08:43.528Z",
+      "url": "https://ssrf.vulnlab.dev/blind",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "ssrf-vulnlab-basic-live-oracle",
+          "title": "ssrf.vulnlab.dev basic SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-aws-live-oracle",
+          "title": "ssrf.vulnlab.dev AWS metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blocklist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev blocklist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-redirect-live-oracle",
+          "title": "ssrf.vulnlab.dev redirect-chain SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-allowlist-bypass-live-oracle",
+          "title": "ssrf.vulnlab.dev allowlist bypass SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-gcp-live-oracle",
+          "title": "ssrf.vulnlab.dev GCP metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-metadata-azure-live-oracle",
+          "title": "ssrf.vulnlab.dev Azure metadata SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-scheme-live-oracle",
+          "title": "ssrf.vulnlab.dev unrestricted scheme SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-gopher-live-oracle",
+          "title": "ssrf.vulnlab.dev gopher TCP SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-parser-live-oracle",
+          "title": "ssrf.vulnlab.dev URL-parser disagreement SSRF live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-live-oracle",
+          "title": "ssrf.vulnlab.dev blind SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-blind-route-live-oracle",
+          "title": "ssrf.vulnlab.dev /blind route SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "ssrf-vulnlab-webhook-live-oracle",
+          "title": "ssrf.vulnlab.dev webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 163,
+      "status": "ok",
+      "scanned_at": "2026-08-10T15:08:43.528Z"
+    },
+    {
       "run_id": "2026-08-10T15:09:01.706Z",
       "url": "https://ssrf.vulnlab.dev/webhook",
       "auth": "public_demo",
@@ -24230,13 +24980,13 @@
       "scanned_at": "2026-08-11T09:49:00.000Z"
     },
     {
-      "run_id": "2026-08-11T10:02:53.750Z",
+      "run_id": "2026-08-11T10:09:45.540Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 46,
+      "finding_count": 47,
       "findings": [
         {
           "slug": "juice-shop-addresss-bola-live-oracle",
@@ -24307,6 +25057,13 @@
           "severity": "medium",
           "confidence": 0.93,
           "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
         },
         {
           "slug": "juice-shop-login-sqli-live-oracle",
@@ -24563,658 +25320,9 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 6,
-      "probes_run": 577,
+      "probes_run": 578,
       "status": "ok",
-      "scanned_at": "2026-08-11T10:02:53.750Z"
-    },
-    {
-      "run_id": "2026-08-11T10:06:39.093Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1024",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 385,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:06:39.093Z"
-    },
-    {
-      "run_id": "2026-08-11T10:06:45.392Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1025",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 9,
-      "findings": [
-        {
-          "slug": "web-security-learning-labs-module-route-live-oracle",
-          "title": "Web Security Learning Labs curated module route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
-          "title": "Web Security Learning Labs placeholder module route live oracle",
-          "severity": "info",
-          "confidence": 0.87,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 385,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:06:45.392Z"
-    },
-    {
-      "run_id": "2026-08-11T10:06:50.499Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1026",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 9,
-      "findings": [
-        {
-          "slug": "web-security-learning-labs-module-route-live-oracle",
-          "title": "Web Security Learning Labs curated module route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
-          "title": "Web Security Learning Labs placeholder module route live oracle",
-          "severity": "info",
-          "confidence": 0.87,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 385,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:06:50.499Z"
-    },
-    {
-      "run_id": "2026-08-11T10:06:55.021Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-36",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 13,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
-          "title": "OWASP WrongSecrets database connection error live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
-          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 571,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:06:55.021Z"
-    },
-    {
-      "run_id": "2026-08-11T10:07:28.829Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-37",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 13,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
-          "title": "OWASP WrongSecrets database connection error live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
-          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 571,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:07:28.829Z"
-    },
-    {
-      "run_id": "2026-08-11T10:08:00.916Z",
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "ai-security-leaked-config-route-live-oracle",
-          "title": "AI Security Platform leaked-config challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.87,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ai-security-platform-evidence",
-          "title": "AI Security Platform hands-on challenge catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:08:00.916Z"
-    },
-    {
-      "run_id": "2026-08-11T10:08:31.456Z",
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "ai-security-supabase-data-route-live-oracle",
-          "title": "AI Security Platform supabase-data challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.87,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ai-security-platform-evidence",
-          "title": "AI Security Platform hands-on challenge catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:08:31.456Z"
-    },
-    {
-      "run_id": "2026-08-11T10:08:58.190Z",
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/admin-console",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "ai-security-admin-console-route-live-oracle",
-          "title": "AI Security Platform admin-console challenge route live oracle",
-          "severity": "critical",
-          "confidence": 0.87,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ai-security-platform-evidence",
-          "title": "AI Security Platform hands-on challenge catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 572,
-      "status": "ok",
-      "scanned_at": "2026-08-11T10:08:58.190Z"
-    },
-    {
-      "run_id": "2026-08-11T10:10:00.000Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — primary Heroku 6/6 recall (46 findings, pages=6 probes=577)",
-      "teacher_delta": [],
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      },
-      "scanned_at": "2026-08-11T10:10:00.000Z"
+      "scanned_at": "2026-08-11T10:09:45.540Z"
     }
   ]
 }
