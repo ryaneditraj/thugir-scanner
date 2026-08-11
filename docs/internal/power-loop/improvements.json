@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-49 confirms AES weak MD5 PIN brute-force walkthrough (ciphertext k800mdwu8vlQoqeAgRMHDQ==); wrongsecrets.herokuapp.com/challenge/challenge-49 findings 13→14 (+wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-50-dotnet-binary-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-50 confirms .NET8 wrongsecrets-dotnet binary secret walkthrough (ILSpy reverse-engineering); wrongsecrets.herokuapp.com/challenge/challenge-50 findings 13→14 (+wrongsecrets-challenge-50-dotnet-binary-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-51-docker-secrets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-51 confirms Exposed Docker Secrets walkthrough (challenge51docker-compose.yml db_password); wrongsecrets.herokuapp.com/challenge/challenge-51 findings 13→14 (+wrongsecrets-challenge-51-docker-secrets-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-46-vault-template-injection-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-46 confirms Vault Agent template injection walkthrough (vault/secrets/challenge46 sidecar echo); wrongsecrets.herokuapp.com/challenge/challenge-46 findings 13→14 (+wrongsecrets-challenge-46-vault-template-injection-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
