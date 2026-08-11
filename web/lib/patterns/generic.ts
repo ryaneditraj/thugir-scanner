@@ -29155,6 +29155,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-4-docker-build-arg-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-4 Docker build-arg route live oracle",
+    description:
+      "When scanning /challenge/4 or /challenge/challenge-4, the walkthrough documents Docker build-arg password exposure via image layer inspection — route-specific challenge-4 container build-arg secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-4 Docker build-arg password walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge4DockerBuildArgRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-4 is intentional — never embed secrets in Docker build arguments or committed image layers.",
+      steps: [
+        "Use runtime secret injection instead of ARG/ENV passwords in Dockerfiles.",
+        "Scan images with docker history and secret scanners before push.",
+        "Rotate credentials exposed in container image layers."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-4 route documents Docker build-arg password exposure. Show remediation for secure container image builds.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-5-configmap-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-5 ConfigMap route live oracle",
+    description:
+      "When scanning /challenge/5 or /challenge/challenge-5, the walkthrough documents secrets stored in Kubernetes ConfigMaps without RBAC — route-specific challenge-5 K8s configmap exposure oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-5 Kubernetes ConfigMap secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge5ConfigmapRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-5 is intentional — never store secrets in ConfigMaps; apply strict RBAC on secret resources.",
+      steps: [
+        "Use Kubernetes Secrets or external secret managers instead of ConfigMaps for credentials.",
+        "Apply least-privilege RBAC so only required workloads can read secrets.",
+        "Audit kubectl access and rotate exposed credentials."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-5 route documents ConfigMap secret exposure. Show remediation for Kubernetes secret storage hygiene.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-6-k8s-secret-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-6 Kubernetes Secret route live oracle",
+    description:
+      "When scanning /challenge/6 or /challenge/challenge-6, the walkthrough documents Kubernetes Secret base64 exposure via kubectl — route-specific challenge-6 K8s secret mount oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-6 Kubernetes Secret base64 walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge6K8sSecretRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "WrongSecrets challenge-6 is intentional — restrict kubectl secret access with tight RBAC and encrypt etcd at rest.",
+      steps: [
+        "Apply least-privilege RBAC so only required roles can read Kubernetes Secrets.",
+        "Enable encryption at rest for etcd secret storage.",
+        "Rotate credentials exposed via kubectl or pod exec."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-6 route documents Kubernetes Secret base64 exposure. Show remediation for K8s secret access control.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-7-vault-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
