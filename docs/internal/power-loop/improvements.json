@@ -2,6 +2,30 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-43-reddit-blunder-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-43 confirms Reddit Blunder walkthrough (r/owasp developer keyword search); wrongsecrets.herokuapp.com/challenge/challenge-43 findings 13→14 (+wrongsecrets-challenge-43-reddit-blunder-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-44-vault-metadata-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-44 confirms Vault Metadata Challenge (kv metadata get -mount=secret wrongsecret); wrongsecrets.herokuapp.com/challenge/challenge-44 findings 13→14 (+wrongsecrets-challenge-44-vault-metadata-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-45-vault-subkey-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-45 confirms Vault subkey challenge (vault kv get secret/wrongsecret); wrongsecrets.herokuapp.com/challenge/challenge-45 findings 13→14 (+wrongsecrets-challenge-45-vault-subkey-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-xxe-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: ist-edu-bd.vercel.app/labs/xxe has no /api/xxe endpoint and JS bundle lacks XXE lab markers — no portable live oracle without backend XML parser"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-40-aes-json-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-40 confirms AES-128-ECB secrchallenge.json with key stored alongside ciphertext (Insecure Encryption Key Part 2); wrongsecrets.herokuapp.com/challenge/challenge-40 findings 13→14 (+wrongsecrets-challenge-40-aes-json-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
