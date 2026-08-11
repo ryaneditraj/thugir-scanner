@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T16:14:07.680Z",
+  "updated_at": "2026-08-11T17:48:01.053Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2858,
-  "total_findings": 28939,
+  "total_sites_scanned": 2867,
+  "total_findings": 29163,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2032,
-  "discovery_findings": 24117,
+  "discovery_urls_added": 2037,
+  "discovery_findings": 24294,
   "improvements_shipped": 1190,
-  "last_run": "2026-08-11T16:14:07.680Z",
+  "last_run": "2026-08-11T17:48:01.053Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 585,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (46 findings, rich live-oracle pass); no benchmark category misses"
+      "note": "Stable 6/6 recall (47 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 239,
-      "focus": "WrongSecrets 46-48 route oracles shipped (parallel) + challenge-53..57 queued; drained 49-52 + pwnshop register-seller",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 177,
+      "focus": "WrongSecrets challenge-58..62 (Heroku README 54-66 range) + demo.owasp-juice.shop REST routes + pentest-fauxbank transactions",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark category misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-46: 13→14 findings — wrongsecrets-challenge-46-vault-template-injection-route-live-oracle shipped",
-      "wrongsecrets.herokuapp.com/challenge/challenge-47: 13→14 findings — wrongsecrets-challenge-47-vault-template-hardcoded-route-live-oracle shipped",
-      "wrongsecrets.herokuapp.com/challenge/challenge-48: 13→14 findings — wrongsecrets-challenge-48-sealed-secret-route-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/register-seller: 42 findings — SSTI/debug/events live oracles + prototype-pollution-search-filters-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-49..52: 13 findings each — .NET topic-specific route oracles still absent",
-      "demo.owasp-juice.shop/rest/basket/1 + /rest/user/whoami: 48 findings each — official Juice Shop demo oracle routes"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-58..62: 13-14 findings each — MCP execute_command + database-connection live oracles on 58-61; challenge-60-mcp-route oracle on 60",
+      "demo.owasp-juice.shop/rest/products/search?q=test: 48 findings — official Juice Shop demo SQLi/search oracle route",
+      "demo.owasp-juice.shop/rest/user/login: 47 findings — login SQLi live oracle on official demo instance",
+      "pentest-fauxbank.vercel.app/transactions: 14 findings — training-bank transaction route hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "wrongsecrets challenge-49..52: .NET/ILSpy topic-specific route oracles absent (13-finding generic hubs)",
-      "wrongsecrets challenge-53..57: queued this run, not yet scanned (awaiting queue drain)",
-      "pwnshop.ctfsecurity.com/register-seller: seller/preview SSTI live oracle absent without authenticated seller session"
+      "wrongsecrets challenge-58..62: topic-specific route oracles absent beyond generic MCP/database oracles (13-14 finding hubs)",
+      "wrongsecrets challenge-53..57: queued but not drained this run (awaiting queue head after 48h skip window)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
-    "pwnshop.ctfsecurity.com/register-seller": 42,
-    "demo.owasp-juice.shop/rest/basket/1": 48,
-    "demo.owasp-juice.shop/rest/user/whoami": 48,
-    "wrongsecrets.herokuapp.com/challenge/challenge-46": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-47": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-48": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-49": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-51": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 13,
-    "ai-security-platform-iota.vercel.app/challenges/admin-console": 7
+    "juice-shop.herokuapp.com": 47,
+    "demo.owasp-juice.shop/rest/products/search?q=test": 48,
+    "demo.owasp-juice.shop/rest/user/login": 47,
+    "wrongsecrets.herokuapp.com/challenge/challenge-59": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-60": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-61": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-58": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-62": 13,
+    "pentest-fauxbank.vercel.app/transactions": 14
   }
 }
