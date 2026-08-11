@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-11T17:40:36.183Z",
+  "updated_at": "2026-08-11T19:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — challenge-63 cryptography oracle (Heroku demo README 63-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+      "source": "OWASP WrongSecrets — challenge-64 binary/Swift oracle (Heroku demo README 63-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — challenge-65 binary oracle (Heroku demo README 63-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+      "source": "OWASP WrongSecrets — challenge-66 binary oracle (Heroku demo README 63-66 range)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product/stock",
+      "source": "PortSwigger Gin & Juice Shop — XXE via stock check (public benchmark /vulnerabilities)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
       "source": "OWASP WrongSecrets — challenge-58 secrets oracle (Heroku demo README 54-66 range)",

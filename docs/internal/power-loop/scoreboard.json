@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T18:00:00.000Z",
+  "updated_at": "2026-08-11T19:16:07.852Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2725,
-  "total_findings": 26511,
+  "total_sites_scanned": 2735,
+  "total_findings": 26811,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22490,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-11T18:00:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22743,
+  "improvements_shipped": 1190,
+  "last_run": "2026-08-11T19:16:07.852Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 578,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,40 +52,42 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 42,
-      "focus": "WrongSecrets challenge-52/53/54 route oracles (Buildx secrets, debugging container leak, .gitignore AES secret)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 253,
+      "focus": "WrongSecrets challenge-63..66 (cryptography/binary range) + ginandjuice XXE stock route; backlog brokencrystals signup, juice-shop chatbot, pwnshop CSS settings",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-52: 13→14 findings — wrongsecrets-challenge-52-buildx-secrets-route-live-oracle shipped (Docker Buildx --secret in docker-create.sh)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-53: 13→14 findings — wrongsecrets-challenge-53-debugging-container-route-live-oracle shipped (secret-challenge53.yml GDB sidecar leak)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-54: 13→14 findings — wrongsecrets-challenge-54-gitignore-secret-route-live-oracle shipped (AES-256-CBC in .gitignore comments)"
+      "wrongsecrets.herokuapp.com/challenge/challenge-63..66: 13 findings each — generic wrongsecrets-challenge-route-live-oracle only; topic-specific crypto/binary oracles absent",
+      "ginandjuice.shop/catalog/product/stock: 32 findings — ginandjuice-stock-xxe-live-oracle + ginandjuice-stock-xxe-route-live-oracle fired (first scan of PortSwigger XXE route)",
+      "brokencrystals.com/api/auth/signup: 81 findings — brokencrystals-signup-route-live-oracle + full Broken Crystals API oracle suite",
+      "demo.owasp-juice.shop/#/chatbot: 46 findings — chatbot XSS/injection hub",
+      "pwnshop.ctfsecurity.com/api/settings/css: 42 findings — LESS/CSS injection oracle surface"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "wrongsecrets challenge-55..62: topic-specific route oracles still absent beyond generic MCP/database oracles",
+      "wrongsecrets challenge-63..66: topic-specific crypto/binary route oracles absent beyond generic challenge-route oracle",
+      "ginandjuice.shop/catalog/product/stock: XXE live oracles present; OAST-dependent blind XXE confirmation still absent",
       "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
       "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent"
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent when scanning route URL without signup flow"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-53": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-54": 14,
+    "ginandjuice.shop/catalog/product/stock": 32,
+    "wrongsecrets.herokuapp.com/challenge/challenge-63": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 13,
+    "brokencrystals.com/api/auth/signup": 81,
+    "demo.owasp-juice.shop/#/chatbot": 46,
+    "pwnshop.ctfsecurity.com/api/settings/css": 42,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 23,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18,
-    "ssrf.vulnlab.dev/basic": 3,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52,
-    "vulnbank.org/api/v2/forgot-password": 19,
-    "pentest-fauxbank.vercel.app/admin": 13
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }
