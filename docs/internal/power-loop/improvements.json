@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-55 confirms .ssh Bastion walkthrough (.ssh/wrongsecrets.keys SSH keypair committed to git); wrongsecrets.herokuapp.com/challenge/challenge-55 findings 13→14 (+wrongsecrets-challenge-55-ssh-bastion-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-56-project-spec-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-56 confirms Project Specification walkthrough (cursor/rules/project-specification.mdc agentic plan secret); wrongsecrets.herokuapp.com/challenge/challenge-56 findings 13→14 (+wrongsecrets-challenge-56-project-spec-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-57-browser-llm-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-57 confirms In-Browser LLM Challenge walkthrough (system-prompt secret, prompt injection, System Prompt Exposure); wrongsecrets.herokuapp.com/challenge/challenge-57 findings 13→14 (+wrongsecrets-challenge-57-browser-llm-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-52-buildx-secrets-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-52 confirms Exposed Buildx Secrets walkthrough (docker-create.sh --secret, var/run/secrets2/secret.txt); wrongsecrets.herokuapp.com/challenge/challenge-52 findings 13→14 (+wrongsecrets-challenge-52-buildx-secrets-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
