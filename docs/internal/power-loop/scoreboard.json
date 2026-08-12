@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T18:50:00.000Z",
+  "updated_at": "2026-08-12T19:10:02.335Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2909,
-  "total_findings": 31391,
+  "total_sites_scanned": 2918,
+  "total_findings": 31626,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2035,
-  "discovery_findings": 25797,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-12T18:50:00.000Z",
+  "discovery_urls_added": 2040,
+  "discovery_findings": 25985,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-12T19:10:02.335Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 594,
+      "probes_run": 585,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,43 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 recall (48 findings, 37 live oracles); no benchmark misses"
+      "note": "Primary Heroku 6/6 recall (47 findings, 36 live oracles); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 3,
-      "findings": 54,
-      "focus": "ginandjuice stock XXE route priority + WrongSecrets-79 hub seed + seclab csrf/idor stub priority",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 188,
+      "focus": "queue drain (ginandjuice XXE stock, juice-shop chatbot/wallet routes, WrongSecrets-65/66 MCP hub) + seeded WrongSecrets error-demo/MCP, VulnForge L3, Altoro testfire search/feedback",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "ginandjuice.shop/catalog/product/stock: 34 findings — ginandjuice-stock-xxe-route-live-oracle with route priority",
-      "wrongsecrets.herokuapp.com/challenge/challenge-79: 14 findings — undeployed Heroku challenge oracle after hub seed extension",
-      "seclab.vercel.app/csrf: 4→6 findings — seclab-angular-stub-route-live-oracle with csrf/idor priority extension"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com/rest/chatbot/respond: 49 findings — prompt-injection live oracle on route-specific scan",
+      "juice-shop.herokuapp.com/rest/wallet/balance: 49 findings — wallet BOLA live oracle on route-specific scan",
+      "ginandjuice.shop/catalog/product/stock: 34 findings — ginandjuice-stock-xxe-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 15 findings — wrongsecrets-mcp-execute-command + error-demo-database-connection live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — challenge-65 hub with MCP62 Google SA oracle",
+      "seclab.vercel.app/csrf: 6 findings — seclab-angular-stub-route-live-oracle (still no route-specific CSRF POST oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "crapi2.apisec.ai: hosts unreachable from cloud agent (connection reset) — community-posts and mechanic_report route oracles not live-validated",
-      "seclab.vercel.app/api/csrf-vulnerable: 4 generic findings only — no route-specific CSRF live oracle",
-      "ist-edu-bd.vercel.app/labs/xxe: no portable live oracle without backend XML parser"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-answers-disclosure)",
+      "new queue seeds (error-demo/database-connection, /mcp, vulnforge L3, testfire search/feedback) not yet scanned — appended for next drain",
+      "seclab.vercel.app/csrf: 6 generic findings only — no route-specific CSRF live oracle on POST /api/csrf-vulnerable",
+      "ist-edu-bd.vercel.app/labs/xss: 11 findings — reflected XSS lab stub without portable live oracle",
+      "dvwu.vercel.app/api/comments: 9 findings — stored XSS comments route without live oracle confirmation"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com/rest/chatbot/respond": 49,
+    "juice-shop.herokuapp.com/rest/wallet/balance": 49,
+    "juice-shop.herokuapp.com": 47,
     "ginandjuice.shop/catalog/product/stock": 34,
-    "wrongsecrets.herokuapp.com/challenge/challenge-79": 14,
-    "seclab.vercel.app/csrf": 6,
-    "pentest-fauxbank.vercel.app/api/profile": 15
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
+    "ist-edu-bd.vercel.app/labs/xss": 11,
+    "dvwu.vercel.app/api/comments": 9,
+    "seclab.vercel.app/csrf": 6
   }
 }
