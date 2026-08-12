@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-31-web-page-secret-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-31 documents secret sauce in OWASP project website HTML (Front-end focus); wrongsecrets.herokuapp.com/challenge/challenge-31 findings 12→13 (+wrongsecrets-challenge-31-web-page-secret-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-32-llm-prompt-leak-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-32 documents Lakera Gandalf LLM password extraction walkthrough (AI focus); wrongsecrets.herokuapp.com/challenge/challenge-32 findings 12→13 (+wrongsecrets-challenge-32-llm-prompt-leak-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-34-pbkdf2-key-generation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-34 documents flawed PBKDF2 key derivation in Challenge34.java (Cryptography focus); wrongsecrets.herokuapp.com/challenge/challenge-34 findings 14→15 (+wrongsecrets-challenge-34-pbkdf2-key-generation-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:crapi2.apisec.ai",
       "slug": "crapi-dashboard-crapi2-host-fix",
       "status": "shipped",
