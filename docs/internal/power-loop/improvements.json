@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin with admin/admin exposes alice+admin user directory and audit log; pentest-fauxbank.vercel.app/admin findings 15→16 (+fauxbank-admin-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-userlogin-css-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /userlogin?logobgcolor=red bundle confirms searchParams.get('logobgcolor') → style.cssText; brokencrystals.com/userlogin findings 80→82 (+brokencrystals-userlogin-css-injection-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v2-forgot-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v2/forgot-password returns status:success for valid username vs status:error User not found for unknown; vulnbank.org/api/v2/forgot-password findings 25→26 (+vulnbank-v2-forgot-password-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-angular-stub-route-live-oracle",
       "status": "shipped",
