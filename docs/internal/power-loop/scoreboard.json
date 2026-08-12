@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T11:05:42.550Z",
+  "updated_at": "2026-08-12T11:08:21.251Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,19 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2834,
-  "total_findings": 29605,
+  "total_sites_scanned": 2835,
+  "total_findings": 29652,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1996,
   "discovery_findings": 24559,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-12T11:05:42.550Z",
+  "last_run": "2026-08-12T11:08:21.251Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Primary Heroku unreachable → staging fallback 47 findings 6/6; secret-resend slug still absent"
+      "note": "Primary Heroku awake 47 findings 6/6; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -59,7 +59,7 @@
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
       "ginandjuice.shop/blog/post?postId=1&back=https://evil.com: 33→35 findings (+back-javascript-dom-xss live+route on route-scoped probe)",
       "ginandjuice.shop/blog?search=test&back=https://evil.com: 32→30 findings (removed false-positive back-javascript on /blog search route)",
       "web-security-learning-labs.vercel.app/module/1599: 8→9 findings (+module-route-live-oracle IDOR topic — prior run code validated)",
@@ -74,7 +74,7 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 47,
     "demo.owasp-juice.shop/rest/addresss": 48,
     "demo.owasp-juice.shop/rest/securityquestion": 47,
     "ginandjuice.shop/blog/post?postId=1&back=https://evil.com": 35,
