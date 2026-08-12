@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-12T14:23:00.236Z",
-  "total": 2182,
-  "uniqueSlugs": 2178,
+  "generatedAt": "2026-08-12T15:28:57.873Z",
+  "total": 2183,
+  "uniqueSlugs": 2179,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2164,
+    "generic": 2165,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2097,
+    "deep": 2098,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 430,
+    "Broken access control": 431,
     "Exposed secret": 96,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -827,6 +827,7 @@
     "convex-open-query-no-auth",
     "cors-reflect-origin",
     "crapi-check-otp-route-live-oracle",
+    "crapi-community-posts-route-live-oracle",
     "crapi-dashboard-live-oracle",
     "crapi-dashboard-route-live-oracle",
     "crapi-mechanic-report-bola-live-oracle",

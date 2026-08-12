@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T15:13:45.470Z",
+  "updated_at": "2026-08-12T15:30:12.152Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2016,
   "discovery_findings": 25271,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-12T15:13:45.470Z",
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-12T15:30:12.152Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 585,
+      "probes_run": 578,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +48,32 @@
           ]
         }
       },
-      "note": "Primary awake 6/6 (47 findings); no benchmark category gaps"
+      "note": "6/6 recall (48 findings); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 198,
-      "focus": "crAPI v2 BOLA community+workshop + demo.owasp-juice deliverys/hints/challenges route oracles + wrongsecrets 76-78 drain",
-      "improvements_shipped_this_run": 0
+      "focus": "crAPI community posts route BOLA + Juice Shop mirror probes + WrongSecrets 74-78 hub seeds",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "demo.owasp-juice.shop/rest/deliverys: 49 findings — juice-shop-deliverys-exposure-route-live-oracle on official demo mirror",
-      "demo.owasp-juice.shop/rest/hints: 49 findings — juice-shop-hints-exposure-route-live-oracle on official demo mirror",
-      "demo.owasp-juice.shop/rest/challenges: 49 findings — juice-shop-challenges-disclosure-route-live-oracle on official demo mirror",
-      "crapi2.apisec.ai/community/api/v2/community/posts/recent: 5 findings — generic misconfig only, no BOLA vehicle-UUID leak oracle",
-      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1: 4 findings — generic misconfig only, no mechanic_report BOLA oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-76/77/78: 14 findings each — wrongsecrets-heroku-undeployed-challenge-live-oracle (WHOOOOPS stubs)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "demo.owasp-juice.shop/rest/deliverys: 49 findings — juice-shop-deliverys-exposure-route-live-oracle (+ escape.tech mirror fallback)",
+      "demo.owasp-juice.shop/rest/hints: 49 findings — juice-shop-hints-exposure-route-live-oracle",
+      "demo.owasp-juice.shop/rest/challenges: 49 findings — juice-shop-challenges-disclosure-route-live-oracle",
+      "crapi2.apisec.ai/community/api/v2/community/posts/recent: crapi-community-posts-route-live-oracle shipped (host unreachable in cloud)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-76/77/78: 14 findings each — undeployed-challenge oracle + hub seeds 74-78"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "crapi2.apisec.ai/*: route-specific BOLA oracles absent for community posts vehicleId leak and mechanic_report sequential IDOR",
-      "wrongsecrets challenge-76/77/78: Heroku undeployed WHOOOOPS stubs — catalog expansion beyond challenge-66 yields no live secret oracles"
+      "crapi2.apisec.ai + crapi.apisec.ai unreachable in cloud agent — crAPI BOLA oracles unvalidated live"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
     "demo.owasp-juice.shop/rest/deliverys": 49,
     "demo.owasp-juice.shop/rest/hints": 49,
     "demo.owasp-juice.shop/rest/challenges": 49,
