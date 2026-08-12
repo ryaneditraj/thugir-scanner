@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T20:35:00.000Z",
+  "updated_at": "2026-08-12T21:52:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2945,
-  "total_findings": 32549,
+  "total_sites_scanned": 2953,
+  "total_findings": 32829,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2052,
-  "discovery_findings": 26351,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-12T20:35:00.000Z",
+  "discovery_urls_added": 2057,
+  "discovery_findings": 26583,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-12T21:52:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -52,34 +52,39 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 6,
-      "urls_scanned": 8,
-      "findings": 318,
-      "focus": "crAPI v2 dashboard host fix + vehicle location route BOLA oracle + route priorities",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 232,
+      "focus": "Gin & Juice checkout/race-condition routes + VulnBank AI system-info + Broken Crystals LLM chat + vulnforge level6",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "crapi2.apisec.ai/identity/api/v2/user/dashboard: dashboard oracle extended to isCrapiLabHost (crapi2 unreachable in cloud — rule validated)",
-      "crapi2.apisec.ai/identity/api/v2/vehicle/{uuid}/location: crapi-vehicle-location-route-live-oracle shipped for direct BOLA route scans",
-      "juice-shop.demo.escape.tech/rest/wallet/balance: 45 findings — wallet BOLA route oracle maintained",
-      "wrongsecrets.herokuapp.com/challenge/challenge-42..43: 15 findings each — challenge hub oracles maintained"
+      "ginandjuice.shop/api/checkout: 27 findings — full Gin & Juice oracle bundle on checkout API route",
+      "ginandjuice.shop/my-account/change-email: 29 findings — ginandjuice-change-email-route-live-oracle fired (race-condition target)",
+      "vulnbank.org/api/ai/system-info: 24 findings — generic vulnbank oracles only, no route-specific system-info oracle",
+      "brokencrystals.com/chat: 83 findings — brokencrystals-chat-llm-query-live-oracle maintained",
+      "vulnforge-academy level6.php: 4 generic findings — no route-specific SQLi challenge oracle",
+      "juice-shop-staging.herokuapp.com/rest/products/search: 49 findings — staging mirror oracles maintained",
+      "ssrf.vulnlab.dev/metadata-gcp: 16 findings — GCP metadata SSRF oracle maintained"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "crapi2.apisec.ai: host unreachable in cloud (connection reset) — dashboard/vehicle-location oracles rule-validated only",
-      "seclab.vercel.app/api/sqli-vulnerable|xss-vulnerable: route oracles fire 4→5 on direct scan but queue drain pending re-validation in results.json"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vulnbank.org/api/ai/system-info: no route-specific unauthenticated system-info disclosure oracle (API8)",
+      "vulnforge-academy level6.php: 4-finding hub without level-specific SQLi challenge oracle",
+      "juice-shop.demo.escape.tech/rest/track-order/1: queue drain hung >50min on 8th URL — scan killed",
+      "ginandjuice.shop/api/checkout: no checkout-specific mass-assignment oracle (generic bundle only)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "juice-shop.demo.escape.tech/rest/wallet/balance": 45,
-    "juice-shop-staging.herokuapp.com/rest/user/whoami": 49,
-    "juice-shop-staging.herokuapp.com/rest/track-order/1": 49,
-    "wrongsecrets.herokuapp.com/challenge/challenge-42": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-43": 15,
-    "crapi2.apisec.ai/identity/api/v2/user/dashboard": 6,
-    "crapi2.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location": 6
+    "brokencrystals.com/chat": 83,
+    "juice-shop-staging.herokuapp.com/rest/products/search?q=test": 49,
+    "ginandjuice.shop/my-account/change-email": 29,
+    "ginandjuice.shop/api/checkout": 27,
+    "vulnbank.org/api/ai/system-info": 24,
+    "ssrf.vulnlab.dev/metadata-gcp": 16,
+    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level6.php": 4
   }
 }
