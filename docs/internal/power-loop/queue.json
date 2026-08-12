@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T17:08:00.000Z",
+  "updated_at": "2026-08-12T18:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/user/dashboard",
+      "source": "APIsec crAPI v2 — user dashboard BOLA oracle GET /identity/api/v2/user/dashboard (OWASPLA 2025 guide API1)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location",
+      "source": "APIsec crAPI v2 — vehicle location BOLA oracle GET /identity/api/v2/vehicle/{uuid}/location (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/profile",
+      "source": "alfredang/pentest FauxBank — sensitive data exposure oracle GET /api/profile (README lesson 4)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/csrf-vulnerable",
+      "source": "DaniSam-STU/security-lab — CSRF oracle POST /api/csrf-vulnerable (seclab.vercel.app README CWE-352)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/quantitys",
+      "source": "Official OWASP Juice Shop demo — inventory quantities exposure oracle GET /rest/quantitys (juice-shop live oracle suite)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/api/comments",
       "source": "zahidoverflow/damn-vulnerable-web-university — stored/reflected XSS oracle GET/POST /api/comments (README OWASP A03)",
