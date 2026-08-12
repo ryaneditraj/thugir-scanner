@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T14:14:07.214Z",
+  "updated_at": "2026-08-12T14:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2011,
   "discovery_findings": 25073,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-12T14:14:07.214Z",
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-12T14:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,38 @@
           ]
         }
       },
-      "note": "6/6 recall (47 findings); primary Heroku awake — no benchmark category gaps"
+      "note": "6/6 recall (48 findings); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 183,
-      "focus": "wrongsecrets challenge-76/77/78 undeployed oracles + WSL module/1603 placeholder + brokencrystals search/admin mass-assignment route oracle + queue drain challenge-44/45/46",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 64,
+      "focus": "juice-shop complaints BOLA sparse-mirror + frontend-xss-demo GitHub fallback + WSL catalog 1606-1608",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "juice-shop.demo.escape.tech/rest/complaints: 48→51 findings — juice-shop-complaints-bola-live-oracle + route oracle (sparse mirror UserId≠JWT data.id)",
+      "frontend-xss-demo.vercel.app/insecure: 1→3 findings — frontend-xss-demo-insecure-dom-xss-live-oracle via dev-lucasoliveira.github.io fallback (Vercel DEPLOYMENT_NOT_FOUND)",
+      "web-security-learning-labs.vercel.app/module/1606: module/1606 IDOR placeholder oracle via catalog max 1608",
       "brokencrystals.com/api/users/search/admin: 86 findings — brokencrystals-search-admin-mass-assignment-route-live-oracle + users-search-exposure live oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-76: 14 findings — wrongsecrets-heroku-undeployed-challenge-live-oracle (WHOOOOPS stub)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-77: 14 findings — undeployed challenge route oracle (WHOOOOPS stub)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-78: 14 findings — undeployed challenge route oracle (WHOOOOPS stub)",
-      "web-security-learning-labs.vercel.app/module/1603: 10 findings — placeholder module route oracle (thin pass)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-44/45/46: 15 findings each — queue drain undeployed stubs"
+      "wrongsecrets.herokuapp.com/challenge/challenge-76: 14 findings — wrongsecrets-heroku-undeployed-challenge-live-oracle (WHOOOOPS stub)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "wrongsecrets challenge-76/77/78: Heroku undeployed WHOOOOPS stubs — no challenge-specific secret oracles",
-      "web-security-learning-labs module/1603: placeholder shell — needs route-specific vuln oracle when lab content ships",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent when scanning route URL without signup flow"
+      "juice-shop.herokuapp.com + staging: intermittent Heroku 503 — escape.tech mirror used for complaints/feedbacks oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "juice-shop.demo.escape.tech/rest/complaints": 51,
+    "frontend-xss-demo.vercel.app/insecure": 3,
+    "web-security-learning-labs.vercel.app/module/1606": 10,
     "brokencrystals.com/api/users/search/admin": 86,
     "brokencrystals.com/api/email/sendSupportEmail?name=Bob": 85,
-    "juice-shop.demo.escape.tech": 50,
     "demo.owasp-juice.shop/rest/feedbacks": 46,
-    "wrongsecrets.herokuapp.com/challenge/challenge-76": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-77": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-78": 14,
-    "web-security-learning-labs.vercel.app/module/1603": 10,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "wrongsecrets.herokuapp.com/challenge/challenge-76": 14
   }
 }
