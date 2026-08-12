@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T13:55:00.000Z",
+  "updated_at": "2026-08-12T14:14:07.214Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2855,
-  "total_findings": 30080,
+  "total_sites_scanned": 2864,
+  "total_findings": 30310,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2006,
-  "discovery_findings": 24890,
-  "improvements_shipped": 1203,
-  "last_run": "2026-08-12T13:55:00.000Z",
+  "discovery_urls_added": 2011,
+  "discovery_findings": 25073,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-12T14:14:07.214Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 578,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,43 @@
           ]
         }
       },
-      "note": "6/6 recall (47 findings); no benchmark category gaps"
+      "note": "6/6 recall (47 findings); primary Heroku awake — no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 66,
-      "focus": "seclab SQLi/XSS route oracles + juice-shop feedbacks BOLA mirror fallback + WSL module/1602 IDOR placeholder oracle",
-      "improvements_shipped_this_run": 4
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 183,
+      "focus": "wrongsecrets challenge-76/77/78 undeployed oracles + WSL module/1603 placeholder + brokencrystals search/admin mass-assignment route oracle + queue drain challenge-44/45/46",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "seclab.vercel.app/api/sqli-vulnerable: 4→5 findings — seclab-sqli-vulnerable-route-live-oracle (Angular stub dead-lab route)",
-      "seclab.vercel.app/api/xss-vulnerable: 4→5 findings — seclab-xss-vulnerable-route-live-oracle (Angular stub dead-lab route)",
-      "demo.owasp-juice.shop/rest/feedbacks: 8→46 findings — juice-shop-feedbacks-bola-live-oracle + route oracle",
-      "web-security-learning-labs.vercel.app/module/1602: 7→10 findings — web-security-learning-labs-idor-module-route-live-oracle"
+      "brokencrystals.com/api/users/search/admin: 86 findings — brokencrystals-search-admin-mass-assignment-route-live-oracle + users-search-exposure live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-76: 14 findings — wrongsecrets-heroku-undeployed-challenge-live-oracle (WHOOOOPS stub)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-77: 14 findings — undeployed challenge route oracle (WHOOOOPS stub)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-78: 14 findings — undeployed challenge route oracle (WHOOOOPS stub)",
+      "web-security-learning-labs.vercel.app/module/1603: 10 findings — placeholder module route oracle (thin pass)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-44/45/46: 15 findings each — queue drain undeployed stubs"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com + staging: intermittent Heroku 503 — escape.tech mirror fallback in feedbacks oracle"
+      "wrongsecrets challenge-76/77/78: Heroku undeployed WHOOOOPS stubs — no challenge-specific secret oracles",
+      "web-security-learning-labs module/1603: placeholder shell — needs route-specific vuln oracle when lab content ships",
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent when scanning route URL without signup flow"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "demo.owasp-juice.shop/rest/feedbacks": 46,
-    "seclab.vercel.app/api/sqli-vulnerable": 5,
-    "seclab.vercel.app/api/xss-vulnerable": 5,
-    "web-security-learning-labs.vercel.app/module/1602": 10,
-    "juice-shop.demo.escape.tech": 50,
+    "brokencrystals.com/api/users/search/admin": 86,
     "brokencrystals.com/api/email/sendSupportEmail?name=Bob": 85,
+    "juice-shop.demo.escape.tech": 50,
+    "demo.owasp-juice.shop/rest/feedbacks": 46,
+    "wrongsecrets.herokuapp.com/challenge/challenge-76": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-77": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-78": 14,
+    "web-security-learning-labs.vercel.app/module/1603": 10,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
