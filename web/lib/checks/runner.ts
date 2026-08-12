@@ -2125,6 +2125,7 @@ const DEEP_RULES = new Set<string>([
   "webSecurityLearningLabsModuleRouteLiveOracle",
   "webSecurityLearningLabsSstiModuleRouteLiveOracle",
   "webSecurityLearningLabsPlaceholderModuleRouteLiveOracle",
+  "webSecurityLearningLabsIdorModuleRouteLiveOracle",
   "secureBankBaySqliLoginRouteLiveOracle",
   "secureBankBayStoredXssCommentsRouteLiveOracle",
   "secureBankBayStoredXssMessagesRouteLiveOracle",
@@ -2777,6 +2778,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
+  "seclabSqliVulnerableRouteLiveOracle",
+  "seclabXssVulnerableRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -10919,6 +10922,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/(ssrf|ssti)\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-angular-stub")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/sqli-vulnerable\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-sqli-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/xss-vulnerable\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-xss-vulnerable")
+      )
+        return -3;
+      if (
+        /web-security-learning-labs\.vercel\.app/i.test(origin) &&
+        /\/module\/(?:159[7-9]|160[0-5])\b/i.test(targetInput) &&
+        p.slug.startsWith("web-security-learning-labs-idor-module")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/(?:api|rest)\/feedbacks\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-feedbacks-bola")
       )
         return -3;
       if (

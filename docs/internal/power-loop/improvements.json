@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-sqli-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/sqli-vulnerable returns <app-root> Angular SPA shell (POST 405 empty); seclab.vercel.app/api/sqli-vulnerable findings 4→5 (+seclab-sqli-vulnerable-route-live-oracle dead-lab route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-xss-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/xss-vulnerable returns <app-root> Angular SPA shell (POST 405 empty); seclab.vercel.app/api/xss-vulnerable findings 4→5 (+seclab-xss-vulnerable-route-live-oracle dead-lab route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-feedbacks-bola-escape-mirror",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopFeedbacksProbeDoc retries juice-shop.demo.escape.tech when Heroku stub; Feedbacks kebab alias + route priority; demo.owasp-juice.shop/rest/feedbacks findings 8→46 (+juice-shop-feedbacks-bola-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-module-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended curated IDOR modules 1597–1605 placeholder shell oracle; web-security-learning-labs.vercel.app/module/1602 findings 7→10 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop-staging.herokuapp.com",
       "slug": "juice-shop-cards-bola-post-seed",
       "status": "shipped",
