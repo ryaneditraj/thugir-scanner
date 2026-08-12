@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T02:30:00.000Z",
+  "updated_at": "2026-08-12T03:18:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1594",
+      "source": "Web Security Learning Labs — module catalog 1594 (WSL vercel app, Aug 2026; queued after 1593)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1595",
+      "source": "Web Security Learning Labs — module catalog 1595 (WSL vercel app, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/logger",
+      "source": "PortSwigger Gin & Juice Shop — /logger OAST interaction endpoint (vulnerabilities page route map)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?searchTerm=",
+      "source": "PortSwigger Gin & Juice Shop — reflected XSS oracle GET /catalog?searchTerm= (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
+      "source": "OWASP WrongSecrets — challenge-67 public Heroku demo (queue expansion past challenge-66)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1593",
       "source": "Web Security Learning Labs — module catalog 1593 (WSL vercel app, Aug 2026; queued after 1592 drain)",
