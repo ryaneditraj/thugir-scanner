@@ -2459,6 +2459,8 @@ const DEEP_RULES = new Set<string>([
   "graphqlBookInternalUserSearchBolaRouteLiveOracle",
   "graphqlBookFetchExternalResourceSsrfLiveOracle",
   "graphqlBookFetchExternalResourceSsrfRouteLiveOracle",
+  "graphqlLabHasuraAdminLiveOracle",
+  "graphqlLabHasuraAdminRouteLiveOracle",
   "dvgaMyPastesIdorLiveOracle",
   "dvgaMyPastesIdorRouteLiveOracle",
   "dvgaImportPasteSsrfLiveOracle",
@@ -2796,6 +2798,7 @@ const DEEP_RULES = new Set<string>([
   "seclabCsrfVulnerableRouteLiveOracle",
   "seclabXssVulnerableRouteLiveOracle",
   "seclabUsersVulnerableRouteLiveOracle",
+  "seclabIdorVulnerableRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -7745,7 +7748,8 @@ function extractSecLabPlaygroundSeeds(html: string, pageUrl: string): string[] {
     "/api/xss-vulnerable",
     "/api/sqli-vulnerable",
     "/api/csrf-vulnerable",
-    "/api/users-vulnerable"
+    "/api/users-vulnerable",
+    "/api/idor-vulnerable"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -11090,6 +11094,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/users-vulnerable\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-users-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/idor-vulnerable\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-idor-vulnerable")
+      )
+        return -3;
+      if (
+        /graphql-lab\.vercel\.app/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("graphql-lab-hasura")
       )
         return -3;
       if (
