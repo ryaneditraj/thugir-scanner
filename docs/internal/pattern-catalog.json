@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-12T22:12:13.236Z",
-  "total": 2197,
-  "uniqueSlugs": 2193,
+  "generatedAt": "2026-08-12T23:16:22.718Z",
+  "total": 2200,
+  "uniqueSlugs": 2196,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2179,
+    "generic": 2182,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2112,
+    "deep": 2115,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 434,
-    "Exposed secret": 100,
+    "Broken access control": 435,
+    "Exposed secret": 102,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -1499,6 +1499,8 @@
     "graphiql-ui-exposed",
     "graphql-endpoint-disclosed-in-docs",
     "graphql-introspection-enabled",
+    "graphql-lab-hasura-admin-live-oracle",
+    "graphql-lab-hasura-admin-route-live-oracle",
     "graphqlbook-fetch-external-resource-ssrf-live-oracle",
     "graphqlbook-fetch-external-resource-ssrf-route-live-oracle",
     "graphqlbook-internal-user-search-bola-live-oracle",
@@ -1742,6 +1744,7 @@
     "sec-research-lab-xxe-lab-route-live-oracle",
     "seclab-angular-stub-route-live-oracle",
     "seclab-csrf-vulnerable-route-live-oracle",
+    "seclab-idor-vulnerable-route-live-oracle",
     "seclab-nextjs-lab-api-probe",
     "seclab-sqli-vulnerable-route-live-oracle",
     "seclab-users-vulnerable-route-live-oracle",
