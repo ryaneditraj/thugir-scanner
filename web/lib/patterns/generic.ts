@@ -51124,6 +51124,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-blog-post-back-javascript-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop blog post back=javascript: DOM XSS live oracle",
+    description:
+      "GET /blog/post?back=javascript: assigns location from URLSearchParams(location.search).get('back') without protocol validation — DOM XSS via javascript: URI on the PortSwigger Gin & Juice training oracle.",
+    impactOneline:
+      "Unvalidated back navigation on ginandjuice.shop blog posts enables javascript: DOM XSS phishing via trusted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject javascript: and other dangerous schemes in back query parameters before client-side navigation.",
+      steps: [
+        "Allowlist http/https same-origin paths only for back navigation.",
+        "Never assign raw query parameters to location without protocol validation.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/post?back= allows javascript: URIs via URLSearchParams location assignment. Show DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-post-back-javascript-dom-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /blog/post back=javascript: DOM XSS route live oracle",
+    description:
+      "When scanning /blog/post, the back query parameter drives client-side location assignment without protocol validation — route-specific DOM XSS oracle.",
+    impactOneline:
+      "Route scans on /blog/post must confirm back navigation cannot execute javascript: URIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPostBackJavascriptDomXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate back URL schemes on /blog/post route handlers and client scripts.",
+      steps: [
+        "Block javascript: and data: schemes in back navigation.",
+        "Use relative same-origin paths only for in-app navigation.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/post route scan confirms javascript: DOM XSS via back param. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-catalog-category-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

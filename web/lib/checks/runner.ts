@@ -2472,6 +2472,8 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceBlogPostRouteLiveOracle",
   "ginAndJuiceBlogPost7AtobRedirectLiveOracle",
   "ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle",
+  "ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle",
+  "ginAndJuiceBlogPostBackJavascriptDomXssRouteLiveOracle",
   "ginAndJuiceCatalogCategorySqliLiveOracle",
   "ginAndJuiceCatalogCategorySqliRouteLiveOracle",
   "ginAndJuiceCatalogCategoryCrlfLiveOracle",
@@ -9460,6 +9462,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           "/vulnerabilities",
           "/catalog",
           "/blog",
+          "/blog/post?postId=6",
           "/blog/post?postId=7",
           "/order/details?orderId=0254809"
         ].map((p) => new URL(p, home.finalUrl).toString())
@@ -10561,8 +10564,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
-        /[?&]postId=7\b/i.test(targetInput) &&
+        /[?&]postId=[67]\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-blog-post-7")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/blog\/post\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-blog-post-back-javascript")
       )
         return -3;
       if (
@@ -10993,7 +11002,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:101[1-9]|102[0135-9]|103[0-6])\b/i.test(targetInput) &&
+        /\/module\/(?:101[1-9]|102[0135-9]|103[0-6]|159[7-9])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-module-route-live-oracle"
       )
         return -3;
