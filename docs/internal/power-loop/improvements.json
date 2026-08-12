@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-angular-stub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclab.vercel.app/ssrf returns Angular <app-root> SPA stub; /api/xss-vulnerable returns 405; README lists SSRF/SSTI as planned not deployed; seclab.vercel.app/ssrf findings 4→6 (+seclab-angular-stub-route-live-oracle +client-side-seclab-playground-evidence); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-heroku-undeployed-challenge-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-69 returns WHOOOOPS error shell (catalog ends at challenge-66 on Heroku); wrongsecrets.herokuapp.com/challenge/challenge-69 findings 12→14 (+wrongsecrets-heroku-undeployed-challenge-live-oracle +route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /chat/init returns found:true for admin@pwnshop.com vs found:false for probe email (PWN-037); pwnshop.ctfsecurity.com/api/chat/init findings 42→44 (+pwnshop-chat-init-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dev-lucasoliveira.github.io/frontend-xss-demo",
       "slug": "frontend-xss-demo-insecure-dom-xss-live-oracle",
       "status": "shipped",
@@ -8844,6 +8862,21 @@
       "source": "discovery:bypass403.vercel.app",
       "slug": "bypass403-route-deprioritization-secret-config-internal",
       "shipped_at": "2026-08-08T12:48:00.000Z"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-angular-stub-route-live-oracle",
+      "shipped_at": "2026-08-12T06:35:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-heroku-undeployed-challenge-live-oracle",
+      "shipped_at": "2026-08-12T06:35:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-route-live-oracle",
+      "shipped_at": "2026-08-12T06:35:00.000Z"
     }
   ]
 }
