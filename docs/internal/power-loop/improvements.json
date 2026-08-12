@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop-staging.herokuapp.com",
+      "slug": "juice-shop-cards-bola-post-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopCardsBolaLiveOracle POST-seeds probe card when GET /api/Cards returns empty data[] + Cards→cards kebab route alias; juice-shop-staging.herokuapp.com/rest/cards findings 46→48 (+juice-shop-cards-bola-route-live-oracle +live); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-catalog-max-1605-module-1601",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1600→1605; extended curated IDOR topics 1601-1605 + runner priority regex; web-security-learning-labs.vercel.app/module/1601 findings 7→9 (+placeholder-module-route-live-oracle +module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-atob-redirect-postId5-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceBlogPostAtobRedirectPostIds extended with postId=5 (scanme header embeds mouse-event gated location=atob('L3Z1bG5lcmFiaWxpdGllcw==')); ginandjuice.shop/blog/post?postId=5 findings 0→35 (+ginandjuice-blog-post-7-atob-redirect-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-rest-kebab-route-aliases",
       "status": "shipped",
