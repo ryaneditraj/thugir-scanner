@@ -10804,6 +10804,31 @@
       "url": "https://ist-edu-bd.vercel.app/api/redirect",
       "source": "zahidoverflow/damn-vulnerable-web-university — open-redirect oracle GET /api/redirect (README OWASP A01)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/error-demo/database-connection",
+      "source": "OWASP WrongSecrets — database connection string credential leak via error messages (challenge-58 companion endpoint)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/mcp",
+      "source": "OWASP WrongSecrets — insecure MCP execute_command env-leak oracle (challenge-60 /mcp endpoint)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level3.php",
+      "source": "webspoilt/vulnforge-academy — Level 3 reflected XSS challenge (GitHub repo structure)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://demo.testfire.net/search.jsp?query=test",
+      "source": "Altoro Mutual demo.testfire.net — SQLi product search oracle GET /search.jsp (IBM HTB guide 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://demo.testfire.net/feedback.jsp",
+      "source": "Altoro Mutual demo.testfire.net — stored/reflected XSS feedback form oracle (IBM HTB guide 2026)",
+      "auth": "public_demo"
     }
   ]
 }
