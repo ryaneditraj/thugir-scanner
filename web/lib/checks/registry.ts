@@ -67723,6 +67723,56 @@ const seclabSqliVulnerableRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabUsersVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/users-vulnerable/1", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    /"password"\s*:/.test(doc.body) &&
+    /No authentication or authorization/i.test(doc.body) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app GET /api/users-vulnerable/1 returns user password without auth — live IDOR training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(doc.body) && doc.body.length > 40
+      ? doc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/users-vulnerable route serves Angular SPA shell instead of the documented Next.js IDOR training API — dead lab route oracle"
+    }
+  };
+};
+
 const seclabXssVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/xss-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
@@ -69271,6 +69321,65 @@ const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeCrapiContactMechanicSsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isCrapiLabHost(ctx)) return null;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return null;
+  const contactUrl = new URL("/workshop/api/merchant/contact_mechanic", ctx.origin).toString();
+  const doc = await ctx.probe.get(contactUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      mechanic_api: SSRF_CANARY_URL,
+      repeat_request_if_failed: true,
+      number_of_repeats: 1,
+      problem_details: "thugir_ssrf_probe",
+      mechanic_code: "TRUGIR"
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  if (!bodyReflectsSsrfCanary(doc.body) && !/response_from_mechanic_api/i.test(doc.body)) return null;
+  if (!bodyReflectsSsrfCanary(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      contactUrl,
+      status: doc.status,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "crAPI POST /workshop/api/merchant/contact_mechanic fetches attacker-controlled mechanic_api URL server-side and echoes response — SSRF oracle (API7)"
+    }
+  };
+}
+
+const crapiContactMechanicSsrfLiveOracle: Rule = async (ctx) => {
+  const hit = await probeCrapiContactMechanicSsrf(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const crapiContactMechanicSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/contact_mechanic/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeCrapiContactMechanicSsrf(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /workshop/api/merchant/contact_mechanic route scan — authenticated POST mechanic_api fetches attacker URL server-side — SSRF route oracle (API7)"
+    }
+  };
+};
+
 const crapiDashboardLiveOracle: Rule = async (ctx) => {
   if (!isCrapi1Host(ctx)) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
@@ -69374,7 +69483,7 @@ const crapiSignupRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const crapiOtpBruteforceLiveOracle: Rule = async (ctx) => {
-  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const rand = `${Date.now()}`.slice(-9);
   const email = `thugir_otp_${rand}@scanner.local`;
   const password = "Test@123";
@@ -69465,7 +69574,7 @@ const crapiOtpBruteforceLiveOracle: Rule = async (ctx) => {
 };
 
 const crapiCheckOtpRouteLiveOracle: Rule = async (ctx) => {
-  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/check-otp/i.test(pageUrl)) return NEGATIVE;
   const result = await crapiOtpBruteforceLiveOracle(ctx);
@@ -76441,6 +76550,7 @@ export const RULES: Record<string, Rule> = {
   seclabAngularStubRouteLiveOracle,
   seclabSqliVulnerableRouteLiveOracle,
   seclabXssVulnerableRouteLiveOracle,
+  seclabUsersVulnerableRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
@@ -76569,6 +76679,8 @@ export const RULES: Record<string, Rule> = {
   crapiVehicleBolaLiveOracle,
   crapiVehicleRouteLiveOracle,
   crapiCommunityPostsRouteLiveOracle,
+  crapiContactMechanicSsrfLiveOracle,
+  crapiContactMechanicSsrfRouteLiveOracle,
   crapiDashboardLiveOracle,
   crapiDashboardRouteLiveOracle,
   crapiSignupOpenRegistrationLiveOracle,

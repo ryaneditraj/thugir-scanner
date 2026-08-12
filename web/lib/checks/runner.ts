@@ -2518,6 +2518,8 @@ const DEEP_RULES = new Set<string>([
   "crapiVehicleBolaLiveOracle",
   "crapiVehicleRouteLiveOracle",
   "crapiCommunityPostsRouteLiveOracle",
+  "crapiContactMechanicSsrfLiveOracle",
+  "crapiContactMechanicSsrfRouteLiveOracle",
   "crapiDashboardLiveOracle",
   "crapiDashboardRouteLiveOracle",
   "crapiSignupOpenRegistrationLiveOracle",
@@ -2783,6 +2785,7 @@ const DEEP_RULES = new Set<string>([
   "seclabAngularStubRouteLiveOracle",
   "seclabSqliVulnerableRouteLiveOracle",
   "seclabXssVulnerableRouteLiveOracle",
+  "seclabUsersVulnerableRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -10994,6 +10997,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/users-vulnerable\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-users-vulnerable")
+      )
+        return -3;
+      if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
         /\/module\/(?:159[7-9]|160[0-8])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
@@ -11016,6 +11025,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /crapi2?\.apisec\.ai/i.test(origin) &&
         /\/mechanic_report/i.test(targetInput) &&
         p.slug.startsWith("crapi-mechanic-report")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/contact_mechanic/i.test(targetInput) &&
+        p.slug.startsWith("crapi-contact-mechanic-ssrf")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/check-otp/i.test(targetInput) &&
+        p.slug.startsWith("crapi-check-otp")
       )
         return -3;
       if (
