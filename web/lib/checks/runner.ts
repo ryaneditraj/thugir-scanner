@@ -1779,6 +1779,7 @@ const DEEP_RULES = new Set<string>([
   "fauxbankLoansRequestLiveOracle",
   "fauxbankLoansNegativeAmountLiveOracle",
   "fauxbankAdminPanelLiveOracle",
+  "fauxbankAdminRouteLiveOracle",
   "webPentestPlaygroundFileUploadLiveOracle",
   "webPentestPlaygroundFileUploadRouteLiveOracle",
   "webPentestPlaygroundStoredXssLiveOracle",
@@ -2109,6 +2110,7 @@ const DEEP_RULES = new Set<string>([
   "fauxbankProfileSensitiveDataLiveOracle",
   "fauxbankProfileRouteLiveOracle",
   "brokencrystalsUserloginCssInjectionLiveOracle",
+  "brokencrystalsUserloginCssInjectionRouteLiveOracle",
   "brokencrystalsHomeDomXssLiveOracle",
   "brokencrystalsHomeDomXssRouteLiveOracle",
   "clientSideVulnforgeAcademyEvidence",
@@ -2945,6 +2947,7 @@ const DEEP_RULES = new Set<string>([
   "vulnbankGraphqlIntrospectionLiveOracle",
   "vulnbankV1ForgotPasswordPinLeakLiveOracle",
   "vulnbankV2ForgotPasswordEnumerationLiveOracle",
+  "vulnbankV2ForgotPasswordRouteLiveOracle",
   "vulnbankV3UserIdorLiveOracle",
   "vulnbankV3UserIdorRouteLiveOracle",
   "vulnbankV3ResetPasswordVersioningLiveOracle",
@@ -11034,6 +11037,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/(?:api\/)?support\b/i.test(targetInput) &&
         p.slug.startsWith("fauxbank-") &&
         /support/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/admin\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-admin")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/userlogin\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-userlogin")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/v2\/forgot-password\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-v2-forgot-password")
       )
         return -3;
       if (

@@ -20642,6 +20642,23 @@ const vulnbankV2ForgotPasswordEnumerationLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankV2ForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v2\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankV2ForgotPasswordEnumerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v2/forgot-password route scan — valid username returns success while unknown username returns User not found — route-specific enumeration oracle"
+    }
+  };
+};
+
 const vulnbankRequestLoanLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const token = await vulnbankProbeUserToken(ctx);
@@ -28662,6 +28679,23 @@ const fauxbankAdminPanelLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const fauxbankAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankAdminPanelLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /admin route scan — admin/admin session exposes user directory and audit log — route-specific admin panel oracle"
+    }
+  };
+};
+
 // --- Web Pentest Playground (web-pentest-playground.onrender.com) --------------------
 function isWebPentestPlaygroundHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
@@ -33988,6 +34022,23 @@ const brokencrystalsUserloginCssInjectionLiveOracle: Rule = async (ctx) => {
       bundleUrl,
       snippet: "searchParams.get(\"logobgcolor\") → logoBgColor → style.cssText = `background-color: ${t}`",
       note: "Broken Crystals /userlogin reads logobgcolor from URL into inline logo background CSS without sanitization — CSS injection oracle"
+    }
+  };
+};
+
+const brokencrystalsUserloginCssInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/userlogin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsUserloginCssInjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /userlogin route scan — logobgcolor URL param flows into inline logo CSS without sanitization — route-specific CSS injection oracle"
     }
   };
 };
@@ -74772,6 +74823,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankLoansRequestLiveOracle,
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
+  fauxbankAdminRouteLiveOracle,
   webPentestPlaygroundFileUploadLiveOracle,
   webPentestPlaygroundFileUploadRouteLiveOracle,
   webPentestPlaygroundStoredXssLiveOracle,
@@ -75000,6 +75052,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankGraphqlIntrospectionLiveOracle,
   vulnbankV1ForgotPasswordPinLeakLiveOracle,
   vulnbankV2ForgotPasswordEnumerationLiveOracle,
+  vulnbankV2ForgotPasswordRouteLiveOracle,
   vulnbankV3UserIdorLiveOracle,
   vulnbankV3UserIdorRouteLiveOracle,
   vulnbankV3ResetPasswordVersioningLiveOracle,
@@ -75219,6 +75272,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
+  brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,
   brokencrystalsHomeDomXssRouteLiveOracle,
   clientSideVulnforgeAcademyEvidence,
