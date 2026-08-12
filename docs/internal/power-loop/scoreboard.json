@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T18:45:00.000Z",
+  "updated_at": "2026-08-12T18:50:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2906,
-  "total_findings": 31337,
+  "total_sites_scanned": 2909,
+  "total_findings": 31391,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2031,
-  "discovery_findings": 25743,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-12T18:45:00.000Z",
+  "discovery_urls_added": 2035,
+  "discovery_findings": 25797,
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-12T18:50:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 578,
+      "probes_run": 594,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,35 @@
           ]
         }
       },
-      "note": "Primary Heroku awake 6/6 recall (47 findings); no benchmark misses"
+      "note": "Primary Heroku 6/6 recall (48 findings, 37 live oracles); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 192,
-      "focus": "crAPI v2 dashboard/vehicle BOLA + FauxBank profile/loans PII oracles + seclab CSRF route + juice-shop route drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 4,
+      "urls_scanned": 3,
+      "findings": 54,
+      "focus": "ginandjuice stock XXE route priority + WrongSecrets-79 hub seed + seclab csrf/idor stub priority",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "pentest-fauxbank.vercel.app/api/profile: 15 findings — fauxbank-profile-sensitive-data-live-oracle + fauxbank-profile-route-live-oracle",
-      "pentest-fauxbank.vercel.app/api/loans: 15 findings — fauxbank-loans-negative-amount-live-oracle + fauxbank-loans-request-live-oracle",
-      "crapi2.apisec.ai/identity/api/v2/user/dashboard: 6 findings — crapi-otp-bruteforce + contact_mechanic SSRF host coverage",
-      "crapi2.apisec.ai/identity/api/v2/vehicle/.../location: 6 findings — same crAPI host oracles on vehicle BOLA route",
-      "juice-shop.herokuapp.com/rest/products/search: 49 findings — route-specific SQLi live oracle hub",
-      "juice-shop.herokuapp.com/rest/user/login: 48 findings — login SQLi route oracle",
-      "juice-shop.herokuapp.com/rest/memories: 49 findings — memories BOLA route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "ginandjuice.shop/catalog/product/stock: 34 findings — ginandjuice-stock-xxe-route-live-oracle with route priority",
+      "wrongsecrets.herokuapp.com/challenge/challenge-79: 14 findings — undeployed Heroku challenge oracle after hub seed extension",
+      "seclab.vercel.app/csrf: 4→6 findings — seclab-angular-stub-route-live-oracle with csrf/idor priority extension"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "crapi2.apisec.ai: hosts unreachable from cloud agent (connection reset) — community-posts and mechanic_report route oracles not live-validated",
       "seclab.vercel.app/api/csrf-vulnerable: 4 generic findings only — no route-specific CSRF live oracle",
-      "demo.owasp-juice.shop/rest/quantitys skipped (503 Heroku) — swapped for fauxbank /api/loans",
-      "crapi2 vehicle-location route: BOLA oracle absent — generic host-level OTP/SSRF oracles only"
+      "ist-edu-bd.vercel.app/labs/xxe: no portable live oracle without backend XML parser"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "juice-shop.herokuapp.com/rest/memories": 49,
-    "juice-shop.herokuapp.com/rest/products/search?q=test": 49,
-    "juice-shop.herokuapp.com/rest/user/login": 48,
-    "pentest-fauxbank.vercel.app/api/profile": 15,
-    "pentest-fauxbank.vercel.app/api/loans": 15,
-    "crapi2.apisec.ai/identity/api/v2/user/dashboard": 6,
-    "seclab.vercel.app/api/csrf-vulnerable": 4
+    "juice-shop.herokuapp.com": 48,
+    "ginandjuice.shop/catalog/product/stock": 34,
+    "wrongsecrets.herokuapp.com/challenge/challenge-79": 14,
+    "seclab.vercel.app/csrf": 6,
+    "pentest-fauxbank.vercel.app/api/profile": 15
   }
 }
