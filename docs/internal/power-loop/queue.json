@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T22:10:00.000Z",
+  "updated_at": "2026-08-12T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://secure-bank-bay.vercel.app/api/login",
+      "source": "Areeeshaa/SecureBank — Attack Mode SQLi oracle POST /api/login (Medium live demo secure-bank-bay.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/api/transactions",
+      "source": "Areeeshaa/SecureBank — unauthenticated transaction BOLA oracle GET/POST /api/transactions (Attack Mode demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/messages",
+      "source": "Areeeshaa/SecureBank — stored XSS via innerHTML oracle GET/POST /messages (Attack Mode demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/admin",
+      "source": "Areeeshaa/SecureBank — admin RBAC bypass oracle GET /admin (Attack Mode session role escalation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/api/comments",
+      "source": "Areeeshaa/SecureBank — stored XSS comments API oracle POST /api/comments (Attack Mode demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://seclab.vercel.app/api/idor-vulnerable",
       "source": "DaniSam-STU/security-lab — IDOR oracle GET /api/idor-vulnerable (seclab.vercel.app README CWE-639)",
