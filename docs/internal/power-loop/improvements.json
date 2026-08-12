@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-rest-kebab-route-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopApiOrRestRoute extended with kebab aliases privacy-requests→PrivacyRequests and securityquestion→SecurityQuestions; juice-shop.herokuapp.com/rest/privacy-requests findings 47→49 (+juice-shop-privacy-requests-bola-route-live-oracle); /rest/securityquestion 47→49 (+juice-shop-security-questions-list-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-extended-curated-module-1600-idor",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES + topic alias extended with module 1600 IDOR; web-security-learning-labs.vercel.app/module/1600 findings 8→9 (+web-security-learning-labs-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-atob-redirect-postId8-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceBlogPostAtobRedirectPostIds extended with postId=8 (404 shell embeds mouse-event gated location=atob('L3Z1bG5lcmFiaWxpdGllcw==')); ginandjuice.shop/blog/post?postId=8 findings 32→31 with +ginandjuice-blog-post-7-atob-redirect-route-live-oracle; benchmark 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-post-back-javascript-scoped-probe",
       "status": "shipped",
