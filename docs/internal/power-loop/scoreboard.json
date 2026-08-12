@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T19:25:00.000Z",
+  "updated_at": "2026-08-12T20:17:42.928100Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2920,
-  "total_findings": 31722,
+  "total_sites_scanned": 2929,
+  "total_findings": 31947,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2046,
-  "discovery_findings": 26033,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-12T19:25:00.000Z",
+  "discovery_urls_added": 2050,
+  "discovery_findings": 26210,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-12T20:17:42.928100Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 585,
+      "probes_run": 578,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,42 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 recall (48 findings, 36 live oracles); no benchmark category misses"
+      "note": "Primary Heroku 6/6 recall (48 findings, 36+ live oracles); no benchmark category misses"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 6,
-      "urls_scanned": 1,
-      "findings": 48,
-      "focus": "SecLab CSRF API route oracle + playground hub seeds for ssrf/ssti/api-vulnerable routes",
-      "improvements_shipped_this_run": 3
+      "urls_added": 4,
+      "urls_scanned": 8,
+      "findings": 177,
+      "focus": "vulnforge XSS levels 4-5 + DVS terminal + WSL module 1604 queue seeds; drained wrongsecrets 44-47/51-52 + pwnshop register-seller + juice-shop whoami",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "seclab.vercel.app/api/csrf-vulnerable: 4→5 findings — seclab-csrf-vulnerable-route-live-oracle shipped (Angular SPA stub dead-lab route)",
-      "seclab.vercel.app/csrf: 6 findings — seclab-angular-stub-route-live-oracle; dedicated CSRF API oracle now available on /api/csrf-vulnerable scans",
-      "ginandjuice.shop/catalog/product/stock: 34 findings — ginandjuice-stock-xxe-route-live-oracle maintained",
-      "wrongsecrets.herokuapp.com/challenge/challenge-67: undeployed-challenge oracle fires on re-scan (12→14 findings expected next drain)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) \u2014 no benchmark misses",
+      "juice-shop-staging.herokuapp.com/rest/user/whoami: 49 findings \u2014 whoami-unauth-route-live-oracle maintained",
+      "pwnshop.ctfsecurity.com/register-seller: 38 findings \u2014 seller registration surface probed",
+      "wrongsecrets.herokuapp.com/challenge/challenge-44..47,51-52: stable 15 findings each \u2014 challenge hub oracles",
+      "queue pending: vulnforge level4/5 XSS, DVS /challenges/terminal, WSL module/1604, demo.testfire search.jsp"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-answers-disclosure)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-67..69: undeployed oracle exists but pre-ship scans at 12 findings — queue re-drain pending",
-      "ist-edu-bd.vercel.app/labs/xss: 11 findings — reflected XSS lab stub without portable live oracle",
-      "dvwu.vercel.app/api/comments: 9 findings — stored XSS comments route oracle shipped but pre-ship scan at 9 findings"
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-answers-disclosure)",
+      "vulnforge-academy level4/5: queued but not drained this run (Vercel 403 on direct PHP paths)",
+      "damn-vulnerable-startup.fly.dev/challenges/terminal: queued \u2014 Fly.io returns 403 from cloud agent",
+      "demo.testfire.net/search.jsp: queued SQLi oracle \u2014 drain pending next run"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "juice-shop.herokuapp.com/rest/chatbot/respond": 49,
-    "juice-shop.herokuapp.com/rest/wallet/balance": 49,
+    "juice-shop-staging.herokuapp.com/rest/user/whoami": 49,
+    "pwnshop.ctfsecurity.com/register-seller": 38,
+    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-44": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-45": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-46": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-47": 15,
     "ginandjuice.shop/catalog/product/stock": 34,
-    "seclab.vercel.app/api/csrf-vulnerable": 5,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
-    "ist-edu-bd.vercel.app/labs/xss": 11,
-    "dvwu.vercel.app/api/comments": 9,
-    "seclab.vercel.app/csrf": 6
+    "seclab.vercel.app/api/csrf-vulnerable": 5
   }
 }
