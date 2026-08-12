@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T21:06:18.044Z",
+  "updated_at": "2026-08-12T22:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://seclab.vercel.app/api/idor-vulnerable",
+      "source": "DaniSam-STU/security-lab — IDOR oracle GET /api/idor-vulnerable (seclab.vercel.app README CWE-639)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://api.graphqlbook.org/graphql",
+      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL endpoint (OWASP API Top 10)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/user/whoami",
+      "source": "OWASP Juice Shop escape.tech mirror — unauthenticated whoami oracle GET /rest/user/whoami",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/captcha",
+      "source": "OWASP Juice Shop escape.tech mirror — captcha bypass oracle GET /rest/captcha",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://graphql-lab.vercel.app/graphql",
+      "source": "vulnerable GraphQL lab — introspection/injection training endpoint (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://ginandjuice.shop/api/checkout",
       "source": "PortSwigger Gin & Juice Shop — mass-assignment checkout oracle POST /api/checkout (Burp sample report)",
