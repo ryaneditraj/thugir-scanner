@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-atob-redirect-postId6-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/post?postId=6 embeds mouse-event gated location=atob('L3Z1bG5lcmFiaWxpdGllcw==') same as postId=7; ginandjuice.shop/blog/post?postId=6 findings 31→35 (+ginandjuice-blog-post-7-atob-redirect-live-oracle +route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-back-javascript-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: onclick handler location=new URLSearchParams(location.search).get('back') without protocol validation; back=javascript:thugirProbeDomXss accepted; ginandjuice.shop/blog/post?postId=6 findings 31→35 (+back-javascript-dom-xss live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-extended-curated-module-1597-1599-idor",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: module/1597-1599 CSR placeholder shells mapped to IDOR topic; web-security-learning-labs.vercel.app/module/1597 findings 8→9 (+module-route-live-oracle); module/1598 8→9; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-post-7-atob-redirect-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/post?postId=7 returns HTTP 404 with mouse-event gated location=atob('L3Z1bG5lcmFiaWxpdGllcw==') → /vulnerabilities; ginandjuice.shop/blog/post?postId=7 findings 30→33 (+ginandjuice-blog-post-7-atob-redirect-live-oracle +route +client-side-open-redirect-evidence); benchmark juice-shop 47 findings 6/6 maintained"
@@ -1040,6 +1058,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-atob-redirect-postId6-extension",
+      "shipped_at": "2026-08-12T09:35:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-back-javascript-dom-xss-live-oracle",
+      "shipped_at": "2026-08-12T09:35:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-extended-curated-module-1597-1599-idor",
+      "shipped_at": "2026-08-12T09:35:00.000Z"
+    },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-46-vault-template-injection-route-live-oracle",
