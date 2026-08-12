@@ -2651,6 +2651,12 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge28GithubIssueRouteLiveOracle",
   "wrongsecretsChallenge29ScreenshotLogRouteLiveOracle",
   "wrongsecretsChallenge30LocalStorageRouteLiveOracle",
+  "wrongsecretsChallenge31WebPageSecretLiveOracle",
+  "wrongsecretsChallenge31WebPageSecretRouteLiveOracle",
+  "wrongsecretsChallenge32LlmPromptLeakLiveOracle",
+  "wrongsecretsChallenge32LlmPromptLeakRouteLiveOracle",
+  "wrongsecretsChallenge34Pbkdf2KeyGenerationLiveOracle",
+  "wrongsecretsChallenge34Pbkdf2KeyGenerationRouteLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionLiveOracle",
   "wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle",
   "wrongsecretsMcpExecuteCommandLiveOracle",
@@ -9754,6 +9760,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-21",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-22",
+        "https://wrongsecrets.herokuapp.com/challenge/28",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-28",
+        "https://wrongsecrets.herokuapp.com/challenge/29",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-29",
+        "https://wrongsecrets.herokuapp.com/challenge/30",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-30",
+        "https://wrongsecrets.herokuapp.com/challenge/31",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
+        "https://wrongsecrets.herokuapp.com/challenge/32",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-32",
+        "https://wrongsecrets.herokuapp.com/challenge/33",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-33",
+        "https://wrongsecrets.herokuapp.com/challenge/34",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-34",
+        "https://wrongsecrets.herokuapp.com/challenge/35",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-35",
         "https://wrongsecrets.herokuapp.com/challenge/8",
         "https://wrongsecrets.herokuapp.com/challenge/59",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
@@ -10985,6 +11007,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?65\b/i.test(targetInput) &&
         p.slug.startsWith("wrongsecrets-challenge-65")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?31\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-31")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?32\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-32")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?34\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-34")
       )
         return -3;
       if (
