@@ -2517,6 +2517,7 @@ const DEEP_RULES = new Set<string>([
   "crapiMechanicReportRouteLiveOracle",
   "crapiVehicleBolaLiveOracle",
   "crapiVehicleRouteLiveOracle",
+  "crapiVehicleLocationRouteLiveOracle",
   "crapiCommunityPostsRouteLiveOracle",
   "crapiContactMechanicSsrfLiveOracle",
   "crapiContactMechanicSsrfRouteLiveOracle",
@@ -11063,6 +11064,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /crapi2?\.apisec\.ai/i.test(origin) &&
         /\/check-otp/i.test(targetInput) &&
         p.slug.startsWith("crapi-check-otp")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/user\/dashboard\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-dashboard")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/vehicle\/[0-9a-f-]{36}\/location/i.test(targetInput) &&
+        p.slug.startsWith("crapi-vehicle")
       )
         return -3;
       if (
