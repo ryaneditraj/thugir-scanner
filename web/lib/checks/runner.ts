@@ -3177,6 +3177,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideGrpcGoatLabEvidence",
   "clientSideWebvulnRunnerEvidence",
   "clientSideFrontendXssDemoEvidence",
+  "frontendXssDemoInsecureDomXssLiveOracle",
+  "frontendXssDemoInsecureDomXssRouteLiveOracle",
   "clientSideAiChatHtmlSinkEvidence",
   "clientSideAvidVulnRegistryEvidence",
   "clientSideSecurityShepherdEvidence",
@@ -10510,6 +10512,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/rest\/wallet\/balance\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-wallet-balance")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/products(?:\/\d+)?\/reviews\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-products-reviews")
+      )
+        return -3;
+      if (
+        /frontend-xss-demo|dev-lucasoliveira\.github\.io/i.test(origin) &&
+        /\/(?:insecure|inseguro)\b/i.test(targetInput) &&
+        p.slug.startsWith("frontend-xss-demo-insecure")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/blog\/post\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-blog-post")
       )
         return -3;
       if (
