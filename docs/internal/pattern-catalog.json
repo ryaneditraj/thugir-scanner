@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-12T04:24:48.501Z",
-  "total": 2166,
-  "uniqueSlugs": 2162,
+  "generatedAt": "2026-08-12T05:25:23.344Z",
+  "total": 2168,
+  "uniqueSlugs": 2164,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2148,
+    "generic": 2150,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2081,
+    "deep": 2083,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 156,
     "Broken authentication": 129,
     "Injection": 309,
-    "Cross-site scripting": 671,
+    "Cross-site scripting": 673,
     "Open redirect": 17,
     "general": 20,
     "SSRF": 12,
@@ -1442,6 +1442,8 @@
     "firing-range-urldom-sink-route-live-oracle",
     "firing-range-vulnerablelibraries-live-oracle",
     "firing-range-vulnerablelibraries-route-live-oracle",
+    "frontend-xss-demo-insecure-dom-xss-live-oracle",
+    "frontend-xss-demo-insecure-dom-xss-route-live-oracle",
     "ginandjuice-admin-bypass-live-oracle",
     "ginandjuice-admin-bypass-route-live-oracle",
     "ginandjuice-admin-delete-live-oracle",

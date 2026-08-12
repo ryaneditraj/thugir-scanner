@@ -3177,6 +3177,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideGrpcGoatLabEvidence",
   "clientSideWebvulnRunnerEvidence",
   "clientSideFrontendXssDemoEvidence",
+  "frontendXssDemoInsecureDomXssLiveOracle",
+  "frontendXssDemoInsecureDomXssRouteLiveOracle",
   "clientSideAiChatHtmlSinkEvidence",
   "clientSideAvidVulnRegistryEvidence",
   "clientSideSecurityShepherdEvidence",

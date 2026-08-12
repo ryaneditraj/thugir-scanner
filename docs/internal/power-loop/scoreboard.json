@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T04:26:00.000Z",
+  "updated_at": "2026-08-12T05:26:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2778,
-  "total_findings": 28150,
+  "total_sites_scanned": 2782,
+  "total_findings": 28241,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1974,
-  "discovery_findings": 23661,
-  "improvements_shipped": 1193,
-  "last_run": "2026-08-12T04:26:00.000Z",
+  "discovery_findings": 23752,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-12T05:26:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,38 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (46 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (47 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 4,
-      "focus": "ginandjuice.shop/logger blind OAST interaction oracles",
+      "urls_scanned": 4,
+      "findings": 91,
+      "focus": "frontend-xss-demo DOM XSS oracle + ginandjuice blog + juice reviews queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "ginandjuice.shop/logger: 22→26 findings — ginandjuice-logger-oast-live-oracle + ginandjuice-logger-route-live-oracle shipped (POST /logger blind OAST sink, searchLogger.js client POST)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-67: not deployed on Heroku (WHOOOOPS error page) — challenge-specific oracle deferred"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "dev-lucasoliveira.github.io/frontend-xss-demo/insecure: 1→6 findings — frontend-xss-demo-insecure-dom-xss-live-oracle shipped (dangerouslySetInnerHTML:{__html:u} bundle sink, SPA entry fallback for GitHub Pages 404)",
+      "ginandjuice.shop/blog/post?postId=2: 31 findings — ginandjuice-blog-post-open-redirect + route oracles via queue drain + route priority",
+      "demo.owasp-juice.shop/rest/products/reviews: 48 findings — juice-shop-products-reviews-exposure oracles via queue drain + route priority",
+      "web-security-learning-labs.vercel.app/module/1596: 8 findings — WSL placeholder module queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "wrongsecrets challenge-67: challenge page not deployed on Heroku public demo (only 0-66 in nav)",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "web-security-learning-labs module routes: placeholder shells only — no route-specific vuln oracles",
-      "queued-not-scanned: module/1596, ginandjuice blog/post?postId=2, demo.owasp-juice.shop/rest/products/reviews"
+      "frontend-xss-demo.vercel.app deployment offline (DEPLOYMENT_NOT_FOUND) — GitHub Pages oracle used instead",
+      "queued-not-scanned: ginandjuice blog/post?postId=3, demo.owasp-juice.shop/rest/products/1/reviews"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
+    "juice-shop.herokuapp.com": 47,
+    "demo.owasp-juice.shop/rest/products/reviews": 48,
+    "ginandjuice.shop/blog/post?postId=2": 31,
+    "dev-lucasoliveira.github.io/frontend-xss-demo/insecure": 6,
     "ginandjuice.shop/logger": 26,
-    "web-security-learning-labs.vercel.app/module/1586": 8,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "web-security-learning-labs.vercel.app/module/1596": 8,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 46,
-    "wrongsecrets.herokuapp.com/challenge/challenge-67": 12,
     "ssrf.vulnlab.dev/basic": 3
   }
 }
