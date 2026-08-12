@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-demo-host-scan-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isJuiceShopHerokuHost limits Heroku 503 fallback to juice-shop.herokuapp.com mirrors only — demo.owasp-juice.shop/rest/memories scan no longer throws BlockedTargetError; findings 0→48 with juice-shop-memories-bola-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-insecure-passwords-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: split insecure-passwords from api-security hub routeRe + catalog fallback for login redirects; /challenges/insecure-passwords findings 0→3 with route-specific ai-security-insecure-passwords-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-vulnerable-deps-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: split vulnerable-deps from supply-chain hub + aiSecurityPlatformFetchCatalog uses curated fallback when login shell omits /challenges/; /challenges/vulnerable-deps findings 0→3 with ai-security-vulnerable-deps-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-59-slack-webhook-route-live-oracle",
       "status": "shipped",
