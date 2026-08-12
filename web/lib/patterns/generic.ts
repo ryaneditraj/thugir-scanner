@@ -30546,6 +30546,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-31-web-page-secret-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-31 web page secret route live oracle",
+    description:
+      "When scanning /challenge/31 or /challenge/challenge-31, the walkthrough documents secret sauce spilled in OWASP project website HTML — route-specific challenge-31 front-end secret exposure oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-31 HTML comment secret walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge31WebPageSecretRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-31 is intentional — never embed secrets in HTML comments or public web pages.",
+      steps: [
+        "Remove secrets from HTML comments, metadata, and client-visible markup.",
+        "Scan public websites for accidental secret disclosure before publishing.",
+        "Rotate any credentials that appeared in public page source."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-31 route documents secret sauce in OWASP website HTML. Show remediation for front-end secret exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-32-llm-prompt-leak-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-32 LLM prompt leak route live oracle",
+    description:
+      "When scanning /challenge/32 or /challenge/challenge-32, the walkthrough documents password extraction via Lakera Gandalf LLM prompt game — route-specific challenge-32 AI secret leakage oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-32 LLM prompt injection walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge32LlmPromptLeakRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-32 is intentional — never upload credentials to LLM applications without output filtering.",
+      steps: [
+        "Redact passwords and API keys before sending code to LLM services.",
+        "Apply output guardrails that block credential leakage from model responses.",
+        "Rotate any credentials that were ever included in LLM prompts."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-32 route documents LLM password extraction via Gandalf. Show remediation for AI secret leakage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-34-pbkdf2-key-generation-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-34 PBKDF2 key generation route live oracle",
+    description:
+      "When scanning /challenge/34 or /challenge/challenge-34, the walkthrough documents flawed PBKDF2 key derivation in Challenge34.java — route-specific challenge-34 cryptography oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-34 weak key generation walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge34Pbkdf2KeyGenerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-34 is intentional — use cryptographically secure random sources for key derivation.",
+      steps: [
+        "Use SecureRandom or platform CSPRNG for PBKDF2 salt and key material.",
+        "Never derive keys from predictable inputs like timestamps or usernames alone.",
+        "Rotate keys generated with weak derivation functions."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-34 route documents flawed PBKDF2 in Challenge34.java. Show remediation for secure key generation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-error-demo-database-connection-live-oracle",
     platform: "generic",
     category: "Exposed secret",
