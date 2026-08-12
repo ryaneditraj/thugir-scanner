@@ -15446,6 +15446,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank /admin route live oracle",
+    description:
+      "When scanning /admin, GET with default admin/admin credentials exposes user directory and audit log — route-specific FauxBank admin panel oracle.",
+    impactOneline:
+      "Route scans on /admin need live admin-panel confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default admin credentials and enforce MFA on privileged panels.",
+      steps: [
+        "Remove or rotate default admin/admin credentials in production.",
+        "Require MFA and IP allowlists for admin panel access.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route scan confirms default admin/admin exposes user directory. Show route-specific admin hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -23373,6 +23399,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /userlogin page reads logobgcolor from the URL into logoBgColor inline CSS. Show how to allowlist safe color values and block CSS injection payloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-userlogin-css-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /userlogin CSS injection route live oracle",
+    description:
+      "When scanning /userlogin, GET ?logobgcolor= passes the URL search param into logo background inline CSS via style.cssText without sanitization — route-specific CSS injection oracle.",
+    impactOneline:
+      "Route scans on /userlogin need live CSS injection confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsUserloginCssInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate URL-driven style values against an allowlist; never pass raw search params into inline CSS.",
+      steps: [
+        "Allowlist logo background colors (named CSS colors or hex codes matching /^#[0-9a-f]{3,8}$/i).",
+        "Reject quotes, semicolons, and url() in user-supplied style values.",
+        "Prefer CSS custom properties set server-side instead of reflecting URL params into style attributes."
+      ]
+    },
+    fixPrompt:
+      "Our /userlogin route scan confirms logobgcolor flows into inline CSS. Show route-specific CSS injection remediation.",
     version: 1,
     enabled: true
   },
@@ -36705,6 +36757,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v2/forgot-password endpoint returns User not found for invalid usernames. Show enumeration-safe password-reset response handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v2-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Vuln Bank v2 forgot-password route live oracle",
+    description:
+      "When scanning /api/v2/forgot-password, POST returns status:success for valid usernames but status:error User not found for unknown accounts — route-specific enumeration oracle.",
+    impactOneline:
+      "Route scans on v2 forgot-password need live username-enumeration confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV2ForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic forgot-password responses for all usernames.",
+      steps: [
+        "Return the same success message whether or not the username exists.",
+        "Rate-limit forgot-password endpoints per IP and per username.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v2/forgot-password route scan confirms username enumeration via differing responses. Show route-specific remediation.",
     version: 1,
     enabled: true
   },
