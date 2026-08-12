@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-idor-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/idor-vulnerable/1 returns Angular <app-root> SPA shell (HTTP 200) instead of Next.js IDOR API; seclab.vercel.app/api/idor-vulnerable findings 4→5 (+seclab-idor-vulnerable-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:graphql-lab.vercel.app",
+      "slug": "graphql-lab-hasura-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle embeds x-hasura-admin-secret + graphql-lab.hasura.app/v1/graphql; POST introspection with leaked secret returns query_root; graphql-lab.vercel.app/graphql findings 6→8 (+graphql-lab-hasura-admin-live-oracle +graphql-lab-hasura-admin-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-playground-idor-vulnerable-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractSecLabPlaygroundSeeds extended with /api/idor-vulnerable hub seed; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-ai-system-info-route-live-oracle",
       "status": "shipped",
