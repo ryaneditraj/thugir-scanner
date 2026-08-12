@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T08:14:57.342Z",
+  "updated_at": "2026-08-12T08:21:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2803,
-  "total_findings": 28686,
+  "total_sites_scanned": 2811,
+  "total_findings": 28876,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1986,
-  "discovery_findings": 24056,
+  "discovery_urls_added": 1991,
+  "discovery_findings": 24246,
   "improvements_shipped": 1190,
-  "last_run": "2026-08-12T08:14:57.342Z",
+  "last_run": "2026-08-12T08:21:30.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -52,34 +52,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 9,
-      "focus": "Route oracle gaps — fauxbank /admin, brokencrystals /userlogin CSS injection, vulnbank v2 forgot-password enumeration",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 190,
+      "focus": "ginandjuice DOM open-redirect + catalog/product XXE route oracles, pwnshop wallet/topup/vulnbank PWN-042, WSL module/1598 placeholder",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "pentest-fauxbank.vercel.app/admin: 15→16 findings — fauxbank-admin-route-live-oracle shipped",
-      "brokencrystals.com/userlogin?logobgcolor=red: 80→82 findings — brokencrystals-userlogin-css-injection-route-live-oracle shipped",
-      "vulnbank.org/api/v2/forgot-password: 25→26 findings — vulnbank-v2-forgot-password-route-live-oracle shipped"
+      "ginandjuice.shop/blog?search=test&back=https://evil.com: 29 findings incl ginandjuice-blog-search-open-redirect-route-live-oracle",
+      "ginandjuice.shop/catalog/product?productId=1: 32 findings incl ginandjuice-catalog-product-route-live-oracle (XXE stock check)",
+      "ginandjuice.shop/blog/post?postId=1&back=https://evil.com: 32 findings incl ginandjuice-blog-post-route-live-oracle",
+      "pwnshop.ctfsecurity.com/wallet/topup/vulnbank: 44 findings incl pwnshop-wallet-topup-route-live-oracle (PWN-042)",
+      "web-security-learning-labs.vercel.app/module/1598: 8 findings — placeholder module route oracle only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "wrongsecrets challenge-72+ on Heroku return undeployed WHOOOOPS — undeployed-challenge oracle covers but queue not yet expanded",
-      "ginandjuice.shop/blog/post?postId=7: missing client-side-open-redirect-evidence vs postId=6 (31 vs 30 findings)",
-      "queued-not-scanned (48h skip): seclab.vercel.app/ssti, demo.owasp-juice.shop/rest/captcha, ginandjuice.shop/blog/post?postId=5"
+      "web-security-learning-labs module/1598: placeholder page — no route-specific vuln oracle beyond generic bundle checks",
+      "ginandjuice.shop/blog/post?postId=7: 404 — postId=1 open-redirect route oracle works; postId=6 remains XSS hub",
+      "queued-not-scanned (48h skip): wrongsecrets challenge-70/71, ginandjuice postId=6, WSL module/1597"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "pwnshop.ctfsecurity.com/wallet/topup/vulnbank": 44,
+    "ginandjuice.shop/catalog/product?productId=1": 32,
+    "ginandjuice.shop/blog/post?postId=1&back=https://evil.com": 32,
+    "ginandjuice.shop/blog?search=test&back=https://evil.com": 29,
     "brokencrystals.com/userlogin?logobgcolor=red": 82,
-    "pentest-fauxbank.vercel.app/admin": 16,
-    "vulnbank.org/api/v2/forgot-password": 26,
     "ginandjuice.shop/blog/post?postId=6": 31,
-    "ssrf.vulnlab.dev/basic": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-70": 14,
-    "web-security-learning-labs.vercel.app/module/1597": 8
+    "web-security-learning-labs.vercel.app/module/1598": 8
   }
 }
