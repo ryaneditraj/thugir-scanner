@@ -6756,9 +6756,30 @@ function frontendXssDemoFindBundleUrl(ctx: RuleContext, pageHtml: string): strin
 
 const frontendXssDemoInsecureDomXssLiveOracle: Rule = async (ctx) => {
   if (!isFrontendXssDemoHost(ctx)) return NEGATIVE;
-  const homeHtml = ctx.home.body || "";
-  if (!/frontend-xss-demo|XSS testing.*educational demo/i.test(homeHtml)) return NEGATIVE;
-  const bundleUrl = frontendXssDemoFindBundleUrl(ctx, homeHtml);
+  const candidates = [
+    ctx.scanUrl,
+    (() => {
+      try {
+        return new URL("/frontend-xss-demo/", ctx.origin).toString();
+      } catch {
+        return null;
+      }
+    })(),
+    ctx.home.finalUrl,
+    ctx.origin
+  ].filter((u): u is string => Boolean(u));
+  let pageDoc: Awaited<ReturnType<RuleContext["probe"]["get"]>> | null = null;
+  let pageUrl = "";
+  for (const candidate of [...new Set(candidates)]) {
+    const doc = await ctx.probe.get(candidate, { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/frontend-xss-demo|XSS testing.*educational demo/i.test(doc.body)) continue;
+    pageDoc = doc;
+    pageUrl = candidate;
+    break;
+  }
+  if (!pageDoc) return NEGATIVE;
+  const bundleUrl = frontendXssDemoFindBundleUrl(ctx, pageDoc.body);
   if (!bundleUrl) return NEGATIVE;
   const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 524288, timeoutMs: 20000 });
   if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
@@ -6776,6 +6797,7 @@ const frontendXssDemoInsecureDomXssLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: 0.92,
     evidence: {
+      pageUrl,
       bundleUrl,
       snippet:
         "dangerouslySetInnerHTML:{__html:u} on /insecure todos vs DOMPurify.sanitize wrapper on /secure route",

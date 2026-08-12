@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dev-lucasoliveira.github.io/frontend-xss-demo",
+      "slug": "frontend-xss-demo-insecure-dom-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle index-SnaU_Sqf.js confirms dangerouslySetInnerHTML:{__html:u} on /insecure vs DOMPurify.sanitize on /secure; SPA entry fallback when /insecure returns GitHub Pages 404; dev-lucasoliveira.github.io/frontend-xss-demo/insecure findings 1→6 (+frontend-xss-demo-insecure-dom-xss-live-oracle + route oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue prepended ginandjuice.shop/blog/post?postId=2 + -3 route priority for ginandjuice-blog-post* on /blog/post; route scan 31 findings incl ginandjuice-blog-post-open-redirect-live-oracle + ginandjuice-blog-post-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-products-reviews-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue prepended demo.owasp-juice.shop/rest/products/reviews + -3 route priority for juice-shop-products-reviews*; route scan 48 findings incl juice-shop-products-reviews-exposure-live-oracle + route oracle (author admin@juice-sh.op); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-logger-oast-live-oracle",
       "status": "shipped",
