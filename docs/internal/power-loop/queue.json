@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T09:24:14.365Z",
+  "updated_at": "2026-08-12T10:21:18.442Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=8",
+      "source": "PortSwigger Gin & Juice Shop — DOM XSS /blog/post oracle postId=8 (pentest-2026-ginandjuice route map expansion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/privacy-requests",
+      "source": "Official OWASP Juice Shop demo — GDPR privacy-request BOLA oracle GET /rest/privacy-requests (juice-shop live oracle suite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/order-history",
+      "source": "Official OWASP Juice Shop demo — order-history BOLA oracle GET /rest/order-history (juice-shop live oracle suite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1600",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1600 security lab (OSS Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/cards",
+      "source": "Official OWASP Juice Shop demo — payment cards BOLA oracle GET /rest/cards (juice-shop live oracle suite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-72",
       "source": "OWASP WrongSecrets — challenge-72 public Heroku demo (README challenge table expansion)",

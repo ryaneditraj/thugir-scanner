@@ -4,7 +4,7 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-post-back-javascript-scoped-probe",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: back-javascript oracle scoped to /blog/post scans and iterates postIds with URLSearchParams back handlers; ginandjuice.shop/blog/post?postId=1&back=https://evil.com findings 33→35 (+back-javascript live+route); ginandjuice.shop/blog?search=test&back=https://evil.com 32→30 (removed false-positive back-javascript); benchmark juice-shop-staging 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: back-javascript oracle scoped to /blog/post scans and iterates postIds with URLSearchParams back handlers; ginandjuice.shop/blog/post?postId=1&back=https://evil.com findings 33→35 (+back-javascript live+route); ginandjuice.shop/blog?search=test&back=https://evil.com 32→30 (removed false-positive back-javascript); benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:ginandjuice.shop",
@@ -16,7 +16,7 @@
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-73-hub-seed",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with /challenge/73 + /challenge/challenge-73; wrongsecrets.herokuapp.com/challenge/challenge-73 fires wrongsecrets-heroku-undeployed-challenge live+route (14 findings WHOOOOPS); benchmark juice-shop-staging 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with /challenge/73 + /challenge/challenge-73; wrongsecrets.herokuapp.com/challenge/challenge-73 fires wrongsecrets-heroku-undeployed-challenge live+route (14 findings WHOOOOPS); benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:ginandjuice.shop",
