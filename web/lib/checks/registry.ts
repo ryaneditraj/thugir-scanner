@@ -35575,6 +35575,16 @@ for (let moduleNum = WEB_SECURITY_LEARNING_SSTI_SHELL_MIN; moduleNum <= WEB_SECU
     "Server-Side Template Injection (Advanced)";
 }
 
+/** High-number WSL modules with explicit curated topics (override placeholder/SSTI shells). */
+const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
+  "1597": "IDOR",
+  "1598": "IDOR",
+  "1599": "IDOR"
+};
+for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
+  WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
+}
+
 function isWebSecurityLearningSstiModuleId(moduleId: string): boolean {
   if (moduleId === "1022" || moduleId === "1024") return true;
   const n = Number(moduleId);
@@ -35626,7 +35636,10 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1033": /Business Logic|business-logic/i,
   "1034": /Request Smuggling|HTTP desync/i,
   "1035": /Cache Poisoning|web cache/i,
-  "1036": /Host Header|host header injection/i
+  "1036": /Host Header|host header injection/i,
+  "1597": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1598": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1599": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -35762,7 +35775,11 @@ const webSecurityLearningLabsModuleRouteLiveOracle: Rule = async (ctx) => {
   const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
   if (!moduleMatch) return NEGATIVE;
   const moduleId = moduleMatch[1]!;
-  if (!WEB_SECURITY_LEARNING_CURATED_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  if (
+    !WEB_SECURITY_LEARNING_CURATED_MODULE_IDS.has(moduleId) &&
+    !WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES[moduleId]
+  )
+    return NEGATIVE;
   const evidenceHit = await webSecurityLearningLabsModuleRouteEvidence(ctx);
   if (!evidenceHit.fired) return NEGATIVE;
   const note = String(evidenceHit.evidence.note ?? "").replace(
@@ -55694,42 +55711,59 @@ const ginAndJuiceBlogPostRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceBlogPostAtobRedirectPostIds = ["6", "7"];
+
+function ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl: string): string | undefined {
+  const match = pageUrl.match(/[?&]postId=(\d+)/i);
+  return match?.[1];
+}
+
 const ginAndJuiceBlogPost7AtobRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL("/blog/post", ctx.origin);
-  probeUrl.searchParams.set("postId", "7");
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
-  const atobMatch = doc.body.match(/location\s*=\s*atob\s*\(\s*['"]([^'"]+)['"]\s*\)/i);
-  if (!atobMatch) return NEGATIVE;
-  if (
-    !/onmouseenter[\s\S]{0,400}onmouseup[\s\S]{0,200}location\s*=\s*atob/i.test(doc.body)
-  )
-    return NEGATIVE;
-  let decodedPath = "";
-  try {
-    decodedPath = atob(atobMatch[1]!);
-  } catch {
-    /* ignore */
-  }
-  return {
-    fired: true,
-    confidence: 0.91,
-    evidence: {
-      url: probeUrl.toString(),
-      atobPayload: atobMatch[1],
-      decodedPath: decodedPath || undefined,
-      snippet: atobMatch[0].slice(0, 160),
-      note: "Gin & Juice Shop /blog/post?postId=7 uses mouse-event gated atob-encoded location redirect — DOM open-redirect training oracle"
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const urlPostId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl);
+  const postIdsToProbe = urlPostId
+    ? [urlPostId]
+    : ginAndJuiceBlogPostAtobRedirectPostIds;
+  for (const postId of postIdsToProbe) {
+    const probeUrl = new URL("/blog/post", ctx.origin);
+    probeUrl.searchParams.set("postId", postId);
+    const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 500) continue;
+    const atobMatch = doc.body.match(/location\s*=\s*atob\s*\(\s*['"]([^'"]+)['"]\s*\)/i);
+    if (!atobMatch) continue;
+    if (
+      !/onmouseenter[\s\S]{0,400}onmouseup[\s\S]{0,200}location\s*=\s*atob/i.test(doc.body)
+    )
+      continue;
+    let decodedPath = "";
+    try {
+      decodedPath = atob(atobMatch[1]!);
+    } catch {
+      /* ignore */
     }
-  };
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url: probeUrl.toString(),
+        postId,
+        atobPayload: atobMatch[1],
+        decodedPath: decodedPath || undefined,
+        snippet: atobMatch[0].slice(0, 160),
+        note: `Gin & Juice Shop /blog/post?postId=${postId} uses mouse-event gated atob-encoded location redirect — DOM open-redirect training oracle`
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
-  if (!/[?&]postId=7\b/i.test(pageUrl)) return NEGATIVE;
+  const postId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl);
+  if (!postId || !ginAndJuiceBlogPostAtobRedirectPostIds.includes(postId)) return NEGATIVE;
   const result = await ginAndJuiceBlogPost7AtobRedirectLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -55738,7 +55772,57 @@ const ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Gin & Juice Shop /blog/post?postId=7 route scan — mouse-event gated atob location redirect without allowlist"
+      note: `Gin & Juice Shop /blog/post?postId=${postId} route scan — mouse-event gated atob location redirect without allowlist`
+    }
+  };
+};
+
+const ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const postId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl) ?? "6";
+  const probeUrl = new URL("/blog/post", ctx.origin);
+  probeUrl.searchParams.set("postId", postId);
+  probeUrl.searchParams.set("back", "javascript:thugirProbeDomXss");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasBackHandler =
+    /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(doc.body) &&
+    /location\s*=\s*new URLSearchParams/i.test(doc.body);
+  if (!hasBackHandler) return NEGATIVE;
+  const onclickBack =
+    doc.body.match(
+      /onclick\s*=\s*['"][^'"]*location\s*=\s*new URLSearchParams[\s\S]{0,120}/i
+    )?.[0];
+  if (!onclickBack) return NEGATIVE;
+  if (/javascript\s*:/i.test(onclickBack) || /replace\s*\(|sanitize|allowlist/i.test(onclickBack))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl.toString(),
+      postId,
+      probeBack: "javascript:thugirProbeDomXss",
+      snippet: onclickBack.slice(0, 160),
+      note: "Gin & Juice Shop /blog/post back query param drives location assignment without protocol validation — DOM XSS via javascript: URI oracle"
+    }
+  };
+};
+
+const ginAndJuiceBlogPostBackJavascriptDomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog/post route scan — back param location assignment allows javascript: DOM XSS"
     }
   };
 };
@@ -76657,6 +76741,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceBlogPostRouteLiveOracle,
   ginAndJuiceBlogPost7AtobRedirectLiveOracle,
   ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle,
+  ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle,
+  ginAndJuiceBlogPostBackJavascriptDomXssRouteLiveOracle,
   ginAndJuiceCatalogCategorySqliLiveOracle,
   ginAndJuiceCatalogCategorySqliRouteLiveOracle,
   ginAndJuiceCatalogCategoryCrlfLiveOracle,
