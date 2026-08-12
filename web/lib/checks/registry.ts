@@ -63469,6 +63469,135 @@ const wrongsecretsChallenge30LocalStorageRouteLiveOracle: Rule = async (ctx) => 
   };
 };
 
+const wrongsecretsChallenge31WebPageSecretLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-31", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Front-end|Front-end<\/strong>/i.test(body) ||
+    !/Secret in a web page|secret sauce/i.test(body) ||
+    !/www-project-wrongsecrets/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Secret in a web page[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "HTML comment secret sauce challenge",
+      note: "OWASP WrongSecrets challenge-31 documents secret sauce spilled in OWASP project website HTML — front-end web page secret exposure oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge31WebPageSecretRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?31\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge31WebPageSecretLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-31 route scan — secret sauce in OWASP project website HTML walkthrough confirms front-end secret exposure"
+    }
+  };
+};
+
+const wrongsecretsChallenge32LlmPromptLeakLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-32", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*AI|AI<\/strong>/i.test(body) ||
+    !/LLM \(Large Language Model\)|uploaded code to look for security issues/i.test(body) ||
+    !/gandalf\.lakera\.ai/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/LLM \(Large Language Model\)[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "LLM prompt injection password leak challenge",
+      note: "OWASP WrongSecrets challenge-32 documents password extraction via Lakera Gandalf LLM prompt game — AI secret leakage oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge32LlmPromptLeakRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?32\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge32LlmPromptLeakLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-32 route scan — Lakera Gandalf LLM prompt leak walkthrough confirms AI secret extraction training oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge34Pbkdf2KeyGenerationLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-34", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Cryptography|Cryptography<\/strong>/i.test(body) ||
+    !/Generating Random Keys|Challenge34\.java/i.test(body) ||
+    !/PBKDF2/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Challenge34\.java[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "PBKDF2 key generation mistake challenge",
+      note: "OWASP WrongSecrets challenge-34 documents flawed PBKDF2 key derivation in Challenge34.java — cryptography weak key generation oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge34Pbkdf2KeyGenerationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?34\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge34Pbkdf2KeyGenerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-34 route scan — PBKDF2 key generation walkthrough in Challenge34.java confirms cryptography training oracle"
+    }
+  };
+};
+
 const WRONGSECRETS_ERROR_DEMO_DB_PATH = "/error-demo/database-connection";
 
 const wrongsecretsErrorDemoDatabaseConnectionLiveOracle: Rule = async (ctx) => {
@@ -76570,6 +76699,12 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge29ScreenshotLogRouteLiveOracle,
   wrongsecretsChallenge30LocalStorageLiveOracle,
   wrongsecretsChallenge30LocalStorageRouteLiveOracle,
+  wrongsecretsChallenge31WebPageSecretLiveOracle,
+  wrongsecretsChallenge31WebPageSecretRouteLiveOracle,
+  wrongsecretsChallenge32LlmPromptLeakLiveOracle,
+  wrongsecretsChallenge32LlmPromptLeakRouteLiveOracle,
+  wrongsecretsChallenge34Pbkdf2KeyGenerationLiveOracle,
+  wrongsecretsChallenge34Pbkdf2KeyGenerationRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionRouteLiveOracle,
   wrongsecretsMcpExecuteCommandLiveOracle,
