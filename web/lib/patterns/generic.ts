@@ -33224,6 +33224,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-idor-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecLab /api/idor-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/idor-vulnerable, GET /api/idor-vulnerable/1 returns user passwords without authentication — or the route serves an Angular SPA shell instead of the documented Next.js IDOR training API.",
+    impactOneline:
+      "Route-specific IDOR lab oracle confirms live unauthenticated user record access or flags dead /api/idor-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabIdorVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab IDOR API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/idor-vulnerable on production.",
+        "Enforce authentication and object-level authorization on user record APIs.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/idor-vulnerable route is a dead Angular stub or exposes live IDOR. Show object-level authorization remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-heroku-undeployed-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -51198,6 +51224,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /graphql route scan confirms _fetchExternalResource SSRF. Show route-specific GraphQL outbound-fetch hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphql-lab-hasura-admin-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "GraphQL Lab Hasura admin secret live oracle",
+    description:
+      "graphql-lab.vercel.app React bundle embeds x-hasura-admin-secret and graphql-lab.hasura.app/v1/graphql — the leaked secret enables full GraphQL introspection on the external Hasura backend.",
+    impactOneline:
+      "Client-bundled Hasura admin secrets grant full GraphQL schema introspection and admin API access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlLabHasuraAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed Hasura admin secrets in client bundles — use server-side proxies with role-based access.",
+      steps: [
+        "Remove x-hasura-admin-secret from React/SPA client code.",
+        "Proxy GraphQL through a backend that injects short-lived user JWTs.",
+        "Rotate exposed Hasura admin secrets immediately."
+      ]
+    },
+    fixPrompt:
+      "Our graphql-lab.vercel.app bundle leaks x-hasura-admin-secret for graphql-lab.hasura.app. Show how to remove admin secrets from SPAs and proxy GraphQL securely.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphql-lab-hasura-admin-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "GraphQL Lab /graphql Hasura admin route live oracle",
+    description:
+      "When scanning /graphql on graphql-lab.vercel.app, the route returns an SPA shell on POST but the bundle leaks Hasura admin credentials that enable introspection on graphql-lab.hasura.app/v1/graphql.",
+    impactOneline:
+      "Route-specific confirmation that /graphql scans expose bundled Hasura admin access to external GraphQL backends.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlLabHasuraAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove Hasura admin secrets from client bundles; proxy GraphQL through authenticated backends.",
+      steps: [
+        "Do not ship x-hasura-admin-secret in frontend JavaScript.",
+        "Use Hasura JWT auth with row-level permissions instead of admin secrets in browsers.",
+        "Rotate any exposed admin secrets."
+      ]
+    },
+    fixPrompt:
+      "Our graphql-lab.vercel.app /graphql route scan confirms bundled Hasura admin secret exposure. Show route-specific remediation for SPA GraphQL clients.",
     version: 1,
     enabled: true
   },
