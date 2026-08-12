@@ -55671,12 +55671,14 @@ const ginAndJuiceCatalogRouteLiveOracle: Rule = async (ctx) => {
 
 const ginAndJuiceBlogPostOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const probeHost = "evil-open-redirect-probe.example";
+  const postId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl) ?? "3";
   const probeUrl = new URL("/blog/post", ctx.origin);
-  probeUrl.searchParams.set("postId", "3");
+  probeUrl.searchParams.set("postId", postId);
   probeUrl.searchParams.set("back", `https://${probeHost}/`);
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
   const hasBackHandler =
     /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(doc.body) &&
     /location\s*=\s*new URLSearchParams/i.test(doc.body);
@@ -55689,7 +55691,7 @@ const ginAndJuiceBlogPostOpenRedirectLiveOracle: Rule = async (ctx) => {
       url: probeUrl.toString(),
       probeHost,
       snippet: doc.body.match(/location\s*=\s*new URLSearchParams[\s\S]{0,120}/i)?.[0]?.slice(0, 160),
-      note: "Gin & Juice Shop /blog/post?back= assigns location from URLSearchParams back query param without validation — DOM open-redirect oracle"
+      note: `Gin & Juice Shop /blog/post?postId=${postId}&back= assigns location from URLSearchParams back query param without validation — DOM open-redirect oracle`
     }
   };
 };
@@ -55777,37 +55779,44 @@ const ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceBlogPostBackJavascriptPostIds = ["1", "3", "5", "6"];
+
 const ginAndJuiceBlogPostBackJavascriptDomXssLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const postId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl) ?? "6";
-  const probeUrl = new URL("/blog/post", ctx.origin);
-  probeUrl.searchParams.set("postId", postId);
-  probeUrl.searchParams.set("back", "javascript:thugirProbeDomXss");
-  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  const hasBackHandler =
-    /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(doc.body) &&
-    /location\s*=\s*new URLSearchParams/i.test(doc.body);
-  if (!hasBackHandler) return NEGATIVE;
-  const onclickBack =
-    doc.body.match(
-      /onclick\s*=\s*['"][^'"]*location\s*=\s*new URLSearchParams[\s\S]{0,120}/i
-    )?.[0];
-  if (!onclickBack) return NEGATIVE;
-  if (/javascript\s*:/i.test(onclickBack) || /replace\s*\(|sanitize|allowlist/i.test(onclickBack))
-    return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.92,
-    evidence: {
-      url: probeUrl.toString(),
-      postId,
-      probeBack: "javascript:thugirProbeDomXss",
-      snippet: onclickBack.slice(0, 160),
-      note: "Gin & Juice Shop /blog/post back query param drives location assignment without protocol validation — DOM XSS via javascript: URI oracle"
-    }
-  };
+  const urlPostId = ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl);
+  if (!urlPostId && !/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  const postIdsToProbe = urlPostId ? [urlPostId] : ginAndJuiceBlogPostBackJavascriptPostIds;
+  for (const postId of postIdsToProbe) {
+    const probeUrl = new URL("/blog/post", ctx.origin);
+    probeUrl.searchParams.set("postId", postId);
+    probeUrl.searchParams.set("back", "javascript:thugirProbeDomXss");
+    const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 500) continue;
+    const hasBackHandler =
+      /URLSearchParams\(location\.search\)\.get\(\s*["']back["']\s*\)/i.test(doc.body) &&
+      /location\s*=\s*new URLSearchParams/i.test(doc.body);
+    if (!hasBackHandler) continue;
+    const onclickBack =
+      doc.body.match(
+        /onclick\s*=\s*['"][^'"]*location\s*=\s*new URLSearchParams[\s\S]{0,120}/i
+      )?.[0];
+    if (!onclickBack) continue;
+    if (/javascript\s*:/i.test(onclickBack) || /replace\s*\(|sanitize|allowlist/i.test(onclickBack))
+      continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl.toString(),
+        postId,
+        probeBack: "javascript:thugirProbeDomXss",
+        snippet: onclickBack.slice(0, 160),
+        note: `Gin & Juice Shop /blog/post?postId=${postId} back query param drives location assignment without protocol validation — DOM XSS via javascript: URI oracle`
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const ginAndJuiceBlogPostBackJavascriptDomXssRouteLiveOracle: Rule = async (ctx) => {

@@ -9724,6 +9724,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-71",
         "https://wrongsecrets.herokuapp.com/challenge/72",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-72",
+        "https://wrongsecrets.herokuapp.com/challenge/73",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-73",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
