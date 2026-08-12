@@ -22,9 +22,9 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://demo.owasp-juice.shop/rest/quantitys",
-      "source": "Official OWASP Juice Shop demo — inventory quantities exposure oracle GET /rest/quantitys (juice-shop live oracle suite)",
-      "auth": "benchmark"
+      "url": "https://pentest-fauxbank.vercel.app/api/loans",
+      "source": "alfredang/pentest FauxBank — loan request API oracle POST /api/loans (README loans module)",
+      "auth": "public_demo"
     },
     {
       "url": "https://ist-edu-bd.vercel.app/api/comments",
