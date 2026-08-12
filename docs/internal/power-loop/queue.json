@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T14:10:00.000Z",
+  "updated_at": "2026-08-12T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/community/api/v2/community/posts/recent",
+      "source": "APIsec crAPI v2 — BOLA vehicle UUID leak oracle GET /community/api/v2/community/posts/recent (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
+      "source": "APIsec crAPI v2 — sequential mechanic_report BOLA oracle GET /workshop/api/mechanic/mechanic_report (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/deliverys",
+      "source": "Official OWASP Juice Shop demo — delivery methods exposure oracle GET /rest/deliverys (juice-shop live oracle suite)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/hints",
+      "source": "Official OWASP Juice Shop demo — challenge hints exposure oracle GET /rest/hints (juice-shop live oracle suite)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/challenges",
+      "source": "Official OWASP Juice Shop demo — challenge scoreboard exposure oracle GET /rest/challenges (juice-shop live oracle suite)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-76",
       "source": "OWASP WrongSecrets — challenge-76 public Heroku demo (README challenge table expansion)",
