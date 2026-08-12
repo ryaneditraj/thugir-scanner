@@ -2955,6 +2955,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsUsersSearchRouteLiveOracle",
   "vulnbankAiAnonymousChatLiveOracle",
   "vulnbankAiAnonymousChatRouteLiveOracle",
+  "vulnbankAiSystemInfoLiveOracle",
+  "vulnbankAiSystemInfoRouteLiveOracle",
   "vulnbankBoplaRegisterLiveOracle",
   "vulnbankSqliLoginLiveOracle",
   "vulnbankSqliLoginRouteLiveOracle",
@@ -3089,6 +3091,7 @@ const DEEP_RULES = new Set<string>([
   "nodegoatProfileSensitiveDataRouteLiveOracle",
   "nodegoatProfileRedosRouteLiveOracle",
   "vulnforgeAcademyLevelSqliRouteLiveOracle",
+  "vulnforgeAcademyLevel6SqliRouteLiveOracle",
   "vulnforgeAcademyLevelXssRouteLiveOracle",
   "vulnforgeAcademyLevelSsrfRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
@@ -10809,6 +10812,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/rest\.testinvicti\.com/i.test(origin) && p.slug.startsWith("rest-testinvicti-jwt-users-bola")) return -2;
       if (/vulnapi\.testinvicti\.com/i.test(origin) && p.slug.startsWith("vulnapi-")) return -2;
       if (/vulnbank\.org/i.test(origin) && p.slug.startsWith("vulnbank-transactions-bola")) return -2;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/ai\/system-info\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-ai-system-info")
+      )
+        return -3;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level6\.php\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level6-sqli")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-process-numbers")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-api-")) return -2;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-oidc-client-secret")) return -2;
@@ -11025,6 +11040,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?34\b/i.test(targetInput) &&
         p.slug.startsWith("wrongsecrets-challenge-34")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?33\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-33")
       )
         return -3;
       if (
