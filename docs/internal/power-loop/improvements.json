@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-7-atob-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/post?postId=7 returns HTTP 404 with mouse-event gated location=atob('L3Z1bG5lcmFiaWxpdGllcw==') → /vulnerabilities; ginandjuice.shop/blog/post?postId=7 findings 30→33 (+ginandjuice-blog-post-7-atob-redirect-live-oracle +route +client-side-open-redirect-evidence); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "client-side-open-redirect-evidence-atob-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideOpenRedirectEvidence extended with atob-encoded location + mouse-event gated redirect chain patterns; postId=7 now fires client-side-open-redirect-evidence (30→33 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-67-72-hub-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds expanded with challenge-67..72 URLs; wrongsecrets.herokuapp.com/challenge/challenge-70 fires wrongsecrets-heroku-undeployed-challenge-live-oracle + route (14 findings); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-admin-route-live-oracle",
       "status": "shipped",

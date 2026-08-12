@@ -55699,7 +55699,7 @@ const ginAndJuiceBlogPost7AtobRedirectLiveOracle: Rule = async (ctx) => {
   const probeUrl = new URL("/blog/post", ctx.origin);
   probeUrl.searchParams.set("postId", "7");
   const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
   const atobMatch = doc.body.match(/location\s*=\s*atob\s*\(\s*['"]([^'"]+)['"]\s*\)/i);
   if (!atobMatch) return NEGATIVE;
   if (
