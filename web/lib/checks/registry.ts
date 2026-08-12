@@ -60168,8 +60168,7 @@ const juiceShopQuantitysExposureRouteLiveOracle: Rule = async (ctx) => {
 const juiceShopHintsExposureLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/api/Hints", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 8192 });
+  const { doc, url, mirror } = await juiceShopApiMirrorProbe(ctx, "/api/Hints", { maxBytes: 8192 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
   const challengeIds = [...doc.body.matchAll(/"ChallengeId"\s*:\s*(\d+)/g)].map((m) => m[1]);
@@ -60185,7 +60184,10 @@ const juiceShopHintsExposureLiveOracle: Rule = async (ctx) => {
       hintCount: hintTexts.length,
       sampleHint: hintTexts[0]?.[1]?.slice(0, 80),
       snippet: doc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET /api/Hints without auth returns challenge walkthrough hints — information disclosure oracle"
+      escapeMirror: mirror ?? false,
+      note: mirror
+        ? "Juice Shop GET /api/Hints without auth returns challenge walkthrough hints — information disclosure oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /api/Hints without auth returns challenge walkthrough hints — information disclosure oracle"
     }
   };
 };
@@ -60210,8 +60212,7 @@ const juiceShopHintsExposureRouteLiveOracle: Rule = async (ctx) => {
 const juiceShopChallengesDisclosureLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/api/Challenges", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 65536 });
+  const { doc, url, mirror } = await juiceShopApiMirrorProbe(ctx, "/api/Challenges", { maxBytes: 65536 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
   const keys = [...doc.body.matchAll(/"key"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
@@ -60228,7 +60229,10 @@ const juiceShopChallengesDisclosureLiveOracle: Rule = async (ctx) => {
       sampleKeys: keys.slice(0, 5),
       categories: [...uniqueCategories].slice(0, 5),
       snippet: doc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET /api/Challenges without auth returns full challenge scoreboard with keys and categories — information disclosure oracle"
+      escapeMirror: mirror ?? false,
+      note: mirror
+        ? "Juice Shop GET /api/Challenges without auth returns full challenge scoreboard with keys and categories — information disclosure oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /api/Challenges without auth returns full challenge scoreboard with keys and categories — information disclosure oracle"
     }
   };
 };
@@ -60253,8 +60257,7 @@ const juiceShopChallengesDisclosureRouteLiveOracle: Rule = async (ctx) => {
 const juiceShopDeliverysExposureLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/api/Deliverys", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 8192 });
+  const { doc, url, mirror } = await juiceShopApiMirrorProbe(ctx, "/api/Deliverys", { maxBytes: 8192 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
   const names = [...doc.body.matchAll(/"name"\s*:\s*"([^"]{4,})"/g)].map((m) => m[1]);
@@ -60268,7 +60271,10 @@ const juiceShopDeliverysExposureLiveOracle: Rule = async (ctx) => {
       deliveryMethods: names.slice(0, 4),
       prices: prices.slice(0, 4),
       snippet: doc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET /api/Deliverys without auth returns full delivery-method catalog with pricing — information disclosure oracle"
+      escapeMirror: mirror ?? false,
+      note: mirror
+        ? "Juice Shop GET /api/Deliverys without auth returns full delivery-method catalog with pricing — information disclosure oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /api/Deliverys without auth returns full delivery-method catalog with pricing — information disclosure oracle"
     }
   };
 };
@@ -60340,28 +60346,36 @@ const juiceShopAddresssIdBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-async function juiceShopFeedbacksProbeDoc(
-  ctx: RuleContext
+async function juiceShopApiMirrorProbe(
+  ctx: RuleContext,
+  apiPath: string,
+  opts: { maxBytes?: number; successBodyTest?: (body: string) => boolean } = {}
 ): Promise<{ doc: Awaited<ReturnType<typeof fetchDoc>>; url: string; mirror?: boolean }> {
-  const primaryUrl = new URL("/api/Feedbacks", ctx.origin).toString();
-  const primaryDoc = await ctx.probe.get(primaryUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const maxBytes = opts.maxBytes ?? 65536;
+  const successTest =
+    opts.successBodyTest ??
+    ((body: string) => /"status"\s*:\s*"success"/.test(body) && /"data"\s*:\s*\[/.test(body));
+  const primaryUrl = new URL(apiPath, ctx.origin).toString();
+  const primaryDoc = await ctx.probe.get(primaryUrl, { maxBytes, timeoutMs: 15000 });
   const primaryOk =
     primaryDoc.status >= 200 &&
     primaryDoc.status < 400 &&
     !HEROKU_STUB_RE.test(primaryDoc.body) &&
-    /"status"\s*:\s*"success"/.test(primaryDoc.body) &&
-    /"data"\s*:\s*\[/.test(primaryDoc.body);
+    successTest(primaryDoc.body);
   if (primaryOk) return { doc: primaryDoc, url: primaryUrl };
   if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return { doc: primaryDoc, url: primaryUrl };
-  const mirrorUrl = new URL("/api/Feedbacks", JUICE_SHOP_ESCAPE_MIRROR).toString();
-  const mirrorDoc = await fetchDoc(mirrorUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const mirrorUrl = new URL(apiPath, JUICE_SHOP_ESCAPE_MIRROR).toString();
+  const mirrorDoc = await fetchDoc(mirrorUrl, { maxBytes, timeoutMs: 15000 });
   const mirrorOk =
-    mirrorDoc.status >= 200 &&
-    mirrorDoc.status < 400 &&
-    /"status"\s*:\s*"success"/.test(mirrorDoc.body) &&
-    /"data"\s*:\s*\[/.test(mirrorDoc.body);
+    mirrorDoc.status >= 200 && mirrorDoc.status < 400 && successTest(mirrorDoc.body);
   if (mirrorOk) return { doc: mirrorDoc, url: mirrorUrl, mirror: true };
   return { doc: primaryDoc, url: primaryUrl };
+}
+
+async function juiceShopFeedbacksProbeDoc(
+  ctx: RuleContext
+): Promise<{ doc: Awaited<ReturnType<typeof fetchDoc>>; url: string; mirror?: boolean }> {
+  return juiceShopApiMirrorProbe(ctx, "/api/Feedbacks", { maxBytes: 65536 });
 }
 
 const juiceShopFeedbacksBolaLiveOracle: Rule = async (ctx) => {
@@ -69240,6 +69254,23 @@ const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/community\/api\/v2\/community\/posts/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiVehicleBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "crAPI /community/api/v2/community/posts route scan — vehicleid UUID leak in recent posts enables cross-user location BOLA (API1)"
+    }
+  };
+};
+
 const crapiDashboardLiveOracle: Rule = async (ctx) => {
   if (!isCrapi1Host(ctx)) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
@@ -76428,6 +76459,7 @@ export const RULES: Record<string, Rule> = {
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
   crapiVehicleRouteLiveOracle,
+  crapiCommunityPostsRouteLiveOracle,
   crapiDashboardLiveOracle,
   crapiDashboardRouteLiveOracle,
   crapiSignupOpenRegistrationLiveOracle,

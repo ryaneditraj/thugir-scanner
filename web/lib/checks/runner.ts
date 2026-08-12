@@ -2517,6 +2517,7 @@ const DEEP_RULES = new Set<string>([
   "crapiMechanicReportRouteLiveOracle",
   "crapiVehicleBolaLiveOracle",
   "crapiVehicleRouteLiveOracle",
+  "crapiCommunityPostsRouteLiveOracle",
   "crapiDashboardLiveOracle",
   "crapiDashboardRouteLiveOracle",
   "crapiSignupOpenRegistrationLiveOracle",
@@ -9729,6 +9730,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-72",
         "https://wrongsecrets.herokuapp.com/challenge/73",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-73",
+        "https://wrongsecrets.herokuapp.com/challenge/74",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-74",
+        "https://wrongsecrets.herokuapp.com/challenge/75",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-75",
+        "https://wrongsecrets.herokuapp.com/challenge/76",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-76",
+        "https://wrongsecrets.herokuapp.com/challenge/77",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-77",
+        "https://wrongsecrets.herokuapp.com/challenge/78",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-78",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
@@ -10938,8 +10949,27 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-5])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-8])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/(?:api|rest)\/(?:deliverys|hints|challenges)\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-") &&
+        /(?:deliverys|hints|challenges)/i.test(p.slug)
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/community\/api\/v2\/community\/posts/i.test(targetInput) &&
+        p.slug.startsWith("crapi-community-posts")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/mechanic_report/i.test(targetInput) &&
+        p.slug.startsWith("crapi-mechanic-report")
       )
         return -3;
       if (
