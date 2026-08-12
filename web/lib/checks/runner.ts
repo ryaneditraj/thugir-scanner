@@ -2538,7 +2538,9 @@ const DEEP_RULES = new Set<string>([
   "dvwuDashboardIdorRouteLiveOracle",
   "istEduNewsletterCrlfRouteLiveOracle",
   "istEduCsrfStateChangeLiveOracle",
+  "istEduCommentsXssRouteLiveOracle",
   "dvwuPortalSqliRouteLiveOracle",
+  "dvwuCommentsXssRouteLiveOracle",
   "dvwuSearchXssRouteLiveOracle",
   "dvwuNoticesLfiRouteLiveOracle",
   "dvwuCsrfNewsletterCrlfRouteLiveOracle",
@@ -7431,6 +7433,42 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/lfi",
     "/labs/xxe",
     "/labs/idor",
+    "/api/comments",
+    "/newsletter"
+  ]) {
+    try {
+      const u = new URL(p, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** DVWU (dvwu.vercel.app) — seed API lab routes for discovery queue drain. */
+function extractDvwuVulnPortalSeeds(html: string, pageUrl: string): string[] {
+  if (!/dvwu\.vercel\.app|Damn Vulnerable Web University/i.test(`${html}\n${pageUrl}`)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  for (const p of [
+    "/portal",
+    "/search",
+    "/dashboard",
+    "/notices",
+    "/login",
+    "/register",
+    "/labs/csrf",
+    "/labs/ssrf",
+    "/labs/xss",
+    "/labs/sqli",
+    "/labs/lfi",
+    "/labs/xxe",
+    "/labs/idor",
+    "/api/comments",
     "/newsletter"
   ]) {
     try {
@@ -9294,6 +9332,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const airtAcademySeeds = extractAirtAcademySeeds(home.body, home.finalUrl);
   const appsecMasterLabSeeds = extractAppsecMasterLabSeeds(home.body, origin);
   const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
+  const dvwuVulnPortalSeeds = extractDvwuVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
   const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
   const vulnerableWebSiteSeeds = extractVulnerableWebSiteSeeds(home.body, home.finalUrl);
@@ -10088,6 +10127,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...airtAcademySeeds,
       ...appsecMasterLabSeeds,
       ...istEduVulnPortalSeeds,
+      ...dvwuVulnPortalSeeds,
       ...vulnforgeSeeds,
       ...vulnshopSeeds,
       ...vulnerableWebSiteSeeds,
@@ -10671,8 +10711,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vulnbank\.org/i.test(origin) && /\/login\b/i.test(targetInput) && p.slug.startsWith("vulnbank-")) return -2;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:register|login|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe)|newsletter)\b/i.test(targetInput) &&
+        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe)|newsletter)\b/i.test(targetInput) &&
         p.slug.startsWith("ist-edu-")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe)|newsletter)\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-")
       )
         return -3;
       if (

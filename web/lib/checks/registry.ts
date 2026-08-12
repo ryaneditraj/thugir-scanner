@@ -73241,6 +73241,115 @@ const istEduCsrfStateChangeLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeCommentsStoredXss(ctx: RuleContext): Promise<RuleResult | null> {
+  const commentsUrl = new URL("/api/comments", ctx.origin).toString();
+  const doc = await ctx.probe.get(commentsUrl, {
+    method: "POST",
+    body: JSON.stringify({ comment: IST_EDU_XSS_PROBE }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/<script>thugirXssProbe<\/script>/i.test(doc.body)) return null;
+  if (!/Stored XSS|stored without sanitization|Comment Posted/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: commentsUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "POST /api/comments stores raw <script> payload without sanitization — stored XSS training oracle"
+    }
+  };
+}
+
+async function probeCommentsReflectedXss(ctx: RuleContext): Promise<RuleResult | null> {
+  const commentsUrl = new URL("/api/comments", ctx.origin);
+  commentsUrl.searchParams.set("comment", IST_EDU_XSS_PROBE);
+  const doc = await ctx.probe.get(commentsUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/<script>thugirXssProbe<\/script>/i.test(doc.body)) return null;
+  if (!/reflected without sanitization|XSS Vulnerable|Your Comment/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: commentsUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "GET /api/comments?comment= reflects raw <script> payload unescaped in HTML — reflected XSS training oracle"
+    }
+  };
+}
+
+function commentsXssRouteMatches(pageUrl: string): boolean {
+  if (/\/api\/comments\b/i.test(pageUrl)) return true;
+  try {
+    const pathname = new URL(pageUrl).pathname;
+    return /\/(?:labs\/xss|xss|comments)\/?$/i.test(pathname);
+  } catch {
+    return false;
+  }
+}
+
+const istEduCommentsXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!commentsXssRouteMatches(pageUrl)) return NEGATIVE;
+  const stored = await probeCommentsStoredXss(ctx);
+  if (stored?.fired) {
+    return {
+      fired: true,
+      confidence: stored.confidence,
+      evidence: {
+        ...stored.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /api/comments or /labs/xss route scan — POST stores raw <script> without sanitization — stored XSS comments oracle"
+      }
+    };
+  }
+  const reflected = await probeCommentsReflectedXss(ctx);
+  if (!reflected?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: reflected.confidence,
+    evidence: {
+      ...reflected.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /api/comments or /labs/xss route scan — GET ?comment= reflects raw <script> unescaped — reflected XSS comments oracle"
+    }
+  };
+};
+
+const dvwuCommentsXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!commentsXssRouteMatches(pageUrl)) return NEGATIVE;
+  const stored = await probeCommentsStoredXss(ctx);
+  if (stored?.fired) {
+    return {
+      fired: true,
+      confidence: stored.confidence,
+      evidence: {
+        ...stored.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /api/comments or /labs/xss route scan — POST stores raw <script> without sanitization — stored XSS comments oracle"
+      }
+    };
+  }
+  const reflected = await probeCommentsReflectedXss(ctx);
+  if (!reflected?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: reflected.confidence,
+    evidence: {
+      ...reflected.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /api/comments or /labs/xss route scan — GET ?comment= reflects raw <script> unescaped — reflected XSS comments oracle"
+    }
+  };
+};
+
 const dvwuCsrfNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -77122,7 +77231,9 @@ export const RULES: Record<string, Rule> = {
   dvwuDashboardIdorRouteLiveOracle,
   istEduNewsletterCrlfRouteLiveOracle,
   istEduCsrfStateChangeLiveOracle,
+  istEduCommentsXssRouteLiveOracle,
   dvwuPortalSqliRouteLiveOracle,
+  dvwuCommentsXssRouteLiveOracle,
   dvwuSearchXssRouteLiveOracle,
   dvwuNoticesLfiRouteLiveOracle,
   dvwuCsrfNewsletterCrlfRouteLiveOracle,
