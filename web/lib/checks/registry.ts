@@ -65836,11 +65836,15 @@ async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string
   const doc = await ctx.probe.get(loginUrl, { maxBytes: 65536, timeoutMs: 12000 });
   if (doc.status < 200 || doc.status >= 400) return null;
   const chunks = [...doc.body.matchAll(/src="(\/_next\/static\/chunks\/[^"]+)"/g)].map((m) => m[1]);
-  for (const chunk of chunks) {
+  const loginChunks = chunks.filter((c) => /\/app\/login\//i.test(c));
+  const ordered = [...loginChunks, ...chunks.filter((c) => !loginChunks.includes(c))];
+  for (const chunk of ordered) {
     const chunkUrl = new URL(chunk, AI_SECURITY_PLATFORM_HOME).toString();
-    const chunkDoc = await ctx.probe.get(chunkUrl, { maxBytes: 65536, timeoutMs: 12000 });
+    const chunkDoc = await ctx.probe.get(chunkUrl, { maxBytes: 131072, timeoutMs: 12000 });
     if (chunkDoc.status < 200 || chunkDoc.status >= 400) continue;
-    const m = chunkDoc.body.match(/createServerReference\("([a-f0-9]+)"[^"]*"signIn"/);
+    const m =
+      chunkDoc.body.match(/createServerReference\("([a-f0-9]{32,})"[^)]*"signIn"\)/) ??
+      chunkDoc.body.match(/"([a-f0-9]{32,})"[^)]*"signIn"/);
     if (m) return m[1];
   }
   return null;
@@ -65856,13 +65860,14 @@ const aiSecurityRateLimitingBruteforceLiveOracle: Rule = async (ctx) => {
 
   const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
   const attempts = 6;
+  const minAccepted = 5;
   let acceptedAttempts = 0;
 
   for (let i = 0; i < attempts; i++) {
     const body = JSON.stringify([
       { email: `thugir-brute-${i}@probe.example`, password: `wrong${i}` }
     ]);
-    const doc = await ctx.probe.get(loginUrl, {
+    let doc = await ctx.probe.get(loginUrl, {
       method: "POST",
       body,
       headers: {
@@ -65873,6 +65878,19 @@ const aiSecurityRateLimitingBruteforceLiveOracle: Rule = async (ctx) => {
       maxBytes: 4096,
       timeoutMs: 12000
     });
+    if (doc.status === 403) {
+      doc = await ctx.probe.get(loginUrl, {
+        method: "POST",
+        body,
+        headers: {
+          "Content-Type": "text/plain;charset=UTF-8",
+          Accept: "text/x-component",
+          "Next-Action": actionId
+        },
+        maxBytes: 4096,
+        timeoutMs: 12000
+      });
+    }
     if (doc.status === 429) return NEGATIVE;
     if (/too many|rate.?limit|locked out|try again later/i.test(doc.body)) return NEGATIVE;
     if (
@@ -65884,7 +65902,7 @@ const aiSecurityRateLimitingBruteforceLiveOracle: Rule = async (ctx) => {
     }
   }
 
-  if (acceptedAttempts < attempts) return NEGATIVE;
+  if (acceptedAttempts < minAccepted) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.91,
