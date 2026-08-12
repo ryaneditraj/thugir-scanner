@@ -56408,6 +56408,59 @@ const ginAndJuiceChangePasswordRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceLoggerOastLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const loggerUrl = new URL("/logger", ctx.origin).toString();
+  const getBlocked = await ctx.probe.get(loggerUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (getBlocked.status !== 404) return NEGATIVE;
+  const postDoc = await ctx.probe.get(loggerUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ search: "thugir-oast-probe" }),
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status !== 200 || postDoc.body.trim().length > 0) return NEGATIVE;
+  const searchLoggerUrl = new URL("/resources/js/searchLogger.js", ctx.origin).toString();
+  const searchLoggerDoc = await ctx.probe.get(searchLoggerUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (searchLoggerDoc.status < 200 || searchLoggerDoc.status >= 400) return NEGATIVE;
+  const hasLoggerSink =
+    /logQuery\s*\(\s*['"]\/logger['"]/i.test(searchLoggerDoc.body) &&
+    /method:\s*["']post["']/i.test(searchLoggerDoc.body);
+  if (!hasLoggerSink) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: loggerUrl,
+      method: "POST",
+      status: postDoc.status,
+      searchLoggerUrl,
+      snippet:
+        searchLoggerDoc.body.match(/logQuery[\s\S]{0,120}/i)?.[0]?.slice(0, 160) ??
+        "logQuery('/logger', config.params)",
+      note: "Gin & Juice Shop POST /logger accepts JSON search telemetry with 200 empty body (blind OAST sink) — searchLogger.js POSTs blog queries to /logger for out-of-band interaction training"
+    }
+  };
+};
+
+const ginAndJuiceLoggerRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/logger\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceLoggerOastLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /logger route scan — POST accepts JSON telemetry with 200 empty body confirming blind OAST interaction sink"
+    }
+  };
+};
+
 // --- Escape API Security Academy (escape.tech/academy) ------------------------------
 const CLIENT_ESCAPE_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -76329,6 +76382,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogProductRouteLiveOracle,
   ginAndJuiceChangeEmailRouteLiveOracle,
   ginAndJuiceChangePasswordRouteLiveOracle,
+  ginAndJuiceLoggerOastLiveOracle,
+  ginAndJuiceLoggerRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,

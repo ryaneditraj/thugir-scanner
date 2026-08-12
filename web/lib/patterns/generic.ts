@@ -51748,6 +51748,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-logger-oast-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /logger blind OAST interaction live oracle",
+    description:
+      "POST /logger accepts JSON search telemetry and returns 200 with an empty body while searchLogger.js POSTs blog search params to /logger — the PortSwigger Gin & Juice blind out-of-band interaction training oracle.",
+    impactOneline:
+      "Blind logging endpoints that trigger server-side outbound requests enable OAST detection of SSRF and hidden interaction sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLoggerOastLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and restrict outbound requests from logging/telemetry handlers — Gin & Juice Shop is intentional lab software.",
+      steps: [
+        "Do not fetch attacker-controlled URLs from server-side logging endpoints.",
+        "Use an allowlist for telemetry callback destinations and block internal/metadata IPs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /logger endpoint accepts JSON telemetry that triggers blind out-of-band interactions. Show OAST/SSRF remediation for logging sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-logger-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /logger route OAST live oracle",
+    description:
+      "When scanning /logger, POST accepts JSON search telemetry with 200 empty body confirming the blind OAST interaction sink referenced by searchLogger.js — route-specific PortSwigger training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop /logger is a blind out-of-band interaction endpoint for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLoggerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict outbound requests from /logger and similar telemetry routes.",
+      steps: [
+        "Block server-side fetches to internal networks from logging handlers.",
+        "Require authentication before accepting telemetry POST bodies.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /logger route scan confirms a blind OAST interaction sink. Show route-specific SSRF/OAST remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-external-localstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
