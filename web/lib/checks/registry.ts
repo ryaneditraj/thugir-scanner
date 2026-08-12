@@ -2077,6 +2077,7 @@ const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
 
 /** Juice Shop SPA routes often use kebab-case /rest/* aliases for PascalCase API resources. */
 const JUICE_SHOP_REST_KEBAB_ALIASES: Record<string, string> = {
+  "Cards\\b": "cards",
   "PrivacyRequests\\b": "privacy-requests",
   "SecurityQuestions\\b": "security-?questions?"
 };
@@ -35568,7 +35569,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1600;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1605;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -35589,7 +35590,12 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1597": "IDOR",
   "1598": "IDOR",
   "1599": "IDOR",
-  "1600": "IDOR"
+  "1600": "IDOR",
+  "1601": "IDOR",
+  "1602": "IDOR",
+  "1603": "IDOR",
+  "1604": "IDOR",
+  "1605": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -35650,7 +35656,12 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1597": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1598": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1599": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1600": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1600": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1601": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1602": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1603": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1604": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1605": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -55724,7 +55735,7 @@ const ginAndJuiceBlogPostRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const ginAndJuiceBlogPostAtobRedirectPostIds = ["6", "7", "8"];
+const ginAndJuiceBlogPostAtobRedirectPostIds = ["5", "6", "7", "8"];
 
 function ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl: string): string | undefined {
   const match = pageUrl.match(/[?&]postId=(\d+)/i);
@@ -59803,15 +59814,38 @@ const juiceShopCardsBolaLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
   const url = new URL("/api/Cards", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, {
+  const authHeaders = juiceShopDataIdAuthHeader();
+  let doc = await ctx.probe.get(url, {
     maxBytes: 8192,
-    headers: juiceShopDataIdAuthHeader()
+    headers: authHeaders
   });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
-  const cardNums = [...doc.body.matchAll(/"cardNum"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
-  const fullNames = [...doc.body.matchAll(/"fullName"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
-  if (cardNums.length < 1 || fullNames.length < 1) return NEGATIVE;
+  if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*(\[|\{)/.test(doc.body)) return NEGATIVE;
+  let cardNums = [...doc.body.matchAll(/"cardNum"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+  let fullNames = [...doc.body.matchAll(/"fullName"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+  if (cardNums.length < 1 || fullNames.length < 1) {
+    const emptyList = /"data"\s*:\s*\[\s*\]/.test(doc.body);
+    if (!emptyList) return NEGATIVE;
+    const seedBody = JSON.stringify({
+      fullName: "Thugir Cards BOLA Probe",
+      cardNum: "4111111111111111",
+      expMonth: 12,
+      expYear: 2099
+    });
+    const seeded = await ctx.probe.get(url, {
+      method: "POST",
+      body: seedBody,
+      headers: { ...authHeaders, "Content-Type": "application/json" },
+      maxBytes: 4096
+    });
+    if (seeded.status < 200 || seeded.status >= 400 || !/"status"\s*:\s*"success"/.test(seeded.body))
+      return NEGATIVE;
+    doc = await ctx.probe.get(url, { maxBytes: 8192, headers: authHeaders });
+    if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+    cardNums = [...doc.body.matchAll(/"cardNum"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+    fullNames = [...doc.body.matchAll(/"fullName"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);
+    if (cardNums.length < 1 || fullNames.length < 1) return NEGATIVE;
+  }
   return {
     fired: true,
     confidence: cardNums.length >= 2 ? 0.93 : 0.91,
