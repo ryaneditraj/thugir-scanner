@@ -69358,6 +69358,64 @@ const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const uuidMatch = pageUrl.match(/\/vehicle\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/location/i);
+  if (!uuidMatch) return NEGATIVE;
+  const targetUuid = uuidMatch[1]!;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const authHeaders = { Authorization: `Bearer ${jwt}` };
+  const ownUrl = new URL("/identity/api/v2/vehicle/vehicles", ctx.origin).toString();
+  const ownDoc = await ctx.probe.get(ownUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  const ownUuids = new Set<string>();
+  if (ownDoc.status >= 200 && ownDoc.status < 400) {
+    try {
+      const own = JSON.parse(ownDoc.body) as Array<{ uuid?: string }>;
+      if (Array.isArray(own)) {
+        for (const v of own) {
+          if (v.uuid) ownUuids.add(v.uuid);
+        }
+      }
+    } catch {
+      /* empty own list still allows BOLA proof via leaked UUID */
+    }
+  }
+  if (ownUuids.has(targetUuid)) return NEGATIVE;
+  const locUrl = new URL(`/identity/api/v2/vehicle/${targetUuid}/location`, ctx.origin).toString();
+  const locDoc = await ctx.probe.get(locUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  if (locDoc.status < 200 || locDoc.status >= 400) return NEGATIVE;
+  if (!/"latitude"\s*:/.test(locDoc.body) || !/"longitude"\s*:/.test(locDoc.body)) return NEGATIVE;
+  let fullName: string | undefined;
+  try {
+    const loc = JSON.parse(locDoc.body) as { fullName?: string };
+    fullName = loc.fullName;
+  } catch {
+    /* location JSON parse optional */
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      scannedUrl: pageUrl,
+      locationUrl: locUrl,
+      vehicleUuid: targetUuid,
+      fullName,
+      snippet: locDoc.body.slice(0, 200).trim(),
+      note: "crAPI /identity/api/v2/vehicle/{uuid}/location route scan — authenticated GET returns another user's GPS coordinates without object-level authorization — BOLA route oracle (API1)"
+    }
+  };
+};
+
 const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -69435,7 +69493,7 @@ const crapiContactMechanicSsrfRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const crapiDashboardLiveOracle: Rule = async (ctx) => {
-  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
   if (isCrapiAuthRoute(ctx)) return NEGATIVE;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
@@ -69473,7 +69531,7 @@ const crapiDashboardLiveOracle: Rule = async (ctx) => {
 };
 
 const crapiDashboardRouteLiveOracle: Rule = async (ctx) => {
-  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/user\/dashboard\b/i.test(pageUrl)) return NEGATIVE;
   const result = await crapiDashboardLiveOracle(ctx);
@@ -69490,7 +69548,7 @@ const crapiDashboardRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const crapiSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
-  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
   const uniq = Date.now();
   const doc = await ctx.probe.get(signupUrl, {
@@ -69520,7 +69578,7 @@ const crapiSignupOpenRegistrationLiveOracle: Rule = async (ctx) => {
 };
 
 const crapiSignupRouteLiveOracle: Rule = async (ctx) => {
-  if (!isCrapi1Host(ctx)) return NEGATIVE;
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/auth\/signup/i.test(pageUrl)) return NEGATIVE;
   const result = await crapiSignupOpenRegistrationLiveOracle(ctx);
@@ -76733,6 +76791,7 @@ export const RULES: Record<string, Rule> = {
   crapiMechanicReportRouteLiveOracle,
   crapiVehicleBolaLiveOracle,
   crapiVehicleRouteLiveOracle,
+  crapiVehicleLocationRouteLiveOracle,
   crapiCommunityPostsRouteLiveOracle,
   crapiContactMechanicSsrfLiveOracle,
   crapiContactMechanicSsrfRouteLiveOracle,
