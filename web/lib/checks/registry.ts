@@ -55609,6 +55609,68 @@ const graphqlBookFetchExternalResourceSsrfRouteLiveOracle: Rule = async (ctx) =>
   };
 };
 
+function isGraphqlLabHost(ctx: RuleContext): boolean {
+  return /graphql-lab\.vercel\.app/i.test(ctx.origin);
+}
+
+function graphqlLabHasuraGqlUrl(ctx: RuleContext): string | null {
+  const urls = extractBundleGraphqlUrls(ctx.combined, ctx.origin);
+  const hasura = urls.find((u) => /hasura\.app/i.test(u));
+  return hasura ?? null;
+}
+
+const graphqlLabHasuraAdminLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlLabHost(ctx)) return NEGATIVE;
+  const hasuraSecret = extractHasuraAdminSecret(ctx.combined);
+  if (!hasuraSecret) return NEGATIVE;
+  const gqlUrl = graphqlLabHasuraGqlUrl(ctx);
+  if (!gqlUrl) return NEGATIVE;
+  const doc = await ctx.probe.get(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ __schema { queryType { name } } }" }),
+    headers: { "Content-Type": "application/json", "x-hasura-admin-secret": hasuraSecret },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const queryType = (parsed.data as { __schema?: { queryType?: { name?: string } } })?.__schema?.queryType
+    ?.name;
+  if (queryType !== "query_root") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: gqlUrl,
+      endpoint: gqlUrl,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "graphql-lab.vercel.app React bundle leaks x-hasura-admin-secret and graphql-lab.hasura.app/v1/graphql — admin secret enables full GraphQL introspection on external Hasura backend"
+    }
+  };
+};
+
+const graphqlLabHasuraAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await graphqlLabHasuraAdminLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "graphql-lab.vercel.app /graphql route scan — SPA shell returns 405 on POST but bundle leaks Hasura admin secret enabling introspection on graphql-lab.hasura.app/v1/graphql"
+    }
+  };
+};
+
 const dvgaMyPastesIdorLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const base = dvgaCanonicalOrigin(ctx);
@@ -68037,6 +68099,56 @@ const seclabUsersVulnerableRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabIdorVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/idor-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/idor-vulnerable/1", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    /"password"\s*:/.test(doc.body) &&
+    /No authentication or authorization/i.test(doc.body) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app GET /api/idor-vulnerable/1 returns user password without auth — live IDOR training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(doc.body) && doc.body.length > 40
+      ? doc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/idor-vulnerable route serves Angular SPA shell instead of the documented Next.js IDOR training API — dead lab route oracle"
+    }
+  };
+};
+
 const seclabCsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/csrf-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
@@ -76938,6 +77050,7 @@ export const RULES: Record<string, Rule> = {
   seclabCsrfVulnerableRouteLiveOracle,
   seclabXssVulnerableRouteLiveOracle,
   seclabUsersVulnerableRouteLiveOracle,
+  seclabIdorVulnerableRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
@@ -77672,6 +77785,8 @@ export const RULES: Record<string, Rule> = {
   graphqlBookInternalUserSearchBolaRouteLiveOracle,
   graphqlBookFetchExternalResourceSsrfLiveOracle,
   graphqlBookFetchExternalResourceSsrfRouteLiveOracle,
+  graphqlLabHasuraAdminLiveOracle,
+  graphqlLabHasuraAdminRouteLiveOracle,
   dvgaMyPastesIdorLiveOracle,
   dvgaMyPastesIdorRouteLiveOracle,
   dvgaImportPasteSsrfLiveOracle,
