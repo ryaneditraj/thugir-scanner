@@ -2058,6 +2058,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopEventsAuditLiveOracle",
   "pwnshopEventsAuditRouteLiveOracle",
   "pwnshopChatInitEmailEnumerationLiveOracle",
+  "pwnshopChatInitRouteLiveOracle",
   "pwnshopForgotPasswordEmailEnumerationLiveOracle",
   "pwnshopTrackIdorLiveOracle",
   "pwnshopTrackIdorRouteLiveOracle",
@@ -2657,6 +2658,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge65JavaPlainCliRouteLiveOracle",
   "wrongsecretsChallenge66JavaObfuscatedLiveOracle",
   "wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle",
+  "wrongsecretsHerokuUndeployedChallengeLiveOracle",
+  "wrongsecretsHerokuUndeployedChallengeRouteLiveOracle",
   "brokencrystalsChatLlmQueryLiveOracle",
   "brokencrystalsChatLlmQueryRouteLiveOracle",
   "brokencrystalsSpawnCommandInjectionLiveOracle",
@@ -2767,6 +2770,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadVulnerableappEvidence",
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
+  "seclabAngularStubRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -9861,7 +9865,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     : [];
   const seclabPlaygroundPrioritySeeds =
     /securityweb-iota\.vercel\.app|seclab\.vercel\.app/i.test(home.finalUrl)
-      ? ["/xss", "/sqli", "/csrf", "/idor"].map((p) => new URL(p, home.finalUrl).toString())
+      ? ["/xss", "/sqli", "/csrf", "/idor", "/ssrf", "/ssti"].map((p) => new URL(p, home.finalUrl).toString())
       : [];
   const vwadWrongsecretsPrioritySeeds =
     /vwad\.owasp\.org\/app\/wrongsecrets/i.test(home.finalUrl)
@@ -10863,6 +10867,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?66\b/i.test(targetInput) &&
         p.slug.startsWith("wrongsecrets-challenge-66")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?(?:6[7-9]|[7-9]\d+)\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-heroku-undeployed-challenge")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/(ssrf|ssti)\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-angular-stub")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:api\/)?chat\/init\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-chat-init")
       )
         return -3;
       if (

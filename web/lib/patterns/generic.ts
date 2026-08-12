@@ -32938,6 +32938,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-angular-stub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "SecLab Angular SPA stub route live oracle",
+    description:
+      "When scanning seclab.vercel.app /ssrf, /ssti, or other lab routes, the deployment returns an Angular <app-root> SPA shell without live Next.js /api/*-vulnerable training endpoints.",
+    impactOneline:
+      "Route-specific confirmation that SecLab lab URLs are advertised but the public Vercel host serves an Angular stub instead of the documented Next.js vulnerability APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabAngularStubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the intended Next.js SecLab build or gate stub hosts behind auth.",
+      steps: [
+        "Verify production deploy matches the DaniSam-STU/security-lab Next.js App Router build.",
+        "Do not advertise /ssrf or /ssti routes until live API labs ship.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app host serves Angular SPA stubs on /ssrf and /ssti without live labs. Show how to deploy the Next.js SecLab API routes or remove dead routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-heroku-undeployed-challenge-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets Heroku undeployed challenge live oracle",
+    description:
+      "OWASP WrongSecrets Heroku public demo returns WHOOOOPS error pages for challenge-67+ URLs — challenges exist in source but are not shipped on Heroku (catalog ends at challenge-66).",
+    impactOneline:
+      "Heroku-hosted WrongSecrets challenges above #66 error out instead of serving walkthrough pages — scanners must not treat WHOOOOPS as a generic 500 without context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsHerokuUndeployedChallengeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets Heroku is a partial demo — run full challenge sets locally or on cloud setups.",
+      steps: [
+        "Use Docker/K8s/cloud WrongSecrets for challenges beyond Heroku's shipped set.",
+        "Do not expose undeployed challenge routes on public demos without clear labeling.",
+        "Monitor Heroku demo for accidental secret leaks in error pages."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets Heroku demo errors on challenge-67+ routes. Show how to label partial demos and deploy the full challenge catalog safely.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-heroku-undeployed-challenge-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets Heroku undeployed challenge route live oracle",
+    description:
+      "When scanning /challenge/challenge-67+ on wrongsecrets.herokuapp.com, the app returns WHOOOOPS instead of a challenge walkthrough — route-specific undeployed-challenge oracle.",
+    impactOneline:
+      "Route-specific confirmation that high-number WrongSecrets challenges are not deployed on the public Heroku demo.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsHerokuUndeployedChallengeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets Heroku is a partial demo — run full challenge sets locally or on cloud setups.",
+      steps: [
+        "Use Docker/K8s/cloud WrongSecrets for challenges beyond Heroku's shipped set.",
+        "Label Heroku demo scope clearly in navigation (0-66 only).",
+        "Remove or redirect queue URLs for undeployed challenge IDs."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets Heroku route scan for challenge-67+ returns WHOOOOPS. Show how to label partial demos and deploy safely.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-chat-init-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop chat init route live oracle (PWN-037)",
+    description:
+      "When scanning /chat/init or /api/chat/init, POST returns found:true with user profile for registered emails and found:false for unknown addresses — route-specific email enumeration oracle.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop chat init enables email/username enumeration via differential found responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatInitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic responses for chat-init lookups — PWN-037 is intentional lab software.",
+      steps: [
+        "Use identical responses for registered and unregistered emails on /chat/init.",
+        "Require authentication before email lookup.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /chat/init route scan confirms email enumeration via found:true/false. Show remediation for PWN-037.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-seclab-playground-evidence",
     platform: "generic",
     category: "Broken access control",

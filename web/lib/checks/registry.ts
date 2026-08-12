@@ -63616,6 +63616,66 @@ const wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const wrongsecretsHerokuUndeployedChallengeLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets\.herokuapp\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const numMatch = pageUrl.match(/\/challenge\/(?:challenge-)?(\d+)\b/i);
+  if (!numMatch) return NEGATIVE;
+  const challengeNum = Number(numMatch[1]);
+  if (challengeNum < 67) return NEGATIVE;
+  const probeUrl = new URL(`/challenge/challenge-${challengeNum}`, ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (/data-cy="answer-textbox"/i.test(doc.body) && /challenge focuses on/i.test(doc.body)) {
+    return NEGATIVE;
+  }
+  if (!/WHOOOOPS|Something went wrong!/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      challengeNum,
+      snippet: doc.body.match(/WHOOOOPS[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ?? "WHOOOOPS error shell",
+      note: `OWASP WrongSecrets Heroku public demo returns application error for challenge-${challengeNum} — challenge not deployed on Heroku (catalog ends at challenge-66; run full catalog locally or on cloud setup)`
+    }
+  };
+};
+
+const wrongsecretsHerokuUndeployedChallengeRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets\.herokuapp\.com/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/challenge\/(?:challenge-)?(?:6[7-9]|[7-9]\d+)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsHerokuUndeployedChallengeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets Heroku route scan — challenge page returns WHOOOOPS error; Heroku demo only ships challenges 0-66"
+    }
+  };
+};
+
+const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/)?chat\/init\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopChatInitEmailEnumerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /chat/init route scan — POST returns found:true with user profile for registered emails and found:false for unknown addresses (PWN-037 email enumeration oracle)"
+    }
+  };
+};
+
 const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/chat/query", ctx.origin).toString();
@@ -67166,6 +67226,52 @@ const seclabNextjsLabApiProbe: Rule = async (ctx) => {
   };
 };
 
+const seclabAngularStubRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  let host = "";
+  let originHost = "";
+  try {
+    host = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(host) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const routeMatch = pageUrl.match(/\/(ssrf|ssti|xss|sqli|csrf|idor)\b/i);
+  if (!routeMatch) return NEGATIVE;
+  const labRoute = routeMatch[1].toLowerCase();
+  const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  const apiProbe = await ctx.probe.get(new URL("/api/xss-vulnerable", ctx.origin).toString(), {
+    method: "POST",
+    body: JSON.stringify({ comment: "probe", author: "probe" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (
+    apiProbe.status >= 200 &&
+    apiProbe.status < 300 &&
+    /"safe"\s*:\s*false/.test(apiProbe.body) &&
+    !isSecLabAngularStubShell(apiProbe.body)
+  ) {
+    return NEGATIVE;
+  }
+  const plannedOnly = labRoute === "ssrf" || labRoute === "ssti";
+  return {
+    fired: true,
+    confidence: plannedOnly ? 0.9 : 0.88,
+    evidence: {
+      url: pageUrl,
+      labRoute,
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: plannedOnly
+        ? `seclab.vercel.app /${labRoute} route is an Angular SPA stub without live Next.js ${labRoute.toUpperCase()} API labs (README lists ${labRoute.toUpperCase()} as planned, not deployed on this host)`
+        : `seclab.vercel.app /${labRoute} route is an Angular SPA stub without live Next.js vulnerability API routes (Next.js SecLab APIs absent on this deployment)`
+    }
+  };
+};
+
 // --- SecLab web vulnerability playground (securityweb-iota.vercel.app) --------------
 const CLIENT_SECLAB_PLAYGROUND_RES: { label: string; re: RegExp }[] = [
   {
@@ -67205,10 +67311,10 @@ const clientSideSecLabPlaygroundEvidence: Rule = async (ctx) => {
   }
   const isKnownSecLabHost = SECLAB_NEXTJS_HOST_RE.test(host) || /securityweb-iota\.vercel\.app/i.test(host);
   const minHits = isKnownSecLabHost ? 1 : 2;
-  if (isKnownSecLabHost && hits.length < minHits && /\/(?:xss|sqli|csrf|idor)(?:\/|$|\?)/i.test(pageUrl)) {
+  if (isKnownSecLabHost && hits.length < minHits && /\/(?:xss|sqli|csrf|idor|ssrf|ssti)(?:\/|$|\?)/i.test(pageUrl)) {
     hits.push({
       label: "SecLab lab route oracle",
-      sample: pageUrl.match(/\/(xss|sqli|csrf|idor)/i)?.[0] ?? pageUrl
+      sample: pageUrl.match(/\/(xss|sqli|csrf|idor|ssrf|ssti)/i)?.[0] ?? pageUrl
     });
   }
   if (hits.length < minHits) return NEGATIVE;
@@ -75064,6 +75170,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopEventsAuditLiveOracle,
   pwnshopEventsAuditRouteLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
+  pwnshopChatInitRouteLiveOracle,
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
   pwnshopTrackIdorLiveOracle,
   pwnshopTrackIdorRouteLiveOracle,
@@ -75625,6 +75732,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge65JavaPlainCliRouteLiveOracle,
   wrongsecretsChallenge66JavaObfuscatedLiveOracle,
   wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle,
+  wrongsecretsHerokuUndeployedChallengeLiveOracle,
+  wrongsecretsHerokuUndeployedChallengeRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,
@@ -75692,6 +75801,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadVulnerableappEvidence,
   clientSideVulnerableappDomXssEvidence,
   seclabNextjsLabApiProbe,
+  seclabAngularStubRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
