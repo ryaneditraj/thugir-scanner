@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-ai-system-info-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/ai/system-info returns status:success with system_info.database_access:true and full system_prompt without auth; vulnbank.org/api/ai/system-info findings 24→26 (+vulnbank-ai-system-info-live-oracle +vulnbank-ai-system-info-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-33-k8s-stringdata-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-33 documents Kubernetes StringData vs Data encoding and metadata plaintext leakage (Secrets focus); wrongsecrets.herokuapp.com/challenge/challenge-33 findings 14→15 (+wrongsecrets-challenge-33-k8s-stringdata-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level6-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level6.php route scan ties SQL syntax error disclosure to /api/portal search parameter; vulnforge-academy.vercel.app/backend/includes/levels/easy/level6.php findings 4→5 (+vulnforge-academy-level6-sqli-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-31-web-page-secret-route-live-oracle",
       "status": "shipped",
