@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-back-javascript-scoped-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: back-javascript oracle scoped to /blog/post scans and iterates postIds with URLSearchParams back handlers; ginandjuice.shop/blog/post?postId=1&back=https://evil.com findings 33→35 (+back-javascript live+route); ginandjuice.shop/blog?search=test&back=https://evil.com 32→30 (removed false-positive back-javascript); benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-open-redirect-postId-from-url",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: open-redirect probe uses postId from scanned URL (accepts HTTP 404 training shells); GET /blog/post?postId=1&back= probes postId=1 not hardcoded 3; ginandjuice.shop/blog/post?postId=1&back=https://evil.com maintains open-redirect live+route oracles with route-accurate postId evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-73-hub-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with /challenge/73 + /challenge/challenge-73; wrongsecrets.herokuapp.com/challenge/challenge-73 fires wrongsecrets-heroku-undeployed-challenge live+route (14 findings WHOOOOPS); benchmark juice-shop-staging 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-post-atob-redirect-postId6-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /blog/post?postId=6 embeds mouse-event gated location=atob('L3Z1bG5lcmFiaWxpdGllcw==') same as postId=7; ginandjuice.shop/blog/post?postId=6 findings 31→35 (+ginandjuice-blog-post-7-atob-redirect-live-oracle +route); benchmark juice-shop 47 findings 6/6 maintained"
@@ -1058,6 +1076,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-back-javascript-scoped-probe",
+      "shipped_at": "2026-08-12T11:05:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-blog-post-open-redirect-postId-from-url",
+      "shipped_at": "2026-08-12T11:05:00.000Z"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-73-hub-seed",
+      "shipped_at": "2026-08-12T11:05:00.000Z"
+    },
     {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-post-atob-redirect-postId6-extension",
