@@ -2470,6 +2470,8 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogRouteLiveOracle",
   "ginAndJuiceBlogPostOpenRedirectLiveOracle",
   "ginAndJuiceBlogPostRouteLiveOracle",
+  "ginAndJuiceBlogPost7AtobRedirectLiveOracle",
+  "ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle",
   "ginAndJuiceCatalogCategorySqliLiveOracle",
   "ginAndJuiceCatalogCategorySqliRouteLiveOracle",
   "ginAndJuiceCatalogCategoryCrlfLiveOracle",
@@ -9454,7 +9456,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuicePrioritySeeds =
     /ginandjuice\.shop|Gin & Juice Shop|vulnerability scanner to the test/i.test(home.body) ||
     /ginandjuice\.shop/i.test(home.finalUrl)
-      ? ["/vulnerabilities", "/catalog", "/blog", "/order/details?orderId=0254809"].map((p) => new URL(p, home.finalUrl).toString())
+      ? [
+          "/vulnerabilities",
+          "/catalog",
+          "/blog",
+          "/blog/post?postId=7",
+          "/order/details?orderId=0254809"
+        ].map((p) => new URL(p, home.finalUrl).toString())
       : [];
   const redTigerPrioritySeeds = /redtiger\.labs\.overthewire\.org/i.test(home.finalUrl)
     ? [
@@ -9701,6 +9709,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
         "https://wrongsecrets.herokuapp.com/challenge/66",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+        "https://wrongsecrets.herokuapp.com/challenge/67",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
+        "https://wrongsecrets.herokuapp.com/challenge/68",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-68",
+        "https://wrongsecrets.herokuapp.com/challenge/69",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-69",
+        "https://wrongsecrets.herokuapp.com/challenge/70",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-70",
+        "https://wrongsecrets.herokuapp.com/challenge/71",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-71",
+        "https://wrongsecrets.herokuapp.com/challenge/72",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-72",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
@@ -10537,6 +10557,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/blog\/post\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-blog-post")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /[?&]postId=7\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-blog-post-7")
       )
         return -3;
       if (
