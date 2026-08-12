@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-rate-limiting-bruteforce-action-id-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Next.js 15 createServerReference format changed to createServerReference(\"HASH\",callServer,void 0,findSourceMapURL,\"signIn\") — updated aiSecurityExtractSignInActionId to parse app/login/page chunk + retry 403; ai-security-platform-iota.vercel.app/challenges/rate-limiting findings 8→9 (+ai-security-rate-limiting-bruteforce-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1594-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue prepended web-security-learning-labs.vercel.app/module/1594 (WSL catalog expansion after 1593); web-security-learning-labs.vercel.app/module/1594 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1595-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue prepended web-security-learning-labs.vercel.app/module/1595 (WSL catalog expansion after 1594); web-security-learning-labs.vercel.app/module/1595 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop.demo.escape.tech",
       "slug": "juice-shop-rest-route-canonical-origin-fix",
       "status": "shipped",
