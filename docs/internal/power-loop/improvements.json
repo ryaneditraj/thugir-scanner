@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-stock-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/product/stock XML entity expansion in productId alters stock lookup; runner -3 priority for ginandjuice-stock* on /catalog/product/stock + queue prepend; ginandjuice.shop/catalog/product/stock findings 34 (+ginandjuice-stock-xxe-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-79-hub-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge-79 URLs; GET /challenge/challenge-79 returns WHOOOOPS undeployed shell; wrongsecrets.herokuapp.com/challenge/challenge-79 findings 14 (+wrongsecrets-heroku-undeployed-challenge live+route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-csrf-idor-stub-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclab angular-stub route priority extended from ssrf|ssti to csrf|idor|xss|sqli; seclab.vercel.app/csrf findings 4→6 (+seclab-angular-stub-route-live-oracle); seclab.vercel.app/idor findings 4→6; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-users-vulnerable-route-live-oracle",
       "status": "shipped",
