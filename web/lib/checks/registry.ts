@@ -6738,6 +6738,69 @@ const clientSideFrontendXssDemoEvidence: Rule = async (ctx) => {
   };
 };
 
+function isFrontendXssDemoHost(ctx: RuleContext): boolean {
+  return /frontend-xss-demo|dev-lucasoliveira\.github\.io\/frontend-xss-demo/i.test(
+    `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`
+  );
+}
+
+function frontendXssDemoFindBundleUrl(ctx: RuleContext, pageHtml: string): string | null {
+  const m = pageHtml.match(/src\s*=\s*["']([^"']*\/assets\/index-[^"']+\.js)["']/i);
+  if (!m) return null;
+  try {
+    return new URL(m[1], ctx.origin).toString();
+  } catch {
+    return null;
+  }
+}
+
+const frontendXssDemoInsecureDomXssLiveOracle: Rule = async (ctx) => {
+  if (!isFrontendXssDemoHost(ctx)) return NEGATIVE;
+  const homeHtml = ctx.home.body || "";
+  if (!/frontend-xss-demo|XSS testing.*educational demo/i.test(homeHtml)) return NEGATIVE;
+  const bundleUrl = frontendXssDemoFindBundleUrl(ctx, homeHtml);
+  if (!bundleUrl) return NEGATIVE;
+  const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 524288, timeoutMs: 20000 });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
+  const bundle = bundleDoc.body;
+  const hasInsecureSink =
+    /dangerouslySetInnerHTML:\{__html:u\}/.test(bundle) &&
+    /Classic img onerror XSS|onerror="alert\('Classic/i.test(bundle);
+  const hasSecureSanitize =
+    /dangerouslySetInnerHTML:\{__html:u\(a\)\}/.test(bundle) && /\.sanitize\s*\(/.test(bundle);
+  const hasRoutePair =
+    /INSECURE\s*:\s*["']\/insecure["']/i.test(bundle) &&
+    /SECURE\s*:\s*["']\/secure["']/i.test(bundle);
+  if (!hasInsecureSink || !hasSecureSanitize || !hasRoutePair) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      bundleUrl,
+      snippet:
+        "dangerouslySetInnerHTML:{__html:u} on /insecure todos vs DOMPurify.sanitize wrapper on /secure route",
+      note: "Frontend XSS demo /insecure route renders todo HTML with dangerouslySetInnerHTML without DOMPurify — DOM XSS training oracle"
+    }
+  };
+};
+
+const frontendXssDemoInsecureDomXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFrontendXssDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:insecure|inseguro)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await frontendXssDemoInsecureDomXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Frontend XSS demo /insecure route scan — todo items rendered via dangerouslySetInnerHTML without sanitization"
+    }
+  };
+};
+
 // --- AI chatbot HTML sink (dvai.vercel.app / DreamVator Aviation) ---------------
 const CLIENT_AI_CHAT_HTML_SINK_RES: { label: string; re: RegExp }[] = [
   {
@@ -76649,6 +76712,8 @@ export const RULES: Record<string, Rule> = {
   clientSideGrpcGoatLabEvidence,
   clientSideWebvulnRunnerEvidence,
   clientSideFrontendXssDemoEvidence,
+  frontendXssDemoInsecureDomXssLiveOracle,
+  frontendXssDemoInsecureDomXssRouteLiveOracle,
   clientSideAiChatHtmlSinkEvidence,
   clientSideAvidVulnRegistryEvidence,
   clientSideSecurityShepherdEvidence,

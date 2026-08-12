@@ -54814,5 +54814,57 @@ export const genericPatterns: Pattern[] = [
       "Our /api/signup route scan confirms open registration. Show route-level signup hardening.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "frontend-xss-demo-insecure-dom-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Frontend XSS demo insecure route DOM XSS live oracle",
+    description:
+      "The /insecure route renders todo items with dangerouslySetInnerHTML:{__html:u} while /secure wraps DOMPurify.sanitize — the dev-LucasOliveira frontend-xss-demo training oracle.",
+    impactOneline:
+      "Educational XSS demos that render unsanitized user HTML teach DOM XSS but must never ship to production.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "frontendXssDemoInsecureDomXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never copy /insecure dangerouslySetInnerHTML patterns into production — use DOMPurify or textContent.",
+      steps: [
+        "Sanitize all user-controlled HTML with DOMPurify before dangerouslySetInnerHTML.",
+        "Keep /insecure training routes off production domains.",
+        "Gate XSS training SPAs behind classroom auth when self-hosting."
+      ]
+    },
+    fixPrompt:
+      "Our frontend XSS demo /insecure route renders todos with dangerouslySetInnerHTML without sanitization. Show DOMPurify remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "frontend-xss-demo-insecure-dom-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Frontend XSS demo /insecure route DOM XSS live oracle",
+    description:
+      "When scanning /insecure, the React bundle confirms dangerouslySetInnerHTML:{__html:u} todo rendering without DOMPurify — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "Route-scoped scans should confirm /insecure training routes do not use unsanitized HTML sinks in production builds.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "frontendXssDemoInsecureDomXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize todo HTML on /insecure training routes and block them from production deploys.",
+      steps: [
+        "Wrap todo rendering with DOMPurify.sanitize like the /secure route.",
+        "Exclude /insecure from production builds via routing guards.",
+        "Gate XSS training SPAs behind classroom auth when self-hosting."
+      ]
+    },
+    fixPrompt:
+      "Our /insecure route scan confirms unsanitized dangerouslySetInnerHTML todo rendering. Show route-specific DOMPurify remediation.",
+    version: 1,
+    enabled: true
   }
 ];
