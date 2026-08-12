@@ -30598,6 +30598,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-33-k8s-stringdata-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-33 K8s StringData route live oracle",
+    description:
+      "When scanning /challenge/33 or /challenge/challenge-33, the walkthrough documents Kubernetes StringData vs Data secret encoding and metadata plaintext leakage — route-specific challenge-33 K8s secrets oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-33 Kubernetes StringData/Data walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge33K8sStringdataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-33 is intentional — never store plaintext secrets in Kubernetes StringData or secret metadata.",
+      steps: [
+        "Use Kubernetes Data fields with base64-encoded secret values only.",
+        "Avoid storing plaintext secrets in secret metadata annotations.",
+        "Rotate any credentials exposed via StringData or metadata fields."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-33 route documents Kubernetes StringData/Data secret encoding mistakes. Show remediation for K8s secret metadata exposure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-34-pbkdf2-key-generation-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -36554,6 +36580,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-ai-system-info-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Vuln Bank unauthenticated AI system-info disclosure oracle",
+    description:
+      "GET /api/ai/system-info returns status:success with system_info.database_access:true, full system_prompt, and security_issues without authentication — the Vuln Bank API8 security misconfiguration oracle.",
+    impactOneline:
+      "Unauthenticated AI system-info endpoints leak LLM prompts, database access flags, and provider configuration to any anonymous caller.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiSystemInfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and strip sensitive fields from AI diagnostics endpoints — Vuln Bank is intentional training software.",
+      steps: [
+        "Authenticate all /api/ai/* diagnostic routes and restrict them to admin roles.",
+        "Never expose system prompts, database flags, or provider keys via public APIs.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/system-info endpoint returns unauthenticated system_prompt and database_access flags. Show API8 security misconfiguration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-ai-system-info-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Vuln Bank /api/ai/system-info route live oracle",
+    description:
+      "When scanning vulnbank.org/api/ai/system-info, GET returns unauthenticated system_info with database_access, system_prompt, and security_issues — route-specific API8 disclosure oracle.",
+    impactOneline:
+      "Route-specific /api/ai/system-info scans confirm unauthenticated AI configuration and prompt leakage without logging in.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiSystemInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on AI system-info routes — Vuln Bank is intentional training software.",
+      steps: [
+        "Authenticate all /api/ai/* diagnostic routes and restrict them to admin roles.",
+        "Never expose system prompts, database flags, or provider keys via public APIs.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/system-info route scan confirms unauthenticated system_prompt and database_access disclosure. Show route-specific API8 hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-bopla-register-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -41480,6 +41558,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level routes leak SQL syntax errors on search parameters. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level6-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnForge Academy level 6 SQLi route live oracle",
+    description:
+      "When scanning /backend/includes/levels/easy/level6.php, query parameters return SQL syntax errors — route-specific VulnForge Academy level 6 SQL injection training oracle.",
+    impactOneline:
+      "Unsanitized query parameters on VulnForge Academy level 6 disclose SQL errors and enable injection practice surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel6SqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — use parameterized queries in production apps.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on level challenge routes.",
+        "Return generic errors instead of database syntax details.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 6 route leaks SQL syntax errors on id/search parameters. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },
