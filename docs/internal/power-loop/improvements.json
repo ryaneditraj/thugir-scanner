@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-rest-route-canonical-origin-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reachTarget drifted to http://www.juice-shop.demo.escape.tech on 401 REST routes — pin canonical origin + homepage re-fetch for /rest|/api|/ftp|/b2b paths; juice-shop.demo.escape.tech/rest/wallet/balance findings 2→45 (+juice-shop-wallet-balance-bola-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-wallet-balance-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: -3 runner priority for juice-shop-wallet-balance* on /rest/wallet/balance routes; escape.tech wallet route scan now surfaces wallet BOLA oracle alongside full Juice Shop oracle suite; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1593-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue prepended web-security-learning-labs.vercel.app/module/1593 (WSL catalog expansion after 1592); web-security-learning-labs.vercel.app/module/1593 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-order-details-queue-fix",
       "status": "shipped",
