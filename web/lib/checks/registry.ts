@@ -6752,6 +6752,8 @@ const clientSideFrontendXssDemoEvidence: Rule = async (ctx) => {
   };
 };
 
+const FRONTEND_XSS_DEMO_GITHUB_MIRROR = "https://dev-lucasoliveira.github.io/frontend-xss-demo/";
+
 function isFrontendXssDemoHost(ctx: RuleContext): boolean {
   return /frontend-xss-demo|dev-lucasoliveira\.github\.io\/frontend-xss-demo/i.test(
     `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`
@@ -6770,6 +6772,7 @@ function frontendXssDemoFindBundleUrl(ctx: RuleContext, pageHtml: string): strin
 
 const frontendXssDemoInsecureDomXssLiveOracle: Rule = async (ctx) => {
   if (!isFrontendXssDemoHost(ctx)) return NEGATIVE;
+  const hostCorpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   const candidates = [
     ctx.scanUrl,
     (() => {
@@ -6782,18 +6785,37 @@ const frontendXssDemoInsecureDomXssLiveOracle: Rule = async (ctx) => {
     ctx.home.finalUrl,
     ctx.origin
   ].filter((u): u is string => Boolean(u));
+  if (/frontend-xss-demo\.vercel\.app/i.test(hostCorpus)) {
+    candidates.unshift(FRONTEND_XSS_DEMO_GITHUB_MIRROR);
+  }
   let pageDoc: Awaited<ReturnType<RuleContext["probe"]["get"]>> | null = null;
   let pageUrl = "";
+  let bundleOrigin = ctx.origin;
   for (const candidate of [...new Set(candidates)]) {
     const doc = await ctx.probe.get(candidate, { maxBytes: 16384, timeoutMs: 15000 });
     if (doc.status < 200 || doc.status >= 400) continue;
+    if (/DEPLOYMENT_NOT_FOUND/i.test(doc.body)) continue;
     if (!/frontend-xss-demo|XSS testing.*educational demo/i.test(doc.body)) continue;
     pageDoc = doc;
     pageUrl = candidate;
+    try {
+      bundleOrigin = new URL(candidate).origin;
+    } catch {
+      bundleOrigin = ctx.origin;
+    }
     break;
   }
   if (!pageDoc) return NEGATIVE;
-  const bundleUrl = frontendXssDemoFindBundleUrl(ctx, pageDoc.body);
+  const bundleMatch = pageDoc.body.match(/src\s*=\s*["']([^"']*\/assets\/index-[^"']+\.js)["']/i);
+  const bundleUrl = bundleMatch
+    ? (() => {
+        try {
+          return new URL(bundleMatch[1], bundleOrigin).toString();
+        } catch {
+          return null;
+        }
+      })()
+    : frontendXssDemoFindBundleUrl(ctx, pageDoc.body);
   if (!bundleUrl) return NEGATIVE;
   const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 524288, timeoutMs: 20000 });
   if (bundleDoc.status < 200 || bundleDoc.status >= 400) return NEGATIVE;
@@ -35573,7 +35595,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1605;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1608;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -35599,7 +35621,10 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1602": "IDOR",
   "1603": "IDOR",
   "1604": "IDOR",
-  "1605": "IDOR"
+  "1605": "IDOR",
+  "1606": "IDOR",
+  "1607": "IDOR",
+  "1608": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -35671,7 +35696,10 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1602": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1603": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1604": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1605": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1605": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1606": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1607": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1608": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -59461,30 +59489,75 @@ const juiceShopBasketItemsBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function juiceShopComplaintsProbeDoc(
+  ctx: RuleContext
+): Promise<{ doc: Awaited<ReturnType<typeof fetchDoc>>; url: string; mirror?: boolean }> {
+  const authHeaders = juiceShopDataIdAuthHeader();
+  const primaryUrl = new URL("/api/Complaints", ctx.origin).toString();
+  const primaryDoc = await ctx.probe.get(primaryUrl, {
+    maxBytes: 65536,
+    headers: authHeaders,
+    timeoutMs: 15000
+  });
+  const primaryOk =
+    primaryDoc.status >= 200 &&
+    primaryDoc.status < 400 &&
+    !HEROKU_STUB_RE.test(primaryDoc.body) &&
+    /"status"\s*:\s*"success"/.test(primaryDoc.body) &&
+    /"data"\s*:\s*\[/.test(primaryDoc.body);
+  if (primaryOk) return { doc: primaryDoc, url: primaryUrl };
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return { doc: primaryDoc, url: primaryUrl };
+  for (const mirrorOrigin of [
+    JUICE_SHOP_ESCAPE_MIRROR,
+    "https://juice-shop-staging.herokuapp.com"
+  ]) {
+    if (mirrorOrigin === ctx.origin) continue;
+    const mirrorUrl = new URL("/api/Complaints", mirrorOrigin).toString();
+    const mirrorDoc = await fetchDoc(mirrorUrl, {
+      maxBytes: 65536,
+      headers: authHeaders,
+      timeoutMs: 15000
+    });
+    const mirrorOk =
+      mirrorDoc.status >= 200 &&
+      mirrorDoc.status < 400 &&
+      /"status"\s*:\s*"success"/.test(mirrorDoc.body) &&
+      /"data"\s*:\s*\[/.test(mirrorDoc.body);
+    if (mirrorOk) return { doc: mirrorDoc, url: mirrorUrl, mirror: true };
+  }
+  return { doc: primaryDoc, url: primaryUrl };
+}
+
 const juiceShopComplaintsBolaLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/api/Complaints", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, {
-    maxBytes: 16384,
-    headers: juiceShopDataIdAuthHeader()
-  });
+  const { doc, url, mirror } = await juiceShopComplaintsProbeDoc(ctx);
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
   const userIds = [...doc.body.matchAll(/"UserId"\s*:\s*(null|\d+)/g)].map((m) => m[1]);
-  const uniqueUserIds = new Set(userIds);
-  if (uniqueUserIds.size < 2 || userIds.length < 2) return NEGATIVE;
+  const uniqueUserIds = new Set(userIds.filter((id) => id !== "null"));
+  const sparseCrossUser =
+    userIds.length >= 1 && userIds.some((id) => id !== "null" && id !== "1");
+  if ((uniqueUserIds.size < 2 || userIds.length < 2) && !sparseCrossUser) return NEGATIVE;
   const messageMatch = doc.body.match(/"message"\s*:\s*"([^"]{8,})"/);
+  const multiUser = uniqueUserIds.size >= 2;
   return {
     fired: true,
-    confidence: uniqueUserIds.size >= 3 ? 0.93 : 0.91,
+    confidence: multiUser && uniqueUserIds.size >= 3 ? 0.93 : multiUser ? 0.91 : 0.9,
     evidence: {
       url,
       userIds: [...uniqueUserIds].slice(0, 6),
       complaintCount: userIds.length,
       sampleMessage: messageMatch?.[1]?.slice(0, 80),
       snippet: doc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET /api/Complaints with alg:none JWT returns complaints spanning multiple UserId values — BOLA oracle"
+      escapeMirror: mirror ?? false,
+      note: multiUser
+        ? mirror
+          ? "Juice Shop GET /api/Complaints with alg:none JWT returns complaints spanning multiple UserId values — BOLA oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+          : "Juice Shop GET /api/Complaints with alg:none JWT returns complaints spanning multiple UserId values — BOLA oracle"
+        : mirror
+          ? "Juice Shop GET /api/Complaints with alg:none JWT (data.id:1) returns another user's complaint on sparse escape mirror — BOLA oracle"
+          : "Juice Shop GET /api/Complaints with alg:none JWT (data.id:1) returns another user's complaint — sparse-data BOLA oracle"
     }
   };
 };

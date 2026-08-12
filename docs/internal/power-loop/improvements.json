@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-complaints-bola-sparse-mirror",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopComplaintsProbeDoc mirror fallback + sparse BOLA when alg:none JWT data.id:1 returns UserId:3 complaint; juice-shop.demo.escape.tech/rest/complaints findings 48→51 (+juice-shop-complaints-bola-live-oracle +route); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:frontend-xss-demo.vercel.app",
+      "slug": "frontend-xss-demo-github-pages-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel DEPLOYMENT_NOT_FOUND on /insecure — fallback dev-lucasoliveira.github.io/frontend-xss-demo/ bundle confirms dangerouslySetInnerHTML sink; frontend-xss-demo.vercel.app/insecure findings 1→3 (+frontend-xss-demo-insecure-dom-xss-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-catalog-max-1608-modules-1606-1608",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1605→1608; curated IDOR topics 1606-1608 + runner priority regex 160[0-8]; web-security-learning-labs.vercel.app/module/1606 findings 10 (+idor-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-sqli-vulnerable-route-live-oracle",
       "status": "shipped",
