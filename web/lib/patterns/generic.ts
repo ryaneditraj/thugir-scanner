@@ -33068,6 +33068,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-csrf-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecLab /api/csrf-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/csrf-vulnerable, POST transfer requests process without CSRF tokens — or the route serves an Angular SPA shell instead of the documented Next.js CSRF training API.",
+    impactOneline:
+      "Route-specific CSRF lab oracle confirms live unprotected transfer endpoints or flags dead /api/csrf-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabCsrfVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab CSRF API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/csrf-vulnerable on production.",
+        "Require anti-CSRF tokens on all state-changing POST endpoints.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/csrf-vulnerable route is a dead Angular stub or exposes live CSRF. Show anti-CSRF token remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-users-vulnerable-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

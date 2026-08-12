@@ -2784,6 +2784,7 @@ const DEEP_RULES = new Set<string>([
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
   "seclabSqliVulnerableRouteLiveOracle",
+  "seclabCsrfVulnerableRouteLiveOracle",
   "seclabXssVulnerableRouteLiveOracle",
   "seclabUsersVulnerableRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
@@ -7722,7 +7723,18 @@ function extractSecLabPlaygroundSeeds(html: string, pageUrl: string): string[] {
   if (!/SecLab|Web Vulnerability Playground/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/xss", "/sqli", "/csrf", "/idor"]) {
+  for (const p of [
+    "/xss",
+    "/sqli",
+    "/csrf",
+    "/idor",
+    "/ssrf",
+    "/ssti",
+    "/api/xss-vulnerable",
+    "/api/sqli-vulnerable",
+    "/api/csrf-vulnerable",
+    "/api/users-vulnerable"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -10996,6 +11008,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/sqli-vulnerable\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-sqli-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/csrf-vulnerable\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-csrf-vulnerable")
       )
         return -3;
       if (
