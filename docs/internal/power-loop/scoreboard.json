@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T16:08:30.000Z",
+  "updated_at": "2026-08-12T16:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2882,
-  "total_findings": 30756,
+  "total_sites_scanned": 2883,
+  "total_findings": 30809,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2021,
-  "discovery_findings": 25425,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-12T16:08:30.000Z",
+  "discovery_findings": 25430,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-12T16:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,37 @@
           ]
         }
       },
-      "note": "6/6 recall (47 findings); no benchmark category gaps"
+      "note": "6/6 recall (48 findings); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 154,
-      "focus": "DVWU API routes (comments/search/notices) + FauxBank IDOR accounts + WrongSecrets challenge-79 hub seed",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 14,
+      "focus": "IST Edu + DVWU /api/comments stored/reflected XSS live oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "ist-edu-bd.vercel.app/api/search: 6 findings — ist-edu-search-xss-route-live-oracle (SQLi/XSS search oracle)",
-      "ist-edu-bd.vercel.app/api/notices: 5 findings — ist-edu-notices-lfi-route-live-oracle (LFI path traversal oracle)",
-      "pentest-fauxbank.vercel.app/api/accounts/1: 15 findings — fauxbank-idor-accounts-probe + authenticated-sqli-search",
-      "wrongsecrets.herokuapp.com/challenge/challenge-79: 14 findings — Heroku undeployed-challenge WHOOOOPS stub",
-      "brokencrystals.com/api/users/search/admin: 85 findings — mass-assignment route oracle (queue drain)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "ist-edu-bd.vercel.app/api/comments: 4→5 findings — ist-edu-comments-xss-route-live-oracle (POST stored XSS)",
+      "dvwu.vercel.app/api/comments: 9 findings — dvwu-comments-xss-route-live-oracle (POST stored + GET reflected XSS)",
+      "ist-edu-bd.vercel.app/api/search: 6 findings — ist-edu-search-xss-route-live-oracle maintained",
+      "ist-edu-bd.vercel.app/api/notices: 5 findings — ist-edu-notices-lfi-route-live-oracle maintained"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "ist-edu-bd.vercel.app/api/comments: 4-finding hub without stored-XSS route oracle (GET/POST comments endpoint)",
       "wrongsecrets.herokuapp.com/challenge/challenge-79: Heroku undeployed WHOOOOPS stub (same as 76-78 pattern)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "ist-edu-bd.vercel.app/api/comments": 5,
+    "dvwu.vercel.app/api/comments": 9,
     "ist-edu-bd.vercel.app/api/search": 6,
     "ist-edu-bd.vercel.app/api/notices": 5,
     "pentest-fauxbank.vercel.app/api/accounts/1": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-79": 14,
     "brokencrystals.com/api/users/search/admin": 85,
-    "web-security-learning-labs.vercel.app/module/1603": 10,
     "wrongsecrets.herokuapp.com/challenge/challenge-49": 15
   }
 }

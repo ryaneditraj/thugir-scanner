@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-comments-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/comments JSON {comment:<script>thugirXssProbe</script>} stores raw script in Comment Posted HTML; ist-edu-bd.vercel.app/api/comments findings 4→5 (+ist-edu-comments-xss-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-comments-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/comments JSON {comment:<script>thugirXssProbe</script>} stores raw script without sanitization on dvwu.vercel.app; dvwu.vercel.app/api/comments deep-scan 9 findings (+dvwu-comments-xss-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "dvwu-vuln-portal-comments-queue-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractDvwuVulnPortalSeeds + /api/comments in extractIstEduVulnPortalSeeds; runner -3 priority for ist-edu/dvwu /api/comments route scans; queue drain for DVWU API lab routes"
+    },
+    {
       "source": "discovery:crapi2.apisec.ai",
       "slug": "crapi-community-posts-route-live-oracle",
       "status": "shipped",
