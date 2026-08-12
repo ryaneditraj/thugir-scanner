@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T15:05:00.000Z",
+  "updated_at": "2026-08-12T16:05:57.581Z",
   "discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/comments",
+      "source": "zahidoverflow/damn-vulnerable-web-university — stored/reflected XSS oracle GET/POST /api/comments (README OWASP A03)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/search",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi search oracle GET /api/search (README OWASP A03)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/notices",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI oracle GET /api/notices (README OWASP A01)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/accounts/1",
+      "source": "alfredang/pentest FauxBank — IDOR oracle GET /api/accounts/[id] (README lesson 1)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-79",
+      "source": "OWASP WrongSecrets — challenge-79 hub seed (Heroku public demo, Aug 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi2.apisec.ai/community/api/v2/community/posts/recent",
       "source": "APIsec crAPI v2 — BOLA vehicle UUID leak oracle GET /community/api/v2/community/posts/recent (OWASPLA 2025 guide)",
