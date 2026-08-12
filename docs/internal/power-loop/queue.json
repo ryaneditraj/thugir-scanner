@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T08:16:00.000Z",
+  "updated_at": "2026-08-12T09:24:14.365Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-72",
+      "source": "OWASP WrongSecrets — challenge-72 public Heroku demo (README challenge table expansion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-73",
+      "source": "OWASP WrongSecrets — challenge-73 public Heroku demo (README challenge table expansion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1599",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1599 security lab (OSS Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/addresss",
+      "source": "Official OWASP Juice Shop demo — shipping address BOLA oracle GET /rest/addresss (juice-shop live oracle suite)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/securityquestion",
+      "source": "Official OWASP Juice Shop demo — security question disclosure oracle GET /rest/securityquestion (juice-shop live oracle suite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/blog?search=test&back=https://evil.com",
       "source": "PortSwigger Gin & Juice Shop — DOM open redirect via back parameter GET /blog?search= (pentest-2026-ginandjuice FINDING-020)",
