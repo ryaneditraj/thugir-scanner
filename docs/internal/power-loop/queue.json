@@ -1,6 +1,16 @@
 {
-  "updated_at": "2026-08-12T01:14:28.000Z",
+  "updated_at": "2026-08-12T02:30:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1593",
+      "source": "Web Security Learning Labs — module catalog 1593 (WSL vercel app, Aug 2026; queued after 1592 drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/wallet/balance",
+      "source": "Escape.tech Juice Shop mirror — wallet balance BOLA oracle GET /rest/wallet/balance (reachTarget www/http drift on 401 REST routes)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/order/details?orderId=0254809",
       "source": "PortSwigger Gin & Juice Shop — order details IDOR oracle GET /order/details?orderId=0254809 (valid training orderId; orderId=1 returns Order not found)",

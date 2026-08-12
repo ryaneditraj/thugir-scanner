@@ -9098,6 +9098,38 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       /* ignore */
     }
   }
+  // reachTarget may drift to http://www.* when a REST route returns 401 — pin canonical origin for Juice Shop API scans.
+  if (
+    /juice-shop|owasp-juice|\.juice\.shop$/i.test(effectiveTargetInput) &&
+    /\/(?:rest|api|ftp|b2b)\//i.test(effectiveTargetInput)
+  ) {
+    try {
+      const canonical = new URL(effectiveTargetInput);
+      target.protocol = canonical.protocol;
+      target.hostname = canonical.hostname;
+      if (
+        home.status === 401 ||
+        home.status === 403 ||
+        (home.body.length < 512 && !/Juice Shop|juice-shop|angular/i.test(home.body))
+      ) {
+        const routeDoc = await fetchDoc(effectiveTargetInput, {
+          timeoutMs: 15000,
+          maxBytes: 4096
+        });
+        const juiceHome = await fetchDoc(new URL("/", canonical.origin).toString(), {
+          timeoutMs: 15000,
+          maxBytes: 600_000
+        });
+        if (juiceHome.status >= 200 && juiceHome.body.length > 500) {
+          home = { ...juiceHome, finalUrl: effectiveTargetInput, url: effectiveTargetInput };
+        } else if (routeDoc.status > 0) {
+          home = { ...routeDoc, finalUrl: effectiveTargetInput, url: effectiveTargetInput };
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   if (
     isJuiceShopHerokuHost(home.finalUrl || effectiveTargetInput) &&
     (await juiceShopHerokuDown(home.finalUrl || effectiveTargetInput))
@@ -10470,6 +10502,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/b2b\/v2\/orders\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-b2b-orders")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/wallet\/balance\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-wallet-balance")
       )
         return -3;
       if (
