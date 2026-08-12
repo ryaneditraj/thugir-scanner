@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T05:31:35.833Z",
+  "updated_at": "2026-08-12T06:13:24.927Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-69",
+      "source": "OWASP WrongSecrets — challenge-69 AI secrets oracle on public Heroku demo (README challenge table)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/ssrf",
+      "source": "DaniSam-STU/security-lab — SSRF attack demo module on Vercel deploy (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/ssti",
+      "source": "DaniSam-STU/security-lab — SSTI attack demo module on Vercel deploy (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=5",
+      "source": "PortSwigger Gin & Juice Shop — DOM XSS /blog/post oracle postId=5 (vulnerabilities route map expansion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/captcha",
+      "source": "OWASP Juice Shop official demo — captcha bypass oracle GET/POST /rest/captcha (juice-shop live oracle suite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/blog/post?postId=4",
       "source": "PortSwigger Gin & Juice Shop — DOM XSS /blog/post oracle postId=4 (vulnerabilities page route map)",
