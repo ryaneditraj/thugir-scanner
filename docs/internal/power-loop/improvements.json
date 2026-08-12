@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-dashboard-crapi2-host-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiDashboardLiveOracle + crapiDashboardRouteLiveOracle extended from isCrapi1Host to isCrapiLabHost — dashboard/signup oracles now run on crapi2.apisec.ai; crapi2.apisec.ai unreachable in cloud (connection reset) — rule chain validated; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-vehicle-location-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiVehicleLocationRouteLiveOracle probes /identity/api/v2/vehicle/{uuid}/location with JWT signup chain and confirms cross-user GPS read when UUID not in own vehicles list; route oracle on queue URL ee389276-4040-4960-8603-11c1c0560027; crapi2 unreachable in cloud — rule validated; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-dashboard-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for crapi-dashboard* on /user/dashboard and crapi-vehicle* on /vehicle/{uuid}/location routes; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-csrf-vulnerable-route-live-oracle",
       "status": "shipped",
