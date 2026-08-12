@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T15:03:31.174Z",
+  "updated_at": "2026-08-12T15:13:45.470Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2865,
-  "total_findings": 30357,
+  "total_sites_scanned": 2873,
+  "total_findings": 30555,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 25073,
+  "discovery_urls_added": 2016,
+  "discovery_findings": 25271,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-12T15:03:31.174Z",
+  "last_run": "2026-08-12T15:13:45.470Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 578,
+      "probes_run": 585,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,40 @@
           ]
         }
       },
-      "note": "6/6 recall (48 findings); no benchmark category gaps"
+      "note": "Primary awake 6/6 (47 findings); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 64,
-      "focus": "juice-shop complaints BOLA sparse-mirror + frontend-xss-demo GitHub fallback + WSL catalog 1606-1608",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 198,
+      "focus": "crAPI v2 BOLA community+workshop + demo.owasp-juice deliverys/hints/challenges route oracles + wrongsecrets 76-78 drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "juice-shop.demo.escape.tech/rest/complaints: 48→51 findings — juice-shop-complaints-bola-live-oracle + route oracle (sparse mirror UserId≠JWT data.id)",
-      "frontend-xss-demo.vercel.app/insecure: 1→3 findings — frontend-xss-demo-insecure-dom-xss-live-oracle via dev-lucasoliveira.github.io fallback (Vercel DEPLOYMENT_NOT_FOUND)",
-      "web-security-learning-labs.vercel.app/module/1606: module/1606 IDOR placeholder oracle via catalog max 1608",
-      "brokencrystals.com/api/users/search/admin: 86 findings — brokencrystals-search-admin-mass-assignment-route-live-oracle + users-search-exposure live oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-76: 14 findings — wrongsecrets-heroku-undeployed-challenge-live-oracle (WHOOOOPS stub)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "demo.owasp-juice.shop/rest/deliverys: 49 findings — juice-shop-deliverys-exposure-route-live-oracle on official demo mirror",
+      "demo.owasp-juice.shop/rest/hints: 49 findings — juice-shop-hints-exposure-route-live-oracle on official demo mirror",
+      "demo.owasp-juice.shop/rest/challenges: 49 findings — juice-shop-challenges-disclosure-route-live-oracle on official demo mirror",
+      "crapi2.apisec.ai/community/api/v2/community/posts/recent: 5 findings — generic misconfig only, no BOLA vehicle-UUID leak oracle",
+      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1: 4 findings — generic misconfig only, no mechanic_report BOLA oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-76/77/78: 14 findings each — wrongsecrets-heroku-undeployed-challenge-live-oracle (WHOOOOPS stubs)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "juice-shop.herokuapp.com + staging: intermittent Heroku 503 — escape.tech mirror used for complaints/feedbacks oracles"
+      "crapi2.apisec.ai/*: route-specific BOLA oracles absent for community posts vehicleId leak and mechanic_report sequential IDOR",
+      "wrongsecrets challenge-76/77/78: Heroku undeployed WHOOOOPS stubs — catalog expansion beyond challenge-66 yields no live secret oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "juice-shop.demo.escape.tech/rest/complaints": 51,
-    "frontend-xss-demo.vercel.app/insecure": 3,
-    "web-security-learning-labs.vercel.app/module/1606": 10,
-    "brokencrystals.com/api/users/search/admin": 86,
-    "brokencrystals.com/api/email/sendSupportEmail?name=Bob": 85,
-    "demo.owasp-juice.shop/rest/feedbacks": 46,
-    "wrongsecrets.herokuapp.com/challenge/challenge-76": 14
+    "juice-shop.herokuapp.com": 47,
+    "demo.owasp-juice.shop/rest/deliverys": 49,
+    "demo.owasp-juice.shop/rest/hints": 49,
+    "demo.owasp-juice.shop/rest/challenges": 49,
+    "crapi2.apisec.ai/community/api/v2/community/posts/recent": 5,
+    "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1": 4,
+    "wrongsecrets.herokuapp.com/challenge/challenge-76": 14,
+    "brokencrystals.com/api/users/search/admin": 86
   }
 }
