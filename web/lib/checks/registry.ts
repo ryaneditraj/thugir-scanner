@@ -2075,9 +2075,18 @@ function extractIdorProbePaths(text: string): string[] {
 const JUICE_SHOP_HOST_RE = /juice-shop|owasp-juice|\.juice\.shop$/i;
 const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
 
+/** Juice Shop SPA routes often use kebab-case /rest/* aliases for PascalCase API resources. */
+const JUICE_SHOP_REST_KEBAB_ALIASES: Record<string, string> = {
+  "PrivacyRequests\\b": "privacy-requests",
+  "SecurityQuestions\\b": "security-?questions?"
+};
+
 /** Juice Shop mirrors REST resources under both /api/* and /rest/* — route scans should match either prefix. */
 function juiceShopApiOrRestRoute(pageUrl: string, pathSuffix: string): boolean {
-  return new RegExp(`/(?:api|rest)/${pathSuffix}`, "i").test(pageUrl);
+  if (new RegExp(`/(?:api|rest)/${pathSuffix}`, "i").test(pageUrl)) return true;
+  const kebabAlias = JUICE_SHOP_REST_KEBAB_ALIASES[pathSuffix];
+  if (kebabAlias && new RegExp(`/(?:api|rest)/${kebabAlias}`, "i").test(pageUrl)) return true;
+  return false;
 }
 
 const idorObjectAccess: Rule = async (ctx) => {
@@ -35579,7 +35588,8 @@ for (let moduleNum = WEB_SECURITY_LEARNING_SSTI_SHELL_MIN; moduleNum <= WEB_SECU
 const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1597": "IDOR",
   "1598": "IDOR",
-  "1599": "IDOR"
+  "1599": "IDOR",
+  "1600": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -35639,7 +35649,8 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1036": /Host Header|host header injection/i,
   "1597": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1598": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1599": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1599": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1600": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -55713,7 +55724,7 @@ const ginAndJuiceBlogPostRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const ginAndJuiceBlogPostAtobRedirectPostIds = ["6", "7"];
+const ginAndJuiceBlogPostAtobRedirectPostIds = ["6", "7", "8"];
 
 function ginAndJuiceBlogPostAtobRedirectPostIdFromUrl(pageUrl: string): string | undefined {
   const match = pageUrl.match(/[?&]postId=(\d+)/i);
