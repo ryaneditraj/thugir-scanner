@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T11:19:45.510Z",
+  "updated_at": "2026-08-12T12:13:59.867Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1602",
+      "source": "FarciarzYT/WebSecurityLearningLabs — module 1602 security lab (OSS Vercel deploy expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/complaints",
+      "source": "Escape.tech Juice Shop mirror — complaint file-upload oracle POST /rest/complaints (escape.tech benchmark parity)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/recycles",
+      "source": "Escape.tech Juice Shop mirror — recycle requests BOLA oracle GET /rest/recycles (escape.tech benchmark parity)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/sqli-vulnerable",
+      "source": "DaniSam-STU/security-lab — string-concat SQLi oracle GET /api/sqli-vulnerable (seclab.vercel.app README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/xss-vulnerable",
+      "source": "DaniSam-STU/security-lab — innerHTML XSS oracle GET /api/xss-vulnerable (seclab.vercel.app README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-74",
       "source": "OWASP WrongSecrets — challenge-74 public Heroku demo (README challenge table expansion)",
