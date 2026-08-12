@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logger-oast-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /logger returns 200 empty body (GET 404); searchLogger.js logQuery('/logger') POSTs blog search params — ginandjuice.shop/logger findings 22→26 (+ginandjuice-logger-oast-live-oracle +ginandjuice-logger-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logger-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /logger confirms blind OAST interaction sink via POST JSON telemetry + searchLogger.js client sink; ginandjuice.shop/logger findings 22→26; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logger-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: -3 runner priority for ginandjuice-logger* on /logger routes; logger OAST oracles surface on route-specific scans; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ai-security-platform-iota.vercel.app",
       "slug": "ai-security-rate-limiting-bruteforce-action-id-fix",
       "status": "shipped",

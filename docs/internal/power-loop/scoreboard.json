@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T04:24:00.000Z",
+  "updated_at": "2026-08-12T04:26:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2777,
-  "total_findings": 28146,
+  "total_sites_scanned": 2778,
+  "total_findings": 28150,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1974,
-  "discovery_findings": 23657,
-  "improvements_shipped": 1190,
-  "last_run": "2026-08-12T04:24:00.000Z",
+  "discovery_findings": 23661,
+  "improvements_shipped": 1193,
+  "last_run": "2026-08-12T04:26:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -48,41 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (46 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (46 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 46,
-      "focus": "WSL 1586-1590 + 1014 queue drain + frontend-xss-demo insecure/secure; queued 1596, ginandjuice postId=2, juice reviews, fauxbank transfer API, pwnshop chat/init",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 4,
+      "focus": "ginandjuice.shop/logger blind OAST interaction oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1586-1589: 8 findings each — WSL placeholder module route drain",
-      "web-security-learning-labs.vercel.app/module/1590: 5 findings — WSL module route (fewer generic oracles)",
-      "web-security-learning-labs.vercel.app/module/1014: 6 findings — WSL catalog shell",
-      "frontend-xss-demo.vercel.app/insecure: 1 finding — reflected XSS demo route",
-      "frontend-xss-demo.vercel.app/secure: 2 findings — sanitized comparison baseline"
+      "ginandjuice.shop/logger: 22→26 findings — ginandjuice-logger-oast-live-oracle + ginandjuice-logger-route-live-oracle shipped (POST /logger blind OAST sink, searchLogger.js client POST)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-67: not deployed on Heroku (WHOOOOPS error page) — challenge-specific oracle deferred"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-answers oracles)",
+      "wrongsecrets challenge-67: challenge page not deployed on Heroku public demo (only 0-66 in nav)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "web-security-learning-labs module routes: placeholder shells only — no route-specific vuln oracles",
-      "frontend-xss-demo: insecure route detected but no dedicated stored/reflected XSS live oracle slug",
-      "queued-not-scanned: module/1596, ginandjuice blog/post?postId=2, demo.owasp-juice.shop/rest/products/reviews, pentest-fauxbank /api/transfer, pwnshop /api/chat/init"
+      "queued-not-scanned: module/1596, ginandjuice blog/post?postId=2, demo.owasp-juice.shop/rest/products/reviews"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 46,
+    "ginandjuice.shop/logger": 26,
     "web-security-learning-labs.vercel.app/module/1586": 8,
-    "web-security-learning-labs.vercel.app/module/1587": 8,
-    "web-security-learning-labs.vercel.app/module/1588": 8,
-    "web-security-learning-labs.vercel.app/module/1589": 8,
-    "web-security-learning-labs.vercel.app/module/1590": 5,
-    "web-security-learning-labs.vercel.app/module/1014": 6,
-    "frontend-xss-demo.vercel.app/insecure": 1,
-    "frontend-xss-demo.vercel.app/secure": 2
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 46,
+    "wrongsecrets.herokuapp.com/challenge/challenge-67": 12,
+    "ssrf.vulnlab.dev/basic": 3
   }
 }
