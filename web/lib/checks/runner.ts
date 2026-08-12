@@ -10467,6 +10467,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/b2b\/v2\/orders\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-b2b-orders")
+      )
+        return -3;
+      if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/wallet\/topup\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
@@ -10843,6 +10849,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/order\/details\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-order-details")
+      )
+        return -3;
       if (/xss-game\.appspot\.com/i.test(origin) && p.slug.startsWith("xss-game-")) return -2;
       if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
       if (/owasp-finbot-ctf\.org/i.test(origin) && p.slug.startsWith("finbot-")) return -2;
