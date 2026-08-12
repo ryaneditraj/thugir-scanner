@@ -10434,6 +10434,31 @@
       "url": "https://juice-shop.demo.escape.tech/rest/products/1/reviews",
       "source": "Escape.tech Juice Shop mirror — product reviews BOLA oracle",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1596",
+      "source": "Web Security Learning Labs — module catalog 1596 (WSL vercel app, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=2",
+      "source": "PortSwigger Gin & Juice Shop — DOM-based XSS oracle /blog/post?postId= (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/products/reviews",
+      "source": "OWASP Juice Shop official demo — product reviews list GET /rest/products/reviews",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "Pentest FauxBank — transfer API business-logic oracle (vercel public lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/chat/init",
+      "source": "ctfsec/pwnshop — chat init email enumeration oracle POST /api/chat/init (PWN-037)",
+      "auth": "public_demo"
     }
   ]
 }
