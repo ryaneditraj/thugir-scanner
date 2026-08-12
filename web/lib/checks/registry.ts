@@ -7420,6 +7420,47 @@ const vulnforgeAcademyLevelSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnforgeAcademyLevel6SqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/levels\/[^/]+\/level6\.php/i.test(pageUrl)) return NEGATIVE;
+  for (const param of ["id", "user_id", "search", "q", "name"]) {
+    const probeUrl = new URL(pageUrl, ctx.origin);
+    probeUrl.searchParams.set(param, "1'");
+    const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+    if (doc.status === 401 || doc.status === 403) continue;
+    const marker = SQL_ERROR_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) continue;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: probeUrl.toString(),
+        level: 6,
+        sqlError: match?.[0]?.slice(0, 120) || "database syntax error",
+        snippet: doc.body.slice(0, 240).trim(),
+        note: `VulnForge Academy level 6 route scan — ${param} query returns SQL syntax error disclosure`
+      }
+    };
+  }
+  const sqlHit = await sqlErrorDisclosure(ctx);
+  if (!sqlHit.fired) return NEGATIVE;
+  const hitUrl = String(sqlHit.evidence?.url ?? "");
+  if (!/\/level6\.php/i.test(hitUrl) && !/\/api\/portal/i.test(hitUrl)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sqlHit.confidence,
+    evidence: {
+      ...sqlHit.evidence,
+      scannedUrl: pageUrl,
+      level: 6,
+      note: "VulnForge Academy level 6 route scan — SQL syntax error disclosure on level route or /api/portal search parameter"
+    }
+  };
+};
+
 const vulnforgeAcademyLevelXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -19743,6 +19784,57 @@ const vulnbankAiAnonymousChatRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Vuln Bank /chat route scan — POST /api/ai/chat/anonymous returns mode:anonymous LLM responses without authentication"
+    }
+  };
+};
+
+const vulnbankAiSystemInfoLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const infoUrl = new URL("/api/ai/system-info", ctx.origin).toString();
+  const doc = await ctx.probe.get(infoUrl, {
+    headers: { Accept: "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (String(parsed.status ?? "") !== "success") return NEGATIVE;
+  const systemInfo = parsed.system_info as Record<string, unknown> | undefined;
+  if (!systemInfo || typeof systemInfo !== "object") return NEGATIVE;
+  const systemPrompt = String(systemInfo.system_prompt ?? "");
+  const securityIssues = systemInfo.security_issues;
+  if (systemInfo.database_access !== true || systemPrompt.length < 40) return NEGATIVE;
+  if (!Array.isArray(securityIssues) || securityIssues.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: infoUrl,
+      apiProvider: String(systemInfo.api_provider ?? ""),
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank GET /api/ai/system-info returns unauthenticated system_info with database_access:true, system_prompt, and security_issues — API8 security misconfiguration oracle"
+    }
+  };
+};
+
+const vulnbankAiSystemInfoRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/ai\/system-info\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankAiSystemInfoLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/ai/system-info route scan — unauthenticated endpoint leaks AI system prompt, database access flag, and security_issues list"
     }
   };
 };
@@ -63555,6 +63647,49 @@ const wrongsecretsChallenge32LlmPromptLeakRouteLiveOracle: Rule = async (ctx) =>
   };
 };
 
+const wrongsecretsChallenge33K8sStringdataLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-33", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Secrets<\/strong>/i.test(body) ||
+    !/Kubernetes StringData or Data/i.test(body) ||
+    !/metadata might contain the actual value of the StringData/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/Kubernetes StringData[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        "K8s StringData challenge",
+      note: "OWASP WrongSecrets challenge-33 documents Kubernetes StringData vs Data secret encoding and metadata plaintext leakage — K8s secrets oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge33K8sStringdataRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?33\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge33K8sStringdataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-33 route scan — Kubernetes StringData/Data walkthrough confirms K8s secret metadata exposure training oracle"
+    }
+  };
+};
+
 const wrongsecretsChallenge34Pbkdf2KeyGenerationLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-34", ctx.origin).toString();
@@ -75971,6 +76106,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
   vulnbankAiAnonymousChatRouteLiveOracle,
+  vulnbankAiSystemInfoLiveOracle,
+  vulnbankAiSystemInfoRouteLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankSqliLoginLiveOracle,
   vulnbankSqliLoginRouteLiveOracle,
@@ -76703,6 +76840,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge31WebPageSecretRouteLiveOracle,
   wrongsecretsChallenge32LlmPromptLeakLiveOracle,
   wrongsecretsChallenge32LlmPromptLeakRouteLiveOracle,
+  wrongsecretsChallenge33K8sStringdataLiveOracle,
+  wrongsecretsChallenge33K8sStringdataRouteLiveOracle,
   wrongsecretsChallenge34Pbkdf2KeyGenerationLiveOracle,
   wrongsecretsChallenge34Pbkdf2KeyGenerationRouteLiveOracle,
   wrongsecretsErrorDemoDatabaseConnectionLiveOracle,
@@ -77735,6 +77874,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatProfileSensitiveDataRouteLiveOracle,
   nodegoatProfileRedosRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
+  vulnforgeAcademyLevel6SqliRouteLiveOracle,
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnforgeAcademyLevelSsrfRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
