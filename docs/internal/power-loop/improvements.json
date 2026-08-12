@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-users-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users-vulnerable/1 returns <app-root> Angular SPA shell (live IDOR API absent); seclab.vercel.app/api/users-vulnerable findings 3→4 (+seclab-users-vulnerable-route-live-oracle dead-lab route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-otp-bruteforce-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isCrapiLabHost extends OTP brute-force oracle to crapi2.apisec.ai (was isCrapi1Host-only); /identity/api/auth/v2/check-otp queue entry; crapi2.apisec.ai unreachable in cloud (connection reset) — rule chain validated; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-contact-mechanic-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeCrapiContactMechanicSsrf POST /workshop/api/merchant/contact_mechanic mechanic_api=http://example.com with JWT signup chain; route oracle on /contact_mechanic scans; crapi2.apisec.ai unreachable in cloud — rule validated; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-comments-xss-route-live-oracle",
       "status": "shipped",

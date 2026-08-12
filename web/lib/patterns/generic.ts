@@ -33068,6 +33068,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-users-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecLab /api/users-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/users-vulnerable, GET /api/users-vulnerable/1 returns user passwords without authentication — or the route serves an Angular SPA shell instead of the documented Next.js IDOR training API.",
+    impactOneline:
+      "Route-specific IDOR lab oracle confirms live unauthenticated user record access or flags dead /api/users-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabUsersVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab IDOR API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/users-vulnerable on production.",
+        "Enforce authentication and object-level authorization on user record APIs.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/users-vulnerable route is a dead Angular stub or exposes live IDOR. Show object-level authorization remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-heroku-undeployed-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -38785,6 +38811,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /identity/api/auth/v3/check-otp route scan confirms legacy v2 OTP brute-force bypass. Show API version deprecation and rate-limit remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-contact-mechanic-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "crAPI contact_mechanic SSRF live oracle",
+    description:
+      "Authenticated POST /workshop/api/merchant/contact_mechanic fetches attacker-controlled mechanic_api URLs server-side and echoes the response — crAPI SSRF training oracle (API7).",
+    impactOneline:
+      "Server-side fetches of user-supplied mechanic_api URLs let attackers reach internal services and cloud metadata from the API backend.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiContactMechanicSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — block SSRF to internal networks and validate outbound fetch destinations.",
+      steps: [
+        "Allowlist outbound fetch destinations for mechanic callbacks.",
+        "Block link-local, metadata, and private IP ranges.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI contact_mechanic endpoint fetches attacker-controlled mechanic_api URLs server-side. Show SSRF egress filtering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-contact-mechanic-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "crAPI contact_mechanic SSRF route live oracle",
+    description:
+      "When scanning /workshop/api/merchant/contact_mechanic, authenticated POST mechanic_api fetches attacker URLs server-side — route-specific crAPI SSRF oracle (API7).",
+    impactOneline:
+      "Route scans on merchant contact endpoints should confirm server-side URL fetch is blocked or strictly validated.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiContactMechanicSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — block SSRF to internal networks and validate outbound fetch destinations.",
+      steps: [
+        "Allowlist outbound fetch destinations for mechanic callbacks.",
+        "Block link-local, metadata, and private IP ranges.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/merchant/contact_mechanic route scan confirms SSRF via mechanic_api. Show egress filtering remediation.",
     version: 1,
     enabled: true
   },

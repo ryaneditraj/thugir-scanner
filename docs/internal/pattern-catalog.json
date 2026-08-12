@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-12T16:13:05.437Z",
-  "total": 2185,
-  "uniqueSlugs": 2181,
+  "generatedAt": "2026-08-12T17:21:06.500Z",
+  "total": 2188,
+  "uniqueSlugs": 2184,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2167,
+    "generic": 2170,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2100,
+    "deep": 2103,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 431,
+    "Broken access control": 432,
     "Exposed secret": 96,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -32,7 +32,7 @@
     "Open redirect": 19,
     "general": 20,
     "SSRF": 12,
-    "Server-side request forgery": 63,
+    "Server-side request forgery": 65,
     "Sensitive data exposure": 55,
     "AI security": 52,
     "Business logic": 19,
@@ -828,6 +828,8 @@
     "cors-reflect-origin",
     "crapi-check-otp-route-live-oracle",
     "crapi-community-posts-route-live-oracle",
+    "crapi-contact-mechanic-ssrf-live-oracle",
+    "crapi-contact-mechanic-ssrf-route-live-oracle",
     "crapi-dashboard-live-oracle",
     "crapi-dashboard-route-live-oracle",
     "crapi-mechanic-report-bola-live-oracle",
@@ -1740,6 +1742,7 @@
     "seclab-angular-stub-route-live-oracle",
     "seclab-nextjs-lab-api-probe",
     "seclab-sqli-vulnerable-route-live-oracle",
+    "seclab-users-vulnerable-route-live-oracle",
     "seclab-xss-vulnerable-route-live-oracle",
     "secret-anthropic",
     "secret-aws-akid",
