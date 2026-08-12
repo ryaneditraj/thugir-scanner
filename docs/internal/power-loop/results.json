@@ -35374,6 +35374,32 @@
       "probes_run": 385,
       "status": "ok",
       "scanned_at": "2026-08-12T01:20:48.292Z"
+    },
+    {
+      "run_id": "2026-08-12T01:22:44.428Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — primary Heroku awake 6/6 recall (47 findings, pages=6 probes=583)",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 01 UTC: benchmark 6/6 (47 findings). Discovery: ginandjuice order-details IDOR + B2B deserialization + WSL 1592 → 3 improvements shipped.",
+      "scanned_at": "2026-08-12T01:22:44.428Z"
     }
   ]
 }
