@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-08-12T18:05:00.000Z",
+  "updated_at": "2026-08-12T18:50:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/catalog/product/stock",
+      "source": "PortSwigger Gin & Juice — XXE oracle POST /catalog/product/stock productId XML entity expansion (scanner lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/xss",
+      "source": "zahidoverflow/damn-vulnerable-web-university — reflected/stored XSS lab hub /labs/xss (README OWASP A03)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/api/comments",
+      "source": "zahidoverflow/damn-vulnerable-web-university — stored XSS oracle POST /api/comments on DVWU mirror deploy",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/csrf",
+      "source": "DaniSam-STU/security-lab — Angular SPA stub /csrf route (planned CSRF lab not deployed on seclab.vercel.app)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://crapi2.apisec.ai/identity/api/v2/user/dashboard",
       "source": "APIsec crAPI v2 — user dashboard BOLA oracle GET /identity/api/v2/user/dashboard (OWASPLA 2025 guide API1)",

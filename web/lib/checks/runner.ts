@@ -9782,6 +9782,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-77",
         "https://wrongsecrets.herokuapp.com/challenge/78",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-78",
+        "https://wrongsecrets.herokuapp.com/challenge/79",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-79",
         "https://wrongsecrets.herokuapp.com/mcp",
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
@@ -10634,6 +10636,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/catalog\/product\/stock\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-stock")
+      )
+        return -3;
+      if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/wallet\/topup\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
@@ -10980,7 +10988,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/(ssrf|ssti)\b/i.test(targetInput) &&
+        /\/(ssrf|ssti|csrf|idor|xss|sqli)\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-angular-stub")
       )
         return -3;
