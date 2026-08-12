@@ -51072,6 +51072,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-blog-post-7-atob-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop blog post 7 atob DOM open-redirect live oracle",
+    description:
+      "GET /blog/post?postId=7 embeds a mouse-event gated onclick chain that assigns location = atob('L3Z1bG5lcmFiaWxpdGllcw==') (/vulnerabilities) without user confirmation — PortSwigger Gin & Juice DOM open-redirect training oracle.",
+    impactOneline:
+      "DOM-based atob-encoded redirects on blog post 7 let attackers phish users via trusted ginandjuice.shop links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPost7AtobRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove client-side atob-encoded location redirects from blog post templates.",
+      steps: [
+        "Use server-side redirects with allowlisted paths instead of atob-encoded client navigation.",
+        "Require explicit user confirmation before any location assignment from blog content.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/post?postId=7 uses mouse-event gated atob location redirects. Show DOM open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-blog-post-7-atob-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /blog/post?postId=7 atob open-redirect route live oracle",
+    description:
+      "When scanning /blog/post?postId=7, the page embeds mouse-event gated atob-encoded location assignment without allowlist — route-specific DOM open-redirect oracle.",
+    impactOneline:
+      "Route scans on postId=7 need live confirmation that atob-encoded redirects cannot target external hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate navigation targets server-side on /blog/post?postId=7 route handlers.",
+      steps: [
+        "Remove atob-encoded location assignments from blog post client scripts.",
+        "Allowlist same-origin paths for any client-side navigation.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /blog/post?postId=7 route scan confirms atob location redirect. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-catalog-category-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

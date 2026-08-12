@@ -42,6 +42,11 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://ginandjuice.shop/blog/post?postId=7",
+      "source": "PortSwigger Gin & Juice Shop — atob DOM open-redirect /blog/post postId=7 (mouse-event gated location redirect)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1597",
       "source": "web-security-learning-labs Vercel — module 1597 IDOR lab (OSS deploy README)",
       "auth": "oss_deploy"

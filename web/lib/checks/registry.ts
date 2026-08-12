@@ -36144,6 +36144,14 @@ const CLIENT_OPEN_REDIRECT_RES: { label: string; re: RegExp }[] = [
   {
     label: "location assignment from back query param",
     re: /location\s*=\s*new URLSearchParams[\s\S]{0,120}\.get\(\s*["']back["']\s*\)/
+  },
+  {
+    label: "atob-encoded location redirect",
+    re: /location\s*=\s*atob\s*\(\s*['"][^'"]+['"]\s*\)/
+  },
+  {
+    label: "mouse-event gated redirect chain",
+    re: /onmouseenter[\s\S]{0,400}onmouseup[\s\S]{0,200}location\s*=\s*atob/
   }
 ];
 
@@ -36155,7 +36163,7 @@ const clientSideOpenRedirectEvidence: Rule = async (ctx) => {
   }
   if (hits.length < 2) return NEGATIVE;
   if (
-    !/\/api\/auth\/validate-redirect|nextParam|resolveRedirect|\.get\(\s*["']back["']\s*\)/i.test(
+    !/\/api\/auth\/validate-redirect|nextParam|resolveRedirect|\.get\(\s*["']back["']\s*\)|location\s*=\s*atob/i.test(
       ctx.combined
     )
   )
@@ -55682,6 +55690,55 @@ const ginAndJuiceBlogPostRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /blog/post route scan — back query param drives client-side location assignment without allowlist"
+    }
+  };
+};
+
+const ginAndJuiceBlogPost7AtobRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/blog/post", ctx.origin);
+  probeUrl.searchParams.set("postId", "7");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const atobMatch = doc.body.match(/location\s*=\s*atob\s*\(\s*['"]([^'"]+)['"]\s*\)/i);
+  if (!atobMatch) return NEGATIVE;
+  if (
+    !/onmouseenter[\s\S]{0,400}onmouseup[\s\S]{0,200}location\s*=\s*atob/i.test(doc.body)
+  )
+    return NEGATIVE;
+  let decodedPath = "";
+  try {
+    decodedPath = atob(atobMatch[1]!);
+  } catch {
+    /* ignore */
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      atobPayload: atobMatch[1],
+      decodedPath: decodedPath || undefined,
+      snippet: atobMatch[0].slice(0, 160),
+      note: "Gin & Juice Shop /blog/post?postId=7 uses mouse-event gated atob-encoded location redirect — DOM open-redirect training oracle"
+    }
+  };
+};
+
+const ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/blog\/post/i.test(pageUrl)) return NEGATIVE;
+  if (!/[?&]postId=7\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceBlogPost7AtobRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /blog/post?postId=7 route scan — mouse-event gated atob location redirect without allowlist"
     }
   };
 };
@@ -76598,6 +76655,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogRouteLiveOracle,
   ginAndJuiceBlogPostOpenRedirectLiveOracle,
   ginAndJuiceBlogPostRouteLiveOracle,
+  ginAndJuiceBlogPost7AtobRedirectLiveOracle,
+  ginAndJuiceBlogPost7AtobRedirectRouteLiveOracle,
   ginAndJuiceCatalogCategorySqliLiveOracle,
   ginAndJuiceCatalogCategorySqliRouteLiveOracle,
   ginAndJuiceCatalogCategoryCrlfLiveOracle,
