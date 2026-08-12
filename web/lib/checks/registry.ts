@@ -65527,13 +65527,15 @@ Client-side Open Redirect /challenges/open-redirect CWE-601 Unvalidated redirect
 Auth & API IDOR /challenges/idor CWE-639 Accessing objects by predictable IDs without authorization checks
 Auth & API Cookie Auth Bypass /challenges/admin-console
 Auth & API Brute Force /challenges/rate-limiting No rate limiting allows unlimited login attempts
-Auth & API Password Storage /challenges/insecure-passwords
+Auth & API Password Storage /challenges/insecure-passwords CWE-521 plaintext password weak hash storage
+Backend & Config Security Headers /challenges/security-headers CWE-200 Missing CSP X-Frame-Options HSTS
 Backend & Config Leaked Secrets /challenges/leaked-config CWE-200 Environment variables and API keys exposed
 Backend & Config Supabase RLS /challenges/supabase-data
-Backend & Config Security Headers /challenges/security-headers
 Legal / Social AI-Assisted Phishing /challenges/ai-phishing Phishing CWE-1021 AI-generated cloned login pages and email spoofing attacks
 Legal / Social Deceptive Privacy Policy /challenges/privacy-policy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
-Supply Chain /challenges/supply-chain /challenges/vulnerable-deps /challenges/hacked-npm-packages
+Supply Chain /challenges/supply-chain Supply Chain Attack dependency tampering
+Supply Chain Vulnerable npm Deps /challenges/vulnerable-deps CVE known vulnerable dependencies typosquat
+Supply Chain Hacked npm Packages /challenges/hacked-npm-packages malicious package compromised npm postinstall
 14 challenges · OWASP Top 10 aligned
 `;
 
@@ -65554,7 +65556,14 @@ async function aiSecurityPlatformFetchCatalog(ctx: RuleContext): Promise<string>
       maxBytes: 65536,
       timeoutMs: 12000
     });
-    if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) return doc.body;
+    if (
+      doc.status >= 200 &&
+      doc.status < 400 &&
+      doc.body.length > 500 &&
+      /\/challenges\//i.test(doc.body)
+    ) {
+      return doc.body;
+    }
   }
   return AI_SECURITY_PLATFORM_CATALOG_FALLBACK;
 }
@@ -65579,7 +65588,7 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform privacy-policy challenge — deceptive privacy policy buries harmful data-sale and plaintext-storage clauses"
   },
   "api-security": {
-    routeRe: /\/challenges\/(?:api-security|rate-limiting|insecure-passwords)\b/i,
+    routeRe: /\/challenges\/(?:api-security|rate-limiting)\b/i,
     markers: [
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i },
       { label: "IDOR CWE-639 training module", re: /IDOR[\s\S]{0,48}CWE-639/i },
@@ -65587,13 +65596,21 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
         label: "Rate limiting bypass module",
         re: /No rate limiting allows unlimited login attempts|Brute Force|\/challenges\/rate-limiting/i
       },
-      { label: "Cookie Auth Bypass challenge", re: /Cookie Auth Bypass|\/challenges\/admin-console/i },
-      {
-        label: "Password Storage challenge",
-        re: /Password Storage|\/challenges\/insecure-passwords/i
-      }
+      { label: "Cookie Auth Bypass challenge", re: /Cookie Auth Bypass|\/challenges\/admin-console/i }
     ],
-    note: "AI Security Platform Auth & API challenge hub — IDOR, cookie auth bypass, brute-force rate limiting, and password storage modules in the Next.js workshop"
+    note: "AI Security Platform Auth & API challenge hub — IDOR, cookie auth bypass, and brute-force rate limiting modules in the Next.js workshop"
+  },
+  "rate-limiting": {
+    routeRe: /\/challenges\/rate-limiting\b/i,
+    markers: [
+      { label: "Rate limiting challenge route", re: /\/challenges\/rate-limiting/i },
+      {
+        label: "Brute Force training module",
+        re: /No rate limiting allows unlimited login attempts|Brute Force/i
+      },
+      { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
+    ],
+    note: "AI Security Platform rate-limiting challenge — missing login throttling allows unlimited brute-force attempts"
   },
   idor: {
     routeRe: /\/challenges\/idor\b/i,
@@ -65666,17 +65683,41 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform admin-console challenge — cookie-based admin authentication bypass without valid credentials"
   },
   "supply-chain": {
-    routeRe: /\/challenges\/(?:supply-chain|vulnerable-deps|hacked-npm-packages)\b/i,
+    routeRe: /\/challenges\/supply-chain\b/i,
     markers: [
-      { label: "Supply Chain challenge route", re: /\/challenges\/(?:supply-chain|vulnerable-deps|hacked-npm-packages)/i },
-      { label: "Supply Chain Attack training module", re: /Supply Chain Attack|Hacked npm Packages|Vulnerable npm Deps/i },
+      { label: "Supply Chain challenge route", re: /\/challenges\/supply-chain/i },
+      { label: "Supply Chain Attack training module", re: /Supply Chain Attack|dependency tampering/i },
       { label: "Supply Chain challenge category", re: /Supply Chain/i },
       {
         label: "typosquatting or dependency tampering",
         re: /typosquat|dependency confusion|malicious package|compromised npm/i
       }
     ],
-    note: "AI Security Platform supply-chain challenge — dependency tampering, typosquatting, and compromised npm package training modules"
+    note: "AI Security Platform supply-chain challenge — dependency tampering and compromised npm package training modules"
+  },
+  "vulnerable-deps": {
+    routeRe: /\/challenges\/vulnerable-deps\b/i,
+    markers: [
+      { label: "Vulnerable deps challenge route", re: /\/challenges\/vulnerable-deps/i },
+      {
+        label: "Vulnerable npm Deps training module",
+        re: /Vulnerable npm Deps|vulnerable dependencies|known CVE/i
+      },
+      { label: "Supply Chain challenge category", re: /Supply Chain/i }
+    ],
+    note: "AI Security Platform vulnerable-deps challenge — known CVE dependencies and typosquatting in npm supply chain"
+  },
+  "hacked-npm-packages": {
+    routeRe: /\/challenges\/hacked-npm-packages\b/i,
+    markers: [
+      { label: "Hacked npm packages challenge route", re: /\/challenges\/hacked-npm-packages/i },
+      {
+        label: "Hacked npm Packages training module",
+        re: /Hacked npm Packages|malicious package|compromised npm|postinstall/i
+      },
+      { label: "Supply Chain challenge category", re: /Supply Chain/i }
+    ],
+    note: "AI Security Platform hacked-npm-packages challenge — malicious postinstall scripts and compromised npm typosquats"
   },
   "security-headers": {
     routeRe: /\/challenges\/security-headers\b/i,
@@ -65751,6 +65792,9 @@ const aiSecurityPrivacyPolicyRouteLiveOracle: Rule = (ctx) =>
 const aiSecurityApiSecurityRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "api-security");
 
+const aiSecurityRateLimitingRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "rate-limiting");
+
 const aiSecurityIdorRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "idor");
 
@@ -65771,6 +65815,12 @@ const aiSecurityAdminConsoleRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecuritySupplyChainRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "supply-chain");
+
+const aiSecurityVulnerableDepsRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "vulnerable-deps");
+
+const aiSecurityHackedNpmPackagesRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityPlatformChallengeRouteOracle(ctx, "hacked-npm-packages");
 
 const aiSecuritySecurityHeadersRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "security-headers");
@@ -75434,6 +75484,7 @@ export const RULES: Record<string, Rule> = {
   clientSideAiSecurityPlatformEvidence,
   aiSecurityPrivacyPolicyRouteLiveOracle,
   aiSecurityApiSecurityRouteLiveOracle,
+  aiSecurityRateLimitingRouteLiveOracle,
   aiSecurityIdorRouteLiveOracle,
   aiSecurityOpenRedirectRouteLiveOracle,
   aiSecurityXssRouteLiveOracle,
@@ -75441,6 +75492,8 @@ export const RULES: Record<string, Rule> = {
   aiSecuritySupabaseDataRouteLiveOracle,
   aiSecurityAdminConsoleRouteLiveOracle,
   aiSecuritySupplyChainRouteLiveOracle,
+  aiSecurityVulnerableDepsRouteLiveOracle,
+  aiSecurityHackedNpmPackagesRouteLiveOracle,
   aiSecuritySecurityHeadersRouteLiveOracle,
   aiSecurityInsecurePasswordsRouteLiveOracle,
   aiSecurityAiPhishingRouteLiveOracle,

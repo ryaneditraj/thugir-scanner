@@ -31872,6 +31872,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-insecure-passwords-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "AI Security Platform insecure-passwords challenge route live oracle",
+    description:
+      "When scanning /challenges/insecure-passwords, the platform catalog documents plaintext or weak password storage (CWE-521) in the Next.js workshop — route-specific password storage oracle.",
+    impactOneline:
+      "Route-specific oracle confirms insecure password storage training module without relying on shared Auth & API hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityInsecurePasswordsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — hash passwords with bcrypt/argon2 and never store plaintext credentials.",
+      steps: [
+        "Use adaptive hashing (bcrypt, scrypt, or argon2) with per-user salts.",
+        "Never log or expose password fields in API responses or error messages.",
+        "Migrate legacy plaintext hashes on next successful login."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/insecure-passwords route documents plaintext password storage. Show secure password hashing for Next.js + Supabase auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-security-headers-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "AI Security Platform security-headers challenge route live oracle",
+    description:
+      "When scanning /challenges/security-headers, the platform catalog documents missing CSP, HSTS, and X-Frame-Options misconfigurations — route-specific security headers oracle.",
+    impactOneline:
+      "Route-specific oracle confirms security-headers training module without relying on shared Backend & Config hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecuritySecurityHeadersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — deploy strict CSP, HSTS, and frame-busting headers.",
+      steps: [
+        "Set Content-Security-Policy without unsafe-inline for scripts.",
+        "Enable Strict-Transport-Security with includeSubDomains.",
+        "Set X-Frame-Options or frame-ancestors CSP directive to deny clickjacking."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/security-headers route documents missing CSP and HSTS. Show Next.js security header configuration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-rate-limiting-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "AI Security Platform rate-limiting challenge route live oracle",
+    description:
+      "When scanning /challenges/rate-limiting, the platform catalog documents missing login throttling that allows unlimited brute-force attempts — route-specific rate-limiting oracle.",
+    impactOneline:
+      "Route-specific oracle confirms rate-limiting training module without relying on shared Auth & API hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityRateLimitingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce per-IP and per-account rate limits on authentication.",
+      steps: [
+        "Apply exponential backoff after failed login attempts.",
+        "Return HTTP 429 after a threshold of failures from the same IP or account.",
+        "Log and alert on credential-stuffing patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/rate-limiting route documents unlimited login attempts. Show server-side rate limiting for Next.js auth.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-rate-limiting-bruteforce-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -31904,9 +31982,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform supply-chain challenge route live oracle",
     description:
-      "When scanning /challenges/supply-chain, /challenges/vulnerable-deps, or /challenges/hacked-npm-packages, the platform catalog documents dependency tampering and compromised npm package training modules.",
+      "When scanning /challenges/supply-chain, the platform catalog documents dependency tampering and compromised npm package training modules.",
     impactOneline:
-      "Route-specific oracle confirms supply-chain training modules without relying on shared AI Security Platform hub fingerprinting.",
+      "Route-specific oracle confirms supply-chain training module without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "aiSecuritySupplyChainRouteLiveOracle" },
     tierRequired: "deep",
@@ -31920,6 +31998,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/supply-chain route documents compromised npm dependencies. Show dependency pinning and integrity verification.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-vulnerable-deps-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform vulnerable-deps challenge route live oracle",
+    description:
+      "When scanning /challenges/vulnerable-deps, the platform catalog documents known CVE dependencies and typosquatting in the npm supply chain — route-specific vulnerable-deps oracle.",
+    impactOneline:
+      "Route-specific oracle confirms vulnerable-deps training module without relying on shared supply-chain hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityVulnerableDepsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — audit dependencies for known CVEs and typosquats.",
+      steps: [
+        "Run npm audit and SCA tools in CI on every build.",
+        "Pin dependency versions and review transitive package updates.",
+        "Block packages with known critical CVEs via policy gates."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/vulnerable-deps route documents known CVE npm dependencies. Show dependency auditing and SCA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-hacked-npm-packages-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform hacked-npm-packages challenge route live oracle",
+    description:
+      "When scanning /challenges/hacked-npm-packages, the platform catalog documents malicious postinstall scripts and compromised npm typosquats — route-specific hacked-npm-packages oracle.",
+    impactOneline:
+      "Route-specific oracle confirms hacked-npm-packages training module without relying on shared supply-chain hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityHackedNpmPackagesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — verify package provenance and block malicious postinstall scripts.",
+      steps: [
+        "Review postinstall scripts before adding new npm packages.",
+        "Use npm provenance and signed package verification where available.",
+        "Monitor for typosquatting when adding dependencies."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/hacked-npm-packages route documents malicious npm typosquats. Show supply-chain verification and postinstall script review.",
     version: 1,
     enabled: true
   },
