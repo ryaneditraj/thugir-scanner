@@ -10374,6 +10374,31 @@
       "url": "https://demo.owasp-juice.shop/b2b/v2/orders",
       "source": "OWASP Juice Shop official demo — B2B order API POST /b2b/v2/orders (juice-shop server.ts route map)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?category=",
+      "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog?category= (pentest-2026-ginandjuice FINDING-017)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/mcp",
+      "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling endpoint with injection vulns (README public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=1",
+      "source": "PortSwigger Gin & Juice Shop — DOM-based XSS oracle /blog/post?postId= (vulnerabilities page)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/products/1/reviews",
+      "source": "OWASP Juice Shop official demo — product reviews BOLA GET /rest/products/:id/reviews",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/products/1/reviews",
+      "source": "Escape.tech Juice Shop mirror — product reviews BOLA oracle",
+      "auth": "public_demo"
     }
   ]
 }
