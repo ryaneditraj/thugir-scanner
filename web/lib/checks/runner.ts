@@ -261,6 +261,16 @@ function isJuiceShopHost(url: string): boolean {
   }
 }
 
+/** Heroku asleep / Application Error — only primary + staging mirrors, not demo.owasp-juice.shop. */
+function isJuiceShopHerokuHost(url: string): boolean {
+  try {
+    const host = new URL(url).hostname;
+    return /^juice-shop(?:-staging)?\.herokuapp\.com$/i.test(host);
+  } catch {
+    return false;
+  }
+}
+
 const JUICE_SHOP_COUPON_BOT_HISTORY_URL =
   "https://raw.githubusercontent.com/juice-shop/juicy-coupon-bot/4fb203e/lib/currentCoupons.ts";
 const JUICE_SHOP_COUPON_BOT_CURRENT_URL =
@@ -2704,6 +2714,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideAiSecurityPlatformEvidence",
   "aiSecurityPrivacyPolicyRouteLiveOracle",
   "aiSecurityApiSecurityRouteLiveOracle",
+  "aiSecurityRateLimitingRouteLiveOracle",
   "aiSecurityIdorRouteLiveOracle",
   "aiSecurityOpenRedirectRouteLiveOracle",
   "aiSecurityXssRouteLiveOracle",
@@ -2711,6 +2722,8 @@ const DEEP_RULES = new Set<string>([
   "aiSecuritySupabaseDataRouteLiveOracle",
   "aiSecurityAdminConsoleRouteLiveOracle",
   "aiSecuritySupplyChainRouteLiveOracle",
+  "aiSecurityVulnerableDepsRouteLiveOracle",
+  "aiSecurityHackedNpmPackagesRouteLiveOracle",
   "aiSecuritySecurityHeadersRouteLiveOracle",
   "aiSecurityInsecurePasswordsRouteLiveOracle",
   "aiSecurityAiPhishingRouteLiveOracle",
@@ -9086,7 +9099,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
   if (
-    isJuiceShopHost(home.finalUrl || effectiveTargetInput) &&
+    isJuiceShopHerokuHost(home.finalUrl || effectiveTargetInput) &&
     (await juiceShopHerokuDown(home.finalUrl || effectiveTargetInput))
   ) {
     const stagingFallback = rewriteJuiceShopStagingFallback(effectiveTargetInput);
@@ -10536,6 +10549,37 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
         /\/(?:register|login|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe)|newsletter)\b/i.test(targetInput) &&
         p.slug.startsWith("ist-edu-")
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/insecure-passwords\b/i.test(targetInput) &&
+        p.slug === "ai-security-insecure-passwords-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/security-headers\b/i.test(targetInput) &&
+        p.slug === "ai-security-security-headers-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/vulnerable-deps\b/i.test(targetInput) &&
+        p.slug === "ai-security-vulnerable-deps-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/hacked-npm-packages\b/i.test(targetInput) &&
+        p.slug === "ai-security-hacked-npm-packages-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/rate-limiting\b/i.test(targetInput) &&
+        (p.slug === "ai-security-rate-limiting-bruteforce-live-oracle" ||
+          p.slug === "ai-security-rate-limiting-route-live-oracle")
       )
         return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
