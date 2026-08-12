@@ -39049,6 +39049,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ist-edu-comments-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "IST Edu comments stored/reflected XSS route live oracle",
+    description:
+      "POST /api/comments stores raw <script> payloads and GET /api/comments?comment= reflects them unescaped when scanning /api/comments or /labs/xss — IST Edu stored and reflected XSS comments training oracle.",
+    impactOneline:
+      "Unsanitized comment storage and reflection let attackers execute scripts in victim browsers through trusted university URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduCommentsXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — encode all user input before rendering in HTML responses.",
+      steps: [
+        "HTML-encode comment output before inserting into response templates.",
+        "Sanitize stored comments and reject script-bearing payloads on POST.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/comments route stores and reflects raw script tags in HTML. Show output encoding remediation for stored and reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ist-edu-notices-lfi-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -52862,6 +52888,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our dvwu.vercel.app /api/search route reflects raw script tags in HTML. Show output encoding remediation for reflected XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-comments-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVWU comments stored/reflected XSS route live oracle",
+    description:
+      "POST /api/comments stores raw <script> payloads and GET /api/comments?comment= reflects them unescaped when scanning /api/comments or /labs/xss on dvwu.vercel.app — stored and reflected XSS comments training oracle.",
+    impactOneline:
+      "Unsanitized comment storage and reflection let attackers execute scripts in victim browsers through trusted training URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuCommentsXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — encode all user input before rendering in HTML responses.",
+      steps: [
+        "HTML-encode comment output before inserting into response templates.",
+        "Sanitize stored comments and reject script-bearing payloads on POST.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /api/comments route stores and reflects raw script tags in HTML. Show output encoding remediation for stored and reflected XSS.",
     version: 1,
     enabled: true
   },
