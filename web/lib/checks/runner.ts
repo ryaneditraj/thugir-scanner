@@ -10893,6 +10893,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("ginandjuice-order-details")
       )
         return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/logger\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-logger")
+      )
+        return -3;
       if (/xss-game\.appspot\.com/i.test(origin) && p.slug.startsWith("xss-game-")) return -2;
       if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
       if (/owasp-finbot-ctf\.org/i.test(origin) && p.slug.startsWith("finbot-")) return -2;
