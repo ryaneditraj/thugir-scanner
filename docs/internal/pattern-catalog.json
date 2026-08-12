@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-12T03:27:06.006Z",
-  "total": 2164,
-  "uniqueSlugs": 2160,
+  "generatedAt": "2026-08-12T04:24:48.501Z",
+  "total": 2166,
+  "uniqueSlugs": 2162,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2146,
+    "generic": 2148,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2079,
+    "deep": 2081,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "Open redirect": 17,
     "general": 20,
     "SSRF": 12,
-    "Server-side request forgery": 61,
+    "Server-side request forgery": 63,
     "Sensitive data exposure": 55,
     "AI security": 52,
     "Business logic": 19,
@@ -1471,6 +1471,8 @@
     "ginandjuice-change-password-route-live-oracle",
     "ginandjuice-home-url-override-live-oracle",
     "ginandjuice-home-url-override-route-live-oracle",
+    "ginandjuice-logger-oast-live-oracle",
+    "ginandjuice-logger-route-live-oracle",
     "ginandjuice-login-route-live-oracle",
     "ginandjuice-login-username-reflection-live-oracle",
     "ginandjuice-logout-route-live-oracle",
