@@ -2078,9 +2078,13 @@ const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
 /** Juice Shop SPA routes often use kebab-case /rest/* aliases for PascalCase API resources. */
 const JUICE_SHOP_REST_KEBAB_ALIASES: Record<string, string> = {
   "Cards\\b": "cards",
+  "Feedbacks\\b": "feedbacks",
   "PrivacyRequests\\b": "privacy-requests",
   "SecurityQuestions\\b": "security-?questions?"
 };
+
+/** Escape.tech mirror stays up when Heroku Juice Shop dynos 503. */
+const JUICE_SHOP_ESCAPE_MIRROR = "https://juice-shop.demo.escape.tech";
 
 /** Juice Shop mirrors REST resources under both /api/* and /rest/* — route scans should match either prefix. */
 function juiceShopApiOrRestRoute(pageUrl: string, pathSuffix: string): boolean {
@@ -35601,6 +35605,12 @@ for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CU
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
 }
 
+const WEB_SECURITY_LEARNING_EXTENDED_IDOR_MODULE_IDS = new Set(
+  Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)
+    .filter(([, topic]) => topic === "IDOR")
+    .map(([moduleId]) => moduleId)
+);
+
 function isWebSecurityLearningSstiModuleId(moduleId: string): boolean {
   if (moduleId === "1022" || moduleId === "1024") return true;
   const n = Number(moduleId);
@@ -35892,6 +35902,33 @@ const webSecurityLearningLabsPlaceholderModuleRouteLiveOracle: Rule = async (ctx
       note: placeholderShell
         ? `web-security-learning-labs.vercel.app/module/${moduleId} is an unreleased CSR placeholder catalog shell (Here is a Module: ${moduleId}) — route-specific placeholder-module live oracle`
         : `web-security-learning-labs.vercel.app/module/${moduleId} is an unreleased CSR placeholder catalog shell (Here is a Module: ${moduleId}) — route-specific placeholder-module live oracle (Vercel checkpoint blocked shell fetch; curated module-id map)`
+    }
+  };
+};
+
+const webSecurityLearningLabsIdorModuleRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/web-security-learning-labs\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
+  if (!moduleMatch) return NEGATIVE;
+  const moduleId = moduleMatch[1]!;
+  if (!WEB_SECURITY_LEARNING_EXTENDED_IDOR_MODULE_IDS.has(moduleId)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  corpus += "\n" + moduleDoc.body;
+  const placeholderShell = webSecurityLearningLabsPlaceholderModuleShell(moduleId, corpus);
+  if (!placeholderShell) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      moduleId,
+      moduleTopic: "IDOR",
+      scannedUrl: pageUrl,
+      snippet:
+        moduleDoc.body.match(/Here is a Module:[\s\S]{0,48}/i)?.[0]?.slice(0, 80) ??
+        `Here is a Module: ${moduleId}`,
+      note: `web-security-learning-labs.vercel.app/module/${moduleId} (IDOR) — route-specific catalog placeholder without object-reference lab content (extended curated module shell)`
     }
   };
 };
@@ -60230,11 +60267,34 @@ const juiceShopAddresssIdBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function juiceShopFeedbacksProbeDoc(
+  ctx: RuleContext
+): Promise<{ doc: Awaited<ReturnType<typeof fetchDoc>>; url: string; mirror?: boolean }> {
+  const primaryUrl = new URL("/api/Feedbacks", ctx.origin).toString();
+  const primaryDoc = await ctx.probe.get(primaryUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const primaryOk =
+    primaryDoc.status >= 200 &&
+    primaryDoc.status < 400 &&
+    !HEROKU_STUB_RE.test(primaryDoc.body) &&
+    /"status"\s*:\s*"success"/.test(primaryDoc.body) &&
+    /"data"\s*:\s*\[/.test(primaryDoc.body);
+  if (primaryOk) return { doc: primaryDoc, url: primaryUrl };
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return { doc: primaryDoc, url: primaryUrl };
+  const mirrorUrl = new URL("/api/Feedbacks", JUICE_SHOP_ESCAPE_MIRROR).toString();
+  const mirrorDoc = await fetchDoc(mirrorUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const mirrorOk =
+    mirrorDoc.status >= 200 &&
+    mirrorDoc.status < 400 &&
+    /"status"\s*:\s*"success"/.test(mirrorDoc.body) &&
+    /"data"\s*:\s*\[/.test(mirrorDoc.body);
+  if (mirrorOk) return { doc: mirrorDoc, url: mirrorUrl, mirror: true };
+  return { doc: primaryDoc, url: primaryUrl };
+}
+
 const juiceShopFeedbacksBolaLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/api/Feedbacks", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 65536 });
+  const { doc, url, mirror } = await juiceShopFeedbacksProbeDoc(ctx);
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
   const userIds = [...doc.body.matchAll(/"UserId"\s*:\s*(\d+)/g)].map((m) => m[1]);
@@ -60250,7 +60310,10 @@ const juiceShopFeedbacksBolaLiveOracle: Rule = async (ctx) => {
       feedbackCount: userIds.length,
       sampleComment: commentMatch?.[1]?.slice(0, 80),
       snippet: doc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET /api/Feedbacks without auth returns product reviews spanning multiple UserId values — BOLA oracle"
+      escapeMirror: mirror ?? false,
+      note: mirror
+        ? "Juice Shop GET /api/Feedbacks without auth returns product reviews spanning multiple UserId values — BOLA oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /api/Feedbacks without auth returns product reviews spanning multiple UserId values — BOLA oracle"
     }
   };
 };
@@ -67514,6 +67577,117 @@ const seclabAngularStubRouteLiveOracle: Rule = async (ctx) => {
       note: plannedOnly
         ? `seclab.vercel.app /${labRoute} route is an Angular SPA stub without live Next.js ${labRoute.toUpperCase()} API labs (README lists ${labRoute.toUpperCase()} as planned, not deployed on this host)`
         : `seclab.vercel.app /${labRoute} route is an Angular SPA stub without live Next.js vulnerability API routes (Next.js SecLab APIs absent on this deployment)`
+    }
+  };
+};
+
+const seclabSqliVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/sqli-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/sqli-vulnerable", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin' OR '1'='1" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 400 &&
+    /"safe"\s*:\s*false/.test(postDoc.body) &&
+    /SELECT[\s\S]{0,120}username/i.test(postDoc.body) &&
+    !isSecLabAngularStubShell(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: postDoc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app POST /api/sqli-vulnerable reflects string-concat SELECT with attacker username — live SQLi training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(postDoc.body) && postDoc.body.length > 40
+      ? postDoc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/sqli-vulnerable route serves Angular SPA shell instead of the documented Next.js SQLi training API — dead lab route oracle"
+    }
+  };
+};
+
+const seclabXssVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/xss-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const canary = "thugirXSScanary";
+  const probeUrl = new URL("/api/xss-vulnerable", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ comment: canary, author: "probe" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 300 &&
+    /"safe"\s*:\s*false/.test(postDoc.body) &&
+    new RegExp(canary).test(postDoc.body) &&
+    !isSecLabAngularStubShell(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: postDoc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app POST /api/xss-vulnerable reflects attacker comment without sanitization — live XSS training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(postDoc.body) && postDoc.body.length > 40
+      ? postDoc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/xss-vulnerable route serves Angular SPA shell instead of the documented Next.js XSS training API — dead lab route oracle"
     }
   };
 };
@@ -75510,6 +75684,7 @@ export const RULES: Record<string, Rule> = {
   webSecurityLearningLabsModuleRouteLiveOracle,
   webSecurityLearningLabsSstiModuleRouteLiveOracle,
   webSecurityLearningLabsPlaceholderModuleRouteLiveOracle,
+  webSecurityLearningLabsIdorModuleRouteLiveOracle,
   clientSideJwtlensEvidence,
   clientSideCybersheildLabEvidence,
   clientSideTegalsecLabEvidence,
@@ -76051,6 +76226,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnerableappDomXssEvidence,
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,
+  seclabSqliVulnerableRouteLiveOracle,
+  seclabXssVulnerableRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,

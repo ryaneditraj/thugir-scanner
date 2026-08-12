@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T13:29:12.373Z",
+  "updated_at": "2026-08-12T13:55:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2860,
-  "total_findings": 30222,
+  "total_sites_scanned": 2855,
+  "total_findings": 30080,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 24985,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-12T13:29:12.373Z",
+  "discovery_urls_added": 2006,
+  "discovery_findings": 24890,
+  "improvements_shipped": 1203,
+  "last_run": "2026-08-12T13:55:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 578,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings) on Heroku primary; secret-resend slug still absent"
+      "note": "6/6 recall (47 findings); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 152,
-      "focus": "wrongsecrets challenge-42..48 queue drain + demo.owasp-juice.shop track-order IDOR oracle; queued testfire/vaultapp/brokencrystals-ldap/dvw-portal for next run",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 66,
+      "focus": "seclab SQLi/XSS route oracles + juice-shop feedbacks BOLA mirror fallback + WSL module/1602 IDOR placeholder oracle",
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "demo.owasp-juice.shop/rest/track-order/1: 46 findings incl juice-shop-track-order-idor-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-44: 16 findings incl wrongsecrets-challenge-44-vault-metadata-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-46: 15 findings incl wrongsecrets-challenge-46-vault-template-injection-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-48: 15 findings incl wrongsecrets-challenge-48-sealed-secret-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-42..43: 15 findings each — actuator-audit + reddit-blunder route oracles"
+      "seclab.vercel.app/api/sqli-vulnerable: 4→5 findings — seclab-sqli-vulnerable-route-live-oracle (Angular stub dead-lab route)",
+      "seclab.vercel.app/api/xss-vulnerable: 4→5 findings — seclab-xss-vulnerable-route-live-oracle (Angular stub dead-lab route)",
+      "demo.owasp-juice.shop/rest/feedbacks: 8→46 findings — juice-shop-feedbacks-bola-live-oracle + route oracle",
+      "web-security-learning-labs.vercel.app/module/1602: 7→10 findings — web-security-learning-labs-idor-module-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.testfire.net/login.jsp + bank/login.aspx queued — not yet scanned this run",
-      "vaultapp-omega.vercel.app/api/documents/1 + brokencrystals.com/api/ldap queued — IDOR/LDAP oracles pending",
-      "ist-edu-bd.vercel.app/api/portal queued — SQLi login-bypass oracle pending"
+      "juice-shop.herokuapp.com + staging: intermittent Heroku 503 — escape.tech mirror fallback in feedbacks oracle"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "demo.owasp-juice.shop/rest/track-order/1": 46,
-    "wrongsecrets.herokuapp.com/challenge/challenge-44": 16,
-    "wrongsecrets.herokuapp.com/challenge/challenge-42": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-43": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-45": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-46": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-47": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-48": 15,
-    "brokencrystals.com/api/email/sendSupportEmail?name=Bob": 85
+    "demo.owasp-juice.shop/rest/feedbacks": 46,
+    "seclab.vercel.app/api/sqli-vulnerable": 5,
+    "seclab.vercel.app/api/xss-vulnerable": 5,
+    "web-security-learning-labs.vercel.app/module/1602": 10,
+    "juice-shop.demo.escape.tech": 50,
+    "brokencrystals.com/api/email/sendSupportEmail?name=Bob": 85,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

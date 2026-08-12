@@ -33016,6 +33016,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-sqli-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab /api/sqli-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/sqli-vulnerable, POST string-concat SQLi payloads return unsafe query disclosure — or the route serves an Angular SPA shell instead of the documented Next.js SQLi training API.",
+    impactOneline:
+      "Route-specific SQLi lab oracle confirms live string-concat injection training endpoints or flags dead /api/sqli-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabSqliVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab SQLi API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/sqli-vulnerable on production.",
+        "Use parameterized queries in any live SQLi training endpoint.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/sqli-vulnerable route is a dead Angular stub or exposes live SQLi. Show parameterized query remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-xss-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SecLab /api/xss-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/xss-vulnerable, POST reflected XSS canaries return unsafe JSON reflection — or the route serves an Angular SPA shell instead of the documented Next.js XSS training API.",
+    impactOneline:
+      "Route-specific XSS lab oracle confirms live reflection training endpoints or flags dead /api/xss-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabXssVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab XSS API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/xss-vulnerable on production.",
+        "Encode or sanitize all reflected output in training APIs.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/xss-vulnerable route is a dead Angular stub or exposes live XSS reflection. Show output encoding remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-heroku-undeployed-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -39227,6 +39279,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WSL /module/{id} route is an unreleased CSR placeholder shell. Show how to hide catalog stubs until lab content ships.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-security-learning-labs-idor-module-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "info",
+    title: "Web Security Learning Labs extended IDOR module route live oracle",
+    description:
+      "When scanning extended curated IDOR catalog modules (1597–1605) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
+    impactOneline:
+      "Route-specific identification of unreleased WSL IDOR catalog modules prevents missing topic context on empty Next.js shells.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webSecurityLearningLabsIdorModuleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Placeholder IDOR catalog modules are not live labs — gate unreleased module routes.",
+      steps: [
+        "Return 404 or auth-gate unreleased /module/{id} IDOR catalog entries.",
+        "Ship object-reference lab content before publishing module routes.",
+        "Do not expose placeholder shells on public Vercel deploys."
+      ]
+    },
+    fixPrompt:
+      "Our WSL /module/{id} IDOR route is an unreleased CSR placeholder shell. Show how to hide catalog stubs until IDOR lab content ships.",
     version: 1,
     enabled: true
   },
