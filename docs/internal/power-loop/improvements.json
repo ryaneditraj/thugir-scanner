@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-community-posts-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /community/api/v2/community/posts/recent leaks vehicleid UUIDs enabling cross-user /identity/api/v2/vehicle/{uuid}/location BOLA; route oracle fires on /community/api/v2/community/posts scans (crapi2.apisec.ai unreachable in cloud — rule validated via isCrapiLabHost + crapiVehicleBolaLiveOracle chain); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-api-mirror-probe-hints-deliverys-challenges",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopApiMirrorProbe shared helper + escape.tech fallback for /api/Hints /api/Challenges /api/Deliverys when primary Heroku/demo host returns Unexpected path stubs; demo.owasp-juice.shop/rest/deliverys|hints|challenges deep-scan fires route-specific disclosure oracles; benchmark 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-hub-seeds-challenge-74-78",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge-74..78 URLs; wrongsecrets.herokuapp.com/challenge/challenge-76 fires wrongsecrets-heroku-undeployed-challenge live+route (14 findings WHOOOOPS); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop.demo.escape.tech",
       "slug": "juice-shop-complaints-bola-sparse-mirror",
       "status": "shipped",
