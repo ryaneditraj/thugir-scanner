@@ -67773,6 +67773,60 @@ const seclabUsersVulnerableRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabCsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/csrf-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/csrf-vulnerable", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ from: "alice", to: "bob", amount: 1 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 300 &&
+    /No CSRF protection|"safe"\s*:\s*false|csrf-vulnerable/i.test(postDoc.body) &&
+    !isSecLabAngularStubShell(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: postDoc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app POST /api/csrf-vulnerable processes transfer without CSRF token — live CSRF training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(postDoc.body) && postDoc.body.length > 40
+      ? postDoc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/csrf-vulnerable route serves Angular SPA shell instead of the documented Next.js CSRF training API — dead lab route oracle"
+    }
+  };
+};
+
 const seclabXssVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/xss-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
@@ -76549,6 +76603,7 @@ export const RULES: Record<string, Rule> = {
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,
   seclabSqliVulnerableRouteLiveOracle,
+  seclabCsrfVulnerableRouteLiveOracle,
   seclabXssVulnerableRouteLiveOracle,
   seclabUsersVulnerableRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,

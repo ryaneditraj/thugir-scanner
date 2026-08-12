@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-csrf-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/csrf-vulnerable returns 405 Angular SPA shell on seclab.vercel.app; seclab.vercel.app/api/csrf-vulnerable findings 4→5 (+seclab-csrf-vulnerable-route-live-oracle dead-lab route); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-playground-api-route-hub-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractSecLabPlaygroundSeeds extended with /ssrf, /ssti, /api/xss-vulnerable, /api/sqli-vulnerable, /api/csrf-vulnerable, /api/users-vulnerable; queue drain seeds SecLab API lab routes from hub crawl; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-csrf-vulnerable-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for seclab-csrf-vulnerable* on /api/csrf-vulnerable route scans; seclab.vercel.app/api/csrf-vulnerable deep-scan fires seclab-csrf-vulnerable-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-stock-route-priority",
       "status": "shipped",
