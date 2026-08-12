@@ -10734,6 +10734,31 @@
       "url": "https://brokencrystals.com/api/ldap",
       "source": "NeuraLegion/brokencrystals — LDAP injection oracle GET /api/ldap (README public demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/v2/check-otp",
+      "source": "APIsec crAPI v2 — unrate-limited OTP brute-force oracle POST /identity/api/auth/v2/check-otp (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/merchant/contact_mechanic",
+      "source": "APIsec crAPI v2 — SSRF oracle POST /workshop/api/merchant/contact_mechanic (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/forget-password",
+      "source": "APIsec crAPI v2 — broken-auth password-reset chain oracle POST /identity/api/auth/forget-password (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/users-vulnerable",
+      "source": "DaniSam-STU/security-lab — IDOR oracle GET /api/users-vulnerable (seclab.vercel.app README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/redirect",
+      "source": "zahidoverflow/damn-vulnerable-web-university — open-redirect oracle GET /api/redirect (README OWASP A01)",
+      "auth": "oss_deploy"
     }
   ]
 }
