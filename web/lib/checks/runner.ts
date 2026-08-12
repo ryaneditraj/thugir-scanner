@@ -10566,7 +10566,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
-        /[?&]postId=[67]\b/i.test(targetInput) &&
+        /[?&]postId=[678]\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-blog-post-7")
       )
         return -3;
