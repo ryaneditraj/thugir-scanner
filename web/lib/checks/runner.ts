@@ -10513,6 +10513,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/products(?:\/\d+)?\/reviews\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-products-reviews")
+      )
+        return -3;
+      if (
+        /frontend-xss-demo|dev-lucasoliveira\.github\.io/i.test(origin) &&
+        /\/(?:insecure|inseguro)\b/i.test(targetInput) &&
+        p.slug.startsWith("frontend-xss-demo-insecure")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/blog\/post\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-blog-post")
+      )
+        return -3;
+      if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/wallet\/topup\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
