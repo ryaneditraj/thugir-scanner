@@ -3033,6 +3033,8 @@ const DEEP_RULES = new Set<string>([
   "vampiUserBolaRouteLiveOracle",
   "vampiBooksExcessiveDataLiveOracle",
   "vampiBooksRouteLiveOracle",
+  "vampiBookBolaLiveOracle",
+  "vampiBookBolaRouteLiveOracle",
   "vampiAdminProfileUnauthLiveOracle",
   "vampiAdminProfileUnauthRouteLiveOracle",
   "vampiUsersEnumerationLiveOracle",
@@ -10823,7 +10825,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
-        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe)|newsletter)\b/i.test(targetInput) &&
+        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|path-traversal|crlf)|newsletter)\b/i.test(
+          targetInput
+        ) &&
         p.slug.startsWith("dvwu-")
       )
         return -3;
@@ -11316,6 +11320,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-") &&
         /-route-/.test(p.slug)
+      )
+        return -3;
+      if (
+        /vampi/i.test(origin) &&
+        /\/books\/v1\/[^/]+/i.test(targetInput) &&
+        p.slug.startsWith("vampi-book-bola")
       )
         return -3;
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;

@@ -53152,6 +53152,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-delete-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/delete route live oracle",
+    description:
+      "When scanning /my-account/delete, the account UI exposes a login-gated account-deletion surface for the PortSwigger CSRF account-deletion training lab — route-specific auth oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes an account-deletion endpoint gated behind authentication for CSRF training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceDeleteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and re-authentication before account deletion.",
+      steps: [
+        "Bind account-deletion requests to a CSRF token tied to the active session.",
+        "Require current-password confirmation before deleting accounts.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/delete route exposes a login-gated account-deletion surface. Show CSRF-safe account deletion remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-logger-oast-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -54838,6 +54864,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /books/v1 route scan confirms excessive data exposure — list returns other users' books. Show owner-scoped filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-book-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VAmPI book-by-title BOLA live oracle",
+    description:
+      "POST /users/v1/login as name1 then GET /books/v1/{other_user_book_title} returns the foreign owner's secret field — the VAmPI book object-level authorization bypass oracle (API1).",
+    impactOneline:
+      "Authenticated users can read private book secrets belonging to other accounts by predictable book titles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiBookBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — enforce object-level authorization on book detail routes in production.",
+      steps: [
+        "Verify the JWT subject owns the requested book_title before returning secrets.",
+        "Return 403 when authenticated users request books they do not own.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /books/v1/{book_title} returns other users' book secrets for any valid JWT. Show book object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-book-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VAmPI book-by-title route BOLA live oracle",
+    description:
+      "When scanning /books/v1/{book_title}, JWT for one user reads another user's book secret — route-specific VAmPI book BOLA oracle (API1).",
+    impactOneline:
+      "Route scans on book detail endpoints should confirm cross-user secret disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiBookBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — enforce object-level authorization on book detail routes in production.",
+      steps: [
+        "Verify the JWT subject owns the requested book_title before returning secrets.",
+        "Return 403 when authenticated users request books they do not own.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /books/v1/{book_title} route scan confirms BOLA — JWT reads another user's book secret. Show object-level authorization remediation.",
     version: 1,
     enabled: true
   },
