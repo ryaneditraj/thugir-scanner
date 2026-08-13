@@ -8639,6 +8639,210 @@ const clientSideAttpAgentTrustEvidence: Rule = async (ctx) => {
   };
 };
 
+function isAttpDemoHost(ctx: RuleContext): boolean {
+  return /attp-live\.fly\.dev|attp\.cybersecai\.co\.uk/i.test(ctx.origin);
+}
+
+async function probeAttpAgentRevokeUnauth(ctx: RuleContext) {
+  const agentId = `thugir-revoke-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const revokeUrl = new URL("/api/v1/revoke", ctx.origin).toString();
+  const revokeDoc = await ctx.probe.get(revokeUrl, {
+    method: "POST",
+    body: JSON.stringify({ agentId }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 1024,
+    timeoutMs: 15000
+  });
+  if (revokeDoc.status < 200 || revokeDoc.status >= 300) return null;
+  let revoked: { revoked?: boolean; agentId?: string };
+  try {
+    revoked = JSON.parse(revokeDoc.body) as { revoked?: boolean; agentId?: string };
+  } catch {
+    return null;
+  }
+  if (!revoked.revoked) return null;
+  const unrevokeUrl = new URL("/api/v1/unrevoke", ctx.origin).toString();
+  const unrevokeDoc = await ctx.probe.get(unrevokeUrl, {
+    method: "POST",
+    body: JSON.stringify({ agentId }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 1024,
+    timeoutMs: 15000
+  });
+  if (unrevokeDoc.status < 200 || unrevokeDoc.status >= 300) return null;
+  let unrevoked: { unrevoked?: boolean };
+  try {
+    unrevoked = JSON.parse(unrevokeDoc.body) as { unrevoked?: boolean };
+  } catch {
+    return null;
+  }
+  if (!unrevoked.unrevoked) return null;
+  return {
+    agentId,
+    revokeUrl,
+    unrevokeUrl,
+    snippet: `${revokeDoc.body.trim()} | ${unrevokeDoc.body.trim()}`
+  };
+}
+
+const attpAgentRevokeUnauthLiveOracle: Rule = async (ctx) => {
+  if (!isAttpDemoHost(ctx)) return NEGATIVE;
+  const probe = await probeAttpAgentRevokeUnauth(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      ...probe,
+      note: "ATTP POST /api/v1/revoke and /api/v1/unrevoke accept unauthenticated agentId without X-Agent-Trust headers — agent lifecycle bypass oracle"
+    }
+  };
+};
+
+const attpAgentRevokeUnauthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAttpDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    /* ignore */
+  }
+  if (!/^\/(?:demo\/?)?$/i.test(pathname)) return NEGATIVE;
+  const probe = await probeAttpAgentRevokeUnauth(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      ...probe,
+      scannedUrl: pageUrl,
+      note: "ATTP /demo route scan — POST /api/v1/revoke and /api/v1/unrevoke accept unauthenticated agentId without X-Agent-Trust headers"
+    }
+  };
+};
+
+function isAevumDemoHost(ctx: RuleContext): boolean {
+  return /demo\.aevum\.build/i.test(ctx.origin);
+}
+
+async function probeAevumConsentReviewUnauth(ctx: RuleContext) {
+  const reviewUrl = new URL("/v1/consent/review", ctx.origin).toString();
+  const payload = JSON.stringify({
+    task_id: `thugir-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    action_description: "Thugir consent review probe — wire transfer without human approval",
+    action_summary: "Unauthorized agent action request",
+    blast_radius: "customer funds",
+    rollback_plan: "reverse transaction"
+  });
+  const doc = await ctx.probe.get(reviewUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: { review_id?: string; audit_id?: string; review_requested_at?: number };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      review_id?: string;
+      audit_id?: string;
+      review_requested_at?: number;
+    };
+  } catch {
+    return null;
+  }
+  if (!parsed.review_id || !parsed.audit_id) return null;
+  return {
+    reviewUrl,
+    reviewId: parsed.review_id,
+    auditId: parsed.audit_id,
+    snippet: doc.body.slice(0, 240).trim()
+  };
+}
+
+const aevumConsentReviewUnauthLiveOracle: Rule = async (ctx) => {
+  if (!isAevumDemoHost(ctx)) return NEGATIVE;
+  const probe = await probeAevumConsentReviewUnauth(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      note: "Aevum POST /v1/consent/review creates pending agent-action reviews without authentication — consent-ledger bypass oracle"
+    }
+  };
+};
+
+const aevumConsentReviewUnauthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAevumDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probe = await probeAevumConsentReviewUnauth(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      scannedUrl: pageUrl,
+      note: "Aevum demo route scan — POST /v1/consent/review creates pending reviews without authentication"
+    }
+  };
+};
+
+const aevumSigchainReplayUnauthLiveOracle: Rule = async (ctx) => {
+  if (!isAevumDemoHost(ctx)) return NEGATIVE;
+  const review = await probeAevumConsentReviewUnauth(ctx);
+  if (!review) return NEGATIVE;
+  const replayUrl = new URL(`/v1/replay/${encodeURIComponent(review.auditId)}`, ctx.origin).toString();
+  const replayDoc = await ctx.probe.get(replayUrl, {
+    method: "POST",
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (replayDoc.status < 200 || replayDoc.status >= 300) return NEGATIVE;
+  let parsed: { audit_id?: string; state?: { replayed_payload?: Record<string, unknown> } };
+  try {
+    parsed = JSON.parse(replayDoc.body) as {
+      audit_id?: string;
+      state?: { replayed_payload?: Record<string, unknown> };
+    };
+  } catch {
+    return NEGATIVE;
+  }
+  const replayed = parsed.state?.replayed_payload;
+  if (!parsed.audit_id || !replayed || typeof replayed !== "object") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      reviewUrl: review.reviewUrl,
+      replayUrl,
+      auditId: review.auditId,
+      snippet: replayDoc.body.slice(0, 240).trim(),
+      note: "Aevum POST /v1/replay/{audit_id} reconstructs sigchain audit events without authentication — tamper-evident ledger replay oracle"
+    }
+  };
+};
+
+const aevumSigchainReplayUnauthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAevumDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await aevumSigchainReplayUnauthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aevum demo route scan — POST /v1/replay/{audit_id} reconstructs sigchain events without authentication"
+    }
+  };
+};
+
 // --- BugZap Next.js prompt-injection defense demo (bugzap.vercel.app) ----------------
 const CLIENT_BUGZAP_PROMPT_DEFENSE_RES: { label: string; re: RegExp }[] = [
   {
@@ -79565,7 +79769,13 @@ export const RULES: Record<string, Rule> = {
   zenDemoExecuteRouteLiveOracle,
   codeBreakingPuzzleRouteLiveOracle,
   clientSideAevumAgentConsentDemoEvidence,
+  aevumConsentReviewUnauthLiveOracle,
+  aevumConsentReviewUnauthRouteLiveOracle,
+  aevumSigchainReplayUnauthLiveOracle,
+  aevumSigchainReplayUnauthRouteLiveOracle,
   clientSideAttpAgentTrustEvidence,
+  attpAgentRevokeUnauthLiveOracle,
+  attpAgentRevokeUnauthRouteLiveOracle,
   clientSideBugzapPromptDefenseEvidence,
   clientSideRedlockxPromptFirewallEvidence,
   clientSideHaoziXssChallengeEvidence,

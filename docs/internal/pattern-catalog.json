@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T12:15:13.695Z",
-  "total": 2251,
-  "uniqueSlugs": 2247,
+  "generatedAt": "2026-08-13T13:27:12.694Z",
+  "total": 2257,
+  "uniqueSlugs": 2253,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2233,
+    "generic": 2239,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2166,
+    "deep": 2172,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 446,
+    "Broken access control": 452,
     "Exposed secret": 102,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -49,6 +49,10 @@
     "Session management": 2
   },
   "slugs": [
+    "aevum-consent-review-unauth-live-oracle",
+    "aevum-consent-review-unauth-route-live-oracle",
+    "aevum-sigchain-replay-unauth-live-oracle",
+    "aevum-sigchain-replay-unauth-route-live-oracle",
     "agentpwn-attack-route-live-oracle",
     "agentpwn-context-window-route-live-oracle",
     "agentpwn-mcp-exploitation-route-live-oracle",
@@ -74,6 +78,8 @@
     "appsec-ci-django-admin-route-live-oracle",
     "appsec-ci-stored-xss-comments-live-oracle",
     "appsec-ci-stored-xss-comments-route-live-oracle",
+    "attp-agent-revoke-unauth-live-oracle",
+    "attp-agent-revoke-unauth-route-live-oracle",
     "auth-security-project-dashboard-xss-route-live-oracle",
     "auth-security-project-login-sqli-route-live-oracle",
     "bolt-demo-mode-shipped",
