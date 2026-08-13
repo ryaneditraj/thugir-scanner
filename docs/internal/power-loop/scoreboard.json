@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T16:28:00.000Z",
+  "updated_at": "2026-08-13T16:38:45.063Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2868,
-  "total_findings": 29555,
-  "critical_findings": 62,
+  "total_sites_scanned": 2877,
+  "total_findings": 29662,
+  "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2022,
-  "discovery_findings": 23997,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-13T16:28:00.000Z",
+  "discovery_findings": 24027,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-13T16:38:45.063Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 579,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,38 @@
           ]
         }
       },
-      "note": "Rich 6/6 recall pass (48 findings pages=6 probes=579); no benchmark misses"
+      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 55,
-      "focus": "oopssec supply-chain + gift-card LCG + NEXT_PUBLIC leak + verbose API error walkthroughs; WSL module/1607 queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 5,
+      "findings": 34,
+      "focus": "koadt.github.io/oss-oopssec-store SSRF + prompt-injection + CVE-2025-29927 middleware-bypass walkthrough route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "koadt.github.io/.../supply-chain-poisoned-rules-chain: 12-finding oopssec evidence hub (supply-chain + prompt-injection client-side oracles)",
-      "koadt.github.io/.../insecure-randomness-gift-card: 12-finding oopssec evidence hub (JWT alg-confusion + race-condition client-side oracles)",
-      "koadt.github.io/.../next-public-env-variable-leak: 6 findings — bolt-public-env-prefix-leak + path-traversal evidence",
-      "koadt.github.io/.../information-disclosure-api-error: 5 findings — race-condition + SSTI reflexion evidence hub",
-      "web-security-learning-labs.vercel.app/module/1607: 10 findings — WSL module-route + idor-module oracles (new module tier)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "koadt.github.io/.../ssrf-internal-page-access: 0→6 findings — oopssec-ssrf-route-live-oracle shipped (support-form screenshot URL SSRF to /internal)",
+      "koadt.github.io/.../prompt-injection-ai-assistant: 0→7 findings — oopssec-prompt-injection-route-live-oracle shipped (OSSBot system-prompt extraction via /api/ai-assistant)",
+      "koadt.github.io/.../middleware-authorization-bypass-cve-2025-29927: 0→8 findings — oopssec-middleware-bypass-route-live-oracle shipped (x-middleware-subrequest CVE-2025-29927)",
+      "web-security-learning-labs.vercel.app/module/1606: 8 findings — WSL IDOR module route oracle maintained"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec walkthrough hubs on GitHub Pages: supply-chain/gift-card posts are evidence-only — no live app route oracles",
-      "next-public-env-variable-leak: bolt-public-env-prefix-leak detected but live NEXT_PUBLIC secret oracle absent on static host",
-      "information-disclosure-api-error: verbose debug response oracle absent — static walkthrough only",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "playground.fabraix.com/challenges/data-exfil-002: data-exfil challenge route oracle not yet validated on queue drain",
+      "vulnforge-academy.vercel.app/.../level2.php: medium tier level2 route oracle absent (level3 returns 403 Forbidden)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 47,
+    "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927": 8,
+    "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant": 7,
+    "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access": 6,
+    "web-security-learning-labs.vercel.app/module/1606": 8,
     "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain": 12,
-    "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 12,
-    "web-security-learning-labs.vercel.app/module/1607": 10,
-    "web-security-learning-labs.vercel.app/module/1606": 10,
-    "koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak": 6,
-    "koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error": 5,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "brokencrystals.com/api/command": 79
   }
 }
