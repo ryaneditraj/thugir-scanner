@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T19:15:53.131Z",
+  "updated_at": "2026-08-13T20:27:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
+      "source": "OWASP WrongSecrets — Challenge 8 logging secrets lab (Heroku public demo)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-9",
+      "source": "OWASP WrongSecrets — Challenge 9 Terraform/IaC secrets lab (Heroku public demo)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product search SQLi walkthrough with $queryRawUnsafe oracle (Apr 2026 blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation/",
+      "source": "kOaDT/oss-oopssec-store — checkout total client-trust business-logic walkthrough (Apr 2026 blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-4",
+      "source": "OWASP WrongSecrets — Challenge 4 Docker secrets lab (Heroku public demo)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://vulnerable-web-site.vercel.app/path-traversal",
       "source": "megmogmog1965/vulnerable-web-site — path traversal lab module (GitHub README Vercel demo)",
