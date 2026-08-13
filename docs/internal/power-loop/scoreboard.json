@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T09:29:11.694Z",
+  "updated_at": "2026-08-13T09:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1991,
   "discovery_findings": 23322,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-13T09:29:11.694Z",
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-13T09:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 44,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 573,
+      "probes_run": 585,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (44 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 99,
-      "focus": "vAPI API3/6-9 BOPLA+mass-assignment+misconfig+injection+inventory oracles + ginandjuice change-address queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 112,
+      "focus": "vAPI API8 login route + VAmPI book BOLA iteration + Broken Crystals /api/fetch SSRF probe hardening",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/api3/user: 13 findings — shared vAPI hub (api1-bola, api3-comment-bola, api6-mass-assignment, api8-sqli-login oracles)",
-      "vapi.apisec.ai/vapi/api6/user: 15 findings — mass-assignment + BOLA hub (route-specific credit injection oracle present)",
-      "vapi.apisec.ai/vapi/api7/user: 14 findings — security-misconfig route shares API1-API8 hub",
-      "vapi.apisec.ai/vapi/api8/user: 13 findings — SQLi-login oracle in shared hub",
-      "vapi.apisec.ai/vapi/api9/user: 15 findings — improper-inventory route shares identical hub surface",
-      "ginandjuice.shop/my-account/change-address: 29 findings — change-address-route-live-oracle + CSRF/XXE/IDOR cluster"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "vapi.apisec.ai/vapi/api8/user/login: 14 findings (+vapi-api8-login-route-live-oracle route oracle on login path)",
+      "brokencrystals.com/api/fetch?url=: 83 findings (+brokencrystals-api-fetch-live-oracle host probe + enriched fetch→file SSRF route evidence)",
+      "vampi-production.up.railway.app/books/v1/bookTitle78: 15 findings maintained with foreign/canonical book title iteration"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "vapi.apisec.ai/vapi/api3-9: route URLs share 13-15 finding hub — route-specific BOPLA/OTP probes may need authenticated session",
-      "vapi.apisec.ai/vapi/api10: not yet queued — completes OWASP API Top 10 coverage gap"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "urban-vampi-production.up.railway.app: book list entries 404 — BOLA oracle still blocked on urban mirror despite iteration",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles now shipped (15 findings on /basic)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 44,
-    "ginandjuice.shop/my-account/change-address": 29,
-    "vapi.apisec.ai/vapi/api6/user": 15,
-    "vapi.apisec.ai/vapi/api9/user": 15,
-    "vapi.apisec.ai/vapi/api7/user": 14,
-    "vapi.apisec.ai/vapi/api3/user": 13,
-    "vapi.apisec.ai/vapi/api8/user": 13,
-    "vapi.apisec.ai/vapi/api1/user/1": 14,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 80
+    "juice-shop.herokuapp.com": 47,
+    "vapi.apisec.ai/vapi/api8/user/login": 14,
+    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 83,
+    "vampi-production.up.railway.app/books/v1/bookTitle78": 15,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "ginandjuice.shop/my-account/delete": 29
   }
 }

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api8/user/login `' OR '1'='1` returns authkey + GET /api8/user/secret flag{api8_*}; vapi.apisec.ai/vapi/api8/user/login findings 14 (+vapi-api8-login-route-live-oracle alongside host oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-book-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeVampiBookBola iterates all foreign list entries plus canonical bookTitle3|1|78 when stale list 404s; vampi-production.up.railway.app/books/v1/bookTitle78 findings 15 maintained (+vampi-book-bola-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-fetch-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/fetch?url= probed first (HTTP 404 JSON) then /api/file?path=httpbin confirms SSRF; brokencrystals.com/api/fetch?url= findings 80→83 (+brokencrystals-api-fetch-live-oracle host-ready + enriched route evidence); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-delete-route-live-oracle",
       "status": "shipped",
@@ -9492,6 +9510,21 @@
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-labs-cmdi-path-traversal-priority",
       "shipped_at": "2026-08-13T08:46:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-login-route-live-oracle",
+      "shipped_at": "2026-08-13T09:45:00.000Z"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-book-bola-iteration-fallback",
+      "shipped_at": "2026-08-13T09:45:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-fetch-live-oracle",
+      "shipped_at": "2026-08-13T09:45:00.000Z"
     }
   ]
 }
