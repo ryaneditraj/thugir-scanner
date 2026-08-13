@@ -1,425 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-08-13T12:42:44.873Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1599",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 10,
-      "findings": [
-        {
-          "slug": "web-security-learning-labs-module-route-live-oracle",
-          "title": "Web Security Learning Labs curated module route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "web-security-learning-labs-idor-module-route-live-oracle",
-          "title": "Web Security Learning Labs extended IDOR module route live oracle",
-          "severity": "info",
-          "confidence": 0.89,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
-          "title": "Web Security Learning Labs placeholder module route live oracle",
-          "severity": "info",
-          "confidence": 0.87,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 385,
-      "status": "ok",
-      "scanned_at": "2026-08-13T12:42:44.873Z"
-    },
-    {
-      "run_id": "2026-08-13T12:42:12.779Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-73",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 14,
-      "findings": [
-        {
-          "slug": "wrongsecrets-heroku-undeployed-challenge-live-oracle",
-          "title": "OWASP WrongSecrets Heroku undeployed challenge live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-heroku-undeployed-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets Heroku undeployed challenge route live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
-          "title": "OWASP WrongSecrets database connection error live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
-          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
-          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-08-13T12:42:12.779Z"
-    },
-    {
-      "run_id": "2026-08-13T12:41:40.666Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-72",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 14,
-      "findings": [
-        {
-          "slug": "wrongsecrets-heroku-undeployed-challenge-live-oracle",
-          "title": "OWASP WrongSecrets Heroku undeployed challenge live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-heroku-undeployed-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets Heroku undeployed challenge route live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
-          "title": "OWASP WrongSecrets database connection error live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
-          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
-          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-08-13T12:41:40.666Z"
-    },
-    {
-      "run_id": "2026-08-13T12:40:50.268Z",
-      "url": "https://zen-demo-java.fly.dev/pages/execute",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 6,
-      "findings": [
-        {
-          "slug": "zen-demo-java-execute-shell-injection-live-oracle",
-          "title": "Aikido Zen demo shell injection live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "zen-demo-java-execute-route-live-oracle",
-          "title": "Aikido Zen /pages/execute route shell injection oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-aikido-zen-demo-evidence",
-          "title": "Aikido Zen live security demo disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 5,
-      "probes_run": 564,
-      "status": "ok",
-      "scanned_at": "2026-08-13T12:40:50.268Z"
-    },
-    {
-      "run_id": "2026-08-13T12:40:28.208Z",
-      "url": "https://code-breaking.fly.dev/puzzle/1/",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-08-13T12:40:28.208Z",
-      "error": "We couldn't reach code-breaking.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-08-13T12:39:32.649Z",
-      "url": "https://attp-live.fly.dev/demo",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 3,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-attp-agent-trust-evidence",
-          "title": "ATTP Agent Trust Transport Protocol demo disclosed",
-          "severity": "medium",
-          "confidence": 0.88,
-          "category": "AI security"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-08-13T12:39:32.649Z"
-    },
-    {
       "run_id": "2026-08-13T12:37:05.971Z",
       "url": "https://vapi.apisec.ai/vapi/api10/identity",
       "auth": "public_benchmark",
@@ -37050,6 +36631,481 @@
       "probes_run": 579,
       "status": "ok",
       "scanned_at": "2026-08-13T16:23:24.497Z"
+    },
+    {
+      "run_id": "2026-08-13T16:26:10.997Z",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": "windsurf",
+      "finding_count": 12,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-idor-evidence",
+          "title": "Client bundle documents IDOR-prone API routes",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-csrf-evidence",
+          "title": "Client bundle documents CSRF-vulnerable transfer flows",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-prompt-injection-evidence",
+          "title": "Prompt-injection red-team or scanner functionality in client bundle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-store-evidence",
+          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-stored-xss-reviews-evidence",
+          "title": "OopsSec Store stored-XSS reviews walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-oopssec-path-traversal-evidence",
+          "title": "OopsSec Store path traversal documents API walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-oopssec-csrf-admin-order-evidence",
+          "title": "OopsSec Store CSRF admin order update walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 484,
+      "status": "ok",
+      "scanned_at": "2026-08-13T16:26:10.997Z"
+    },
+    {
+      "run_id": "2026-08-13T16:26:14.386Z",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 12,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-idor-evidence",
+          "title": "Client bundle documents IDOR-prone API routes",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-csrf-evidence",
+          "title": "Client bundle documents CSRF-vulnerable transfer flows",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-store-evidence",
+          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-stored-xss-reviews-evidence",
+          "title": "OopsSec Store stored-XSS reviews walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-oopssec-jwt-alg-confusion-evidence",
+          "title": "OopsSec Store JWT algorithm confusion walkthrough disclosed",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "client-side-oopssec-path-traversal-evidence",
+          "title": "OopsSec Store path traversal documents API walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-oopssec-csrf-admin-order-evidence",
+          "title": "OopsSec Store CSRF admin order update walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 499,
+      "status": "ok",
+      "scanned_at": "2026-08-13T16:26:14.386Z"
+    },
+    {
+      "run_id": "2026-08-13T16:26:17.633Z",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-oopssec-store-evidence",
+          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-path-traversal-evidence",
+          "title": "OopsSec Store path traversal documents API walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bolt-public-env-prefix-leak",
+          "title": "Server secret behind a public env prefix",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 481,
+      "status": "ok",
+      "scanned_at": "2026-08-13T16:26:17.633Z"
+    },
+    {
+      "run_id": "2026-08-13T16:26:20.128Z",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-oopssec-store-evidence",
+          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-race-condition-evidence",
+          "title": "OopsSec Store race-condition coupon abuse walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 497,
+      "status": "ok",
+      "scanned_at": "2026-08-13T16:26:20.128Z"
+    },
+    {
+      "run_id": "2026-08-13T16:26:23.004Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1607",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 10,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-idor-module-route-live-oracle",
+          "title": "Web Security Learning Labs extended IDOR module route live oracle",
+          "severity": "info",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-live-oracle",
+          "title": "Web Security Learning Labs curated module route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 385,
+      "status": "ok",
+      "scanned_at": "2026-08-13T16:26:23.004Z"
+    },
+    {
+      "run_id": "2026-08-13T16:26:28.640Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1606",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 10,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-idor-module-route-live-oracle",
+          "title": "Web Security Learning Labs extended IDOR module route live oracle",
+          "severity": "info",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-live-oracle",
+          "title": "Web Security Learning Labs curated module route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 385,
+      "status": "ok",
+      "scanned_at": "2026-08-13T16:26:28.640Z"
     }
   ]
 }
