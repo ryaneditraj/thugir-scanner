@@ -54068,7 +54068,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "DVWU CSRF newsletter CRLF route live oracle",
     description:
-      "When scanning /labs/csrf or /newsletter, POST /api/newsletter with CRLF in email confirms HTTP response splitting — Damn Vulnerable Web University CSRF/header injection route oracle.",
+      "When scanning /labs/csrf, /labs/crlf, or /newsletter, POST /api/newsletter with CRLF in email confirms HTTP response splitting — Damn Vulnerable Web University CSRF/header injection route oracle.",
     impactOneline:
       "Unsanitized newsletter email input enables CRLF injection that can forge headers or split HTTP responses.",
     detectorKind: "rule_ref",
@@ -54994,6 +54994,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /createdb route scan confirms unauthenticated database repopulation. Show remediation for destructive debug endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-crlf-client-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU CRLF cookie injection client route live oracle",
+    description:
+      "When scanning /labs/crlf on dvwu.vercel.app, the SPA bundle documents cookie and redirect CRLF injection training labs with %0d%0a payload panels — route-specific HTTP response splitting oracle.",
+    impactOneline:
+      "Client-side CRLF labs document header injection patterns attackers replay against real cookie and redirect handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuCrlfClientRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — strip CR/LF from user input before setting cookies or redirect headers.",
+      steps: [
+        "Reject newline characters in cookie and redirect parameter values.",
+        "Use framework APIs that sanitize header values by default.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/crlf route documents cookie and redirect CRLF injection. Show HTTP response splitting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-debug-password-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VAmPI debug endpoint cleartext password live oracle",
+    description:
+      "GET /users/v1/_debug returns user records with cleartext password fields without authentication — the VAmPI OpenAPI debug endpoint sensitive data exposure oracle (API3).",
+    impactOneline:
+      "Unauthenticated debug endpoints leaking passwords enable credential theft and account takeover.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiDebugPasswordLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — remove /_debug routes and never return password fields in API responses.",
+      steps: [
+        "Delete or disable /users/v1/_debug outside development.",
+        "Strip password fields from all user serializers.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /users/v1/_debug endpoint returns cleartext passwords without auth. Show remediation for debug routes and user serializers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-debug-password-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VAmPI /users/v1/_debug cleartext password route live oracle",
+    description:
+      "When scanning /users/v1/_debug, GET returns user records with cleartext password fields without authentication — route-specific VAmPI sensitive data exposure oracle (API3).",
+    impactOneline:
+      "Route scans on /users/v1/_debug should confirm unauthenticated cleartext password disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiDebugPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — remove /_debug routes and never return password fields in API responses.",
+      steps: [
+        "Delete or disable /users/v1/_debug outside development.",
+        "Strip password fields from all user serializers.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /users/v1/_debug route scan confirms cleartext password disclosure. Show remediation for debug routes and user serializers.",
     version: 1,
     enabled: true
   },

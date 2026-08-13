@@ -74670,7 +74670,7 @@ const dvwuCommentsXssRouteLiveOracle: Rule = async (ctx) => {
 const dvwuCsrfNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:labs\/csrf|newsletter)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:labs\/(?:csrf|crlf)|newsletter)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await probeNewsletterCrlfInjection(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -74679,7 +74679,34 @@ const dvwuCsrfNewsletterCrlfRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "DVWU /labs/csrf or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
+      note: "DVWU /labs/csrf, /labs/crlf, or /newsletter route scan — POST /api/newsletter CRLF injection confirms HTTP response splitting / forged email header oracle"
+    }
+  };
+};
+
+const dvwuCrlfClientRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/labs\/crlf\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/CRLF Injection Vulnerability/i.test(bundle)) return NEGATIVE;
+  if (!/CRLF - Cookie Injection|CRLF - Redirect Injection/i.test(bundle)) return NEGATIVE;
+  if (!/%0d%0a|\\r\\n|HTTP Response Splitting/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["CRLF Injection Vulnerability", "CRLF - Cookie Injection", "CRLF - Redirect Injection"],
+      snippet: bundle.match(/CRLF Injection Vulnerability[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /labs/crlf route scan — SPA documents cookie and redirect CRLF injection training labs with %0d%0a payload panels"
     }
   };
 };
@@ -75228,6 +75255,44 @@ const vampiCreatedbUnauthRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "VAmPI /createdb route scan — unauthenticated GET repopulates the database — route-specific security misconfiguration oracle (API8)"
+    }
+  };
+};
+
+async function probeVampiDebugPasswordExposure(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVampiHost(ctx)) return null;
+  const debugUrl = new URL("/users/v1/_debug", ctx.origin).toString();
+  const doc = await ctx.probe.get(debugUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  if (!/"password"\s*:\s*"/i.test(doc.body)) return null;
+  if (!/"username"\s*:\s*"admin"/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      debugUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VAmPI GET /users/v1/_debug returns user records with cleartext password fields without authentication — OpenAPI debug endpoint oracle (API3)"
+    }
+  };
+}
+
+const vampiDebugPasswordLiveOracle: Rule = async (ctx) =>
+  (await probeVampiDebugPasswordExposure(ctx)) ?? NEGATIVE;
+
+const vampiDebugPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/users\/v1\/_debug\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeVampiDebugPasswordExposure(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /users/v1/_debug route scan — unauthenticated debug endpoint returns cleartext passwords for all users — route-specific sensitive data exposure oracle (API3)"
     }
   };
 };
@@ -78817,6 +78882,7 @@ export const RULES: Record<string, Rule> = {
   dvwuSearchXssRouteLiveOracle,
   dvwuNoticesLfiRouteLiveOracle,
   dvwuCsrfNewsletterCrlfRouteLiveOracle,
+  dvwuCrlfClientRouteLiveOracle,
   allSeeingEyeReadRouteLiveOracle,
   allSeeingEyeHelloRouteLiveOracle,
   istEduSsrfRedirectRouteLiveOracle,
@@ -78829,6 +78895,8 @@ export const RULES: Record<string, Rule> = {
   vampiUsersEnumerationRouteLiveOracle,
   vampiCreatedbUnauthLiveOracle,
   vampiCreatedbUnauthRouteLiveOracle,
+  vampiDebugPasswordLiveOracle,
+  vampiDebugPasswordRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
   vaultappAdminAuditLogsIdorLiveOracle,
