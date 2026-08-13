@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-08-13T19:22:00.000Z",
+=======
+  "updated_at": "2026-08-13T19:28:00.000Z",
+>>>>>>> 369f2857 (docs: log 3 discovery oracles + benchmark 6/6 validation (48 findings))
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 2903,
   "total_findings": 30104,
   "critical_findings": 64,
@@ -24,6 +29,17 @@
   "discovery_findings": 24201,
   "improvements_shipped": 1196,
   "last_run": "2026-08-13T19:22:00.000Z",
+=======
+  "total_sites_scanned": 2897,
+  "total_findings": 30051,
+  "critical_findings": 63,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2027,
+  "discovery_findings": 24147,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-13T19:28:00.000Z",
+>>>>>>> 369f2857 (docs: log 3 discovery oracles + benchmark 6/6 validation (48 findings))
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
@@ -48,6 +64,7 @@
           ]
         }
       },
+<<<<<<< HEAD
       "note": "Stable 6/6 recall (47 findings, 36 juice-shop live oracles); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
@@ -83,5 +100,38 @@
     "vulnerable-web-site.vercel.app/command-injection": 5,
     "vulnerable-web-site.vercel.app/sqli": 5,
     "vulnforge-academy.vercel.app/backend/includes/levels/medium/level4.php": 5
+=======
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+    },
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "discovery": {
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 30,
+      "focus": "oopssec gift-card randomness + vulnerable-web-site SSRF + ist-edu open-redirect route oracles",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "koadt.github.io/.../insecure-randomness-gift-card: 12→15 findings — oopssec-gift-card-randomness-route-live-oracle shipped (LCG + createdAt seed)",
+      "vulnerable-web-site.vercel.app/ssrf: 5→6 findings — vulnerable-web-site-ssrf-route-live-oracle shipped (auth-gated SSRF lab)",
+      "ist-edu-bd.vercel.app/labs/open-redirect: 8→9 findings — ist-edu-open-redirect-route-live-oracle shipped (SPA redirect chain)"
+    ],
+    "learning_gaps": [
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "gdg-benin.vercel.app + web-security-learning-labs module/1609–1610 queued but not drained (queue depth ahead of limit 8)",
+      "vulnforge-academy medium level2/level3 return 403 Forbidden from Vercel — cannot live-oracle"
+    ]
+  },
+  "discovery_highlights": {
+    "juice-shop.herokuapp.com": 48,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 15,
+    "ist-edu-bd.vercel.app/labs/open-redirect": 9,
+    "vulnerable-web-site.vercel.app/ssrf": 6,
+    "vapi.apisec.ai/vapi/api10/login": 14,
+    "ist-edu-bd.vercel.app/labs/idor": 10,
+    "web-security-learning-labs.vercel.app/module/1608": 10,
+    "attp-live.fly.dev/demo": 5
+>>>>>>> 369f2857 (docs: log 3 discovery oracles + benchmark 6/6 validation (48 findings))
   }
 }
