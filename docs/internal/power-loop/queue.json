@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T17:14:38.619Z",
+  "updated_at": "2026-08-13T18:28:25.411Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1608",
@@ -11363,6 +11363,31 @@
     {
       "url": "https://pwnshop.ctfsecurity.com/debug/events",
       "source": "ctfsec/pwnshop — unauthenticated audit log JSON feed /debug/events (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1609",
+      "source": "web-security-learning-labs Vercel — module 1609 security lab route (OSS deploy hub expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1610",
+      "source": "web-security-learning-labs Vercel — module 1610 security lab route (OSS deploy hub expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://gdg-benin.vercel.app/",
+      "source": "skynette/gdg-ctf-challenge — GDG Benin CTF flag-hunt homepage (GitHub README public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://gdg-benin.vercel.app/ctf",
+      "source": "skynette/gdg-ctf-challenge — CTF flag submission page (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://gdg-benin.vercel.app/instructions",
+      "source": "skynette/gdg-ctf-challenge — CTF instructions and clue surface (GitHub README)",
       "auth": "public_demo"
     }
   ]

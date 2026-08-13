@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T18:20:00.000Z",
+  "updated_at": "2026-08-13T18:38:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2887,
-  "total_findings": 29883,
+  "total_sites_scanned": 2896,
+  "total_findings": 30003,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2022,
-  "discovery_findings": 24075,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-13T18:20:00.000Z",
+  "discovery_urls_added": 2027,
+  "discovery_findings": 24147,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-13T18:38:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,34 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings, 37 juice-shop live oracles); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 0,
-      "focus": "fabraix data-exfil-002 route oracle + vulnforge level SSTI route oracle + juice-shop REST deliverys/quantitys kebab aliases",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 72,
+      "focus": "web-security-learning-labs module/1608 + vulnerable-web-site SSRF/clickjacking + ist-edu IDOR/open-redirect + vAPI API10 login/identity + ATTP demo",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "playground.fabraix.com/challenges/data-exfil-002: 6→7 findings — fabraix-data-exfil-002-route-live-oracle shipped (v2 exfil route maps to data-exfil-001 backend session)",
-      "vulnforge-academy.vercel.app/.../medium/level2.php: 5→6 findings — vulnforge-academy-level-ssti-route-live-oracle shipped",
-      "demo.owasp-juice.shop/rest/deliverys: route scan fires juice-shop-deliverys-exposure-route-live-oracle via REST kebab alias"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles) — no benchmark misses",
+      "vapi.apisec.ai/vapi/api10/login: 14 findings — full vAPI API1–API10 oracle bundle on API10 login route",
+      "vapi.apisec.ai/vapi/api10/identity: 14 findings — identity route mirrors API10 login oracle coverage",
+      "ist-edu-bd.vercel.app/labs/idor: 10 findings — ist-edu-dashboard-idor-route-live-oracle + notices LFI route oracle",
+      "vulnerable-web-site.vercel.app/clickjacking: 6 findings — vulnerable-web-site-clickjacking-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1608: 10 findings — extended IDOR module route oracle",
+      "attp-live.fly.dev/demo: 5 findings — attp-agent-revoke-unauth live oracle pair"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "vulnforge-academy.vercel.app PHP backend paths return 403 on Vercel — level oracles rely on reflexion probes"
+      "vulnerable-web-site.vercel.app/ssrf: 5-finding hub without route-specific SSRF live oracle",
+      "ist-edu-bd.vercel.app/labs/open-redirect: 8 findings without dedicated open-redirect route oracle",
+      "gdg-benin.vercel.app + web-security-learning-labs module/1609–1610 queued but not drained (queue depth ahead of limit 8)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "playground.fabraix.com/challenges/data-exfil-002": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level2.php": 6,
-    "demo.owasp-juice.shop/rest/deliverys": 49,
-    "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain": 14,
-    "brokencrystals.com/api/command": 76
+    "juice-shop.herokuapp.com": 48,
+    "vapi.apisec.ai/vapi/api10/login": 14,
+    "vapi.apisec.ai/vapi/api10/identity": 14,
+    "ist-edu-bd.vercel.app/labs/idor": 10,
+    "web-security-learning-labs.vercel.app/module/1608": 10,
+    "ist-edu-bd.vercel.app/labs/open-redirect": 8,
+    "vulnerable-web-site.vercel.app/clickjacking": 6,
+    "vulnerable-web-site.vercel.app/ssrf": 5,
+    "attp-live.fly.dev/demo": 5
   }
 }
