@@ -45358,6 +45358,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "aevum-consent-review-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aevum consent review unauthenticated live oracle",
+    description:
+      "POST /v1/consent/review on demo.aevum.build creates pending agent-action reviews and sigchain audit entries without authentication.",
+    impactOneline:
+      "Unauthenticated consent review creation lets attackers queue destructive agent actions on public Aevum demos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aevumConsentReviewUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Aevum demos are research infrastructure — authenticate all consent-ledger API routes in production.",
+      steps: [
+        "Require authenticated reviewers before creating consent review requests.",
+        "Bind review creation to verified agent identities and tenant scopes.",
+        "Rate-limit public consent API endpoints on demo deployments."
+      ]
+    },
+    fixPrompt:
+      "Our Aevum /v1/consent/review endpoint accepts unauthenticated review creation. Show consent-ledger API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "aevum-consent-review-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aevum consent review unauthenticated route live oracle",
+    description:
+      "When scanning demo.aevum.build, POST /v1/consent/review creates pending reviews without authentication — route-specific consent-ledger oracle.",
+    impactOneline:
+      "Route-scoped Aevum demo scans should confirm unauthenticated consent review creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aevumConsentReviewUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Aevum demos are research infrastructure — authenticate all consent-ledger API routes in production.",
+      steps: [
+        "Require authenticated reviewers before creating consent review requests.",
+        "Bind review creation to verified agent identities and tenant scopes.",
+        "Rate-limit public consent API endpoints on demo deployments."
+      ]
+    },
+    fixPrompt:
+      "Our Aevum demo route scan confirms unauthenticated /v1/consent/review creation. Show route-specific consent API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "aevum-sigchain-replay-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aevum sigchain replay unauthenticated live oracle",
+    description:
+      "POST /v1/replay/{audit_id} on demo.aevum.build reconstructs tamper-evident sigchain audit events without authentication.",
+    impactOneline:
+      "Unauthenticated sigchain replay exposes prior agent-action audit payloads on public Aevum demos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aevumSigchainReplayUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect sigchain replay endpoints with authentication and authorization checks.",
+      steps: [
+        "Require reviewer credentials before replaying audit events.",
+        "Scope replay access to the audit tenant that created the event.",
+        "Log and alert on unauthenticated replay attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Aevum /v1/replay/{audit_id} endpoint replays sigchain events without authentication. Show audit replay hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "aevum-sigchain-replay-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aevum sigchain replay unauthenticated route live oracle",
+    description:
+      "When scanning demo.aevum.build, POST /v1/replay/{audit_id} reconstructs sigchain audit payloads without authentication — route-specific replay oracle.",
+    impactOneline:
+      "Route-scoped Aevum demo scans should confirm unauthenticated sigchain replay.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aevumSigchainReplayUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect sigchain replay endpoints with authentication and authorization checks.",
+      steps: [
+        "Require reviewer credentials before replaying audit events.",
+        "Scope replay access to the audit tenant that created the event.",
+        "Log and alert on unauthenticated replay attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Aevum demo route scan confirms unauthenticated sigchain replay. Show route-specific audit replay hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-attp-agent-trust-evidence",
     platform: "generic",
     category: "AI security",
@@ -45380,6 +45484,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host an ATTP-style agent trust transport demo. Show how to authenticate agent wire-protocol endpoints in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "attp-agent-revoke-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "ATTP agent revoke unauthenticated live oracle",
+    description:
+      "POST /api/v1/revoke and /api/v1/unrevoke on attp-live.fly.dev accept agentId without X-Agent-Trust headers — agent lifecycle bypass on a signed-transport demo.",
+    impactOneline:
+      "Unauthenticated revoke/unrevoke lets attackers disrupt agent trust state on public ATTP demos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "attpAgentRevokeUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "ATTP demos are research infrastructure — require signed agent trust headers on all lifecycle endpoints.",
+      steps: [
+        "Reject /api/v1/revoke and /api/v1/unrevoke without valid X-Agent-Trust verification.",
+        "Bind revoke operations to authenticated agent operator credentials.",
+        "Monitor lifecycle endpoints for unauthorized agentId manipulation."
+      ]
+    },
+    fixPrompt:
+      "Our ATTP /api/v1/revoke endpoint accepts unauthenticated agentId. Show agent lifecycle endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "attp-agent-revoke-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "ATTP agent revoke unauthenticated route live oracle",
+    description:
+      "When scanning attp-live.fly.dev/demo, POST /api/v1/revoke and /api/v1/unrevoke accept agentId without X-Agent-Trust headers — route-specific agent lifecycle bypass oracle.",
+    impactOneline:
+      "Route-scoped ATTP demo scans should confirm unauthenticated agent revoke/unrevoke.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "attpAgentRevokeUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "ATTP demos are research infrastructure — require signed agent trust headers on all lifecycle endpoints.",
+      steps: [
+        "Reject /api/v1/revoke and /api/v1/unrevoke without valid X-Agent-Trust verification.",
+        "Bind revoke operations to authenticated agent operator credentials.",
+        "Monitor lifecycle endpoints for unauthorized agentId manipulation."
+      ]
+    },
+    fixPrompt:
+      "Our ATTP /demo route scan confirms unauthenticated agent revoke/unrevoke. Show route-specific lifecycle endpoint hardening.",
     version: 1,
     enabled: true
   },
