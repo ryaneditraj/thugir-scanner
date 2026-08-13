@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-delete-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /my-account/delete redirects to login with account-icon selected + login-form; ginandjuice.shop/my-account/delete findings 0→30 (+ginandjuice-delete-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-book-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /users/v1/login name1 + GET /books/v1/bookTitle78 returns owner name2 secret; vampi-production.up.railway.app/books/v1/bookTitle78 findings 15 (+vampi-book-bola-live-oracle + vampi-book-bola-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-labs-cmdi-path-traversal-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended DVWU runner priority for labs/cmdi|path-traversal|crlf; dvwu.vercel.app/labs/xxe findings 8→11 (+dvwu-notices-lfi-route-live-oracle + dvwu-files-client-lfi-route-live-oracle + dvwu-search-sqli-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-crlf-route-oracle-fix",
       "status": "shipped",
@@ -9459,6 +9477,21 @@
       "source": "discovery:vampi-production.up.railway.app",
       "slug": "vampi-debug-password-route-live-oracle",
       "shipped_at": "2026-08-13T07:30:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-delete-route-live-oracle",
+      "shipped_at": "2026-08-13T08:46:00.000Z"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-book-bola-live-oracle",
+      "shipped_at": "2026-08-13T08:46:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-labs-cmdi-path-traversal-priority",
+      "shipped_at": "2026-08-13T08:46:00.000Z"
     }
   ]
 }
