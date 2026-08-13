@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T13:26:00.000Z",
+  "updated_at": "2026-08-13T14:25:53.698Z",
   "discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
+      "source": "kOaDT/oss-oopssec-store — JWT alg-confusion partner API walkthrough (Aug 2026 blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack walkthrough (Jun 2026 blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
+      "source": "kOaDT/oss-oopssec-store — CSRF admin order-update walkthrough (Apr 2026 blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
+      "source": "kOaDT/oss-oopssec-store — path traversal documents API walkthrough (Apr 2026 blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/quantitys",
+      "source": "Official OWASP Juice Shop demo — inventory quantities exposure oracle GET /rest/quantitys",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://playground.fabraix.com/challenges/data-exfil-002",
       "source": "fabraix/playground — Show HN AI agent data-exfil challenge v2 with harder outbound-request defenses (GitHub challenges/)",
