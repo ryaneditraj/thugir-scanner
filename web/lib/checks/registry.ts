@@ -37303,7 +37303,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1612;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1613;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -37336,7 +37336,8 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1609": "IDOR",
   "1610": "IDOR",
   "1611": "IDOR",
-  "1612": "IDOR"
+  "1612": "IDOR",
+  "1613": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -76608,6 +76609,57 @@ const dvwuRaceConditionLabRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const dvwuJwtLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/jwt\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeDvwuLabRouteInjection(ctx);
+  if (!injection?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...injection.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/jwt route scan — JWT algorithm-confusion training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+    }
+  };
+};
+
+const dvwuDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/deserialization\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeDvwuLabRouteInjection(ctx);
+  if (!injection?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...injection.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/deserialization route scan — insecure deserialization training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+    }
+  };
+};
+
+const dvwuSstiLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/ssti\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeDvwuLabRouteInjection(ctx);
+  if (!injection?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...injection.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/ssti route scan — server-side template injection training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+    }
+  };
+};
+
 const dvwuDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -80555,6 +80607,9 @@ export const RULES: Record<string, Rule> = {
   dvwuSsrfRedirectRouteLiveOracle,
   dvwuGraphqlLabRouteLiveOracle,
   dvwuRaceConditionLabRouteLiveOracle,
+  dvwuJwtLabRouteLiveOracle,
+  dvwuDeserializationLabRouteLiveOracle,
+  dvwuSstiLabRouteLiveOracle,
   dvwuFilesClientLfiRouteLiveOracle,
   dvwuPathTraversalClientRouteLiveOracle,
   vampiAdminProfileUnauthLiveOracle,

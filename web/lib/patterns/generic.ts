@@ -55233,6 +55233,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-jwt-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "DVWU JWT algorithm confusion lab route live oracle",
+    description:
+      "When scanning /labs/jwt on dvwu.vercel.app, confirm the JWT algorithm-confusion training lab route with live DVWU /api/search or /api/portal SQL injection oracle — route-specific JWT lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes a JWT algorithm-confusion training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuJwtLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — reject alg=none JWTs and enforce signature verification in production.",
+      steps: [
+        "Allowlist permitted JWT algorithms and reject alg=none before parsing claims.",
+        "Verify signatures with the expected public key or shared secret.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/jwt route is a JWT algorithm-confusion training lab. Show secure JWT verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-deserialization-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "DVWU insecure deserialization lab route live oracle",
+    description:
+      "When scanning /labs/deserialization on dvwu.vercel.app, confirm the insecure deserialization training lab route with live DVWU injection oracle — route-specific deserialization lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes an insecure deserialization training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuDeserializationLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — never deserialize untrusted data in production.",
+      steps: [
+        "Avoid native deserialization of attacker-controlled input.",
+        "Use safe serialization formats (JSON) with strict schema validation.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/deserialization route is an insecure deserialization training lab. Show safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-ssti-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "DVWU SSTI lab route live oracle",
+    description:
+      "When scanning /labs/ssti on dvwu.vercel.app, confirm the server-side template injection training lab route with live DVWU injection oracle — route-specific SSTI lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes an SSTI training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuSstiLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — use logic-less templates and strict input sanitization in production.",
+      steps: [
+        "Never embed user input directly into server-side template expressions.",
+        "Use sandboxed template engines or separate logic from presentation.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/ssti route is a server-side template injection training lab. Show SSTI-safe templating remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-xss-playground-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
