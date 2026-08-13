@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-search-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=' returns SQL Syntax Error + Database Leak with admin@ist.edu.bd row; dvwu.vercel.app/labs/sqli findings 10→12 (+dvwu-search-sqli-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-command-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/command returns 404 but README maps to /api/spawn?command= which echoes thugirSpawnCmdCanary; brokencrystals.com/api/command findings 80→85 (+brokencrystals-command-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-createdb-unauth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /createdb returns {\"message\":\"Database populated.\"} without auth; vampi-production.up.railway.app/createdb findings 10→12 (+vampi-createdb-unauth-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-change-address-route-live-oracle",
       "status": "shipped",
@@ -9393,6 +9411,21 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-my-account-route-priority",
       "shipped_at": "2026-08-13T05:30:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-search-sqli-live-oracle",
+      "shipped_at": "2026-08-13T06:30:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-command-route-live-oracle",
+      "shipped_at": "2026-08-13T06:30:00.000Z"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-createdb-unauth-live-oracle",
+      "shipped_at": "2026-08-13T06:30:00.000Z"
     }
   ]
 }
