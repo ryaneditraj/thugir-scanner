@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:koadt.github.io",
+      "slug": "oopssec-information-disclosure-api-error-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/information-disclosure-api-error documents POST /api/user/export invalid field leaking debug.systemDiagnostics.featureFlags; koadt.github.io/.../information-disclosure-api-error findings 5→8 (+client-side-oopssec-information-disclosure-evidence + route oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-next-public-env-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/next-public-env-variable-leak documents NEXT_PUBLIC_PAYMENT_SECRET sent as X-Payment-Auth on POST /api/orders from /checkout; koadt.github.io/.../next-public-env-variable-leak findings 6→9 (+client-side-oopssec-next-public-env-evidence + route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-supply-chain-poisoned-rules-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/supply-chain-poisoned-rules-chain documents react-toastfy typosquat postinstall + poisoned productivity-helper.mdc adding /api/admin/diag X-Debug-Auth bypass; koadt.github.io/.../supply-chain-poisoned-rules-chain findings 12→14 (+client-side-oopssec-supply-chain-evidence + route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
       "slug": "oopssec-ssrf-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/ssrf-internal-page-access documents support-form screenshot URL SSRF to http://localhost:3000/internal; koadt.github.io/.../ssrf-internal-page-access findings 0→6 (+client-side-oopssec-ssrf-evidence + route oracle); benchmark juice-shop 45 findings 6/6 maintained"
@@ -9753,6 +9771,21 @@
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-middleware-bypass-route-live-oracle",
       "shipped_at": "2026-08-13T16:36:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-information-disclosure-api-error-route-live-oracle",
+      "shipped_at": "2026-08-13T17:45:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-next-public-env-route-live-oracle",
+      "shipped_at": "2026-08-13T17:45:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-supply-chain-poisoned-rules-route-live-oracle",
+      "shipped_at": "2026-08-13T17:45:00.000Z"
     }
   ]
 }

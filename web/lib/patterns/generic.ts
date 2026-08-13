@@ -42732,6 +42732,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-information-disclosure-evidence",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OopsSec Store verbose API error disclosure walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/information-disclosure-api-error documents POST /api/user/export returning debug.systemDiagnostics.featureFlags when an invalid field is submitted.",
+    impactOneline:
+      "Public walkthrough teaches CWE-209 verbose error responses leaking internal feature flags from authenticated export API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecInformationDisclosureEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip debug payloads from API error responses and log diagnostics server-side only.",
+      steps: [
+        "Return generic validation errors without systemDiagnostics in production.",
+        "Gate verbose debug blocks behind NODE_ENV=development checks.",
+        "Host OopsSec information-disclosure walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/user/export leaks featureFlags in debug.systemDiagnostics on invalid fields. Show error-handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-information-disclosure-api-error-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OopsSec Store verbose API error disclosure route live oracle",
+    description:
+      "When scanning /posts/information-disclosure-api-error, the walkthrough documents POST /api/user/export invalid-field errors leaking debug.systemDiagnostics.featureFlags — route-specific information disclosure oracle.",
+    impactOneline:
+      "OopsSec export API dumps internal feature flags in verbose 400 responses when invalid fields bypass UI checkboxes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecInformationDisclosureApiErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug diagnostics from client-facing error responses.",
+      steps: [
+        "Validate export fields server-side without returning systemDiagnostics.",
+        "Log invalid export attempts server-side only.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/user/export verbose errors leak featureFlags. Show route-specific error sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-next-public-env-evidence",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OopsSec Store NEXT_PUBLIC_ env leak walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/next-public-env-variable-leak documents NEXT_PUBLIC_PAYMENT_SECRET inlined into checkout bundle and sent as X-Payment-Auth on POST /api/orders.",
+    impactOneline:
+      "Public walkthrough teaches NEXT_PUBLIC_ prefix publishing payment credentials to every browser loading /checkout.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecNextPublicEnvEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move payment secrets to server-only env vars and never prefix with NEXT_PUBLIC_.",
+      steps: [
+        "Read PAYMENT_SECRET from server route handlers only.",
+        "Scan CI for NEXT_PUBLIC_.*(SECRET|KEY|TOKEN|PASSWORD) patterns.",
+        "Rotate any credential ever built into client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our checkout sends NEXT_PUBLIC_PAYMENT_SECRET as X-Payment-Auth. Show server-side secret handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-next-public-env-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OopsSec Store NEXT_PUBLIC_ env leak route live oracle",
+    description:
+      "When scanning /posts/next-public-env-variable-leak, the walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders — route-specific client env exposure oracle.",
+    impactOneline:
+      "OopsSec checkout publishes payment credentials via NEXT_PUBLIC_ build-time substitution visible in static chunks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecNextPublicEnvRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep payment credentials server-side; never use NEXT_PUBLIC_ for secrets.",
+      steps: [
+        "Proxy POST /api/orders through a server route that attaches auth headers.",
+        "Add CI grep for NEXT_PUBLIC_ secret-like variable names.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /checkout route leaks NEXT_PUBLIC_PAYMENT_SECRET in X-Payment-Auth. Show route-specific env leak remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-supply-chain-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "OopsSec Store supply-chain poisoned AI rules walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/supply-chain-poisoned-rules-chain documents react-toastfy typosquat postinstall dropping poisoned Cursor rules that add X-Debug-Auth bypass on /api/admin/diag.",
+    impactOneline:
+      "Public walkthrough teaches npm typosquat → poisoned AI rules file → magic-header admin backdoor chain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecSupplyChainEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block install scripts, review AI rules files raw, and deny magic-header auth bypasses.",
+      steps: [
+        "Set npm ignore-scripts and sandbox installs away from ~/.cursor/rules.",
+        "Two-person review on .cursor/rules edits with raw grep for hidden HTML comments.",
+        "Remove hardcoded X-Debug-Auth bypasses from admin routes."
+      ]
+    },
+    fixPrompt:
+      "Our react-toastfy typosquat drops poisoned Cursor rules adding /api/admin/diag X-Debug-Auth bypass. Show supply-chain defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-supply-chain-poisoned-rules-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "OopsSec Store supply-chain poisoned AI rules route live oracle",
+    description:
+      "When scanning /posts/supply-chain-poisoned-rules-chain, the walkthrough documents typosquat npm postinstall + poisoned productivity-helper.mdc adding /api/admin/diag X-Debug-Auth bypass — route-specific supply-chain oracle.",
+    impactOneline:
+      "OopsSec supply-chain chain ends with unauthenticated /api/admin/diag access via hardcoded X-Debug-Auth header.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSupplyChainPoisonedRulesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Review AI rules files raw and block magic-header admin bypass routes.",
+      steps: [
+        "Pin and audit .cursor/rules with grep for OSS{ flags and X-Debug-Auth directives.",
+        "Disable npm postinstall scripts by default in CI and developer machines.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/diag is reachable via X-Debug-Auth from poisoned AI rules. Show supply-chain and auth bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",
