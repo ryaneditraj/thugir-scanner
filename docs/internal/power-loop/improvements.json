@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:dvwu.vercel.app",
-      "slug": "dvwu-portal-sqli-live-oracle",
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-execute-shell-injection-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful + Logged in as admin; dvwu.vercel.app/labs/jwt findings 9→11 (+dvwu-portal-sqli-live-oracle host oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/execute invalid-command-here returns Cannot run program error=2 proving OS process spawn; zen-demo-java.fly.dev/pages/execute findings 0→6 (+zen-demo-java-execute-shell-injection-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-execute-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /pages/execute route scan fires shell injection live+route oracles via POST /api/execute; zen-demo-java.fly.dev/pages/execute findings 0→6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "code-breaking-puzzle-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /puzzle/1/ route scan detects easy-function puzzle title + GitHub phith0n/code-breaking source link + flag form; code-breaking.fly.dev/puzzle/1/ findings 0→4 (+code-breaking-puzzle-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:dvwu.vercel.app",
@@ -9576,6 +9588,21 @@
       "source": "discovery:urban-vampi-production.up.railway.app",
       "slug": "vampi-books-stale-catalog-live-oracle",
       "shipped_at": "2026-08-13T10:25:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-execute-shell-injection-live-oracle",
+      "shipped_at": "2026-08-13T12:30:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-execute-route-live-oracle",
+      "shipped_at": "2026-08-13T12:30:00.000Z"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "code-breaking-puzzle-route-live-oracle",
+      "shipped_at": "2026-08-13T12:30:00.000Z"
     }
   ]
 }
