@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:attp-live.fly.dev",
+      "slug": "attp-agent-revoke-unauth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/revoke and /api/v1/unrevoke without X-Agent-Trust return revoked:true and unrevoked:true for attacker agentId; attp-live.fly.dev/demo findings 3→5; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:attp-live.fly.dev",
+      "slug": "attp-agent-revoke-unauth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /demo route scan fires attp-agent-revoke-unauth live+route oracles via unauthenticated revoke/unrevoke; attp-live.fly.dev/demo findings 3→5; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-consent-review-unauth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /v1/consent/review without auth returns review_id + audit_id sigchain entry; demo.aevum.build findings 5→9; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-consent-review-unauth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: demo.aevum.build route scan fires consent-review live+route oracles; demo.aevum.build findings 5→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-sigchain-replay-unauth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /v1/replay/{audit_id} reconstructs replayed_payload without authentication after consent review probe; demo.aevum.build findings 5→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-sigchain-replay-unauth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: demo.aevum.build route scan fires sigchain-replay live+route oracles; demo.aevum.build findings 5→9; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:zen-demo-java.fly.dev",
       "slug": "zen-demo-java-execute-shell-injection-live-oracle",
       "status": "shipped",
@@ -9603,6 +9639,21 @@
       "source": "discovery:code-breaking.fly.dev",
       "slug": "code-breaking-puzzle-route-live-oracle",
       "shipped_at": "2026-08-13T12:30:00.000Z"
+    },
+    {
+      "source": "discovery:attp-live.fly.dev",
+      "slug": "attp-agent-revoke-unauth-live-oracle",
+      "shipped_at": "2026-08-13T13:30:00.000Z"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-consent-review-unauth-live-oracle",
+      "shipped_at": "2026-08-13T13:30:00.000Z"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-sigchain-replay-unauth-live-oracle",
+      "shipped_at": "2026-08-13T13:30:00.000Z"
     }
   ]
 }
