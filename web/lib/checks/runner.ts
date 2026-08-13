@@ -2802,6 +2802,9 @@ const DEEP_RULES = new Set<string>([
   "seclabUsersVulnerableRouteLiveOracle",
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
+  "seclabSsrfVulnerableRouteLiveOracle",
+  "vulnerableWebSiteCsrfRouteLiveOracle",
+  "vulnerableWebSiteStoredXssRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -11110,6 +11113,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/path-traversal\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-path-traversal")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/ssrf-vulnerable\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-ssrf-vulnerable")
+      )
+        return -3;
+      if (
+        /vulnerable-web-site\.vercel\.app/i.test(origin) &&
+        /\/csrf\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-web-site-csrf")
+      )
+        return -3;
+      if (
+        /vulnerable-web-site\.vercel\.app/i.test(origin) &&
+        /\/xss\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-web-site-stored-xss")
       )
         return -3;
       if (
