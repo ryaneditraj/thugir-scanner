@@ -68261,21 +68261,32 @@ async function probeVulnerableWebSiteLoginGatedLabRoute(
     timeoutMs: 15000,
     redirect: "manual"
   });
+  const location = routeDoc.headers["location"] || "";
   const loginRedirect =
     /\/login\b/i.test(ctx.home.finalUrl || "") ||
     /\/login\b/i.test(pageUrl) ||
-    ([301, 302, 303, 307, 308].includes(routeDoc.status) &&
-      /\/login\b/i.test(routeDoc.headers["location"] || ""));
-  if (!loginRedirect) return NEGATIVE;
-  if (!/Vulnerable Web Site|vulnerable-web-site/i.test(ctx.combined)) return NEGATIVE;
+    ([301, 302, 303, 307, 308].includes(routeDoc.status) && /\/login\b/i.test(location));
+  const vercelChallenge =
+    routeDoc.status === 403 &&
+    (/vercel-mitigated|x-vercel-challenge-token/i.test(JSON.stringify(routeDoc.headers)) ||
+      /Vercel Security Checkpoint/i.test(routeDoc.body));
+  if (
+    !/Vulnerable Web Site|vulnerable-web-site/i.test(ctx.combined) &&
+    !/vulnerable-web-site\.vercel\.app/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  if (!loginRedirect && !vercelChallenge) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.88,
+    confidence: loginRedirect ? 0.88 : 0.86,
     evidence: {
       scannedUrl: pageUrl,
       routeStatus: routeDoc.status,
-      location: routeDoc.headers["location"] || "",
-      note: `vulnerable-web-site.vercel.app /${routeSegment} route redirects to login — auth-gated ${labName} training lab surface on Next.js vulnerable-web-site demo`
+      location,
+      note: loginRedirect
+        ? `vulnerable-web-site.vercel.app /${routeSegment} route redirects to login — auth-gated ${labName} training lab surface on Next.js vulnerable-web-site demo`
+        : `vulnerable-web-site.vercel.app /${routeSegment} route scan hit Vercel checkpoint — auth-gated ${labName} training lab route on discovery queue (README documents CSRF/XSS/clickjacking/SSRF modules)`
     }
   };
 }
