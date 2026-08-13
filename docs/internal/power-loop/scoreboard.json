@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T11:40:00.000Z",
+  "updated_at": "2026-08-13T12:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2817,
-  "total_findings": 28682,
-  "critical_findings": 58,
+  "total_sites_scanned": 2828,
+  "total_findings": 28818,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1996,
-  "discovery_findings": 23426,
+  "discovery_findings": 23470,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-13T11:40:00.000Z",
+  "last_run": "2026-08-13T12:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 618,
+      "probes_run": 578,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 48,
-      "focus": "DVWU host-level portal SQLi + redirect SSRF oracles; brokencrystals /api/file route SSRF evidence",
+      "urls_scanned": 5,
+      "findings": 41,
+      "focus": "zen-demo-java shell injection execute oracle + code-breaking puzzle route oracle + vapi api10/login queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "dvwu.vercel.app/labs/jwt: 9→11 findings (+dvwu-portal-sqli-live-oracle + dvwu-ssrf-redirect-live-oracle host oracles)",
-      "dvwu.vercel.app/labs/ssrf: 11→13 findings (+dvwu-ssrf-redirect-live-oracle host oracle alongside route oracle)",
-      "brokencrystals.com/api/file?url=: route-specific SSRF evidence via brokencrystals-api-file-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "zen-demo-java.fly.dev/pages/execute: 0→6 findings (+zen-demo-java-execute-shell-injection-live-oracle + route oracle; POST /api/execute invalid-command-here)",
+      "code-breaking.fly.dev/puzzle/1/: 0→4 findings (+code-breaking-puzzle-route-live-oracle; easy-function puzzle + GitHub source link)",
+      "vapi.apisec.ai/vapi/api10/login|identity: 14 findings each (api10 logging oracle; login/identity route-specific oracle still absent)",
+      "attp-live.fly.dev/demo: 3 findings (client-side ATTP evidence only; no live oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "dvwu.vercel.app/labs/jwt|ssti|deserialization: SPA has no JWT/SSTI/deserialization lab content on deployed Vercel build",
-      "brokencrystals.com/api/file: endpoint intermittently returns URL is not a constructor",
-      "vapi.apisec.ai/vapi/api10/login|identity: api10-unsafe-consumption route oracle still absent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "dvwu.vercel.app/labs/ssti|deserialization: no SSTI/deserialization API endpoints on deployed Vercel build",
+      "vapi.apisec.ai/vapi/api10/login|identity: api10 unsafe-consumption route oracle still absent",
+      "attp-live.fly.dev/demo: ATTP signed-transfer live oracle absent (client-side evidence only)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "dvwu.vercel.app/labs/jwt": 11,
-    "dvwu.vercel.app/labs/ssrf": 13,
-    "brokencrystals.com/api/file?url=https://httpbin.org/get": 79,
+    "juice-shop.herokuapp.com": 47,
+    "zen-demo-java.fly.dev/pages/execute": 6,
+    "code-breaking.fly.dev/puzzle/1/": 4,
     "vapi.apisec.ai/vapi/api10/login": 14,
-    "vapi.apisec.ai/vapi/api3/user": 14,
-    "urban-vampi-production.up.railway.app/books/v1": 15
+    "vapi.apisec.ai/vapi/api10/identity": 14,
+    "attp-live.fly.dev/demo": 3,
+    "dvwu.vercel.app/labs/jwt": 11,
+    "brokencrystals.com/api/file?url=https://httpbin.org/get": 79
   }
 }
