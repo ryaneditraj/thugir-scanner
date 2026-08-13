@@ -54115,6 +54115,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-my-account-orders-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/orders route live oracle",
+    description:
+      "When scanning /my-account/orders, the orders list redirects to login while GET /order/details?orderId= still returns billing and payment metadata without authentication — route-specific order IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop order history is auth-gated but order detail lookups remain unauthenticated IDOR vectors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceMyAccountOrdersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind order lookups to the authenticated user's session and verify ownership server-side.",
+      steps: [
+        "Reject order detail requests when the session user does not own the order.",
+        "Use unpredictable order identifiers instead of sequential IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/orders route is login-gated but /order/details?orderId= leaks PII without auth. Show route-specific IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-delete-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

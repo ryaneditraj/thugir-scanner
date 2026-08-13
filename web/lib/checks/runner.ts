@@ -2533,6 +2533,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceChangeEmailRouteLiveOracle",
   "ginAndJuiceChangePasswordRouteLiveOracle",
   "ginAndJuiceChangeAddressRouteLiveOracle",
+  "ginAndJuiceMyAccountOrdersRouteLiveOracle",
   "ginAndJuiceDeleteRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
   "ginAndJuiceLoggerRouteLiveOracle",
@@ -11466,6 +11467,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/order\/details\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-order-details")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/orders\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-my-account-orders")
       )
         return -3;
       if (
