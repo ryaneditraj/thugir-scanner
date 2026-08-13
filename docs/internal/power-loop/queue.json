@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T11:09:00.000Z",
+  "updated_at": "2026-08-13T12:32:00.000Z",
   "discovery_urls": [
     {
       "url": "https://vapi.apisec.ai/vapi/api10/login",
@@ -11208,6 +11208,31 @@
     {
       "url": "https://crapi2.apisec.ai/identity/api/v2/user/videos",
       "source": "APIsec crAPI v2 — broken access control oracle GET /identity/api/v2/user/videos (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/signup",
+      "source": "megmogmog1965/vulnerable-web-site — signup mass-assignment / weak password policy oracle (Vercel README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/login",
+      "source": "Areeeshaa/SecureBank — Attack Mode SQLi login surface (Medium live demo secure-bank-bay.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/shop/return_qr_code",
+      "source": "APIsec crAPI v2 — SSRF/shop QR return oracle GET /workshop/api/shop/return_qr_code (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/vehicles",
+      "source": "APIsec crAPI v2 — vehicle BOLA oracle GET /identity/api/v2/vehicle/vehicles (OWASPLA 2025 guide)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/events",
+      "source": "ctfsec/pwnshop — unauthenticated audit log JSON feed /debug/events (GitHub README Key URLs)",
       "auth": "public_demo"
     }
   ]
