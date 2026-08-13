@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T22:24:00.000Z",
+  "updated_at": "2026-08-13T23:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
+      "source": "0xSV1/DVS DeployBro — interactive terminal challenge (leaked creds + command injection via deploybro CLI)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://damn-vulnerable-startup.fly.dev/challenges/owasp",
+      "source": "0xSV1/DVS DeployBro — OWASP Top 10 (2025) challenge grid on fly.dev public demo",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/deserialization",
+      "source": "zahidoverflow/dvwu — insecure deserialization lab /labs/deserialization (DVWU Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/dvwu — JWT algorithm confusion lab /labs/jwt (DVWU Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level5.php",
+      "source": "webspoilt/vulnforge-academy — Level 5 reflected XSS challenge (GitHub README OWASP A03)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
       "source": "OWASP WrongSecrets — Challenge 10 CSI-Driver/AWS Secrets Manager mount lab (Heroku public demo)",
