@@ -31456,6 +31456,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-command-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/command route command injection oracle",
+    description:
+      "When scanning /api/command, README documents OS command injection at /api/spawn — GET /api/spawn?command= executes shell and echoes canary output.",
+    impactOneline:
+      "Route-scoped scans of /api/command should confirm unauthenticated OS command injection via the spawn endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsCommandRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove or disable /api/spawn in any internet-reachable deployment.",
+        "If subprocess use is unavoidable, use argument arrays and strict input validation.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/command route scan confirms OS command injection via /api/spawn. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -53828,6 +53854,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU search SQL injection live oracle",
+    description:
+      "GET /api/search?q=' triggers SQL syntax error and leaks admin credentials from the courses table on dvwu.vercel.app — Damn Vulnerable Web University search SQLi oracle.",
+    impactOneline:
+      "String-concatenated SQL in search queries lets attackers extract database rows without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — use parameterized queries for all search lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic search errors without SQL syntax details or row dumps.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /api/search route leaks admin rows via SQL injection on a single-quote probe. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU search SQL injection route live oracle",
+    description:
+      "When scanning /labs/sqli or /api/search, GET /api/search?q=' triggers SQL error and leaks admin@ist.edu.bd from the courses table — route-specific DVWU SQLi oracle.",
+    impactOneline:
+      "Route scans on DVWU SQLi labs should confirm search-parameter SQL injection with database row disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — use parameterized queries for all search lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic search errors without SQL syntax details or row dumps.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/sqli route scan confirms search SQLi with admin row leak. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-search-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -54864,6 +54942,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /users/v1 route scan confirms unauthenticated user enumeration. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-createdb-unauth-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VAmPI unauthenticated database reset live oracle",
+    description:
+      "GET /createdb repopulates the VAmPI database without authentication — the VAmPI destructive debug endpoint oracle (API8).",
+    impactOneline:
+      "Public database reset endpoints let any attacker wipe and reseed application data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiCreatedbUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — remove or protect /createdb in any production deployment.",
+      steps: [
+        "Disable /createdb on internet-reachable instances.",
+        "Require admin authentication before any database seed or reset operation.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /createdb endpoint repopulates the database without authentication. Show remediation for destructive debug endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-createdb-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VAmPI unauthenticated database reset route live oracle",
+    description:
+      "When scanning /createdb, GET repopulates the database without authentication — route-specific VAmPI security misconfiguration oracle (API8).",
+    impactOneline:
+      "Route scans on /createdb should confirm unauthenticated destructive database operations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiCreatedbUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — remove or protect /createdb in any production deployment.",
+      steps: [
+        "Disable /createdb on internet-reachable instances.",
+        "Require admin authentication before any database seed or reset operation.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /createdb route scan confirms unauthenticated database repopulation. Show remediation for destructive debug endpoints.",
     version: 1,
     enabled: true
   },

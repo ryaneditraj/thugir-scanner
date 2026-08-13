@@ -14707,6 +14707,23 @@ const brokencrystalsSpawnRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsCommandRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/command\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsSpawnCommandInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/command route scan — README documents command injection at /api/spawn; GET /api/spawn?command= executes shell and echoes canary output — route-specific OS command injection oracle"
+    }
+  };
+};
+
 const invictiNslookupCommandInjectionProbe: Rule = async (ctx) =>
   (await probeInvictiNslookupCommandInjection(ctx)) ??
   (await probeBrokencrystalsSpawnCommandInjection(ctx)) ??
@@ -74771,6 +74788,50 @@ const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeDvwuSearchSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isDvwuHost(ctx)) return null;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", "'");
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/SQL Syntax Error|Vulnerable Query:/i.test(doc.body)) return null;
+  if (!/Database Leak \(SQL Injection Successful\)|admin@ist\.edu\.bd/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "DVWU GET /api/search?q=' triggers SQL syntax error and leaks admin credentials from the courses table — SQL injection search oracle"
+    }
+  };
+}
+
+const dvwuSearchSqliLiveOracle: Rule = async (ctx) => (await probeDvwuSearchSqli(ctx)) ?? NEGATIVE;
+
+const dvwuSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/sqli|api\/search|search)\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await probeDvwuSearchSqli(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /api/search route scan — single-quote probe triggers SQL error and leaks admin row from courses table — route-specific SQL injection oracle"
+    }
+  };
+};
+
 const dvwuSearchXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -75135,6 +75196,40 @@ const vampiUsersEnumerationLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
+};
+
+const vampiCreatedbUnauthLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const createdbUrl = new URL("/createdb", ctx.origin).toString();
+  const doc = await ctx.probe.get(createdbUrl, { maxBytes: 1024, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/Database populated/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      createdbUrl,
+      snippet: doc.body.slice(0, 120).trim(),
+      note: "VAmPI GET /createdb repopulates the database without authentication — destructive debug endpoint exposed (API8 security misconfiguration)"
+    }
+  };
+};
+
+const vampiCreatedbUnauthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/createdb\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await vampiCreatedbUnauthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /createdb route scan — unauthenticated GET repopulates the database — route-specific security misconfiguration oracle (API8)"
+    }
+  };
 };
 
 const vampiUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
@@ -77843,6 +77938,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,
   brokencrystalsSpawnRouteLiveOracle,
+  brokencrystalsCommandRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
   clientSideVulnlabCmsPlatformEvidence,
   clientSideVulnlabRubyPlatformEvidence,
@@ -78715,6 +78811,8 @@ export const RULES: Record<string, Rule> = {
   istEduCsrfStateChangeLiveOracle,
   istEduCommentsXssRouteLiveOracle,
   dvwuPortalSqliRouteLiveOracle,
+  dvwuSearchSqliLiveOracle,
+  dvwuSearchSqliRouteLiveOracle,
   dvwuCommentsXssRouteLiveOracle,
   dvwuSearchXssRouteLiveOracle,
   dvwuNoticesLfiRouteLiveOracle,
@@ -78729,6 +78827,8 @@ export const RULES: Record<string, Rule> = {
   vampiAdminProfileUnauthRouteLiveOracle,
   vampiUsersEnumerationLiveOracle,
   vampiUsersEnumerationRouteLiveOracle,
+  vampiCreatedbUnauthLiveOracle,
+  vampiCreatedbUnauthRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
   vaultappAdminAuditLogsIdorLiveOracle,
