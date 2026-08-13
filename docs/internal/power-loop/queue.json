@@ -1,10 +1,31 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-13T08:11:59.829Z",
-=======
-  "updated_at": "2026-08-13T08:46:00.000Z",
->>>>>>> e031e63f (docs: log 3 discovery improvements and benchmark validation (2026-08-13 UTC))
+  "updated_at": "2026-08-13T09:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vapi.apisec.ai/vapi/api3/user",
+      "source": "roottusk/vAPI — API3 BOPLA oracle POST/GET /vapi/api3/user (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api6/user",
+      "source": "roottusk/vAPI — API6 mass-assignment oracle /vapi/api6/user (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api7/user",
+      "source": "roottusk/vAPI — API7 security-misconfiguration oracle /vapi/api7/user (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api8/user",
+      "source": "roottusk/vAPI — API8 injection oracle /vapi/api8/user (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api9/user",
+      "source": "roottusk/vAPI — API9 improper-inventory oracle /vapi/api9/user (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api1/user/1",
       "source": "roottusk/vAPI — API1 BOLA oracle GET /vapi/api1/user/{api1_id} (APIsec hosted lab)",
