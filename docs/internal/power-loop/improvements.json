@@ -1,6 +1,36 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-template-ssti-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /template?name={{7*7}} returns Angular SPA shell on Vercel; vulnshopFlaskRouteUrlOracle fires README oracle #6 SSTI; vulnshop.vercel.app/template findings 6→7 (+vulnshop-template-ssti-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-track-order-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /track-order?url= returns SPA shell; README oracle #5 SSRF route mapped via vulnshopFlaskRouteUrlOracle; vulnshop.vercel.app/track-order findings 6→7 (+vulnshop-track-order-ssrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-support-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /support?file= returns SPA shell; README oracle #3 LFI route mapped via vulnshopFlaskRouteUrlOracle; vulnshop.vercel.app/support findings 6→8 (+vulnshop-support-lfi-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-run-diagnostic-cmdi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /run-diagnostic?input= returns SPA shell; README oracle #4 command injection route mapped; vulnshop.vercel.app/run-diagnostic findings 6→7 (+vulnshop-run-diagnostic-cmdi-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README route #2 is reflected XSS on /search?q= not SQLi; vulnshopProductsSqliRouteLiveOracle skips /search-only scans; vulnshop.vercel.app/search findings 8 with vulnshop-search-xss-route-live-oracle replacing wrong sqli slug; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-ssrf-vulnerable-route-live-oracle",
       "status": "shipped",
