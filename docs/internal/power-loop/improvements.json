@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-jwt-alg-confusion-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/jwt-algorithm-confusion-partner-api documents RS256/HS256 confusion with partner-signing-key.pem reused as HMAC secret; koadt.github.io/.../jwt-algorithm-confusion-partner-api findings 5→7 (+client-side-oopssec-jwt-alg-confusion-evidence + route oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-path-traversal-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/path-traversal-documents-api documents /api/files?file=../flag.txt via unsanitized path.join; koadt.github.io/.../path-traversal-documents-api findings 6→8 (+client-side-oopssec-path-traversal-evidence + route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-csrf-admin-order-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/csrf-admin-order-update documents PATCH /api/orders/:id CSRF via sameSite:lax authToken without CSRF/Origin checks; koadt.github.io/.../csrf-admin-order-update findings 10→12 (+client-side-oopssec-csrf-admin-order-evidence + route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:playground.fabraix.com",
       "slug": "fabraix-playground-session-live-oracle",
       "status": "shipped",
@@ -9687,6 +9705,21 @@
       "source": "discovery:demo.aevum.build",
       "slug": "aevum-consent-sigchain-discovery-validation",
       "shipped_at": "2026-08-13T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-jwt-alg-confusion-route-live-oracle",
+      "shipped_at": "2026-08-13T15:30:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-path-traversal-route-live-oracle",
+      "shipped_at": "2026-08-13T15:30:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-csrf-admin-order-route-live-oracle",
+      "shipped_at": "2026-08-13T15:30:00.000Z"
     }
   ]
 }

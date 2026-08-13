@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T15:20:00.000Z",
+  "updated_at": "2026-08-13T15:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2858,
-  "total_findings": 29425,
-  "critical_findings": 61,
+  "total_sites_scanned": 2861,
+  "total_findings": 29452,
+  "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2017,
-  "discovery_findings": 23915,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-13T15:20:00.000Z",
+  "discovery_findings": 23942,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-13T15:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 585,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 42,
-      "focus": "WSL module/1606 expansion + oopssec CVE-2025-29927/SSRF/prompt-injection walkthroughs + vulnforge medium/level3 + aevum queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 27,
+      "focus": "koadt.github.io/oss-oopssec-store JWT alg-confusion + path-traversal + CSRF admin-order route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1606: 10 findings — WSL module-route + IDOR module oracles on new hub",
-      "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927: 7 findings — client-side-nextjs-middleware-cve-evidence + reflexion SSTI",
-      "vulnforge-academy.vercel.app/backend/includes/levels/medium/level3.php: 5 findings — vulnforge-academy-level-sqli-route-live-oracle confirmed",
-      "demo.aevum.build: 9 findings — aevum consent/sigchain live oracles validated (queue drain)",
-      "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant: 6 findings — client-side-prompt-injection-evidence hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "koadt.github.io/.../jwt-algorithm-confusion-partner-api: 5→7 findings — oopssec-jwt-alg-confusion-route-live-oracle shipped",
+      "koadt.github.io/.../path-traversal-documents-api: 6→8 findings — oopssec-path-traversal-route-live-oracle shipped",
+      "koadt.github.io/.../csrf-admin-order-update: 10→12 findings — oopssec-csrf-admin-order-route-live-oracle shipped",
+      "web-security-learning-labs.vercel.app/module/1606: 10 findings — WSL module-route + IDOR module oracles",
+      "demo.aevum.build: 9 findings — aevum consent/sigchain live oracles validated"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec blog walkthrough URLs: GitHub Pages hubs — route live oracles absent without live app host (middleware/SSRF/prompt-injection are evidence hubs only)",
-      "oopssec CVE-2025-29927 walkthrough: middleware-bypass route oracle absent on static GitHub Pages host",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "oopssec middleware/SSRF/prompt-injection walkthroughs: evidence hubs only on static GitHub Pages host",
+      "playground.fabraix.com/challenges/data-exfil-002: data-exfil challenge route oracle not yet validated on queue drain",
+      "vulnforge-academy.vercel.app/.../level2.php: medium tier level2 route oracle absent from queue scan"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update": 12,
+    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 8,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api": 7,
     "web-security-learning-labs.vercel.app/module/1606": 10,
     "demo.aevum.build": 9,
-    "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927": 7,
-    "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant": 6,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level3.php": 5,
-    "demo.owasp-juice.shop/rest/quantitys": 49,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "brokencrystals.com/api/command": 79
   }
 }
