@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T06:36:00.000Z",
+  "updated_at": "2026-08-13T07:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2777,
-  "total_findings": 27591,
+  "total_sites_scanned": 2784,
+  "total_findings": 27974,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
   "discovery_findings": 23172,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-13T06:36:00.000Z",
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-13T07:18:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 583,
+      "probes_run": 585,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,38 +52,39 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 49,
-      "focus": "DVWU search SQLi + Broken Crystals /api/command route + VAmPI /createdb unauth reset",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 336,
+      "focus": "urban-vampi books BOLA + vaultapp notes/users IDOR + Google Firing Range body XSS + ginandjuice productId=2",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "dvwu.vercel.app/labs/sqli: 10→12 findings — dvwu-search-sqli-live-oracle shipped (GET /api/search?q=' leaks admin row)",
-      "brokencrystals.com/api/command: 80→85 findings — brokencrystals-command-route-live-oracle shipped (/api/spawn command injection)",
-      "vampi-production.up.railway.app/createdb: 10→12 findings — vampi-createdb-unauth-live-oracle shipped (unauthenticated DB reset)",
-      "vampi-production.up.railway.app/users/v1/admin: 13 findings — vampi-admin-profile-unauth-live-oracle",
-      "vampi-production.up.railway.app/users/v1: 12 findings — vampi-users-enumeration-route-live-oracle"
+      "public-firing-range.appspot.com/reflected/parameter/body: 249 findings — dense reflected-XSS probe surface on Google Firing Range body oracle",
+      "ginandjuice.shop/catalog/product?productId=2: 33 findings — XXE stock-check variant route (queue drain)",
+      "vaultapp-omega.vercel.app/api/notes/1: 15 findings — private-note IDOR hub (401 without session)",
+      "vaultapp-omega.vercel.app/api/users/1: 15 findings — sequential user-ID enumeration hub (401 without session)",
+      "urban-vampi-production.up.railway.app/books/v1: 12 findings — books list BOLA oracle live on Railway mirror",
+      "urban-vampi-production.up.railway.app/books/v1/1: 12 findings — per-book IDOR route returns 401 but scanner maps auth-gated API surface"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "crapi2.apisec.ai/identity/api/v2/user/videos: connection reset — BOLA oracle blocked by upstream",
-      "damn-vulnerable-startup.fly.dev: host unreachable (DNS failure)",
-      "dvwu.vercel.app/labs/xxe|cmdi: SPA shell only — route-specific oracles still absent"
+      "vaultapp-omega.vercel.app/api/notes|users/1: route-specific IDOR live oracles absent without authenticated JWT session",
+      "urban-vampi-production.up.railway.app/books/v1/1: per-title BOLA oracle blocked by 401 — needs auth token from /users/v1/login",
+      "crapi.apisec.ai + crapi2.apisec.ai: upstream connection reset from cloud agent — BOLA/OTP oracles unreachable this hour"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "brokencrystals.com/api/command": 85,
-    "dvwu.vercel.app/labs/sqli": 12,
-    "vampi-production.up.railway.app/createdb": 12,
+    "public-firing-range.appspot.com/reflected/parameter/body": 249,
+    "ginandjuice.shop/catalog/product?productId=2": 33,
+    "vaultapp-omega.vercel.app/api/notes/1": 15,
+    "vaultapp-omega.vercel.app/api/users/1": 15,
+    "urban-vampi-production.up.railway.app/books/v1": 12,
+    "urban-vampi-production.up.railway.app/books/v1/1": 12,
     "vampi-production.up.railway.app/users/v1/admin": 13,
-    "vampi-production.up.railway.app/users/v1/_debug": 13,
-    "ginandjuice.shop/catalog/product?productId=2": 34,
-    "ginandjuice.shop/my-account/change-address": 30,
-    "dvwu.vercel.app/labs/path-traversal": 11,
-    "vampi-production.up.railway.app/users/v1": 12
+    "brokencrystals.com/api/command": 85,
+    "dvwu.vercel.app/labs/sqli": 12
   }
 }
