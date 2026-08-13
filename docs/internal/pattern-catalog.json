@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-12T23:16:22.718Z",
-  "total": 2200,
-  "uniqueSlugs": 2196,
+  "generatedAt": "2026-08-13T00:22:41.221Z",
+  "total": 2203,
+  "uniqueSlugs": 2199,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2182,
+    "generic": 2185,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2115,
+    "deep": 2118,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 435,
+    "Broken access control": 437,
     "Exposed secret": 102,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 108,
     "Security misconfiguration": 157,
     "Broken authentication": 131,
-    "Injection": 311,
+    "Injection": 312,
     "Cross-site scripting": 679,
     "Open redirect": 19,
     "general": 20,
@@ -1746,6 +1746,7 @@
     "seclab-csrf-vulnerable-route-live-oracle",
     "seclab-idor-vulnerable-route-live-oracle",
     "seclab-nextjs-lab-api-probe",
+    "seclab-path-traversal-route-live-oracle",
     "seclab-sqli-vulnerable-route-live-oracle",
     "seclab-users-vulnerable-route-live-oracle",
     "seclab-xss-vulnerable-route-live-oracle",
@@ -1776,6 +1777,8 @@
     "secure-bank-bay-sqli-login-route-live-oracle",
     "secure-bank-bay-stored-xss-comments-route-live-oracle",
     "secure-bank-bay-stored-xss-messages-route-live-oracle",
+    "secure-bank-bay-transactions-csrf-route-live-oracle",
+    "secure-bank-bay-transfer-csrf-route-live-oracle",
     "security-question-disclosure",
     "sensitive-api-password-leakage",
     "sensitive-api-token-leakage",
