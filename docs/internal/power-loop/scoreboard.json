@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-13T19:22:00.000Z",
-=======
   "updated_at": "2026-08-13T19:28:00.000Z",
->>>>>>> 369f2857 (docs: log 3 discovery oracles + benchmark 6/6 validation (48 findings))
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,7 +15,6 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 2903,
   "total_findings": 30104,
   "critical_findings": 64,
@@ -27,28 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2032,
   "discovery_findings": 24201,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-13T19:22:00.000Z",
-=======
-  "total_sites_scanned": 2897,
-  "total_findings": 30051,
-  "critical_findings": 63,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2027,
-  "discovery_findings": 24147,
   "improvements_shipped": 1199,
   "last_run": "2026-08-13T19:28:00.000Z",
->>>>>>> 369f2857 (docs: log 3 discovery oracles + benchmark 6/6 validation (48 findings))
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 580,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -64,43 +48,6 @@
           ]
         }
       },
-<<<<<<< HEAD
-      "note": "Stable 6/6 recall (47 findings, 36 juice-shop live oracles); no benchmark misses"
-    },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-    "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 54,
-      "focus": "vulnerable-web-site path-traversal/command-injection/sqli + vulnforge medium/level4 + ginandjuice orders BOLA + zen-demo-java execute",
-      "improvements_shipped_this_run": 0
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 36 live oracles) — no benchmark misses",
-      "ginandjuice.shop/my-account/orders: 28 findings — full Gin & Juice oracle bundle (order-details IDOR, admin bypass, XXE, CSTI, SQLi)",
-      "zen-demo-java.fly.dev/pages/execute: 6 findings — zen-demo-java-execute-shell-injection-live-oracle pair",
-      "vulnerable-web-site.vercel.app/path-traversal: 5 findings — generic hub + reflexion SSTI probe (no path-traversal route oracle)",
-      "vulnerable-web-site.vercel.app/command-injection: 5-finding generic hub without command-injection route oracle",
-      "vulnerable-web-site.vercel.app/sqli: 5-finding generic hub without SQLi route oracle",
-      "vulnforge-academy medium/level4.php: 5-finding generic hub without level-specific oracle"
-    ],
-    "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnerable-web-site.vercel.app/path-traversal|command-injection|sqli: 5-finding hubs without route-specific live oracles (same pattern as SSRF/clickjacking)",
-      "vulnforge-academy medium/level4.php: generic 5-finding hub — level-specific challenge oracle absent",
-      "ginandjuice.shop/my-account/orders: orders-route-specific BOLA oracle absent despite 28-finding bundle from site-wide probes"
-    ]
-  },
-  "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "ginandjuice.shop/my-account/orders": 28,
-    "zen-demo-java.fly.dev/pages/execute": 6,
-    "vulnerable-web-site.vercel.app/path-traversal": 5,
-    "vulnerable-web-site.vercel.app/command-injection": 5,
-    "vulnerable-web-site.vercel.app/sqli": 5,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level4.php": 5
-=======
       "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
@@ -119,8 +66,8 @@
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "gdg-benin.vercel.app + web-security-learning-labs module/1609–1610 queued but not drained (queue depth ahead of limit 8)",
-      "vulnforge-academy medium level2/level3 return 403 Forbidden from Vercel — cannot live-oracle"
+      "vulnerable-web-site.vercel.app/path-traversal|command-injection|sqli: 5-finding hubs without route-specific live oracles",
+      "gdg-benin.vercel.app + web-security-learning-labs module/1609–1610 queued but not drained (queue depth ahead of limit 8)"
     ]
   },
   "discovery_highlights": {
@@ -128,10 +75,10 @@
     "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 15,
     "ist-edu-bd.vercel.app/labs/open-redirect": 9,
     "vulnerable-web-site.vercel.app/ssrf": 6,
+    "ginandjuice.shop/my-account/orders": 28,
     "vapi.apisec.ai/vapi/api10/login": 14,
     "ist-edu-bd.vercel.app/labs/idor": 10,
     "web-security-learning-labs.vercel.app/module/1608": 10,
     "attp-live.fly.dev/demo": 5
->>>>>>> 369f2857 (docs: log 3 discovery oracles + benchmark 6/6 validation (48 findings))
   }
 }
