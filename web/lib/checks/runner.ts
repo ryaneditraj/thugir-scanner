@@ -3277,6 +3277,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideWafWorkshopEvidence",
   "clientSideBugforgeLabEvidence",
   "clientSideAikidoZenDemoEvidence",
+  "zenDemoExecuteShellInjectionLiveOracle",
+  "zenDemoExecuteRouteLiveOracle",
+  "codeBreakingPuzzleRouteLiveOracle",
   "clientSideAevumAgentConsentDemoEvidence",
   "clientSideAttpAgentTrustEvidence",
   "clientSideBugzapPromptDefenseEvidence",
@@ -9780,7 +9783,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const zenDemoPrioritySeeds = /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(home.finalUrl)
     ? [
         new URL("/pages/create", home.finalUrl).toString(),
-        new URL("/pages/request", home.finalUrl).toString()
+        new URL("/pages/request", home.finalUrl).toString(),
+        new URL("/pages/execute", home.finalUrl).toString()
       ]
     : [];
   const domgoCxssProgressiveTailSeeds = (() => {
@@ -10839,6 +10843,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           targetInput
         ) &&
         p.slug.startsWith("dvwu-")
+      )
+        return -3;
+      if (
+        /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(origin) &&
+        /\/pages\/execute\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-java-execute")
+      )
+        return -3;
+      if (
+        /code-breaking\.fly\.dev/i.test(origin) &&
+        /\/puzzle\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("code-breaking-puzzle")
       )
         return -3;
       if (

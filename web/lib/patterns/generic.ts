@@ -25198,6 +25198,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "code-breaking-puzzle-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking puzzle route live oracle",
+    description:
+      "When scanning /puzzle/{id}, Code-Breaking publishes open source-code audit puzzles with GitHub source archives and flag submission forms — route-specific code-audit CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /puzzle routes should confirm source-code audit CTF puzzle content with downloadable challenge source.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingPuzzleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /puzzle route scan confirms open source-code audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sanitize-xss-demo-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -45250,6 +45276,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host an Aikido Zen-style security evaluation demo. Show how to isolate rate-limit and bot-blocking test endpoints from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-java-execute-shell-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen demo shell injection live oracle",
+    description:
+      "POST /api/execute on zen-demo-java.fly.dev spawns userCommand via OS process execution — invalid-command-here returns Cannot run program error proving shell injection surface.",
+    impactOneline:
+      "Live shell injection probe confirms unauthenticated OS command execution on the Aikido Zen WAF playground execute endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoExecuteShellInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — never pass user input to shell or ProcessBuilder in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use allow-listed command APIs instead of arbitrary shell execution.",
+        "Keep Aikido Zen WAF rules enabled to block obvious injection payloads in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-java /api/execute endpoint spawns userCommand via OS process. Show shell injection remediation and safe command APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-java-execute-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen /pages/execute route shell injection oracle",
+    description:
+      "When scanning /pages/execute, POST /api/execute spawns userCommand and returns OS Cannot run program error — route-specific shell injection oracle on the Zen live demo.",
+    impactOneline:
+      "Route-scoped scans of /pages/execute should confirm shell injection via the /api/execute JSON API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoExecuteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — never pass user input to shell in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use allow-listed command APIs instead of arbitrary shell execution.",
+        "Keep Aikido Zen WAF rules enabled to block obvious injection payloads in production."
+      ]
+    },
+    fixPrompt:
+      "Our /pages/execute route scan confirms shell injection via /api/execute. Show route-specific remediation.",
     version: 1,
     enabled: true
   },

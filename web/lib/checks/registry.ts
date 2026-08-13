@@ -8478,6 +8478,82 @@ const clientSideAikidoZenDemoEvidence: Rule = async (ctx) => {
   };
 };
 
+const ZEN_EXECUTE_PROBE_CMD = "invalid-command-here";
+
+function isZenDemoHost(ctx: RuleContext): boolean {
+  return /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(ctx.origin);
+}
+
+async function probeZenDemoExecuteShellInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isZenDemoHost(ctx)) return null;
+  const executeUrl = new URL("/api/execute", ctx.origin).toString();
+  const doc = await ctx.probe.get(executeUrl, {
+    method: "POST",
+    body: JSON.stringify({ userCommand: ZEN_EXECUTE_PROBE_CMD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  if (
+    !/Cannot run program|No such file or directory|error=2/i.test(doc.body) ||
+    !ZEN_EXECUTE_PROBE_CMD.test(doc.body)
+  )
+    return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      executeUrl,
+      command: ZEN_EXECUTE_PROBE_CMD,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Aikido Zen demo POST /api/execute runs userCommand via OS process spawn — invalid-command-here returns Cannot run program error proving shell injection surface"
+    }
+  };
+}
+
+const zenDemoExecuteShellInjectionLiveOracle: Rule = async (ctx) =>
+  (await probeZenDemoExecuteShellInjection(ctx)) ?? NEGATIVE;
+
+const zenDemoExecuteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/execute\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoExecuteShellInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen /pages/execute route scan — POST /api/execute spawns userCommand and returns OS Cannot run program error — route-specific shell injection oracle"
+    }
+  };
+};
+
+const codeBreakingPuzzleRouteLiveOracle: Rule = async (ctx) => {
+  if (!/code-breaking\.fly\.dev/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/puzzle\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const titleMatch = corpus.match(/easy\s*-\s*function|medium\s*-\s*\w+|hard\s*-\s*\w+/i);
+  const githubMatch = /github\.com\/phith0n\/code-breaking/i.test(corpus);
+  const flagForm = /csrfmiddlewaretoken|flag.*submit|提交/i.test(corpus);
+  if (!titleMatch && !githubMatch) return NEGATIVE;
+  if (!flagForm && !githubMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: titleMatch && githubMatch ? 0.92 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      puzzleTitle: titleMatch ? titleMatch[0].slice(0, 80) : undefined,
+      snippet: titleMatch ? titleMatch[0] : "Code-Breaking puzzle route",
+      note: "Code-Breaking /puzzle/{id} route scan — open source-code audit puzzle with GitHub source archive and flag submission form — route-specific code-audit CTF oracle"
+    }
+  };
+};
+
 // --- Aevum consent-ledger agent demo (demo.aevum.build) ------------------------------
 const CLIENT_AEVUM_AGENT_CONSENT_DEMO_RES: { label: string; re: RegExp }[] = [
   {
@@ -79485,6 +79561,9 @@ export const RULES: Record<string, Rule> = {
   clientSideWafWorkshopEvidence,
   clientSideBugforgeLabEvidence,
   clientSideAikidoZenDemoEvidence,
+  zenDemoExecuteShellInjectionLiveOracle,
+  zenDemoExecuteRouteLiveOracle,
+  codeBreakingPuzzleRouteLiveOracle,
   clientSideAevumAgentConsentDemoEvidence,
   clientSideAttpAgentTrustEvidence,
   clientSideBugzapPromptDefenseEvidence,
