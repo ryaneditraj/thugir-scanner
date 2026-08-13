@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T01:05:09.935Z",
+  "updated_at": "2026-08-13T02:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnshop.vercel.app/template",
+      "source": "chethan-vinayak/vulnshop — SSTI oracle GET /template?name= (README route #6, Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/track-order",
+      "source": "chethan-vinayak/vulnshop — SSRF oracle GET /track-order?url= (README route #5, Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/support",
+      "source": "chethan-vinayak/vulnshop — LFI oracle GET /support?file= (README route #3, Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/run-diagnostic",
+      "source": "chethan-vinayak/vulnshop — command injection oracle GET /run-diagnostic?input= (README route #4, Vercel deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/search",
+      "source": "chethan-vinayak/vulnshop — reflected XSS oracle GET /search?q= (README route #2, Vercel deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://seclab.vercel.app/api/ssrf-vulnerable",
       "source": "DaniSam-STU/security-lab — SSRF oracle GET /api/ssrf-vulnerable (seclab.vercel.app README)",
