@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T08:23:04.624Z",
-  "total": 2239,
-  "uniqueSlugs": 2235,
+  "generatedAt": "2026-08-13T09:45:11.169Z",
+  "total": 2241,
+  "uniqueSlugs": 2237,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2221,
+    "generic": 2223,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2154,
+    "deep": 2156,
     "continuous": 0
   },
   "byCategory": {
@@ -27,11 +27,11 @@
     "Information disclosure": 108,
     "Security misconfiguration": 161,
     "Broken authentication": 131,
-    "Injection": 326,
+    "Injection": 327,
     "Cross-site scripting": 682,
     "Open redirect": 19,
     "general": 20,
-    "SSRF": 12,
+    "SSRF": 13,
     "Server-side request forgery": 68,
     "Sensitive data exposure": 59,
     "AI security": 52,
@@ -81,6 +81,7 @@
     "brokencrystals-admin-login-bfla-live-oracle",
     "brokencrystals-admin-login-bfla-route-live-oracle",
     "brokencrystals-adminpermission-route-live-oracle",
+    "brokencrystals-api-fetch-live-oracle",
     "brokencrystals-api-fetch-route-live-oracle",
     "brokencrystals-api-file-httpbin-ssrf-live-oracle",
     "brokencrystals-aws-metadata-ssrf-live-oracle",
@@ -1947,6 +1948,7 @@
     "vapi-api6-route-live-oracle",
     "vapi-api7-cors-misconfig-live-oracle",
     "vapi-api7-cors-route-live-oracle",
+    "vapi-api8-login-route-live-oracle",
     "vapi-api8-secret-route-live-oracle",
     "vapi-api8-sqli-login-live-oracle",
     "vapi-api9-improper-inventory-live-oracle",
