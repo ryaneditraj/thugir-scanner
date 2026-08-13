@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T11:32:15.446Z",
-  "total": 2248,
-  "uniqueSlugs": 2244,
+  "generatedAt": "2026-08-13T12:15:13.695Z",
+  "total": 2251,
+  "uniqueSlugs": 2247,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2230,
+    "generic": 2233,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2163,
+    "deep": 2166,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 110,
     "Security misconfiguration": 161,
     "Broken authentication": 131,
-    "Injection": 329,
+    "Injection": 332,
     "Cross-site scripting": 682,
     "Open redirect": 19,
     "general": 20,
@@ -826,6 +826,7 @@
     "client-side-zero-health-evidence",
     "client-side-zeroday-training-evidence",
     "client-side-ziran-agent-security-evidence",
+    "code-breaking-puzzle-route-live-oracle",
     "command-injection-form-probe",
     "convex-open-query-no-auth",
     "cors-reflect-origin",
@@ -2265,6 +2266,8 @@
     "xss-vulnlab-stored-live-oracle",
     "xss-vulnlab-stored-route-live-oracle",
     "xxe-xml-post-probe",
+    "zen-demo-java-execute-route-live-oracle",
+    "zen-demo-java-execute-shell-injection-live-oracle",
     "zerohealth-admin-users-route-live-oracle",
     "zerohealth-ai-chat-sqli-route-live-oracle",
     "zerohealth-chatbot-history-route-live-oracle",

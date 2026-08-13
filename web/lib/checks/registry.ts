@@ -8497,7 +8497,7 @@ async function probeZenDemoExecuteShellInjection(ctx: RuleContext): Promise<Rule
   if (doc.status < 200 || doc.status >= 500) return null;
   if (
     !/Cannot run program|No such file or directory|error=2/i.test(doc.body) ||
-    !ZEN_EXECUTE_PROBE_CMD.test(doc.body)
+    !doc.body.includes(ZEN_EXECUTE_PROBE_CMD)
   )
     return null;
   return {
