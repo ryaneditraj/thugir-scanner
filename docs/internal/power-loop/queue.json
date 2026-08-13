@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T09:12:00.000Z",
+  "updated_at": "2026-08-13T10:18:43.831Z",
   "discovery_urls": [
+    {
+      "url": "https://vapi.apisec.ai/vapi/api10/user",
+      "source": "roottusk/vAPI — API10 unsafe-consumption oracle /vapi/api10/user (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file?url=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — SSRF oracle GET /api/file?url= variant (README endpoint family)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/ssti",
+      "source": "zahidoverflow/dvwu — SSTI lab /labs/ssti (DVWU Vercel deploy README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/deserialization",
+      "source": "zahidoverflow/dvwu — insecure deserialization lab /labs/deserialization (DVWU Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/dvwu — JWT algorithm confusion lab /labs/jwt (DVWU Vercel deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api3/user",
       "source": "roottusk/vAPI — API3 BOPLA oracle POST/GET /vapi/api3/user (APIsec hosted lab)",
