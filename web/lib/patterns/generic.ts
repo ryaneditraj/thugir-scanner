@@ -53932,6 +53932,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-portal-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU portal SQL injection live oracle",
+    description:
+      "POST /api/portal with admin' OR '1'='1 bypasses authentication on dvwu.vercel.app — Damn Vulnerable Web University SQL injection login oracle.",
+    impactOneline:
+      "String-concatenated SQL in login queries lets attackers bypass authentication without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuPortalSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic login failure messages without SQL error details.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /api/portal route accepts SQL injection in the username field for authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-portal-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -54266,6 +54292,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/redirect route accepts //https:/// bypass while blocking metadata URLs. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-ssrf-redirect-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "DVWU redirect whitelist bypass SSRF live oracle",
+    description:
+      "GET /api/redirect?url= accepts //https:/// malformed bypass payloads with HTTP 302 while blocking AWS metadata — DVWU SSRF/open redirect training oracle.",
+    impactOneline:
+      "Broken redirect allow-lists let attackers chain open redirects toward internal or attacker-controlled targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuSsrfRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — validate redirect targets with strict URL parsing, not substring allow-lists.",
+      steps: [
+        "Parse redirect URLs with a strict URL library and compare hostnames exactly.",
+        "Reject protocol-relative and malformed scheme bypass payloads.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /api/redirect endpoint accepts //https:/// whitelist bypass. Show redirect allow-list hardening.",
     version: 1,
     enabled: true
   },
@@ -55332,6 +55384,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our GET /api/file?path= endpoint fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-api-file-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/file route URL SSRF live oracle",
+    description:
+      "When scanning /api/file, GET /api/file?path=https://example.com/ fetches attacker-controlled URLs server-side and returns the response body — route-specific Broken Crystals URL SSRF oracle.",
+    impactOneline:
+      "Route-scoped scans of /api/file should confirm server-side URL fetching via the path parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiFileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF on /api/file path parameter — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to internal, link-local, and cloud metadata addresses.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file route scan confirms GET /api/file?path= fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering.",
     version: 1,
     enabled: true
   },
