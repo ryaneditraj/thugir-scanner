@@ -6579,6 +6579,66 @@ const oopssecSupplyChainPoisonedRulesRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store insecure gift-card randomness (posts/insecure-randomness-gift-card) -
+const CLIENT_OOPSSEC_GIFT_CARD_RANDOMNESS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Insecure randomness gift card title",
+    re: /Insecure Randomness:[\s\S]{0,80}recovering a gift card code from its timestamp/i
+  },
+  {
+    label: "LCG generateGiftCardCode seeded with createdAt",
+    re: /generateGiftCardCode\(createdAt\.getTime\(\)\)|linear congruential generator \(LCG\) seeded with the card's`?createdAt`?/i
+  },
+  {
+    label: "Math.imul 1103515245 LCG constants",
+    re: /Math\.imul\(state, 1103515245\) \+ 12345|1103515245 and 12345/i
+  },
+  {
+    label: "GET /api/gift-cards exposes createdAt millisecond seed",
+    re: /GET \/api\/gift-cards|createdAt.*millisecond|\/profile\/gift-cards/i
+  },
+  {
+    label: "Gift card randomness walkthrough route",
+    re: /\/posts\/insecure-randomness-gift-card/i
+  }
+];
+
+const clientSideOopssecGiftCardRandomnessEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_GIFT_CARD_RANDOMNESS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|gift card|generateGiftCardCode|LCG|createdAt/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents LCG gift-card codes seeded with createdAt millisecond timestamps exposed via GET /api/gift-cards"
+    }
+  };
+};
+
+const oopssecGiftCardRandomnessRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/insecure-randomness-gift-card/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecGiftCardRandomnessEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/insecure-randomness-gift-card route scan — walkthrough documents LCG generateGiftCardCode(createdAt.getTime()) with millisecond seed leaked via /api/gift-cards"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -68041,6 +68101,61 @@ const vulnerableWebSiteClickjackingRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const vulnerableWebSiteSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const session = await vulnerableWebSiteSessionCookie(ctx);
+  if (session) {
+    const probeUrl = new URL("/api/ssrf?url=http://127.0.0.1:3000/", ctx.origin).toString();
+    const probeDoc = await ctx.probe.get(probeUrl, {
+      headers: { Cookie: session },
+      maxBytes: 4096,
+      timeoutMs: 20000,
+      redirect: "manual"
+    });
+    if (probeDoc.status >= 200 && probeDoc.status < 400 && !/\/login\b/i.test(probeDoc.body)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          scannedUrl: pageUrl,
+          probeUrl,
+          status: probeDoc.status,
+          snippet: probeDoc.body.slice(0, 200).trim(),
+          note: "vulnerable-web-site.vercel.app GET /api/ssrf fetches attacker-controlled URLs server-side when ENABLE_SSRF is enabled — route-specific SSRF training oracle"
+        }
+      };
+    }
+  }
+  const ssrfPageDoc = await ctx.probe.get(new URL("/ssrf", ctx.origin).toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loginRedirect =
+    /\/login\b/i.test(ctx.home.finalUrl || "") ||
+    /\/login\b/i.test(pageUrl) ||
+    ([301, 302, 303, 307, 308].includes(ssrfPageDoc.status) && /\/login\b/i.test(ssrfPageDoc.headers["location"] || ""));
+  const documentsSsrf =
+    /SSRF \(Server-Side Request Forgery\)/i.test(ctx.combined) ||
+    /ENABLE_SSRF/i.test(ctx.combined) ||
+    /vulnerable-web-site\.vercel\.app/i.test(pageUrl);
+  if (!loginRedirect && !documentsSsrf) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: session ? 0.9 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      ssrfStatus: ssrfPageDoc.status,
+      location: ssrfPageDoc.headers["location"] || "",
+      note: loginRedirect
+        ? "vulnerable-web-site.vercel.app /ssrf route redirects to login; README documents optional ENABLE_SSRF server-side fetch lab — route-specific SSRF training oracle"
+        : "vulnerable-web-site.vercel.app documents SSRF (Server-Side Request Forgery) reproduction lab — route-specific SSRF training oracle"
+    }
+  };
+};
+
 // --- Nivara security assessment platform (cybersec-demo.vercel.app) -------------------
 const CLIENT_NIVARA_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
@@ -76353,6 +76468,32 @@ const istEduSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const istEduOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/labs\/open-redirect\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Redirecting in|Open redirect via Location header/i.test(bundle)) return NEGATIVE;
+  if (!/\/redirect\?url=|approved IST domains|External Redirect Blocked/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["Redirecting in", "Open redirect via Location header", "/redirect?url="],
+      snippet: bundle.match(/Open redirect via Location header[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "IST Edu /labs/open-redirect route scan — SPA documents unvalidated /redirect?url= open redirect with countdown UI and Location-header phishing chain"
+    }
+  };
+};
+
 const dvwuSsrfRedirectLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const result = await probeRedirectWhitelistBypass(ctx);
@@ -79348,6 +79489,7 @@ export const RULES: Record<string, Rule> = {
   vulnerableWebSiteCsrfRouteLiveOracle,
   vulnerableWebSiteStoredXssRouteLiveOracle,
   vulnerableWebSiteClickjackingRouteLiveOracle,
+  vulnerableWebSiteSsrfRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
@@ -80163,6 +80305,7 @@ export const RULES: Record<string, Rule> = {
   allSeeingEyeReadRouteLiveOracle,
   allSeeingEyeHelloRouteLiveOracle,
   istEduSsrfRedirectRouteLiveOracle,
+  istEduOpenRedirectRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
   dvwuFilesClientLfiRouteLiveOracle,
@@ -80286,6 +80429,8 @@ export const RULES: Record<string, Rule> = {
   oopssecNextPublicEnvRouteLiveOracle,
   clientSideOopssecSupplyChainEvidence,
   oopssecSupplyChainPoisonedRulesRouteLiveOracle,
+  clientSideOopssecGiftCardRandomnessEvidence,
+  oopssecGiftCardRandomnessRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
