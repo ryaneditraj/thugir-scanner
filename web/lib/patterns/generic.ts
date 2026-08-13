@@ -38945,6 +38945,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api8-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "vAPI API8 login route SQLi live oracle",
+    description:
+      "When scanning /api8/user/login, POST accepts SQLi `' OR '1'='1` bypass and chains to /api8/user/secret admin flag — route-specific API8 injection oracle.",
+    impactOneline:
+      "Route-specific scans on the login endpoint should confirm SQL injection authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi8LoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — use parameterized queries for every login path in production.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic auth failures without SQL syntax errors.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api8/user/login route scan confirms SQLi authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api8-secret-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -55206,13 +55232,39 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-api-fetch-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "Broken Crystals /api/fetch SSRF live oracle",
+    description:
+      "GET /api/fetch?url= fetches attacker-controlled URLs server-side when the README SSRF endpoint is deployed — Broken Crystals fetch oracle.",
+    impactOneline:
+      "Unvalidated /api/fetch URL parameters let attackers reach internal services and cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiFetchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side URL fetchers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove or restrict /api/fetch URL parameters in production.",
+        "Deny RFC1918, link-local, and cloud metadata destinations at egress.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/fetch?url= endpoint fetches arbitrary URLs server-side. Show SSRF remediation with egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-api-fetch-route-live-oracle",
     platform: "generic",
     category: "SSRF",
     severityDefault: "high",
     title: "Broken Crystals /api/fetch route SSRF live oracle",
     description:
-      "When scanning /api/fetch?url=, sibling GET /api/file?path= fetches external URLs server-side even though /api/fetch returns 404 — route-specific SSRF confirmation oracle.",
+      "When scanning /api/fetch?url=, probes GET /api/fetch first then falls back to sibling GET /api/file?path= when fetch returns 404 — route-specific SSRF confirmation oracle.",
     impactOneline:
       "Route scans on /api/fetch confirm the Broken Crystals SSRF training surface via the live /api/file fetcher.",
     detectorKind: "rule_ref",

