@@ -8722,6 +8722,90 @@ const attpAgentRevokeUnauthRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const FABRAIX_API_ORIGIN = "https://api.fabraix.com";
+const FABRAIX_LIVE_CHALLENGE_IDS = new Set(["access-code-001", "data-exfil-001", "biosafety-001"]);
+
+function isFabraixPlaygroundHost(ctx: RuleContext): boolean {
+  const hint = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /playground\.fabraix\.com|api\.fabraix\.com/i.test(hint);
+}
+
+function fabraixChallengeIdFromScan(ctx: RuleContext): string {
+  const hint = `${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  const slug = hint.match(/\/challenges\/([a-z0-9-]+)/i)?.[1]?.toLowerCase();
+  if (slug && FABRAIX_LIVE_CHALLENGE_IDS.has(slug)) return slug;
+  if (slug === "data-exfil-002") return "data-exfil-001";
+  return "access-code-001";
+}
+
+async function probeFabraixPlaygroundSession(ctx: RuleContext, challengeId?: string) {
+  const cid = challengeId || fabraixChallengeIdFromScan(ctx);
+  const startUrl = `${FABRAIX_API_ORIGIN}/v1/playground/sessions/start`;
+  const userId = `thugir-fabraix-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const doc = await ctx.probe.get(startUrl, {
+    method: "POST",
+    body: JSON.stringify({ challenge_id: cid, user_identifier: userId }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: {
+    sessionId?: string;
+    guardrailsRunId?: string;
+    challenge?: { id?: string; name?: string };
+  };
+  try {
+    parsed = JSON.parse(doc.body) as {
+      sessionId?: string;
+      guardrailsRunId?: string;
+      challenge?: { id?: string; name?: string };
+    };
+  } catch {
+    return null;
+  }
+  if (!parsed.sessionId || !parsed.guardrailsRunId) return null;
+  return {
+    startUrl,
+    challengeId: parsed.challenge?.id || cid,
+    challengeName: parsed.challenge?.name,
+    sessionId: parsed.sessionId,
+    guardrailsRunId: parsed.guardrailsRunId,
+    snippet: doc.body.slice(0, 240).trim()
+  };
+}
+
+const fabraixPlaygroundSessionLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      note: "Fabraix POST /v1/playground/sessions/start creates unauthenticated agent red-team sessions with guardrailsRunId — playground challenge oracle"
+    }
+  };
+};
+
+const fabraixPlaygroundSessionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/[a-z0-9-]+/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/* route scan — POST /v1/playground/sessions/start creates unauthenticated agent sessions — route-specific red-team oracle"
+    }
+  };
+};
+
 function isAevumDemoHost(ctx: RuleContext): boolean {
   return /demo\.aevum\.build/i.test(ctx.origin);
 }
@@ -79776,6 +79860,8 @@ export const RULES: Record<string, Rule> = {
   clientSideAttpAgentTrustEvidence,
   attpAgentRevokeUnauthLiveOracle,
   attpAgentRevokeUnauthRouteLiveOracle,
+  fabraixPlaygroundSessionLiveOracle,
+  fabraixPlaygroundSessionRouteLiveOracle,
   clientSideBugzapPromptDefenseEvidence,
   clientSideRedlockxPromptFirewallEvidence,
   clientSideHaoziXssChallengeEvidence,

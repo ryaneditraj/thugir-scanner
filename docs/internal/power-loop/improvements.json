@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-playground-session-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://api.fabraix.com/v1/playground/sessions/start challenge_id=data-exfil-001 returns sessionId+guardrailsRunId without auth; playground.fabraix.com/challenges/data-exfil-002 findings 4→6; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-command-route-priority-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/spawn?command=echo thugirSpawnCmdCanary returns canary; brokencrystals.com/api/command gained brokencrystals-spawn-command-injection-live-oracle + brokencrystals-command-route-live-oracle via route priority + /api/command warmup; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-consent-sigchain-discovery-validation",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /v1/consent/review returns review_id+audit_id; POST /v1/replay/{audit_id} reconstructs audit without auth; demo.aevum.build queue target 9 findings with consent+sigchain oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:attp-live.fly.dev",
       "slug": "attp-agent-revoke-unauth-live-oracle",
       "status": "shipped",
@@ -9654,6 +9672,21 @@
       "source": "discovery:demo.aevum.build",
       "slug": "aevum-sigchain-replay-unauth-live-oracle",
       "shipped_at": "2026-08-13T13:30:00.000Z"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-playground-session-live-oracle",
+      "shipped_at": "2026-08-13T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-command-route-priority-fix",
+      "shipped_at": "2026-08-13T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:demo.aevum.build",
+      "slug": "aevum-consent-sigchain-discovery-validation",
+      "shipped_at": "2026-08-13T14:30:00.000Z"
     }
   ]
 }

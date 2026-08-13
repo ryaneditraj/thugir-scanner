@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T13:27:12.694Z",
-  "total": 2257,
-  "uniqueSlugs": 2253,
+  "generatedAt": "2026-08-13T14:32:22.301Z",
+  "total": 2259,
+  "uniqueSlugs": 2255,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2239,
+    "generic": 2241,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2172,
+    "deep": 2174,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 14,
     "Server-side request forgery": 69,
     "Sensitive data exposure": 59,
-    "AI security": 52,
+    "AI security": 54,
     "Business logic": 19,
     "Cross-site request forgery": 2,
     "Insecure file upload": 2,
@@ -947,6 +947,8 @@
     "exposed-git-dir",
     "exposed-infra-artifacts",
     "exposed-source-maps",
+    "fabraix-playground-session-live-oracle",
+    "fabraix-playground-session-route-live-oracle",
     "fauxbank-accounts-route-live-oracle",
     "fauxbank-admin-panel-live-oracle",
     "fauxbank-admin-route-live-oracle",

@@ -1,6 +1,11 @@
 {
-  "updated_at": "2026-08-13T13:26:00.000Z",
+  "updated_at": "2026-08-13T14:30:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://demo.aevum.build",
+      "source": "Aevum consent-ledger demo — unauthenticated POST /v1/consent/review + /v1/replay/{audit_id} sigchain APIs (demo.aevum.build)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://playground.fabraix.com/challenges/data-exfil-002",
       "source": "fabraix/playground — Show HN AI agent data-exfil challenge v2 with harder outbound-request defenses (GitHub challenges/)",
