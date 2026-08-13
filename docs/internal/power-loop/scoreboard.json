@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T03:30:00.000Z",
+  "updated_at": "2026-08-13T04:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2751,
-  "total_findings": 27039,
-  "critical_findings": 56,
+  "total_sites_scanned": 2758,
+  "total_findings": 27130,
+  "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1968,
-  "discovery_findings": 22761,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-13T03:30:00.000Z",
+  "discovery_urls_added": 1973,
+  "discovery_findings": 22807,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-13T04:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 45,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 585,
+      "probes_run": 579,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,31 +52,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_scanned": 3,
-      "findings_delta": "+3 route oracles",
-      "focus": "vulnshop /api/xml-import XXE + /upload-review file upload + vulnerable-web-site /clickjacking frameable profile"
+      "urls_added": 5,
+      "urls_scanned": 6,
+      "findings": 46,
+      "focus": "DVWU lab routes (lfi/xxe/cmdi/path-traversal) + VAmPI _debug dump + ist-edu newsletter CRLF drain"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
-      "vulnshop.vercel.app/api/xml-import: 7→8 findings — vulnshop-xml-import-xxe-route-live-oracle shipped (README oracle #7)",
-      "vulnshop.vercel.app/upload-review: 6→7 findings — vulnshop-upload-review-file-upload-route-live-oracle shipped (README oracle #10)",
-      "vulnerable-web-site.vercel.app/clickjacking: 4→6 findings — vulnerable-web-site-clickjacking-route-live-oracle shipped (empty X-Frame-Options)"
+      "vampi-production.up.railway.app/users/v1/_debug: 9 findings — openapi-debug-password-exposure + vampi-user-bola-live-oracle (mass user dump)",
+      "ist-edu-bd.vercel.app/api/newsletter: 5 findings — ist-edu-newsletter-crlf-route-live-oracle live",
+      "dvwu.vercel.app/labs/*: 8 findings each — notices-file-lfi-probe + client-side-ist-edu-vuln-portal-evidence; route-specific XXE/cmdi/path-traversal live oracles absent (shared SPA shell)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnshop Railway backend (vulnshop-production.up.railway.app) undeployed — live Flask probes fall back to README URL oracle on Vercel SPA shell",
-      "vulnerable-web-site.vercel.app/ssrf: route-specific SSRF oracle still absent (ENABLE_SSRF=false on Vercel deploy)"
+      "dvwu.vercel.app/labs/xxe|cmdi|path-traversal: route-specific live oracles absent — all four lab URLs share identical 8-finding hub via IST SPA shell",
+      "ginandjuice.shop/my-account/*: head-of-queue routes still undrained (change-password/delete/change-address skipped by POWER_SCAN_LIMIT=6)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 45,
-    "vulnshop.vercel.app/api/xml-import": 8,
-    "vulnshop.vercel.app/upload-review": 7,
-    "vulnerable-web-site.vercel.app/clickjacking": 6,
-    "vulnshop.vercel.app/search": 8,
-    "vulnshop.vercel.app/support": 8,
-    "ginandjuice.shop/catalog/product?productId=2": 31,
+    "vampi-production.up.railway.app/users/v1/_debug": 9,
+    "dvwu.vercel.app/labs/lfi": 8,
+    "dvwu.vercel.app/labs/xxe": 8,
+    "dvwu.vercel.app/labs/cmdi": 8,
+    "dvwu.vercel.app/labs/path-traversal": 8,
+    "ist-edu-bd.vercel.app/api/newsletter": 5,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

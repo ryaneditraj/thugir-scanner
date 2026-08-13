@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T03:06:00.000Z",
+  "updated_at": "2026-08-13T04:07:55.884Z",
   "discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/lfi",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI training lab /labs/lfi (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/xxe",
+      "source": "zahidoverflow/damn-vulnerable-web-university — XXE training lab /labs/xxe (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/cmdi",
+      "source": "zahidoverflow/damn-vulnerable-web-university — command injection lab /labs/cmdi (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/path-traversal",
+      "source": "zahidoverflow/damn-vulnerable-web-university — path traversal lab /labs/path-traversal (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/_debug",
+      "source": "erev0s/VAmPI — mass-assignment / debug user dump oracle GET /users/v1/_debug (Railway public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/api/newsletter",
       "source": "zahidoverflow/damn-vulnerable-web-university — CRLF injection oracle POST /api/newsletter (README vuln #6)",
