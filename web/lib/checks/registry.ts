@@ -2078,8 +2078,10 @@ const HEROKU_STUB_RE = /Application Error|herokucdn\.com\/error-pages/i;
 /** Juice Shop SPA routes often use kebab-case /rest/* aliases for PascalCase API resources. */
 const JUICE_SHOP_REST_KEBAB_ALIASES: Record<string, string> = {
   "Cards\\b": "cards",
+  "Deliverys(?:/\\d+)?\\b": "deliverys",
   "Feedbacks\\b": "feedbacks",
   "PrivacyRequests\\b": "privacy-requests",
+  "Quantitys\\b": "quantitys",
   "SecurityQuestions\\b": "security-?questions?"
 };
 
@@ -8061,6 +8063,28 @@ const vulnforgeAcademyLevelXssRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const vulnforgeAcademyLevelSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  const sstiHit = await reflexionEscalatedSsti(ctx);
+  if (!sstiHit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sstiHit.confidence,
+    evidence: {
+      ...sstiHit.evidence,
+      scannedUrl: pageUrl,
+      level: levelNum,
+      note:
+        levelNum !== null
+          ? `VulnForge Academy level ${levelNum} route scan — reflexion SSTI probe confirms server-side template injection on level route`
+          : "VulnForge Academy level route scan — reflexion SSTI probe confirms server-side template injection on level route"
+    }
+  };
+};
+
 const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
   number,
   { vulnerability: string; note: string }
@@ -9342,6 +9366,24 @@ const fabraixPlaygroundSessionRouteLiveOracle: Rule = async (ctx) => {
       ...probe,
       scannedUrl: pageUrl,
       note: "Fabraix /challenges/* route scan — POST /v1/playground/sessions/start creates unauthenticated agent sessions — route-specific red-team oracle"
+    }
+  };
+};
+
+const fabraixDataExfil002RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/data-exfil-002/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "data-exfil-001");
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      challengeRoute: "data-exfil-002",
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/data-exfil-002 route scan — v2 data-exfil challenge (harder outbound-request defenses) maps to data-exfil-001 backend; unauthenticated session with verify_identity exfil_via_request oracle"
     }
   };
 };
@@ -27217,6 +27259,16 @@ const FABRAIX_CHALLENGE_SLUGS: Record<string, { topic: string; res: RegExp[] }> 
   "data-exfil-001": {
     topic: "data exfiltration agent challenge",
     res: [/data-exfil-001/i, /data.exfil/i, /exfiltrat/i, /challenge-objective/i]
+  },
+  "data-exfil-002": {
+    topic: "data exfiltration agent challenge v2 (harder outbound defenses)",
+    res: [
+      /data-exfil-002/i,
+      /harder outbound/i,
+      /verify_identity/i,
+      /sentinelid/i,
+      /exfil_via_request/i
+    ]
   },
   "prompt-injection-001": {
     topic: "prompt injection agent challenge",
@@ -80280,6 +80332,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnforgeAcademyLevel6SqliRouteLiveOracle,
   vulnforgeAcademyLevelXssRouteLiveOracle,
+  vulnforgeAcademyLevelSstiRouteLiveOracle,
   vulnforgeAcademyLevelSsrfRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
@@ -80420,6 +80473,7 @@ export const RULES: Record<string, Rule> = {
   attpAgentRevokeUnauthRouteLiveOracle,
   fabraixPlaygroundSessionLiveOracle,
   fabraixPlaygroundSessionRouteLiveOracle,
+  fabraixDataExfil002RouteLiveOracle,
   clientSideBugzapPromptDefenseEvidence,
   clientSideRedlockxPromptFirewallEvidence,
   clientSideHaoziXssChallengeEvidence,
