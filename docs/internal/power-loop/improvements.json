@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-catalog-1613",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /module/1613 returns Here is a Module: 1613 placeholder shell; WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1612→1613 + IDOR curated topic 1613; web-security-learning-labs.vercel.app/module/1613 findings 7→7 with +placeholder-module-route-live-oracle +idor-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-jwt-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwuJwtLabRouteLiveOracle confirms /labs/jwt with live /api/search SQLi probe; dvwu.vercel.app/labs/jwt findings 11→12 (+dvwu-jwt-lab-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-deserialization-ssti-lab-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwuDeserializationLabRouteLiveOracle + dvwuSstiLabRouteLiveOracle confirm /labs/deserialization and /labs/ssti with live DVWU injection oracle; deserialization 11→12 (+dvwu-deserialization-lab-route-live-oracle); ssti 11→12 (+dvwu-ssti-lab-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-catalog-1612",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /module/1612 Vercel checkpoint fallback + placeholder shell map; WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1611→1612; web-security-learning-labs.vercel.app/module/1612 findings 7→10 (+placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
