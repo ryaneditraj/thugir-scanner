@@ -7395,6 +7395,21 @@
   ],
   "shipped_log": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-xml-import-xxe-route-live-oracle",
+      "shipped_at": "2026-08-13T03:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-upload-review-file-upload-route-live-oracle",
+      "shipped_at": "2026-08-13T03:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-clickjacking-route-live-oracle",
+      "shipped_at": "2026-08-13T03:30:00.000Z"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-checkout-private-coupon-route-live-oracle",
       "shipped_at": "2026-07-28T21:25:00.000Z"
