@@ -27720,6 +27720,81 @@ const vampiBookBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeVampiBooksStaleCatalog(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVampiHost(ctx)) return null;
+  const auth = await tryVampiLabJwt(ctx);
+  if (!auth) return null;
+  const listUrl = new URL("/books/v1", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${auth.token}` }
+  });
+  if (listDoc.status < 200 || listDoc.status >= 300) return null;
+  let books: Array<{ book_title?: string; user?: string }>;
+  try {
+    const data = JSON.parse(listDoc.body) as { Books?: Array<{ book_title?: string; user?: string }> };
+    books = data.Books ?? [];
+  } catch {
+    return null;
+  }
+  const foreign = books.filter((b) => b.book_title && b.user && b.user !== auth.username);
+  if (foreign.length === 0) return null;
+  const staleTitles: string[] = [];
+  for (const book of foreign) {
+    const bookTitle = book.book_title!;
+    const bookUrl = new URL(`/books/v1/${encodeURIComponent(bookTitle)}`, ctx.origin).toString();
+    const bookDoc = await ctx.probe.get(bookUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${auth.token}` }
+    });
+    if (bookDoc.status >= 200 && bookDoc.status < 300) {
+      try {
+        const parsed = JSON.parse(bookDoc.body) as { secret?: string; owner?: string };
+        if (parsed.secret && parsed.owner && parsed.owner !== auth.username) return null;
+      } catch {
+        /* not a successful BOLA read */
+      }
+      continue;
+    }
+    if (/Book not found|status"\s*:\s*"fail"/i.test(bookDoc.body)) staleTitles.push(bookTitle);
+  }
+  if (staleTitles.length < foreign.length) return null;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      listUrl,
+      caller: auth.username,
+      staleTitles: staleTitles.slice(0, 5),
+      foreignOwners: [...new Set(foreign.map((b) => b.user!))].slice(0, 3),
+      snippet: listDoc.body.slice(0, 200).trim(),
+      note: `VAmPI GET /books/v1 lists ${foreign.length} foreign-owned book(s) but every GET /books/v1/{title} returns not-found — stale catalog leaks ownership metadata without granting object access (broken mirror / inconsistent authorization state)`
+    }
+  };
+}
+
+const vampiBooksStaleCatalogLiveOracle: Rule = async (ctx) =>
+  (await probeVampiBooksStaleCatalog(ctx)) ?? NEGATIVE;
+
+const vampiBooksStaleCatalogRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/books\/v1(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeVampiBooksStaleCatalog(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /books/v1 route scan — catalog lists foreign-owned books but individual book GETs all return not-found — stale catalog information disclosure oracle"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -73713,6 +73788,23 @@ const vapiApi3CommentRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vapiApi3UserRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api3\/user\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi3CommentBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api3/user route scan — GET /api3/comment returns every comment JSON without authentication — BOLA / excessive data exposure oracle (API3)"
+    }
+  };
+};
+
 const vapiApi5BflaLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const username = `thugir_bfla_${Date.now()}`;
@@ -74129,6 +74221,24 @@ const vapiApi8LoginRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "vAPI /api8/user/login route scan — POST accepts SQLi `' OR '1'='1` bypass and chains to /api8/user/secret admin flag — API8 injection route oracle"
+    }
+  };
+};
+
+const vapiApi8UserRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api8\/user\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/api8\/user\/(?:login|secret)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi8SqliLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api8/user route scan — POST /api8/user/login accepts SQLi `' OR '1'='1` bypass and /api8/user/secret dumps admin flag — API8 injection route oracle"
     }
   };
 };
@@ -78406,6 +78516,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi2RouteLiveOracle,
   vapiApi3CommentBolaLiveOracle,
   vapiApi3CommentRouteLiveOracle,
+  vapiApi3UserRouteLiveOracle,
   vapiApi4OtpBrokenAuthLiveOracle,
   vapiApi4OtpRouteLiveOracle,
   vapiApi4UserExposureLiveOracle,
@@ -78416,6 +78527,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi8SqliLoginLiveOracle,
   vapiApi8SecretRouteLiveOracle,
   vapiApi8LoginRouteLiveOracle,
+  vapiApi8UserRouteLiveOracle,
   vapiApi7CorsMisconfigLiveOracle,
   vapiApi7CorsRouteLiveOracle,
   vapiApi9ImproperInventoryLiveOracle,
@@ -79098,6 +79210,8 @@ export const RULES: Record<string, Rule> = {
   vampiBooksRouteLiveOracle,
   vampiBookBolaLiveOracle,
   vampiBookBolaRouteLiveOracle,
+  vampiBooksStaleCatalogLiveOracle,
+  vampiBooksStaleCatalogRouteLiveOracle,
   http403BypassProbe,
   bypass403AdminLiveOracle,
   bypass403AdminRouteLiveOracle,
