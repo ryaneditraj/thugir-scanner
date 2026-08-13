@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T21:17:00.000Z",
+  "updated_at": "2026-08-13T22:38:32.630Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2920,
-  "total_findings": 30454,
+  "total_sites_scanned": 2927,
+  "total_findings": 30581,
   "critical_findings": 104,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2042,
-  "discovery_findings": 24457,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-13T21:17:00.000Z",
+  "discovery_urls_added": 2047,
+  "discovery_findings": 24536,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-13T22:38:32.630Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 580,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47-48 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 161,
-      "focus": "WSL 1611-1612 + DVWU graphql/race + fauxbank transfer + brokencrystals SSRF drain + OopsSec price-manipulation + VulnForge level4",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 6,
+      "findings": 79,
+      "focus": "WrongSecrets ch10-12 CSI/IAM/Docker + WSL module/1613 + VulnSite cmdi + DVWU SSTI drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47-48 findings) — no benchmark misses",
-      "brokencrystals.com/api/file: 85 findings — first scan fires full JWT/SSRF/MCP oracle bundle (36 critical)",
-      "pentest-fauxbank.vercel.app/api/transfer: 15 findings — fauxbank-transfer-route-live-oracle + CSRF transfer probe",
-      "koadt.github.io/.../client-side-price-manipulation: 6→8 findings — oopssec-price-manipulation-route-live-oracle shipped (concurrent run)",
-      "vulnforge-academy.vercel.app/.../level4.php: 5→6 findings — vulnforge-academy-level4-sqli-route-live-oracle shipped",
-      "web-security-learning-labs.vercel.app/module/1611: 8-10 findings — WSL catalog extended to 1611 with IDOR topic",
-      "dvwu.vercel.app/labs/graphql: 11 findings — generic DVWU portal bundle, no GraphQL-route-specific oracle",
-      "dvwu.vercel.app/labs/race-condition: 11 findings — generic DVWU portal bundle, no race-route-specific oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-10: 15 findings — wrongsecrets-challenge-10-csi-driver-route-live-oracle fires",
+      "wrongsecrets.herokuapp.com/challenge/challenge-11: 15 findings — wrongsecrets-challenge-11-iam-escalation-route-live-oracle fires",
+      "wrongsecrets.herokuapp.com/challenge/challenge-12: 15 findings — wrongsecrets-challenge-12-docker-route-live-oracle fires",
+      "vuln-expose.vercel.app/cmdi: 16 findings — vuln-expose-cmdi-route-live-oracle + reflexion-escalated-ssti",
+      "dvwu.vercel.app/labs/ssti: 11 findings — generic DVWU portal bundle, no SSTI-route-specific oracle",
+      "web-security-learning-labs.vercel.app/module/1613: 7 findings — placeholder shell, module-route evidence only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "dvwu.vercel.app/labs/graphql: 11-finding generic hub without GraphQL injection live oracle",
-      "dvwu.vercel.app/labs/race-condition: 11-finding generic hub without race-condition live oracle",
-      "web-security-learning-labs module/1612: placeholder shell absent — only module-route evidence fires",
+      "dvwu.vercel.app/labs/ssti: 11-finding generic hub without SSTI-route-specific live oracle",
+      "web-security-learning-labs module/1613: placeholder shell — only module-route evidence fires",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnerable-web-site.vercel.app/path-traversal|command-injection|sqli: routes redirect to login — not in official README vuln list"
+      "dvwu.vercel.app/labs/graphql|race-condition: route-specific oracles still absent from prior runs"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "vuln-expose.vercel.app/cmdi": 16,
+    "wrongsecrets.herokuapp.com/challenge/challenge-10": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-11": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-12": 15,
+    "dvwu.vercel.app/labs/ssti": 11,
+    "web-security-learning-labs.vercel.app/module/1613": 7,
     "brokencrystals.com/api/file": 85,
-    "pentest-fauxbank.vercel.app/api/transfer": 15,
-    "dvwu.vercel.app/labs/graphql": 11,
-    "dvwu.vercel.app/labs/race-condition": 11,
-    "web-security-learning-labs.vercel.app/module/1611": 10,
-    "koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation": 8,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level4.php": 6,
-    "web-security-learning-labs.vercel.app/module/1612": 7,
-    "wrongsecrets.herokuapp.com/challenge/challenge-9": 16
+    "pentest-fauxbank.vercel.app/api/transfer": 15
   }
 }
