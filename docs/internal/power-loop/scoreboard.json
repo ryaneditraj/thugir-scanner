@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T02:08:00.000Z",
+  "updated_at": "2026-08-13T02:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2744,
-  "total_findings": 26865,
-  "critical_findings": 55,
+  "total_findings": 26870,
+  "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1963,
-  "discovery_findings": 22658,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-13T02:08:00.000Z",
+  "discovery_findings": 22663,
+  "improvements_shipped": 1201,
+  "last_run": "2026-08-13T02:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -52,31 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 40,
-      "focus": "vulnshop SSTI/SSRF/LFI/cmdi route oracles + WSL module 1594 placeholder shell"
+      "urls_scanned": 5,
+      "findings_delta": "+5 route oracles",
+      "focus": "vulnshop /template SSTI, /track-order SSRF, /support LFI, /run-diagnostic cmdi, /search reflected XSS route oracles"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "vulnshop.vercel.app/search: 8 findings — vulnshop-products-sqli-route-live-oracle (README route #2 is reflected XSS, not SQLi)",
-      "vulnshop.vercel.app/template|track-order|support|run-diagnostic: 6 findings each — client-side-vulnshop-evidence only; SSTI/SSRF/LFI/cmdi route oracles absent",
-      "web-security-learning-labs.vercel.app/module/1594: 8 findings — web-security-learning-labs-placeholder-module-route-live-oracle (catalog shell, no live vuln route)"
+      "vulnshop.vercel.app/template: 6→7 findings — vulnshop-template-ssti-route-live-oracle shipped (README oracle #6)",
+      "vulnshop.vercel.app/track-order: 6→7 findings — vulnshop-track-order-ssrf-route-live-oracle shipped (README oracle #5)",
+      "vulnshop.vercel.app/support: 6→8 findings — vulnshop-support-lfi-route-live-oracle shipped (README oracle #3)",
+      "vulnshop.vercel.app/run-diagnostic: 6→7 findings — vulnshop-run-diagnostic-cmdi-route-live-oracle shipped (README oracle #4)",
+      "vulnshop.vercel.app/search: 8 findings — vulnshop-search-xss-route-live-oracle replaces wrong sqli slug (README oracle #2 reflected XSS)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnshop.vercel.app: missing live oracles for /template (SSTI), /track-order (SSRF), /support (LFI), /run-diagnostic (cmdi) — high-value ship targets",
-      "vulnshop.vercel.app/search: wrong oracle slug (sqli vs reflected XSS per README route #2)"
+      "vulnshop Railway backend (vulnshop-production.up.railway.app) undeployed — live Flask probes fall back to README URL oracle on Vercel SPA shell"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 46,
     "vulnshop.vercel.app/search": 8,
-    "vulnshop.vercel.app/template": 6,
-    "vulnshop.vercel.app/track-order": 6,
-    "vulnshop.vercel.app/support": 6,
-    "vulnshop.vercel.app/run-diagnostic": 6,
+    "vulnshop.vercel.app/support": 8,
+    "vulnshop.vercel.app/template": 7,
+    "vulnshop.vercel.app/track-order": 7,
+    "vulnshop.vercel.app/run-diagnostic": 7,
     "web-security-learning-labs.vercel.app/module/1594": 8,
     "seclab.vercel.app/api/ssrf-vulnerable": 5,
     "vulnerable-web-site.vercel.app/csrf": 6,
