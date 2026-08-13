@@ -2512,6 +2512,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogProductRouteLiveOracle",
   "ginAndJuiceChangeEmailRouteLiveOracle",
   "ginAndJuiceChangePasswordRouteLiveOracle",
+  "ginAndJuiceChangeAddressRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
   "ginAndJuiceLoggerRouteLiveOracle",
   "crapi2ShopOrdersAllRouteLiveOracle",
@@ -2560,6 +2561,7 @@ const DEEP_RULES = new Set<string>([
   "istEduSsrfRedirectRouteLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
   "dvwuFilesClientLfiRouteLiveOracle",
+  "dvwuPathTraversalClientRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
   "vaultappLabGuideRouteLiveOracle",
   "vaultappAdminAuditLogsIdorLiveOracle",
@@ -11301,6 +11303,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-") &&
+        /-route-/.test(p.slug)
+      )
+        return -3;
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;
       if (
         /ginandjuice\.shop/i.test(origin) &&

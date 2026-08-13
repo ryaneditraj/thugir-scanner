@@ -53100,6 +53100,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-change-address-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/change-address route live oracle",
+    description:
+      "When scanning /my-account/change-address, the account UI exposes a login-gated address-change surface for the PortSwigger IDOR training lab — route-specific access-control oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes an address-change endpoint gated behind authentication for IDOR training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceChangeAddressRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind address updates to the authenticated user and verify object ownership server-side.",
+      steps: [
+        "Reject address changes when the target user ID does not match the session.",
+        "Use indirect object references instead of predictable address IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/change-address route exposes a login-gated address-change surface. Show IDOR-safe address update validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-logger-oast-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -54110,6 +54136,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our dvwu.vercel.app /labs/lfi route exposes a client-side Document Library with LFI training payloads. Show server-side path validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-path-traversal-client-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU Document Library path-traversal route live oracle",
+    description:
+      "When scanning /labs/path-traversal on dvwu.vercel.app, the SPA bundle documents a client-side Document Library file viewer that detects path traversal sequences — route-specific directory traversal training oracle.",
+    impactOneline:
+      "Client-side path traversal labs document traversal patterns attackers replay against real file-serving endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuPathTraversalClientRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — canonicalize paths server-side and reject parent-directory sequences in production.",
+      steps: [
+        "Resolve paths against a fixed base directory and reject .. segments.",
+        "Use an allow-list of readable filenames instead of user-supplied paths.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/path-traversal route exposes a client-side Document Library with path traversal detection. Show canonical path validation remediation.",
     version: 1,
     enabled: true
   },
