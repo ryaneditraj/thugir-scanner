@@ -2395,9 +2395,11 @@ const DEEP_RULES = new Set<string>([
   "vapiApi6MassAssignmentLiveOracle",
   "vapiApi6RouteLiveOracle",
   "vapiApi3CommentRouteLiveOracle",
+  "vapiApi3UserRouteLiveOracle",
   "vapiApi8SqliLoginLiveOracle",
   "vapiApi8SecretRouteLiveOracle",
   "vapiApi8LoginRouteLiveOracle",
+  "vapiApi8UserRouteLiveOracle",
   "vapiApi7CorsMisconfigLiveOracle",
   "vapiApi7CorsRouteLiveOracle",
   "vapiApi9ImproperInventoryLiveOracle",
@@ -3038,6 +3040,8 @@ const DEEP_RULES = new Set<string>([
   "vampiBooksRouteLiveOracle",
   "vampiBookBolaLiveOracle",
   "vampiBookBolaRouteLiveOracle",
+  "vampiBooksStaleCatalogLiveOracle",
+  "vampiBooksStaleCatalogRouteLiveOracle",
   "vampiAdminProfileUnauthLiveOracle",
   "vampiAdminProfileUnauthRouteLiveOracle",
   "vampiUsersEnumerationLiveOracle",
@@ -11288,6 +11292,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vapi\.apisec\.ai/i.test(origin) &&
+        /\/api8\/user\b/i.test(targetInput) &&
+        !/\/api8\/user\/(?:login|secret)\b/i.test(targetInput) &&
+        p.slug.startsWith("vapi-api8-user-route")
+      )
+        return -3;
+      if (
+        /vapi\.apisec\.ai/i.test(origin) &&
+        /\/api3\/user\b/i.test(targetInput) &&
+        p.slug.startsWith("vapi-api3-user-route")
+      )
+        return -3;
+      if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/spawn\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-spawn") || p.slug === "command-injection-form-probe")
@@ -11339,8 +11356,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vampi/i.test(origin) &&
-        /\/books\/v1\/[^/]+/i.test(targetInput) &&
-        p.slug.startsWith("vampi-book-bola")
+        /\/books\/v1(?:\/|$|\?)/i.test(targetInput) &&
+        p.slug.startsWith("vampi-books-stale-catalog")
+      )
+        return -3;
+      if (
+        /vampi/i.test(origin) &&
+        /\/users\/v1\/_debug\b/i.test(targetInput) &&
+        p.slug.startsWith("vampi-debug-password")
       )
         return -3;
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;
