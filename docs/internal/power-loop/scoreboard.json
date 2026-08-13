@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T12:43:00.000Z",
+  "updated_at": "2026-08-13T13:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2833,
-  "total_findings": 28886,
+  "total_sites_scanned": 2840,
+  "total_findings": 29116,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2001,
-  "discovery_findings": 23501,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-13T12:43:00.000Z",
+  "discovery_urls_added": 2006,
+  "discovery_findings": 23683,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-13T13:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 27,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 522,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (27 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 75,
-      "focus": "vAPI api10 login/identity + wrongsecrets challenge-72/73 + zen-demo-java shell injection + web-security-learning-labs module 1599",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 6,
+      "findings": 182,
+      "focus": "fabraix data-exfil-002 + WSL module/1605 + vulnforge medium/level2 + brokencrystals /api/command + queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (27 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/api10/login: 14 findings — full vAPI oracle bundle including api10-logging-live-oracle",
-      "vapi.apisec.ai/vapi/api10/identity: 14 findings — api10 identity route mirrors login oracle coverage",
-      "zen-demo-java.fly.dev/pages/execute: 6 findings — zen-demo-java-execute-shell-injection-live-oracle",
-      "code-breaking.fly.dev/puzzle/1/: remote run 4 findings (code-breaking-puzzle-route-live-oracle); this run scan error (host timeout)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-72: 14 findings — undeployed-challenge + error-demo-database-connection oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-73: 14 findings — same Heroku undeployed-challenge hub pattern",
-      "web-security-learning-labs.vercel.app/module/1599: 10 findings — web-security-learning-labs-idor-module-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "brokencrystals.com/api/command: 83 findings — full brokencrystals oracle hub (no route-specific command-injection oracle)",
+      "demo.owasp-juice.shop/rest/privacy-requests: 49 findings — juice-shop privacy-requests BOLA hub",
+      "web-security-learning-labs.vercel.app/module/1605: 10 findings — web-security-learning-labs-idor-module-route-live-oracle",
+      "ginandjuice.shop/blog/post?postId=8: 31 findings — ginandjuice atob open-redirect oracle bundle",
+      "playground.fabraix.com/challenges/data-exfil-002: 4 findings — client-side-fabraix-challenge-evidence (no data-exfil-specific live oracle)",
+      "vulnforge-academy.vercel.app/.../medium/level2.php: 5 findings — generic vulnforge hub (no medium-tier route oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vapi.apisec.ai/vapi/api10/*: api10-unsafe-consumption route-specific oracle still absent (logging oracle present)",
-      "code-breaking.fly.dev/puzzle/1/: intermittent — remote agent got 4 findings, this run timed out",
+      "brokencrystals.com/api/command: 83-finding generic hub — route-specific command-injection live oracle absent",
+      "playground.fabraix.com/challenges/data-exfil-002: 4-finding generic hub — agentic data-exfil live oracle absent",
+      "vulnforge-academy medium/level2: 5-finding generic hub — medium-tier challenge oracle absent",
       "pwnshop.ctfsecurity.com/debug/events: queued but not yet scanned (tail append)",
       "crapi2.apisec.ai/workshop/api/shop/return_qr_code: queued but not yet scanned (tail append)",
       "secure-bank-bay.vercel.app/login: queued but not yet scanned (tail append)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 27,
-    "vapi.apisec.ai/vapi/api10/login": 14,
-    "vapi.apisec.ai/vapi/api10/identity": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-72": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-73": 14,
-    "web-security-learning-labs.vercel.app/module/1599": 10,
-    "zen-demo-java.fly.dev/pages/execute": 6,
-    "code-breaking.fly.dev/puzzle/1/": 4,
-    "attp-live.fly.dev/demo": 3
+    "juice-shop.herokuapp.com": 48,
+    "brokencrystals.com/api/command": 83,
+    "demo.owasp-juice.shop/rest/privacy-requests": 49,
+    "ginandjuice.shop/blog/post?postId=8": 31,
+    "web-security-learning-labs.vercel.app/module/1605": 10,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level2.php": 5,
+    "playground.fabraix.com/challenges/data-exfil-002": 4
   }
 }
