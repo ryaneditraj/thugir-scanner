@@ -24418,6 +24418,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-xml-import-xxe-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop XXE live oracle",
+    description:
+      "POST /api/xml-import resolves external XML entities from attacker-controlled DOCTYPE declarations when the Flask backend is reachable.",
+    impactOneline:
+      "XML external entity injection can read local files and pivot to server-side request forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopXmlImportXxeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — VulnShop is intentional training software.",
+      steps: [
+        "Use defusedxml or disable DTD processing in production XML parsers.",
+        "Reject DOCTYPE declarations in untrusted XML input.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/xml-import route is XXE-vulnerable. Show secure XML parser configuration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-xml-import-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop /api/xml-import XXE route live oracle",
+    description:
+      "When scanning /api/xml-import, live XXE via external entities or README oracle #7 documents XML entity expansion on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/xml-import module documents XXE.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopXmlImportXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution on /api/xml-import routes.",
+      steps: [
+        "Use defusedxml or disable DTD processing.",
+        "Reject DOCTYPE in untrusted XML.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/xml-import route documents XXE. Show route-specific XML parser hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-upload-review-file-upload-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnShop unrestricted file upload live oracle",
+    description:
+      "POST /upload-review accepts dangerous file extensions (.php, .jsp, .asp, .aspx) without validation when the Flask backend is reachable.",
+    impactOneline:
+      "Unrestricted file upload enables remote code execution via web-shell deployment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUploadReviewFileUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file extensions and store uploads outside the web root — VulnShop is intentional training software.",
+      steps: [
+        "Allowlist safe extensions (e.g. .jpg, .png) and verify magic bytes.",
+        "Store uploads outside the document root with randomized names.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /upload-review route accepts .php uploads. Show secure file upload validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-upload-review-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnShop /upload-review file upload route live oracle",
+    description:
+      "When scanning /upload-review, live unrestricted .php upload or README oracle #10 documents dangerous extension acceptance on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /upload-review module documents unrestricted file upload.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUploadReviewFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate extensions and content-type on /upload-review routes.",
+      steps: [
+        "Allowlist safe extensions and verify magic bytes.",
+        "Store uploads outside the document root.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /upload-review route documents unrestricted upload. Show route-specific upload validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwtlens-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -31452,6 +31556,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /xss route scan confirms stored XSS via profile message dangerouslySetInnerHTML. Show output encoding remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-web-site-clickjacking-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vulnerable Web Site clickjacking route live oracle",
+    description:
+      "When scanning /clickjacking on vulnerable-web-site.vercel.app, authenticated /profile lacks X-Frame-Options/CSP frame-ancestors — or login sets empty X-Frame-Options per next.config.js confirming the clickjacking training lab.",
+    impactOneline:
+      "Route-specific confirmation that Vulnerable Web Site exposes a frameable profile page for UI-redress clickjacking practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteClickjackingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set X-Frame-Options DENY or CSP frame-ancestors 'none' — Vulnerable Web Site is intentional training software.",
+      steps: [
+        "Set X-Frame-Options: DENY on all authenticated pages.",
+        "Add Content-Security-Policy frame-ancestors 'none'.",
+        "Run Vulnerable Web Site only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /clickjacking route scan confirms empty X-Frame-Options on profile pages. Show frame-busting remediation for route-specific scans.",
     version: 1,
     enabled: true
   },
