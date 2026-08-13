@@ -34535,6 +34535,22 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Search query reflection", re: /\/search\?q=|<script>alert/i }
     ],
     note: "VulnShop GET /search?q= reflects unescaped HTML — README oracle #2 (reflected XSS, not SQLi)"
+  },
+  {
+    pathRe: /\/api\/xml-import\b/i,
+    markers: [
+      { label: "XXE lab route", re: /XXE|XML External Entity|xml-import/i },
+      { label: "DOCTYPE entity probe", re: /<!DOCTYPE|SYSTEM\s+["']file:\/\//i }
+    ],
+    note: "VulnShop POST /api/xml-import processes external XML entities — README oracle #7"
+  },
+  {
+    pathRe: /\/upload-review\b/i,
+    markers: [
+      { label: "Unrestricted file upload lab", re: /Unrestricted File Upload|file_upload|upload-review/i },
+      { label: "Dangerous extension allowlist", re: /\.php|\.jsp|\.asp|\.aspx/i }
+    ],
+    note: "VulnShop POST /upload-review accepts dangerous file extensions (.php, .jsp, .asp, .aspx) — README oracle #10"
   }
 ];
 
@@ -34597,6 +34613,16 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/run-diagnostic\b/i,
     vulnerability: "Command Injection",
     note: "VulnShop Flask GET /run-diagnostic?input= executes shell metacharacters — README oracle #4"
+  },
+  {
+    pathRe: /\/api\/xml-import\b/i,
+    vulnerability: "XXE (XML External Entity)",
+    note: "VulnShop Flask POST /api/xml-import resolves external XML entities from attacker-controlled DOCTYPE — README oracle #7"
+  },
+  {
+    pathRe: /\/upload-review\b/i,
+    vulnerability: "Unrestricted File Upload",
+    note: "VulnShop Flask POST /upload-review accepts .php/.jsp/.asp/.aspx uploads without extension validation — README oracle #10"
   }
 ];
 
@@ -35711,6 +35737,89 @@ const vulnshopSearchXssRouteLiveOracle: Rule = (ctx) =>
     /\/search\b/i,
     vulnshopSearchXssLiveOracle,
     "VulnShop /search route scan — reflected XSS on q= parameter confirmed or documented (README oracle #2)"
+  );
+
+const VULNSHOP_XXE_PROBE_BODY =
+  '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><root>&xxe;</root>';
+
+const vulnshopXmlImportXxeLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/api/xml-import", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: VULNSHOP_XXE_PROBE_BODY,
+    headers: { "Content-Type": "application/xml" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const xxeOk =
+    /root:|\/etc\/passwd|xml external entity|xxe|entity expansion/i.test(doc.body) ||
+    /"error".*entity|"status"\s*:\s*"error"/i.test(doc.body);
+  if (!xxeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /root:|\/etc\/passwd/i.test(doc.body) ? 0.94 : 0.9,
+    evidence: {
+      probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnShop POST /api/xml-import resolves external XML entities from attacker DOCTYPE — XXE oracle #7"
+    }
+  };
+};
+
+const vulnshopXmlImportXxeRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/xml-import\b/i,
+    vulnshopXmlImportXxeLiveOracle,
+    "VulnShop /api/xml-import route scan — XXE via external entities confirmed or documented (README oracle #7)"
+  );
+
+const vulnshopUploadReviewFileUploadLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/upload-review", ctx.origin).toString();
+  const boundary = `thugirVulnshopUpload${Date.now()}`;
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="file"; filename="thugir-probe.php"',
+    "Content-Type: application/x-php",
+    "",
+    "<?php echo 'thugir-upload-probe'; ?>",
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const uploadOk =
+    /uploaded|uploads\/|thugir-probe\.php|file_upload|successfully uploaded/i.test(doc.body) ||
+    /"status"\s*:\s*"success"/i.test(doc.body);
+  if (!uploadOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /thugir-probe\.php/i.test(doc.body) ? 0.94 : 0.9,
+    evidence: {
+      probeUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "VulnShop POST /upload-review accepts .php file upload without extension validation — unrestricted file upload oracle #10"
+    }
+  };
+};
+
+const vulnshopUploadReviewFileUploadRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/upload-review\b/i,
+    vulnshopUploadReviewFileUploadLiveOracle,
+    "VulnShop /upload-review route scan — unrestricted dangerous file extension upload confirmed or documented (README oracle #10)"
   );
 
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
@@ -66698,6 +66807,68 @@ const vulnerableWebSiteStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function vulnerableWebSiteFrameableHeaders(headers: Record<string, string>): boolean {
+  const xfo = (headers["x-frame-options"] ?? "").trim();
+  const csp = (headers["content-security-policy"] ?? "").trim();
+  if (xfo && !/^allow/i.test(xfo)) return false;
+  if (/frame-ancestors\s+'none'|frame-ancestors\s+none/i.test(csp)) return false;
+  return true;
+}
+
+const vulnerableWebSiteClickjackingRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/clickjacking\b/i.test(pageUrl)) return NEGATIVE;
+  const session = await vulnerableWebSiteSessionCookie(ctx);
+  if (session) {
+    const profileUrl = new URL("/profile", ctx.origin).toString();
+    const profileDoc = await ctx.probe.get(profileUrl, {
+      headers: { Cookie: session },
+      maxBytes: 8192,
+      timeoutMs: 20000
+    });
+    if (
+      profileDoc.status >= 200 &&
+      profileDoc.status < 400 &&
+      vulnerableWebSiteFrameableHeaders(profileDoc.headers)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          scannedUrl: pageUrl,
+          profileUrl,
+          xFrameOptions: profileDoc.headers["x-frame-options"] ?? "(empty)",
+          note: "vulnerable-web-site.vercel.app authenticated /profile lacks X-Frame-Options/CSP frame-ancestors — route-specific clickjacking training oracle"
+        }
+      };
+    }
+  }
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  const loginRedirect =
+    /\/login\b/i.test(ctx.home.finalUrl || "") ||
+    /\/login\b/i.test(pageUrl) ||
+    (loginDoc.status >= 300 && loginDoc.status < 400);
+  const frameableLogin = vulnerableWebSiteFrameableHeaders(loginDoc.headers);
+  const documentsClickjacking =
+    /Clickjacking/i.test(ctx.combined) ||
+    /X-Frame-Options[\s\S]{0,40}value:\s*['"]\s*['"]/i.test(ctx.combined);
+  if (frameableLogin && (loginRedirect || documentsClickjacking)) {
+    return {
+      fired: true,
+      confidence: session ? 0.9 : 0.88,
+      evidence: {
+        scannedUrl: pageUrl,
+        loginUrl,
+        xFrameOptions: loginDoc.headers["x-frame-options"] ?? "(empty)",
+        note: "vulnerable-web-site.vercel.app sets empty X-Frame-Options in next.config.js and documents clickjacking UI-redress lab — route-specific clickjacking oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Nivara security assessment platform (cybersec-demo.vercel.app) -------------------
 const CLIENT_NIVARA_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
@@ -77006,6 +77177,10 @@ export const RULES: Record<string, Rule> = {
   vulnshopRunDiagnosticCmdiRouteLiveOracle,
   vulnshopSearchXssLiveOracle,
   vulnshopSearchXssRouteLiveOracle,
+  vulnshopXmlImportXxeLiveOracle,
+  vulnshopXmlImportXxeRouteLiveOracle,
+  vulnshopUploadReviewFileUploadLiveOracle,
+  vulnshopUploadReviewFileUploadRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,
@@ -77575,6 +77750,7 @@ export const RULES: Record<string, Rule> = {
   seclabSsrfVulnerableRouteLiveOracle,
   vulnerableWebSiteCsrfRouteLiveOracle,
   vulnerableWebSiteStoredXssRouteLiveOracle,
+  vulnerableWebSiteClickjackingRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,

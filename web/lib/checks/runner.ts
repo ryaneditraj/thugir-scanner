@@ -2730,6 +2730,10 @@ const DEEP_RULES = new Set<string>([
   "vulnshopRunDiagnosticCmdiRouteLiveOracle",
   "vulnshopSearchXssLiveOracle",
   "vulnshopSearchXssRouteLiveOracle",
+  "vulnshopXmlImportXxeLiveOracle",
+  "vulnshopXmlImportXxeRouteLiveOracle",
+  "vulnshopUploadReviewFileUploadLiveOracle",
+  "vulnshopUploadReviewFileUploadRouteLiveOracle",
   "clientSideVulnlabAuditApiEvidence",
   "clientSideVulnlabHandsOnLabEvidence",
   "clientSideVibeEvalEvidence",
@@ -2815,6 +2819,7 @@ const DEEP_RULES = new Set<string>([
   "seclabSsrfVulnerableRouteLiveOracle",
   "vulnerableWebSiteCsrfRouteLiveOracle",
   "vulnerableWebSiteStoredXssRouteLiveOracle",
+  "vulnerableWebSiteClickjackingRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -11152,6 +11157,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnerable-web-site\.vercel\.app/i.test(origin) &&
         /\/xss\b/i.test(targetInput) &&
         p.slug.startsWith("vulnerable-web-site-stored-xss")
+      )
+        return -3;
+      if (
+        /vulnerable-web-site\.vercel\.app/i.test(origin) &&
+        /\/clickjacking\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-web-site-clickjacking")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/xml-import\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-xml-import")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/upload-review\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-upload-review")
       )
         return -3;
       if (

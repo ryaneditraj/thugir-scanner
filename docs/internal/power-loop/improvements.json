@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-xml-import-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/xml-import with DOCTYPE external entity returns SPA shell on Vercel; vulnshopFlaskRouteUrlOracle fires README oracle #7 XXE; vulnshop.vercel.app/api/xml-import findings 7→8 (+vulnshop-xml-import-xxe-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-upload-review-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /upload-review multipart .php probe hits SPA shell; README oracle #10 unrestricted file upload mapped via vulnshopFlaskRouteUrlOracle; vulnshop.vercel.app/upload-review findings 6→7 (+vulnshop-upload-review-file-upload-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-clickjacking-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /login X-Frame-Options empty per next.config.js + authenticated /profile frameable; vulnerable-web-site.vercel.app/clickjacking findings 4→6 (+vulnerable-web-site-clickjacking-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-template-ssti-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /template?name={{7*7}} returns Angular SPA shell on Vercel; vulnshopFlaskRouteUrlOracle fires README oracle #6 SSTI; vulnshop.vercel.app/template findings 6→7 (+vulnshop-template-ssti-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
