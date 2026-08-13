@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-price-manipulation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/client-side-price-manipulation documents POST /api/orders trusting client-provided total without server-side recalculation (OSS{cl13nt_s1d3_pr1c3_m4n1pul4t10n}); koadt.github.io/.../client-side-price-manipulation findings 6→8 (+client-side-oopssec-price-manipulation-evidence + oopssec-price-manipulation-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level4-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /backend/includes/levels/medium/level4.php?search=1' returns SQL syntax error; vulnforge-academy.vercel.app/.../level4.php findings 5→6 (+vulnforge-academy-level4-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-catalog-1611",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /module/1611 returns Here is a Module: 1611 placeholder shell; extended WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX to 1611 with IDOR curated topic; web-security-learning-labs.vercel.app/module/1611 findings 10 (+idor-module-route-live-oracle + placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-catalog-1609-1610",
       "status": "shipped",
@@ -9855,6 +9873,21 @@
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-jwt-alg-confusion-route-fetch-fallback",
       "shipped_at": "2026-08-13T20:32:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-price-manipulation-route-live-oracle",
+      "shipped_at": "2026-08-13T21:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level4-sqli-route-live-oracle",
+      "shipped_at": "2026-08-13T21:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-catalog-1611",
+      "shipped_at": "2026-08-13T21:15:00.000Z"
     }
   ]
 }

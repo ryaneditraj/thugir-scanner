@@ -2136,6 +2136,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
   "clientSideOopssecRaceConditionEvidence",
+  "clientSideOopssecPriceManipulationEvidence",
   "clientSideOopssecXffSqliEvidence",
   "clientSideOopssecProductSearchSqliEvidence",
   "clientSideOopssecStoredXssReviewsEvidence",
@@ -2144,6 +2145,7 @@ const DEEP_RULES = new Set<string>([
   "oopssecProductSearchSqliRouteLiveOracle",
   "oopssecStoredXssReviewsRouteLiveOracle",
   "oopssecRaceConditionCouponRouteLiveOracle",
+  "oopssecPriceManipulationRouteLiveOracle",
   "clientSideOopssecJwtAlgConfusionEvidence",
   "oopssecJwtAlgConfusionRouteLiveOracle",
   "clientSideOopssecPathTraversalEvidence",
@@ -3164,6 +3166,7 @@ const DEEP_RULES = new Set<string>([
   "nodegoatProfileSensitiveDataRouteLiveOracle",
   "nodegoatProfileRedosRouteLiveOracle",
   "vulnforgeAcademyLevelSqliRouteLiveOracle",
+  "vulnforgeAcademyLevel4SqliRouteLiveOracle",
   "vulnforgeAcademyLevel6SqliRouteLiveOracle",
   "vulnforgeAcademyLevelXssRouteLiveOracle",
   "vulnforgeAcademyLevelSstiRouteLiveOracle",
@@ -8534,6 +8537,8 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/x-forwarded-for-sql-injection",
     "/posts/sql-injection-writeup/",
     "/posts/product-search-sql-injection/",
+    "/posts/client-side-price-manipulation/",
+    "/posts/client-side-price-manipulation",
     "/posts/stored-xss-product-reviews/",
     "/posts/live-stream-hijack/"
   ]) {
@@ -10934,6 +10939,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnbank\.org/i.test(origin) &&
         /\/api\/ai\/system-info\b/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-ai-system-info")
+      )
+        return -3;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level4\.php\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level4-sqli")
       )
         return -3;
       if (
