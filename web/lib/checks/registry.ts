@@ -27644,6 +27644,77 @@ const vampiBooksRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeVampiBookBola(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVampiHost(ctx)) return null;
+  const auth = await tryVampiLabJwt(ctx);
+  if (!auth) return null;
+  const listUrl = new URL("/books/v1", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${auth.token}` }
+  });
+  if (listDoc.status < 200 || listDoc.status >= 300) return null;
+  let books: Array<{ book_title?: string; user?: string }>;
+  try {
+    const data = JSON.parse(listDoc.body) as { Books?: Array<{ book_title?: string; user?: string }> };
+    books = data.Books ?? [];
+  } catch {
+    return null;
+  }
+  const foreignBook = books.find((b) => b.book_title && b.user && b.user !== auth.username);
+  if (!foreignBook?.book_title) return null;
+  const bookUrl = new URL(
+    `/books/v1/${encodeURIComponent(foreignBook.book_title)}`,
+    ctx.origin
+  ).toString();
+  const bookDoc = await ctx.probe.get(bookUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${auth.token}` }
+  });
+  if (bookDoc.status < 200 || bookDoc.status >= 300) return null;
+  try {
+    const book = JSON.parse(bookDoc.body) as { book_title?: string; owner?: string; secret?: string };
+    if (!book.secret || !book.owner || book.owner === auth.username) return null;
+    if (book.book_title !== foreignBook.book_title) return null;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        listUrl,
+        bookUrl,
+        caller: auth.username,
+        owner: book.owner,
+        bookTitle: book.book_title,
+        snippet: bookDoc.body.slice(0, 200).trim(),
+        note: `VAmPI GET /books/v1/${foreignBook.book_title} returns owner ${book.owner}'s secret for authenticated ${auth.username} — book object-level authorization bypass oracle (API1)`
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const vampiBookBolaLiveOracle: Rule = async (ctx) => (await probeVampiBookBola(ctx)) ?? NEGATIVE;
+
+const vampiBookBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/books\/v1\/[^/]+/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeVampiBookBola(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /books/v1/{book_title} route scan — JWT for one user reads another user's book secret — book BOLA oracle (API1)"
+    }
+  };
+};
+
 // --- OpenAPI _debug routes returning cleartext passwords (VAmPI-style) ----------
 const openApiDebugPasswordExposure: Rule = async (ctx) => {
   const specPaths = await loadOpenApiSpec(ctx);
@@ -57336,6 +57407,30 @@ const ginAndJuiceChangeAddressRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceDeleteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\/delete\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasAccountNav =
+    /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
+  const hasLoginSurface =
+    /class=login-form/i.test(doc.body) &&
+    /name="username"/i.test(doc.body) &&
+    /type=username/i.test(doc.body);
+  if (!hasAccountNav || !hasLoginSurface) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
+      note: "Gin & Juice Shop /my-account/delete route scan — authenticated account-deletion surface gated behind login (PortSwigger CSRF account-deletion training lab entry point)"
+    }
+  };
+};
+
 const ginAndJuiceLoggerOastLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const loggerUrl = new URL("/logger", ctx.origin).toString();
@@ -78864,6 +78959,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceChangeEmailRouteLiveOracle,
   ginAndJuiceChangePasswordRouteLiveOracle,
   ginAndJuiceChangeAddressRouteLiveOracle,
+  ginAndJuiceDeleteRouteLiveOracle,
   ginAndJuiceLoggerOastLiveOracle,
   ginAndJuiceLoggerRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
@@ -78928,6 +79024,8 @@ export const RULES: Record<string, Rule> = {
   vampiUserBolaRouteLiveOracle,
   vampiBooksExcessiveDataLiveOracle,
   vampiBooksRouteLiveOracle,
+  vampiBookBolaLiveOracle,
+  vampiBookBolaRouteLiveOracle,
   http403BypassProbe,
   bypass403AdminLiveOracle,
   bypass403AdminRouteLiveOracle,
