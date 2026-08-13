@@ -2159,6 +2159,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecNextPublicEnvRouteLiveOracle",
   "clientSideOopssecSupplyChainEvidence",
   "oopssecSupplyChainPoisonedRulesRouteLiveOracle",
+  "clientSideOopssecGiftCardRandomnessEvidence",
+  "oopssecGiftCardRandomnessRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
@@ -2582,6 +2584,7 @@ const DEEP_RULES = new Set<string>([
   "vulnwebProfileIdorRouteLiveOracle",
   "vulnwebCsrfRouteLiveOracle",
   "istEduSsrfRedirectRouteLiveOracle",
+  "istEduOpenRedirectRouteLiveOracle",
   "dvwuSsrfRedirectLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
   "dvwuFilesClientLfiRouteLiveOracle",
@@ -2848,6 +2851,7 @@ const DEEP_RULES = new Set<string>([
   "vulnerableWebSiteCsrfRouteLiveOracle",
   "vulnerableWebSiteStoredXssRouteLiveOracle",
   "vulnerableWebSiteClickjackingRouteLiveOracle",
+  "vulnerableWebSiteSsrfRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
   "clientSideSkillauditEvidence",
@@ -7532,6 +7536,7 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/lfi",
     "/labs/xxe",
     "/labs/idor",
+    "/labs/open-redirect",
     "/api/comments",
     "/newsletter"
   ]) {
@@ -10858,7 +10863,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vulnbank\.org/i.test(origin) && /\/login\b/i.test(targetInput) && p.slug.startsWith("vulnbank-")) return -2;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe)|newsletter)\b/i.test(targetInput) &&
+        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|open-redirect)|newsletter)\b/i.test(targetInput) &&
         p.slug.startsWith("ist-edu-")
       )
         return -3;
@@ -11236,6 +11241,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnerable-web-site\.vercel\.app/i.test(origin) &&
         /\/clickjacking\b/i.test(targetInput) &&
         p.slug.startsWith("vulnerable-web-site-clickjacking")
+      )
+        return -3;
+      if (
+        /vulnerable-web-site\.vercel\.app/i.test(origin) &&
+        /\/ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-web-site-ssrf")
       )
         return -3;
       if (

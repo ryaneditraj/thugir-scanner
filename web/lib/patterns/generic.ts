@@ -31638,6 +31638,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-web-site-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Vulnerable Web Site SSRF route live oracle",
+    description:
+      "When scanning /ssrf on vulnerable-web-site.vercel.app, GET /api/ssrf fetches attacker-controlled URLs when ENABLE_SSRF is enabled — or the route redirects to login confirming the auth-gated SSRF training lab.",
+    impactOneline:
+      "Route-specific confirmation that Vulnerable Web Site exposes a server-side URL fetch lab for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal networks and restrict URL schemes — Vulnerable Web Site is intentional training software.",
+      steps: [
+        "Allowlist outbound fetch destinations and deny link-local/internal IP ranges.",
+        "Restrict outbound fetch to http/https only.",
+        "Run Vulnerable Web Site only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf route scan confirms server-side URL fetch when ENABLE_SSRF is enabled. Show SSRF egress controls for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-nivara-security-evidence",
     platform: "generic",
     category: "Information disclosure",
@@ -42910,6 +42936,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/admin/diag is reachable via X-Debug-Auth from poisoned AI rules. Show supply-chain and auth bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-gift-card-randomness-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "OopsSec Store insecure gift-card randomness walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/insecure-randomness-gift-card documents LCG gift-card codes seeded with createdAt millisecond timestamps exposed via GET /api/gift-cards.",
+    impactOneline:
+      "Public walkthrough teaches predictable gift-card code recovery from leaked millisecond creation timestamps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecGiftCardRandomnessEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use crypto.randomBytes for gift-card codes; never seed secrets from observable timestamps.",
+      steps: [
+        "Replace LCG generateGiftCardCode with crypto.randomBytes draws.",
+        "Stop returning millisecond-precision createdAt on gift-card API responses.",
+        "Hash gift-card codes at rest and compare with timing-safe equality."
+      ]
+    },
+    fixPrompt:
+      "Our gift-card generator uses Math.imul LCG seeded with createdAt.getTime(). Show crypto.randomBytes remediation and timestamp truncation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-gift-card-randomness-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "OopsSec Store insecure gift-card randomness route live oracle",
+    description:
+      "When scanning /posts/insecure-randomness-gift-card, the walkthrough documents LCG generateGiftCardCode(createdAt.getTime()) with millisecond seed leaked via /api/gift-cards — route-specific insecure randomness oracle.",
+    impactOneline:
+      "OopsSec gift-card codes are reproducible from observable createdAt timestamps when seeded with a classic LCG.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecGiftCardRandomnessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use crypto.randomBytes for gift-card codes; never seed secrets from observable timestamps.",
+      steps: [
+        "Replace LCG generateGiftCardCode with crypto.randomBytes draws.",
+        "Stop returning millisecond-precision createdAt on gift-card API responses.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/insecure-randomness-gift-card route documents LCG gift-card recovery. Show route-specific crypto.randomBytes remediation.",
     version: 1,
     enabled: true
   },
@@ -55099,6 +55177,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/redirect route accepts //https:/// bypass while blocking metadata URLs. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "high",
+    title: "IST Edu open redirect route live oracle",
+    description:
+      "When scanning /labs/open-redirect on ist-edu-bd.vercel.app, the SPA documents unvalidated /redirect?url= redirects with countdown UI and Location-header phishing chains.",
+    impactOneline:
+      "Open redirect labs teach phishing via unvalidated redirect query parameters on university portal SPAs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — validate redirect targets against a strict hostname allowlist.",
+      steps: [
+        "Parse redirect URLs with a strict URL library and compare hostnames exactly.",
+        "Reject protocol-relative and external redirect targets on logout/login flows.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/open-redirect route documents unvalidated /redirect?url= phishing chains. Show redirect allow-list hardening.",
     version: 1,
     enabled: true
   },
