@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-gift-card-randomness-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/insecure-randomness-gift-card documents LCG generateGiftCardCode(createdAt.getTime()) with millisecond seed via GET /api/gift-cards; koadt.github.io/.../insecure-randomness-gift-card findings 12→15 (+client-side-oopssec-gift-card-randomness-evidence + route oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /ssrf route redirects to login; README documents ENABLE_SSRF server-side fetch lab; vulnerable-web-site.vercel.app/ssrf findings 5→6 (+vulnerable-web-site-ssrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/open-redirect SPA bundle documents Redirecting in countdown + Open redirect via Location header + /redirect?url=; ist-edu-bd.vercel.app/labs/open-redirect findings 8→9 (+ist-edu-open-redirect-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:playground.fabraix.com",
       "slug": "fabraix-data-exfil-002-route-live-oracle",
       "status": "shipped",
