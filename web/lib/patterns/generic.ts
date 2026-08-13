@@ -42316,6 +42316,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnforge-academy-level-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnForge Academy level SSTI route live oracle",
+    description:
+      "When scanning /backend/includes/levels/*/level*.php, reflexion-escalated SSTI probes confirm server-side template injection on the level route — route-specific VulnForge Academy SSTI training oracle.",
+    impactOneline:
+      "Unsanitized template evaluation on VulnForge Academy level routes enables server-side template injection practice surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — never evaluate user input as template code in production apps.",
+      steps: [
+        "Use logic-less templates or strict sandboxed template engines.",
+        "Never pass user input into template expression contexts.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level routes are SSTI-vulnerable via reflexion probes. Show safe template engine configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "agentpwn-attack-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -46056,6 +46082,33 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Fabraix /challenges/* route scan confirms unauthenticated session creation. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-data-exfil-002-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix data-exfil-002 challenge route live oracle",
+    description:
+      "When scanning /challenges/data-exfil-002, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the v2 data-exfil challenge (harder outbound-request defenses) — route-specific exfil_via_request oracle.",
+    impactOneline:
+      "Route-scoped Fabraix data-exfil-002 scans should confirm unauthenticated agent sessions targeting verify_identity outbound exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixDataExfil002RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — restrict verify_identity outbound hosts in production agent deployments.",
+      steps: [
+        "Allowlist verify_identity outbound destinations to trusted partner hosts only.",
+        "Require authenticated users before starting agent red-team sessions.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/data-exfil-002 route scan confirms unauthenticated exfil challenge sessions. Show verify_identity outbound host allowlisting.",
     version: 1,
     enabled: true
   },

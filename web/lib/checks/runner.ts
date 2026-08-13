@@ -3161,6 +3161,7 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevelSqliRouteLiveOracle",
   "vulnforgeAcademyLevel6SqliRouteLiveOracle",
   "vulnforgeAcademyLevelXssRouteLiveOracle",
+  "vulnforgeAcademyLevelSstiRouteLiveOracle",
   "vulnforgeAcademyLevelSsrfRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlRouteLiveOracle",
@@ -3305,6 +3306,7 @@ const DEEP_RULES = new Set<string>([
   "attpAgentRevokeUnauthRouteLiveOracle",
   "fabraixPlaygroundSessionLiveOracle",
   "fabraixPlaygroundSessionRouteLiveOracle",
+  "fabraixDataExfil002RouteLiveOracle",
   "clientSideBugzapPromptDefenseEvidence",
   "clientSideRedlockxPromptFirewallEvidence",
   "clientSideHaoziXssChallengeEvidence",
@@ -11380,6 +11382,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (/demo\.aevum\.build/i.test(origin) && p.slug.startsWith("aevum-")) return -3;
       if (/playground\.fabraix\.com/i.test(origin) && p.slug.startsWith("fabraix-playground")) return -3;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/data-exfil-002/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-data-exfil")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level\d+\.php\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level-ssti")
+      )
+        return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/testimonials\/count\b/i.test(targetInput) &&
