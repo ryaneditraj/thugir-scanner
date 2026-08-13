@@ -71205,6 +71205,23 @@ const brokencrystalsApiFileHttpbinSsrfLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsApiFileRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsApiFileHttpbinSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/file route scan — GET /api/file?path= fetches attacker-controlled URLs server-side — route-specific URL SSRF oracle"
+    }
+  };
+};
+
 async function probeBrokencrystalsFetchSsrf(ctx: RuleContext): Promise<RuleResult | null> {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
   const fetchUrl = new URL("/api/fetch", ctx.origin);
@@ -75064,10 +75081,8 @@ function isDvwuHost(ctx: RuleContext): boolean {
   return /dvwu\.vercel\.app/i.test(ctx.origin);
 }
 
-const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
-  if (!isDvwuHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl)) return NEGATIVE;
+async function probeDvwuPortalSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isDvwuHost(ctx)) return null;
   const portalUrl = new URL("/api/portal", ctx.origin).toString();
   const doc = await ctx.probe.get(portalUrl, {
     method: "POST",
@@ -75076,16 +75091,34 @@ const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/Authentication Bypass Successful|SQL Injection Detected/i.test(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/Authentication Bypass Successful|SQL Injection Detected/i.test(doc.body)) return null;
   return {
     fired: true,
     confidence: 0.94,
     evidence: {
-      scannedUrl: pageUrl,
       portalUrl,
       snippet: doc.body.slice(0, 240).trim(),
-      note: "DVWU POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login route oracle"
+      note: "DVWU POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login oracle"
+    }
+  };
+}
+
+const dvwuPortalSqliLiveOracle: Rule = async (ctx) => (await probeDvwuPortalSqli(ctx)) ?? NEGATIVE;
+
+const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeDvwuPortalSqli(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /api/portal or /labs/sqli route scan — POST with admin' OR '1'='1 bypasses authentication — SQL injection login route oracle"
     }
   };
 };
@@ -75362,6 +75395,12 @@ const istEduSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
       note: "IST Edu /labs/ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
     }
   };
+};
+
+const dvwuSsrfRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const result = await probeRedirectWhitelistBypass(ctx);
+  return result?.fired ? result : NEGATIVE;
 };
 
 const dvwuSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
@@ -78379,6 +78418,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsGotoOpenRedirectLiveOracle,
   brokencrystalsGotoOpenRedirectRouteLiveOracle,
   brokencrystalsApiFileHttpbinSsrfLiveOracle,
+  brokencrystalsApiFileRouteLiveOracle,
   brokencrystalsApiFetchLiveOracle,
   brokencrystalsApiFetchRouteLiveOracle,
   brokencrystalsAwsMetadataSsrfLiveOracle,
@@ -79155,6 +79195,7 @@ export const RULES: Record<string, Rule> = {
   istEduNewsletterCrlfRouteLiveOracle,
   istEduCsrfStateChangeLiveOracle,
   istEduCommentsXssRouteLiveOracle,
+  dvwuPortalSqliLiveOracle,
   dvwuPortalSqliRouteLiveOracle,
   dvwuSearchSqliLiveOracle,
   dvwuSearchSqliRouteLiveOracle,
@@ -79166,6 +79207,7 @@ export const RULES: Record<string, Rule> = {
   allSeeingEyeReadRouteLiveOracle,
   allSeeingEyeHelloRouteLiveOracle,
   istEduSsrfRedirectRouteLiveOracle,
+  dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
   dvwuFilesClientLfiRouteLiveOracle,
   dvwuPathTraversalClientRouteLiveOracle,

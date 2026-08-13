@@ -2551,6 +2551,7 @@ const DEEP_RULES = new Set<string>([
   "istEduNewsletterCrlfRouteLiveOracle",
   "istEduCsrfStateChangeLiveOracle",
   "istEduCommentsXssRouteLiveOracle",
+  "dvwuPortalSqliLiveOracle",
   "dvwuPortalSqliRouteLiveOracle",
   "dvwuSearchSqliLiveOracle",
   "dvwuSearchSqliRouteLiveOracle",
@@ -2566,6 +2567,7 @@ const DEEP_RULES = new Set<string>([
   "vulnwebProfileIdorRouteLiveOracle",
   "vulnwebCsrfRouteLiveOracle",
   "istEduSsrfRedirectRouteLiveOracle",
+  "dvwuSsrfRedirectLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
   "dvwuFilesClientLfiRouteLiveOracle",
   "dvwuPathTraversalClientRouteLiveOracle",
@@ -2963,6 +2965,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsProcessNumbersLiveOracle",
   "brokencrystalsProcessNumbersRouteLiveOracle",
   "brokencrystalsApiFileHttpbinSsrfLiveOracle",
+  "brokencrystalsApiFileRouteLiveOracle",
   "brokencrystalsApiFetchLiveOracle",
   "brokencrystalsApiFetchRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
@@ -11283,6 +11286,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/fetch\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-api-fetch")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/file\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-api-file")
       )
         return -3;
       if (
