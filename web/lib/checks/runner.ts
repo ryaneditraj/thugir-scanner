@@ -2590,6 +2590,8 @@ const DEEP_RULES = new Set<string>([
   "istEduOpenRedirectRouteLiveOracle",
   "dvwuSsrfRedirectLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
+  "dvwuGraphqlLabRouteLiveOracle",
+  "dvwuRaceConditionLabRouteLiveOracle",
   "dvwuFilesClientLfiRouteLiveOracle",
   "dvwuPathTraversalClientRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
@@ -2854,6 +2856,9 @@ const DEEP_RULES = new Set<string>([
   "vulnerableWebSiteCsrfRouteLiveOracle",
   "vulnerableWebSiteStoredXssRouteLiveOracle",
   "vulnerableWebSiteClickjackingRouteLiveOracle",
+  "vulnerableWebSiteSqliRouteLiveOracle",
+  "vulnerableWebSitePathTraversalRouteLiveOracle",
+  "vulnerableWebSiteCommandInjectionRouteLiveOracle",
   "vulnerableWebSiteSsrfRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
@@ -7318,7 +7323,7 @@ function extractVulnerableWebSiteSeeds(html: string, pageUrl: string): string[] 
     return [];
   }
   const out = new Set<string>();
-  for (const p of ["/xss", "/csrf", "/clickjacking", "/ssrf", "/home"]) {
+  for (const p of ["/xss", "/csrf", "/clickjacking", "/ssrf", "/sqli", "/path-traversal", "/command-injection", "/home"]) {
     try {
       out.add(new URL(p, pageUrl).toString());
     } catch {
@@ -7579,6 +7584,8 @@ function extractDvwuVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/cmdi",
     "/labs/path-traversal",
     "/labs/idor",
+    "/labs/graphql",
+    "/labs/race-condition",
     "/api/comments",
     "/newsletter"
   ]) {
@@ -11262,6 +11269,36 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vulnerable-web-site\.vercel\.app/i.test(origin) &&
+        /\/sqli\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-web-site-sqli")
+      )
+        return -3;
+      if (
+        /vulnerable-web-site\.vercel\.app/i.test(origin) &&
+        /\/path-traversal\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-web-site-path-traversal")
+      )
+        return -3;
+      if (
+        /vulnerable-web-site\.vercel\.app/i.test(origin) &&
+        /\/command-injection\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-web-site-command-injection")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-graphql")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/race-condition\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-race-condition")
+      )
+        return -3;
+      if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/xml-import\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-xml-import")
@@ -11519,13 +11556,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-8]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-2]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-8])\b/i.test(targetInput) &&
+        /\/module\/(?:1022|1024|11[2-9]\d|12\d\d|13[0-6]\d|137[0-9]|138[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-2])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-ssti-module-route-live-oracle"
       )
         return -3;

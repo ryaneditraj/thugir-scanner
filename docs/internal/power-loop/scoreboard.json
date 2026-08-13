@@ -56,7 +56,7 @@
       "urls_scanned": 6,
       "findings": 79,
       "focus": "WrongSecrets ch10-12 CSI/IAM/Docker + WSL module/1613 + VulnSite cmdi + DVWU SSTI drain",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
@@ -64,6 +64,9 @@
       "wrongsecrets.herokuapp.com/challenge/challenge-11: 15 findings — wrongsecrets-challenge-11-iam-escalation-route-live-oracle fires",
       "wrongsecrets.herokuapp.com/challenge/challenge-12: 15 findings — wrongsecrets-challenge-12-docker-route-live-oracle fires",
       "vuln-expose.vercel.app/cmdi: 16 findings — vuln-expose-cmdi-route-live-oracle + reflexion-escalated-ssti",
+      "web-security-learning-labs.vercel.app/module/1612: 7→10 findings — web-security-learning-labs-catalog-1612 shipped (concurrent run)",
+      "dvwu.vercel.app/labs/graphql: 11→12 findings — dvwu-graphql-lab-route-live-oracle shipped (concurrent run)",
+      "dvwu.vercel.app/labs/race-condition: 11→12 findings — dvwu-race-condition-lab-route-live-oracle shipped (concurrent run)",
       "dvwu.vercel.app/labs/ssti: 11 findings — generic DVWU portal bundle, no SSTI-route-specific oracle",
       "web-security-learning-labs.vercel.app/module/1613: 7 findings — placeholder shell, module-route evidence only"
     ],
@@ -72,7 +75,7 @@
       "dvwu.vercel.app/labs/ssti: 11-finding generic hub without SSTI-route-specific live oracle",
       "web-security-learning-labs module/1613: placeholder shell — only module-route evidence fires",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "dvwu.vercel.app/labs/graphql|race-condition: route-specific oracles still absent from prior runs"
+      "ginandjuice.shop/my-account/orders: ginandjuice-my-account-orders-route-live-oracle still absent on route scan despite prior ship"
     ]
   },
   "discovery_highlights": {
@@ -81,7 +84,10 @@
     "wrongsecrets.herokuapp.com/challenge/challenge-10": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-11": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-12": 15,
+    "dvwu.vercel.app/labs/graphql": 12,
+    "dvwu.vercel.app/labs/race-condition": 12,
     "dvwu.vercel.app/labs/ssti": 11,
+    "web-security-learning-labs.vercel.app/module/1612": 10,
     "web-security-learning-labs.vercel.app/module/1613": 7,
     "brokencrystals.com/api/file": 85,
     "pentest-fauxbank.vercel.app/api/transfer": 15
