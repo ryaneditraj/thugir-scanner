@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-address-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /my-account/change-address redirects to login with account-icon selected + login-form; ginandjuice.shop/my-account/change-address findings 0→30 (+ginandjuice-change-address-route-live-oracle + login-route); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-path-traversal-client-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/path-traversal SPA bundle contains Path traversal detected + Document Library markers; dvwu.vercel.app/labs/path-traversal findings 8→11 (+dvwu-path-traversal-client-route-live-oracle + dvwu-notices-lfi-route-live-oracle + dvwu-files-client-lfi-route-live-oracle); benchmark 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-my-account-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority -3 for ginandjuice my-account route slugs on /change-password|change-email|change-address|delete; change-password route scan fires ginandjuice-change-password-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-notices-lfi-route-live-oracle",
       "status": "shipped",
