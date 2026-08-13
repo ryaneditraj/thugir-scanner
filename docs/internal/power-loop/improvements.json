@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-portal-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful + Logged in as admin; dvwu.vercel.app/labs/jwt findings 9→11 (+dvwu-portal-sqli-live-oracle host oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-ssrf-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=//https:///google.com/%2e%2e returns 302 Location //https:///google.com/.. while metadata blocked 403; dvwu.vercel.app/labs/ssrf findings 11→13 (+dvwu-ssrf-redirect-live-oracle host oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-file-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file?path=http://example.com/ SSRF probe aligned with host oracle; brokencrystals.com/api/file?url= route scan adds scannedUrl evidence (+brokencrystals-api-file-route-live-oracle; endpoint intermittently returns URL constructor error); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api3-user-route-live-oracle",
       "status": "shipped",
