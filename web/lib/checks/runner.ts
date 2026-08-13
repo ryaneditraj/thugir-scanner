@@ -11470,6 +11470,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/orders\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-my-account-orders")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
         /\/logger\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-logger")
       )

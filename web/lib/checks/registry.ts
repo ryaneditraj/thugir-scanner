@@ -6086,7 +6086,16 @@ const clientSideOopssecJwtAlgConfusionEvidence: Rule = async (ctx) => {
 const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/jwt-algorithm-confusion-partner-api/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecJwtAlgConfusionEvidence(ctx);
+  let result = await clientSideOopssecJwtAlgConfusionEvidence(ctx);
+  if (!result.fired) {
+    const doc = await ctx.probe.get(pageUrl, { maxBytes: 196_608, timeoutMs: 20000 });
+    if (doc.status >= 200 && doc.status < 400) {
+      result = await clientSideOopssecJwtAlgConfusionEvidence({
+        ...ctx,
+        combined: `${ctx.combined}\n${doc.body}`
+      });
+    }
+  }
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -37193,7 +37202,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1608;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1610;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -37222,7 +37231,9 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1605": "IDOR",
   "1606": "IDOR",
   "1607": "IDOR",
-  "1608": "IDOR"
+  "1608": "IDOR",
+  "1609": "IDOR",
+  "1610": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -58499,6 +58510,39 @@ const ginAndJuiceChangeAddressRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
       note: "Gin & Juice Shop /my-account/change-address route scan — authenticated address-change surface gated behind login (PortSwigger IDOR training lab entry point)"
+    }
+  };
+};
+
+const ginAndJuiceMyAccountOrdersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\/orders\b/i.test(pageUrl)) return NEGATIVE;
+  const ordersDoc = await ctx.probe.get(pageUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loginRedirect =
+    [301, 302, 303, 307, 308].includes(ordersDoc.status) &&
+    /\/login\b/i.test(ordersDoc.headers["location"] || "");
+  const inlineLogin =
+    ordersDoc.status >= 200 &&
+    ordersDoc.status < 400 &&
+    /class=login-form/i.test(ordersDoc.body) &&
+    /name="username"/i.test(ordersDoc.body);
+  if (!loginRedirect && !inlineLogin) return NEGATIVE;
+  const idor = await ginAndJuiceOrderDetailsIdorLiveOracle(ctx);
+  if (!idor.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...idor.evidence,
+      scannedUrl: pageUrl,
+      ordersStatus: ordersDoc.status,
+      location: ordersDoc.headers["location"] || "",
+      note: "Gin & Juice Shop /my-account/orders route scan — orders list gated behind login while GET /order/details?orderId= exposes billing and payment details without authentication (PortSwigger order IDOR training lab)"
     }
   };
 };
@@ -80281,6 +80325,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceChangeEmailRouteLiveOracle,
   ginAndJuiceChangePasswordRouteLiveOracle,
   ginAndJuiceChangeAddressRouteLiveOracle,
+  ginAndJuiceMyAccountOrdersRouteLiveOracle,
   ginAndJuiceDeleteRouteLiveOracle,
   ginAndJuiceLoggerOastLiveOracle,
   ginAndJuiceLoggerRouteLiveOracle,
