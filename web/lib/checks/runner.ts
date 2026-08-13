@@ -2397,6 +2397,7 @@ const DEEP_RULES = new Set<string>([
   "vapiApi3CommentRouteLiveOracle",
   "vapiApi8SqliLoginLiveOracle",
   "vapiApi8SecretRouteLiveOracle",
+  "vapiApi8LoginRouteLiveOracle",
   "vapiApi7CorsMisconfigLiveOracle",
   "vapiApi7CorsRouteLiveOracle",
   "vapiApi9ImproperInventoryLiveOracle",
@@ -2960,6 +2961,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsProcessNumbersLiveOracle",
   "brokencrystalsProcessNumbersRouteLiveOracle",
   "brokencrystalsApiFileHttpbinSsrfLiveOracle",
+  "brokencrystalsApiFetchLiveOracle",
   "brokencrystalsApiFetchRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
   "brokencrystalsFileLfiRouteLiveOracle",
@@ -11271,6 +11273,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:api\/)?chat\/init\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-chat-init")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/fetch\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-api-fetch")
+      )
+        return -3;
+      if (
+        /vapi\.apisec\.ai/i.test(origin) &&
+        /\/api8\/user\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("vapi-api8")
       )
         return -3;
       if (
