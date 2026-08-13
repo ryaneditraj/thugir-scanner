@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T12:32:00.000Z",
+  "updated_at": "2026-08-13T13:26:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://playground.fabraix.com/challenges/data-exfil-002",
+      "source": "fabraix/playground — Show HN AI agent data-exfil challenge v2 with harder outbound-request defenses (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1605",
+      "source": "web-security-learning-labs Vercel — module 1605 security lab route (OSS deploy hub expansion past 1604)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level2.php",
+      "source": "webspoilt/vulnforge-academy — medium tier Level 2 challenge (GitHub repo levels/medium/)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://brokencrystals.com/api/command",
+      "source": "NeuraLegion/brokencrystals — command injection oracle GET /api/command (README injection vulns)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/deliverys",
+      "source": "Official OWASP Juice Shop demo — delivery BOLA oracle GET /rest/deliverys (demo.owasp-juice.shop README)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api10/login",
       "source": "roottusk/vAPI — API10 unsafe-consumption login oracle /vapi/api10/login (APIsec hosted lab)",
