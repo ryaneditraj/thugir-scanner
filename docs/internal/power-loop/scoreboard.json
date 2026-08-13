@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T19:28:00.000Z",
+  "updated_at": "2026-08-13T20:32:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2903,
-  "total_findings": 30104,
+  "total_sites_scanned": 2907,
+  "total_findings": 30186,
   "critical_findings": 64,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2032,
-  "discovery_findings": 24201,
+  "discovery_findings": 24238,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-13T19:28:00.000Z",
+  "last_run": "2026-08-13T20:32:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 45,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 583,
+      "probes_run": 585,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (45 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 30,
-      "focus": "oopssec gift-card randomness + vulnerable-web-site SSRF + ist-edu open-redirect route oracles",
+      "findings": 46,
+      "focus": "WSL catalog 1609-1610 + ginandjuice orders route oracle + oopssec JWT fetch fallback",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "koadt.github.io/.../insecure-randomness-gift-card: 12→15 findings — oopssec-gift-card-randomness-route-live-oracle shipped (LCG + createdAt seed)",
-      "vulnerable-web-site.vercel.app/ssrf: 5→6 findings — vulnerable-web-site-ssrf-route-live-oracle shipped (auth-gated SSRF lab)",
-      "ist-edu-bd.vercel.app/labs/open-redirect: 8→9 findings — ist-edu-open-redirect-route-live-oracle shipped (SPA redirect chain)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1609: catalog extended to 1610 — idor-module-route-live-oracle fires on placeholder shell",
+      "ginandjuice.shop/my-account/orders: 28→29 findings — ginandjuice-my-account-orders-route-live-oracle shipped (302 login + unauthenticated order details IDOR)",
+      "koadt.github.io/.../jwt-algorithm-confusion-partner-api: 5→7 findings — oopssec JWT route oracle direct-fetch fallback shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnerable-web-site.vercel.app/path-traversal|command-injection|sqli: 5-finding hubs without route-specific live oracles",
-      "gdg-benin.vercel.app + web-security-learning-labs module/1609–1610 queued but not drained (queue depth ahead of limit 8)"
+      "vulnerable-web-site.vercel.app/path-traversal|command-injection|sqli: rejected — routes absent from upstream repo (middleware auth redirect only, no lab modules)",
+      "gdg-benin.vercel.app: event-site SPA without security-lab signals in bundle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 45,
+    "ginandjuice.shop/my-account/orders": 29,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api": 7,
+    "web-security-learning-labs.vercel.app/module/1609": 10,
     "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 15,
     "ist-edu-bd.vercel.app/labs/open-redirect": 9,
     "vulnerable-web-site.vercel.app/ssrf": 6,
-    "ginandjuice.shop/my-account/orders": 28,
     "vapi.apisec.ai/vapi/api10/login": 14,
-    "ist-edu-bd.vercel.app/labs/idor": 10,
-    "web-security-learning-labs.vercel.app/module/1608": 10,
-    "attp-live.fly.dev/demo": 5
+    "ist-edu-bd.vercel.app/labs/idor": 10
   }
 }

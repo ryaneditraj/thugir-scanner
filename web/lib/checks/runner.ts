@@ -2533,6 +2533,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceChangeEmailRouteLiveOracle",
   "ginAndJuiceChangePasswordRouteLiveOracle",
   "ginAndJuiceChangeAddressRouteLiveOracle",
+  "ginAndJuiceMyAccountOrdersRouteLiveOracle",
   "ginAndJuiceDeleteRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
   "ginAndJuiceLoggerRouteLiveOracle",

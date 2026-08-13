@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-catalog-1609-1610",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /module/1609 and /module/1610 return Here is a Module placeholder shells; extended WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX to 1610 with IDOR curated topics; web-security-learning-labs.vercel.app/module/1609 findings 10 (+idor-module-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-my-account-orders-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /my-account/orders returns 302 Location /login while GET /order/details?orderId=0254809 returns Order no + Billing address without auth; ginandjuice.shop/my-account/orders findings 28→29 (+ginandjuice-my-account-orders-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-jwt-alg-confusion-route-fetch-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route oracle now fetches Astro walkthrough HTML when shallow crawl omits RS256/HS256/partner-signing-key.pem markers; koadt.github.io/.../jwt-algorithm-confusion-partner-api findings 5→7 (+oopssec-jwt-alg-confusion-route-live-oracle + client-side evidence); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-gift-card-randomness-route-live-oracle",
       "status": "shipped",
@@ -9821,7 +9839,22 @@
     {
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-supply-chain-poisoned-rules-route-live-oracle",
-      "shipped_at": "2026-08-13T17:45:00.000Z"
+      "shipped_at": "2026-08-13T20:32:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-catalog-1609-1610",
+      "shipped_at": "2026-08-13T20:32:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-my-account-orders-route-live-oracle",
+      "shipped_at": "2026-08-13T20:32:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-jwt-alg-confusion-route-fetch-fallback",
+      "shipped_at": "2026-08-13T20:32:00.000Z"
     }
   ]
 }
