@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 2734,
-  "total_findings": 26801,
-  "critical_findings": 58,
+  "total_sites_scanned": 2851,
+  "total_findings": 29336,
+  "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1952,
-  "discovery_findings": 22780,
-  "improvements_shipped": 1164,
+  "discovery_urls_added": 2012,
+  "discovery_findings": 23873,
+  "improvements_shipped": 1199,
   "last_run": "2026-08-13T14:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
@@ -69,6 +69,7 @@
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "fabraix data-exfil-002 challenge slug absent on API — session oracle falls back to data-exfil-001",
       "dvwu.vercel.app/labs/ssti and /labs/deserialization: route-specific SSTI/deserialization oracles still absent (SPA shell only)",
+      "oopssec blog walkthrough URLs: GitHub Pages hubs — JWT alg-confusion route live oracles absent without live app host",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
@@ -78,8 +79,7 @@
     "brokencrystals.com/api/command": 80,
     "demo.aevum.build": 9,
     "attp-live.fly.dev/demo": 5,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "ginandjuice.shop": 31
+    "demo.owasp-juice.shop/rest/quantitys": 49,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
