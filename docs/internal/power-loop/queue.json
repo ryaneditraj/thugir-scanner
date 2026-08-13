@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T07:12:18.220Z",
+  "updated_at": "2026-08-13T08:11:59.829Z",
   "discovery_urls": [
+    {
+      "url": "https://vapi.apisec.ai/vapi/api1/user/1",
+      "source": "roottusk/vAPI — API1 BOLA oracle GET /vapi/api1/user/{api1_id} (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api2/user/login",
+      "source": "roottusk/vAPI — API2 broken authentication oracle POST /vapi/api2/user/login (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api4/otp/verify",
+      "source": "roottusk/vAPI — API4 OTP brute-force oracle POST /vapi/api4/otp/verify (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api5/user/1",
+      "source": "roottusk/vAPI — API5 broken function-level authorization oracle GET /vapi/api5/user/{api5_id}",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — SSRF oracle GET /api/fetch?url= (README new endpoint)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://urban-vampi-production.up.railway.app/books/v1",
       "source": "erev0s/VAmPI — urban mirror books enumeration oracle GET /books/v1 (Railway deploy README)",
