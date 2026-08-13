@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T18:28:25.411Z",
+  "updated_at": "2026-08-13T19:15:53.131Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnerable-web-site.vercel.app/path-traversal",
+      "source": "megmogmog1965/vulnerable-web-site — path traversal lab module (GitHub README Vercel demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/command-injection",
+      "source": "megmogmog1965/vulnerable-web-site — command injection lab module (GitHub README Vercel demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/sqli",
+      "source": "megmogmog1965/vulnerable-web-site — SQL injection lab module (GitHub README Vercel demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level4.php",
+      "source": "webspoilt/vulnforge-academy — medium tier Level 4 challenge (GitHub repo levels/medium/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/orders",
+      "source": "PortSwigger Web Security Academy — Gin & Juice Shop orders BOLA lab route (public academy demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1608",
       "source": "web-security-learning-labs Vercel — module 1608 security lab route (OSS deploy hub expansion past 1607)",
