@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T04:17:20.645Z",
-  "total": 2226,
-  "uniqueSlugs": 2222,
+  "generatedAt": "2026-08-13T05:12:30.214Z",
+  "total": 2228,
+  "uniqueSlugs": 2224,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2208,
+    "generic": 2210,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2141,
+    "deep": 2143,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 441,
+    "Broken access control": 442,
     "Exposed secret": 102,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 108,
     "Security misconfiguration": 159,
     "Broken authentication": 131,
-    "Injection": 321,
+    "Injection": 322,
     "Cross-site scripting": 682,
     "Open redirect": 19,
     "general": 20,
@@ -920,6 +920,7 @@
     "dvwu-dashboard-idor-route-live-oracle",
     "dvwu-files-client-lfi-route-live-oracle",
     "dvwu-notices-lfi-route-live-oracle",
+    "dvwu-path-traversal-client-route-live-oracle",
     "dvwu-portal-sqli-route-live-oracle",
     "dvwu-search-xss-route-live-oracle",
     "dvwu-ssrf-redirect-route-live-oracle",
@@ -1481,6 +1482,7 @@
     "ginandjuice-catalog-search-xss-live-oracle",
     "ginandjuice-catalog-subscribe-live-oracle",
     "ginandjuice-catalog-subscribe-route-live-oracle",
+    "ginandjuice-change-address-route-live-oracle",
     "ginandjuice-change-email-route-live-oracle",
     "ginandjuice-change-password-route-live-oracle",
     "ginandjuice-home-url-override-live-oracle",

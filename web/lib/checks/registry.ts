@@ -57295,6 +57295,30 @@ const ginAndJuiceChangePasswordRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceChangeAddressRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\/change-address\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hasAccountNav =
+    /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
+  const hasLoginSurface =
+    /class=login-form/i.test(doc.body) &&
+    /name="username"/i.test(doc.body) &&
+    /type=username/i.test(doc.body);
+  if (!hasAccountNav || !hasLoginSurface) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
+      note: "Gin & Juice Shop /my-account/change-address route scan — authenticated address-change surface gated behind login (PortSwigger IDOR training lab entry point)"
+    }
+  };
+};
+
 const ginAndJuiceLoggerOastLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const loggerUrl = new URL("/logger", ctx.origin).toString();
@@ -75003,7 +75027,7 @@ const dvwuFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/(?:labs\/lfi|files|notices)\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:labs\/(?:lfi|path-traversal|xxe|cmdi)|files|notices)\/?$/i.test(pathname)) return NEGATIVE;
   const bundle = await istEduVulnPortalBundleCorpus(ctx);
   if (!bundle) return NEGATIVE;
   if (!/Document Library/i.test(bundle)) return NEGATIVE;
@@ -75017,6 +75041,32 @@ const dvwuFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
       markers: ["Document Library", "LFI vuln-hint", "?file=../../../etc/passwd"],
       snippet: bundle.match(/file viewer is vulnerable to LFI[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
       note: "DVWU /labs/lfi or /files route scan — SPA Document Library exposes client-side LFI training lab with path traversal payloads"
+    }
+  };
+};
+
+const dvwuPathTraversalClientRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/labs\/path-traversal\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Path traversal detected/i.test(bundle)) return NEGATIVE;
+  if (!/Document Library/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["Path traversal detected", "Document Library"],
+      snippet: bundle.match(/Path traversal detected[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /labs/path-traversal route scan — SPA Document Library exposes client-side path traversal training lab with ../ detection"
     }
   };
 };
@@ -78652,6 +78702,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogProductRouteLiveOracle,
   ginAndJuiceChangeEmailRouteLiveOracle,
   ginAndJuiceChangePasswordRouteLiveOracle,
+  ginAndJuiceChangeAddressRouteLiveOracle,
   ginAndJuiceLoggerOastLiveOracle,
   ginAndJuiceLoggerRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
@@ -78673,6 +78724,7 @@ export const RULES: Record<string, Rule> = {
   istEduSsrfRedirectRouteLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
   dvwuFilesClientLfiRouteLiveOracle,
+  dvwuPathTraversalClientRouteLiveOracle,
   vampiAdminProfileUnauthLiveOracle,
   vampiAdminProfileUnauthRouteLiveOracle,
   vampiUsersEnumerationLiveOracle,
