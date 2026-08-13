@@ -38763,6 +38763,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api3-user-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI API3 user route BOLA live oracle",
+    description:
+      "When scanning /api3/user, GET /api3/comment returns every comment JSON without authentication including flag device IDs — route-specific API3 excessive data exposure oracle.",
+    impactOneline:
+      "Route scans on the API3 user hub should still confirm unauthenticated comment export via the linked comment API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi3UserRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — require authentication and object-level checks on comment APIs in production.",
+      steps: [
+        "Require authentication before returning comment collections.",
+        "Scope comment queries to the authenticated user's device or account.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api3/user route scan confirms unauthenticated bulk comment export via /api3/comment. Show BOLA remediation for comment APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api4-otp-broken-auth-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -38967,6 +38993,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api8/user/login route scan confirms SQLi authentication bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-api8-user-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "vAPI API8 user route SQLi live oracle",
+    description:
+      "When scanning /api8/user, POST /api8/user/login accepts SQLi `' OR '1'='1` bypass and /api8/user/secret dumps admin flag{api8_*} — route-specific API8 injection oracle.",
+    impactOneline:
+      "Route scans on the API8 user hub should confirm SQL injection authentication bypass chains to the secret endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi8UserRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — use parameterized queries for every login path in production.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic auth failures without SQL syntax errors.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api8/user route scan confirms SQLi login bypass chains to /api8/user/secret. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },
@@ -54942,6 +54994,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /books/v1/{book_title} route scan confirms BOLA — JWT reads another user's book secret. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-books-stale-catalog-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "VAmPI stale book catalog live oracle",
+    description:
+      "GET /books/v1 lists foreign-owned book titles but every GET /books/v1/{title} returns not-found — stale catalog leaks ownership metadata without granting object access (common on broken VAmPI mirrors).",
+    impactOneline:
+      "Inconsistent book catalogs expose which users own which resources even when individual object reads are blocked or broken.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiBooksStaleCatalogLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI mirrors with stale catalogs are training infrastructure — keep list and detail endpoints consistent in production APIs.",
+      steps: [
+        "Ensure list endpoints only return objects the caller can actually retrieve.",
+        "Invalidate or refresh catalog caches when underlying records are deleted.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /books/v1 lists foreign-owned books but detail GETs all return not-found. Show catalog consistency and authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-books-stale-catalog-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "VAmPI stale book catalog route live oracle",
+    description:
+      "When scanning /books/v1 or /books/v1/{id}, the catalog lists foreign-owned titles but individual book GETs all return not-found — route-specific stale catalog information disclosure oracle.",
+    impactOneline:
+      "Route scans on book list endpoints should detect catalog/detail inconsistency that leaks ownership metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiBooksStaleCatalogRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI mirrors with stale catalogs are training infrastructure — keep list and detail endpoints consistent in production APIs.",
+      steps: [
+        "Ensure list endpoints only return objects the caller can actually retrieve.",
+        "Invalidate or refresh catalog caches when underlying records are deleted.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /books/v1 route scan shows foreign-owned titles in the list but not-found on detail GETs. Show catalog consistency remediation.",
     version: 1,
     enabled: true
   },
