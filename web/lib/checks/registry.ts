@@ -6397,6 +6397,186 @@ const oopssecMiddlewareBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store verbose API error disclosure (posts/information-disclosure-api-error) -
+const CLIENT_OOPSSEC_INFORMATION_DISCLOSURE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Verbose API debug response title",
+    re: /Leaking Secrets Through Error Messages|Verbose API Debug Response/i
+  },
+  {
+    label: "POST /api/user/export invalid field oracle",
+    re: /POST \/api\/user\/export|invalid field names in export request|invalidFields/i
+  },
+  {
+    label: "debug.systemDiagnostics featureFlags leak",
+    re: /systemDiagnostics|featureFlags|getSystemDiagnostics/i
+  },
+  {
+    label: "Data export profile tab route",
+    re: /Data Export tab|allowedFields.*password/i
+  },
+  {
+    label: "Information disclosure walkthrough route",
+    re: /\/posts\/information-disclosure-api-error/i
+  }
+];
+
+const clientSideOopssecInformationDisclosureEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_INFORMATION_DISCLOSURE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|\/api\/user\/export|systemDiagnostics|featureFlags/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents verbose 400 errors on POST /api/user/export — invalid field triggers debug.systemDiagnostics.featureFlags leak"
+    }
+  };
+};
+
+const oopssecInformationDisclosureApiErrorRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/information-disclosure-api-error/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecInformationDisclosureEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/information-disclosure-api-error route scan — walkthrough documents POST /api/user/export invalid field leaking debug.systemDiagnostics.featureFlags"
+    }
+  };
+};
+
+// --- OopsSec Store NEXT_PUBLIC_ env leak (posts/next-public-env-variable-leak) ---------
+const CLIENT_OOPSSEC_NEXT_PUBLIC_ENV_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "NEXT_PUBLIC env leak walkthrough title",
+    re: /Reading Secrets From the Browser|The NEXT_PUBLIC_ Trap in Next\.js/i
+  },
+  {
+    label: "NEXT_PUBLIC_PAYMENT_SECRET checkout leak",
+    re: /NEXT_PUBLIC_PAYMENT_SECRET|X-Payment-Auth/i
+  },
+  {
+    label: "Checkout POST /api/orders header oracle",
+    re: /POST \/api\/orders|Complete Payment|\/checkout/i
+  },
+  {
+    label: "Client bundle env substitution",
+    re: /substituted into the client JavaScript bundle|process\.env\.NEXT_PUBLIC_/i
+  },
+  {
+    label: "NEXT_PUBLIC env walkthrough route",
+    re: /\/posts\/next-public-env-variable-leak/i
+  }
+];
+
+const clientSideOopssecNextPublicEnvEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_NEXT_PUBLIC_ENV_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|NEXT_PUBLIC_|X-Payment-Auth|\/checkout/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET inlined into checkout bundle and sent as X-Payment-Auth on POST /api/orders"
+    }
+  };
+};
+
+const oopssecNextPublicEnvRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/next-public-env-variable-leak/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecNextPublicEnvEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/next-public-env-variable-leak route scan — walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
+    }
+  };
+};
+
+// --- OopsSec Store supply-chain poisoned rules (posts/supply-chain-poisoned-rules-chain) -
+const CLIENT_OOPSSEC_SUPPLY_CHAIN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Supply chain poisoned rules title",
+    re: /Supply Chain & AI Rules File Backdoor|Typosquat.*Poisoned Skill/i
+  },
+  {
+    label: "react-toastfy typosquat package",
+    re: /react-toastfy|react-toastify.*typosquat|postinstall/i
+  },
+  {
+    label: "Poisoned Cursor rules file drop",
+    re: /productivity-helper\.mdc|\.cursor\/rules|prompt injection targeting the developer's AI agent/i
+  },
+  {
+    label: "Magic-header admin diag backdoor",
+    re: /\/api\/admin\/diag|X-Debug-Auth:\s*dbg_8f3a7c91e2b4d6a05e21/i
+  },
+  {
+    label: "Supply chain walkthrough route",
+    re: /\/posts\/supply-chain-poisoned-rules-chain/i
+  }
+];
+
+const clientSideOopssecSupplyChainEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_SUPPLY_CHAIN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|react-toastfy|productivity-helper|\/api\/admin\/diag/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents typosquat react-toastfy postinstall dropping poisoned Cursor rules that add X-Debug-Auth bypass on /api/admin/diag"
+    }
+  };
+};
+
+const oopssecSupplyChainPoisonedRulesRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/supply-chain-poisoned-rules-chain/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecSupplyChainEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/supply-chain-poisoned-rules-chain route scan — walkthrough documents typosquat npm postinstall + poisoned AI rules backdoor on /api/admin/diag via X-Debug-Auth"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -80048,6 +80228,12 @@ export const RULES: Record<string, Rule> = {
   oopssecPromptInjectionRouteLiveOracle,
   clientSideOopssecMiddlewareBypassEvidence,
   oopssecMiddlewareBypassRouteLiveOracle,
+  clientSideOopssecInformationDisclosureEvidence,
+  oopssecInformationDisclosureApiErrorRouteLiveOracle,
+  clientSideOopssecNextPublicEnvEvidence,
+  oopssecNextPublicEnvRouteLiveOracle,
+  clientSideOopssecSupplyChainEvidence,
+  oopssecSupplyChainPoisonedRulesRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
