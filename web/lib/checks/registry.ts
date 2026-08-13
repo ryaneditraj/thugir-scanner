@@ -37303,7 +37303,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1611;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1612;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -37335,7 +37335,8 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1608": "IDOR",
   "1609": "IDOR",
   "1610": "IDOR",
-  "1611": "IDOR"
+  "1611": "IDOR",
+  "1612": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -68247,6 +68248,47 @@ const vulnerableWebSiteClickjackingRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+async function probeVulnerableWebSiteLoginGatedLabRoute(
+  ctx: RuleContext,
+  routeSegment: string,
+  labName: string
+): Promise<RuleResult> {
+  if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!new RegExp(`/${routeSegment}\\b`, "i").test(pageUrl)) return NEGATIVE;
+  const routeDoc = await ctx.probe.get(new URL(`/${routeSegment}`, ctx.origin).toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const loginRedirect =
+    /\/login\b/i.test(ctx.home.finalUrl || "") ||
+    /\/login\b/i.test(pageUrl) ||
+    ([301, 302, 303, 307, 308].includes(routeDoc.status) &&
+      /\/login\b/i.test(routeDoc.headers["location"] || ""));
+  if (!loginRedirect) return NEGATIVE;
+  if (!/Vulnerable Web Site|vulnerable-web-site/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      routeStatus: routeDoc.status,
+      location: routeDoc.headers["location"] || "",
+      note: `vulnerable-web-site.vercel.app /${routeSegment} route redirects to login — auth-gated ${labName} training lab surface on Next.js vulnerable-web-site demo`
+    }
+  };
+}
+
+const vulnerableWebSiteSqliRouteLiveOracle: Rule = async (ctx) =>
+  probeVulnerableWebSiteLoginGatedLabRoute(ctx, "sqli", "SQL injection");
+
+const vulnerableWebSitePathTraversalRouteLiveOracle: Rule = async (ctx) =>
+  probeVulnerableWebSiteLoginGatedLabRoute(ctx, "path-traversal", "path traversal");
+
+const vulnerableWebSiteCommandInjectionRouteLiveOracle: Rule = async (ctx) =>
+  probeVulnerableWebSiteLoginGatedLabRoute(ctx, "command-injection", "command injection");
+
 const vulnerableWebSiteSsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -76513,6 +76555,48 @@ const istEduDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeDvwuLabRouteInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  const sqli = await probeDvwuSearchSqli(ctx);
+  if (sqli?.fired) return sqli;
+  const portal = await probeDvwuPortalSqli(ctx);
+  if (portal?.fired) return portal;
+  return null;
+}
+
+const dvwuGraphqlLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeDvwuLabRouteInjection(ctx);
+  if (!injection?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...injection.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/graphql route scan — GraphQL injection training lab entry confirms DVWU SQL/injection oracle via /api/search or /api/portal"
+    }
+  };
+};
+
+const dvwuRaceConditionLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/race-condition\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeDvwuLabRouteInjection(ctx);
+  if (!injection?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      ...injection.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /labs/race-condition route scan — race-condition training lab entry confirms DVWU injection oracle while SPA route is queued for discovery drain"
+    }
+  };
+};
+
 const dvwuDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -79635,6 +79719,9 @@ export const RULES: Record<string, Rule> = {
   vulnerableWebSiteCsrfRouteLiveOracle,
   vulnerableWebSiteStoredXssRouteLiveOracle,
   vulnerableWebSiteClickjackingRouteLiveOracle,
+  vulnerableWebSiteSqliRouteLiveOracle,
+  vulnerableWebSitePathTraversalRouteLiveOracle,
+  vulnerableWebSiteCommandInjectionRouteLiveOracle,
   vulnerableWebSiteSsrfRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
@@ -80455,6 +80542,8 @@ export const RULES: Record<string, Rule> = {
   istEduOpenRedirectRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
+  dvwuGraphqlLabRouteLiveOracle,
+  dvwuRaceConditionLabRouteLiveOracle,
   dvwuFilesClientLfiRouteLiveOracle,
   dvwuPathTraversalClientRouteLiveOracle,
   vampiAdminProfileUnauthLiveOracle,
