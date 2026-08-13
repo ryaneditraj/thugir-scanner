@@ -3288,6 +3288,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideAttpAgentTrustEvidence",
   "attpAgentRevokeUnauthLiveOracle",
   "attpAgentRevokeUnauthRouteLiveOracle",
+  "fabraixPlaygroundSessionLiveOracle",
+  "fabraixPlaygroundSessionRouteLiveOracle",
   "clientSideBugzapPromptDefenseEvidence",
   "clientSideRedlockxPromptFirewallEvidence",
   "clientSideHaoziXssChallengeEvidence",
@@ -9132,7 +9134,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(targetInput) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count)\b/i.test(targetInput)
+    /\/api\/(?:goto|products\/latest|testimonials\/count|command|spawn)\b/i.test(targetInput)
   ) {
     try {
       const routeDoc = await fetchDoc(targetInput, {
@@ -11341,6 +11343,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         (p.slug.startsWith("brokencrystals-spawn") || p.slug === "command-injection-form-probe")
       )
         return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/command\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-spawn") ||
+          p.slug.startsWith("brokencrystals-command") ||
+          p.slug === "command-injection-form-probe")
+      )
+        return -3;
+      if (
+        /attp-live\.fly\.dev|attp\.cybersecai\.co\.uk/i.test(origin) &&
+        /\/demo\b/i.test(targetInput) &&
+        p.slug.startsWith("attp-agent-revoke")
+      )
+        return -3;
+      if (/demo\.aevum\.build/i.test(origin) && p.slug.startsWith("aevum-")) return -3;
+      if (/playground\.fabraix\.com/i.test(origin) && p.slug.startsWith("fabraix-playground")) return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/testimonials\/count\b/i.test(targetInput) &&
