@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T10:18:43.831Z",
+  "updated_at": "2026-08-13T11:09:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vapi.apisec.ai/vapi/api10/login",
+      "source": "roottusk/vAPI — API10 unsafe-consumption login oracle /vapi/api10/login (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api10/identity",
+      "source": "roottusk/vAPI — API10 identity route oracle /vapi/api10/identity (APIsec hosted lab)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://attp-live.fly.dev/demo",
+      "source": "ATTP Agent Trust Transport Protocol — SQL-gate + agent signing live demo /demo (fly.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/puzzle/1/",
+      "source": "Code-Breaking Puzzles — PHP RCE/SQLi code-audit puzzle #1 (fly.dev public CTF)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/execute",
+      "source": "Aikido Zen WAF playground — shell injection test surface /pages/execute (fly.dev)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api10/user",
       "source": "roottusk/vAPI — API10 unsafe-consumption oracle /vapi/api10/user (APIsec hosted lab)",
