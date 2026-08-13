@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:koadt.github.io",
+      "slug": "oopssec-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/ssrf-internal-page-access documents support-form screenshot URL SSRF to http://localhost:3000/internal; koadt.github.io/.../ssrf-internal-page-access findings 0→6 (+client-side-oopssec-ssrf-evidence + route oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/prompt-injection-ai-assistant documents OSSBot BLOCKED_PATTERNS bypass leaking INTERNAL CONFIGURATION from /api/ai-assistant system prompt; koadt.github.io/.../prompt-injection-ai-assistant findings 0→7 (+client-side-oopssec-prompt-injection-evidence + route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-middleware-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/middleware-authorization-bypass-cve-2025-29927 documents CVE-2025-29927 x-middleware-subrequest bypass to /monitoring/internal-status; koadt.github.io/.../middleware-authorization-bypass-cve-2025-29927 findings 0→8 (+client-side-oopssec-middleware-bypass-evidence + route oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
       "slug": "oopssec-jwt-alg-confusion-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/jwt-algorithm-confusion-partner-api documents RS256/HS256 confusion with partner-signing-key.pem reused as HMAC secret; koadt.github.io/.../jwt-algorithm-confusion-partner-api findings 5→7 (+client-side-oopssec-jwt-alg-confusion-evidence + route oracle); benchmark juice-shop 48 findings 6/6 maintained"
@@ -9720,6 +9738,21 @@
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-csrf-admin-order-route-live-oracle",
       "shipped_at": "2026-08-13T15:30:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-ssrf-route-live-oracle",
+      "shipped_at": "2026-08-13T16:36:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-prompt-injection-route-live-oracle",
+      "shipped_at": "2026-08-13T16:36:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-middleware-bypass-route-live-oracle",
+      "shipped_at": "2026-08-13T16:36:00.000Z"
     }
   ]
 }
