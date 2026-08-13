@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T07:28:10.036Z",
-  "total": 2236,
-  "uniqueSlugs": 2232,
+  "generatedAt": "2026-08-13T08:23:04.624Z",
+  "total": 2239,
+  "uniqueSlugs": 2235,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2218,
+    "generic": 2221,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2151,
+    "deep": 2154,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 442,
+    "Broken access control": 445,
     "Exposed secret": 102,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1489,6 +1489,7 @@
     "ginandjuice-change-address-route-live-oracle",
     "ginandjuice-change-email-route-live-oracle",
     "ginandjuice-change-password-route-live-oracle",
+    "ginandjuice-delete-route-live-oracle",
     "ginandjuice-home-url-override-live-oracle",
     "ginandjuice-home-url-override-route-live-oracle",
     "ginandjuice-logger-oast-live-oracle",
@@ -1917,6 +1918,8 @@
     "v0-server-action-no-authz",
     "vampi-admin-profile-unauth-live-oracle",
     "vampi-admin-profile-unauth-route-live-oracle",
+    "vampi-book-bola-live-oracle",
+    "vampi-book-bola-route-live-oracle",
     "vampi-books-excessive-data-live-oracle",
     "vampi-books-route-live-oracle",
     "vampi-createdb-unauth-live-oracle",
