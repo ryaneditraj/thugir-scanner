@@ -2720,6 +2720,16 @@ const DEEP_RULES = new Set<string>([
   "vulnshopApiInfoRouteLiveOracle",
   "vulnshopApiProcessDeserializationLiveOracle",
   "vulnshopApiProcessRouteLiveOracle",
+  "vulnshopTemplateSstiLiveOracle",
+  "vulnshopTemplateSstiRouteLiveOracle",
+  "vulnshopTrackOrderSsrfLiveOracle",
+  "vulnshopTrackOrderSsrfRouteLiveOracle",
+  "vulnshopSupportLfiLiveOracle",
+  "vulnshopSupportLfiRouteLiveOracle",
+  "vulnshopRunDiagnosticCmdiLiveOracle",
+  "vulnshopRunDiagnosticCmdiRouteLiveOracle",
+  "vulnshopSearchXssLiveOracle",
+  "vulnshopSearchXssRouteLiveOracle",
   "clientSideVulnlabAuditApiEvidence",
   "clientSideVulnlabHandsOnLabEvidence",
   "clientSideVibeEvalEvidence",
@@ -7262,6 +7272,7 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
     "/login",
     "/register",
     "/products",
+    "/search",
     "/orders",
     "/admin",
     "/profile",
@@ -7274,6 +7285,9 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
     "/api/info",
     "/api/process",
     "/api/v1/wallet/add-funds",
+    "/template",
+    "/track-order",
+    "/support",
     "/run-diagnostic",
     "/upload-review",
     "/api/xml-import"
@@ -10742,6 +10756,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/v1\/(?:orders|users)\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/(?:template|track-order|support|run-diagnostic|search)\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-") &&
+        /template|track-order|support|run-diagnostic|search-xss/.test(p.slug)
       )
         return -3;
       if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;

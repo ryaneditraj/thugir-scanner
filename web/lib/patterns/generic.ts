@@ -24158,6 +24158,266 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-template-ssti-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop SSTI live oracle",
+    description:
+      "GET /template?name={{7*7}} evaluates Jinja templates server-side — returns 49 when the Flask backend is reachable.",
+    impactOneline:
+      "Server-side template injection lets attackers execute code in the template engine context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopTemplateSstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template engines — VulnShop is intentional training software.",
+      steps: [
+        "Use static templates with strict variable allow-lists.",
+        "Sandbox or disable template evaluation on user-controlled strings.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /template?name= route is SSTI-vulnerable. Show safe template handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-template-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /template SSTI route live oracle",
+    description:
+      "When scanning /template, live SSTI on name= or README oracle #6 documents Jinja template injection on the VulnShop Flask route.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /template module documents server-side template injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopTemplateSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template engines on /template routes.",
+      steps: [
+        "Use static templates with strict variable allow-lists.",
+        "Sandbox or disable template evaluation on user-controlled strings.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /template route documents SSTI. Show route-specific template hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-track-order-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop SSRF live oracle",
+    description:
+      "GET /track-order?url= fetches attacker-controlled URLs server-side including cloud metadata endpoints.",
+    impactOneline:
+      "SSRF on order tracking lets attackers scan internal networks and steal cloud credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopTrackOrderSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations — VulnShop is intentional training software.",
+      steps: [
+        "Block link-local and metadata IP ranges (169.254.169.254).",
+        "Validate and resolve URLs before server-side fetch.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /track-order?url= route is SSRF-vulnerable. Show outbound fetch allow-list remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-track-order-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /track-order SSRF route live oracle",
+    description:
+      "When scanning /track-order, live SSRF on url= or README oracle #5 documents server-side fetch to attacker-controlled URLs.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /track-order module documents SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopTrackOrderSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations on /track-order routes.",
+      steps: [
+        "Block link-local and metadata IP ranges.",
+        "Validate and resolve URLs before server-side fetch.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /track-order route documents SSRF. Show route-specific outbound fetch remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-support-lfi-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop LFI live oracle",
+    description:
+      "GET /support?file= reads local files via path traversal — ../../../../etc/passwd returns passwd contents when Flask backend is reachable.",
+    impactOneline:
+      "Local file inclusion exposes sensitive files and can escalate to remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopSupportLfiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file paths against an allow-list — VulnShop is intentional training software.",
+      steps: [
+        "Reject path traversal sequences in file parameters.",
+        "Use opaque file IDs instead of filesystem paths.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /support?file= route is LFI-vulnerable. Show path traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-support-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop /support LFI route live oracle",
+    description:
+      "When scanning /support, live LFI on file= or README oracle #3 documents local file inclusion via path traversal.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /support module documents LFI.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopSupportLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file paths against an allow-list on /support routes.",
+      steps: [
+        "Reject path traversal sequences in file parameters.",
+        "Use opaque file IDs instead of filesystem paths.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /support route documents LFI. Show route-specific path traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-run-diagnostic-cmdi-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop command injection live oracle",
+    description:
+      "GET /run-diagnostic?input= executes shell metacharacters — ;id returns uid output when Flask backend is reachable.",
+    impactOneline:
+      "Command injection on diagnostic endpoints grants full server shell access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopRunDiagnosticCmdiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — VulnShop is intentional training software.",
+      steps: [
+        "Use parameterized APIs instead of shell invocation.",
+        "Strictly validate and allow-list diagnostic inputs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /run-diagnostic?input= route is command-injection vulnerable. Show shell hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-run-diagnostic-cmdi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /run-diagnostic command injection route live oracle",
+    description:
+      "When scanning /run-diagnostic, live command injection on input= or README oracle #4 documents shell metacharacter execution.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /run-diagnostic module documents command injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopRunDiagnosticCmdiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands on /run-diagnostic routes.",
+      steps: [
+        "Use parameterized APIs instead of shell invocation.",
+        "Strictly validate and allow-list diagnostic inputs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /run-diagnostic route documents command injection. Show route-specific shell hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-search-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnShop reflected XSS live oracle",
+    description:
+      "GET /search?q= reflects unescaped HTML — script payloads render in the response when Flask backend is reachable.",
+    impactOneline:
+      "Reflected XSS on search lets attackers execute JavaScript in victims' browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopSearchXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input in HTML output — VulnShop is intentional training software.",
+      steps: [
+        "Use context-aware output encoding for search results.",
+        "Deploy a strict Content-Security-Policy.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /search?q= route reflects XSS. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnShop /search reflected XSS route live oracle",
+    description:
+      "When scanning /search, live reflected XSS on q= or README oracle #2 documents unescaped HTML reflection (not SQLi).",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /search module documents reflected XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input in HTML output on /search routes.",
+      steps: [
+        "Use context-aware output encoding for search results.",
+        "Deploy a strict Content-Security-Policy.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /search route documents reflected XSS. Show route-specific output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-jwtlens-evidence",
     platform: "generic",
     category: "Broken authentication",
