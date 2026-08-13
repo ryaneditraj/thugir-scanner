@@ -9378,6 +9378,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-chat-init-route-live-oracle",
       "shipped_at": "2026-08-12T06:35:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-address-route-live-oracle",
+      "shipped_at": "2026-08-13T05:30:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-path-traversal-client-route-live-oracle",
+      "shipped_at": "2026-08-13T05:30:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-my-account-route-priority",
+      "shipped_at": "2026-08-13T05:30:00.000Z"
     }
   ]
 }
