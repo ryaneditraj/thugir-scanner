@@ -9444,6 +9444,21 @@
       "source": "discovery:vampi-production.up.railway.app",
       "slug": "vampi-createdb-unauth-live-oracle",
       "shipped_at": "2026-08-13T06:30:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-crlf-route-oracle-fix",
+      "shipped_at": "2026-08-13T07:30:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-crlf-client-route-live-oracle",
+      "shipped_at": "2026-08-13T07:30:00.000Z"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-debug-password-route-live-oracle",
+      "shipped_at": "2026-08-13T07:30:00.000Z"
     }
   ]
 }
