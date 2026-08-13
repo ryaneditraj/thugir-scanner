@@ -31716,6 +31716,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-web-site-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Vulnerable Web Site /sqli route live oracle",
+    description:
+      "When scanning /sqli on vulnerable-web-site.vercel.app, the route redirects to login confirming an auth-gated SQL injection training lab surface — route-specific sqli lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that vulnerable-web-site exposes an auth-gated SQL injection reproduction lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and auth-gate lab routes — VulnSite is intentional training software.",
+      steps: [
+        "Require authentication before exposing SQL injection lab panels.",
+        "Use parameterized queries for all database access.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vulnerable-web-site.vercel.app /sqli route is an auth-gated SQL injection lab. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-web-site-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vulnerable Web Site /path-traversal route live oracle",
+    description:
+      "When scanning /path-traversal on vulnerable-web-site.vercel.app, the route redirects to login confirming an auth-gated path traversal training lab surface — route-specific LFI lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that vulnerable-web-site exposes an auth-gated path traversal reproduction lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSitePathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file paths and auth-gate lab routes — VulnSite is intentional training software.",
+      steps: [
+        "Allowlist permitted file paths instead of accepting arbitrary user input.",
+        "Require authentication before exposing path traversal lab panels.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vulnerable-web-site.vercel.app /path-traversal route is an auth-gated LFI lab. Show path validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-web-site-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vulnerable Web Site /command-injection route live oracle",
+    description:
+      "When scanning /command-injection on vulnerable-web-site.vercel.app, the route redirects to login confirming an auth-gated command injection training lab surface — route-specific command injection lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that vulnerable-web-site exposes an auth-gated command injection reproduction lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — VulnSite is intentional training software.",
+      steps: [
+        "Require authentication before exposing command injection lab panels.",
+        "Use safe APIs instead of shelling out with user-controlled input.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vulnerable-web-site.vercel.app /command-injection route is an auth-gated OS command injection lab. Show safe subprocess remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-nivara-security-evidence",
     platform: "generic",
     category: "Information disclosure",
@@ -55099,6 +55177,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our dvwu.vercel.app /api/notices?file= route accepts path traversal to /etc/passwd. Show input validation remediation for file inclusion.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-graphql-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU GraphQL injection lab route live oracle",
+    description:
+      "When scanning /labs/graphql on dvwu.vercel.app, confirm the GraphQL injection training lab route with live DVWU /api/search or /api/portal SQL injection oracle — route-specific GraphQL lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes a GraphQL injection training lab backed by live SQL injection oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuGraphqlLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — disable introspection and validate GraphQL queries in production.",
+      steps: [
+        "Disable GraphQL introspection on production APIs.",
+        "Use query depth/complexity limits and parameterized resolvers.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/graphql route is a GraphQL injection training lab. Show query allowlisting and resolver input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-race-condition-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "DVWU race condition lab route live oracle",
+    description:
+      "When scanning /labs/race-condition on dvwu.vercel.app, confirm the race-condition training lab route with live DVWU injection oracle — route-specific race-condition lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes a race-condition training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuRaceConditionLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — use transactions and idempotency keys in production.",
+      steps: [
+        "Wrap balance transfers in database transactions with row-level locking.",
+        "Use idempotency keys for state-changing API requests.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/race-condition route is a race-condition training lab. Show transactional remediation for concurrent state changes.",
     version: 1,
     enabled: true
   },
