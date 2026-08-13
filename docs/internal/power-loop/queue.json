@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T05:10:00.000Z",
+  "updated_at": "2026-08-13T06:10:55.889Z",
   "discovery_urls": [
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1",
+      "source": "erev0s/VAmPI — unauthenticated user enumeration oracle GET /users/v1 (Railway public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/admin",
+      "source": "erev0s/VAmPI — admin user BOLA oracle GET /users/v1/admin (Railway public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/books/v1",
+      "source": "erev0s/VAmPI — books API IDOR oracle GET /books/v1 (Railway public demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/_debug",
+      "source": "erev0s/VAmPI — urban mirror debug user dump oracle GET /users/v1/_debug (Railway deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/admin",
+      "source": "erev0s/VAmPI — urban mirror admin BOLA oracle GET /users/v1/admin (Railway deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvwu.vercel.app/labs/lfi",
       "source": "zahidoverflow/damn-vulnerable-web-university — LFI training lab /labs/lfi (DVWU Vercel mirror)",
