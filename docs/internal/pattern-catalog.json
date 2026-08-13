@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T19:23:06.220Z",
-  "total": 2283,
-  "uniqueSlugs": 2279,
+  "generatedAt": "2026-08-13T20:30:45.502Z",
+  "total": 2284,
+  "uniqueSlugs": 2280,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2265,
+    "generic": 2266,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2198,
+    "deep": 2199,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 456,
+    "Broken access control": 457,
     "Exposed secret": 104,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1522,6 +1522,7 @@
     "ginandjuice-login-username-reflection-live-oracle",
     "ginandjuice-logout-route-live-oracle",
     "ginandjuice-logout-session-regeneration-live-oracle",
+    "ginandjuice-my-account-orders-route-live-oracle",
     "ginandjuice-order-details-idor-live-oracle",
     "ginandjuice-order-details-idor-route-live-oracle",
     "ginandjuice-stock-xxe-live-oracle",
