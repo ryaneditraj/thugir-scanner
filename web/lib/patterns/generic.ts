@@ -42420,6 +42420,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-jwt-alg-confusion-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store JWT algorithm confusion walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/jwt-algorithm-confusion-partner-api documents RS256/HS256 algorithm confusion — the HS256 verifier branch reuses the published partner-signing-key.pem as an HMAC secret.",
+    impactOneline:
+      "Public walkthrough teaches forging partner API JWTs by signing with the published RSA public key PEM under alg:HS256.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecJwtAlgConfusionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to a single algorithm and keep signing/verification keys in separate variables.",
+      steps: [
+        "Reject tokens whose alg header is not the expected RS256 allow-list entry.",
+        "Never reuse public verification key material in HMAC branches.",
+        "Host OopsSec JWT walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our Partner API verifier accepts both RS256 and HS256 with one key variable. Show algorithm pinning and separate signing/verification keys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-jwt-alg-confusion-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store JWT algorithm confusion route live oracle",
+    description:
+      "When scanning /posts/jwt-algorithm-confusion-partner-api, the walkthrough documents forging partner JWTs via HS256 with the published partner-signing-key.pem — route-specific algorithm-confusion oracle.",
+    impactOneline:
+      "OopsSec Partner API verifier treats published RSA public key PEM as HMAC secret when alg is HS256.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecJwtAlgConfusionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to RS256 only; never branch on attacker-controlled alg headers.",
+      steps: [
+        "Use jwt.verify with algorithms: ['RS256'] allow-list only.",
+        "Keep PARTNER_SIGNING_PRIVATE_KEY and PARTNER_VERIFICATION_PUBLIC_KEY in separate variables.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/partner/orders verifier branches on alg and reuses the public key in HS256 HMAC. Show algorithm pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-path-traversal-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store path traversal documents API walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/path-traversal-documents-api documents /api/files?file=../flag.txt path traversal via unsanitized path.join into documents/.",
+    impactOneline:
+      "Public walkthrough teaches reading flag.txt and .env via ../ segments in the file query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecPathTraversalEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Resolve absolute paths and verify they remain inside the documents base directory before readFile.",
+      steps: [
+        "Reject file parameters containing .. or path separators before join.",
+        "Use resolve() plus startsWith(baseDir + sep) guard before disk reads.",
+        "Host OopsSec path traversal walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our /api/files endpoint joins user file names into documents/ without traversal checks. Show resolve-and-validate remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store path traversal route live oracle",
+    description:
+      "When scanning /posts/path-traversal-documents-api, the walkthrough documents /api/files?file=../flag.txt escaping documents/ via unsanitized path.join — route-specific path traversal oracle.",
+    impactOneline:
+      "OopsSec Files API joins attacker-controlled file names without verifying the resolved path stays inside documents/.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecPathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Resolve and validate file paths before readFile; deny .. segments.",
+      steps: [
+        "Resolve absolute paths and reject anything outside documents/.",
+        "Use filename allowlists instead of raw path parameters.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/files route is vulnerable to ../flag.txt traversal. Show path canonicalization and base-directory validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-csrf-admin-order-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store CSRF admin order update walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/csrf-admin-order-update documents CSRF on PATCH /api/orders/:id — authToken cookie with sameSite:lax and no CSRF token or Origin validation.",
+    impactOneline:
+      "Public walkthrough teaches forging admin order status updates via cross-site fetch with credentials:include.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecCsrfAdminOrderEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and Origin validation on state-changing admin routes; use sameSite:strict on session cookies.",
+      steps: [
+        "Issue per-session CSRF tokens required in X-CSRF-Token on PATCH/POST.",
+        "Validate Origin against an allowlist before order mutations.",
+        "Set sameSite:strict on auth cookies that authorize admin writes."
+      ]
+    },
+    fixPrompt:
+      "Our PATCH /api/orders/:id trusts authToken cookies without CSRF defenses. Show token + Origin validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-csrf-admin-order-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store CSRF admin order route live oracle",
+    description:
+      "When scanning /posts/csrf-admin-order-update, the walkthrough documents unauthenticated CSRF on PATCH /api/orders/:id via lax authToken cookies — route-specific CSRF oracle.",
+    impactOneline:
+      "OopsSec admin order endpoint accepts cross-site authenticated requests without CSRF token or Origin checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecCsrfAdminOrderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and strict sameSite cookies on admin mutation endpoints.",
+      steps: [
+        "Require matching CSRF cookie and X-CSRF-Token header on PATCH /api/orders/:id.",
+        "Validate Origin before processing admin order status changes.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our admin order PATCH endpoint is CSRF-vulnerable with sameSite:lax cookies. Show CSRF token and Origin validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",

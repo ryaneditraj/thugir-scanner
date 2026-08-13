@@ -6037,6 +6037,186 @@ const oopssecRaceConditionCouponRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store JWT algorithm confusion walkthrough (posts/jwt-algorithm-confusion-partner-api) -
+const CLIENT_OOPSSEC_JWT_ALG_CONFUSION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JWT algorithm confusion partner API title",
+    re: /JWT algorithm confusion:[\s\S]{0,80}public key into a signing secret/i
+  },
+  {
+    label: "Partner API RS256 with published JWKS",
+    re: /Partner API|RS256-signed JWTs|\/\.well-known\/jwks\.json/i
+  },
+  {
+    label: "Verifier branches on alg RS256 vs HS256",
+    re: /algorithm === "RS256"|algorithm === "HS256"|createHmac\("sha256", key\)/i
+  },
+  {
+    label: "HS256 branch reuses RSA public key PEM",
+    re: /partner-signing-key\.pem|getPartnerTokenKey\(\)|same key/i
+  },
+  {
+    label: "JWT algorithm confusion walkthrough route",
+    re: /\/posts\/jwt-algorithm-confusion-partner-api/i
+  }
+];
+
+const clientSideOopssecJwtAlgConfusionEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_JWT_ALG_CONFUSION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|JWT|algorithm confusion|partner-signing-key/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents JWT algorithm confusion — HS256 verifier branch reuses published RSA public key PEM as HMAC secret"
+    }
+  };
+};
+
+const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/jwt-algorithm-confusion-partner-api/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecJwtAlgConfusionEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/jwt-algorithm-confusion-partner-api route scan — walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
+    }
+  };
+};
+
+// --- OopsSec Store path traversal walkthrough (posts/path-traversal-documents-api) ---------
+const CLIENT_OOPSSEC_PATH_TRAVERSAL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Path traversal documents API title",
+    re: /Path Traversal:[\s\S]{0,80}Escaping the Documents Directory via the Files API/i
+  },
+  {
+    label: "/api/files?file= unsanitized join",
+    re: /\/api\/files\?file=|searchParams\.get\("file"\)/i
+  },
+  {
+    label: "../flag.txt traversal payload",
+    re: /file=\.\.\/flag\.txt|join\(baseDir, file\)/i
+  },
+  {
+    label: "path.join resolves parent segments",
+    re: /path\.join\(\) looks like a safety net|join\("\/app\/documents", "\.\.\/flag\.txt"\)/i
+  },
+  {
+    label: "Path traversal walkthrough route",
+    re: /\/posts\/path-traversal-documents-api/i
+  }
+];
+
+const clientSideOopssecPathTraversalEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_PATH_TRAVERSAL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|path traversal|\/api\/files/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents path traversal via unsanitized file query parameter joined into documents/ with ../ escaping to flag.txt"
+    }
+  };
+};
+
+const oopssecPathTraversalRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/path-traversal-documents-api/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecPathTraversalEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/path-traversal-documents-api route scan — walkthrough documents /api/files?file=../flag.txt path traversal via unsanitized path.join"
+    }
+  };
+};
+
+// --- OopsSec Store CSRF admin order walkthrough (posts/csrf-admin-order-update) ------------
+const CLIENT_OOPSSEC_CSRF_ADMIN_ORDER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CSRF admin order update title",
+    re: /Cross-Site Request Forgery on the Admin Order Update Endpoint/i
+  },
+  {
+    label: "PATCH /api/orders/:id without CSRF token",
+    re: /PATCH \/api\/orders\/:id|No CSRF token validation/i
+  },
+  {
+    label: "authToken cookie sameSite lax",
+    re: /authToken.*sameSite:\s*"lax"|sameSite:\s*"lax"/i
+  },
+  {
+    label: "CSRF exploit page /exploits/csrf-attack.html",
+    re: /\/exploits\/csrf-attack\.html|credentials:\s*"include"/i
+  },
+  {
+    label: "CSRF admin order walkthrough route",
+    re: /\/posts\/csrf-admin-order-update/i
+  }
+];
+
+const clientSideOopssecCsrfAdminOrderEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_CSRF_ADMIN_ORDER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|CSRF|\/api\/orders/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents CSRF on PATCH /api/orders/:id — authToken cookie with sameSite:lax and no Origin/CSRF token validation"
+    }
+  };
+};
+
+const oopssecCsrfAdminOrderRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/csrf-admin-order-update/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecCsrfAdminOrderEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/csrf-admin-order-update route scan — walkthrough documents unauthenticated CSRF on PATCH /api/orders/:id via lax authToken cookie"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -79676,6 +79856,12 @@ export const RULES: Record<string, Rule> = {
   oopssecProductSearchSqliRouteLiveOracle,
   oopssecStoredXssReviewsRouteLiveOracle,
   oopssecRaceConditionCouponRouteLiveOracle,
+  clientSideOopssecJwtAlgConfusionEvidence,
+  oopssecJwtAlgConfusionRouteLiveOracle,
+  clientSideOopssecPathTraversalEvidence,
+  oopssecPathTraversalRouteLiveOracle,
+  clientSideOopssecCsrfAdminOrderEvidence,
+  oopssecCsrfAdminOrderRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
