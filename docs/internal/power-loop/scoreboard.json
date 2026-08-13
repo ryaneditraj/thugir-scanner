@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T09:45:00.000Z",
+  "updated_at": "2026-08-13T10:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2803,
-  "total_findings": 28395,
+  "total_sites_scanned": 2809,
+  "total_findings": 28531,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1991,
   "discovery_findings": 23322,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-13T09:45:00.000Z",
+  "last_run": "2026-08-13T10:25:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -53,33 +53,33 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 112,
-      "focus": "vAPI API8 login route + VAmPI book BOLA iteration + Broken Crystals /api/fetch SSRF probe hardening",
+      "urls_scanned": 4,
+      "findings": 59,
+      "focus": "vAPI API3/8 user route oracles + VAmPI stale book catalog on urban mirror",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/api8/user/login: 14 findings (+vapi-api8-login-route-live-oracle route oracle on login path)",
-      "brokencrystals.com/api/fetch?url=: 83 findings (+brokencrystals-api-fetch-live-oracle host probe + enriched fetch→file SSRF route evidence)",
-      "vampi-production.up.railway.app/books/v1/bookTitle78: 15 findings maintained with foreign/canonical book title iteration"
+      "vapi.apisec.ai/vapi/api3/user: 13→14 findings (+vapi-api3-user-route-live-oracle)",
+      "vapi.apisec.ai/vapi/api8/user: 13→14 findings (+vapi-api8-user-route-live-oracle)",
+      "urban-vampi-production.up.railway.app/books/v1: 12→15 findings (+vampi-books-stale-catalog-live-oracle + route; foreign list entries all 404)",
+      "urban-vampi-production.up.railway.app/users/v1/_debug: 12→16 findings (+vampi-debug-password-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "urban-vampi-production.up.railway.app: book list entries 404 — BOLA oracle still blocked on urban mirror despite iteration",
+      "urban-vampi-production.up.railway.app: book BOLA still blocked — stale catalog oracle documents list/detail inconsistency instead",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles now shipped (15 findings on /basic)"
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "vapi.apisec.ai/vapi/api8/user/login": 14,
+    "vapi.apisec.ai/vapi/api3/user": 14,
+    "vapi.apisec.ai/vapi/api8/user": 14,
+    "urban-vampi-production.up.railway.app/books/v1": 15,
+    "urban-vampi-production.up.railway.app/users/v1/_debug": 16,
     "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 83,
-    "vampi-production.up.railway.app/books/v1/bookTitle78": 15,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "ginandjuice.shop/my-account/delete": 29
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
