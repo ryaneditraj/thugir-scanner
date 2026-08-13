@@ -2,6 +2,36 @@
   "candidates": [
     {
       "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-path-traversal-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/path-traversal?file=../../../etc/passwd returns Angular <app-root> SPA shell (HTTP 200) instead of Next.js path-traversal API; seclab.vercel.app/api/path-traversal findings 3→4 (+seclab-path-traversal-route-live-oracle); extractSecLabPlaygroundSeeds extended with /api/path-traversal; benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-transactions-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents POST /api/transactions/transfer with Vulnerable (No CSRF) mode and Simulate CSRF Attack; secure-bank-bay.vercel.app/api/transactions findings 8→9 (+secure-bank-bay-transactions-csrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-transfer-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /transfer route scan reuses transactions CSRF oracle chain; runner -3 priority for secure-bank-bay-transfer* on /transfer routes; benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sandbox-graveyard.vercel.app",
+      "slug": "sandbox-graveyard-pentest-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: sandbox-graveyard.vercel.app is RSAC Innovation Sandbox startup tracker (Next.js), not Faraday pentest demo — reflexion-escalated-ssti is false positive on benign content; no portable auth/IDOR/SSRF live oracle"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-checkout-mass-assignment-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET/POST /api/checkout returns 404 HTML shell — not listed in Gin & Juice vulnerabilities path table; no mass-assignment or checkout API oracle without authenticated session"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
       "slug": "seclab-idor-vulnerable-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/idor-vulnerable/1 returns Angular <app-root> SPA shell (HTTP 200) instead of Next.js IDOR API; seclab.vercel.app/api/idor-vulnerable findings 4→5 (+seclab-idor-vulnerable-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
