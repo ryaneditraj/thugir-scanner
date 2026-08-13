@@ -54088,6 +54088,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-files-client-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU Document Library client-side LFI route live oracle",
+    description:
+      "When scanning /labs/lfi, /files, or /notices on dvwu.vercel.app, the SPA bundle documents a client-side Document Library file viewer vulnerable to path traversal — route-specific LFI training oracle.",
+    impactOneline:
+      "Client-side file viewers that accept traversal paths teach attackers patterns replayed against real file-serving endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuFilesClientLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — never trust client-side path validation for file access in production.",
+      steps: [
+        "Allowlist permitted filenames server-side before reading any file.",
+        "Reject ../ sequences and encoded traversal payloads.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/lfi route exposes a client-side Document Library with LFI training payloads. Show server-side path validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vaultapp-lab-guide-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -54682,6 +54708,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /books/v1 route scan confirms excessive data exposure — list returns other users' books. Show owner-scoped filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-admin-profile-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VAmPI admin profile unauthenticated live oracle",
+    description:
+      "GET /users/v1/admin returns admin username and email without authentication — the VAmPI broken access control oracle (API1).",
+    impactOneline:
+      "Unauthenticated access to admin profile endpoints exposes privileged account metadata to any scanner or attacker.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiAdminProfileUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — require authentication and authorization on all user profile routes in production.",
+      steps: [
+        "Require a valid JWT before returning any /users/v1/{username} profile.",
+        "Return 401 for unauthenticated requests to privileged accounts.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /users/v1/admin returns admin email without authentication. Show authentication and authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-admin-profile-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VAmPI admin profile unauthenticated route live oracle",
+    description:
+      "When scanning /users/v1/admin, the admin profile is returned without authentication — route-specific VAmPI broken access control oracle (API1).",
+    impactOneline:
+      "Route scans on admin profile endpoints should confirm missing authentication controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiAdminProfileUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — gate admin profile routes behind authentication in production.",
+      steps: [
+        "Require JWT authentication on /users/v1/admin.",
+        "Enforce admin role checks server-side.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /users/v1/admin route scan confirms unauthenticated admin profile access. Show authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-users-enumeration-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VAmPI user enumeration live oracle",
+    description:
+      "GET /users/v1 returns a full username/email list without authentication — the VAmPI user enumeration oracle (API3).",
+    impactOneline:
+      "Public user directory endpoints help attackers harvest valid accounts for credential stuffing and targeted attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiUsersEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — never expose full user directories without authentication in production.",
+      steps: [
+        "Require authentication before listing user accounts.",
+        "Return only the caller's own profile unless the caller is an admin.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /users/v1 returns all usernames and emails without auth. Show user enumeration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-users-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VAmPI user enumeration route live oracle",
+    description:
+      "When scanning /users/v1, the API returns admin and demo usernames without authentication — route-specific VAmPI user enumeration oracle (API3).",
+    impactOneline:
+      "Route scans on user list endpoints should confirm excessive data exposure and enumeration risk.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiUsersEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VAmPI is intentional API security training — restrict user list endpoints to authenticated admins in production.",
+      steps: [
+        "Return 401 for unauthenticated GET /users/v1 requests.",
+        "Paginate and scope user lists to authorized callers only.",
+        "Run VAmPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /users/v1 route scan confirms unauthenticated user enumeration. Show access control remediation.",
     version: 1,
     enabled: true
   },

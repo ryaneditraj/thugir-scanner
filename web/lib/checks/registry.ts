@@ -74777,7 +74777,13 @@ const dvwuSearchXssRouteLiveOracle: Rule = async (ctx) => {
 const dvwuNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf))\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf|lfi|xxe|cmdi|path-traversal)|files|notices)\b/i.test(
+      pageUrl
+    )
+  ) {
+    return NEGATIVE;
+  }
   for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
     const url = new URL("/api/notices", ctx.origin);
     url.searchParams.set("file", payload);
@@ -74984,6 +74990,116 @@ const dvwuSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "DVWU /labs/ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
+    }
+  };
+};
+
+const dvwuFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/lfi|files|notices)\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Document Library/i.test(bundle)) return NEGATIVE;
+  if (!/file viewer is vulnerable to LFI|LFI Vulnerability/i.test(bundle)) return NEGATIVE;
+  if (!/\?file=\.\.\/\.\.\/\.\.\/etc\/passwd/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["Document Library", "LFI vuln-hint", "?file=../../../etc/passwd"],
+      snippet: bundle.match(/file viewer is vulnerable to LFI[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /labs/lfi or /files route scan — SPA Document Library exposes client-side LFI training lab with path traversal payloads"
+    }
+  };
+};
+
+const vampiAdminProfileUnauthLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const profileUrl = new URL("/users/v1/admin", ctx.origin).toString();
+  const doc = await ctx.probe.get(profileUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { username?: string; email?: string };
+    if (data.username !== "admin" || !data.email) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        profileUrl,
+        email: data.email,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "VAmPI GET /users/v1/admin returns admin profile (username + email) without authentication — broken access control oracle (API1)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const vampiAdminProfileUnauthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/users\/v1\/admin\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await vampiAdminProfileUnauthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /users/v1/admin route scan — admin profile returned without authentication — broken access control route oracle (API1)"
+    }
+  };
+};
+
+const vampiUsersEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const usersUrl = new URL("/users/v1", ctx.origin).toString();
+  const doc = await ctx.probe.get(usersUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  try {
+    const data = JSON.parse(doc.body) as { users?: Array<{ username?: string; email?: string }> };
+    const users = data.users;
+    if (!Array.isArray(users) || users.length < 2) return NEGATIVE;
+    const names = users.map((u) => u.username).filter(Boolean);
+    if (!names.includes("admin") || !names.includes("name1")) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        usersUrl,
+        usernames: names.slice(0, 5),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "VAmPI GET /users/v1 returns full username/email list without authentication — user enumeration oracle (API3)"
+      }
+    };
+  } catch {
+    return NEGATIVE;
+  }
+};
+
+const vampiUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/users\/v1\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await vampiUsersEnumerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VAmPI /users/v1 route scan — unauthenticated user list exposes admin and demo accounts — user enumeration route oracle (API3)"
     }
   };
 };
@@ -78556,6 +78672,11 @@ export const RULES: Record<string, Rule> = {
   allSeeingEyeHelloRouteLiveOracle,
   istEduSsrfRedirectRouteLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
+  dvwuFilesClientLfiRouteLiveOracle,
+  vampiAdminProfileUnauthLiveOracle,
+  vampiAdminProfileUnauthRouteLiveOracle,
+  vampiUsersEnumerationLiveOracle,
+  vampiUsersEnumerationRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
   vaultappAdminAuditLogsIdorLiveOracle,
