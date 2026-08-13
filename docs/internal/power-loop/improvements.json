@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-user-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vapi/api3/comment returns comment JSON without auth from /api3/user route scan; vapi.apisec.ai/vapi/api3/user findings 13→14 (+vapi-api3-user-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-user-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api8/user/login SQLi `' OR '1'='1` chains to /api8/user/secret flag{api8_*}; vapi.apisec.ai/vapi/api8/user findings 13→14 (+vapi-api8-user-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-books-stale-catalog-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /books/v1 lists foreign-owned titles but every GET /books/v1/{title} returns Book not found on urban mirror; urban-vampi-production.up.railway.app/books/v1 findings 12→15 (+vampi-books-stale-catalog-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api8-login-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /vapi/api8/user/login `' OR '1'='1` returns authkey + GET /api8/user/secret flag{api8_*}; vapi.apisec.ai/vapi/api8/user/login findings 14 (+vapi-api8-login-route-live-oracle alongside host oracle); benchmark juice-shop 47 findings 6/6 maintained"
@@ -9525,6 +9543,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-api-fetch-live-oracle",
       "shipped_at": "2026-08-13T09:45:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api3-user-route-live-oracle",
+      "shipped_at": "2026-08-13T10:25:00.000Z"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api8-user-route-live-oracle",
+      "shipped_at": "2026-08-13T10:25:00.000Z"
+    },
+    {
+      "source": "discovery:urban-vampi-production.up.railway.app",
+      "slug": "vampi-books-stale-catalog-live-oracle",
+      "shipped_at": "2026-08-13T10:25:00.000Z"
     }
   ]
 }
