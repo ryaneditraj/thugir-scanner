@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T21:13:00.000Z",
+  "updated_at": "2026-08-13T22:24:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
+      "source": "OWASP WrongSecrets — Challenge 10 CSI-Driver/AWS Secrets Manager mount lab (Heroku public demo)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-11",
+      "source": "OWASP WrongSecrets — Challenge 11 IAM privilege-escalation lab (Heroku public demo)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-12",
+      "source": "OWASP WrongSecrets — Challenge 12 Docker history/Dockerfile secrets lab (Heroku public demo)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1613",
+      "source": "web-security-learning-labs Vercel — module 1613 security lab route (OSS deploy hub expansion past 1612)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/cmdi",
+      "source": "JuaniVeltri/vuln-expose — command injection lab module (GitHub README VulnSite)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1611",
       "source": "web-security-learning-labs Vercel — module 1611 security lab route (OSS deploy hub expansion past 1610)",
