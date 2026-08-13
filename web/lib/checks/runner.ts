@@ -7749,7 +7749,8 @@ function extractSecLabPlaygroundSeeds(html: string, pageUrl: string): string[] {
     "/api/sqli-vulnerable",
     "/api/csrf-vulnerable",
     "/api/users-vulnerable",
-    "/api/idor-vulnerable"
+    "/api/idor-vulnerable",
+    "/api/path-traversal"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -11103,6 +11104,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/path-traversal\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-path-traversal")
+      )
+        return -3;
+      if (
         /graphql-lab\.vercel\.app/i.test(origin) &&
         /\/graphql\b/i.test(targetInput) &&
         p.slug.startsWith("graphql-lab-hasura")
@@ -11302,6 +11309,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /secure-bank-bay\.vercel\.app/i.test(origin) &&
         /\/admin\b/i.test(targetInput) &&
         p.slug.startsWith("secure-bank-bay-admin")
+      )
+        return -3;
+      if (
+        /secure-bank-bay\.vercel\.app/i.test(origin) &&
+        /\/api\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-bank-bay-transactions")
+      )
+        return -3;
+      if (
+        /secure-bank-bay\.vercel\.app/i.test(origin) &&
+        /\/transfer\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-bank-bay-transfer")
       )
         return -3;
       if (

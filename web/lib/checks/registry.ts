@@ -36632,6 +36632,44 @@ const secureBankBayAdminRbacRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const secureBankBayTransactionsCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/transactions\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const csrfOk =
+    /\/api\/transactions\/transfer/i.test(corpus) &&
+    (/Vulnerable \(No CSRF\)/i.test(corpus) || /CSRF token NOT verified/i.test(corpus)) &&
+    (/Simulate CSRF Attack/i.test(corpus) || /CSRF Forged Request/i.test(corpus));
+  if (!csrfOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/transactions/transfer — CSRF token not verified in vulnerable mode",
+      note: "secure-bank-bay.vercel.app /api/transactions route scan — SPA bundle documents POST /api/transactions/transfer without CSRF validation in Attack Mode — route-specific CSRF training oracle"
+    }
+  };
+};
+
+const secureBankBayTransferCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/transfer\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await secureBankBayTransactionsCsrfRouteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "secure-bank-bay.vercel.app /transfer route scan — SPA bundle documents POST /api/transactions/transfer CSRF bypass in Attack Mode — route-specific CSRF training oracle"
+    }
+  };
+};
+
 // --- Cyber Drill interactive security suite (thecyberdrill.netlify.app) ---------------
 const CLIENT_CYBERDRILL_RES: { label: string; re: RegExp }[] = [
   {
@@ -68149,6 +68187,56 @@ const seclabIdorVulnerableRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabPathTraversalRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/path-traversal\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/path-traversal?file=../../../etc/passwd", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    (/root:|\/etc\/passwd|path traversal|directory traversal/i.test(doc.body) ||
+      /No authentication or authorization/i.test(doc.body)) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app GET /api/path-traversal reads ../../../etc/passwd via user-controlled file parameter — live path traversal training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(doc.body) && doc.body.length > 40
+      ? doc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/path-traversal route serves Angular SPA shell instead of the documented Next.js path-traversal training API — dead lab route oracle (README lists path traversal as planned, not deployed)"
+    }
+  };
+};
+
 const seclabCsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/csrf-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
@@ -76511,6 +76599,8 @@ export const RULES: Record<string, Rule> = {
   secureBankBayStoredXssCommentsRouteLiveOracle,
   secureBankBayStoredXssMessagesRouteLiveOracle,
   secureBankBayAdminRbacRouteLiveOracle,
+  secureBankBayTransactionsCsrfRouteLiveOracle,
+  secureBankBayTransferCsrfRouteLiveOracle,
   clientSideBugBountyHunterEvidence,
   clientSideBugBountyHunterChallengeScenarioEvidence,
   clientSideBugCollectionEvidence,
@@ -77051,6 +77141,7 @@ export const RULES: Record<string, Rule> = {
   seclabXssVulnerableRouteLiveOracle,
   seclabUsersVulnerableRouteLiveOracle,
   seclabIdorVulnerableRouteLiveOracle,
+  seclabPathTraversalRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
