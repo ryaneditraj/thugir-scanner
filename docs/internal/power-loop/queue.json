@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-12T23:05:00.000Z",
+  "updated_at": "2026-08-13T00:03:35.627Z",
   "discovery_urls": [
+    {
+      "url": "https://sandbox-graveyard.vercel.app/",
+      "source": "Faraday sandbox-graveyard — intentional Next.js pentest target for auth/IDOR/SSRF/API abuse (Faraday blog 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/sqli",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi training lab /labs/sqli (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/xss",
+      "source": "zahidoverflow/damn-vulnerable-web-university — XSS training lab /labs/xss (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/csrf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — CSRF training lab /labs/csrf (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/path-traversal",
+      "source": "DaniSam-STU/security-lab — path traversal oracle GET /api/path-traversal (seclab.vercel.app README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://secure-bank-bay.vercel.app/api/login",
       "source": "Areeeshaa/SecureBank — Attack Mode SQLi oracle POST /api/login (Medium live demo secure-bank-bay.vercel.app)",
