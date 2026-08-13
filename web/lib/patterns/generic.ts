@@ -31144,6 +31144,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-web-site-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vulnerable Web Site CSRF route live oracle",
+    description:
+      "When scanning /csrf on vulnerable-web-site.vercel.app, POST /api/userUpdateForm updates profiles without anti-CSRF tokens — or the route redirects to login confirming the auth-gated CSRF training lab.",
+    impactOneline:
+      "Route-specific confirmation that Vulnerable Web Site exposes a CSRF-vulnerable profile update form for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Add CSRF tokens to all state-changing forms — Vulnerable Web Site is intentional training software.",
+      steps: [
+        "Require a synchronizer token on POST /api/userUpdateForm.",
+        "Validate Origin/Referer on state-changing requests.",
+        "Run Vulnerable Web Site only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /csrf route scan confirms POST /api/userUpdateForm lacks CSRF protection. Show anti-CSRF token remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-web-site-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Vulnerable Web Site stored XSS route live oracle",
+    description:
+      "When scanning /xss on vulnerable-web-site.vercel.app, profile message updates render via dangerouslySetInnerHTML without sanitization — or the route redirects to login confirming the auth-gated stored XSS training lab.",
+    impactOneline:
+      "Route-specific confirmation that Vulnerable Web Site profile messages are stored and rendered as raw HTML for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize user-supplied HTML before rendering — Vulnerable Web Site is intentional training software.",
+      steps: [
+        "Remove dangerouslySetInnerHTML from profile message rendering.",
+        "Sanitize memo fields with a strict HTML allowlist.",
+        "Run Vulnerable Web Site only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /xss route scan confirms stored XSS via profile message dangerouslySetInnerHTML. Show output encoding remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-nivara-security-evidence",
     platform: "generic",
     category: "Information disclosure",
@@ -33272,6 +33324,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our seclab.vercel.app /api/path-traversal route is a dead Angular stub or exposes live LFI. Show path traversal remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-ssrf-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "SecLab /api/ssrf-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/ssrf-vulnerable, GET with attacker-controlled url fetches internal targets — or the route serves an Angular SPA shell instead of the documented Next.js SSRF training API.",
+    impactOneline:
+      "Route-specific SSRF lab oracle confirms live server-side fetch or flags dead /api/ssrf-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabSsrfVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab SSRF API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/ssrf-vulnerable on production.",
+        "Allowlist outbound fetch destinations and block internal IP ranges.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/ssrf-vulnerable route is a dead Angular stub or exposes live SSRF. Show outbound fetch allow-list remediation and deploy fixes.",
     version: 1,
     enabled: true
   },

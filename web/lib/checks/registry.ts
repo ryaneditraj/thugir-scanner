@@ -66327,6 +66327,164 @@ const clientSideVulnerableWebSiteEvidence: Rule = async (ctx) => {
   };
 };
 
+function isVulnerableWebSiteHost(ctx: RuleContext): boolean {
+  return /vulnerable-web-site\.vercel\.app/i.test(ctx.origin);
+}
+
+function vwsSessionCookieFromLoginBody(body: string, setCookies: string[]): string | null {
+  for (const c of setCookies) {
+    const m = c.match(/(?:^|,\s*)token=([^;]+)/i);
+    if (m) return `token=${m[1]}`;
+  }
+  try {
+    const parsed = JSON.parse(body) as { token?: string };
+    if (parsed.token) return `token=${parsed.token}`;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+async function vulnerableWebSiteSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const email = `thugir-probe-${Date.now()}@probe.invalid`;
+  const password = "ThugirProbe1!";
+  const signupUrl = new URL("/api/user", ctx.origin).toString();
+  const signupDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({ email, password, name: "Thugir Probe", message: "probe" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 25000
+  });
+  if (signupDoc.status < 200 || signupDoc.status >= 500) return null;
+  const loginUrl = new URL("/api/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 25000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return null;
+  return vwsSessionCookieFromLoginBody(loginDoc.body, loginDoc.setCookies);
+}
+
+async function probeVulnerableWebSiteUserUpdateForm(
+  ctx: RuleContext,
+  cookie?: string | null
+): Promise<{ status: number; location: string }> {
+  const probeUrl = new URL("/api/userUpdateForm", ctx.origin).toString();
+  const imageUrl = new URL("/user.png", ctx.origin).toString();
+  const body = `name=${encodeURIComponent("thugir-probe")}&message=${encodeURIComponent("probe")}&imageUrl=${encodeURIComponent(imageUrl)}`;
+  const headers: Record<string, string> = { "Content-Type": "application/x-www-form-urlencoded" };
+  if (cookie) headers.Cookie = cookie;
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body,
+    headers,
+    maxBytes: 4096,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  return { status: doc.status, location: doc.headers["location"] || "" };
+}
+
+const vulnerableWebSiteCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csrf\b/i.test(pageUrl)) return NEGATIVE;
+  const session = await vulnerableWebSiteSessionCookie(ctx);
+  if (session) {
+    const live = await probeVulnerableWebSiteUserUpdateForm(ctx, session);
+    if ([301, 302, 303, 307, 308].includes(live.status) && /\/profile\b/i.test(live.location)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          scannedUrl: pageUrl,
+          location: live.location,
+          note: "vulnerable-web-site.vercel.app POST /api/userUpdateForm processes profile update without CSRF token when authenticated — route-specific CSRF training oracle"
+        }
+      };
+    }
+  }
+  const unauth = await probeVulnerableWebSiteUserUpdateForm(ctx);
+  const loginRedirect =
+    /\/login\b/i.test(ctx.home.finalUrl || "") ||
+    /\/login\b/i.test(pageUrl) ||
+    (unauth.status >= 300 && unauth.status < 400 && /\/login\b/i.test(unauth.location));
+  if (!loginRedirect && unauth.status !== 500) return NEGATIVE;
+  if (unauth.status !== 500 && !loginRedirect) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: session ? 0.9 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      formStatus: unauth.status,
+      note: loginRedirect
+        ? "vulnerable-web-site.vercel.app /csrf route redirects to login; POST /api/userUpdateForm is a state-changing form without CSRF protection when authenticated — route-specific CSRF lab oracle"
+        : "vulnerable-web-site.vercel.app POST /api/userUpdateForm accepts state-changing profile updates without CSRF token — route-specific CSRF training oracle"
+    }
+  };
+};
+
+const vulnerableWebSiteStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\b/i.test(pageUrl)) return NEGATIVE;
+  const canary = "thugirVwsXssCanary";
+  const session = await vulnerableWebSiteSessionCookie(ctx);
+  if (session) {
+    const imageUrl = new URL("/user.png", ctx.origin).toString();
+    const probeUrl = new URL("/api/userUpdateForm", ctx.origin).toString();
+    const body = `name=${encodeURIComponent("probe")}&message=${encodeURIComponent(`<img src=x onerror="${canary}">`)}&imageUrl=${encodeURIComponent(imageUrl)}`;
+    const postDoc = await ctx.probe.get(probeUrl, {
+      method: "POST",
+      body,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: session
+      },
+      maxBytes: 4096,
+      timeoutMs: 20000,
+      redirect: "manual"
+    });
+    if ([301, 302, 303, 307, 308].includes(postDoc.status)) {
+      const profileDoc = await ctx.probe.get(new URL("/profile", ctx.origin).toString(), {
+        headers: { Cookie: session },
+        maxBytes: 65536,
+        timeoutMs: 20000
+      });
+      if (profileDoc.status >= 200 && profileDoc.status < 400 && profileDoc.body.includes(canary)) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            scannedUrl: pageUrl,
+            snippet: profileDoc.body.match(new RegExp(`.{0,40}${canary}.{0,40}`))?.[0]?.slice(0, 120),
+            note: "vulnerable-web-site.vercel.app profile renders attacker message via dangerouslySetInnerHTML without sanitization — route-specific stored XSS training oracle"
+          }
+        };
+      }
+    }
+  }
+  const unauth = await probeVulnerableWebSiteUserUpdateForm(ctx);
+  const loginRedirect =
+    /\/login\b/i.test(ctx.home.finalUrl || "") ||
+    /\/login\b/i.test(pageUrl) ||
+    (unauth.status >= 300 && unauth.status < 400 && /\/login\b/i.test(unauth.location));
+  if (!loginRedirect && unauth.status !== 500) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      formStatus: unauth.status,
+      note: "vulnerable-web-site.vercel.app /xss route is auth-gated; profile message field uses dangerouslySetInnerHTML for stored XSS when authenticated — route-specific XSS lab oracle"
+    }
+  };
+};
+
 // --- Nivara security assessment platform (cybersec-demo.vercel.app) -------------------
 const CLIENT_NIVARA_SECURITY_RES: { label: string; re: RegExp }[] = [
   {
@@ -68233,6 +68391,55 @@ const seclabPathTraversalRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
       note: "seclab.vercel.app /api/path-traversal route serves Angular SPA shell instead of the documented Next.js path-traversal training API — dead lab route oracle (README lists path traversal as planned, not deployed)"
+    }
+  };
+};
+
+const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/ssrf-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/ssrf-vulnerable?url=http://127.0.0.1:8089/secret", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    (/ssrf|server-side request|127\.0\.0\.1/i.test(doc.body) || /No authentication or authorization/i.test(doc.body)) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app GET /api/ssrf-vulnerable fetches attacker-controlled URLs server-side — live SSRF training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(doc.body) && doc.body.length > 40
+      ? doc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/ssrf-vulnerable route serves Angular SPA shell instead of the documented Next.js SSRF training API — dead lab route oracle (README lists SSRF as planned, not deployed)"
     }
   };
 };
@@ -77142,6 +77349,9 @@ export const RULES: Record<string, Rule> = {
   seclabUsersVulnerableRouteLiveOracle,
   seclabIdorVulnerableRouteLiveOracle,
   seclabPathTraversalRouteLiveOracle,
+  seclabSsrfVulnerableRouteLiveOracle,
+  vulnerableWebSiteCsrfRouteLiveOracle,
+  vulnerableWebSiteStoredXssRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
   clientSideSkillauditEvidence,
