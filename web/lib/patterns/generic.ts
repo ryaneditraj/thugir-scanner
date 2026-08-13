@@ -20962,6 +20962,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-price-manipulation-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store price-manipulation walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/client-side-price-manipulation documents checkout trusting client-provided total in POST /api/orders without server-side price recalculation.",
+    impactOneline:
+      "Public walkthrough teaches business-logic abuse — attackers can purchase at arbitrary prices by modifying the total field in checkout API requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecPriceManipulationEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate order totals server-side from product prices and cart quantities; never trust client-submitted totals.",
+      steps: [
+        "Compute order total from database product prices and cart line quantities on the server.",
+        "Reject checkout requests where submitted total does not match server-calculated amount.",
+        "Host OopsSec business-logic walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/orders endpoint trusts client-provided total from checkout. Show server-side total recalculation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-price-manipulation-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store price-manipulation route live oracle",
+    description:
+      "When scanning /posts/client-side-price-manipulation, the walkthrough documents POST /api/orders accepting client-provided total without server-side recalculation — route-specific business-logic oracle.",
+    impactOneline:
+      "OopsSec checkout saves browser-calculated totals directly, enabling arbitrary-price purchase abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecPriceManipulationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate order totals server-side from product prices and cart quantities.",
+      steps: [
+        "Compute order total from database product prices and cart line quantities on the server.",
+        "Reject checkout requests where submitted total does not match server-calculated amount.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/orders endpoint trusts client-provided checkout totals. Show server-side recalculation fixes for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-stored-xss-reviews-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -42286,6 +42338,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level routes leak SQL syntax errors on search parameters. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level4-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnForge Academy level 4 SQLi route live oracle",
+    description:
+      "When scanning /backend/includes/levels/medium/level4.php, query parameters return SQL syntax errors — route-specific VulnForge Academy level 4 SQL injection training oracle.",
+    impactOneline:
+      "Unsanitized query parameters on VulnForge Academy medium tier level 4 disclose SQL errors and enable injection practice surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel4SqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — use parameterized queries in production apps.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic errors instead of database syntax details.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 4 route leaks SQL syntax errors on search parameters. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },

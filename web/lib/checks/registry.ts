@@ -6039,6 +6039,66 @@ const oopssecRaceConditionCouponRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store client-side price manipulation walkthrough (posts/client-side-price-manipulation) -
+const CLIENT_OOPSSEC_PRICE_MANIPULATION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Client-side price manipulation title",
+    re: /Client-Side Price Manipulation/i
+  },
+  {
+    label: "POST /api/orders with client-provided total",
+    re: /POST to `\/api\/orders`|POST to \/api\/orders|POST to \/api\/orders with the cart items and a `total` field/i
+  },
+  {
+    label: "Server saves client total without recalculation",
+    re: /server saves whatever it receives without recalculating|Client-provided value used directly|takes it at face value/i
+  },
+  {
+    label: "OSS price manipulation flag",
+    re: /OSS\{cl13nt_s1d3_pr1c3_m4n1pul4t10n\}/i
+  },
+  {
+    label: "Price manipulation walkthrough route",
+    re: /\/posts\/client-side-price-manipulation/i
+  }
+];
+
+const clientSideOopssecPriceManipulationEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_PRICE_MANIPULATION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|price manipulation|checkout|\/api\/orders/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents checkout total trusted from browser — POST /api/orders accepts client-provided total without server-side recalculation"
+    }
+  };
+};
+
+const oopssecPriceManipulationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/client-side-price-manipulation/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecPriceManipulationEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/client-side-price-manipulation route scan — walkthrough documents POST /api/orders trusting client-provided total field without recalculating from product prices"
+    }
+  };
+};
+
 // --- OopsSec Store JWT algorithm confusion walkthrough (posts/jwt-algorithm-confusion-partner-api) -
 const CLIENT_OOPSSEC_JWT_ALG_CONFUSION_RES: { label: string; re: RegExp }[] = [
   {
@@ -8027,6 +8087,47 @@ const vulnforgeAcademyLevelSqliRouteLiveOracle: Rule = async (ctx) => {
       ...sqlHit.evidence,
       scannedUrl: pageUrl,
       note: "VulnForge Academy level route scan — /api/portal (or level) search parameter returns SQL syntax error disclosure"
+    }
+  };
+};
+
+const vulnforgeAcademyLevel4SqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/levels\/medium\/level4\.php/i.test(pageUrl)) return NEGATIVE;
+  for (const param of ["id", "user_id", "search", "q", "name"]) {
+    const probeUrl = new URL(pageUrl, ctx.origin);
+    probeUrl.searchParams.set(param, "1'");
+    const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+    if (doc.status === 401 || doc.status === 403) continue;
+    const marker = SQL_ERROR_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) continue;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: probeUrl.toString(),
+        level: 4,
+        sqlError: match?.[0]?.slice(0, 120) || "database syntax error",
+        snippet: doc.body.slice(0, 240).trim(),
+        note: `VulnForge Academy level 4 route scan — ${param} query returns SQL syntax error disclosure`
+      }
+    };
+  }
+  const sqlHit = await sqlErrorDisclosure(ctx);
+  if (!sqlHit.fired) return NEGATIVE;
+  const hitUrl = String(sqlHit.evidence?.url ?? "");
+  if (!/\/level4\.php/i.test(hitUrl) && !/\/api\/portal/i.test(hitUrl)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: sqlHit.confidence,
+    evidence: {
+      ...sqlHit.evidence,
+      scannedUrl: pageUrl,
+      level: 4,
+      note: "VulnForge Academy level 4 route scan — SQL syntax error disclosure on medium tier level route or /api/portal search parameter"
     }
   };
 };
@@ -37202,7 +37303,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1610;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1611;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -37233,7 +37334,8 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1607": "IDOR",
   "1608": "IDOR",
   "1609": "IDOR",
-  "1610": "IDOR"
+  "1610": "IDOR",
+  "1611": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -80456,6 +80558,8 @@ export const RULES: Record<string, Rule> = {
   oopssecProductSearchSqliRouteLiveOracle,
   oopssecStoredXssReviewsRouteLiveOracle,
   oopssecRaceConditionCouponRouteLiveOracle,
+  clientSideOopssecPriceManipulationEvidence,
+  oopssecPriceManipulationRouteLiveOracle,
   clientSideOopssecJwtAlgConfusionEvidence,
   oopssecJwtAlgConfusionRouteLiveOracle,
   clientSideOopssecPathTraversalEvidence,
@@ -80520,6 +80624,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatProfileSensitiveDataRouteLiveOracle,
   nodegoatProfileRedosRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
+  vulnforgeAcademyLevel4SqliRouteLiveOracle,
   vulnforgeAcademyLevel6SqliRouteLiveOracle,
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnforgeAcademyLevelSstiRouteLiveOracle,
