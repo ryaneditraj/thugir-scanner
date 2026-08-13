@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-08-13T08:11:59.829Z",
+=======
+  "updated_at": "2026-08-13T08:46:00.000Z",
+>>>>>>> e031e63f (docs: log 3 discovery improvements and benchmark validation (2026-08-13 UTC))
   "discovery_urls": [
     {
       "url": "https://vapi.apisec.ai/vapi/api1/user/1",

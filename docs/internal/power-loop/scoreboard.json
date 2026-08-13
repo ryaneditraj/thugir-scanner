@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T08:22:30.687Z",
+  "updated_at": "2026-08-13T08:46:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2791,
-  "total_findings": 28186,
+  "total_sites_scanned": 2796,
+  "total_findings": 28252,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1991,
-  "discovery_findings": 23337,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-13T08:22:30.687Z",
+  "discovery_urls_added": 1986,
+  "discovery_findings": 23223,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-13T08:46:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 585,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,34 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 165,
-      "focus": "vAPI APIsec hosted lab API1–API5 oracles + brokencrystals /api/fetch SSRF route",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 55,
+      "focus": "ginandjuice /my-account/delete CSRF lab entry + VAmPI book-by-title BOLA + DVWU labs/xxe route priority drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/api1/user/1: 14 findings — vapi-api1-bola-live-oracle + API2–API10 hub oracles on first vAPI surface",
-      "vapi.apisec.ai/vapi/api4/otp/verify: 14 findings — vapi-api4-otp-broken-auth-live-oracle (OTP brute-force training route)",
-      "brokencrystals.com/api/fetch?url=https://httpbin.org/get: 80 findings — brokencrystals-api-fetch-route-live-oracle SSRF hub",
-      "ginandjuice.shop/my-account/delete: 29 findings — queue drain CSRF account-deletion route"
+      "ginandjuice.shop/my-account/delete: 0→30 findings — ginandjuice-delete-route-live-oracle shipped (login-gated account-deletion CSRF lab entry)",
+      "vampi-production.up.railway.app/books/v1/bookTitle78: 15 findings — vampi-book-bola-live-oracle + route (name1 reads name2 book secret)",
+      "dvwu.vercel.app/labs/xxe: 8→11 findings — DVWU lab route priority extended for cmdi/path-traversal/crlf (+notices-lfi-route + files-client-lfi-route)",
+      "public-firing-range.appspot.com/reflected/parameter/body: 249 findings — dense reflected-XSS probe surface"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vapi.apisec.ai/*: four API1–API5 route URLs share identical 14-finding hub — route-specific OTP/BFLA live oracles may need authenticated session probes",
-      "crapi.apisec.ai + crapi2.apisec.ai: connection reset from cloud agent (prior runs)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "dvwu.vercel.app/labs/xxe|cmdi: no dedicated XXE/CMDI API in SPA bundle — LFI route oracles only",
+      "vaultapp-omega.vercel.app/api/notes|users/1: route-specific IDOR live oracles absent without authenticated JWT session"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "brokencrystals.com/api/fetch?url=https://httpbin.org/get": 80,
-    "ginandjuice.shop/my-account/delete": 29,
-    "vapi.apisec.ai/vapi/api1/user/1": 14,
-    "vapi.apisec.ai/vapi/api4/otp/verify": 14,
-    "public-firing-range.appspot.com/reflected/parameter/body": 249,
+    "ginandjuice.shop/my-account/delete": 30,
+    "vampi-production.up.railway.app/books/v1/bookTitle78": 15,
+    "dvwu.vercel.app/labs/xxe": 11,
+    "dvwu.vercel.app/labs/crlf": 12,
     "vampi-production.up.railway.app/users/v1/_debug": 15,
-    "dvwu.vercel.app/labs/crlf": 12
+    "public-firing-range.appspot.com/reflected/parameter/body": 249,
+    "ginandjuice.shop/catalog/product?productId=2": 33,
+    "urban-vampi-production.up.railway.app/books/v1": 12
   }
 }
