@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T00:03:35.627Z",
+  "updated_at": "2026-08-13T01:05:09.935Z",
   "discovery_urls": [
+    {
+      "url": "https://seclab.vercel.app/api/ssrf-vulnerable",
+      "source": "DaniSam-STU/security-lab — SSRF oracle GET /api/ssrf-vulnerable (seclab.vercel.app README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/ssrf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SSRF training lab /labs/ssrf (DVWU Vercel mirror)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/csrf",
+      "source": "megmogmog1965/vulnerable-web-site — CSRF transfer-funds lab module (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/xss",
+      "source": "megmogmog1965/vulnerable-web-site — stored XSS comments lab module (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://idor-website.vercel.app/",
+      "source": "SecureBank Portal — IDOR employee access training lab (Vercel demo accounts)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sandbox-graveyard.vercel.app/",
       "source": "Faraday sandbox-graveyard — intentional Next.js pentest target for auth/IDOR/SSRF/API abuse (Faraday blog 2026)",
@@ -2832,16 +2857,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnerable-web-site.vercel.app/csrf",
-      "source": "megmogmog1965/vulnerable-web-site — CSRF transfer-funds lab module (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vulnerable-web-site.vercel.app/xss",
-      "source": "megmogmog1965/vulnerable-web-site — stored XSS comments lab module (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://vulnshop.vercel.app/login",
       "source": "yashasrnair/VulnShop — NoSQL injection login-bypass demo panel (GitHub README)",
       "auth": "oss_deploy"
@@ -3075,11 +3090,6 @@
       "url": "https://csrf-xss-demo.vercel.app/",
       "source": "CSRF and XSS interactive React training demo (web search)",
       "auth": "oss_deploy"
-    },
-    {
-      "url": "https://idor-website.vercel.app/",
-      "source": "SecureBank IDOR employee portal — broken access control lab (web search)",
-      "auth": "public_demo"
     },
     {
       "url": "https://chal10.vercel.app/",
