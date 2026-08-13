@@ -6217,6 +6217,186 @@ const oopssecCsrfAdminOrderRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store SSRF walkthrough (posts/ssrf-internal-page-access) ------------------
+const CLIENT_OOPSSEC_SSRF_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "SSRF support form title",
+    re: /Server-Side Request Forgery:[\s\S]{0,80}Accessing Internal Pages via Support Form/i
+  },
+  {
+    label: "Support form screenshot URL fetch",
+    re: /screenshot URL|server is fetching the URL|fetch\(\) on it/i
+  },
+  {
+    label: "/internal localhost SSRF target",
+    re: /localhost:3000\/internal|\/internal endpoint that returns a 302/i
+  },
+  {
+    label: "Support form route",
+    re: /localhost:3000\/support|Contact Support page/i
+  },
+  {
+    label: "SSRF walkthrough route",
+    re: /\/posts\/ssrf-internal-page-access/i
+  }
+];
+
+const clientSideOopssecSsrfEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_SSRF_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|support form|SSRF|\/internal/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents SSRF via support-form screenshot URL fetching localhost/internal without outbound allowlisting"
+    }
+  };
+};
+
+const oopssecSsrfRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/ssrf-internal-page-access/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecSsrfEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/ssrf-internal-page-access route scan — walkthrough documents support-form screenshot URL SSRF to http://localhost:3000/internal"
+    }
+  };
+};
+
+// --- OopsSec Store prompt injection walkthrough (posts/prompt-injection-ai-assistant) ---
+const CLIENT_OOPSSEC_PROMPT_INJECTION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Prompt injection AI assistant title",
+    re: /Prompt Injection:[\s\S]{0,80}Extracting Secrets from the AI Assistant/i
+  },
+  {
+    label: "OSSBot assistant with system prompt secret",
+    re: /OSSBot|secret embedded in its system prompt|INTERNAL CONFIGURATION/i
+  },
+  {
+    label: "/api/ai-assistant route with regex blocklist",
+    re: /\/api\/ai-assistant\/route\.ts|BLOCKED_PATTERNS|ignore.*previous.*instructions/i
+  },
+  {
+    label: "AI assistant support route",
+    re: /localhost:3000\/support\/ai-assistant|Mistral AI API key/i
+  },
+  {
+    label: "Prompt injection walkthrough route",
+    re: /\/posts\/prompt-injection-ai-assistant/i
+  }
+];
+
+const clientSideOopssecPromptInjectionEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_PROMPT_INJECTION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|prompt injection|OSSBot|system prompt/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents prompt injection against OSSBot — regex blocklist bypass leaks INTERNAL CONFIGURATION from system prompt"
+    }
+  };
+};
+
+const oopssecPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/prompt-injection-ai-assistant/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecPromptInjectionEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/prompt-injection-ai-assistant route scan — walkthrough documents bypassing BLOCKED_PATTERNS to extract secrets from OSSBot system prompt via /api/ai-assistant"
+    }
+  };
+};
+
+// --- OopsSec Store middleware bypass walkthrough (posts/middleware-authorization-bypass-cve-2025-29927)
+const CLIENT_OOPSSEC_MIDDLEWARE_BYPASS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Middleware authorization bypass CVE title",
+    re: /Middleware Authorization Bypass:[\s\S]{0,80}CVE-2025-29927/i
+  },
+  {
+    label: "x-middleware-subrequest header bypass",
+    re: /x-middleware-subrequest|middleware-subrequest internal header/i
+  },
+  {
+    label: "Protected internal status page",
+    re: /monitoring\/internal-status|protected internal status page/i
+  },
+  {
+    label: "Next.js middleware auth bypass",
+    re: /Next\.js middleware|middleware-based authentication/i
+  },
+  {
+    label: "Middleware bypass walkthrough route",
+    re: /\/posts\/middleware-authorization-bypass-cve-2025-29927/i
+  }
+];
+
+const clientSideOopssecMiddlewareBypassEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_MIDDLEWARE_BYPASS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|CVE-2025-29927|middleware/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents CVE-2025-29927 — x-middleware-subrequest header skips Next.js middleware auth to reach /monitoring/internal-status"
+    }
+  };
+};
+
+const oopssecMiddlewareBypassRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/middleware-authorization-bypass-cve-2025-29927/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecMiddlewareBypassEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/middleware-authorization-bypass-cve-2025-29927 route scan — walkthrough documents CVE-2025-29927 x-middleware-subrequest bypass to /monitoring/internal-status"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -79862,6 +80042,12 @@ export const RULES: Record<string, Rule> = {
   oopssecPathTraversalRouteLiveOracle,
   clientSideOopssecCsrfAdminOrderEvidence,
   oopssecCsrfAdminOrderRouteLiveOracle,
+  clientSideOopssecSsrfEvidence,
+  oopssecSsrfRouteLiveOracle,
+  clientSideOopssecPromptInjectionEvidence,
+  oopssecPromptInjectionRouteLiveOracle,
+  clientSideOopssecMiddlewareBypassEvidence,
+  oopssecMiddlewareBypassRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,

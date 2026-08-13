@@ -42576,6 +42576,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-ssrf-evidence",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "OopsSec Store SSRF support-form walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/ssrf-internal-page-access documents SSRF via the support form screenshot URL — the backend fetch()es attacker-controlled URLs including http://localhost:3000/internal.",
+    impactOneline:
+      "Public walkthrough teaches reading restricted /internal pages by pointing the support screenshot URL at localhost.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecSsrfEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations and block internal IP ranges on server-side URL preview features.",
+      steps: [
+        "Reject localhost, 127.0.0.1, and RFC1918 targets before fetch().",
+        "Proxy screenshot previews through a hardened fetch service with DNS rebinding protections.",
+        "Host OopsSec SSRF walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our support form screenshot URL fetcher calls fetch() on user input without blocking localhost. Show SSRF allowlisting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "OopsSec Store SSRF support-form route live oracle",
+    description:
+      "When scanning /posts/ssrf-internal-page-access, the walkthrough documents support-form screenshot URL SSRF to http://localhost:3000/internal — route-specific SSRF oracle.",
+    impactOneline:
+      "OopsSec support form server-side fetch bypasses /internal redirect restrictions via localhost SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to internal hosts on server-side URL preview endpoints.",
+      steps: [
+        "Deny localhost and link-local destinations before fetch().",
+        "Disable server-side URL rendering for unauthenticated support tickets.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /support screenshot URL preview is SSRF-vulnerable to /internal. Show outbound fetch allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-prompt-injection-evidence",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "OopsSec Store AI assistant prompt-injection walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/prompt-injection-ai-assistant documents bypassing regex BLOCKED_PATTERNS to extract INTERNAL CONFIGURATION secrets from OSSBot's system prompt via /api/ai-assistant.",
+    impactOneline:
+      "Public walkthrough teaches prompt-injection bypass of naive regex filters to leak system-prompt secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecPromptInjectionEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never store secrets in LLM system prompts; use output filtering and privilege-separated tool calls.",
+      steps: [
+        "Remove INTERNAL CONFIGURATION flags from system prompts reachable by users.",
+        "Treat regex blocklists as insufficient — enforce output policies server-side.",
+        "Host OopsSec prompt-injection walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai-assistant stores secrets in the system prompt behind regex blocklists. Show prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "OopsSec Store AI assistant prompt-injection route live oracle",
+    description:
+      "When scanning /posts/prompt-injection-ai-assistant, the walkthrough documents OSSBot system-prompt extraction via /api/ai-assistant after bypassing BLOCKED_PATTERNS — route-specific prompt-injection oracle.",
+    impactOneline:
+      "OopsSec AI assistant regex filters fail to stop prompt injection that leaks INTERNAL CONFIGURATION from OSSBot.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove secrets from system prompts and enforce output guardrails beyond regex deny-lists.",
+      steps: [
+        "Store flags outside the LLM context; never embed INTERNAL CONFIGURATION in prompts.",
+        "Log and rate-limit jailbreak attempts on /api/ai-assistant.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /support/ai-assistant OSSBot leaks system-prompt secrets via regex-bypass prompt injection. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-middleware-bypass-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OopsSec Store CVE-2025-29927 middleware bypass walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/middleware-authorization-bypass-cve-2025-29927 documents skipping Next.js middleware auth with the x-middleware-subrequest header to reach /monitoring/internal-status.",
+    impactOneline:
+      "Public walkthrough teaches CVE-2025-29927 middleware authorization bypass via internal subrequest header forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecMiddlewareBypassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js past CVE-2025-29927 and strip x-middleware-subrequest at the edge.",
+      steps: [
+        "Patch Next.js to a fixed release and verify middleware cannot be skipped via forged headers.",
+        "Block x-middleware-subrequest at reverse proxies for external clients.",
+        "Host OopsSec middleware bypass walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js middleware auth is bypassable via x-middleware-subrequest (CVE-2025-29927). Show patch and edge-header stripping.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-middleware-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OopsSec Store CVE-2025-29927 middleware bypass route live oracle",
+    description:
+      "When scanning /posts/middleware-authorization-bypass-cve-2025-29927, the walkthrough documents x-middleware-subrequest header forgery reaching /monitoring/internal-status without credentials — route-specific middleware bypass oracle.",
+    impactOneline:
+      "OopsSec Next.js middleware auth is skipped via CVE-2025-29927 x-middleware-subrequest to access internal status pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecMiddlewareBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js and deny forged middleware subrequest headers at the edge.",
+      steps: [
+        "Apply CVE-2025-29927 patches and retest /monitoring/internal-status enforcement.",
+        "Strip x-middleware-subrequest from untrusted requests at CDN/WAF.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /monitoring/internal-status is reachable via x-middleware-subrequest (CVE-2025-29927). Show middleware bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",
