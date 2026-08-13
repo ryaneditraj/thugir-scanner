@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-crlf-route-oracle-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended dvwuCsrfNewsletterCrlfRouteLiveOracle to match /labs/crlf; POST /api/newsletter email=test%0d%0aBcc:evil returns CRLF Injection Detected; dvwu.vercel.app/labs/crlf findings 9→12 (+dvwu-csrf-newsletter-crlf-route-live-oracle + dvwu-crlf-client-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-crlf-client-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle documents CRLF - Cookie Injection (%0d%0a) and CRLF - Redirect Injection panels on /labs/crlf; dvwu.vercel.app/labs/crlf findings 9→12; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-debug-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /users/v1/_debug returns {\"username\":\"admin\",\"password\":\"pass1\",...} without auth; vampi-production.up.railway.app/users/v1/_debug findings 13→15 (+vampi-debug-password-live-oracle + route); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-search-sqli-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=' returns SQL Syntax Error + Database Leak with admin@ist.edu.bd row; dvwu.vercel.app/labs/sqli findings 10→12 (+dvwu-search-sqli-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
