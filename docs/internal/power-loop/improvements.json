@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-data-exfil-002-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=data-exfil-001 returns sessionId+guardrailsRunId for /challenges/data-exfil-002 v2 route; playground.fabraix.com/challenges/data-exfil-002 findings 6→7 (+fabraix-data-exfil-002-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-ssti-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: reflexion SSTI probe on vulnforge-academy.vercel.app/backend/includes/levels/medium/level2.php route scan; findings 5→6 (+vulnforge-academy-level-ssti-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-rest-deliverys-kebab-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopApiOrRestRoute now maps /rest/deliverys and /rest/quantitys to Deliverys/Quantitys API probes; demo.owasp-juice.shop/rest/deliverys route scan fires juice-shop-deliverys-exposure-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-information-disclosure-api-error-route-live-oracle",
       "status": "shipped",
