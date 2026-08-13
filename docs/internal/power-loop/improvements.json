@@ -1,6 +1,36 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-notices-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended dvwuNoticesLfiRouteLiveOracle paths to labs/lfi|files|notices|cmdi|path-traversal; GET /api/notices?file=../../../etc/passwd returns passwd on route scan; dvwu.vercel.app/labs/lfi findings 8→10 (+dvwu-notices-lfi-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-files-client-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle documents Document Library + LFI vuln-hint with ?file=../../../etc/passwd on /labs/lfi; dvwu.vercel.app/labs/lfi findings 8→10 (+dvwu-files-client-lfi-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-admin-profile-unauth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /users/v1/admin returns {\"username\":\"admin\",\"email\":\"admin@mail.com\"} without auth; vampi-production.up.railway.app/users/v1/_debug findings 9→12; /users/v1/admin route 13 findings (+vampi-admin-profile-unauth-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-users-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /users/v1 returns users array with admin/name1/name2 emails without auth; vampi-production.up.railway.app/users/v1/_debug findings 9→12 (+vampi-users-enumeration-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-labs-xxe-cmdi-path-traversal",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/xxe|cmdi|path-traversal return SPA shell only — shared index-DZYRBcB5.js has no XXE/CMDi/path-traversal lab components (only Document Library LFI + server /api/notices); no portable live oracle without mislabeling LFI as XXE"
+    },
+    {
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-xml-import-xxe-route-live-oracle",
       "status": "shipped",
