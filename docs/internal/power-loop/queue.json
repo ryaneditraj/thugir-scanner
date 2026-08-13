@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-13T06:10:55.889Z",
+  "updated_at": "2026-08-13T07:12:18.220Z",
   "discovery_urls": [
+    {
+      "url": "https://urban-vampi-production.up.railway.app/books/v1",
+      "source": "erev0s/VAmPI — urban mirror books enumeration oracle GET /books/v1 (Railway deploy README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/books/v1/1",
+      "source": "erev0s/VAmPI — urban mirror book IDOR oracle GET /books/v1/:book_title (Railway deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/notes/1",
+      "source": "MRMcyber/vaultapp — private note IDOR oracle GET /api/notes/:id (GitHub lab guide challenge #8)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp — sequential user ID enumeration oracle GET /api/users/:id (GitHub lab guide challenge #1)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://public-firing-range.appspot.com/reflected/parameter/body",
+      "source": "Google Firing Range — reflected XSS body parameter oracle (google/firing-range OSS)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://vampi-production.up.railway.app/users/v1",
       "source": "erev0s/VAmPI — unauthenticated user enumeration oracle GET /users/v1 (Railway public demo)",
