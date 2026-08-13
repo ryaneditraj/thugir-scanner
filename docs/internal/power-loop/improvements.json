@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-ssrf-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/ssrf-vulnerable?url=http://127.0.0.1:8089/secret returns Angular <app-root> SPA shell (HTTP 200) instead of Next.js SSRF API; seclab.vercel.app/api/ssrf-vulnerable findings 4→5 (+seclab-ssrf-vulnerable-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /csrf redirects to login; POST /api/userUpdateForm returns HTTP 500 without CSRF token (auth-gated CSRF lab); vulnerable-web-site.vercel.app/csrf findings 5→6 (+vulnerable-web-site-csrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /xss redirects to login; profile message field documented as dangerouslySetInnerHTML stored XSS when authenticated; vulnerable-web-site.vercel.app/xss findings 5→6 (+vulnerable-web-site-stored-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
       "slug": "seclab-path-traversal-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/path-traversal?file=../../../etc/passwd returns Angular <app-root> SPA shell (HTTP 200) instead of Next.js path-traversal API; seclab.vercel.app/api/path-traversal findings 3→4 (+seclab-path-traversal-route-live-oracle); extractSecLabPlaygroundSeeds extended with /api/path-traversal; benchmark juice-shop 46 findings 6/6 maintained"
