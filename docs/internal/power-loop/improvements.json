@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-catalog-1612",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /module/1612 Vercel checkpoint fallback + placeholder shell map; WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1611→1612; web-security-learning-labs.vercel.app/module/1612 findings 7→10 (+placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-graphql-race-lab-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwuGraphqlLabRouteLiveOracle + dvwuRaceConditionLabRouteLiveOracle confirm /labs/graphql and /labs/race-condition with live /api/search SQLi probe; dvwu.vercel.app/labs/graphql findings 11→12 (+dvwu-graphql-lab-route-live-oracle); /labs/race-condition 11→12 (+dvwu-race-condition-lab-route-live-oracle); benchmark 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-sqli-path-command-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnerableWebSiteSqli/PathTraversal/CommandInjection route oracles fire on auth-gated /sqli /path-traversal /command-injection with login redirect or Vercel checkpoint fallback; route-specific slugs confirmed on discovery queue URLs; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-price-manipulation-route-live-oracle",
       "status": "shipped",
@@ -9888,6 +9906,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-catalog-1611",
       "shipped_at": "2026-08-13T21:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-catalog-1612",
+      "shipped_at": "2026-08-13T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-graphql-race-lab-route-oracles",
+      "shipped_at": "2026-08-13T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-sqli-path-command-route-oracles",
+      "shipped_at": "2026-08-13T22:32:00.000Z"
     }
   ]
 }
