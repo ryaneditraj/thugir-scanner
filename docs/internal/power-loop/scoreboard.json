@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-12T23:25:00.000Z",
+  "updated_at": "2026-08-13T00:04:15.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2972,
-  "total_findings": 33289,
-  "critical_findings": 59,
+  "total_sites_scanned": 2729,
+  "total_findings": 26643,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2067,
-  "discovery_findings": 26901,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-12T23:25:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22575,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-13T00:04:15.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 580,
+      "probes_run": 585,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 (47–48 findings); secret-resend slug still absent"
+      "note": "Primary awake 6/6 (47 findings pages=6 probes=585; gap=[]). secret-resend slug still absent (sensitive_data covered via other slugs)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 86,
-      "focus": "SecureBank Bay Attack Mode routes + concurrent seclab/graphql-lab oracle validation + ginandjuice order/details drain",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 6,
+      "findings": 88,
+      "focus": "sandbox-graveyard SSTI + DVWU sqli/xss/csrf labs + seclab path-traversal + demo.owasp-juice.shop b2b orders drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 — no benchmark misses",
-      "secure-bank-bay.vercel.app/api/login: secure-bank-bay-sqli-login-route-live-oracle (admin'-- bypass)",
-      "secure-bank-bay.vercel.app/admin: secure-bank-bay-admin-rbac-route-live-oracle",
-      "secure-bank-bay.vercel.app/api/comments: secure-bank-bay-stored-xss-comments-route-live-oracle",
-      "seclab.vercel.app/api/idor-vulnerable: seclab-idor-vulnerable-route-live-oracle shipped (concurrent run)",
-      "graphql-lab.vercel.app/graphql: graphql-lab-hasura-admin route oracles shipped (concurrent run)",
-      "ginandjuice.shop/order/details?orderId=0254809: 29 findings — order-details IDOR + CSTI live oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "sandbox-graveyard.vercel.app: 6 findings incl reflexion-escalated-ssti (Faraday pentest demo target)",
+      "dvwu.vercel.app/labs/sqli: 10 findings — dvwu-portal-sqli-route-live-oracle + notices LFI oracle",
+      "dvwu.vercel.app/labs/xss: 11 findings — DVWU XSS lab route oracles",
+      "dvwu.vercel.app/labs/csrf: 10 findings — DVWU CSRF lab route oracles",
+      "demo.owasp-juice.shop/b2b/v2/orders: 48 findings — b2b deserialization live oracle on queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "secure-bank-bay.vercel.app/api/transactions: 8 generic findings — transaction BOLA/CSRF route oracle absent",
-      "graphql-lab.hasura.app backend degraded — insert_todo mutations absent despite bundle references",
-      "queue drain hung on 7th URL after ginandjuice order/details — killed before 8th"
+      "seclab.vercel.app/api/path-traversal: 3 generic findings — route-specific path-traversal live oracle absent",
+      "sandbox-graveyard.vercel.app: SSTI detected but no route-specific auth/IDOR/SSRF live oracles yet"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "ginandjuice.shop/order/details?orderId=0254809": 29,
-    "secure-bank-bay.vercel.app/api/login": 9,
-    "secure-bank-bay.vercel.app/messages": 9,
-    "secure-bank-bay.vercel.app/admin": 9,
-    "secure-bank-bay.vercel.app/api/comments": 9,
-    "graphql-lab.vercel.app/graphql": 8,
-    "seclab.vercel.app/api/idor-vulnerable": 5,
-    "secure-bank-bay.vercel.app/api/transactions": 8
+    "juice-shop.herokuapp.com": 47,
+    "demo.owasp-juice.shop/b2b/v2/orders": 48,
+    "dvwu.vercel.app/labs/xss": 11,
+    "dvwu.vercel.app/labs/sqli": 10,
+    "dvwu.vercel.app/labs/csrf": 10,
+    "sandbox-graveyard.vercel.app": 6,
+    "seclab.vercel.app/api/path-traversal": 3,
+    "brokencrystals.com/chat": 83,
+    "ginandjuice.shop/order/details": 29
   }
 }
