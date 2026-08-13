@@ -2144,6 +2144,12 @@ const DEEP_RULES = new Set<string>([
   "oopssecProductSearchSqliRouteLiveOracle",
   "oopssecStoredXssReviewsRouteLiveOracle",
   "oopssecRaceConditionCouponRouteLiveOracle",
+  "clientSideOopssecJwtAlgConfusionEvidence",
+  "oopssecJwtAlgConfusionRouteLiveOracle",
+  "clientSideOopssecPathTraversalEvidence",
+  "oopssecPathTraversalRouteLiveOracle",
+  "clientSideOopssecCsrfAdminOrderEvidence",
+  "oopssecCsrfAdminOrderRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
@@ -11355,6 +11361,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /attp-live\.fly\.dev|attp\.cybersecai\.co\.uk/i.test(origin) &&
         /\/demo\b/i.test(targetInput) &&
         p.slug.startsWith("attp-agent-revoke")
+      )
+        return -3;
+      if (
+        /koadt\.github\.io|oss-oopssec-store/i.test(origin) &&
+        /\/posts\//i.test(targetInput) &&
+        p.slug.startsWith("oopssec-")
       )
         return -3;
       if (/demo\.aevum\.build/i.test(origin) && p.slug.startsWith("aevum-")) return -3;
