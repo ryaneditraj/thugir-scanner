@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T22:22:25.781Z",
-  "total": 2292,
-  "uniqueSlugs": 2288,
+  "generatedAt": "2026-08-13T23:27:07.624Z",
+  "total": 2295,
+  "uniqueSlugs": 2291,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2274,
+    "generic": 2277,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2207,
+    "deep": 2210,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 112,
     "Security misconfiguration": 161,
-    "Broken authentication": 135,
-    "Injection": 339,
+    "Broken authentication": 136,
+    "Injection": 341,
     "Cross-site scripting": 682,
     "Open redirect": 20,
     "general": 20,
@@ -940,8 +940,10 @@
     "dvwu-crlf-client-route-live-oracle",
     "dvwu-csrf-newsletter-crlf-route-live-oracle",
     "dvwu-dashboard-idor-route-live-oracle",
+    "dvwu-deserialization-lab-route-live-oracle",
     "dvwu-files-client-lfi-route-live-oracle",
     "dvwu-graphql-lab-route-live-oracle",
+    "dvwu-jwt-lab-route-live-oracle",
     "dvwu-notices-lfi-route-live-oracle",
     "dvwu-path-traversal-client-route-live-oracle",
     "dvwu-portal-sqli-live-oracle",
@@ -952,6 +954,7 @@
     "dvwu-search-xss-route-live-oracle",
     "dvwu-ssrf-redirect-live-oracle",
     "dvwu-ssrf-redirect-route-live-oracle",
+    "dvwu-ssti-lab-route-live-oracle",
     "euri-sec-csp-dynamic-script-live-oracle",
     "euri-sec-csp-dynamic-script-route-live-oracle",
     "exposed-api-config",
