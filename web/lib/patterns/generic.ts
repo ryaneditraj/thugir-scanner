@@ -33250,6 +33250,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab /api/path-traversal route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/path-traversal, GET with ../../../etc/passwd reads local files — or the route serves an Angular SPA shell instead of the documented Next.js path-traversal training API.",
+    impactOneline:
+      "Route-specific path-traversal lab oracle confirms live LFI or flags dead /api/path-traversal stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabPathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab path-traversal API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/path-traversal on production.",
+        "Canonicalize and validate file paths before reads.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/path-traversal route is a dead Angular stub or exposes live LFI. Show path traversal remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-heroku-undeployed-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -39773,6 +39799,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /admin route documents JWT role-based admin panel access. Show server-side RBAC remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-bank-bay-transactions-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecureBank Bay transactions CSRF route live oracle",
+    description:
+      "When scanning /api/transactions on secure-bank-bay.vercel.app, the SPA bundle documents POST /api/transactions/transfer without CSRF token validation in Attack Mode — route-specific CSRF training oracle.",
+    impactOneline:
+      "Educational banking SPA exposes intentional CSRF-vulnerable money transfer flows in client bundle for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBayTransactionsCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBank Bay is intentional lab software — require anti-CSRF tokens on state-changing transfers.",
+      steps: [
+        "Validate CSRF tokens on all POST /api/transactions/transfer requests.",
+        "Use SameSite cookies and double-submit cookie patterns.",
+        "Run Attack Mode labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/transactions route documents CSRF-vulnerable money transfers. Show anti-CSRF token remediation for banking transfer APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-bank-bay-transfer-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecureBank Bay transfer CSRF route live oracle",
+    description:
+      "When scanning /transfer on secure-bank-bay.vercel.app, the SPA bundle documents POST /api/transactions/transfer without CSRF token validation in Attack Mode — route-specific CSRF training oracle.",
+    impactOneline:
+      "Educational banking SPA exposes intentional CSRF-vulnerable money transfer flows when scanning the /transfer route alias.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBayTransferCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBank Bay is intentional lab software — require anti-CSRF tokens on state-changing transfers.",
+      steps: [
+        "Validate CSRF tokens on all POST /api/transactions/transfer requests.",
+        "Use SameSite cookies and double-submit cookie patterns.",
+        "Run Attack Mode labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /transfer route documents CSRF-vulnerable money transfers via /api/transactions/transfer. Show anti-CSRF token remediation.",
     version: 1,
     enabled: true
   },
