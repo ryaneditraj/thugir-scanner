@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T02:20:00.000Z",
+  "updated_at": "2026-08-14T03:16:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/idor",
+      "source": "zahidoverflow/dvwu — IDOR / broken access control lab module (DVWU Vercel deploy README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/open-redirect",
+      "source": "zahidoverflow/dvwu — open redirect validation bypass lab module (DVWU Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/broken-auth",
+      "source": "zahidoverflow/dvwu — broken authentication / session lab module (DVWU Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/parser/",
+      "source": "sampsonc/vulnlab.dev — SSRF parser-disagreement bypass lab (validator regex vs HTTP client)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-azure/",
+      "source": "sampsonc/vulnlab.dev — Azure-themed cloud metadata SSRF lab with Metadata:true header injection",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/users/search/test",
       "source": "NeuraLegion/brokencrystals — excessive data exposure oracle GET /api/users/search/:name (README Broken Access Control)",
