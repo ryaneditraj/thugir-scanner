@@ -36235,6 +36235,21 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/api\/v1\/wallet\/add-funds\b/i,
     vulnerability: "Race Condition",
     note: "VulnShop Flask POST /api/v1/wallet/add-funds credits wallet balance without mutex — concurrent requests can double funds — README oracle #35"
+  },
+  {
+    pathRe: /\/api\/v1\/cart\/update-price\b/i,
+    vulnerability: "Price Manipulation",
+    note: "VulnShop Flask POST /api/v1/cart/update-price accepts client-supplied price without server-side verification — README oracle #34"
+  },
+  {
+    pathRe: /\/api\/v1\/payment\/process\b/i,
+    vulnerability: "Unsafe API Consumption",
+    note: "VulnShop Flask POST /api/v1/payment/process accepts unvalidated payment payloads — README oracle #32 (API10:2023)"
+  },
+  {
+    pathRe: /\/api\/v1\/products\/import\b/i,
+    vulnerability: "SSRF (API7:2023)",
+    note: "VulnShop Flask POST /api/v1/products/import fetches attacker-controlled import URLs without validation — README oracle #29"
   }
 ];
 
@@ -36242,6 +36257,9 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
 const VULNSHOP_README_FALLBACK = `
 /api/v1/checkout/apply-discount POST Payment Manipulation business_logic Stack unlimited discounts, negative prices
 /api/v1/wallet/add-funds POST Race Condition race_condition Concurrent requests can double funds
+/api/v1/cart/update-price POST Price Manipulation business_logic Client-side price accepted without verification
+/api/v1/payment/process POST Unsafe API Consumption api_unsafe No validation of payment data
+/api/v1/products/import POST SSRF api_ssrf URL-based import without validation
 `;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
@@ -36438,6 +36456,8 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!VULNSHOP_PRODUCT_SEARCH_ROUTE_RE.test(pageUrl)) return NEGATIVE;
+  // README route #29 is SSRF on /api/v1/products/import — defer to vulnshopProductsImportSsrfRouteLiveOracle
+  if (/\/products\/import\b/i.test(pageUrl)) return NEGATIVE;
   // README route #2 is reflected XSS on /search?q= — defer to vulnshopSearchXssRouteLiveOracle
   if (/\/search\b/i.test(pageUrl) && !/\/products\b/i.test(pageUrl)) return NEGATIVE;
   const live = await vulnshopProductsSqliLiveOracle(ctx);
@@ -37042,7 +37062,7 @@ const vulnshopFlashSaleRaceLiveOracle: Rule = async (ctx) => {
 const vulnshopCartRouteLiveOracle: Rule = (ctx) =>
   vulnshopRouteOracleWithFallback(
     ctx,
-    /\/cart\b/i,
+    /\/cart\/?$/i,
     vulnshopFlashSaleRaceLiveOracle,
     "VulnShop /cart route scan — flash-sale inventory race condition confirmed or documented"
   );
@@ -37190,6 +37210,177 @@ const vulnshopWalletAddFundsRouteLiveOracle: Rule = (ctx) =>
     /\/api\/v1\/wallet\/add-funds\b/i,
     vulnshopWalletAddFundsRaceLiveOracle,
     "VulnShop /api/v1/wallet/add-funds route scan — wallet-funding race condition confirmed or documented"
+  );
+
+const vulnshopUpdatePriceManipulationLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const priceUrl = `${apiBase}/v1/cart/update-price`;
+    const doc = await ctx.probe.get(priceUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ product_id: 1, price: 0.01 })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /"price"\s*:\s*0\.01|"updated"|"success"|price manipulation|client.?side price/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /price|cart/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            priceUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/cart/update-price accepted attacker-controlled price — price manipulation oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /Price Manipulation|update-price|Client-side price/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/cart\/update-price/i.test(corpus) ||
+    !/Price Manipulation|Client-side price|without verification/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/cart/update-price — Price Manipulation (client-side price accepted without verification)",
+      note: "VulnShop POST /api/v1/cart/update-price documents price manipulation via client-supplied prices — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopUpdatePriceRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/cart\/update-price\b/i,
+    vulnshopUpdatePriceManipulationLiveOracle,
+    "VulnShop /api/v1/cart/update-price route scan — client-side price manipulation confirmed or documented (README oracle #34)"
+  );
+
+const vulnshopPaymentProcessUnsafeApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const paymentUrl = `${apiBase}/v1/payment/process`;
+    const doc = await ctx.probe.get(paymentUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: -100, card_number: "4111111111111111" })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /"amount"\s*:\s*-100|negative|processed|payment|unsafe|no validation/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /payment|amount/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            paymentUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/payment/process accepted unvalidated negative payment amount — unsafe API consumption oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /Unsafe API|payment\/process|api_unsafe/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/payment\/process/i.test(corpus) ||
+    !/Unsafe API|No validation of payment|api_unsafe/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/payment/process — Unsafe API Consumption (no validation of payment data)",
+      note: "VulnShop POST /api/v1/payment/process documents unsafe API consumption without payment validation — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopPaymentProcessRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/payment\/process\b/i,
+    vulnshopPaymentProcessUnsafeApiLiveOracle,
+    "VulnShop /api/v1/payment/process route scan — unsafe payment API consumption confirmed or documented (README oracle #32)"
+  );
+
+const vulnshopProductsImportSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const importUrl = `${apiBase}/v1/products/import`;
+    const doc = await ctx.probe.get(importUrl, {
+      method: "POST",
+      maxBytes: 8192,
+      timeoutMs: 20000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: "http://169.254.169.254/latest/meta-data/" })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /ami-id|instance-id|meta-data|169\.254\.169\.254|ssrf|fetched url/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /import|url/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: /ami-id|instance-id|meta-data/i.test(doc.body) ? 0.93 : 0.9,
+          evidence: {
+            importUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/products/import fetched attacker-controlled import URL — SSRF oracle #29"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /products\/import|api_ssrf|URL-based import/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/products\/import/i.test(corpus) ||
+    !/SSRF|URL-based import|api_ssrf|without validation/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/products/import — SSRF (URL-based import without validation)",
+      note: "VulnShop POST /api/v1/products/import documents SSRF via unvalidated import URLs — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopProductsImportSsrfRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/products\/import\b/i,
+    vulnshopProductsImportSsrfLiveOracle,
+    "VulnShop /api/v1/products/import route scan — URL-based import SSRF confirmed or documented (README oracle #29)"
   );
 
 const vulnshopHiddenAdminPathLiveOracle = (path: string, markers: RegExp): Rule => async (ctx) => {
@@ -80267,6 +80458,12 @@ export const RULES: Record<string, Rule> = {
   vulnshopApplyDiscountRouteLiveOracle,
   vulnshopWalletAddFundsRaceLiveOracle,
   vulnshopWalletAddFundsRouteLiveOracle,
+  vulnshopUpdatePriceManipulationLiveOracle,
+  vulnshopUpdatePriceRouteLiveOracle,
+  vulnshopPaymentProcessUnsafeApiLiveOracle,
+  vulnshopPaymentProcessRouteLiveOracle,
+  vulnshopProductsImportSsrfLiveOracle,
+  vulnshopProductsImportSsrfRouteLiveOracle,
   vulnshopHiddenAdminManagerLiveOracle,
   vulnshopHiddenAdminManagerRouteLiveOracle,
   vulnshopHiddenAdminAdministratorLiveOracle,

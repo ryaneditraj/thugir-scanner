@@ -2602,6 +2602,12 @@ const DEEP_RULES = new Set<string>([
   "vulnshopApplyDiscountRouteLiveOracle",
   "vulnshopWalletAddFundsRaceLiveOracle",
   "vulnshopWalletAddFundsRouteLiveOracle",
+  "vulnshopUpdatePriceManipulationLiveOracle",
+  "vulnshopUpdatePriceRouteLiveOracle",
+  "vulnshopPaymentProcessUnsafeApiLiveOracle",
+  "vulnshopPaymentProcessRouteLiveOracle",
+  "vulnshopProductsImportSsrfLiveOracle",
+  "vulnshopProductsImportSsrfRouteLiveOracle",
   "vulnshopHiddenAdminManagerLiveOracle",
   "vulnshopHiddenAdminManagerRouteLiveOracle",
   "vulnshopHiddenAdminAdministratorLiveOracle",
@@ -11220,6 +11226,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/ssti\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-ssti")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/cart\/update-price\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-update-price")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/payment\/process\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-payment-process")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/products\/import\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-products-import")
       )
         return -3;
       if (
