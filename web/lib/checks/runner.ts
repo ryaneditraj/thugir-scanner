@@ -2368,6 +2368,12 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceChangeAddressRouteLiveOracle",
   "ginAndJuiceMyAccountOrdersRouteLiveOracle",
   "ginAndJuiceDeleteRouteLiveOracle",
+  "ginAndJuiceCatalogLinkManipulationLiveOracle",
+  "ginAndJuiceCatalogLinkManipulationRouteLiveOracle",
+  "ginAndJuiceCartCheckoutAuthLiveOracle",
+  "ginAndJuiceCartRouteLiveOracle",
+  "ginAndJuiceAngularVulnerableDependencyLiveOracle",
+  "ginAndJuiceAngularVulnerableDependencyRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
   "ginAndJuiceLoggerRouteLiveOracle",
   "crapi2ShopOrdersAllRouteLiveOracle",
@@ -11383,6 +11389,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/logger\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-logger")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/catalog\/cart\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-cart")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/catalog\/cart\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-angular-vulnerable-dependency")
       )
         return -3;
       if (/xss-game\.appspot\.com/i.test(origin) && p.slug.startsWith("xss-game-")) return -2;
