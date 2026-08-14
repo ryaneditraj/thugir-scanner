@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1624-1630-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1623→1630 + IDOR curated modules 1624-1630 + topic aliases + runner priority /module/(1597-1630); web-security-learning-labs.vercel.app/module/1624 findings 5→7 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-roadmap-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /roadmap documents 35 CTF flags across 11 OWASP Top 10 chapters; koadt.github.io/oss-oopssec-store/roadmap/ findings 15→16 (+oopssec-roadmap-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-store-home-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: home landing documents intentionally vulnerable e-commerce SPA with 35-flag CTF catalog; koadt.github.io/oss-oopssec-store/ findings 19→20 (+oopssec-store-home-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:zen-demo-java.fly.dev",
       "slug": "zen-demo-java-create-route-live-oracle",
       "status": "shipped",
