@@ -34316,6 +34316,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-data-poisoning-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI data-poisoning lesson route live oracle",
+    description:
+      "When scanning /lesson/data-poisoning on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM04 data and model poisoning training lesson.",
+    impactOneline:
+      "Route-scoped scans of data-poisoning lessons should confirm LLM04 backdoor/training-data tampering demos via authenticated lesson fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiDataPoisoningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — validate and monitor training/fine-tuning datasets in production pipelines.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Scan fine-tuning datasets for poisoned samples and backdoor triggers.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/data-poisoning route scan confirms LLM04 data poisoning training. Show route-specific training-data integrity remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-genai-misinformation-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI misinformation lesson route live oracle",
+    description:
+      "When scanning /lesson/misinformation on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM09 misinformation and hallucination training lesson.",
+    impactOneline:
+      "Route-scoped scans of misinformation lessons should confirm LLM09 hallucination demos via authenticated lesson fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiMisinformationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — ground LLM outputs and validate high-risk recommendations in production.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Add retrieval grounding and citation verification for factual claims.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/misinformation route scan confirms LLM09 misinformation training. Show route-specific hallucination mitigation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sql-injection-challenge-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL Injection Challenge login SQLi live oracle",
+    description:
+      "POST /login on sql-injection-challenge.vercel.app with Admin123GOATee username and char(35) concat password bypasses the # keyword blacklist and reaches /flags — Jupiterian SQL-Injection-Challenge oracle.",
+    impactOneline:
+      "Keyword-filtered login still accepts SQLite string-concat injection that reconstructs the real password containing blocked # characters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqlInjectionChallengeLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries — substring blacklists do not prevent SQL injection.",
+      steps: [
+        "Replace f-string SQL in login handlers with prepared statements.",
+        "Never rely on keyword blacklists for injection prevention.",
+        "Run CTF SQLi labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /login endpoint accepts char(35) concat bypass despite keyword filter. Show parameterized query remediation for Flask/SQLite login.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sql-injection-challenge-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL Injection Challenge login route SQLi live oracle",
+    description:
+      "When scanning sql-injection-challenge.vercel.app/, POST /login with Admin123GOATee and char(35) password concat bypasses auth — route-specific SQL injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that the Flask SQLi CTF login bypasses keyword filtering via SQLite char() concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqlInjectionChallengeLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries — substring blacklists do not prevent SQL injection.",
+      steps: [
+        "Replace f-string SQL in login handlers with prepared statements.",
+        "Never rely on keyword blacklists for injection prevention.",
+        "Run CTF SQLi labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our login route scan confirms char(35) SQLi auth bypass on sql-injection-challenge.vercel.app. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ctf-defi-evidence",
     platform: "generic",
     category: "Broken access control",

