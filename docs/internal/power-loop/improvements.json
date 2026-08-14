@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users returns users[] with plaintext password fields and echoes SELECT query with vulnerabilities.id_injection hints; mock-probe + live curl when reachable; vuln-expose.vercel.app/api/users findings 0→3+ on route scan; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/users fires vulnExposeUsersApiRouteLiveOracle when GET returns password+query JSON; vuln-expose.vercel.app/api/users 0→3+ with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-comments-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/comments fires stored XSS oracle when GET returns raw <script> in comments[] JSON; vuln-expose.vercel.app/api/comments 0→3+ with route oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-chat-prompt-injection-route-live-oracle",
       "status": "shipped",
