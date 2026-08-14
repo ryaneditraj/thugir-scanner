@@ -38093,7 +38093,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1616;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1623;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38130,7 +38130,14 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1613": "IDOR",
   "1614": "IDOR",
   "1615": "IDOR",
-  "1616": "IDOR"
+  "1616": "IDOR",
+  "1617": "IDOR",
+  "1618": "IDOR",
+  "1619": "IDOR",
+  "1620": "IDOR",
+  "1621": "IDOR",
+  "1622": "IDOR",
+  "1623": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38210,7 +38217,17 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1610": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1611": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1612": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1613": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1613": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1614": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1615": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1616": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1617": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1618": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1619": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1620": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1621": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1622": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1623": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -70058,6 +70075,49 @@ const aiSecurityRateLimitingBruteforceLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const aiSecurityLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+
+  const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const loginDoc = await ctx.probe.get(loginUrl, { maxBytes: 65536, timeoutMs: 12000 });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  corpus += `\n${loginDoc.body}`;
+
+  const catalog = await aiSecurityPlatformFetchCatalog(ctx);
+  if (catalog) corpus += `\n${catalog}`;
+
+  const actionId = await aiSecurityExtractSignInActionId(ctx);
+  if (!actionId) return NEGATIVE;
+
+  const markers: { label: string; sample: string }[] = [
+    { label: "signIn server action", sample: `signIn ${actionId.slice(0, 12)}…` }
+  ];
+  const rateLimitMatch = corpus.match(
+    /No rate limiting allows unlimited login attempts|Brute Force|\/challenges\/rate-limiting/i
+  );
+  if (rateLimitMatch) {
+    markers.push({ label: "rate-limiting training module", sample: rateLimitMatch[0].slice(0, 80) });
+  }
+  if (/type=["']password["']|signIn|log\s*in/i.test(loginDoc.body)) {
+    markers.push({ label: "login form surface", sample: "/login" });
+  }
+  if (markers.length < 2 || !rateLimitMatch) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      loginUrl,
+      markers: markers.slice(0, 4),
+      note: "AI Security Platform /login route scan — signIn server-action login surface documented alongside rate-limiting brute-force training module"
+    }
+  };
+};
+
 const clientSideXssQuizEvidence: Rule = async (ctx) => {
   if (/printenv at xss-quiz\.int21h\.jp/i.test(ctx.combined)) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -81306,6 +81366,7 @@ export const RULES: Record<string, Rule> = {
   aiSecurityInsecurePasswordsRouteLiveOracle,
   aiSecurityAiPhishingRouteLiveOracle,
   aiSecurityRateLimitingBruteforceLiveOracle,
+  aiSecurityLoginRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
   juiceShopForgottenBackupRouteLiveOracle,
   juiceShopProductsSearchSqliRouteLiveOracle,

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T16:30:21.040Z",
-  "total": 2335,
-  "uniqueSlugs": 2331,
+  "generatedAt": "2026-08-14T17:10:46.310Z",
+  "total": 2336,
+  "uniqueSlugs": 2332,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2317,
+    "generic": 2318,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2250,
+    "deep": 2251,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 112,
     "Security misconfiguration": 165,
-    "Broken authentication": 140,
+    "Broken authentication": 141,
     "Injection": 346,
     "Cross-site scripting": 686,
     "Open redirect": 21,
@@ -63,6 +63,7 @@
     "ai-security-idor-route-live-oracle",
     "ai-security-insecure-passwords-route-live-oracle",
     "ai-security-leaked-config-route-live-oracle",
+    "ai-security-login-route-live-oracle",
     "ai-security-open-redirect-route-live-oracle",
     "ai-security-privacy-policy-route-live-oracle",
     "ai-security-rate-limiting-bruteforce-live-oracle",

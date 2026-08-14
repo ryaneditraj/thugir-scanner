@@ -33380,6 +33380,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "AI Security Platform /login route live oracle",
+    description:
+      "When scanning /login, the Next.js signIn server-action login surface is documented alongside the rate-limiting brute-force training module in the platform catalog — route-specific login oracle.",
+    impactOneline:
+      "Route-specific oracle confirms the login attack surface without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce per-IP and per-account rate limits on authentication.",
+      steps: [
+        "Apply exponential backoff after failed login attempts.",
+        "Return HTTP 429 after a threshold of failures from the same IP or account.",
+        "Log and alert on credential-stuffing patterns."
+      ]
+    },
+    fixPrompt:
+      "Our /login route exposes a signIn server action without rate limiting. Show Next.js auth throttling and lockout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-supply-chain-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
