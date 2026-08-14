@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-queue-drain-api9-api1",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: power-scan queue drain — vapi.apisec.ai/vapi/api9/user 15 findings (+vapi-api9-route-live-oracle +vapi-api9-improper-inventory-live-oracle); vapi.apisec.ai/vapi/api1/user/1 14 findings (+vapi-api1-route-live-oracle); benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-social-corpus-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extracted to juice-shop-social.ts with old.reddit /search.json fallback (resend/re_/apikey terms) and fosstodon tag timelines limit 40→80; benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-resend-key-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopResendKeyLiveOracle scans expanded social corpus and validates canonical re_<8>_<24> keys via GET api.resend.com/domains — no live key in feeds (likely revoked post-GitHub secret scanner); benchmark heroku+staging 48 findings 6/6 maintained; sensitive_data covered via juice-shop-leaked-api-key"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-catalog-1613",
       "status": "shipped",
