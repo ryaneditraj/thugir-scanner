@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T04:17:10.580Z",
+  "updated_at": "2026-08-14T04:30:27.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,23 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2980,
-  "total_findings": 31920,
+  "total_sites_scanned": 2985,
+  "total_findings": 32057,
   "critical_findings": 106,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2073,
-  "discovery_findings": 25218,
+  "discovery_urls_added": 2078,
+  "discovery_findings": 25355,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-14T04:17:10.580Z",
+  "last_run": "2026-08-14T04:30:27.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -46,32 +47,39 @@
             "misconfig"
           ]
         }
-      }
+      },
+      "note": "Stable 6/6 first-pass recall; secret-resend slug still absent (sensitive_data covered via other slugs)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
+      "urls_added": 5,
       "urls_scanned": 5,
-      "improvements_shipped_this_run": 3
+      "findings": 137,
+      "focus": "brokencrystals mass-assignment POST + PUT profile, vuln-expose IDOR module, fauxbank support XSS, dvwu file-upload lab",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings)",
-      "seclab.vercel.app/api/jwt-vulnerable: 3→4 findings — seclab-jwt-vulnerable-route-live-oracle shipped (Angular stub dead JWT lab route)",
-      "secure-bank-bay.vercel.app/api/users/1: 8→9 findings — secure-bank-bay-api-users-route-live-oracle shipped",
-      "dvwu.vercel.app/labs/jwt: 11→12 findings — dvwu-jwt-lab-route-live-oracle restored via bundle fallback",
-      "dvwu.vercel.app/labs/deserialization: 11→12 findings — dvwu-deserialization-lab-route-live-oracle restored",
-      "web-security-learning-labs.vercel.app/module/1613: 7→10 findings — idor-module oracle + extended IDOR topic aliases 1609-1613"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "brokencrystals.com/api/users/basic: 80 findings — brokencrystals-mass-assignment-live-oracle fires on targeted POST endpoint",
+      "vuln-expose.vercel.app/idor: 15 findings — vuln-expose-idor-profile-route-live-oracle + blind-sqli + stored-xss bundle",
+      "pentest-fauxbank.vercel.app/api/support: 14 findings — fauxbank-stored-xss-support-probe + loans/admin oracles",
+      "brokencrystals.com/api/users/one/regular_user/info: 17-finding hub without brokencrystals-mass-assignment-put-live-oracle when scanning route URL directly",
+      "dvwu.vercel.app/labs/file-upload: 11-finding generic hub without route-specific file-upload live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "damn-vulnerable-startup.fly.dev unreachable from cloud agent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "brokencrystals.com/api/users/one/regular_user/info: mass-assignment PUT oracle absent when scanning route URL without signup flow",
+      "dvwu.vercel.app/labs/file-upload: route-specific unrestricted-upload oracle still absent",
+      "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "seclab.vercel.app/api/jwt-vulnerable": 4,
-    "secure-bank-bay.vercel.app/api/users/1": 9,
-    "dvwu.vercel.app/labs/jwt": 12,
-    "dvwu.vercel.app/labs/deserialization": 12,
-    "web-security-learning-labs.vercel.app/module/1613": 10
+    "brokencrystals.com/api/users/basic": 80,
+    "vuln-expose.vercel.app/idor": 15,
+    "pentest-fauxbank.vercel.app/api/support": 14,
+    "brokencrystals.com/api/users/one/regular_user/info": 17,
+    "dvwu.vercel.app/labs/file-upload": 11
   }
 }
