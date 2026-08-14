@@ -11664,6 +11664,31 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1616",
       "source": "web-security-learning-labs Vercel — module 1616 security lab route (WSL catalog expansion)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1617",
+      "source": "web-security-learning-labs Vercel — module 1617 security lab route (WSL catalog expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1618",
+      "source": "web-security-learning-labs Vercel — module 1618 security lab route (WSL catalog expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1619",
+      "source": "web-security-learning-labs Vercel — module 1619 security lab route (WSL catalog expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ethantroy.dev/labs/damn-vulnerable-trust-center/api/ssrf/",
+      "source": "ethantroy/DVTC — FLAG SSRF challenge route (archived trust-center CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/auth/login",
+      "source": "pentest-fauxbank Vercel — auth login API oracle (public vulnerable banking lab)",
+      "auth": "public_demo"
     }
   ]
 }

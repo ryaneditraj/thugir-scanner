@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T05:18:28.136Z",
+  "updated_at": "2026-08-14T14:09:06.332Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2991,
-  "total_findings": 32338,
+  "total_sites_scanned": 2998,
+  "total_findings": 32465,
   "critical_findings": 106,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2083,
-  "discovery_findings": 25590,
+  "discovery_urls_added": 2088,
+  "discovery_findings": 25672,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-14T05:18:28.136Z",
+  "last_run": "2026-08-14T14:09:06.332Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 45,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (46 findings); secret-resend slug still absent (sensitive_data covered via other slugs)"
+      "note": "Stable 6/6 first-pass recall (45 findings); secret-resend slug still absent (sensitive_data covered via other slugs)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 235,
-      "focus": "brokencrystals JWT weak-key/kid-sql/jku/hmac/x5c login oracles from swagger",
+      "urls_scanned": 6,
+      "findings": 82,
+      "focus": "ginandjuice stock XXE/CSTI + DVWU comments XSS + crAPI dashboard/vehicle BOLA queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "brokencrystals.com/api/auth/jwt/weak-key/login: 82 findings — full JWT oracle bundle (weak-key, kid-sql, hmac-confusion, jku/x5c/x5u rogue, alg-none route oracles)",
-      "brokencrystals.com/api/auth/jwt/hmac/login: 63 findings — brokencrystals-jwt-hmac-confusion-route-live-oracle fires on targeted endpoint",
-      "brokencrystals.com/api/auth/jwt/jku/login: 29-finding generic hub without route-specific jku-rogue live oracle",
-      "brokencrystals.com/api/auth/jwt/x5c/login: 45-finding generic hub without route-specific x5c-rogue live oracle",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 16-finding generic hub without route-specific kid-sql live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
+      "ginandjuice.shop/catalog/product/stock: 39 findings — ginandjuice-stock-xxe-live-oracle + angular-csti + catalog-search-xss bundle",
+      "dvwu.vercel.app/api/comments: 12 findings — dvwu-comments-xss-route-live-oracle + portal-sqli + ssrf-redirect oracles",
+      "ist-edu-bd.vercel.app/labs/xss: 11 findings — ist-edu-search-xss + comments-xss route oracles",
+      "crapi2.apisec.ai/identity/api/v2/user/dashboard: 7 findings — crapi-signup-open-registration-live-oracle (vehicle/location route same bundle)",
+      "seclab.vercel.app/csrf: 6 findings — client-side-seclab-playground-evidence + angular-stub route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: route-specific kid-sql JWT oracle absent when scanning endpoint directly",
-      "brokencrystals.com/api/auth/jwt/jku/login: route-specific jku-rogue JWT oracle absent (generic misconfig/xss bundle only)",
-      "brokencrystals.com/api/auth/jwt/x5c/login: route-specific x5c-rogue JWT oracle absent (generic misconfig/xss bundle only)",
-      "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)"
+      "crapi2.apisec.ai/identity/api/v2/vehicle/*/location: vehicle BOLA live oracle absent (signup-oracle only, 7-finding generic hub)",
+      "crapi2.apisec.ai/identity/api/v2/user/dashboard: dashboard BOLA live oracle absent when scanning route directly",
+      "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)",
+      "seclab.vercel.app/csrf: CSRF live oracle absent (6-finding generic hub only)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
-    "brokencrystals.com/api/auth/jwt/weak-key/login": 82,
-    "brokencrystals.com/api/auth/jwt/hmac/login": 63,
-    "brokencrystals.com/api/auth/jwt/x5c/login": 45,
-    "brokencrystals.com/api/auth/jwt/jku/login": 29,
-    "brokencrystals.com/api/auth/jwt/kid-sql/login": 16
+    "juice-shop.herokuapp.com": 45,
+    "ginandjuice.shop/catalog/product/stock": 39,
+    "dvwu.vercel.app/api/comments": 12,
+    "ist-edu-bd.vercel.app/labs/xss": 11,
+    "crapi2.apisec.ai/identity/api/v2/user/dashboard": 7,
+    "crapi2.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location": 7,
+    "seclab.vercel.app/csrf": 6
   }
 }
