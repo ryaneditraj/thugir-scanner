@@ -37282,6 +37282,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-users-api-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnSite users API password disclosure oracle",
+    description:
+      "GET /api/users returns user records with plaintext passwords and echoes the raw SQL query with documented id/username/role injection vectors — the VulnSite sensitive data exposure API oracle.",
+    impactOneline:
+      "Unauthenticated user APIs leaking plaintext passwords expose every account to credential theft.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeUsersApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return password fields from APIs and use parameterized queries — VulnSite is intentional training software.",
+      steps: [
+        "Remove password columns from all API responses.",
+        "Replace dynamic SQL with prepared statements.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/users endpoint returns plaintext passwords and echoes raw SQL. Show password hashing and parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-users-api-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnSite /api/users route password disclosure oracle",
+    description:
+      "When scanning vuln-expose.vercel.app /api/users, GET returns user records with plaintext passwords and echoes raw SQL with injection hints — route-specific sensitive data exposure API oracle.",
+    impactOneline:
+      "Unauthenticated user APIs leaking plaintext passwords expose every account to credential theft.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeUsersApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return password fields from APIs and use parameterized queries — VulnSite is intentional training software.",
+      steps: [
+        "Remove password columns from all API responses.",
+        "Replace dynamic SQL with prepared statements.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users route scan returns plaintext passwords and echoes raw SQL. Show password hashing and parameterized query remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-comments-api-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnSite /api/comments route stored XSS oracle",
+    description:
+      "When scanning vuln-expose.vercel.app /api/comments, GET returns persisted comment bodies with raw <script> tags unescaped in JSON — route-specific stored XSS API oracle.",
+    impactOneline:
+      "Unsanitized stored comment HTML enables persistent XSS when rendered via dangerouslySetInnerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeCommentsApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and rendering — VulnSite is intentional training software.",
+      steps: [
+        "Never use dangerouslySetInnerHTML with unsanitized user content.",
+        "Use a strict HTML sanitizer or render comments as plain text.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/comments route scan returns raw <script> payloads in JSON. Show stored XSS comment remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-testimonials-route-live-oracle",
     platform: "generic",
     category: "Injection",

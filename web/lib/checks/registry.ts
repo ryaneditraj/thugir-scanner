@@ -20660,6 +20660,60 @@ const vulnExposeBlindSqliApiLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnExposeUsersApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const usersUrl = new URL("/api/users", ctx.origin).toString();
+  const doc = await ctx.probe.get(usersUrl, { maxBytes: 8192, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"users"\s*:\s*\[/i.test(doc.body)) return NEGATIVE;
+  if (!/"password"\s*:\s*"/i.test(doc.body)) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  if (!/"vulnerabilities"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: usersUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "VulnSite GET /api/users returns user records with plaintext passwords and echoes raw SQL query with documented injection vectors — sensitive data exposure API oracle"
+    }
+  };
+};
+
+const vulnExposeUsersApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeUsersApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/users route scan — GET returns user records with plaintext passwords and echoes raw SQL query — route-specific sensitive data exposure API oracle"
+    }
+  };
+};
+
+const vulnExposeCommentsApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/comments\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeCommentsStoredXssApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/comments route scan — GET returns persisted comment bodies with raw <script> tags unescaped in JSON — route-specific stored XSS API oracle"
+    }
+  };
+};
+
 const vulnExposeSqliBlindRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnExposeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -79424,6 +79478,9 @@ export const RULES: Record<string, Rule> = {
   vulnExposeCmdiRouteLiveOracle,
   vulnExposeIdorProfileRouteLiveOracle,
   vulnExposeBlindSqliApiLiveOracle,
+  vulnExposeUsersApiLiveOracle,
+  vulnExposeUsersApiRouteLiveOracle,
+  vulnExposeCommentsApiRouteLiveOracle,
   vulnExposeSqliBlindRouteLiveOracle,
   vulnExposeXssCspBypassRouteLiveOracle,
   vulnExposeNetworkToolsRouteLiveOracle,
