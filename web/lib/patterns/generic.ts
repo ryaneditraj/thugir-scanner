@@ -22444,6 +22444,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-chat-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "Pwnshop chat prompt-injection route live oracle (PWN-031)",
+    description:
+      "When scanning /chat or /api/v1/chat/query, POST /chat with a developer debug jailbreak returns the full system prompt including the classified INTERNAL AGENT PRIVILEGED COMMANDS section — route-specific prompt-injection oracle.",
+    impactOneline:
+      "Route scans on Pwnshop chat endpoints confirm live LLM prompt injection leaking system prompts and privileged command schemas.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — Pwnshop PWN-031 is intentional lab software.",
+      steps: [
+        "Strip jailbreak patterns and instruction-override phrases before sending user messages to the model.",
+        "Never embed privileged command schemas in prompts reachable via prompt injection.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /chat route scan confirms POST /chat leaks the full system prompt via developer debug jailbreak. Show route-specific prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-mass-assignment-admin-live-oracle",
     platform: "generic",
     category: "Broken access control",
