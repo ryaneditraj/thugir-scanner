@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-system-prompt-leakage-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lesson/prompt-leakage alias → /lesson/system-prompt-leakage; POST /onboard + GET confirms LLM07: System Prompt Leakage with demo-player markers (HTTP verified pre-checkpoint); rule mirrors LLM01/03 pattern; Vercel checkpoint blocked live oracle in cloud agent this run; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-improper-output-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lesson/output-handling alias → /lesson/improper-output; POST /onboard + GET confirms LLM05: Improper Output Handling with unsanitized/XSS/SQLi markers (HTTP verified pre-checkpoint); rule mirrors LLM01/03 pattern; Vercel checkpoint blocked live oracle in cloud agent this run; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1631-1632-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1630→1632 + IDOR curated modules 1631-1632 + topic aliases + runner priority /module/(1597-1632); web-security-learning-labs.vercel.app/module/1631 findings 6→10 (+web-security-learning-labs-idor-module-route-live-oracle); module/1632 findings 8→10; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
       "slug": "owasp-genai-prompt-injection-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard session + GET /lesson/prompt-injection confirms LLM01: Prompt Injection with Direct Prompt Injection demo; owaspbased-lessons.vercel.app/lesson/prompt-injection findings 4→4 (+owasp-genai-prompt-injection-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
@@ -10444,6 +10462,21 @@
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-next-public-env-route-live-oracle",
       "shipped_at": "2026-08-14T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-system-prompt-leakage-route-live-oracle",
+      "shipped_at": "2026-08-14T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-improper-output-route-live-oracle",
+      "shipped_at": "2026-08-14T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1631-1632-idor-catalog",
+      "shipped_at": "2026-08-14T21:20:00.000Z"
     }
   ]
 }
