@@ -46918,6 +46918,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zen-demo-java-create-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen demo pet-creation SQLi live oracle",
+    description:
+      "POST /api/create on zen-demo-java.fly.dev with a Malicious Pet SQLi payload returns blocked SQL Injection — confirming the pet-creation SQL injection lab surface.",
+    impactOneline:
+      "Live SQLi probe confirms unauthenticated SQL injection surface on the Aikido Zen WAF playground create endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoCreateSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — use parameterized queries in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use prepared statements for all database queries.",
+        "Keep Aikido Zen WAF rules enabled to block SQL injection in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-java /api/create endpoint accepts pet names vulnerable to SQL injection. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-java-create-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen /pages/create route SQLi oracle",
+    description:
+      "When scanning /pages/create, POST /api/create with SQLi payload triggers blocked SQL Injection — route-specific pet-creation SQLi oracle on the Zen live demo.",
+    impactOneline:
+      "Route-scoped scans of /pages/create should confirm SQL injection via the /api/create JSON API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoCreateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — use parameterized queries in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use prepared statements for all database queries.",
+        "Keep Aikido Zen WAF rules enabled to block SQL injection in production."
+      ]
+    },
+    fixPrompt:
+      "Our /pages/create route scan confirms SQL injection via /api/create. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-java-request-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Aikido Zen demo fetch-page SSRF live oracle",
+    description:
+      "POST /api/request on zen-demo-java.fly.dev with an internal URL returns SSRF block — confirming the fetch-page server-side request forgery lab surface.",
+    impactOneline:
+      "Live SSRF probe confirms unauthenticated server-side fetch surface on the Aikido Zen WAF playground request endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoRequestSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — allowlist outbound fetch destinations in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Block SSRF to internal IPs and metadata endpoints.",
+        "Keep Aikido Zen WAF rules enabled to block SSRF in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-java /api/request endpoint fetches attacker-controlled URLs. Show SSRF remediation and URL validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-java-request-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Aikido Zen /pages/request route SSRF oracle",
+    description:
+      "When scanning /pages/request, POST /api/request with internal URL triggers SSRF block — route-specific fetch-page SSRF oracle on the Zen live demo.",
+    impactOneline:
+      "Route-scoped scans of /pages/request should confirm SSRF via the /api/request JSON API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoRequestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — allowlist outbound fetch destinations in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Block SSRF to internal IPs and metadata endpoints.",
+        "Keep Aikido Zen WAF rules enabled to block SSRF in production."
+      ]
+    },
+    fixPrompt:
+      "Our /pages/request route scan confirms SSRF via /api/request. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-java-read-path-traversal-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aikido Zen demo read-file path traversal live oracle",
+    description:
+      "GET /api/read on zen-demo-java.fly.dev with a traversal path returns blocked Path Traversal — confirming the read-file path traversal lab surface.",
+    impactOneline:
+      "Live path traversal probe confirms unauthenticated file-read surface on the Aikido Zen WAF playground read endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoReadPathTraversalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — canonicalize and jail file paths in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Resolve paths against a chrooted base directory and reject .. segments.",
+        "Keep Aikido Zen WAF rules enabled to block path traversal in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-java /api/read endpoint accepts traversal paths. Show path canonicalization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-java-read-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aikido Zen /pages/read route path traversal oracle",
+    description:
+      "When scanning /pages/read, GET /api/read with traversal path triggers blocked Path Traversal — route-specific read-file path traversal oracle on the Zen live demo.",
+    impactOneline:
+      "Route-scoped scans of /pages/read should confirm path traversal via the /api/read endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoReadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — canonicalize and jail file paths in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Resolve paths against a chrooted base directory and reject .. segments.",
+        "Keep Aikido Zen WAF rules enabled to block path traversal in production."
+      ]
+    },
+    fixPrompt:
+      "Our /pages/read route scan confirms path traversal via /api/read. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-aevum-agent-consent-demo-evidence",
     platform: "generic",
     category: "AI security",

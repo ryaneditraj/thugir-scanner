@@ -9348,6 +9348,139 @@ const zenDemoExecuteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ZEN_SQLI_CREATE_PAYLOAD = "Malicious Pet', 'Gru from the Minions') -- ";
+const ZEN_SSRF_PROBE_URL = "http://127.0.0.1:8080";
+const ZEN_PATH_TRAVERSAL_PROBE = "../secrets/key.txt";
+
+async function probeZenDemoCreateSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isZenDemoHost(ctx)) return null;
+  const createUrl = new URL("/api/create", ctx.origin).toString();
+  const doc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ name: ZEN_SQLI_CREATE_PAYLOAD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 400 || doc.status >= 600) return null;
+  if (!/blocked SQL Injection/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      createUrl,
+      payload: ZEN_SQLI_CREATE_PAYLOAD,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Aikido Zen demo POST /api/create with SQL injection payload returns blocked SQL Injection — pet creation SQLi lab surface confirmed"
+    }
+  };
+}
+
+async function probeZenDemoRequestSsrf(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isZenDemoHost(ctx)) return null;
+  const requestUrl = new URL("/api/request", ctx.origin).toString();
+  const doc = await ctx.probe.get(requestUrl, {
+    method: "POST",
+    body: JSON.stringify({ url: ZEN_SSRF_PROBE_URL }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 400 || doc.status >= 600) return null;
+  if (!/blocked.*server-side request forgery|SSRFException/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      requestUrl,
+      probeUrl: ZEN_SSRF_PROBE_URL,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Aikido Zen demo POST /api/request with internal URL returns SSRF block — fetch-page SSRF lab surface confirmed"
+    }
+  };
+}
+
+async function probeZenDemoReadPathTraversal(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isZenDemoHost(ctx)) return null;
+  const readUrl = new URL(
+    `/api/read?path=${encodeURIComponent(ZEN_PATH_TRAVERSAL_PROBE)}`,
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(readUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 400 || doc.status >= 600) return null;
+  if (!/blocked Path Traversal/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      readUrl,
+      probePath: ZEN_PATH_TRAVERSAL_PROBE,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Aikido Zen demo GET /api/read with traversal path returns blocked Path Traversal — read-file path traversal lab surface confirmed"
+    }
+  };
+}
+
+const zenDemoCreateSqliLiveOracle: Rule = async (ctx) =>
+  (await probeZenDemoCreateSqli(ctx)) ?? NEGATIVE;
+
+const zenDemoCreateRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/create\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoCreateSqli(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen /pages/create route scan — POST /api/create SQLi payload triggers blocked SQL Injection — route-specific pet-creation SQLi oracle"
+    }
+  };
+};
+
+const zenDemoRequestSsrfLiveOracle: Rule = async (ctx) =>
+  (await probeZenDemoRequestSsrf(ctx)) ?? NEGATIVE;
+
+const zenDemoRequestRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/request\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoRequestSsrf(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen /pages/request route scan — POST /api/request internal URL triggers SSRF block — route-specific fetch-page SSRF oracle"
+    }
+  };
+};
+
+const zenDemoReadPathTraversalLiveOracle: Rule = async (ctx) =>
+  (await probeZenDemoReadPathTraversal(ctx)) ?? NEGATIVE;
+
+const zenDemoReadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/read\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoReadPathTraversal(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen /pages/read route scan — GET /api/read traversal path triggers blocked Path Traversal — route-specific read-file path traversal oracle"
+    }
+  };
+};
+
 const codeBreakingPuzzleRouteLiveOracle: Rule = async (ctx) => {
   if (!/code-breaking\.fly\.dev/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -34406,7 +34539,7 @@ async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<stri
   const cartRoute = /\/cart\b/i.test(pageUrl);
   const couponRoute = /\/apply-coupon/i.test(pageUrl);
   const walletRoute = /\/wallet\b/i.test(pageUrl);
-  if (uploadAvatarRoute) await pwnshopSleep(3000);
+  if (uploadAvatarRoute) await pwnshopSleep(4000);
   if (cartRoute || couponRoute || walletRoute) await pwnshopSleep(2500);
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
@@ -34495,7 +34628,7 @@ export async function primePwnshopOtpSessionForDeepScan(
   if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b|\/search\/filters/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   const primeWaitsMs = /\/profile\/upload-avatar/i.test(scanUrl)
-    ? [5000, 8000, 11000, 14000, 17000]
+    ? [5000, 8000, 11000, 14000, 17000, 20000]
     : /\/(?:apply-coupon|cart|wallet)\b/i.test(scanUrl)
       ? [4000, 7000, 10000, 13000]
       : [3000, 5000, 7000, 9000];
@@ -82560,6 +82693,12 @@ export const RULES: Record<string, Rule> = {
   clientSideAikidoZenDemoEvidence,
   zenDemoExecuteShellInjectionLiveOracle,
   zenDemoExecuteRouteLiveOracle,
+  zenDemoCreateSqliLiveOracle,
+  zenDemoCreateRouteLiveOracle,
+  zenDemoRequestSsrfLiveOracle,
+  zenDemoRequestRouteLiveOracle,
+  zenDemoReadPathTraversalLiveOracle,
+  zenDemoReadRouteLiveOracle,
   codeBreakingPuzzleRouteLiveOracle,
   clientSideAevumAgentConsentDemoEvidence,
   aevumConsentReviewUnauthLiveOracle,
