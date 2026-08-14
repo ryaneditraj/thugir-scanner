@@ -1925,6 +1925,24 @@
       "slug": "fauxbank-open-registration-mass-assignment-live-oracle",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register and /api/auth/register return HTTP 404 on pentest-fauxbank.vercel.app — no registration endpoint on current Vercel deploy; mass-assignment oracle not portable without live API"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-login-vulnerable-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/login-vulnerable — Auth bypass via SQLi (USE_DATABASE=true) per Chimera openapi; chimera.atlascrew.dev/api/v1/auth/login-vulnerable findings 5→6 (+chimera-login-vulnerable-sqli-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-patients-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/patients/search?ssn= — Patient search by SSN (classic SQLi, USE_DATABASE=true) per Chimera openapi; chimera.atlascrew.dev/api/v1/patients/search findings 5→6 (+chimera-patients-search-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-apply-discount-payment-manipulation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/checkout/apply-discount stacks unlimited discounts per chethan-vinayak/vulnshop README #33; vulnshop.vercel.app/api/v1/checkout/apply-discount findings 6→8 (+vulnshop-apply-discount-payment-manipulation + route oracles); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10121,6 +10139,21 @@
       "source": "discovery:securebank-blog.vercel.app",
       "slug": "securebank-blog-admin-rbac-route-live-oracle",
       "shipped_at": "2026-08-14T09:30:00.000Z"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-login-vulnerable-sqli-route-live-oracle",
+      "shipped_at": "2026-08-14T10:30:00.000Z"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-patients-search-sqli-route-live-oracle",
+      "shipped_at": "2026-08-14T10:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-apply-discount-payment-manipulation-live-oracle",
+      "shipped_at": "2026-08-14T10:30:00.000Z"
     }
   ]
 }
