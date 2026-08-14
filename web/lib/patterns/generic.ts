@@ -54427,6 +54427,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-catalog-link-manipulation-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop catalog link manipulation live oracle",
+    description:
+      "GET /catalog?searchTerm= reflects attacker input into category navigation href URLs in the client-side categories map — the PortSwigger Gin & Juice link manipulation (reflected DOM-based) training oracle.",
+    impactOneline:
+      "Reflected search terms embedded in navigation links enable DOM-based link manipulation and phishing via trusted catalog URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogLinkManipulationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode searchTerm before embedding in category href URLs and validate link destinations client-side.",
+      steps: [
+        "URL-encode or HTML-encode user input before inserting into href attributes.",
+        "Avoid reflecting raw query parameters into navigation link builders.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /catalog?searchTerm= endpoint reflects attacker input into category navigation hrefs. Show link manipulation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-link-manipulation-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /catalog link manipulation route live oracle",
+    description:
+      "When scanning /catalog, searchTerm is reflected into category navigation href URLs — route-specific link manipulation (reflected DOM-based) training oracle.",
+    impactOneline:
+      "Route-specific confirmation that catalog category links embed unsanitized searchTerm values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogLinkManipulationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode searchTerm in category navigation hrefs on /catalog routes.",
+      steps: [
+        "URL-encode user input before inserting into href attributes.",
+        "Validate link destinations before client-side navigation.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog route scan confirms searchTerm reflected in category link hrefs. Show route-specific link manipulation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-cart-checkout-auth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop cart checkout auth gate live oracle",
+    description:
+      "POST /catalog/cart adds items and POST /catalog/cart/checkout redirects unauthenticated sessions to /login?redirect=cart — the PortSwigger Gin & Juice cart business-logic training oracle.",
+    impactOneline:
+      "Cart checkout flows that accept item manipulation before authentication gates enable business-logic testing of coupon and settlement endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCartCheckoutAuthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart state server-side and require authentication before checkout settlement.",
+      steps: [
+        "Recompute cart totals server-side on checkout; never trust client-submitted prices.",
+        "Require authenticated sessions before order placement.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/cart checkout accepts manipulated cart state before redirecting unauthenticated users to login. Show cart business-logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-cart-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /catalog/cart route live oracle",
+    description:
+      "When scanning /catalog/cart, add-to-cart POST populates coupon and checkout forms and unauthenticated checkout redirects to /login?redirect=cart — route-specific cart business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop cart exposes coupon application and checkout business-logic surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCartRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart totals server-side and gate checkout behind authentication.",
+      steps: [
+        "Recompute cart totals server-side on checkout.",
+        "Require authentication before order placement.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/cart route scan confirms coupon/checkout business-logic surfaces. Show route-specific cart remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-angular-vulnerable-dependency-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop AngularJS 1.7.7 vulnerable dependency live oracle",
+    description:
+      "GET /catalog loads ng-app with /resources/js/angular_1-7-7.js containing AngularJS v1.7.7 — the PortSwigger Gin & Juice vulnerable JavaScript dependency training oracle.",
+    impactOneline:
+      "End-of-life AngularJS 1.7.7 on public pages expands CSTI/XSS attack surface and signals outdated client-side dependencies.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAngularVulnerableDependencyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade or remove end-of-life AngularJS client dependencies.",
+      steps: [
+        "Migrate from AngularJS 1.x to a supported framework or patched Angular version.",
+        "Run dependency scanning in CI to flag EOL client libraries.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our site serves AngularJS 1.7.7 via angular_1-7-7.js on ng-app pages. Show vulnerable dependency remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-angular-vulnerable-dependency-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop AngularJS vulnerable dependency route live oracle",
+    description:
+      "When scanning /catalog or /catalog/cart, ng-app pages load angular_1-7-7.js (AngularJS v1.7.7) — route-specific vulnerable JavaScript dependency oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop pages ship an end-of-life AngularJS client library.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceAngularVulnerableDependencyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade or remove AngularJS 1.7.7 from route-specific ng-app pages.",
+      steps: [
+        "Migrate from AngularJS 1.x to a supported framework.",
+        "Pin and audit client-side library versions in CI.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /catalog/cart route scan confirms AngularJS 1.7.7 dependency. Show route-specific client library upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "firing-range-dom-external-localstorage-property-eval-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

@@ -58719,6 +58719,174 @@ const ginAndJuiceDeleteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceCatalogLinkManipulationLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const canary = `thugirLink${Date.now().toString(36)}`;
+  const probeUrl = new URL("/catalog", ctx.origin);
+  probeUrl.searchParams.set("searchTerm", canary);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const escapedCanary = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const linkPattern = new RegExp(
+    `"[^"]+":\\s*"/catalog\\?category=[^"]*&searchTerm=${escapedCanary}"`
+  );
+  if (!linkPattern.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.match(linkPattern)?.[0]?.slice(0, 160),
+      note: "Gin & Juice Shop GET /catalog?searchTerm= reflects attacker input into category navigation href URLs — link manipulation (reflected DOM-based) training oracle"
+    }
+  };
+};
+
+const ginAndJuiceCatalogLinkManipulationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogLinkManipulationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog route scan — searchTerm reflected into category link hrefs without encoding — link manipulation training oracle"
+    }
+  };
+};
+
+async function probeGinAndJuiceCartCheckoutAuth(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const catalogUrl = new URL("/catalog", ctx.origin);
+  catalogUrl.searchParams.set("thugir", Date.now().toString(36));
+  const catalogPage = await ctx.probe.get(catalogUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (catalogPage.status < 200 || catalogPage.status >= 400) return null;
+  let sessionCookie = ginAndJuiceSessionCookieFromDoc(catalogPage);
+  if (!sessionCookie) return null;
+  const addCartUrl = new URL("/catalog/cart", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(addCartUrl, {
+    method: "POST",
+    body: new URLSearchParams({ productId: "1", quantity: "1", redir: "CART" }).toString(),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: sessionCookie
+    },
+    maxBytes: 1024,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (addDoc.status < 300 || addDoc.status >= 400) return null;
+  sessionCookie = ginAndJuiceSessionCookieFromDoc(addDoc) || sessionCookie;
+  const cartPage = await ctx.probe.get(addCartUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: sessionCookie }
+  });
+  if (cartPage.status < 200 || cartPage.status >= 400) return null;
+  if (/empty-cart-wrapper/i.test(cartPage.body)) return null;
+  if (!/action=\/catalog\/cart\/coupon/i.test(cartPage.body)) return null;
+  if (!/action=\/catalog\/cart\/checkout/i.test(cartPage.body)) return null;
+  const csrf = ginAndJuiceCsrfFromLoginPage(cartPage.body);
+  if (!csrf) return null;
+  const checkoutUrl = new URL("/catalog/cart/checkout", ctx.origin).toString();
+  const checkoutDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: new URLSearchParams({ csrf }).toString(),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: sessionCookie
+    },
+    maxBytes: 1024,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const checkoutLocation = checkoutDoc.headers["location"] || "";
+  const checkoutAuthGate =
+    checkoutDoc.status >= 300 &&
+    checkoutDoc.status < 400 &&
+    /\/login\b/i.test(checkoutLocation) &&
+    /redirect=cart/i.test(checkoutLocation);
+  if (!checkoutAuthGate) return null;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: addCartUrl,
+      checkoutUrl,
+      checkoutLocation,
+      snippet: cartPage.body.match(/cart-order-section[\s\S]{0,160}/i)?.[0]?.slice(0, 180),
+      note: "Gin & Juice Shop POST /catalog/cart adds items and POST /catalog/cart/checkout redirects unauthenticated users to /login?redirect=cart — cart checkout business-logic training oracle"
+    }
+  };
+}
+
+const ginAndJuiceCartCheckoutAuthLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceCartCheckoutAuth(ctx);
+  return result ?? NEGATIVE;
+};
+
+const ginAndJuiceCartRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\/cart\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeGinAndJuiceCartCheckoutAuth(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /catalog/cart route scan — add-to-cart, coupon, and checkout forms with unauthenticated checkout redirect to login — cart business-logic training oracle"
+    }
+  };
+};
+
+const ginAndJuiceAngularVulnerableDependencyLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/catalog", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/ng-app/i.test(doc.body) || !/angular_1-7-7\.js/i.test(doc.body)) return NEGATIVE;
+  const jsUrl = new URL("/resources/js/angular_1-7-7.js", ctx.origin).toString();
+  const jsDoc = await ctx.probe.get(jsUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (jsDoc.status < 200 || jsDoc.status >= 400) return NEGATIVE;
+  const versionMatch = /AngularJS v1\.7\.7/i.test(jsDoc.body);
+  if (!versionMatch && !/angular\.module/i.test(jsDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: versionMatch ? 0.92 : 0.88,
+    evidence: {
+      url: probeUrl,
+      angularScript: jsUrl,
+      snippet: jsDoc.body.match(/AngularJS[\s\S]{0,40}/i)?.[0]?.slice(0, 80) ?? "angular_1-7-7.js",
+      note: "Gin & Juice Shop serves AngularJS 1.7.7 (angular_1-7-7.js) on ng-app pages — vulnerable JavaScript dependency training oracle"
+    }
+  };
+};
+
+const ginAndJuiceAngularVulnerableDependencyRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\/cart\b/i.test(pageUrl) && !/\/catalog\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceAngularVulnerableDependencyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop route scan confirms AngularJS 1.7.7 client dependency on ng-app pages — vulnerable JavaScript dependency training oracle"
+    }
+  };
+};
+
 const ginAndJuiceLoggerOastLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const loggerUrl = new URL("/logger", ctx.origin).toString();
@@ -80642,6 +80810,12 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceChangeAddressRouteLiveOracle,
   ginAndJuiceMyAccountOrdersRouteLiveOracle,
   ginAndJuiceDeleteRouteLiveOracle,
+  ginAndJuiceCatalogLinkManipulationLiveOracle,
+  ginAndJuiceCatalogLinkManipulationRouteLiveOracle,
+  ginAndJuiceCartCheckoutAuthLiveOracle,
+  ginAndJuiceCartRouteLiveOracle,
+  ginAndJuiceAngularVulnerableDependencyLiveOracle,
+  ginAndJuiceAngularVulnerableDependencyRouteLiveOracle,
   ginAndJuiceLoggerOastLiveOracle,
   ginAndJuiceLoggerRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
