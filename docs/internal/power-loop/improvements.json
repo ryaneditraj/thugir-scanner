@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-debug-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/debug README #30 Misconfiguration API8 exposes secrets and environment; vulnshop.vercel.app/api/v1/debug findings 7→13 (+vulnshop-debug-api-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-orders-modify-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/orders/modify README #36 Order Status Manipulation can modify shipped orders; vulnshop.vercel.app/api/v1/orders/modify findings 9→14 (+vulnshop-orders-modify-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-dashboard-jwt-otp-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: tryCrapiLabJwt extended with mechanic_code signup + tryCrapiOtpToken v2/check-otp brute for JWT when login omits token; crapi2.apisec.ai unreachable from cloud (connection reset) — rule chain validated; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-jwk-rogue-login-live-oracle",
       "status": "shipped",
@@ -10232,6 +10250,21 @@
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-products-import-ssrf-route-live-oracle",
       "shipped_at": "2026-08-14T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-debug-api-route-live-oracle",
+      "shipped_at": "2026-08-14T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-orders-modify-route-live-oracle",
+      "shipped_at": "2026-08-14T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-dashboard-jwt-otp-fallback",
+      "shipped_at": "2026-08-14T14:30:00.000Z"
     }
   ]
 }

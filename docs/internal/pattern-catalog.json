@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T13:19:43.809Z",
-  "total": 2330,
-  "uniqueSlugs": 2326,
+  "generatedAt": "2026-08-14T14:20:17.750Z",
+  "total": 2333,
+  "uniqueSlugs": 2329,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2312,
+    "generic": 2315,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2245,
+    "deep": 2248,
     "continuous": 0
   },
   "byCategory": {
@@ -33,9 +33,9 @@
     "general": 20,
     "SSRF": 14,
     "Server-side request forgery": 74,
-    "Sensitive data exposure": 61,
+    "Sensitive data exposure": 62,
     "AI security": 58,
-    "Business logic": 19,
+    "Business logic": 21,
     "Cross-site request forgery": 2,
     "Insecure file upload": 2,
     "Command injection": 2,
@@ -2165,6 +2165,7 @@
     "vulnshop-buy-ticket-route-live-oracle",
     "vulnshop-cart-route-live-oracle",
     "vulnshop-debug-api-live-oracle",
+    "vulnshop-debug-api-route-live-oracle",
     "vulnshop-flash-sale-race-live-oracle",
     "vulnshop-hidden-admin-administrator-route-live-oracle",
     "vulnshop-hidden-admin-manager-route-live-oracle",
@@ -2174,6 +2175,8 @@
     "vulnshop-login-jwt-route-live-oracle",
     "vulnshop-orders-idor-live-oracle",
     "vulnshop-orders-idor-route-live-oracle",
+    "vulnshop-orders-modify-live-oracle",
+    "vulnshop-orders-modify-route-live-oracle",
     "vulnshop-payment-process-route-live-oracle",
     "vulnshop-payment-process-unsafe-api-live-oracle",
     "vulnshop-products-import-ssrf-live-oracle",
