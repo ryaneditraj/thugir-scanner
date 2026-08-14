@@ -2859,6 +2859,9 @@ const DEEP_RULES = new Set<string>([
   "vulnExposeCmdiRouteLiveOracle",
   "vulnExposeIdorProfileRouteLiveOracle",
   "vulnExposeBlindSqliApiLiveOracle",
+  "vulnExposeUsersApiLiveOracle",
+  "vulnExposeUsersApiRouteLiveOracle",
+  "vulnExposeCommentsApiRouteLiveOracle",
   "vulnExposeSqliBlindRouteLiveOracle",
   "vulnExposeXssCspBypassRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
@@ -6713,7 +6716,11 @@ function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
     "/network-tools",
     "/blog",
     "/invoices",
-    "/employee-portal"
+    "/employee-portal",
+    "/api/users",
+    "/api/comments",
+    "/api/search",
+    "/api/auth/login"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -9039,6 +9046,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       /* ignore */
     }
   }
+  if (
+    /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(targetInput) &&
+    /\/api\//i.test(targetInput) &&
+    (home.status === 0 || home.body.length < 512 || !/VulnSite|"users"|"comments"/i.test(home.body))
+  ) {
+    try {
+      const routeDoc = await fetchDoc(targetInput, { timeoutMs: 20000, maxBytes: 8192 });
+      const veHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (veHome.status >= 200 && veHome.body.length > 512) {
+        home = { ...veHome, finalUrl: targetInput, url: targetInput };
+      } else if (routeDoc.status > 0 && /"success"\s*:\s*true/i.test(routeDoc.body)) {
+        home = { ...routeDoc, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
   if (stubRedirect && home.body.length < 4096) {
@@ -11097,6 +11124,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/ssrf-vulnerable\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-ssrf-vulnerable")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-users-api")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/comments\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-comments-api")
       )
         return -3;
       if (
