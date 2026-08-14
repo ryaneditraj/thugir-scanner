@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T08:10:16.096Z",
+  "updated_at": "2026-08-14T09:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera — auth-bypass SQLi oracle POST /api/v1/auth/login-vulnerable (vuln-api README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=1",
+      "source": "atlas-crew/Chimera — classic SQLi oracle GET /api/v1/patients/search?ssn= (API-DOCUMENTATION.md)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/swagger",
+      "source": "atlas-crew/Chimera — 456+ vulnerable endpoint Swagger UI discovery surface (chimera.atlascrew.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/checkout/apply-discount",
+      "source": "chethan-vinayak/vulnshop — payment manipulation oracle POST /api/v1/checkout/apply-discount (README route #33)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/wallet/add-funds",
+      "source": "chethan-vinayak/vulnshop — race-condition wallet funding oracle POST /api/v1/wallet/add-funds (README route #35)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vaultapp-omega.vercel.app/api/admin/audit-logs",
       "source": "MRMcyber/vaultapp — unauthenticated admin audit-log IDOR oracle GET /api/admin/audit-logs (README IDOR lab #8)",
