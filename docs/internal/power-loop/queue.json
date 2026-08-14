@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T09:20:00.000Z",
+  "updated_at": "2026-08-14T10:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
+      "source": "webspoilt/vulnforge-academy — file upload bypass tier Level 16 (levels 16-18 file upload, GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — file upload tier Level 17 validation bypass (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php",
+      "source": "webspoilt/vulnforge-academy — hard tier Level 18 file upload chain (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/xml-import",
+      "source": "chethan-vinayak/vulnshop — XXE oracle POST /api/xml-import (README route #7)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/products/import",
+      "source": "chethan-vinayak/vulnshop — SSRF API7 oracle POST /api/v1/products/import URL-based import (README route #29)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
       "source": "atlas-crew/Chimera — auth-bypass SQLi oracle POST /api/v1/auth/login-vulnerable (vuln-api README)",
