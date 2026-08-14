@@ -16,6 +16,7 @@ import {
 } from "./agent-power";
 import { fetchDoc, isVercelSecurityCheckpoint, looksHtml, type FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
+import { extractJuiceShopResendKeys, fetchJuiceShopSocialFeedBodies } from "./juice-shop-social";
 import {
   extractApiPaths,
   extractExternalApiBases,
@@ -30817,6 +30818,49 @@ const juiceShopLeakedApiKeyOracle: Rule = async (ctx) => {
       note: "Juice Shop juicy-coupon-bot git history (commit 4fb203e) hardcoded AWS API Gateway key still validates coupon API — Leaked API Key challenge oracle"
     }
   };
+};
+
+const RESEND_API_DOMAINS_URL = "https://api.resend.com/domains";
+
+async function validateResendApiKey(ctx: RuleContext, apiKey: string): Promise<boolean> {
+  const doc = await ctx.probe.get(RESEND_API_DOMAINS_URL, {
+    maxBytes: 2048,
+    timeoutMs: 12000,
+    headers: { Authorization: `Bearer ${apiKey}` }
+  });
+  return doc.status >= 200 && doc.status < 300 && /"data"\s*:/.test(doc.body);
+}
+
+const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  let corpus = ctx.combined;
+  let keys = extractJuiceShopResendKeys(corpus);
+  if (keys.length === 0) {
+    const configUrl = new URL("/rest/admin/application-configuration", ctx.origin).toString();
+    const configDoc = await ctx.probe.get(configUrl, { maxBytes: 16384, timeoutMs: 15000 });
+    if (configDoc.status >= 200 && configDoc.status < 300 && !HEROKU_STUB_RE.test(configDoc.body)) {
+      corpus += "\n" + configDoc.body;
+      if (!/blueSkyUrl|mastodonUrl/i.test(corpus)) {
+        corpus += "\n" + (await fetchJuiceShopSocialFeedBodies(configDoc.body, ctx.probe));
+      }
+      keys = extractJuiceShopResendKeys(corpus);
+    }
+  }
+  for (const key of keys.slice(0, 2)) {
+    if (await validateResendApiKey(ctx, key)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          secretName: "Resend API key",
+          sampleRedacted: `${key.slice(0, 6)}...${key.slice(-4)}`,
+          validateUrl: RESEND_API_DOMAINS_URL,
+          note: "Juice Shop social/config corpus contains Resend API key validated against api.resend.com/domains — Leaked Resend API Key challenge oracle"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
 };
 
 async function probeJuiceShopProductsSearchApi(ctx: RuleContext): Promise<RuleResult | null> {
@@ -79737,6 +79781,7 @@ export const RULES: Record<string, Rule> = {
   juiceShopForgottenBackupRouteLiveOracle,
   juiceShopProductsSearchSqliRouteLiveOracle,
   juiceShopLeakedApiKeyOracle,
+  juiceShopResendKeyLiveOracle,
   clientSideEksGoatEvidence,
   clientSideCtflearnEvidence,
   clientSideCybenchEvidence,

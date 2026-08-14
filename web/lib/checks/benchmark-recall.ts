@@ -11,6 +11,7 @@ const SLUG_TO_BENCHMARK: Record<string, string[]> = {
   "security-question-disclosure": ["sensitive_data"],
   "juice-shop-forgotten-backup-disclosure": ["sensitive_data"],
   "juice-shop-leaked-api-key": ["sensitive_data"],
+  "juice-shop-resend-key-live-oracle": ["sensitive_data"],
   "juice-shop-jwt-alg-none-live-oracle": ["auth_bypass"],
   "juice-shop-captcha-bypass-live-oracle": ["auth_bypass"],
   "juice-shop-image-captcha-bypass-live-oracle": ["auth_bypass"],
