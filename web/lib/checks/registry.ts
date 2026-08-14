@@ -5740,6 +5740,40 @@ const clientSideOopssecStoreEvidence: Rule = async (ctx) => {
   };
 };
 
+const oopssecRoadmapRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/roadmap\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecStoreEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /roadmap route scan — 35-flag CTF walkthrough catalog across 11 chapters covering OWASP Top 10 flaws in a Next.js e-commerce SPA"
+    }
+  };
+};
+
+const oopssecStoreHomeRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/oss-oopssec-store\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecStoreEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store home route scan — intentionally vulnerable e-commerce SPA landing documents 35 CTF flags across 11 OWASP Top 10 chapters"
+    }
+  };
+};
+
 // --- OopsSec Store race-condition coupon abuse walkthrough (posts/race-condition-coupon-abuse) -
 const CLIENT_OOPSSEC_RACE_CONDITION_RES: { label: string; re: RegExp }[] = [
   {
@@ -38226,7 +38260,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1623;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1630;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38270,7 +38304,14 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1620": "IDOR",
   "1621": "IDOR",
   "1622": "IDOR",
-  "1623": "IDOR"
+  "1623": "IDOR",
+  "1624": "IDOR",
+  "1625": "IDOR",
+  "1626": "IDOR",
+  "1627": "IDOR",
+  "1628": "IDOR",
+  "1629": "IDOR",
+  "1630": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38360,7 +38401,14 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1620": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1621": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1622": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1623": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1623": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1624": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1625": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1626": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1627": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1628": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1629": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1630": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -82484,6 +82532,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingUnencryptedCommunicationLessonEvidence,
   clientSideHacksplainingXssiLessonEvidence,
   clientSideOopssecStoreEvidence,
+  oopssecRoadmapRouteLiveOracle,
+  oopssecStoreHomeRouteLiveOracle,
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
   clientSideOopssecProductSearchSqliEvidence,
