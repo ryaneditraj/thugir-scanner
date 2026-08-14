@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T03:24:31.481Z",
-  "total": 2305,
-  "uniqueSlugs": 2301,
+  "generatedAt": "2026-08-14T04:19:59.952Z",
+  "total": 2307,
+  "uniqueSlugs": 2303,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2287,
+    "generic": 2289,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2220,
+    "deep": 2222,
     "continuous": 0
   },
   "byCategory": {
@@ -26,10 +26,10 @@
     "Information exposure": 1,
     "Information disclosure": 112,
     "Security misconfiguration": 163,
-    "Broken authentication": 137,
+    "Broken authentication": 138,
     "Injection": 341,
     "Cross-site scripting": 684,
-    "Open redirect": 20,
+    "Open redirect": 21,
     "general": 20,
     "SSRF": 14,
     "Server-side request forgery": 72,
@@ -936,6 +936,7 @@
     "dvga-route-live-oracle",
     "dvrag-admin-config-live-oracle",
     "dvrag-rag-pipeline-live-oracle",
+    "dvwu-broken-auth-route-live-oracle",
     "dvwu-comments-xss-route-live-oracle",
     "dvwu-crlf-client-route-live-oracle",
     "dvwu-csrf-newsletter-crlf-route-live-oracle",
@@ -945,6 +946,7 @@
     "dvwu-graphql-lab-route-live-oracle",
     "dvwu-jwt-lab-route-live-oracle",
     "dvwu-notices-lfi-route-live-oracle",
+    "dvwu-open-redirect-route-live-oracle",
     "dvwu-path-traversal-client-route-live-oracle",
     "dvwu-portal-sqli-live-oracle",
     "dvwu-portal-sqli-route-live-oracle",
