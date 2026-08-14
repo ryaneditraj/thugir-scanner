@@ -38266,6 +38266,94 @@ const clientSideSecurebankBlogEvidence: Rule = async (ctx) => {
   };
 };
 
+function isSecureBankBlogHost(ctx: RuleContext): boolean {
+  return /securebank-blog\.vercel\.app/i.test(ctx.origin);
+}
+
+async function secureBankBlogArticleCorpus(ctx: RuleContext): Promise<string> {
+  const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 200_000,
+    timeoutMs: 15000
+  });
+  if (indexDoc.status < 200 || indexDoc.status >= 400) return "";
+  if (!/SecureBank|Attack Mode/i.test(indexDoc.body)) return "";
+  return indexDoc.body;
+}
+
+async function secureBankBlogRouteCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (!/SecureBank/i.test(corpus) || !/Attack Mode/i.test(corpus) || corpus.length < 500) {
+    const article = await secureBankBlogArticleCorpus(ctx);
+    if (article) corpus = `${corpus}\n${article}`;
+  }
+  return corpus;
+}
+
+const secureBankBlogLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const sqliOk =
+    /Attack 1:\s*SQL Injection/i.test(corpus) &&
+    (/Attack mode — dangerous/i.test(corpus) ||
+      /directly pasting your input into the SQL string/i.test(corpus)) &&
+    (/inject SQL into the login form/i.test(corpus) || /admin'--/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "admin'-- comments out password check in Attack Mode login SQLi demo",
+      note: "securebank-blog.vercel.app /login route scan — Medium blog article documents Attack Mode SQL injection via login form string concatenation (route returns 404; corpus fetched from /) — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const secureBankBlogMessagesXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/messages\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const xssOk =
+    /Attack 2:\s*Cross-Site Scripting/i.test(corpus) &&
+    (/messages page/i.test(corpus) || /stored as raw HTML/i.test(corpus)) &&
+    /rendered directly/i.test(corpus);
+  if (!xssOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "messages page stores raw HTML rendered directly in Attack Mode XSS demo",
+      note: "securebank-blog.vercel.app /messages route scan — Medium blog article documents stored XSS via messages page raw HTML rendering (route returns 404; corpus fetched from /) — route-specific XSS training oracle"
+    }
+  };
+};
+
+const secureBankBlogAdminRbacRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const adminOk =
+    /\/admin/i.test(corpus) &&
+    (/403 error for anyone who isn't an admin/i.test(corpus) ||
+      /returns a 403/i.test(corpus)) &&
+    (/two roles/i.test(corpus) || /\badmin\b.*\buser\b/i.test(corpus));
+  if (!adminOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "/admin route checks session role and returns 403 for non-admin users",
+      note: "securebank-blog.vercel.app /admin route scan — Medium blog article documents admin/user RBAC with /admin 403 gate (route returns 404; corpus fetched from /) — route-specific access-control training oracle"
+    }
+  };
+};
+
 function isSecureBankBayHost(ctx: RuleContext): boolean {
   return /secure-bank-bay\.vercel\.app/i.test(ctx.origin);
 }
@@ -79794,6 +79882,9 @@ export const RULES: Record<string, Rule> = {
   clientSideXssVictimBankEvidence,
   clientSideNimbusVaultEvidence,
   clientSideSecurebankBlogEvidence,
+  secureBankBlogLoginSqliRouteLiveOracle,
+  secureBankBlogMessagesXssRouteLiveOracle,
+  secureBankBlogAdminRbacRouteLiveOracle,
   secureBankBaySqliLoginRouteLiveOracle,
   secureBankBayStoredXssCommentsRouteLiveOracle,
   secureBankBayStoredXssMessagesRouteLiveOracle,

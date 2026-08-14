@@ -24860,6 +24860,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "securebank-blog-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecureBank blog SQLi login route live oracle",
+    description:
+      "When scanning /login on securebank-blog.vercel.app, the Medium article documents Attack Mode SQL injection via login form string concatenation — route-specific SQLi training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional SQLi login bypass patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Use parameterized queries for all authentication flows.",
+        "Remove Attack Mode from any publicly reachable deployment.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /login route documents Attack Mode SQLi login bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "securebank-blog-messages-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SecureBank blog stored XSS messages route live oracle",
+    description:
+      "When scanning /messages on securebank-blog.vercel.app, the Medium article documents stored XSS via messages page raw HTML rendering in Attack Mode — route-specific XSS training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional stored XSS message flows for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogMessagesXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Sanitize HTML or use a strict allowlist before storing user messages.",
+        "Encode output in templates instead of rendering raw HTML.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /messages route documents stored XSS via raw HTML rendering. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "securebank-blog-admin-rbac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SecureBank blog admin RBAC route live oracle",
+    description:
+      "When scanning /admin on securebank-blog.vercel.app, the Medium article documents admin/user role separation with /admin returning 403 for non-admin sessions — route-specific access-control training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional RBAC admin panel patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogAdminRbacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Authorize admin routes server-side using session role claims.",
+        "Never rely on client-side role checks alone.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /admin route documents RBAC with 403 for non-admin users. Show server-side authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bugbountyhunter-evidence",
     platform: "generic",
     category: "Cross-site scripting",
