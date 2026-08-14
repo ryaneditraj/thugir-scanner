@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T20:29:13.853Z",
-  "total": 2347,
-  "uniqueSlugs": 2343,
+  "generatedAt": "2026-08-14T21:15:53.327Z",
+  "total": 2349,
+  "uniqueSlugs": 2345,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2329,
+    "generic": 2331,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2262,
+    "deep": 2264,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 14,
     "Server-side request forgery": 76,
     "Sensitive data exposure": 62,
-    "AI security": 61,
+    "AI security": 63,
     "Business logic": 21,
     "Cross-site request forgery": 2,
     "Insecure file upload": 2,
@@ -1703,9 +1703,11 @@
     "oopssec-xff-sqli-route-live-oracle",
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
+    "owasp-genai-improper-output-route-live-oracle",
     "owasp-genai-prompt-injection-route-live-oracle",
     "owasp-genai-sensitive-info-route-live-oracle",
     "owasp-genai-supply-chain-route-live-oracle",
+    "owasp-genai-system-prompt-leakage-route-live-oracle",
     "pentest-forge-dvwa-sqli-route-live-oracle",
     "pentest-forge-linked-lab-probe",
     "pentest-ground-dvwa-csp-bypass-route-live-oracle",
