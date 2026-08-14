@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T01:12:00.000Z",
+  "updated_at": "2026-08-14T01:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2952,
-  "total_findings": 31016,
+  "total_sites_scanned": 2953,
+  "total_findings": 31063,
   "critical_findings": 106,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2058,
   "discovery_findings": 24736,
-  "improvements_shipped": 1198,
-  "last_run": "2026-08-14T01:12:00.000Z",
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-14T01:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,44 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent — sensitive_data via juice-shop-leaked-api-key"
+      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 6,
-      "urls_scanned": 6,
-      "findings": 87,
-      "focus": "vAPI queue drain + Juice Shop Resend corpus expansion + WSL 1614-1615 queued",
-      "improvements_shipped_this_run": 2
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "vAPI mini-lab route oracles (jwt/serversurfer/api4-user) validated on live vapi.apisec.ai",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "vapi.apisec.ai/vapi/api9/user: 15 findings — vapi-api9-route-live-oracle on queue drain",
-      "vapi.apisec.ai/vapi/api1/user/1: 14-15 findings — vapi-api1-route-live-oracle confirmed",
-      "vapi.apisec.ai/vapi/api3-9/user: route live oracles firing (BOLA/BFLA/CORS/SQLi)",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: 86 findings — adminpermission-route-live-oracle",
-      "juice-shop-resend-key-live-oracle: expanded social corpus — no live re_<8>_<24> key validates (likely revoked)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "vapi.apisec.ai/vapi/api4/user: +vapi-api4-user-route-live-oracle — OTP-leaked key dumps flag{api4_*}",
+      "vapi.apisec.ai/vapi/jwt/user: +vapi-jwt-weak-token-route-live-oracle — forged admin JWT returns flag{jwt_*}",
+      "vapi.apisec.ai/vapi/serversurfer: +vapi-serversurfer-ssrf-route-live-oracle — example.com fetch SSRF confirmed",
+      "vapi.apisec.ai/vapi/stickynotes: vapi-stickynotes-stored-xss-route-live-oracle validated (flag{xss_*}) — queued next run"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "damn-vulnerable-startup.fly.dev: public DVS demo offline",
-      "secret-resend slug still absent — api.resend.com validation found no live key in expanded corpus",
-      "new queue URLs (WSL 1614-1615, WrongSecrets 13-15) not yet scanned"
+      "secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key",
+      "vapi.apisec.ai/vapi/stickynotes route oracle validated but not logged this run (3-improvement cap)",
+      "damn-vulnerable-startup.fly.dev: public DVS demo offline"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 47,
     "vapi.apisec.ai/vapi/api9/user": 15,
     "vapi.apisec.ai/vapi/api7/user": 15,
     "vapi.apisec.ai/vapi/api8/user": 15,
     "vapi.apisec.ai/vapi/api6/user": 14,
     "vapi.apisec.ai/vapi/api3/user": 14,
     "vapi.apisec.ai/vapi/api1/user/1": 15,
+    "vapi.apisec.ai/vapi/jwt/user": 12,
+    "vapi.apisec.ai/vapi/serversurfer": 13,
+    "vapi.apisec.ai/vapi/api4/user": 15,
     "brokencrystals.com/api/users/one/regular_user/adminpermission": 86,
-    "web-security-learning-labs.vercel.app/module/1613": 7,
-    "dvwu.vercel.app/labs/jwt": 12,
     "ssrf.vulnlab.dev/basic": 15,
-    "pentest-fauxbank.vercel.app/transfer": 16,
-    "brokencrystals.com/api/file": 85
+    "pentest-fauxbank.vercel.app/transfer": 16
   }
 }
