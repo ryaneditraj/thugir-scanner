@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-render-dot-ssti-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/render Hello {{=7*7}} returns HTTP 201 Hello 49 (doT SSTI); brokencrystals.com/api/render findings 16→84 (+brokencrystals-render-dot-ssti-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-render-dot-ssti-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/render fires brokencrystals-render-dot-ssti-route-live-oracle with scannedUrl; findings 16→84 incl route-specific doT SSTI oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level16-18-file-upload-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: suppress vulnforgeAcademyLevelSstiRouteLiveOracle on levels 16-18 (file-upload labs); vulnforge-academy level17.php drops misleading SSTI route oracle, keeps vulnforge-academy-level-file-upload-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1614-1616-idor-catalog",
       "status": "shipped",
