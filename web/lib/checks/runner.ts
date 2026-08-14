@@ -498,6 +498,16 @@ async function primeBrokencrystalsRouteOracleProbes(
       "/api/testimonials/count?query=select%20count(table_name)%20as%20count%20from%20information_schema.tables"
     );
   }
+  const jwtRoute = scanUrl.match(
+    /\/api\/auth\/jwt\/(jwk|x5u|jku|x5c|hmac|kid-sql|weak-key)\/(validate|login)\b/i
+  );
+  if (jwtRoute) {
+    const [, kind, action] = jwtRoute;
+    paths.push(`/api/auth/jwt/${kind}/${action}`);
+    if (action === "login") {
+      paths.push(`/api/auth/jwt/${kind}/validate`);
+    }
+  }
   if (paths.length === 0) return;
   const urls = paths.map((p) => new URL(p, origin).toString());
   await probe.getMany(urls, { maxBytes: 65536, timeoutMs: 15000, redirect: "manual" }, 3);
@@ -2781,6 +2791,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsJwtJkuRogueRouteLiveOracle",
   "brokencrystalsJwtX5uRogueLiveOracle",
   "brokencrystalsJwtX5uRogueRouteLiveOracle",
+  "brokencrystalsJwtJwkRogueLoginLiveOracle",
+  "brokencrystalsJwtJwkRogueLoginRouteLiveOracle",
   "brokencrystalsSimpleCsrfFlowLiveOracle",
   "brokencrystalsSimpleCsrfRouteLiveOracle",
   "brokencrystalsDomCsrfFlowLiveOracle",
@@ -9182,6 +9194,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       /* ignore */
     }
   }
+  if (
+    /brokencrystals\.com/i.test(targetInput) &&
+    /\/api\/auth\/jwt\//i.test(targetInput) &&
+    (home.status === 404 ||
+      home.status === 0 ||
+      home.body.length < 512 ||
+      !/Broken Crystals|brokencrystals|assets\/index-/i.test(home.body))
+  ) {
+    try {
+      const bcHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 20000,
+        maxBytes: 600_000
+      });
+      if (bcHome.status >= 200 && bcHome.body.length > home.body.length) {
+        home = { ...bcHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   // reachTarget may drift to http://www.* when a REST route returns 401 — pin canonical origin for Juice Shop API scans.
   if (
     /juice-shop|owasp-juice|\.juice\.shop$/i.test(effectiveTargetInput) &&
@@ -9245,7 +9277,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(origin) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count)\b/i.test(effectiveTargetInput)
+    /\/api\/(?:goto|products\/latest|testimonials\/count|auth\/jwt\/)\b/i.test(effectiveTargetInput)
   ) {
     await primeBrokencrystalsRouteOracleProbes(probe, origin, effectiveTargetInput);
   }
