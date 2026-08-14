@@ -7214,6 +7214,7 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
     "/api/info",
     "/api/process",
     "/api/v1/wallet/add-funds",
+    "/api/v1/checkout/apply-discount",
     "/template",
     "/track-order",
     "/support",

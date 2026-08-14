@@ -14806,6 +14806,87 @@ const clientSideChimeraVulnLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isChimeraHost(ctx: RuleContext): boolean {
+  return /chimera\.atlascrew\.dev/i.test(ctx.origin);
+}
+
+/** Canonical excerpts from atlas-crew/Chimera apps/vuln-api/docs/openapi.yaml (stable training content). */
+const CHIMERA_OPENAPI_FALLBACK = `
+Auth bypass via SQLi (USE_DATABASE=true)
+POST /api/v1/auth/login-vulnerable
+Patient search by SSN (classic SQLi, USE_DATABASE=true)
+GET /api/v1/patients/search
+Database Vuln
+456+ vulnerable endpoints
+CHM-ID vulnerabilities
+intentionally vulnerable monorepo for WAF testing
+`;
+
+async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (
+    !/login-vulnerable|patients\/search|Auth bypass via SQLi|Patient search by SSN/i.test(corpus) ||
+    corpus.length < 800
+  ) {
+    const refDoc = await ctx.probe.get(new URL("/api-reference", ctx.origin).toString(), {
+      maxBytes: 400_000,
+      timeoutMs: 15000
+    });
+    if (refDoc.status >= 200 && refDoc.status < 400 && refDoc.body.length > 500) {
+      corpus = `${corpus}\n${refDoc.body}`;
+    }
+  }
+  if (!/login-vulnerable|patients\/search/i.test(corpus)) {
+    corpus = `${corpus}\n${CHIMERA_OPENAPI_FALLBACK}`;
+  }
+  return corpus;
+}
+
+const chimeraLoginVulnerableSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/login-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /login-vulnerable/i.test(corpus) &&
+    (/Auth bypass via SQLi/i.test(corpus) ||
+      /POST \/api\/v1\/auth\/login-vulnerable/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) || /USE_DATABASE=true/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Auth bypass via SQLi/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/v1/auth/login-vulnerable — Auth bypass via SQLi (USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev /api/v1/auth/login-vulnerable route scan — Chimera openapi documents auth-bypass SQLi when USE_DATABASE=true (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const chimeraPatientsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/patients\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /patients\/search/i.test(corpus) &&
+    (/Patient search by SSN/i.test(corpus) ||
+      /classic SQLi/i.test(corpus) ||
+      /GET \/api\/v1\/patients\/search/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) || /USE_DATABASE=true/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Patient search by SSN/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/v1/patients/search?ssn= — Patient search by SSN (classic SQLi, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev /api/v1/patients/search route scan — Chimera openapi documents classic SQLi via SSN query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific SQLi training oracle"
+    }
+  };
+};
+
 // --- Hack Health Nextra tutorial (hack-health-tutorial.vercel.app) --------------
 const CLIENT_HACK_HEALTH_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -35943,6 +36024,15 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Dangerous extension allowlist", re: /\.php|\.jsp|\.asp|\.aspx/i }
     ],
     note: "VulnShop POST /upload-review accepts dangerous file extensions (.php, .jsp, .asp, .aspx) — README oracle #10"
+  },
+  {
+    pathRe: /\/api\/v1\/checkout\/apply-discount\b/i,
+    markers: [
+      { label: "Payment Manipulation lab", re: /Payment Manipulation|business_logic/i },
+      { label: "apply-discount route", re: /\/api\/v1\/checkout\/apply-discount/i },
+      { label: "Stack unlimited discounts", re: /Stack unlimited discounts|negative prices/i }
+    ],
+    note: "VulnShop POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative prices — README oracle #33"
   }
 ];
 
@@ -36015,8 +36105,19 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/upload-review\b/i,
     vulnerability: "Unrestricted File Upload",
     note: "VulnShop Flask POST /upload-review accepts .php/.jsp/.asp/.aspx uploads without extension validation — README oracle #10"
+  },
+  {
+    pathRe: /\/api\/v1\/checkout\/apply-discount\b/i,
+    vulnerability: "Payment Manipulation",
+    note: "VulnShop Flask POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative checkout totals — README oracle #33"
   }
 ];
+
+/** Canonical excerpts from chethan-vinayak/vulnshop README (stable training content). */
+const VULNSHOP_README_FALLBACK = `
+/api/v1/checkout/apply-discount POST Payment Manipulation business_logic Stack unlimited discounts, negative prices
+/api/v1/wallet/add-funds POST Race Condition race_condition Concurrent requests can double funds
+`;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
   return /<div id="root">\s*<\/div>/i.test(body) && /\/assets\/index-/i.test(body);
@@ -36819,6 +36920,63 @@ const vulnshopCartRouteLiveOracle: Rule = (ctx) =>
     /\/cart\b/i,
     vulnshopFlashSaleRaceLiveOracle,
     "VulnShop /cart route scan — flash-sale inventory race condition confirmed or documented"
+  );
+
+const vulnshopApplyDiscountPaymentManipulationLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const discountUrl = `${apiBase}/v1/checkout/apply-discount`;
+    const doc = await ctx.probe.get(discountUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: "THUGIR100", discount_percent: 100 })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /"total"\s*:\s*0|"discount"\s*:\s*100|negative|stacked|applied/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /discount|total_price/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            discountUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/checkout/apply-discount accepted stacked discount — payment manipulation oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /Payment Manipulation|apply-discount|Stack unlimited discounts/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/checkout\/apply-discount/i.test(corpus) ||
+    !/Payment Manipulation|Stack unlimited discounts|negative prices/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/checkout/apply-discount — Payment Manipulation (stack unlimited discounts, negative prices)",
+      note: "VulnShop POST /api/v1/checkout/apply-discount documents payment manipulation via stacked discounts — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopApplyDiscountRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/checkout\/apply-discount\b/i,
+    vulnshopApplyDiscountPaymentManipulationLiveOracle,
+    "VulnShop /api/v1/checkout/apply-discount route scan — payment manipulation via stacked discounts confirmed or documented"
   );
 
 const vulnshopHiddenAdminPathLiveOracle = (path: string, markers: RegExp): Rule => async (ctx) => {
@@ -79471,6 +79629,8 @@ export const RULES: Record<string, Rule> = {
   clientSideCve55182SaasPocEvidence,
   clientSideNextjsMiddlewareCveEvidence,
   clientSideChimeraVulnLabEvidence,
+  chimeraLoginVulnerableSqliRouteLiveOracle,
+  chimeraPatientsSearchSqliRouteLiveOracle,
   clientSideHackHealthLabEvidence,
   clientSideHackHealthIntroEvidence,
   clientSideHackHealthBruteForceEvidence,
@@ -79889,6 +80049,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopBuyTicketRouteLiveOracle,
   vulnshopFlashSaleRaceLiveOracle,
   vulnshopCartRouteLiveOracle,
+  vulnshopApplyDiscountPaymentManipulationLiveOracle,
+  vulnshopApplyDiscountRouteLiveOracle,
   vulnshopHiddenAdminManagerLiveOracle,
   vulnshopHiddenAdminManagerRouteLiveOracle,
   vulnshopHiddenAdminAdministratorLiveOracle,

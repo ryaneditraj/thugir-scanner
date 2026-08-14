@@ -14718,6 +14718,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-login-vulnerable-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera auth-bypass SQLi login-vulnerable route live oracle",
+    description:
+      "When scanning /api/v1/auth/login-vulnerable on chimera.atlascrew.dev, Chimera openapi documents auth-bypass SQLi when USE_DATABASE=true — route-specific SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection auth bypass on the login-vulnerable endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraLoginVulnerableSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection.",
+        "Gate vulnerability inventory pages behind authentication for internal red-team use only."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/auth/login-vulnerable route documents auth-bypass SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-patients-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera patient SSN search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/patients/search on chimera.atlascrew.dev, Chimera openapi documents classic SQLi via SSN query parameter when USE_DATABASE=true — route-specific SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents classic SQL injection on the patient SSN search endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPatientsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate and sanitize all query parameters before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/patients/search route documents classic SQLi via SSN parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hack-health-lab-evidence",
     platform: "generic",
     category: "Injection",
@@ -23842,6 +23894,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnShop /cart route documents a flash-sale inventory race condition. Show route-specific locking remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-apply-discount-payment-manipulation-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop checkout apply-discount payment manipulation live oracle",
+    description:
+      "POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative checkout totals — the VulnShop payment manipulation oracle (README #33).",
+    impactOneline:
+      "Attackers can stack discount codes to zero or negative checkout totals on VulnShop training deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopApplyDiscountPaymentManipulationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate discounts server-side and cap total discount percentage.",
+      steps: [
+        "Reject stacked discount codes that exceed 100% off.",
+        "Recalculate checkout totals server-side on every discount application.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/checkout/apply-discount allows stacked discounts. Show server-side discount validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-apply-discount-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/checkout/apply-discount payment manipulation route live oracle",
+    description:
+      "When scanning /api/v1/checkout/apply-discount, live Railway backend probe or README oracle #33 documents payment manipulation via stacked discounts on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/checkout/apply-discount documents payment manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopApplyDiscountRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate discounts server-side on /api/v1/checkout/apply-discount.",
+      steps: [
+        "Reject stacked discount codes that exceed 100% off.",
+        "Recalculate checkout totals server-side on every discount application.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/checkout/apply-discount route documents payment manipulation. Show route-specific discount validation.",
     version: 1,
     enabled: true
   },
