@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-wallet-add-funds-race-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/wallet/add-funds README #35 documents race_condition — concurrent requests can double funds; vulnshop.vercel.app/api/v1/wallet/add-funds findings 6→9 (+vulnshop-wallet-add-funds-race + route oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-swagger-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /swagger route scan — Chimera docs corpus documents Swagger UI with 456+ intentional API vulnerabilities (live vuln-api not on docs host); chimera.atlascrew.dev/swagger findings 5→6 (+chimera-swagger-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webspoilt/vulnforge-academy README levels 16-18 Medium File Upload Bypass validation; vulnforge-academy level16.php findings 5→6 (+vulnforge-academy-level-file-upload-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:securebank-blog.vercel.app",
       "slug": "securebank-blog-login-sqli-route-live-oracle",
       "status": "shipped",
@@ -10154,6 +10172,21 @@
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-apply-discount-payment-manipulation-live-oracle",
       "shipped_at": "2026-08-14T10:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-wallet-add-funds-race-live-oracle",
+      "shipped_at": "2026-08-14T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-swagger-route-live-oracle",
+      "shipped_at": "2026-08-14T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
+      "shipped_at": "2026-08-14T11:30:00.000Z"
     }
   ]
 }
