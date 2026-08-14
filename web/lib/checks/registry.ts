@@ -75099,6 +75099,23 @@ const vapiApi4OtpRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vapiApi4UserRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api4\/user\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vapiApi4UserExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vAPI /api4/user route scan — OTP-leaked Authorization-Token returns every user record including flag in lastname — excessive data exposure oracle (API4)"
+    }
+  };
+};
+
 function vapiBasicAuthToken(username: string, password: string): string {
   return Buffer.from(`${username}:${password}`).toString("base64");
 }
@@ -79999,6 +80016,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi4OtpBrokenAuthLiveOracle,
   vapiApi4OtpRouteLiveOracle,
   vapiApi4UserExposureLiveOracle,
+  vapiApi4UserRouteLiveOracle,
   vapiApi5BflaLiveOracle,
   vapiApi5RouteLiveOracle,
   vapiApi6MassAssignmentLiveOracle,
