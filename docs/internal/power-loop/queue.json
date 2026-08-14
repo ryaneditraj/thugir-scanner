@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T23:15:00.000Z",
+  "updated_at": "2026-08-14T00:20:00.000Z",
   "discovery_urls": [
     {
       "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
@@ -11513,6 +11513,31 @@
     {
       "url": "https://gdg-benin.vercel.app/instructions",
       "source": "skynette/gdg-ctf-challenge — CTF instructions and clue surface (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1614",
+      "source": "web-security-learning-labs Vercel — module 1614 security lab route (WSL catalog expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1615",
+      "source": "web-security-learning-labs Vercel — module 1615 security lab route (WSL catalog expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-13",
+      "source": "OWASP WrongSecrets — challenge-13 secret exposure lab (public Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-14",
+      "source": "OWASP WrongSecrets — challenge-14 secret exposure lab (public Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-15",
+      "source": "OWASP WrongSecrets — challenge-15 secret exposure lab (public Heroku demo)",
       "auth": "public_demo"
     }
   ]
