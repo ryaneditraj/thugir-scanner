@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-link-manipulation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?searchTerm=CANARY reflects into categories JSON href map (e.g. Accessories:/catalog?category=Accessories&searchTerm=CANARY); ginandjuice.shop/catalog/cart route scan 38 findings (+link-manipulation live+route); benchmark juice-shop.herokuapp.com 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-cart-checkout-auth-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /catalog/cart productId=1&redir=CART populates coupon+checkout forms; POST /catalog/cart/checkout returns 302 Location /login?redirect=cart without auth; ginandjuice.shop/catalog/cart findings 0→38 (+cart-checkout-auth +cart-route); benchmark 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-angular-vulnerable-dependency-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /resources/js/angular_1-7-7.js returns AngularJS v1.7.7 on ng-app /catalog/cart pages; ginandjuice.shop/catalog/cart findings 38 incl angular-vulnerable-dependency live+route oracles; benchmark 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-api4-user-route-live-oracle",
       "status": "shipped",
