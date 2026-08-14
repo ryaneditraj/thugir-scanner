@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T22:07:08.258Z",
-  "total": 2353,
-  "uniqueSlugs": 2349,
+  "generatedAt": "2026-08-14T23:04:21.855Z",
+  "total": 2356,
+  "uniqueSlugs": 2352,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2335,
+    "generic": 2338,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2268,
+    "deep": 2271,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 14,
     "Server-side request forgery": 76,
     "Sensitive data exposure": 62,
-    "AI security": 65,
+    "AI security": 68,
     "Business logic": 21,
     "Cross-site request forgery": 2,
     "Insecure file upload": 2,
@@ -1704,12 +1704,15 @@
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
     "owasp-genai-data-poisoning-route-live-oracle",
+    "owasp-genai-excessive-agency-route-live-oracle",
     "owasp-genai-improper-output-route-live-oracle",
     "owasp-genai-misinformation-route-live-oracle",
     "owasp-genai-prompt-injection-route-live-oracle",
     "owasp-genai-sensitive-info-route-live-oracle",
     "owasp-genai-supply-chain-route-live-oracle",
     "owasp-genai-system-prompt-leakage-route-live-oracle",
+    "owasp-genai-unbounded-consumption-route-live-oracle",
+    "owasp-genai-vector-embedding-route-live-oracle",
     "pentest-forge-dvwa-sqli-route-live-oracle",
     "pentest-forge-linked-lab-probe",
     "pentest-ground-dvwa-csp-bypass-route-live-oracle",

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-excessive-agency-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard + GET /lesson/excessive-agency confirms LLM06: Excessive Agency with demo-player and tool-permission markers (HTTP verified); owaspbased-lessons.vercel.app/lesson/excessive-agency findings 1→4 (+owasp-genai-excessive-agency-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-vector-embedding-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard + GET /lesson/vector-embedding confirms LLM08: Vector and Embedding Weaknesses with RAG/embedding-inversion markers (HTTP verified); owaspbased-lessons.vercel.app/lesson/vector-embedding findings 1→4 (+owasp-genai-vector-embedding-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-unbounded-consumption-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard + GET /lesson/unbounded-consumption confirms LLM10: Unbounded Consumption with Denial of Wallet markers (HTTP verified); owaspbased-lessons.vercel.app/lesson/unbounded-consumption findings 1→5 (+owasp-genai-unbounded-consumption-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:sql-injection-challenge.vercel.app",
       "slug": "sql-injection-challenge-login-sqli-live-oracle",
       "status": "shipped",
@@ -10495,6 +10513,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1631-1632-idor-catalog",
       "shipped_at": "2026-08-14T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-excessive-agency-route-live-oracle",
+      "shipped_at": "2026-08-14T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-vector-embedding-route-live-oracle",
+      "shipped_at": "2026-08-14T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-unbounded-consumption-route-live-oracle",
+      "shipped_at": "2026-08-14T23:10:00.000Z"
     }
   ]
 }
