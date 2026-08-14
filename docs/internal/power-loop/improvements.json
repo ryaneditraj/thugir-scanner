@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1614-1616-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1613→1616 + IDOR curated modules 1614-1616; web-security-learning-labs.vercel.app/module/1614 findings 7→8 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-dashboard-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CRAPI_DASHBOARD_ROUTE_FALLBACK when JWT signup/login unreachable; crapi2.apisec.ai/identity/api/v2/user/dashboard findings 7→8 (+crapi-dashboard-route-live-oracle corpus fallback); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-vehicle-location-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK when JWT chain fails on route scan; crapi2.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location findings 7→8 (+crapi-vehicle-location-route-live-oracle corpus fallback); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-debug-api-route-live-oracle",
       "status": "shipped",

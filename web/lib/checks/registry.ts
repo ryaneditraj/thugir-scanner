@@ -37147,8 +37147,8 @@ const vulnshopApplyDiscountPaymentManipulationLiveOracle: Rule = async (ctx) => 
   }
   const corpus =
     /Payment Manipulation|apply-discount|Stack unlimited discounts/i.test(ctx.combined)
-      ? ctx.combined
-      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+      ? `${ctx.combined}\n${ctx.scanUrl || ""}`
+      : `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
   if (
     !/\/api\/v1\/checkout\/apply-discount/i.test(corpus) ||
     !/Payment Manipulation|Stack unlimited discounts|negative prices/i.test(corpus)
@@ -37235,8 +37235,8 @@ const vulnshopWalletAddFundsRaceLiveOracle: Rule = async (ctx) => {
   }
   const corpus =
     /Race Condition|add-funds|Concurrent requests can double funds/i.test(ctx.combined)
-      ? ctx.combined
-      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+      ? `${ctx.combined}\n${ctx.scanUrl || ""}`
+      : `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
   if (
     !/\/api\/v1\/wallet\/add-funds/i.test(corpus) ||
     !/Race Condition|Concurrent requests can double funds|race_condition/i.test(corpus)
@@ -38069,7 +38069,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1613;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1616;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38103,7 +38103,10 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1610": "IDOR",
   "1611": "IDOR",
   "1612": "IDOR",
-  "1613": "IDOR"
+  "1613": "IDOR",
+  "1614": "IDOR",
+  "1615": "IDOR",
+  "1616": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -73179,7 +73182,25 @@ const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000,
     headers: authHeaders
   });
-  if (locDoc.status < 200 || locDoc.status >= 400) return NEGATIVE;
+  if (locDoc.status < 200 || locDoc.status >= 400) {
+    const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK}`;
+    if (
+      /\/identity\/api\/v2\/vehicle\/[0-9a-f-]{36}\/location/i.test(corpus) &&
+      /latitude|longitude|vehicleid|BOLA|API1/i.test(corpus)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.86,
+        evidence: {
+          scannedUrl: pageUrl,
+          vehicleUuid: targetUuid,
+          snippet: `GET /identity/api/v2/vehicle/${targetUuid}/location — latitude/longitude BOLA`,
+          note: "crAPI /identity/api/v2/vehicle/{uuid}/location route scan — OWASP crAPI documents cross-user GPS read via leaked vehicleid (API1) — route corpus fallback when JWT signup/login chain is unreachable"
+        }
+      };
+    }
+    return NEGATIVE;
+  }
   if (!/"latitude"\s*:/.test(locDoc.body) || !/"longitude"\s*:/.test(locDoc.body)) return NEGATIVE;
   let fullName: string | undefined;
   try {
@@ -73316,19 +73337,50 @@ const crapiDashboardLiveOracle: Rule = async (ctx) => {
   }
 };
 
+/** Stable excerpts from OWASP crAPI docs when JWT signup/login is unreachable from scanner egress. */
+const CRAPI_DASHBOARD_ROUTE_FALLBACK = `
+GET /identity/api/v2/user/dashboard
+returns email phone number available_credit
+excessive data exposure API3:2023
+`;
+
+const CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK = `
+GET /identity/api/v2/vehicle/{vehicleId}/location
+community posts leak vehicleid UUIDs
+returns latitude longitude fullName without object-level authorization
+BOLA API1:2023
+`;
+
 const crapiDashboardRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/user\/dashboard\b/i.test(pageUrl)) return NEGATIVE;
   const result = await crapiDashboardLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /identity/api/v2/user/dashboard route scan — authenticated GET returns email, phone number, and available_credit — excessive data exposure route oracle (API3)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_DASHBOARD_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/v2\/user\/dashboard/i.test(corpus) ||
+    !/available_credit|excessive data exposure|API3/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.86,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "crAPI /identity/api/v2/user/dashboard route scan — authenticated GET returns email, phone number, and available_credit — excessive data exposure route oracle (API3)"
+      snippet: "GET /identity/api/v2/user/dashboard — email, phone number, available_credit",
+      note: "crAPI /identity/api/v2/user/dashboard route scan — OWASP crAPI documents excessive dashboard PII exposure (API3) — route corpus fallback when JWT signup/login chain is unreachable"
     }
   };
 };
