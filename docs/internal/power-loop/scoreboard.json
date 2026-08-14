@@ -15,14 +15,24 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 3017,
   "total_findings": 32770,
+=======
+  "total_sites_scanned": 3014,
+  "total_findings": 32760,
+>>>>>>> 2b25207b (power-scan: benchmark + 5 discovery, 43 findings [09 UTC])
   "critical_findings": 107,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2103,
+<<<<<<< HEAD
   "discovery_findings": 25834,
   "improvements_shipped": 1199,
+=======
+  "discovery_findings": 25825,
+  "improvements_shipped": 1196,
+>>>>>>> 2b25207b (power-scan: benchmark + 5 discovery, 43 findings [09 UTC])
   "last_run": "2026-08-14T09:34:07.534Z",
   "last_run_summary": {
     "hour_utc": "09",
@@ -62,9 +72,13 @@
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
       "vuln-expose.vercel.app/api/users: 0→16 findings — host live; password disclosure + SQLi + stored XSS API oracles firing",
       "chimera.atlascrew.dev/api/v1/auth/login-vulnerable: 5 findings — chimera lab evidence + reflexion-escalated-ssti",
+<<<<<<< HEAD
       "securebank-blog.vercel.app/login: 2→3 findings — securebank-blog-login-sqli-route-live-oracle (concurrent 09 UTC run)",
       "securebank-blog.vercel.app/messages: 2→3 findings — securebank-blog-messages-xss-route-live-oracle (concurrent run)",
       "securebank-blog.vercel.app/admin: 2→3 findings — securebank-blog-admin-rbac-route-live-oracle (concurrent run)",
+=======
+      "chimera.atlascrew.dev/api/v1/patients/search: 5 findings — chimera SQLi route hub (no route-specific live oracle yet)",
+>>>>>>> 2b25207b (power-scan: benchmark + 5 discovery, 43 findings [09 UTC])
       "vulnshop.vercel.app/api/v1/checkout/apply-discount: 6 findings — vulnshop client-bundle evidence hub",
       "vulnshop.vercel.app/api/v1/wallet/add-funds: 6 findings — race-condition route hub without live oracle"
     ],
@@ -80,6 +94,7 @@
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
     "vuln-expose.vercel.app/api/users": 16,
+<<<<<<< HEAD
     "pwnshop.ctfsecurity.com/admin/export-orders": 43,
     "vulnshop.vercel.app/api/v1/checkout/apply-discount": 6,
     "vulnshop.vercel.app/api/v1/wallet/add-funds": 6,
@@ -87,5 +102,12 @@
     "securebank-blog.vercel.app/login": 3,
     "securebank-blog.vercel.app/messages": 3,
     "securebank-blog.vercel.app/admin": 3
+=======
+    "vulnshop.vercel.app/api/v1/checkout/apply-discount": 6,
+    "vulnshop.vercel.app/api/v1/wallet/add-funds": 6,
+    "chimera.atlascrew.dev/api/v1/auth/login-vulnerable": 5,
+    "chimera.atlascrew.dev/api/v1/patients/search?ssn=1": 5,
+    "chimera.atlascrew.dev/swagger": 5
+>>>>>>> 2b25207b (power-scan: benchmark + 5 discovery, 43 findings [09 UTC])
   }
 }
