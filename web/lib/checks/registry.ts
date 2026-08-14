@@ -71319,7 +71319,6 @@ const SQL_INJECTION_CHALLENGE_LOGIN_PASSWORD_PAYLOAD =
 const sqlInjectionChallengeLoginSqliLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
   if (!SQL_INJECTION_CHALLENGE_HOST_RE.test(corpus)) return NEGATIVE;
-  if (!/Admin123GOATee/i.test(corpus)) return NEGATIVE;
   const loginUrl = new URL("/login", ctx.origin).toString();
   const badBody = new URLSearchParams({
     username: "thugir-invalid-probe",
