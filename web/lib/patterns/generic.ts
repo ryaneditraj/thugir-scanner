@@ -24028,6 +24028,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-update-price-manipulation-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop cart update-price manipulation live oracle",
+    description:
+      "POST /api/v1/cart/update-price accepts client-supplied prices without server-side verification — the VulnShop price manipulation oracle (README #34).",
+    impactOneline:
+      "Attackers can set arbitrary cart item prices on VulnShop training deployments that trust client-side price fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUpdatePriceManipulationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never trust client-supplied prices — recalculate from catalog server-side.",
+      steps: [
+        "Reject cart price updates that differ from authoritative product catalog prices.",
+        "Bind checkout totals to server-side price lookups on every cart mutation.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/cart/update-price accepts client-controlled prices. Show server-side price validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-update-price-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/cart/update-price manipulation route live oracle",
+    description:
+      "When scanning /api/v1/cart/update-price, live Railway backend probe or README oracle #34 documents price manipulation via client-supplied cart prices on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/cart/update-price documents client-side price manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUpdatePriceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate cart prices server-side on /api/v1/cart/update-price.",
+      steps: [
+        "Reject cart price updates that differ from authoritative product catalog prices.",
+        "Bind checkout totals to server-side price lookups on every cart mutation.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/cart/update-price route documents price manipulation. Show route-specific price validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-payment-process-unsafe-api-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop payment process unsafe API live oracle",
+    description:
+      "POST /api/v1/payment/process accepts unvalidated payment payloads without amount or card checks — the VulnShop unsafe API consumption oracle (README #32).",
+    impactOneline:
+      "Attackers can submit arbitrary negative or malformed payment data on VulnShop training deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPaymentProcessUnsafeApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment amounts, card data, and business rules server-side before processing.",
+      steps: [
+        "Reject negative or out-of-range payment amounts.",
+        "Tokenize card data via a PCI-compliant payment provider instead of accepting raw PANs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/payment/process lacks payment validation. Show server-side payment verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-payment-process-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/payment/process unsafe API route live oracle",
+    description:
+      "When scanning /api/v1/payment/process, live Railway backend probe or README oracle #32 documents unsafe payment API consumption on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/payment/process documents unsafe API consumption without payment validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPaymentProcessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment payloads server-side on /api/v1/payment/process.",
+      steps: [
+        "Reject negative or out-of-range payment amounts.",
+        "Tokenize card data via a PCI-compliant payment provider instead of accepting raw PANs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/payment/process route documents unsafe payment API consumption. Show route-specific validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-products-import-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop products import SSRF live oracle",
+    description:
+      "POST /api/v1/products/import fetches attacker-controlled import URLs without validation — the VulnShop API SSRF oracle (README #29).",
+    impactOneline:
+      "Attackers can coerce VulnShop to fetch internal URLs or cloud metadata via unvalidated product import URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductsImportSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal networks and validate import URL allowlists.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted import pipeline instead of arbitrary URL fetching.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/products/import is SSRF-vulnerable via import URLs. Show URL allowlist and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-products-import-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/products/import SSRF route live oracle",
+    description:
+      "When scanning /api/v1/products/import, live Railway backend probe or README oracle #29 documents URL-based import SSRF on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/products/import documents SSRF via unvalidated import URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductsImportSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal URL fetches on /api/v1/products/import.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted import pipeline instead of arbitrary URL fetching.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/products/import route documents import SSRF. Show route-specific URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-hidden-admin-manager-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

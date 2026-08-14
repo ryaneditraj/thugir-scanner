@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-update-price-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README #34 POST /api/v1/cart/update-price Price Manipulation — client-side price accepted without verification; vulnshop.vercel.app/api/v1/cart/update-price findings 9→12 (+vulnshop-update-price-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-payment-process-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README #32 POST /api/v1/payment/process Unsafe API Consumption — no validation of payment data; vulnshop.vercel.app/api/v1/payment/process findings 8→12 (+vulnshop-payment-process-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-products-import-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README #29 POST /api/v1/products/import SSRF — URL-based import without validation; vulnshop.vercel.app/api/v1/products/import findings 10→13 (+vulnshop-products-import-ssrf-route-live-oracle; products-sqli deferred on import route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-wallet-add-funds-race-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/wallet/add-funds README #35 documents race_condition — concurrent requests can double funds; vulnshop.vercel.app/api/v1/wallet/add-funds findings 6→9 (+vulnshop-wallet-add-funds-race + route oracles); benchmark juice-shop 48 findings 6/6 maintained"
@@ -10187,6 +10205,21 @@
       "source": "discovery:vulnforge-academy.vercel.app",
       "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
       "shipped_at": "2026-08-14T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-update-price-route-live-oracle",
+      "shipped_at": "2026-08-14T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-payment-process-route-live-oracle",
+      "shipped_at": "2026-08-14T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-products-import-ssrf-route-live-oracle",
+      "shipped_at": "2026-08-14T12:20:00.000Z"
     }
   ]
 }
