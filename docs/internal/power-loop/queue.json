@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T06:18:00.000Z",
+  "updated_at": "2026-08-14T07:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://securebank-blog.vercel.app/login",
+      "source": "FAST-NUCES SecureBank attack lab — SQLi login bypass oracle POST /login (attack mode, semester project README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/messages",
+      "source": "FAST-NUCES SecureBank attack lab — stored XSS oracle POST /messages (attack mode raw HTML render)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/admin",
+      "source": "FAST-NUCES SecureBank attack lab — RBAC admin panel bypass oracle GET /admin (session role check)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php",
+      "source": "webspoilt/vulnforge-academy — SSRF tier Level 13 internal service access (levels 13-15 SSRF, GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php",
+      "source": "webspoilt/vulnforge-academy — hard tier Level 19 command injection RCE challenge (GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
       "source": "ctfsec/pwnshop — SSRF avatar URL fetch oracle POST /profile/update-avatar targeting localhost:3000/debug/info (PWN-029)",
