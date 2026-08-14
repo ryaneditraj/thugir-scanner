@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T07:12:00.000Z",
+  "updated_at": "2026-08-14T08:10:16.096Z",
   "discovery_urls": [
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/admin/audit-logs",
+      "source": "MRMcyber/vaultapp — unauthenticated admin audit-log IDOR oracle GET /api/admin/audit-logs (README IDOR lab #8)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/account/export?user_id=1",
+      "source": "MRMcyber/vaultapp — account data export IDOR oracle GET /api/account/export?user_id= (README IDOR lab #3)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/transactions",
+      "source": "MRMcyber/vaultapp — transaction history IDOR oracle GET /api/transactions (README IDOR lab #2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/export-orders",
+      "source": "ctfsec/pwnshop vulnerabilities — CSV formula injection oracle GET /admin/export-orders (PWN-013)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/product/1",
+      "source": "ctfsec/pwnshop vulnerabilities — stored XSS product review oracle POST /review on product pages (PWN-011)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://securebank-blog.vercel.app/login",
       "source": "FAST-NUCES SecureBank attack lab — SQLi login bypass oracle POST /login (attack mode, semester project README)",
