@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://sql-injection-challenge.vercel.app/",
+      "source": "Jupiterian/SQL-Injection-Challenge — Flask CTF SQLi login lab (GitHub README live demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/output-handling",
+      "source": "OWASP GenAI Security Lab — LLM output handling lesson route (Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-leakage",
+      "source": "OWASP GenAI Security Lab — LLM prompt leakage lesson route (Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1631",
+      "source": "web-security-learning-labs Vercel — module 1631 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1632",
+      "source": "web-security-learning-labs Vercel — module 1632 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-injection",
       "source": "OWASP GenAI Security Lab Vercel — LLM prompt injection lesson route (Aug 2026 power-loop discovery)",
       "auth": "public_demo"
