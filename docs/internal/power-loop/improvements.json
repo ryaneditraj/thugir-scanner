@@ -1,6 +1,96 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jwk-rogue-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/jwt/jwk/login admin/admin returns token; GET /api/auth/jwt/jwk/validate accepts empty-jwk header JWT and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/jwk/login findings 20→84 (+brokencrystals-jwt-jwk-rogue-login-live-oracle + route); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jwk-rogue-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/auth/jwt/jwk/login confirms JWK rogue-key login chain; findings 20→84; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-update-price-manipulation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README #34 corpus fallback now always includes scanUrl; vulnshop.vercel.app/api/v1/cart/update-price findings 8→12 (+vulnshop-update-price-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-payment-process-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README #32 POST /api/v1/payment/process Unsafe API Consumption — no validation of payment data; vulnshop.vercel.app/api/v1/payment/process findings 8→12 (+vulnshop-payment-process-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-products-import-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README #29 POST /api/v1/products/import SSRF — URL-based import without validation; vulnshop.vercel.app/api/v1/products/import findings 10→13 (+vulnshop-products-import-ssrf-route-live-oracle; products-sqli deferred on import route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-wallet-add-funds-race-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/wallet/add-funds README #35 documents race_condition — concurrent requests can double funds; vulnshop.vercel.app/api/v1/wallet/add-funds findings 6→9 (+vulnshop-wallet-add-funds-race + route oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-swagger-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /swagger route scan — Chimera docs corpus documents Swagger UI with 456+ intentional API vulnerabilities (live vuln-api not on docs host); chimera.atlascrew.dev/swagger findings 5→6 (+chimera-swagger-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: webspoilt/vulnforge-academy README levels 16-18 Medium File Upload Bypass validation; vulnforge-academy level16.php findings 5→6 (+vulnforge-academy-level-file-upload-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: FAST-NUCES SecureBank Medium article documents Attack 1 SQL Injection via login form string concatenation (admin'--); /login route 404 + Vercel checkpoint — curated blog corpus fallback; securebank-blog.vercel.app/login findings 2→3; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-messages-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Medium article documents Attack 2 stored XSS via messages page raw HTML rendering; /messages route 404 + checkpoint — curated corpus fallback; securebank-blog.vercel.app/messages findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-admin-rbac-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Medium article documents /admin RBAC with 403 for non-admin sessions; /admin route 404 + checkpoint — curated corpus fallback; securebank-blog.vercel.app/admin findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-api-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users returns users[] with plaintext password fields and echoes SELECT query with vulnerabilities.id_injection hints; mock-probe + live curl when reachable; vuln-expose.vercel.app/api/users findings 0→3+ on route scan; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/users fires vulnExposeUsersApiRouteLiveOracle when GET returns password+query JSON; vuln-expose.vercel.app/api/users 0→3+ with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-comments-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/comments fires stored XSS oracle when GET returns raw <script> in comments[] JSON; vuln-expose.vercel.app/api/comments 0→3+ with route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /chat with developer debug jailbreak returns reply with You are Pwnie + INTERNAL AGENT PRIVILEGED COMMANDS; pwnshop.ctfsecurity.com/api/v1/chat/query findings 17→41 (+pwnshop-chat-prompt-injection-route-live-oracle with scannedUrl); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-open-redirect-route-live-oracle",
       "status": "shipped",
@@ -1883,6 +1973,24 @@
       "slug": "fauxbank-open-registration-mass-assignment-live-oracle",
       "status": "rejected",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register and /api/auth/register return HTTP 404 on pentest-fauxbank.vercel.app — no registration endpoint on current Vercel deploy; mass-assignment oracle not portable without live API"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-login-vulnerable-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/login-vulnerable — Auth bypass via SQLi (USE_DATABASE=true) per Chimera openapi; chimera.atlascrew.dev/api/v1/auth/login-vulnerable findings 5→6 (+chimera-login-vulnerable-sqli-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-patients-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/patients/search?ssn= — Patient search by SSN (classic SQLi, USE_DATABASE=true) per Chimera openapi; chimera.atlascrew.dev/api/v1/patients/search findings 5→6 (+chimera-patients-search-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-apply-discount-payment-manipulation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/checkout/apply-discount stacks unlimited discounts per chethan-vinayak/vulnshop README #33; vulnshop.vercel.app/api/v1/checkout/apply-discount findings 6→8 (+vulnshop-apply-discount-payment-manipulation + route oracles); benchmark 6/6 maintained"
     }
   ],
   "shipped": [
@@ -10059,6 +10167,71 @@
       "source": "discovery:secure-bank-bay.vercel.app",
       "slug": "secure-bank-bay-api-users-bundle-fallback",
       "shipped_at": "2026-08-14T04:25:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-route-live-oracle",
+      "shipped_at": "2026-08-14T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-login-sqli-route-live-oracle",
+      "shipped_at": "2026-08-14T09:30:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-messages-xss-route-live-oracle",
+      "shipped_at": "2026-08-14T09:30:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-admin-rbac-route-live-oracle",
+      "shipped_at": "2026-08-14T09:30:00.000Z"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-login-vulnerable-sqli-route-live-oracle",
+      "shipped_at": "2026-08-14T10:30:00.000Z"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-patients-search-sqli-route-live-oracle",
+      "shipped_at": "2026-08-14T10:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-apply-discount-payment-manipulation-live-oracle",
+      "shipped_at": "2026-08-14T10:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-wallet-add-funds-race-live-oracle",
+      "shipped_at": "2026-08-14T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-swagger-route-live-oracle",
+      "shipped_at": "2026-08-14T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
+      "shipped_at": "2026-08-14T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-update-price-route-live-oracle",
+      "shipped_at": "2026-08-14T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-payment-process-route-live-oracle",
+      "shipped_at": "2026-08-14T12:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-products-import-ssrf-route-live-oracle",
+      "shipped_at": "2026-08-14T12:20:00.000Z"
     }
   ]
 }

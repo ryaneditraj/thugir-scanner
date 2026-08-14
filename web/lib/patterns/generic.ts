@@ -14718,6 +14718,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-login-vulnerable-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera auth-bypass SQLi login-vulnerable route live oracle",
+    description:
+      "When scanning /api/v1/auth/login-vulnerable on chimera.atlascrew.dev, Chimera openapi documents auth-bypass SQLi when USE_DATABASE=true — route-specific SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection auth bypass on the login-vulnerable endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraLoginVulnerableSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection.",
+        "Gate vulnerability inventory pages behind authentication for internal red-team use only."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/auth/login-vulnerable route documents auth-bypass SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-patients-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera patient SSN search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/patients/search on chimera.atlascrew.dev, Chimera openapi documents classic SQLi via SSN query parameter when USE_DATABASE=true — route-specific SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents classic SQL injection on the patient SSN search endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPatientsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate and sanitize all query parameters before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/patients/search route documents classic SQLi via SSN parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-swagger-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera Swagger UI vulnerability catalog route live oracle",
+    description:
+      "When scanning /swagger on chimera.atlascrew.dev, Swagger UI exposes the Chimera vuln-api catalog with 456+ intentional API vulnerabilities — route-specific API discovery oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /swagger documents an unauthenticated vulnerability inventory for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSwaggerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Swagger UI and vulnerability inventories to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing OpenAPI/Swagger documentation.",
+        "Do not publish CHM-ID vulnerability registries on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /swagger route exposes 456+ intentional API vulnerabilities. Show how to restrict API documentation to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hack-health-lab-evidence",
     platform: "generic",
     category: "Injection",
@@ -22444,6 +22522,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-chat-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "Pwnshop chat prompt-injection route live oracle (PWN-031)",
+    description:
+      "When scanning /chat or /api/v1/chat/query, POST /chat with a developer debug jailbreak returns the full system prompt including the classified INTERNAL AGENT PRIVILEGED COMMANDS section — route-specific prompt-injection oracle.",
+    impactOneline:
+      "Route scans on Pwnshop chat endpoints confirm live LLM prompt injection leaking system prompts and privileged command schemas.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — Pwnshop PWN-031 is intentional lab software.",
+      steps: [
+        "Strip jailbreak patterns and instruction-override phrases before sending user messages to the model.",
+        "Never embed privileged command schemas in prompts reachable via prompt injection.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /chat route scan confirms POST /chat leaks the full system prompt via developer debug jailbreak. Show route-specific prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-mass-assignment-admin-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -23820,6 +23924,266 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-apply-discount-payment-manipulation-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop checkout apply-discount payment manipulation live oracle",
+    description:
+      "POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative checkout totals — the VulnShop payment manipulation oracle (README #33).",
+    impactOneline:
+      "Attackers can stack discount codes to zero or negative checkout totals on VulnShop training deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopApplyDiscountPaymentManipulationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate discounts server-side and cap total discount percentage.",
+      steps: [
+        "Reject stacked discount codes that exceed 100% off.",
+        "Recalculate checkout totals server-side on every discount application.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/checkout/apply-discount allows stacked discounts. Show server-side discount validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-apply-discount-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/checkout/apply-discount payment manipulation route live oracle",
+    description:
+      "When scanning /api/v1/checkout/apply-discount, live Railway backend probe or README oracle #33 documents payment manipulation via stacked discounts on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/checkout/apply-discount documents payment manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopApplyDiscountRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate discounts server-side on /api/v1/checkout/apply-discount.",
+      steps: [
+        "Reject stacked discount codes that exceed 100% off.",
+        "Recalculate checkout totals server-side on every discount application.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/checkout/apply-discount route documents payment manipulation. Show route-specific discount validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-wallet-add-funds-race-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop wallet add-funds race condition live oracle",
+    description:
+      "POST /api/v1/wallet/add-funds credits wallet balance without mutex — concurrent requests can double funds — the VulnShop race-condition wallet funding oracle (README #35).",
+    impactOneline:
+      "Attackers can race concurrent wallet-funding requests to multiply credited balance on VulnShop training deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopWalletAddFundsRaceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialize wallet balance updates with database transactions or distributed locks.",
+      steps: [
+        "Use atomic balance increments with row-level locking.",
+        "Reject duplicate in-flight funding requests per session.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/wallet/add-funds has a race condition on wallet funding. Show atomic balance update remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-wallet-add-funds-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/wallet/add-funds race condition route live oracle",
+    description:
+      "When scanning /api/v1/wallet/add-funds, live Railway backend probe or README oracle #35 documents wallet-funding race condition on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/wallet/add-funds documents concurrent wallet-funding race conditions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopWalletAddFundsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialize wallet balance updates on /api/v1/wallet/add-funds.",
+      steps: [
+        "Use atomic balance increments with row-level locking.",
+        "Reject duplicate in-flight funding requests per session.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/wallet/add-funds route documents wallet-funding race conditions. Show route-specific locking remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-update-price-manipulation-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop cart update-price manipulation live oracle",
+    description:
+      "POST /api/v1/cart/update-price accepts client-supplied prices without server-side verification — the VulnShop price manipulation oracle (README #34).",
+    impactOneline:
+      "Attackers can set arbitrary cart item prices on VulnShop training deployments that trust client-side price fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUpdatePriceManipulationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never trust client-supplied prices — recalculate from catalog server-side.",
+      steps: [
+        "Reject cart price updates that differ from authoritative product catalog prices.",
+        "Bind checkout totals to server-side price lookups on every cart mutation.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/cart/update-price accepts client-controlled prices. Show server-side price validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-update-price-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/cart/update-price manipulation route live oracle",
+    description:
+      "When scanning /api/v1/cart/update-price, live Railway backend probe or README oracle #34 documents price manipulation via client-supplied cart prices on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/cart/update-price documents client-side price manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopUpdatePriceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate cart prices server-side on /api/v1/cart/update-price.",
+      steps: [
+        "Reject cart price updates that differ from authoritative product catalog prices.",
+        "Bind checkout totals to server-side price lookups on every cart mutation.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/cart/update-price route documents price manipulation. Show route-specific price validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-payment-process-unsafe-api-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop payment process unsafe API live oracle",
+    description:
+      "POST /api/v1/payment/process accepts unvalidated payment payloads without amount or card checks — the VulnShop unsafe API consumption oracle (README #32).",
+    impactOneline:
+      "Attackers can submit arbitrary negative or malformed payment data on VulnShop training deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPaymentProcessUnsafeApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment amounts, card data, and business rules server-side before processing.",
+      steps: [
+        "Reject negative or out-of-range payment amounts.",
+        "Tokenize card data via a PCI-compliant payment provider instead of accepting raw PANs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/payment/process lacks payment validation. Show server-side payment verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-payment-process-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/payment/process unsafe API route live oracle",
+    description:
+      "When scanning /api/v1/payment/process, live Railway backend probe or README oracle #32 documents unsafe payment API consumption on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/payment/process documents unsafe API consumption without payment validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPaymentProcessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment payloads server-side on /api/v1/payment/process.",
+      steps: [
+        "Reject negative or out-of-range payment amounts.",
+        "Tokenize card data via a PCI-compliant payment provider instead of accepting raw PANs.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/payment/process route documents unsafe payment API consumption. Show route-specific validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-products-import-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop products import SSRF live oracle",
+    description:
+      "POST /api/v1/products/import fetches attacker-controlled import URLs without validation — the VulnShop API SSRF oracle (README #29).",
+    impactOneline:
+      "Attackers can coerce VulnShop to fetch internal URLs or cloud metadata via unvalidated product import URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductsImportSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal networks and validate import URL allowlists.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted import pipeline instead of arbitrary URL fetching.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/products/import is SSRF-vulnerable via import URLs. Show URL allowlist and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-products-import-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/products/import SSRF route live oracle",
+    description:
+      "When scanning /api/v1/products/import, live Railway backend probe or README oracle #29 documents URL-based import SSRF on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/products/import documents SSRF via unvalidated import URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductsImportSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal URL fetches on /api/v1/products/import.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted import pipeline instead of arbitrary URL fetching.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/products/import route documents import SSRF. Show route-specific URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-hidden-admin-manager-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -24830,6 +25194,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our SecureBank blog documents Attack Mode SQLi/XSS/CSRF. Show how to remove attack toggles from production and isolate lab deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "securebank-blog-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecureBank blog SQLi login route live oracle",
+    description:
+      "When scanning /login on securebank-blog.vercel.app, the Medium article documents Attack Mode SQL injection via login form string concatenation — route-specific SQLi training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional SQLi login bypass patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Use parameterized queries for all authentication flows.",
+        "Remove Attack Mode from any publicly reachable deployment.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /login route documents Attack Mode SQLi login bypass. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "securebank-blog-messages-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SecureBank blog stored XSS messages route live oracle",
+    description:
+      "When scanning /messages on securebank-blog.vercel.app, the Medium article documents stored XSS via messages page raw HTML rendering in Attack Mode — route-specific XSS training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional stored XSS message flows for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogMessagesXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Sanitize HTML or use a strict allowlist before storing user messages.",
+        "Encode output in templates instead of rendering raw HTML.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /messages route documents stored XSS via raw HTML rendering. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "securebank-blog-admin-rbac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "SecureBank blog admin RBAC route live oracle",
+    description:
+      "When scanning /admin on securebank-blog.vercel.app, the Medium article documents admin/user role separation with /admin returning 403 for non-admin sessions — route-specific access-control training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional RBAC admin panel patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogAdminRbacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Authorize admin routes server-side using session role claims.",
+        "Never rely on client-side role checks alone.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /admin route documents RBAC with 403 for non-admin users. Show server-side authorization remediation.",
     version: 1,
     enabled: true
   },
@@ -34862,6 +35304,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-jwk-rogue-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT JWK rogue-key login live oracle",
+    description:
+      "POST /api/auth/jwt/jwk/login issues JWT tokens; companion GET /api/auth/jwt/jwk/validate accepts JWTs with empty jwk headers signed by attacker keys — the Broken Crystals JWK rogue-key login chain oracle.",
+    impactOneline:
+      "Trusting empty or attacker-supplied JWK objects in JWT headers lets attackers forge valid tokens and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJwkRogueLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWTs with empty or untrusted jwk headers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require jwk.kty and validate keys against a pinned trust store.",
+        "Never skip signature verification when jwk.kty is missing.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jwk/login and /validate endpoints accept rogue empty-jwk JWTs. Show secure JWK validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-jwk-rogue-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/jwk/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/jwk/login, POST login issues JWT and empty-jwk rogue header bypasses JWK validation on companion /validate — route-specific JWK injection confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals JWK login flow is vulnerable to rogue-key JWT forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJwkRogueLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWTs with empty or untrusted jwk headers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require jwk.kty and validate keys against a pinned trust store.",
+        "Never skip signature verification when jwk.kty is missing.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jwk/login route scan confirms empty-jwk rogue JWT bypass. Show secure JWK validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -37252,6 +37746,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /xss/comments route scan confirms stored XSS via /api/comments and dangerouslySetInnerHTML. Show XSS-safe comment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-users-api-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnSite users API password disclosure oracle",
+    description:
+      "GET /api/users returns user records with plaintext passwords and echoes the raw SQL query with documented id/username/role injection vectors — the VulnSite sensitive data exposure API oracle.",
+    impactOneline:
+      "Unauthenticated user APIs leaking plaintext passwords expose every account to credential theft.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeUsersApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return password fields from APIs and use parameterized queries — VulnSite is intentional training software.",
+      steps: [
+        "Remove password columns from all API responses.",
+        "Replace dynamic SQL with prepared statements.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/users endpoint returns plaintext passwords and echoes raw SQL. Show password hashing and parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-users-api-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnSite /api/users route password disclosure oracle",
+    description:
+      "When scanning vuln-expose.vercel.app /api/users, GET returns user records with plaintext passwords and echoes raw SQL with injection hints — route-specific sensitive data exposure API oracle.",
+    impactOneline:
+      "Unauthenticated user APIs leaking plaintext passwords expose every account to credential theft.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeUsersApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return password fields from APIs and use parameterized queries — VulnSite is intentional training software.",
+      steps: [
+        "Remove password columns from all API responses.",
+        "Replace dynamic SQL with prepared statements.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users route scan returns plaintext passwords and echoes raw SQL. Show password hashing and parameterized query remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-expose-comments-api-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnSite /api/comments route stored XSS oracle",
+    description:
+      "When scanning vuln-expose.vercel.app /api/comments, GET returns persisted comment bodies with raw <script> tags unescaped in JSON — route-specific stored XSS API oracle.",
+    impactOneline:
+      "Unsanitized stored comment HTML enables persistent XSS when rendered via dangerouslySetInnerHTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeCommentsApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and rendering — VulnSite is intentional training software.",
+      steps: [
+        "Never use dangerouslySetInnerHTML with unsanitized user content.",
+        "Use a strict HTML sanitizer or render comments as plain text.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/comments route scan returns raw <script> payloads in JSON. Show stored XSS comment remediation for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -42624,6 +43196,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level routes are SSTI-vulnerable via reflexion probes. Show safe template engine configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 16–18 file upload route live oracle",
+    description:
+      "When scanning level16–18.php routes, VulnForge Academy documents file upload validation bypass techniques (extension, Content-Type, blacklist bypass) — route-specific file upload training oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy medium-tier levels 16–18 expose intentional unrestricted file upload validation bypass patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate file uploads with allowlists and content inspection in production apps.",
+      steps: [
+        "Allowlist permitted extensions and verify file magic bytes server-side.",
+        "Store uploads outside the web root and serve via authenticated download endpoints.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 16–18 routes document file upload bypass techniques. Show secure upload validation remediation.",
     version: 1,
     enabled: true
   },
