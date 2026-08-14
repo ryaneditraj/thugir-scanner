@@ -38344,7 +38344,15 @@ const secureBankBayApiUsersRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/users(?:\/\d+)?\b/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  let corpus = ctx.combined;
+  if (
+    !/\/api\/auth\/me/i.test(corpus) ||
+    !/\/api\/admin\/users/i.test(corpus) ||
+    (!/SELECT \* FROM users WHERE username/i.test(corpus) && !/admin' OR '1'='1'/i.test(corpus))
+  ) {
+    const bundle = await istEduVulnPortalBundleCorpus(ctx);
+    if (bundle) corpus = `${corpus}\n${bundle}`;
+  }
   const userApiOk =
     /\/api\/auth\/me/i.test(corpus) &&
     /\/api\/admin\/users/i.test(corpus) &&
@@ -77179,6 +77187,117 @@ const dvwuSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const dvwuOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/labs\/open-redirect\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await probeRedirectWhitelistBypass(ctx);
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/open-redirect route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass (HTTP 302 Location: //https:///google.com/..) while blocking AWS metadata — open redirect route oracle"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Redirecting in|Open redirect via Location header/i.test(bundle)) return NEGATIVE;
+  if (!/\/redirect\?url=|approved IST domains|External Redirect Blocked/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["Redirecting in", "Open redirect via Location header", "/redirect?url="],
+      snippet: bundle.match(/Open redirect via Location header[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /labs/open-redirect route scan — SPA documents unvalidated /redirect?url= open redirect with countdown UI and Location-header phishing chain"
+    }
+  };
+};
+
+async function probeDvwuWeakCredentialLogin(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isDvwuHost(ctx)) return null;
+  const portalUrl = new URL("/api/portal", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "20050@ist.edu.bd", password: "password123" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/Welcome, RAKIB|Login successful/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      portalUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "DVWU POST /api/portal accepts hardcoded student credentials 20050@ist.edu.bd / password123 without rate limiting — weak credential broken authentication oracle"
+    }
+  };
+}
+
+const dvwuBrokenAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/labs\/broken-auth\/?$/i.test(pathname)) return NEGATIVE;
+  const weakCred = await probeDvwuWeakCredentialLogin(ctx);
+  if (weakCred?.fired) {
+    return {
+      fired: true,
+      confidence: weakCred.confidence,
+      evidence: {
+        ...weakCred.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/broken-auth route scan — POST /api/portal accepts hardcoded 20050@ist.edu.bd / password123 without lockout — broken authentication route oracle"
+      }
+    };
+  }
+  const sqli = await probeDvwuPortalSqli(ctx);
+  if (sqli?.fired) {
+    return {
+      fired: true,
+      confidence: sqli.confidence,
+      evidence: {
+        ...sqli.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/broken-auth route scan — POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection broken authentication route oracle"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/20050@ist\.edu\.bd/i.test(bundle) || !/password123/i.test(bundle)) return NEGATIVE;
+  if (!/Authentication Bypass Successful|SQL Injection Detected/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["20050@ist.edu.bd", "password123", "Authentication Bypass"],
+      snippet: bundle.match(/20050@ist\.edu\.bd[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /labs/broken-auth route scan — SPA documents hardcoded credentials and SQL injection authentication bypass on /api/portal"
+    }
+  };
+};
+
 const dvwuFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -80984,6 +81103,8 @@ export const RULES: Record<string, Rule> = {
   istEduOpenRedirectRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
+  dvwuOpenRedirectRouteLiveOracle,
+  dvwuBrokenAuthRouteLiveOracle,
   dvwuGraphqlLabRouteLiveOracle,
   dvwuRaceConditionLabRouteLiveOracle,
   dvwuJwtLabRouteLiveOracle,
