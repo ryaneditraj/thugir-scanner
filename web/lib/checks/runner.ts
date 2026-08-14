@@ -2583,6 +2583,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsChatLlmQueryLiveOracle",
   "brokencrystalsChatLlmQueryRouteLiveOracle",
   "brokencrystalsSpawnCommandInjectionLiveOracle",
+  "brokencrystalsRenderDotSstiLiveOracle",
+  "brokencrystalsRenderDotSstiRouteLiveOracle",
   "brokencrystalsSpawnRouteLiveOracle",
   "brokencrystalsCommandRouteLiveOracle",
   "clientSideDvragLabEvidence",
@@ -9058,7 +9060,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(targetInput) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count|command|spawn)\b/i.test(targetInput)
+    /\/api\/(?:goto|products\/latest|testimonials\/count|command|spawn|render|process_numbers)\b/i.test(targetInput)
   ) {
     try {
       const routeDoc = await fetchDoc(targetInput, {
@@ -11424,6 +11426,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/render\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-render") || p.slug === "ssti-template-injection")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/command\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-spawn") ||
           p.slug.startsWith("brokencrystals-command") ||
@@ -11448,6 +11456,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/data-exfil-002/i.test(targetInput) &&
         p.slug.startsWith("fabraix-data-exfil")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:1[6-8])\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level-file-upload")
       )
         return -4;
       if (

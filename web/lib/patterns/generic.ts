@@ -32106,6 +32106,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-render-dot-ssti-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/render doT SSTI live oracle",
+    description:
+      "POST /api/render with Hello {{=7*7}} evaluates the doT template engine and returns Hello 49 — positive proof of server-side template injection on the render endpoint.",
+    impactOneline:
+      "SSTI on /api/render can escalate to remote code execution via template engine helpers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsRenderDotSstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass raw user input into doT or other template expressions — Broken Crystals is intentional lab software.",
+      steps: [
+        "Render templates with bound variables only; never evaluate user-controlled template syntax.",
+        "Disable dangerous template helpers (eval, include) in production.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/render endpoint evaluates doT templates from POST body (Hello {{=7*7}} → Hello 49). Show SSTI remediation with logic-less templates or strict sandboxing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-render-dot-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/render route doT SSTI oracle",
+    description:
+      "When scanning /api/render, POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route-scoped scans of /api/render should confirm doT SSTI with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsRenderDotSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass raw user input into doT template expressions — Broken Crystals is intentional lab software.",
+      steps: [
+        "Render templates with bound variables only on /api/render.",
+        "Disable dangerous template helpers in production.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/render route scan confirms doT SSTI via POST body. Show route-specific SSTI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vulnlab-api-labs-evidence",
     platform: "generic",
     category: "Broken access control",

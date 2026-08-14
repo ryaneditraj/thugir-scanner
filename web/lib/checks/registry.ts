@@ -8239,6 +8239,8 @@ const vulnforgeAcademyLevelSstiRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
   const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  // Levels 16–18 are file-upload labs — defer to vulnforgeAcademyLevelFileUploadRouteLiveOracle.
+  if (levelNum !== null && levelNum >= 16 && levelNum <= 18) return NEGATIVE;
   const sstiHit = await reflexionEscalatedSsti(ctx);
   if (!sstiHit.fired) return NEGATIVE;
   return {
@@ -16006,6 +16008,28 @@ async function probeBrokencrystalsSpawnCommandInjection(ctx: RuleContext): Promi
 const brokencrystalsSpawnCommandInjectionLiveOracle: Rule = async (ctx) => {
   const result = await probeBrokencrystalsSpawnCommandInjection(ctx);
   return result ?? NEGATIVE;
+};
+
+const brokencrystalsRenderDotSstiLiveOracle: Rule = async (ctx) => {
+  const result = await probeBrokencrystalsDotSsti(ctx);
+  return result ?? NEGATIVE;
+};
+
+const brokencrystalsRenderDotSstiRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/render\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsDotSsti(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/render route scan — POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle"
+    }
+  };
 };
 
 const brokencrystalsSpawnRouteLiveOracle: Rule = async (ctx) => {
@@ -81253,6 +81277,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,
+  brokencrystalsRenderDotSstiLiveOracle,
+  brokencrystalsRenderDotSstiRouteLiveOracle,
   brokencrystalsSpawnRouteLiveOracle,
   brokencrystalsCommandRouteLiveOracle,
   clientSideVulnlabApiLabsEvidence,
