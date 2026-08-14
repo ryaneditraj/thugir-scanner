@@ -71227,13 +71227,31 @@ const OWASP_GENAI_LESSON_DEFS: Record<string, OwaspGenaiLessonDef> = {
     llmId: "LLM09",
     titleRe: /LLM09:\s*Misinformation/i,
     topicMarkers: [/Misinformation|Hallucination/i, /Hallucinated|Package hallucination|Fabricated legal/i]
+  },
+  "excessive-agency": {
+    slug: "excessive-agency",
+    llmId: "LLM06",
+    titleRe: /LLM06:\s*Excessive Agency/i,
+    topicMarkers: [/Excessive Agency/i, /functionality.*permissions.*autonomy|demo-player/i]
+  },
+  "vector-embedding": {
+    slug: "vector-embedding",
+    llmId: "LLM08",
+    titleRe: /LLM08:\s*Vector and Embedding/i,
+    topicMarkers: [/Vector and Embedding Weaknesses/i, /Embedding inversion|Retrieval-Augmented Generation|poisoned documents/i]
+  },
+  "unbounded-consumption": {
+    slug: "unbounded-consumption",
+    llmId: "LLM10",
+    titleRe: /LLM10:\s*Unbounded Consumption/i,
+    topicMarkers: [/Unbounded Consumption/i, /Denial of Wallet|Model extraction via high-volume querying/i]
   }
 };
 
 async function ensureOwaspGenaiRegistrySession(ctx: RuleContext): Promise<string | undefined> {
   const onboardUrl = new URL("/onboard", ctx.origin).toString();
   const body =
-    "name=thugir&goals=prompt-injection&goals=sensitive-info&goals=supply-chain&goals=improper-output&goals=system-prompt-leakage&goals=data-poisoning&goals=misinformation";
+    "name=thugir&goals=prompt-injection&goals=sensitive-info&goals=supply-chain&goals=improper-output&goals=system-prompt-leakage&goals=data-poisoning&goals=misinformation&goals=excessive-agency&goals=vector-embedding&goals=unbounded-consumption";
   const res = await ctx.probe.get(onboardUrl, {
     method: "POST",
     body,
@@ -71310,6 +71328,15 @@ const owaspGenaiDataPoisoningRouteLiveOracle: Rule = async (ctx) =>
 
 const owaspGenaiMisinformationRouteLiveOracle: Rule = async (ctx) =>
   (await probeOwaspGenaiLessonRoute(ctx, "misinformation")) ?? NEGATIVE;
+
+const owaspGenaiExcessiveAgencyRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "excessive-agency")) ?? NEGATIVE;
+
+const owaspGenaiVectorEmbeddingRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "vector-embedding")) ?? NEGATIVE;
+
+const owaspGenaiUnboundedConsumptionRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "unbounded-consumption")) ?? NEGATIVE;
 
 const SQL_INJECTION_CHALLENGE_HOST_RE = /sql-injection-challenge\.vercel\.app/i;
 /** Bypasses # blacklist via SQLite char(35) concat — see Jupiterian/SQL-Injection-Challenge main.py */
@@ -81851,6 +81878,9 @@ export const RULES: Record<string, Rule> = {
   owaspGenaiSystemPromptLeakageRouteLiveOracle,
   owaspGenaiDataPoisoningRouteLiveOracle,
   owaspGenaiMisinformationRouteLiveOracle,
+  owaspGenaiExcessiveAgencyRouteLiveOracle,
+  owaspGenaiVectorEmbeddingRouteLiveOracle,
+  owaspGenaiUnboundedConsumptionRouteLiveOracle,
   sqlInjectionChallengeLoginSqliLiveOracle,
   sqlInjectionChallengeLoginSqliRouteLiveOracle,
   clientSideCtfDefiEvidence,

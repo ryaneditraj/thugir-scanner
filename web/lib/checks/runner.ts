@@ -2713,6 +2713,9 @@ const DEEP_RULES = new Set<string>([
   "owaspGenaiSystemPromptLeakageRouteLiveOracle",
   "owaspGenaiDataPoisoningRouteLiveOracle",
   "owaspGenaiMisinformationRouteLiveOracle",
+  "owaspGenaiExcessiveAgencyRouteLiveOracle",
+  "owaspGenaiVectorEmbeddingRouteLiveOracle",
+  "owaspGenaiUnboundedConsumptionRouteLiveOracle",
   "sqlInjectionChallengeLoginSqliLiveOracle",
   "sqlInjectionChallengeLoginSqliRouteLiveOracle",
   "clientSideCtfDefiEvidence",
@@ -10937,7 +10940,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
-        /\/lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage)\b/i.test(targetInput) &&
+        /\/lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)\b/i.test(targetInput) &&
         p.slug.startsWith("owasp-genai-")
       )
         return -3;

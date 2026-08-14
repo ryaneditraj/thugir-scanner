@@ -34368,6 +34368,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-excessive-agency-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI excessive-agency lesson route live oracle",
+    description:
+      "When scanning /lesson/excessive-agency on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM06 excessive agency training lesson.",
+    impactOneline:
+      "Route-scoped scans of excessive-agency lessons should confirm LLM06 over-permissioned tool autonomy demos via authenticated lesson fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiExcessiveAgencyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — enforce least-privilege tool scopes and human-in-the-loop for high-impact actions.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Limit LLM tool permissions to the minimum needed for each task.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/excessive-agency route scan confirms LLM06 excessive agency training. Show route-specific tool permission remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-genai-vector-embedding-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI vector-embedding lesson route live oracle",
+    description:
+      "When scanning /lesson/vector-embedding on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM08 vector and embedding weaknesses training lesson.",
+    impactOneline:
+      "Route-scoped scans of vector-embedding lessons should confirm LLM08 RAG poisoning and embedding inversion demos via authenticated lesson fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiVectorEmbeddingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — validate retrieved document trust and monitor vector store integrity in production RAG pipelines.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Treat retrieved chunks as untrusted input and scan for poisoned embeddings.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/vector-embedding route scan confirms LLM08 vector embedding training. Show route-specific RAG retrieval hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-genai-unbounded-consumption-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI unbounded-consumption lesson route live oracle",
+    description:
+      "When scanning /lesson/unbounded-consumption on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM10 unbounded consumption training lesson.",
+    impactOneline:
+      "Route-scoped scans of unbounded-consumption lessons should confirm LLM10 denial-of-wallet and resource abuse demos via authenticated lesson fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiUnboundedConsumptionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — enforce token budgets, rate limits, and cost caps on LLM API integrations.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Apply per-user token and request rate limits on LLM endpoints.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/unbounded-consumption route scan confirms LLM10 unbounded consumption training. Show route-specific LLM resource quota remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sql-injection-challenge-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
