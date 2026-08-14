@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T17:17:47.388Z",
+  "updated_at": "2026-08-14T18:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3078,
-  "total_findings": 34123,
+  "total_sites_scanned": 3087,
+  "total_findings": 34226,
   "critical_findings": 112,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2126,
-  "discovery_findings": 26547,
+  "discovery_urls_added": 2131,
+  "discovery_findings": 26602,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-14T17:17:47.388Z",
+  "last_run": "2026-08-14T18:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 586,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (46 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 49,
-      "focus": "WSL catalog expansion modules 1624–1628 + queue drain 1621–1623",
+      "findings": 55,
+      "focus": "Aikido Zen WAF demo SQLi/SSRF/path-traversal routes + WSL modules 1629–1630 + queue drain 1620/1616 + ai-security login",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings, probes=586) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1625: 8 findings — placeholder module + dangerous-html-sinks",
-      "web-security-learning-labs.vercel.app/module/1626–1628: 7 findings each — generic misconfig/XSS signals on placeholder modules",
-      "web-security-learning-labs.vercel.app/module/1624: 5 findings — web-security-learning-labs-placeholder-module-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1621–1623: 5 findings each — consistent placeholder-module hub pattern"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, probes=582) — no benchmark misses",
+      "zen-demo-java.fly.dev/pages/create: 5 findings — client-side-aikido-zen-demo-evidence + generic misconfig; no route-specific SQLi live oracle",
+      "zen-demo-java.fly.dev/pages/request: 5 findings — SSRF lab route without zen-demo-java-request-ssrf-live-oracle",
+      "zen-demo-java.fly.dev/pages/read: 5 findings — path traversal lab route without zen-demo-java-read-traversal-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1629–1630: 7 findings each — placeholder module hub pattern",
+      "web-security-learning-labs.vercel.app/module/1620: 10 findings — curated module-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/login: 8 findings — ai-security-rate-limiting-bruteforce-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "web-security-learning-labs.vercel.app/module/1624–1628: placeholder module pages without route-specific injection oracles",
-      "crapi.apisec.ai: hosted crAPI v1 routes not queued this run (timeouts from cloud agent on identity API probe)",
-      "seclab.vercel.app: domain now serves unrelated Portuguese SPA — prior security-lab API routes dead"
+      "zen-demo-java.fly.dev/pages/create|request|read: execute-shell-injection oracle fires cross-route (false positive); route-specific SQLi/SSRF/path-traversal oracles absent",
+      "web-security-learning-labs.vercel.app/module/1629–1630: placeholder module pages without route-specific injection oracles",
+      "vwad.owasp.org/app/voice-goat/ queued but 404 — OWASP VWAD voice lab unreachable"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
-    "web-security-learning-labs.vercel.app/module/1625": 8,
-    "web-security-learning-labs.vercel.app/module/1628": 7,
-    "web-security-learning-labs.vercel.app/module/1627": 7,
-    "web-security-learning-labs.vercel.app/module/1626": 7,
-    "web-security-learning-labs.vercel.app/module/1624": 5,
-    "web-security-learning-labs.vercel.app/module/1623": 5,
-    "brokencrystals.com/api/render": 84,
+    "juice-shop.herokuapp.com": 48,
+    "web-security-learning-labs.vercel.app/module/1620": 10,
+    "ai-security-platform-iota.vercel.app/login": 8,
+    "web-security-learning-labs.vercel.app/module/1616": 8,
+    "web-security-learning-labs.vercel.app/module/1629": 7,
+    "web-security-learning-labs.vercel.app/module/1630": 7,
+    "zen-demo-java.fly.dev/pages/create": 5,
+    "zen-demo-java.fly.dev/pages/request": 5,
+    "zen-demo-java.fly.dev/pages/read": 5,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

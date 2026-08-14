@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://zen-demo-java.fly.dev/pages/create",
+      "source": "Aikido Zen WAF demo (HN Jan 2025) — SQL injection pet-creation lab /pages/create",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/request",
+      "source": "Aikido Zen WAF demo (HN Jan 2025) — SSRF fetch-page lab /pages/request",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/read",
+      "source": "Aikido Zen WAF demo (HN Jan 2025) — path traversal read-file lab /pages/read",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1629",
+      "source": "web-security-learning-labs Vercel — module 1629 security lab route (Aug 2026 power-loop discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1630",
+      "source": "web-security-learning-labs Vercel — module 1630 security lab route (Aug 2026 power-loop discovery)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1628",
       "source": "web-security-learning-labs Vercel — module 1628 security lab route (WSL catalog expansion, Aug 2026 power-loop discovery)",
       "auth": "oss_deploy"
