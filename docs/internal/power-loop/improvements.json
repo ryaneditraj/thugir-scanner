@@ -10334,6 +10334,21 @@
       "source": "discovery:vulnforge-academy.vercel.app",
       "slug": "vulnforge-academy-level16-18-file-upload-route-priority",
       "shipped_at": "2026-08-14T16:35:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1617-1623-idor-catalog",
+      "shipped_at": "2026-08-14T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-login-route-live-oracle",
+      "shipped_at": "2026-08-14T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-x5c-validate-route-priority",
+      "shipped_at": "2026-08-14T17:15:00.000Z"
     }
   ]
 }
