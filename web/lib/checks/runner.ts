@@ -10931,11 +10931,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
-        /\/lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain)\b/i.test(targetInput) &&
+        /\/lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage)\b/i.test(targetInput) &&
         p.slug.startsWith("owasp-genai-")
       )
         return -3;
       if (/owaspbased-lessons\.vercel\.app/i.test(origin) && p.slug.startsWith("owasp-genai-")) return -2;
+      if (
+        /sql-injection-challenge\.vercel\.app/i.test(origin) &&
+        p.slug.startsWith("sql-injection-challenge-login-sqli")
+      )
+        return -3;
       if (
         /koadt\.github\.io/i.test(origin) &&
         /\/posts\/next-public-env-(?:variable-)?leak/i.test(targetInput) &&
