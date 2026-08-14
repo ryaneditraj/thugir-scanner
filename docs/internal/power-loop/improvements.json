@@ -1,7 +1,23 @@
 {
   "candidates": [
     {
-      "source": "discovery:vuln-expose.vercel.app",
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: FAST-NUCES SecureBank Medium article documents Attack 1 SQL Injection via login form string concatenation (admin'--); /login route 404 + Vercel checkpoint — curated blog corpus fallback; securebank-blog.vercel.app/login findings 2→3; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-messages-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Medium article documents Attack 2 stored XSS via messages page raw HTML rendering; /messages route 404 + checkpoint — curated corpus fallback; securebank-blog.vercel.app/messages findings 2→3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-admin-rbac-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Medium article documents /admin RBAC with 403 for non-admin sessions; /admin route 404 + checkpoint — curated corpus fallback; securebank-blog.vercel.app/admin findings 2→3; benchmark 6/6 maintained"
+    },
       "slug": "vuln-expose-users-api-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users returns users[] with plaintext password fields and echoes SELECT query with vulnerabilities.id_injection hints; mock-probe + live curl when reachable; vuln-expose.vercel.app/api/users findings 0→3+ on route scan; benchmark juice-shop 47 findings 6/6 maintained"
@@ -10088,6 +10104,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-chat-prompt-injection-route-live-oracle",
       "shipped_at": "2026-08-14T07:15:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-login-sqli-route-live-oracle",
+      "shipped_at": "2026-08-14T09:30:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-messages-xss-route-live-oracle",
+      "shipped_at": "2026-08-14T09:30:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-admin-rbac-route-live-oracle",
+      "shipped_at": "2026-08-14T09:30:00.000Z"
     }
   ]
 }
