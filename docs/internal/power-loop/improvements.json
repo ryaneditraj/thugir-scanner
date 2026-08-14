@@ -10301,6 +10301,21 @@
       "source": "discovery:crapi2.apisec.ai",
       "slug": "crapi-dashboard-jwt-otp-fallback",
       "shipped_at": "2026-08-14T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-render-dot-ssti-live-oracle",
+      "shipped_at": "2026-08-14T16:35:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-render-dot-ssti-route-live-oracle",
+      "shipped_at": "2026-08-14T16:35:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level16-18-file-upload-route-priority",
+      "shipped_at": "2026-08-14T16:35:00.000Z"
     }
   ]
 }
