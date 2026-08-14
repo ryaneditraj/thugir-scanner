@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-13T23:27:07.624Z",
-  "total": 2295,
-  "uniqueSlugs": 2291,
+  "generatedAt": "2026-08-14T00:48:05.564Z",
+  "total": 2296,
+  "uniqueSlugs": 2292,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2277,
+    "generic": 2278,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2210,
+    "deep": 2211,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 461,
-    "Exposed secret": 104,
+    "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -1621,6 +1621,7 @@
     "juice-shop-quantitys-exposure-route-live-oracle",
     "juice-shop-recycles-bola-live-oracle",
     "juice-shop-recycles-bola-route-live-oracle",
+    "juice-shop-resend-key-live-oracle",
     "juice-shop-save-login-ip-live-oracle",
     "juice-shop-save-login-ip-route-live-oracle",
     "juice-shop-security-answers-disclosure-live-oracle",
