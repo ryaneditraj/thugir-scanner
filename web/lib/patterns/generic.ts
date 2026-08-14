@@ -44006,6 +44006,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "oopssec-roadmap-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OopsSec Store CTF roadmap route live oracle",
+    description:
+      "When scanning /roadmap, the walkthrough catalog documents 35 CTF flags across 11 OWASP Top 10 chapters in an intentionally vulnerable Next.js e-commerce SPA — route-specific training roadmap oracle.",
+    impactOneline:
+      "OopsSec Store roadmap exposes the full CTF challenge catalog for unauthenticated reconnaissance on training infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecRoadmapRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — gate roadmap content on isolated lab infrastructure.",
+      steps: [
+        "Require authentication before exposing the full CTF challenge catalog.",
+        "Run OopsSec Store only on isolated training infrastructure.",
+        "Do not mirror production e-commerce flows on public GitHub Pages demos."
+      ]
+    },
+    fixPrompt:
+      "Our /roadmap route documents 35 CTF flags across 11 chapters. Show route-specific access control for training catalog pages.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-store-home-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OopsSec Store home route live oracle",
+    description:
+      "When scanning the OopsSec Store home page, the landing documents an intentionally vulnerable e-commerce SPA with 35 CTF flags across 11 OWASP Top 10 chapters — route-specific training platform oracle.",
+    impactOneline:
+      "OopsSec Store home page discloses the full CTF training scope to unauthenticated visitors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecStoreHomeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — limit public disclosure of challenge scope on production-like hosts.",
+      steps: [
+        "Gate challenge catalog details behind authenticated lab enrollment.",
+        "Run OopsSec Store only on isolated training infrastructure.",
+        "Avoid publishing full CTF scope on index pages reachable without auth."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store home route documents 35 CTF flags across 11 chapters. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T18:46:02.264Z",
-  "total": 2342,
-  "uniqueSlugs": 2338,
+  "generatedAt": "2026-08-14T19:23:21.789Z",
+  "total": 2344,
+  "uniqueSlugs": 2340,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2324,
+    "generic": 2326,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2257,
+    "deep": 2259,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 476,
+    "Broken access control": 478,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1695,7 +1695,9 @@
     "oopssec-product-search-sqli-route-live-oracle",
     "oopssec-prompt-injection-route-live-oracle",
     "oopssec-race-condition-coupon-route-live-oracle",
+    "oopssec-roadmap-route-live-oracle",
     "oopssec-ssrf-route-live-oracle",
+    "oopssec-store-home-route-live-oracle",
     "oopssec-stored-xss-reviews-route-live-oracle",
     "oopssec-supply-chain-poisoned-rules-route-live-oracle",
     "oopssec-xff-sqli-route-live-oracle",
