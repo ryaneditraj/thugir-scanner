@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1630;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1632;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38357,7 +38357,9 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1627": "IDOR",
   "1628": "IDOR",
   "1629": "IDOR",
-  "1630": "IDOR"
+  "1630": "IDOR",
+  "1631": "IDOR",
+  "1632": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38454,7 +38456,9 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1627": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1628": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1629": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1630": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1630": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1631": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1632": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -71161,7 +71165,9 @@ function isOwaspGenaiLabHost(ctx: RuleContext): boolean {
 }
 
 const OWASP_GENAI_LESSON_ALIASES: Record<string, string> = {
-  "info-disclosure": "sensitive-info"
+  "info-disclosure": "sensitive-info",
+  "prompt-leakage": "system-prompt-leakage",
+  "output-handling": "improper-output"
 };
 
 type OwaspGenaiLessonDef = {
@@ -71195,13 +71201,27 @@ const OWASP_GENAI_LESSON_DEFS: Record<string, OwaspGenaiLessonDef> = {
     llmId: "LLM03",
     titleRe: /LLM03:\s*Supply Chain/i,
     topicMarkers: [/Supply Chain Vulnerabilities/i, /third.party|plugin|extension/i]
+  },
+  "improper-output": {
+    slug: "improper-output",
+    aliases: ["output-handling"],
+    llmId: "LLM05",
+    titleRe: /LLM05:\s*Improper Output Handling/i,
+    topicMarkers: [/Improper Output Handling/i, /unsanitized LLM outputs|XSS.*SQL injection/i]
+  },
+  "system-prompt-leakage": {
+    slug: "system-prompt-leakage",
+    aliases: ["prompt-leakage"],
+    llmId: "LLM07",
+    titleRe: /LLM07:\s*System Prompt Leakage/i,
+    topicMarkers: [/System Prompt Leakage/i, /system prompts can be extracted|demo-player__system-prompt/i]
   }
 };
 
 async function ensureOwaspGenaiRegistrySession(ctx: RuleContext): Promise<string | undefined> {
   const onboardUrl = new URL("/onboard", ctx.origin).toString();
   const body =
-    "name=thugir&goals=prompt-injection&goals=sensitive-info&goals=supply-chain&goals=data-poisoning";
+    "name=thugir&goals=prompt-injection&goals=sensitive-info&goals=supply-chain&goals=improper-output&goals=system-prompt-leakage&goals=data-poisoning";
   const res = await ctx.probe.get(onboardUrl, {
     method: "POST",
     body,
@@ -71266,6 +71286,12 @@ const owaspGenaiSensitiveInfoRouteLiveOracle: Rule = async (ctx) =>
 
 const owaspGenaiSupplyChainRouteLiveOracle: Rule = async (ctx) =>
   (await probeOwaspGenaiLessonRoute(ctx, "supply-chain")) ?? NEGATIVE;
+
+const owaspGenaiImproperOutputRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "improper-output")) ?? NEGATIVE;
+
+const owaspGenaiSystemPromptLeakageRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "system-prompt-leakage")) ?? NEGATIVE;
 
 // --- CTF DeFi Security 101 (ctf-maker-monorepo.vercel.app) ----------------------------
 const CLIENT_CTF_DEFI_RES: { label: string; re: RegExp }[] = [
@@ -81729,6 +81755,8 @@ export const RULES: Record<string, Rule> = {
   owaspGenaiPromptInjectionRouteLiveOracle,
   owaspGenaiSensitiveInfoRouteLiveOracle,
   owaspGenaiSupplyChainRouteLiveOracle,
+  owaspGenaiImproperOutputRouteLiveOracle,
+  owaspGenaiSystemPromptLeakageRouteLiveOracle,
   clientSideCtfDefiEvidence,
   clientSideAtlasCrewInfernoLabEvidence,
   clientSideAtlasCrewEdgeProtectionEvidence,
