@@ -57873,6 +57873,10 @@ function ginAndJuiceSessionCookieFromDoc(doc: { setCookies: string[] }): string 
   return parts.length ? parts.join("; ") : null;
 }
 
+function ginAndJuiceSessionOnlyCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
 const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const loginUrl = new URL("/login", ctx.origin);
@@ -58766,32 +58770,37 @@ async function probeGinAndJuiceCartCheckoutAuth(ctx: RuleContext): Promise<RuleR
   catalogUrl.searchParams.set("thugir", Date.now().toString(36));
   const catalogPage = await ctx.probe.get(catalogUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (catalogPage.status < 200 || catalogPage.status >= 400) return null;
-  let sessionCookie = ginAndJuiceSessionCookieFromDoc(catalogPage);
-  if (!sessionCookie) return null;
+  const sessionCookie = ginAndJuiceSessionCookieFromDoc(catalogPage);
+  const cartCookieHeader = sessionCookie ? { Cookie: sessionCookie } : undefined;
   const addCartUrl = new URL("/catalog/cart", ctx.origin).toString();
   const addDoc = await ctx.probe.get(addCartUrl, {
     method: "POST",
     body: new URLSearchParams({ productId: "1", quantity: "1", redir: "CART" }).toString(),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: sessionCookie
+      ...cartCookieHeader
     },
-    maxBytes: 1024,
-    timeoutMs: 15000,
-    redirect: "manual"
-  });
-  if (addDoc.status < 300 || addDoc.status >= 400) return null;
-  sessionCookie = ginAndJuiceSessionCookieFromDoc(addDoc) || sessionCookie;
-  const cartPage = await ctx.probe.get(addCartUrl, {
     maxBytes: 32768,
-    timeoutMs: 15000,
-    headers: { Cookie: sessionCookie }
+    timeoutMs: 15000
   });
+  if (addDoc.status < 200 || addDoc.status >= 400) return null;
+  const cartSessionHeader = cartCookieHeader;
+  const cartPage =
+    /action=\/catalog\/cart\/checkout/i.test(addDoc.body) && !/empty-cart-wrapper/i.test(addDoc.body)
+      ? addDoc
+      : await ctx.probe.get(addCartUrl, {
+          maxBytes: 32768,
+          timeoutMs: 15000,
+          headers: cartSessionHeader
+        });
   if (cartPage.status < 200 || cartPage.status >= 400) return null;
   if (/empty-cart-wrapper/i.test(cartPage.body)) return null;
   if (!/action=\/catalog\/cart\/coupon/i.test(cartPage.body)) return null;
   if (!/action=\/catalog\/cart\/checkout/i.test(cartPage.body)) return null;
-  const csrf = ginAndJuiceCsrfFromLoginPage(cartPage.body);
+  const checkoutCsrfMatch = cartPage.body.match(
+    /action=\/catalog\/cart\/checkout[\s\S]{0,400}?name="csrf"\s+value="([^"]+)"/i
+  );
+  const csrf = checkoutCsrfMatch?.[1] ?? ginAndJuiceCsrfFromLoginPage(cartPage.body);
   if (!csrf) return null;
   const checkoutUrl = new URL("/catalog/cart/checkout", ctx.origin).toString();
   const checkoutDoc = await ctx.probe.get(checkoutUrl, {
@@ -58799,7 +58808,7 @@ async function probeGinAndJuiceCartCheckoutAuth(ctx: RuleContext): Promise<RuleR
     body: new URLSearchParams({ csrf }).toString(),
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: sessionCookie
+      ...cartSessionHeader
     },
     maxBytes: 1024,
     timeoutMs: 15000,
