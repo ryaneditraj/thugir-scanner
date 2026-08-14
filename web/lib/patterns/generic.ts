@@ -34264,6 +34264,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-improper-output-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI improper-output lesson route live oracle",
+    description:
+      "When scanning /lesson/improper-output or /lesson/output-handling on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM05 improper output handling training lesson.",
+    impactOneline:
+      "Route-scoped scans of output-handling lessons should confirm LLM05 unsanitized LLM output demos (XSS/SQLi) via authenticated lesson fetch (output-handling slug alias supported).",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiImproperOutputRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — sanitize and encode all LLM outputs before rendering.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Treat LLM outputs as untrusted input — encode for HTML/SQL contexts.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/output-handling route scan confirms LLM05 improper output handling training. Show route-specific LLM output sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-genai-system-prompt-leakage-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI system-prompt-leakage lesson route live oracle",
+    description:
+      "When scanning /lesson/system-prompt-leakage or /lesson/prompt-leakage on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM07 system prompt leakage training lesson.",
+    impactOneline:
+      "Route-scoped scans of prompt-leakage lessons should confirm LLM07 system prompt extraction demos via authenticated lesson fetch (prompt-leakage slug alias supported).",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiSystemPromptLeakageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — protect system prompts from extraction in production agents.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Never expose raw system prompts in model responses or error messages.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/prompt-leakage route scan confirms LLM07 system prompt leakage training. Show route-specific system prompt protection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ctf-defi-evidence",
     platform: "generic",
     category: "Broken access control",
