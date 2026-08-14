@@ -1,6 +1,21 @@
 {
   "discovery_urls": [
     {
+      "url": "https://web-security-learning-labs.vercel.app/module/1616",
+      "source": "Web Security Learning Labs — module catalog 1616 (WSL vercel app, Aug 2026; IDOR placeholder expansion past 1613)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1615",
+      "source": "Web Security Learning Labs — module catalog 1615 (WSL vercel app, Aug 2026; IDOR placeholder expansion past 1613)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1614",
+      "source": "Web Security Learning Labs — module catalog 1614 (WSL vercel app, Aug 2026; IDOR placeholder expansion past 1613)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
       "source": "NeuraLegion/brokencrystals — JWT x5c certificate-chain bypass oracle POST /api/auth/jwt/x5c/validate (swagger + issue #688)",
       "auth": "public_demo"
@@ -23,8 +38,6 @@
     {
       "url": "https://seclab.vercel.app/api/xss-vulnerable",
       "source": "DaniSam-STU/security-lab — innerHTML XSS oracle GET /api/xss-vulnerable (seclab.vercel.app README CWE-79)",
-      "auth": "public_demo"
-    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
       "source": "NeuraLegion/brokencrystals — JWT X5U rogue-certificate bypass oracle POST /api/auth/jwt/x5u/login (swagger)",

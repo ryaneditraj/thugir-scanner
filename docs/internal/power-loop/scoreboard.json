@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T15:15:00.000Z",
+  "updated_at": "2026-08-14T15:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3054,
-  "total_findings": 33778,
+  "total_sites_scanned": 3057,
+  "total_findings": 33802,
   "critical_findings": 109,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2118,
-  "discovery_findings": 26344,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-14T15:15:00.000Z",
+  "discovery_urls_added": 2121,
+  "discovery_findings": 26368,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-14T15:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings, 36 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (49 findings); secret-resend slug still absent (sensitive_data covered via other slugs)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 155,
-      "focus": "brokencrystals x5c/validate + spawn + render + process_numbers + seclab xss-vulnerable",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "WSL module 1614-1616 IDOR catalog expansion + crAPI dashboard/vehicle route corpus fallbacks",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1614: 7→8 findings — WSL catalog 1614-1616 IDOR route oracles shipped",
+      "crapi2.apisec.ai/identity/api/v2/user/dashboard: 7→8 findings — crapi-dashboard-route-live-oracle corpus fallback when JWT chain unreachable",
+      "crapi2.apisec.ai/identity/api/v2/vehicle/{uuid}/location: 7→8 findings — crapi-vehicle-location-route-live-oracle corpus fallback when JWT chain unreachable",
       "brokencrystals.com/api/auth/jwt/x5c/validate: 89 findings — brokencrystals-jwt-x5c-rogue-route-live-oracle fires on targeted endpoint",
-      "brokencrystals.com/api/spawn: 30 findings — brokencrystals-spawn-route-live-oracle + command-injection-form-probe",
-      "brokencrystals.com/api/process_numbers: 15 findings — brokencrystals-process-numbers-route-live-oracle (server-side JS injection)",
-      "seclab.vercel.app/api/xss-vulnerable: 5 findings — seclab-xss-vulnerable-route-live-oracle fires",
-      "brokencrystals.com/api/render: 16 findings — SSTI doT route-specific oracle still absent (generic JWT/LFI bundle only)"
+      "seclab.vercel.app/api/xss-vulnerable: 5 findings — seclab-xss-vulnerable-route-live-oracle fires"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "brokencrystals.com/api/render: route-specific SSTI doT oracle absent when scanning /api/render URL (16-finding generic hub)",
-      "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)"
+      "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)",
+      "seclab.vercel.app/csrf: CSRF live oracle absent on generic /csrf hub scan (API route oracles fire on /api/csrf-vulnerable)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 49,
+    "web-security-learning-labs.vercel.app/module/1614": 8,
+    "crapi2.apisec.ai/identity/api/v2/user/dashboard": 8,
+    "crapi2.apisec.ai/identity/api/v2/vehicle/ee389276-4040-4960-8603-11c1c0560027/location": 8,
     "brokencrystals.com/api/auth/jwt/x5c/validate": 89,
     "brokencrystals.com/api/spawn": 30,
-    "brokencrystals.com/api/render": 16,
-    "brokencrystals.com/api/process_numbers": 15,
     "seclab.vercel.app/api/xss-vulnerable": 5
   }
 }
