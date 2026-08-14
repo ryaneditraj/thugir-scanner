@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T10:30:00.000Z",
+  "updated_at": "2026-08-14T11:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3021,
-  "total_findings": 32848,
-  "critical_findings": 107,
+  "total_sites_scanned": 3027,
+  "total_findings": 32935,
+  "critical_findings": 108,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2103,
-  "discovery_findings": 25850,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-14T10:30:00.000Z",
+  "discovery_urls_added": 2108,
+  "discovery_findings": 25889,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-14T11:16:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 583,
+      "probes_run": 581,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,32 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 20,
-      "focus": "Chimera SQLi route oracles + vulnshop apply-discount payment manipulation",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 39,
+      "focus": "vulnshop API business-logic routes (cart/update-price, payment/process, jwt-login, debug, orders/modify)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "chimera.atlascrew.dev/api/v1/auth/login-vulnerable: 5→6 findings — chimera-login-vulnerable-sqli-route-live-oracle shipped",
-      "chimera.atlascrew.dev/api/v1/patients/search: 5→6 findings — chimera-patients-search-sqli-route-live-oracle shipped",
-      "vulnshop.vercel.app/api/v1/checkout/apply-discount: 6→8 findings — vulnshop-apply-discount-payment-manipulation + route oracles shipped",
-      "vulnshop.vercel.app/api/v1/wallet/add-funds: 6 findings — race-condition route hub without live oracle (remaining gap)"
+      "vulnshop.vercel.app/jwt-login: 8 findings — vulnshop-jwt-login-route-live-oracle (JWT alg:none critical)",
+      "vulnshop.vercel.app/api/v1/cart/update-price: 8 findings — vulnshop-cart-route-live-oracle + payment manipulation",
+      "vulnshop.vercel.app/api/v1/orders/modify: 9 findings — vulnshop-orders-idor-route-live-oracle + module evidence",
+      "vulnshop.vercel.app/api/v1/payment/process: 7 findings — generic API hub without route-specific payment oracle",
+      "vulnshop.vercel.app/api/v1/debug: 7 findings — API misconfig secrets route hub without live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnshop.vercel.app/api/v1/wallet/add-funds: race-condition wallet-funding live oracle absent",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent on some routes"
+      "vulnshop.vercel.app/api/v1/debug: secrets-exposure live oracle absent (generic 7-finding hub)",
+      "vulnshop.vercel.app/api/v1/payment/process: unsafe-payment live oracle absent (generic 7-finding hub)",
+      "damn-vulnerable-startup.fly.dev: still offline (DNS unreachable)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "vulnshop.vercel.app/api/v1/orders/modify": 9,
+    "vulnshop.vercel.app/jwt-login": 8,
+    "vulnshop.vercel.app/api/v1/cart/update-price": 8,
     "vulnshop.vercel.app/api/v1/checkout/apply-discount": 8,
-    "chimera.atlascrew.dev/api/v1/auth/login-vulnerable": 6,
-    "chimera.atlascrew.dev/api/v1/patients/search?ssn=1": 6,
-    "vulnshop.vercel.app/api/v1/wallet/add-funds": 6,
-    "vuln-expose.vercel.app/api/users": 16
+    "vulnshop.vercel.app/api/v1/payment/process": 7,
+    "vulnshop.vercel.app/api/v1/debug": 7
   }
 }
