@@ -57873,10 +57873,6 @@ function ginAndJuiceSessionCookieFromDoc(doc: { setCookies: string[] }): string 
   return parts.length ? parts.join("; ") : null;
 }
 
-function ginAndJuiceSessionOnlyCookieFromDoc(doc: { setCookies: string[] }): string | null {
-  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
-}
-
 const ginAndJuiceLoginUsernameReflectionLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const loginUrl = new URL("/login", ctx.origin);
