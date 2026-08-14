@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T05:17:00.000Z",
+  "updated_at": "2026-08-14T06:18:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
+      "source": "ctfsec/pwnshop — SSRF avatar URL fetch oracle POST /profile/update-avatar targeting localhost:3000/debug/info (PWN-029)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/chat/query",
+      "source": "ctfsec/pwnshop — direct LLM prompt injection oracle POST /api/v1/chat/query (PWN-031)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/users",
+      "source": "JuaniVeltri/vuln-expose — IDOR / parameter manipulation oracle GET /api/users (VulnSite README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/comments",
+      "source": "JuaniVeltri/vuln-expose — stored XSS oracle POST /api/comments (VulnSite README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level5.php",
+      "source": "webspoilt/vulnforge-academy — medium tier Level 5 SSRF challenge (levels 13-15 SSRF tier, GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
       "source": "NeuraLegion/brokencrystals — JWT weak-secret brute-force oracle POST /api/auth/jwt/weak-key/login (swagger)",
