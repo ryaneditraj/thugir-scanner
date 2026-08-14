@@ -1,6 +1,180 @@
 {
-  "updated_at": "2026-08-14T05:17:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
+      "source": "NeuraLegion/brokencrystals — JWT X5U rogue-certificate bypass oracle POST /api/auth/jwt/x5u/login (swagger)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/login",
+      "source": "NeuraLegion/brokencrystals — JWT JWK rogue-key bypass oracle POST /api/auth/jwt/jwk/login (swagger)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/admin/login",
+      "source": "NeuraLegion/brokencrystals — admin credential bypass oracle POST /api/auth/admin/login (swagger Broken Authentication)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/sqli-vulnerable",
+      "source": "DaniSam-STU/security-lab — string-concat SQLi oracle GET /api/sqli-vulnerable (seclab.vercel.app README CWE-89)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/csrf-vulnerable",
+      "source": "DaniSam-STU/security-lab — CSRF oracle POST /api/csrf-vulnerable (seclab.vercel.app README CWE-352)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/cart/update-price",
+      "source": "chethan-vinayak/vulnshop — price manipulation oracle POST /api/v1/cart/update-price (README route #34)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/payment/process",
+      "source": "chethan-vinayak/vulnshop — unsafe payment API oracle POST /api/v1/payment/process (README route #32)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/jwt-login",
+      "source": "chethan-vinayak/vulnshop — JWT none-algorithm oracle GET /jwt-login (README route #8)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/debug",
+      "source": "chethan-vinayak/vulnshop — API misconfig secrets oracle GET /api/v1/debug (README route #30)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/orders/modify",
+      "source": "chethan-vinayak/vulnshop — order status manipulation oracle POST /api/v1/orders/modify (README route #36)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
+      "source": "webspoilt/vulnforge-academy — file upload bypass tier Level 16 (levels 16-18 file upload, GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — file upload tier Level 17 validation bypass (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php",
+      "source": "webspoilt/vulnforge-academy — hard tier Level 18 file upload chain (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/xml-import",
+      "source": "chethan-vinayak/vulnshop — XXE oracle POST /api/xml-import (README route #7)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/products/import",
+      "source": "chethan-vinayak/vulnshop — SSRF API7 oracle POST /api/v1/products/import URL-based import (README route #29)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera — auth-bypass SQLi oracle POST /api/v1/auth/login-vulnerable (vuln-api README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=1",
+      "source": "atlas-crew/Chimera — classic SQLi oracle GET /api/v1/patients/search?ssn= (API-DOCUMENTATION.md)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/swagger",
+      "source": "atlas-crew/Chimera — 456+ vulnerable endpoint Swagger UI discovery surface (chimera.atlascrew.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/checkout/apply-discount",
+      "source": "chethan-vinayak/vulnshop — payment manipulation oracle POST /api/v1/checkout/apply-discount (README route #33)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/wallet/add-funds",
+      "source": "chethan-vinayak/vulnshop — race-condition wallet funding oracle POST /api/v1/wallet/add-funds (README route #35)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/admin/audit-logs",
+      "source": "MRMcyber/vaultapp — unauthenticated admin audit-log IDOR oracle GET /api/admin/audit-logs (README IDOR lab #8)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/account/export?user_id=1",
+      "source": "MRMcyber/vaultapp — account data export IDOR oracle GET /api/account/export?user_id= (README IDOR lab #3)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/transactions",
+      "source": "MRMcyber/vaultapp — transaction history IDOR oracle GET /api/transactions (README IDOR lab #2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/export-orders",
+      "source": "ctfsec/pwnshop vulnerabilities — CSV formula injection oracle GET /admin/export-orders (PWN-013)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/product/1",
+      "source": "ctfsec/pwnshop vulnerabilities — stored XSS product review oracle POST /review on product pages (PWN-011)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/login",
+      "source": "FAST-NUCES SecureBank attack lab — SQLi login bypass oracle POST /login (attack mode, semester project README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/messages",
+      "source": "FAST-NUCES SecureBank attack lab — stored XSS oracle POST /messages (attack mode raw HTML render)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/admin",
+      "source": "FAST-NUCES SecureBank attack lab — RBAC admin panel bypass oracle GET /admin (session role check)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php",
+      "source": "webspoilt/vulnforge-academy — SSRF tier Level 13 internal service access (levels 13-15 SSRF, GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php",
+      "source": "webspoilt/vulnforge-academy — hard tier Level 19 command injection RCE challenge (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
+      "source": "ctfsec/pwnshop — SSRF avatar URL fetch oracle POST /profile/update-avatar targeting localhost:3000/debug/info (PWN-029)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/chat/query",
+      "source": "ctfsec/pwnshop — direct LLM prompt injection oracle POST /api/v1/chat/query (PWN-031)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/users",
+      "source": "JuaniVeltri/vuln-expose — IDOR / parameter manipulation oracle GET /api/users (VulnSite README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/comments",
+      "source": "JuaniVeltri/vuln-expose — stored XSS oracle POST /api/comments (VulnSite README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level5.php",
+      "source": "webspoilt/vulnforge-academy — medium tier Level 5 SSRF challenge (levels 13-15 SSRF tier, GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
       "source": "NeuraLegion/brokencrystals — JWT weak-secret brute-force oracle POST /api/auth/jwt/weak-key/login (swagger)",
@@ -11666,13 +11840,28 @@
       "auth": "oss_deploy"
     },
     {
+      "url": "https://zero-health.vercel.app/login",
+      "source": "aligorithm/Zero-Health — SQLi auth-bypass oracle POST /api/auth/login (challenges.md Challenge 2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/reset-password?code=test&email=patient@test.com",
+      "source": "aligorithm/Zero-Health — reflected XSS via dangerouslySetInnerHTML reset code param (challenges.md Challenge 1)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/search",
+      "source": "aligorithm/Zero-Health — reflected XSS searchSummary oracle GET /api/search (challenges.md Challenge 4)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1617",
-      "source": "web-security-learning-labs Vercel — module 1617 security lab route (WSL catalog expansion)",
+      "source": "web-security-learning-labs Vercel — module 1617 security lab route (WSL catalog expansion past 1616)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1618",
-      "source": "web-security-learning-labs Vercel — module 1618 security lab route (WSL catalog expansion)",
+      "source": "web-security-learning-labs Vercel — module 1618 security lab route (WSL catalog expansion past 1617)",
       "auth": "oss_deploy"
     },
     {

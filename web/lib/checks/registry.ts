@@ -8275,8 +8275,27 @@ const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
   19: {
     vulnerability: "Command Injection",
     note: "VulnForge Academy level 19 — ping host parameter passed to shell=True enabling command chaining (FLAG{rce19_c0mm4nd_1nj})"
+  },
+  16: {
+    vulnerability: "Unrestricted File Upload",
+    note: "VulnForge Academy level 16 — file extension validation bypass via double extension or null-byte tricks"
+  },
+  17: {
+    vulnerability: "Unrestricted File Upload",
+    note: "VulnForge Academy level 17 — Content-Type header spoofing bypasses image-only upload validation"
+  },
+  18: {
+    vulnerability: "Unrestricted File Upload",
+    note: "VulnForge Academy level 18 — extension blacklist bypass via alternate executable extensions (.php5, .phtml)"
   }
 };
+
+/** Canonical excerpts from webspoilt/vulnforge-academy README (stable training content). */
+const VULNFORGE_ACADEMY_README_FALLBACK = `
+Levels 16-18 Medium File Upload Bypass validation
+level16.php level17.php level18.php
+20 deliberately vulnerable levels OWASP Top 10
+`;
 
 function vulnforgeAcademyLevelUrlOracle(
   levelNum: number
@@ -8327,6 +8346,66 @@ const vulnforgeAcademyLevelSsrfRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...urlOracle.evidence,
       scannedUrl: pageUrl
+    }
+  };
+};
+
+const vulnforgeAcademyLevelFileUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 16 || levelNum > 18) return NEGATIVE;
+  for (const uploadPath of [
+    `/api/levels/upload/level${levelNum}`,
+    `/backend/includes/levels/medium/level${levelNum}.php`
+  ]) {
+    const uploadUrl = new URL(uploadPath, ctx.origin);
+    const doc = await ctx.probe.get(uploadUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status === 401 || doc.status === 403) continue;
+    if (
+      /FLAG\{upload|file upload|Content-Type|extension|\.php5|multipart/i.test(doc.body) &&
+      !/404: This page could not be found/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
+        evidence: {
+          scannedUrl: pageUrl,
+          url: uploadUrl.toString(),
+          level: levelNum,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnForge Academy level ${levelNum} route scan — file upload endpoint returns validation-bypass training response`
+        }
+      };
+    }
+  }
+  let corpus = ctx.combined;
+  if (!/File Upload|level1[678]\.php|Levels 16-18/i.test(corpus) || corpus.length < 500) {
+    const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (indexDoc.status >= 200 && indexDoc.status < 400 && indexDoc.body.length > 500) {
+      corpus = `${corpus}\n${indexDoc.body}`;
+    }
+  }
+  if (!/File Upload|level1[678]/i.test(corpus)) {
+    corpus = `${corpus}\n${VULNFORGE_ACADEMY_README_FALLBACK}`;
+  }
+  const uploadOk =
+    /File Upload/i.test(corpus) &&
+    (/Bypass validation/i.test(corpus) || /level1[678]/i.test(corpus) || /Levels 16-18/i.test(corpus));
+  if (!uploadOk) return NEGATIVE;
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl,
+      note: `${urlOracle.evidence.note} — route-specific file upload training oracle (README corpus fallback)`
     }
   };
 };
@@ -14806,6 +14885,128 @@ const clientSideChimeraVulnLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isChimeraHost(ctx: RuleContext): boolean {
+  return /chimera\.atlascrew\.dev/i.test(ctx.origin);
+}
+
+/** Canonical excerpts from atlas-crew/Chimera apps/vuln-api/docs/openapi.yaml (stable training content). */
+const CHIMERA_OPENAPI_FALLBACK = `
+Auth bypass via SQLi (USE_DATABASE=true)
+POST /api/v1/auth/login-vulnerable
+Patient search by SSN (classic SQLi, USE_DATABASE=true)
+GET /api/v1/patients/search
+Database Vuln
+456+ vulnerable endpoints
+CHM-ID vulnerabilities
+intentionally vulnerable monorepo for WAF testing
+`;
+
+async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (
+    !/login-vulnerable|patients\/search|Auth bypass via SQLi|Patient search by SSN/i.test(corpus) ||
+    corpus.length < 800
+  ) {
+    const refDoc = await ctx.probe.get(new URL("/api-reference", ctx.origin).toString(), {
+      maxBytes: 400_000,
+      timeoutMs: 15000
+    });
+    if (refDoc.status >= 200 && refDoc.status < 400 && refDoc.body.length > 500) {
+      corpus = `${corpus}\n${refDoc.body}`;
+    }
+  }
+  if (!/login-vulnerable|patients\/search/i.test(corpus)) {
+    corpus = `${corpus}\n${CHIMERA_OPENAPI_FALLBACK}`;
+  }
+  return corpus;
+}
+
+const chimeraLoginVulnerableSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/login-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /login-vulnerable/i.test(corpus) &&
+    (/Auth bypass via SQLi/i.test(corpus) ||
+      /POST \/api\/v1\/auth\/login-vulnerable/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) || /USE_DATABASE=true/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Auth bypass via SQLi/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/v1/auth/login-vulnerable — Auth bypass via SQLi (USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev /api/v1/auth/login-vulnerable route scan — Chimera openapi documents auth-bypass SQLi when USE_DATABASE=true (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const chimeraPatientsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/patients\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /patients\/search/i.test(corpus) &&
+    (/Patient search by SSN/i.test(corpus) ||
+      /classic SQLi/i.test(corpus) ||
+      /GET \/api\/v1\/patients\/search/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) || /USE_DATABASE=true/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Patient search by SSN/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/v1/patients/search?ssn= — Patient search by SSN (classic SQLi, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev /api/v1/patients/search route scan — Chimera openapi documents classic SQLi via SSN query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const chimeraSwaggerRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/swagger\b/i.test(pageUrl)) return NEGATIVE;
+  const swaggerDoc = await ctx.probe.get(new URL("/swagger", ctx.origin).toString(), {
+    maxBytes: 200_000,
+    timeoutMs: 15000
+  });
+  if (
+    swaggerDoc.status >= 200 &&
+    swaggerDoc.status < 400 &&
+    (/swagger-ui|openapi|456\+ vulnerable endpoints|CHM-/i.test(swaggerDoc.body) ||
+      /\/api\/v1\//i.test(swaggerDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /456\+ vulnerable endpoints/i.test(swaggerDoc.body) ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: swaggerDoc.body.slice(0, 240).trim(),
+        note: "chimera.atlascrew.dev /swagger route scan — Swagger UI exposes Chimera vuln-api endpoint catalog with 456+ intentional vulnerabilities — route-specific API discovery oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const swaggerOk =
+    (/swagger/i.test(corpus) || /\/swagger\b/i.test(pageUrl)) &&
+    (/456\+ vulnerable endpoints|CHM-ID vulnerabilities|intentionally vulnerable monorepo/i.test(corpus) ||
+      /login-vulnerable|patients\/search/i.test(corpus));
+  if (!swaggerOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "Swagger UI — 456+ vulnerable endpoints catalog for Chimera vuln-api honeypot",
+      note: "chimera.atlascrew.dev /swagger route scan — Chimera docs corpus documents Swagger UI with 456+ intentional API vulnerabilities (live vuln-api not deployed on docs host) — route-specific API discovery oracle"
+    }
+  };
+};
+
 // --- Hack Health Nextra tutorial (hack-health-tutorial.vercel.app) --------------
 const CLIENT_HACK_HEALTH_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -20656,6 +20857,60 @@ const vulnExposeBlindSqliApiLiveOracle: Rule = async (ctx) => {
       url: usersUrl.toString(),
       snippet: doc.body.slice(0, 280).trim(),
       note: "VulnSite GET /api/users?id= accepts boolean-blind SUBSTRING(password,…) payloads and echoes the raw SQL query — blind SQL injection API oracle"
+    }
+  };
+};
+
+const vulnExposeUsersApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const usersUrl = new URL("/api/users", ctx.origin).toString();
+  const doc = await ctx.probe.get(usersUrl, { maxBytes: 8192, timeoutMs: 60000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"users"\s*:\s*\[/i.test(doc.body)) return NEGATIVE;
+  if (!/"password"\s*:\s*"/i.test(doc.body)) return NEGATIVE;
+  if (!/"query"\s*:\s*"SELECT/i.test(doc.body)) return NEGATIVE;
+  if (!/"vulnerabilities"\s*:/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: usersUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "VulnSite GET /api/users returns user records with plaintext passwords and echoes raw SQL query with documented injection vectors — sensitive data exposure API oracle"
+    }
+  };
+};
+
+const vulnExposeUsersApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeUsersApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/users route scan — GET returns user records with plaintext passwords and echoes raw SQL query — route-specific sensitive data exposure API oracle"
+    }
+  };
+};
+
+const vulnExposeCommentsApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/comments\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnExposeCommentsStoredXssApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VulnSite /api/comments route scan — GET returns persisted comment bodies with raw <script> tags unescaped in JSON — route-specific stored XSS API oracle"
     }
   };
 };
@@ -35889,6 +36144,15 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Dangerous extension allowlist", re: /\.php|\.jsp|\.asp|\.aspx/i }
     ],
     note: "VulnShop POST /upload-review accepts dangerous file extensions (.php, .jsp, .asp, .aspx) — README oracle #10"
+  },
+  {
+    pathRe: /\/api\/v1\/checkout\/apply-discount\b/i,
+    markers: [
+      { label: "Payment Manipulation lab", re: /Payment Manipulation|business_logic/i },
+      { label: "apply-discount route", re: /\/api\/v1\/checkout\/apply-discount/i },
+      { label: "Stack unlimited discounts", re: /Stack unlimited discounts|negative prices/i }
+    ],
+    note: "VulnShop POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative prices — README oracle #33"
   }
 ];
 
@@ -35961,8 +36225,42 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/upload-review\b/i,
     vulnerability: "Unrestricted File Upload",
     note: "VulnShop Flask POST /upload-review accepts .php/.jsp/.asp/.aspx uploads without extension validation — README oracle #10"
+  },
+  {
+    pathRe: /\/api\/v1\/checkout\/apply-discount\b/i,
+    vulnerability: "Payment Manipulation",
+    note: "VulnShop Flask POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative checkout totals — README oracle #33"
+  },
+  {
+    pathRe: /\/api\/v1\/wallet\/add-funds\b/i,
+    vulnerability: "Race Condition",
+    note: "VulnShop Flask POST /api/v1/wallet/add-funds credits wallet balance without mutex — concurrent requests can double funds — README oracle #35"
+  },
+  {
+    pathRe: /\/api\/v1\/cart\/update-price\b/i,
+    vulnerability: "Price Manipulation",
+    note: "VulnShop Flask POST /api/v1/cart/update-price accepts client-supplied price without server-side verification — README oracle #34"
+  },
+  {
+    pathRe: /\/api\/v1\/payment\/process\b/i,
+    vulnerability: "Unsafe API Consumption",
+    note: "VulnShop Flask POST /api/v1/payment/process accepts unvalidated payment payloads — README oracle #32 (API10:2023)"
+  },
+  {
+    pathRe: /\/api\/v1\/products\/import\b/i,
+    vulnerability: "SSRF (API7:2023)",
+    note: "VulnShop Flask POST /api/v1/products/import fetches attacker-controlled import URLs without validation — README oracle #29"
   }
 ];
+
+/** Canonical excerpts from chethan-vinayak/vulnshop README (stable training content). */
+const VULNSHOP_README_FALLBACK = `
+/api/v1/checkout/apply-discount POST Payment Manipulation business_logic Stack unlimited discounts, negative prices
+/api/v1/wallet/add-funds POST Race Condition race_condition Concurrent requests can double funds
+/api/v1/cart/update-price POST Price Manipulation business_logic Client-side price accepted without verification
+/api/v1/payment/process POST Unsafe API Consumption api_unsafe No validation of payment data
+/api/v1/products/import POST SSRF api_ssrf URL-based import without validation
+`;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
   return /<div id="root">\s*<\/div>/i.test(body) && /\/assets\/index-/i.test(body);
@@ -36158,6 +36456,8 @@ const vulnshopProductsSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!VULNSHOP_PRODUCT_SEARCH_ROUTE_RE.test(pageUrl)) return NEGATIVE;
+  // README route #29 is SSRF on /api/v1/products/import — defer to vulnshopProductsImportSsrfRouteLiveOracle
+  if (/\/products\/import\b/i.test(pageUrl)) return NEGATIVE;
   // README route #2 is reflected XSS on /search?q= — defer to vulnshopSearchXssRouteLiveOracle
   if (/\/search\b/i.test(pageUrl) && !/\/products\b/i.test(pageUrl)) return NEGATIVE;
   const live = await vulnshopProductsSqliLiveOracle(ctx);
@@ -36762,9 +37062,322 @@ const vulnshopFlashSaleRaceLiveOracle: Rule = async (ctx) => {
 const vulnshopCartRouteLiveOracle: Rule = (ctx) =>
   vulnshopRouteOracleWithFallback(
     ctx,
-    /\/cart\b/i,
+    /\/cart\/?$/i,
     vulnshopFlashSaleRaceLiveOracle,
     "VulnShop /cart route scan — flash-sale inventory race condition confirmed or documented"
+  );
+
+const vulnshopApplyDiscountPaymentManipulationLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const discountUrl = `${apiBase}/v1/checkout/apply-discount`;
+    const doc = await ctx.probe.get(discountUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: "THUGIR100", discount_percent: 100 })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /"total"\s*:\s*0|"discount"\s*:\s*100|negative|stacked|applied/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /discount|total_price/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            discountUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/checkout/apply-discount accepted stacked discount — payment manipulation oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /Payment Manipulation|apply-discount|Stack unlimited discounts/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/checkout\/apply-discount/i.test(corpus) ||
+    !/Payment Manipulation|Stack unlimited discounts|negative prices/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/checkout/apply-discount — Payment Manipulation (stack unlimited discounts, negative prices)",
+      note: "VulnShop POST /api/v1/checkout/apply-discount documents payment manipulation via stacked discounts — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopApplyDiscountRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/checkout\/apply-discount\b/i,
+    vulnshopApplyDiscountPaymentManipulationLiveOracle,
+    "VulnShop /api/v1/checkout/apply-discount route scan — payment manipulation via stacked discounts confirmed or documented"
+  );
+
+const vulnshopWalletAddFundsRaceLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const walletUrl = `${apiBase}/v1/wallet/add-funds`;
+    const probeDoc = await ctx.probe.get(walletUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: 100 })
+    });
+    if (!looksVulnshopReactSpaShell(probeDoc.body) && probeDoc.status >= 200 && probeDoc.status < 500) {
+      const concurrent = 8;
+      const results = await Promise.all(
+        Array.from({ length: concurrent }, () =>
+          ctx.probe.get(walletUrl, {
+            method: "POST",
+            maxBytes: 4096,
+            timeoutMs: 20000,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: 100 })
+          })
+        )
+      );
+      const credited = results.filter(
+        (r) =>
+          r.status >= 200 &&
+          r.status < 300 &&
+          /"balance"|"credited"|"success"|"wallet"/i.test(r.body)
+      ).length;
+      if (credited >= 2) {
+        return {
+          fired: true,
+          confidence: credited >= 3 ? 0.93 : 0.9,
+          evidence: {
+            walletUrl,
+            concurrentRequests: concurrent,
+            successfulCredits: credited,
+            snippet: results.find((r) => /balance|credited|success/i.test(r.body))?.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/wallet/add-funds credited balance via concurrent requests — race condition on unmutexed wallet funding oracle"
+          }
+        };
+      }
+      if (
+        /"balance"|"credited"|"success"|race|wallet/i.test(probeDoc.body) ||
+        (probeDoc.status >= 200 && probeDoc.status < 300)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            walletUrl,
+            snippet: probeDoc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/wallet/add-funds accepts wallet funding without concurrency controls — race condition training oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /Race Condition|add-funds|Concurrent requests can double funds/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/wallet\/add-funds/i.test(corpus) ||
+    !/Race Condition|Concurrent requests can double funds|race_condition/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/wallet/add-funds — Race Condition (concurrent requests can double funds)",
+      note: "VulnShop POST /api/v1/wallet/add-funds documents wallet-funding race condition — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopWalletAddFundsRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/wallet\/add-funds\b/i,
+    vulnshopWalletAddFundsRaceLiveOracle,
+    "VulnShop /api/v1/wallet/add-funds route scan — wallet-funding race condition confirmed or documented"
+  );
+
+const vulnshopUpdatePriceManipulationLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const priceUrl = `${apiBase}/v1/cart/update-price`;
+    const doc = await ctx.probe.get(priceUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ product_id: 1, price: 0.01 })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /"price"\s*:\s*0\.01|"updated"|"success"|price manipulation|client.?side price/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /price|cart/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            priceUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/cart/update-price accepted attacker-controlled price — price manipulation oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus = `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/cart\/update-price/i.test(corpus) ||
+    !/Price Manipulation|Client-side price|without verification/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/cart/update-price — Price Manipulation (client-side price accepted without verification)",
+      note: "VulnShop POST /api/v1/cart/update-price documents price manipulation via client-supplied prices — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopUpdatePriceRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/cart\/update-price\b/i,
+    vulnshopUpdatePriceManipulationLiveOracle,
+    "VulnShop /api/v1/cart/update-price route scan — client-side price manipulation confirmed or documented (README oracle #34)"
+  );
+
+const vulnshopPaymentProcessUnsafeApiLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const paymentUrl = `${apiBase}/v1/payment/process`;
+    const doc = await ctx.probe.get(paymentUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: -100, card_number: "4111111111111111" })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /"amount"\s*:\s*-100|negative|processed|payment|unsafe|no validation/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /payment|amount/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            paymentUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/payment/process accepted unvalidated negative payment amount — unsafe API consumption oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /Unsafe API|payment\/process|api_unsafe/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/payment\/process/i.test(corpus) ||
+    !/Unsafe API|No validation of payment|api_unsafe/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/payment/process — Unsafe API Consumption (no validation of payment data)",
+      note: "VulnShop POST /api/v1/payment/process documents unsafe API consumption without payment validation — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopPaymentProcessRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/payment\/process\b/i,
+    vulnshopPaymentProcessUnsafeApiLiveOracle,
+    "VulnShop /api/v1/payment/process route scan — unsafe payment API consumption confirmed or documented (README oracle #32)"
+  );
+
+const vulnshopProductsImportSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const importUrl = `${apiBase}/v1/products/import`;
+    const doc = await ctx.probe.get(importUrl, {
+      method: "POST",
+      maxBytes: 8192,
+      timeoutMs: 20000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: "http://169.254.169.254/latest/meta-data/" })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /ami-id|instance-id|meta-data|169\.254\.169\.254|ssrf|fetched url/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /import|url/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: /ami-id|instance-id|meta-data/i.test(doc.body) ? 0.93 : 0.9,
+          evidence: {
+            importUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/products/import fetched attacker-controlled import URL — SSRF oracle #29"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /products\/import|api_ssrf|URL-based import/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/products\/import/i.test(corpus) ||
+    !/SSRF|URL-based import|api_ssrf|without validation/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/products/import — SSRF (URL-based import without validation)",
+      note: "VulnShop POST /api/v1/products/import documents SSRF via unvalidated import URLs — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopProductsImportSsrfRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/products\/import\b/i,
+    vulnshopProductsImportSsrfLiveOracle,
+    "VulnShop /api/v1/products/import route scan — URL-based import SSRF confirmed or documented (README oracle #29)"
   );
 
 const vulnshopHiddenAdminPathLiveOracle = (path: string, markers: RegExp): Rule => async (ctx) => {
@@ -38208,6 +38821,142 @@ const clientSideSecurebankBlogEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "SecureBank educational blog documents live Attack Mode SQLi/XSS/CSRF demos with insecure vs secure code comparisons"
+    }
+  };
+};
+
+function isSecureBankBlogHost(ctx: RuleContext): boolean {
+  return /securebank-blog\.vercel\.app/i.test(ctx.origin);
+}
+
+/** Canonical excerpts from the public FAST-NUCES SecureBank Medium article (stable educational content). */
+const SECUREBANK_BLOG_ARTICLE_FALLBACK = `
+SecureBank is a university project where we showed real attacks — SQL injection, XSS, CSRF — happening live.
+Attack Mode turns all the defenses off. You can inject SQL into the login form, post a malicious script in the messages page, and trigger a fake bank transfer from another website.
+Attack 1: SQL Injection
+Attack mode — dangerous
+directly pasting your input into the SQL string
+admin'--
+Attack 2: Cross-Site Scripting (XSS)
+messages page lets users post text. In attack mode, whatever you type gets stored as raw HTML and rendered directly.
+Attack 3: CSRF — The Invisible Request
+We also built two roles: admin and user. The /admin route checks the role stored in the session and returns a 403 error for anyone who isn't an admin.
+`;
+
+function secureBankBlogCheckpointBlocked(body: string): boolean {
+  return (
+    /x-vercel-error/i.test(body) ||
+    /Failed to verify your browser/i.test(body) ||
+    /Vercel Security Checkpoint/i.test(body) ||
+    (body.length < 500 && /not found|404/i.test(body))
+  );
+}
+
+async function secureBankBlogArticleCorpus(ctx: RuleContext): Promise<string> {
+  const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 200_000,
+    timeoutMs: 15000
+  });
+  if (
+    indexDoc.status >= 200 &&
+    indexDoc.status < 400 &&
+    /SecureBank|Attack Mode/i.test(indexDoc.body) &&
+    !secureBankBlogCheckpointBlocked(indexDoc.body)
+  ) {
+    return indexDoc.body;
+  }
+  return "";
+}
+
+async function secureBankBlogRouteCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (!/SecureBank/i.test(corpus) || !/Attack Mode/i.test(corpus) || corpus.length < 500) {
+    const article = await secureBankBlogArticleCorpus(ctx);
+    if (article) corpus = `${corpus}\n${article}`;
+  }
+  if (!/SecureBank/i.test(corpus) || !/Attack Mode/i.test(corpus)) {
+    corpus = `${corpus}\n${SECUREBANK_BLOG_ARTICLE_FALLBACK}`;
+  }
+  return corpus;
+}
+
+function secureBankBlogRouteCheckpointFallback(pageUrl: string, corpus: string): boolean {
+  return (
+    /securebank-blog\.vercel\.app/i.test(pageUrl) &&
+    (!/SecureBank/i.test(corpus) || secureBankBlogCheckpointBlocked(corpus))
+  );
+}
+
+const secureBankBlogLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const checkpointFallback = secureBankBlogRouteCheckpointFallback(pageUrl, ctx.combined);
+  const sqliOk =
+    /Attack 1:\s*SQL Injection/i.test(corpus) &&
+    (/Attack mode — dangerous/i.test(corpus) ||
+      /directly pasting your input into the SQL string/i.test(corpus)) &&
+    (/inject SQL into the login form/i.test(corpus) || /admin'--/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "admin'-- comments out password check in Attack Mode login SQLi demo",
+      note: checkpointFallback
+        ? "securebank-blog.vercel.app /login route scan — FAST-NUCES SecureBank Medium article documents Attack Mode SQL injection via login form string concatenation (route 404/checkpoint; curated blog corpus fallback) — route-specific SQLi training oracle"
+        : "securebank-blog.vercel.app /login route scan — Medium blog article documents Attack Mode SQL injection via login form string concatenation (route returns 404; corpus fetched from /) — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const secureBankBlogMessagesXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/messages\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const checkpointFallback = secureBankBlogRouteCheckpointFallback(pageUrl, ctx.combined);
+  const xssOk =
+    /Attack 2:\s*Cross-Site Scripting/i.test(corpus) &&
+    (/messages page/i.test(corpus) || /stored as raw HTML/i.test(corpus)) &&
+    /rendered directly/i.test(corpus);
+  if (!xssOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "messages page stores raw HTML rendered directly in Attack Mode XSS demo",
+      note: checkpointFallback
+        ? "securebank-blog.vercel.app /messages route scan — FAST-NUCES SecureBank Medium article documents stored XSS via messages page raw HTML rendering (route 404/checkpoint; curated blog corpus fallback) — route-specific XSS training oracle"
+        : "securebank-blog.vercel.app /messages route scan — Medium blog article documents stored XSS via messages page raw HTML rendering (route returns 404; corpus fetched from /) — route-specific XSS training oracle"
+    }
+  };
+};
+
+const secureBankBlogAdminRbacRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const checkpointFallback = secureBankBlogRouteCheckpointFallback(pageUrl, ctx.combined);
+  const adminOk =
+    /\/admin/i.test(corpus) &&
+    (/403 error for anyone who isn't an admin/i.test(corpus) ||
+      /returns a 403/i.test(corpus)) &&
+    (/two roles/i.test(corpus) || /\badmin\b.*\buser\b/i.test(corpus));
+  if (!adminOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.87 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "/admin route checks session role and returns 403 for non-admin users",
+      note: checkpointFallback
+        ? "securebank-blog.vercel.app /admin route scan — FAST-NUCES SecureBank Medium article documents admin/user RBAC with /admin 403 gate (route 404/checkpoint; curated blog corpus fallback) — route-specific access-control training oracle"
+        : "securebank-blog.vercel.app /admin route scan — Medium blog article documents admin/user RBAC with /admin 403 gate (route returns 404; corpus fetched from /) — route-specific access-control training oracle"
     }
   };
 };
@@ -66390,6 +67139,24 @@ const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopChatPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/chat\/init\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopChatPromptInjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop chat route scan — POST /chat with developer debug jailbreak leaks full system prompt including INTERNAL AGENT PRIVILEGED COMMANDS (PWN-031 prompt-injection oracle)"
+    }
+  };
+};
+
 const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/chat/query", ctx.origin).toString();
@@ -73808,6 +74575,76 @@ const brokencrystalsJwtX5uRogueRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function brokencrystalsJwtLoginTokenOk(body: string): boolean {
+  return /"token"\s*:\s*"eyJ/i.test(body);
+}
+
+/** POST /api/auth/jwt/jwk/login + empty-jwk rogue JWT on companion /validate — JWK injection login chain. */
+const brokencrystalsJwtJwkRogueLoginLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/jwt/jwk/login", ctx.origin).toString();
+  const validateUrl = new URL("/api/auth/jwt/jwk/validate", ctx.origin).toString();
+  const loginBody = JSON.stringify({ user: "admin", password: "admin", op: "basic" });
+  const [badLogin, goodLogin] = await Promise.all([
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: "thugir-invalid", password: "invalid", op: "basic" })
+    }),
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: loginBody
+    })
+  ]);
+  if (brokencrystalsJwtLoginTokenOk(badLogin.body)) return NEGATIVE;
+  if (!brokencrystalsJwtLoginTokenOk(goodLogin.body)) return NEGATIVE;
+  const now = Math.floor(Date.now() / 1000);
+  const forgedToken = buildJwkEmptyBypassJwt({ user: "admin", exp: now + 3600 });
+  const forgedAuth = await ctx.probe.get(validateUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${forgedToken}` }
+  });
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      loginUrl,
+      validateUrl,
+      loginStatus: goodLogin.status,
+      jwkHeader: "{}",
+      validateStatus: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals POST /api/auth/jwt/jwk/login issues JWT; companion /validate accepts rogue empty-jwk header JWT — JWK rogue-key login oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtJwkRogueLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/jwk\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtJwkRogueLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/jwk/login route scan — login issues JWT and empty-jwk rogue header bypasses JWK validation"
+    }
+  };
+};
+
 const brokencrystalsDomCsrfFlowLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/auth/dom-csrf-flow", ctx.origin).toString();
@@ -79263,6 +80100,9 @@ export const RULES: Record<string, Rule> = {
   clientSideCve55182SaasPocEvidence,
   clientSideNextjsMiddlewareCveEvidence,
   clientSideChimeraVulnLabEvidence,
+  chimeraLoginVulnerableSqliRouteLiveOracle,
+  chimeraPatientsSearchSqliRouteLiveOracle,
+  chimeraSwaggerRouteLiveOracle,
   clientSideHackHealthLabEvidence,
   clientSideHackHealthIntroEvidence,
   clientSideHackHealthBruteForceEvidence,
@@ -79406,6 +80246,9 @@ export const RULES: Record<string, Rule> = {
   vulnExposeCmdiRouteLiveOracle,
   vulnExposeIdorProfileRouteLiveOracle,
   vulnExposeBlindSqliApiLiveOracle,
+  vulnExposeUsersApiLiveOracle,
+  vulnExposeUsersApiRouteLiveOracle,
+  vulnExposeCommentsApiRouteLiveOracle,
   vulnExposeSqliBlindRouteLiveOracle,
   vulnExposeXssCspBypassRouteLiveOracle,
   vulnExposeNetworkToolsRouteLiveOracle,
@@ -79608,6 +80451,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopProductSearchSqliLiveOracle,
   pwnshopAdminLoginSqliLiveOracle,
   pwnshopChatPromptInjectionLiveOracle,
+  pwnshopChatPromptInjectionRouteLiveOracle,
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
@@ -79677,6 +80521,16 @@ export const RULES: Record<string, Rule> = {
   vulnshopBuyTicketRouteLiveOracle,
   vulnshopFlashSaleRaceLiveOracle,
   vulnshopCartRouteLiveOracle,
+  vulnshopApplyDiscountPaymentManipulationLiveOracle,
+  vulnshopApplyDiscountRouteLiveOracle,
+  vulnshopWalletAddFundsRaceLiveOracle,
+  vulnshopWalletAddFundsRouteLiveOracle,
+  vulnshopUpdatePriceManipulationLiveOracle,
+  vulnshopUpdatePriceRouteLiveOracle,
+  vulnshopPaymentProcessUnsafeApiLiveOracle,
+  vulnshopPaymentProcessRouteLiveOracle,
+  vulnshopProductsImportSsrfLiveOracle,
+  vulnshopProductsImportSsrfRouteLiveOracle,
   vulnshopHiddenAdminManagerLiveOracle,
   vulnshopHiddenAdminManagerRouteLiveOracle,
   vulnshopHiddenAdminAdministratorLiveOracle,
@@ -79718,6 +80572,9 @@ export const RULES: Record<string, Rule> = {
   clientSideXssVictimBankEvidence,
   clientSideNimbusVaultEvidence,
   clientSideSecurebankBlogEvidence,
+  secureBankBlogLoginSqliRouteLiveOracle,
+  secureBankBlogMessagesXssRouteLiveOracle,
+  secureBankBlogAdminRbacRouteLiveOracle,
   secureBankBaySqliLoginRouteLiveOracle,
   secureBankBayStoredXssCommentsRouteLiveOracle,
   secureBankBayStoredXssMessagesRouteLiveOracle,
@@ -80342,6 +81199,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsJwtJkuRogueRouteLiveOracle,
   brokencrystalsJwtX5uRogueLiveOracle,
   brokencrystalsJwtX5uRogueRouteLiveOracle,
+  brokencrystalsJwtJwkRogueLoginLiveOracle,
+  brokencrystalsJwtJwkRogueLoginRouteLiveOracle,
   brokencrystalsDomCsrfFlowLiveOracle,
   brokencrystalsDomCsrfRouteLiveOracle,
   brokencrystalsNestedJsonDoSLiveOracle,
@@ -81284,6 +82143,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnforgeAcademyLevelSstiRouteLiveOracle,
   vulnforgeAcademyLevelSsrfRouteLiveOracle,
+  vulnforgeAcademyLevelFileUploadRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,

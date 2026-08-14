@@ -498,6 +498,16 @@ async function primeBrokencrystalsRouteOracleProbes(
       "/api/testimonials/count?query=select%20count(table_name)%20as%20count%20from%20information_schema.tables"
     );
   }
+  const jwtRoute = scanUrl.match(
+    /\/api\/auth\/jwt\/(jwk|x5u|jku|x5c|hmac|kid-sql|weak-key)\/(validate|login)\b/i
+  );
+  if (jwtRoute) {
+    const [, kind, action] = jwtRoute;
+    paths.push(`/api/auth/jwt/${kind}/${action}`);
+    if (action === "login") {
+      paths.push(`/api/auth/jwt/${kind}/validate`);
+    }
+  }
   if (paths.length === 0) return;
   const urls = paths.map((p) => new URL(p, origin).toString());
   await probe.getMany(urls, { maxBytes: 65536, timeoutMs: 15000, redirect: "manual" }, 3);
@@ -1578,6 +1588,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideCve55182SaasPocEvidence",
   "clientSideNextjsMiddlewareCveEvidence",
   "clientSideChimeraVulnLabEvidence",
+  "chimeraLoginVulnerableSqliRouteLiveOracle",
+  "chimeraPatientsSearchSqliRouteLiveOracle",
+  "chimeraSwaggerRouteLiveOracle",
   "clientSideHackHealthLabEvidence",
   "clientSideDomGoatLabEvidence",
   "domgoReferrerDomXssEvidence",
@@ -1896,6 +1909,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopProductSearchSqliLiveOracle",
   "pwnshopAdminLoginSqliLiveOracle",
   "pwnshopChatPromptInjectionLiveOracle",
+  "pwnshopChatPromptInjectionRouteLiveOracle",
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
   "pwnshopVerifyOtpBruteforceLiveOracle",
@@ -1956,6 +1970,9 @@ const DEEP_RULES = new Set<string>([
   "webSecurityLearningLabsSstiModuleRouteLiveOracle",
   "webSecurityLearningLabsPlaceholderModuleRouteLiveOracle",
   "webSecurityLearningLabsIdorModuleRouteLiveOracle",
+  "secureBankBlogLoginSqliRouteLiveOracle",
+  "secureBankBlogMessagesXssRouteLiveOracle",
+  "secureBankBlogAdminRbacRouteLiveOracle",
   "secureBankBaySqliLoginRouteLiveOracle",
   "secureBankBayStoredXssCommentsRouteLiveOracle",
   "secureBankBayStoredXssMessagesRouteLiveOracle",
@@ -2591,6 +2608,16 @@ const DEEP_RULES = new Set<string>([
   "vulnshopBuyTicketRouteLiveOracle",
   "vulnshopFlashSaleRaceLiveOracle",
   "vulnshopCartRouteLiveOracle",
+  "vulnshopApplyDiscountPaymentManipulationLiveOracle",
+  "vulnshopApplyDiscountRouteLiveOracle",
+  "vulnshopWalletAddFundsRaceLiveOracle",
+  "vulnshopWalletAddFundsRouteLiveOracle",
+  "vulnshopUpdatePriceManipulationLiveOracle",
+  "vulnshopUpdatePriceRouteLiveOracle",
+  "vulnshopPaymentProcessUnsafeApiLiveOracle",
+  "vulnshopPaymentProcessRouteLiveOracle",
+  "vulnshopProductsImportSsrfLiveOracle",
+  "vulnshopProductsImportSsrfRouteLiveOracle",
   "vulnshopHiddenAdminManagerLiveOracle",
   "vulnshopHiddenAdminManagerRouteLiveOracle",
   "vulnshopHiddenAdminAdministratorLiveOracle",
@@ -2764,6 +2791,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsJwtJkuRogueRouteLiveOracle",
   "brokencrystalsJwtX5uRogueLiveOracle",
   "brokencrystalsJwtX5uRogueRouteLiveOracle",
+  "brokencrystalsJwtJwkRogueLoginLiveOracle",
+  "brokencrystalsJwtJwkRogueLoginRouteLiveOracle",
   "brokencrystalsSimpleCsrfFlowLiveOracle",
   "brokencrystalsSimpleCsrfRouteLiveOracle",
   "brokencrystalsDomCsrfFlowLiveOracle",
@@ -2858,6 +2887,9 @@ const DEEP_RULES = new Set<string>([
   "vulnExposeCmdiRouteLiveOracle",
   "vulnExposeIdorProfileRouteLiveOracle",
   "vulnExposeBlindSqliApiLiveOracle",
+  "vulnExposeUsersApiLiveOracle",
+  "vulnExposeUsersApiRouteLiveOracle",
+  "vulnExposeCommentsApiRouteLiveOracle",
   "vulnExposeSqliBlindRouteLiveOracle",
   "vulnExposeXssCspBypassRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
@@ -3021,6 +3053,7 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevelXssRouteLiveOracle",
   "vulnforgeAcademyLevelSstiRouteLiveOracle",
   "vulnforgeAcademyLevelSsrfRouteLiveOracle",
+  "vulnforgeAcademyLevelFileUploadRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlRouteLiveOracle",
   "agentpwnAttackRouteLiveOracle",
@@ -6712,7 +6745,11 @@ function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
     "/network-tools",
     "/blog",
     "/invoices",
-    "/employee-portal"
+    "/employee-portal",
+    "/api/users",
+    "/api/comments",
+    "/api/search",
+    "/api/auth/login"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -7203,6 +7240,7 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
     "/api/info",
     "/api/process",
     "/api/v1/wallet/add-funds",
+    "/api/v1/checkout/apply-discount",
     "/template",
     "/track-order",
     "/support",
@@ -9038,6 +9076,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       /* ignore */
     }
   }
+  if (
+    /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(targetInput) &&
+    /\/api\//i.test(targetInput) &&
+    (home.status === 0 || home.body.length < 512 || !/VulnSite|"users"|"comments"/i.test(home.body))
+  ) {
+    try {
+      const routeDoc = await fetchDoc(targetInput, { timeoutMs: 20000, maxBytes: 8192 });
+      const veHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (veHome.status >= 200 && veHome.body.length > 512) {
+        home = { ...veHome, finalUrl: targetInput, url: targetInput };
+      } else if (routeDoc.status > 0 && /"success"\s*:\s*true/i.test(routeDoc.body)) {
+        home = { ...routeDoc, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
   if (stubRedirect && home.body.length < 4096) {
@@ -9136,6 +9194,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       /* ignore */
     }
   }
+  if (
+    /brokencrystals\.com/i.test(targetInput) &&
+    /\/api\/auth\/jwt\//i.test(targetInput) &&
+    (home.status === 404 ||
+      home.status === 0 ||
+      home.body.length < 512 ||
+      !/Broken Crystals|brokencrystals|assets\/index-/i.test(home.body))
+  ) {
+    try {
+      const bcHome = await fetchDoc(new URL("/", target.origin).toString(), {
+        timeoutMs: 20000,
+        maxBytes: 600_000
+      });
+      if (bcHome.status >= 200 && bcHome.body.length > home.body.length) {
+        home = { ...bcHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   // reachTarget may drift to http://www.* when a REST route returns 401 — pin canonical origin for Juice Shop API scans.
   if (
     /juice-shop|owasp-juice|\.juice\.shop$/i.test(effectiveTargetInput) &&
@@ -9199,7 +9277,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(origin) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count)\b/i.test(effectiveTargetInput)
+    /\/api\/(?:goto|products\/latest|testimonials\/count|auth\/jwt\/)\b/i.test(effectiveTargetInput)
   ) {
     await primeBrokencrystalsRouteOracleProbes(probe, origin, effectiveTargetInput);
   }
@@ -11099,6 +11177,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-users-api")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/comments\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-comments-api")
+      )
+        return -3;
+      if (
         /vulnerable-web-site\.vercel\.app/i.test(origin) &&
         /\/csrf\b/i.test(targetInput) &&
         p.slug.startsWith("vulnerable-web-site-csrf")
@@ -11168,6 +11258,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/ssti\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-ssti")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/cart\/update-price\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-update-price")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/payment\/process\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-payment-process")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/products\/import\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-products-import")
       )
         return -3;
       if (
@@ -11253,6 +11361,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:api\/)?chat\/init\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-chat-init")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(targetInput) &&
+        !/\/chat\/init\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-chat-prompt-injection")
       )
         return -3;
       if (
