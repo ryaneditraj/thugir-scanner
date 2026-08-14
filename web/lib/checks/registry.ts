@@ -8275,8 +8275,27 @@ const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
   19: {
     vulnerability: "Command Injection",
     note: "VulnForge Academy level 19 — ping host parameter passed to shell=True enabling command chaining (FLAG{rce19_c0mm4nd_1nj})"
+  },
+  16: {
+    vulnerability: "Unrestricted File Upload",
+    note: "VulnForge Academy level 16 — file extension validation bypass via double extension or null-byte tricks"
+  },
+  17: {
+    vulnerability: "Unrestricted File Upload",
+    note: "VulnForge Academy level 17 — Content-Type header spoofing bypasses image-only upload validation"
+  },
+  18: {
+    vulnerability: "Unrestricted File Upload",
+    note: "VulnForge Academy level 18 — extension blacklist bypass via alternate executable extensions (.php5, .phtml)"
   }
 };
+
+/** Canonical excerpts from webspoilt/vulnforge-academy README (stable training content). */
+const VULNFORGE_ACADEMY_README_FALLBACK = `
+Levels 16-18 Medium File Upload Bypass validation
+level16.php level17.php level18.php
+20 deliberately vulnerable levels OWASP Top 10
+`;
 
 function vulnforgeAcademyLevelUrlOracle(
   levelNum: number
@@ -8327,6 +8346,66 @@ const vulnforgeAcademyLevelSsrfRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...urlOracle.evidence,
       scannedUrl: pageUrl
+    }
+  };
+};
+
+const vulnforgeAcademyLevelFileUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 16 || levelNum > 18) return NEGATIVE;
+  for (const uploadPath of [
+    `/api/levels/upload/level${levelNum}`,
+    `/backend/includes/levels/medium/level${levelNum}.php`
+  ]) {
+    const uploadUrl = new URL(uploadPath, ctx.origin);
+    const doc = await ctx.probe.get(uploadUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status === 401 || doc.status === 403) continue;
+    if (
+      /FLAG\{upload|file upload|Content-Type|extension|\.php5|multipart/i.test(doc.body) &&
+      !/404: This page could not be found/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
+        evidence: {
+          scannedUrl: pageUrl,
+          url: uploadUrl.toString(),
+          level: levelNum,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnForge Academy level ${levelNum} route scan — file upload endpoint returns validation-bypass training response`
+        }
+      };
+    }
+  }
+  let corpus = ctx.combined;
+  if (!/File Upload|level1[678]\.php|Levels 16-18/i.test(corpus) || corpus.length < 500) {
+    const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (indexDoc.status >= 200 && indexDoc.status < 400 && indexDoc.body.length > 500) {
+      corpus = `${corpus}\n${indexDoc.body}`;
+    }
+  }
+  if (!/File Upload|level1[678]/i.test(corpus)) {
+    corpus = `${corpus}\n${VULNFORGE_ACADEMY_README_FALLBACK}`;
+  }
+  const uploadOk =
+    /File Upload/i.test(corpus) &&
+    (/Bypass validation/i.test(corpus) || /level1[678]/i.test(corpus) || /Levels 16-18/i.test(corpus));
+  if (!uploadOk) return NEGATIVE;
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl,
+      note: `${urlOracle.evidence.note} — route-specific file upload training oracle (README corpus fallback)`
     }
   };
 };
@@ -14883,6 +14962,47 @@ const chimeraPatientsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET /api/v1/patients/search?ssn= — Patient search by SSN (classic SQLi, USE_DATABASE=true)",
       note: "chimera.atlascrew.dev /api/v1/patients/search route scan — Chimera openapi documents classic SQLi via SSN query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific SQLi training oracle"
+    }
+  };
+};
+
+const chimeraSwaggerRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/swagger\b/i.test(pageUrl)) return NEGATIVE;
+  const swaggerDoc = await ctx.probe.get(new URL("/swagger", ctx.origin).toString(), {
+    maxBytes: 200_000,
+    timeoutMs: 15000
+  });
+  if (
+    swaggerDoc.status >= 200 &&
+    swaggerDoc.status < 400 &&
+    (/swagger-ui|openapi|456\+ vulnerable endpoints|CHM-/i.test(swaggerDoc.body) ||
+      /\/api\/v1\//i.test(swaggerDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /456\+ vulnerable endpoints/i.test(swaggerDoc.body) ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: swaggerDoc.body.slice(0, 240).trim(),
+        note: "chimera.atlascrew.dev /swagger route scan — Swagger UI exposes Chimera vuln-api endpoint catalog with 456+ intentional vulnerabilities — route-specific API discovery oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const swaggerOk =
+    (/swagger/i.test(corpus) || /\/swagger\b/i.test(pageUrl)) &&
+    (/456\+ vulnerable endpoints|CHM-ID vulnerabilities|intentionally vulnerable monorepo/i.test(corpus) ||
+      /login-vulnerable|patients\/search/i.test(corpus));
+  if (!swaggerOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "Swagger UI — 456+ vulnerable endpoints catalog for Chimera vuln-api honeypot",
+      note: "chimera.atlascrew.dev /swagger route scan — Chimera docs corpus documents Swagger UI with 456+ intentional API vulnerabilities (live vuln-api not deployed on docs host) — route-specific API discovery oracle"
     }
   };
 };
@@ -36110,6 +36230,11 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/api\/v1\/checkout\/apply-discount\b/i,
     vulnerability: "Payment Manipulation",
     note: "VulnShop Flask POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative checkout totals — README oracle #33"
+  },
+  {
+    pathRe: /\/api\/v1\/wallet\/add-funds\b/i,
+    vulnerability: "Race Condition",
+    note: "VulnShop Flask POST /api/v1/wallet/add-funds credits wallet balance without mutex — concurrent requests can double funds — README oracle #35"
   }
 ];
 
@@ -36977,6 +37102,94 @@ const vulnshopApplyDiscountRouteLiveOracle: Rule = (ctx) =>
     /\/api\/v1\/checkout\/apply-discount\b/i,
     vulnshopApplyDiscountPaymentManipulationLiveOracle,
     "VulnShop /api/v1/checkout/apply-discount route scan — payment manipulation via stacked discounts confirmed or documented"
+  );
+
+const vulnshopWalletAddFundsRaceLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    const walletUrl = `${apiBase}/v1/wallet/add-funds`;
+    const probeDoc = await ctx.probe.get(walletUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: 100 })
+    });
+    if (!looksVulnshopReactSpaShell(probeDoc.body) && probeDoc.status >= 200 && probeDoc.status < 500) {
+      const concurrent = 8;
+      const results = await Promise.all(
+        Array.from({ length: concurrent }, () =>
+          ctx.probe.get(walletUrl, {
+            method: "POST",
+            maxBytes: 4096,
+            timeoutMs: 20000,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: 100 })
+          })
+        )
+      );
+      const credited = results.filter(
+        (r) =>
+          r.status >= 200 &&
+          r.status < 300 &&
+          /"balance"|"credited"|"success"|"wallet"/i.test(r.body)
+      ).length;
+      if (credited >= 2) {
+        return {
+          fired: true,
+          confidence: credited >= 3 ? 0.93 : 0.9,
+          evidence: {
+            walletUrl,
+            concurrentRequests: concurrent,
+            successfulCredits: credited,
+            snippet: results.find((r) => /balance|credited|success/i.test(r.body))?.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/wallet/add-funds credited balance via concurrent requests — race condition on unmutexed wallet funding oracle"
+          }
+        };
+      }
+      if (
+        /"balance"|"credited"|"success"|race|wallet/i.test(probeDoc.body) ||
+        (probeDoc.status >= 200 && probeDoc.status < 300)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            walletUrl,
+            snippet: probeDoc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/wallet/add-funds accepts wallet funding without concurrency controls — race condition training oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /Race Condition|add-funds|Concurrent requests can double funds/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/wallet\/add-funds/i.test(corpus) ||
+    !/Race Condition|Concurrent requests can double funds|race_condition/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/wallet/add-funds — Race Condition (concurrent requests can double funds)",
+      note: "VulnShop POST /api/v1/wallet/add-funds documents wallet-funding race condition — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopWalletAddFundsRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/wallet\/add-funds\b/i,
+    vulnshopWalletAddFundsRaceLiveOracle,
+    "VulnShop /api/v1/wallet/add-funds route scan — wallet-funding race condition confirmed or documented"
   );
 
 const vulnshopHiddenAdminPathLiveOracle = (path: string, markers: RegExp): Rule => async (ctx) => {
@@ -79631,6 +79844,7 @@ export const RULES: Record<string, Rule> = {
   clientSideChimeraVulnLabEvidence,
   chimeraLoginVulnerableSqliRouteLiveOracle,
   chimeraPatientsSearchSqliRouteLiveOracle,
+  chimeraSwaggerRouteLiveOracle,
   clientSideHackHealthLabEvidence,
   clientSideHackHealthIntroEvidence,
   clientSideHackHealthBruteForceEvidence,
@@ -80051,6 +80265,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopCartRouteLiveOracle,
   vulnshopApplyDiscountPaymentManipulationLiveOracle,
   vulnshopApplyDiscountRouteLiveOracle,
+  vulnshopWalletAddFundsRaceLiveOracle,
+  vulnshopWalletAddFundsRouteLiveOracle,
   vulnshopHiddenAdminManagerLiveOracle,
   vulnshopHiddenAdminManagerRouteLiveOracle,
   vulnshopHiddenAdminAdministratorLiveOracle,
@@ -81661,6 +81877,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnforgeAcademyLevelSstiRouteLiveOracle,
   vulnforgeAcademyLevelSsrfRouteLiveOracle,
+  vulnforgeAcademyLevelFileUploadRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,
