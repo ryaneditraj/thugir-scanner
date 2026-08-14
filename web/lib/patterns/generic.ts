@@ -39075,6 +39075,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-api4-user-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "vAPI API4 user route exposure live oracle",
+    description:
+      "When scanning /api4/user, GET with the OTP-leaked Authorization-Token returns every user record including flag data in lastname — route-specific API4 excessive data exposure oracle.",
+    impactOneline:
+      "Route scans on the API4 user hub should confirm OTP-bypassed bulk user export on the /user endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiApi4UserRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — scope API keys and filter user list responses in production.",
+      steps: [
+        "Bind API keys to least-privilege scopes instead of full user export.",
+        "Return only the authenticated user's profile from /user routes.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /api4/user route scan confirms OTP-leaked key dumps every user profile. Show API key scoping and response filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api5-bfla-live-oracle",
     platform: "generic",
     category: "Broken access control",

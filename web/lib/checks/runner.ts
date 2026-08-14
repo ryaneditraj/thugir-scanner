@@ -2235,6 +2235,7 @@ const DEEP_RULES = new Set<string>([
   "vapiApi4OtpBrokenAuthLiveOracle",
   "vapiApi4OtpRouteLiveOracle",
   "vapiApi4UserExposureLiveOracle",
+  "vapiApi4UserRouteLiveOracle",
   "vapiApi5BflaLiveOracle",
   "vapiApi5RouteLiveOracle",
   "vapiApi1BolaLiveOracle",

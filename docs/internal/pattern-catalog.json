@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T00:48:05.564Z",
-  "total": 2296,
-  "uniqueSlugs": 2292,
+  "generatedAt": "2026-08-14T01:29:11.965Z",
+  "total": 2297,
+  "uniqueSlugs": 2293,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2278,
+    "generic": 2279,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2211,
+    "deep": 2212,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 461,
+    "Broken access control": 462,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1988,6 +1988,7 @@
     "vapi-api4-otp-broken-auth-live-oracle",
     "vapi-api4-otp-route-live-oracle",
     "vapi-api4-user-exposure-live-oracle",
+    "vapi-api4-user-route-live-oracle",
     "vapi-api5-bfla-live-oracle",
     "vapi-api5-route-live-oracle",
     "vapi-api6-mass-assignment-live-oracle",
