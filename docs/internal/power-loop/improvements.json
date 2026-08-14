@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api4-user-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api4/user with OTP-leaked Authorization-Token returns flag{api4_*} in lastname — vapiApi4UserRouteLiveOracle fires on /api4/user route scans; benchmark juice-shop.herokuapp.com 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-jwt-weak-token-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /jwt/user register + forged admin JWT (alg:none/HS256 weak key) returns flag{jwt_*} — vapiJwtRouteLiveOracle fires on http://vapi.apisec.ai/vapi/jwt/user deep scan (+vapi-jwt-weak-token-route-live-oracle); benchmark 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-serversurfer-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /serversurfer?url=http://example.com/ returns base64 Example Domain HTML after blocking 127.0.0.1 — vapiServerSurferRouteLiveOracle fires on http://vapi.apisec.ai/vapi/serversurfer; benchmark 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
       "slug": "vapi-queue-drain-api9-api1",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: power-scan queue drain — vapi.apisec.ai/vapi/api9/user 15 findings (+vapi-api9-route-live-oracle +vapi-api9-improper-inventory-live-oracle); vapi.apisec.ai/vapi/api1/user/1 14 findings (+vapi-api1-route-live-oracle); benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
