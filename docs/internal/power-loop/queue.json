@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T12:22:00.000Z",
+  "updated_at": "2026-08-14T13:15:00.000Z",
   "discovery_urls": [
     {
       "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
@@ -11838,6 +11838,31 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1616",
       "source": "web-security-learning-labs Vercel — module 1616 security lab route (WSL catalog expansion)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://zero-health.vercel.app/login",
+      "source": "aligorithm/Zero-Health — SQLi auth-bypass oracle POST /api/auth/login (challenges.md Challenge 2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/reset-password?code=test&email=patient@test.com",
+      "source": "aligorithm/Zero-Health — reflected XSS via dangerouslySetInnerHTML reset code param (challenges.md Challenge 1)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/search",
+      "source": "aligorithm/Zero-Health — reflected XSS searchSummary oracle GET /api/search (challenges.md Challenge 4)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1617",
+      "source": "web-security-learning-labs Vercel — module 1617 security lab route (WSL catalog expansion past 1616)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1618",
+      "source": "web-security-learning-labs Vercel — module 1618 security lab route (WSL catalog expansion past 1617)",
       "auth": "oss_deploy"
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T12:22:00.000Z",
+  "updated_at": "2026-08-14T13:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3032,
-  "total_findings": 33203,
+  "total_sites_scanned": 3039,
+  "total_findings": 33317,
   "critical_findings": 107,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2108,
-  "discovery_findings": 26063,
+  "discovery_urls_added": 2113,
+  "discovery_findings": 26130,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-14T12:22:00.000Z",
+  "last_run": "2026-08-14T13:16:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -53,34 +53,33 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 198,
-      "focus": "brokencrystals JWT x5u/jwk/admin login oracles + seclab sqli/csrf labs from swagger/README",
+      "urls_scanned": 6,
+      "findings": 67,
+      "focus": "zero-health healthcare lab (login/XSS/search) + WSL modules 1617/1618 queued; queue drain hit vulnshop routes + seclab SSRF",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "brokencrystals.com/api/auth/jwt/x5u/login: 85 findings — full JWT bundle incl brokencrystals-jwt-x5u-rogue-route-live-oracle",
-      "brokencrystals.com/api/auth/admin/login: 83 findings — brokencrystals-admin-login-bfla-route-live-oracle + JWT oracle bundle",
-      "brokencrystals.com/api/auth/jwt/jwk/login: 20-finding thin pass — sqli-header reflexion only, no route-specific jwk-rogue live oracle",
-      "seclab.vercel.app/api/sqli-vulnerable: 5 findings — seclab-sqli-vulnerable-route-live-oracle",
-      "seclab.vercel.app/api/csrf-vulnerable: 5 findings — seclab-csrf-vulnerable-route-live-oracle"
+      "vulnshop.vercel.app/support: 13 findings — vulnshop hub with template/track-order/search siblings at 12-13",
+      "seclab.vercel.app/api/ssrf-vulnerable: 5 findings — seclab-ssrf-vulnerable-route-live-oracle",
+      "damn-vulnerable-startup.fly.dev/challenges/*: unreachable (DNS/offline) — 2 queue errors",
+      "zero-health.vercel.app/*: 5 new discovery URLs queued (login SQLi, reset-password XSS, search XSS, WSL 1617/1618) — pending queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/auth/jwt/jwk/login: route-specific jwk-rogue JWT oracle absent on thin pass (20 findings vs 85 on x5u sibling endpoint)",
       "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)",
-      "vulnforge-academy level17/18: file-upload oracle fires via README fallback but live backend paths return 403"
+      "zero-health.vercel.app API routes return 404 on Vercel deploy — frontend-only; login/XSS oracles need page-level probes",
+      "vulnshop.vercel.app/template|track-order|run-diagnostic: 12-finding hubs without route-specific live oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "brokencrystals.com/api/auth/jwt/x5u/login": 85,
-    "brokencrystals.com/api/auth/admin/login": 83,
-    "brokencrystals.com/api/auth/jwt/jwk/login": 20,
-    "seclab.vercel.app/api/sqli-vulnerable": 5,
-    "seclab.vercel.app/api/csrf-vulnerable": 5,
-    "vulnshop.vercel.app/api/v1/cart/update-price": 12
+    "vulnshop.vercel.app/support": 13,
+    "vulnshop.vercel.app/search": 13,
+    "vulnshop.vercel.app/template": 12,
+    "vulnshop.vercel.app/track-order": 12,
+    "vulnshop.vercel.app/run-diagnostic": 12,
+    "seclab.vercel.app/api/ssrf-vulnerable": 5
   }
 }
