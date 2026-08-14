@@ -2683,6 +2683,7 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityInsecurePasswordsRouteLiveOracle",
   "aiSecurityAiPhishingRouteLiveOracle",
   "aiSecurityRateLimitingBruteforceLiveOracle",
+  "aiSecurityLoginRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
   "juiceShopForgottenBackupRouteLiveOracle",
   "juiceShopProductsSearchSqliRouteLiveOracle",
@@ -10862,6 +10863,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           p.slug === "ai-security-rate-limiting-route-live-oracle")
       )
         return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        (p.slug === "ai-security-rate-limiting-bruteforce-live-oracle" ||
+          p.slug === "ai-security-login-route-live-oracle")
+      )
+        return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
@@ -11315,7 +11323,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-3])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-3])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;
@@ -11428,6 +11436,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/render\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-render") || p.slug === "ssti-template-injection")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/x5c\/validate\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-x5c")
       )
         return -3;
       if (
