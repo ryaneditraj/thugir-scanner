@@ -2706,6 +2706,9 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnCollegeEvidence",
   "clientSideReactDomXssLabEvidence",
   "clientSideOwaspGenaiLabEvidence",
+  "owaspGenaiPromptInjectionRouteLiveOracle",
+  "owaspGenaiSensitiveInfoRouteLiveOracle",
+  "owaspGenaiSupplyChainRouteLiveOracle",
   "clientSideCtfDefiEvidence",
   "clientSideAtlasCrewHubEvidence",
   "clientSideAtlasCrewInfernoLabEvidence",
@@ -9767,6 +9770,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ? [
         new URL("/pages/create", home.finalUrl).toString(),
         new URL("/pages/request", home.finalUrl).toString(),
+        new URL("/pages/read", home.finalUrl).toString(),
         new URL("/pages/execute", home.finalUrl).toString()
       ]
     : [];
@@ -10566,6 +10570,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       .join("\n");
   }
 
+  let owaspGenaiBootstrap = "";
+  if (/owaspbased-lessons\.vercel\.app/i.test(origin) && /\/lesson\//i.test(targetInput)) {
+    const session = await ensureOwaspGenaiLabSession(origin, probe, owaspGenaiSessionRef);
+    if (session) {
+      const lessonMatch = targetInput.match(/\/lesson\/([^/?#]+)/i);
+      const rawSlug = lessonMatch?.[1]?.toLowerCase() ?? "";
+      const canonicalSlug = rawSlug === "info-disclosure" ? "sensitive-info" : rawSlug;
+      if (canonicalSlug) {
+        const lessonDoc = await probe.get(new URL(`/lesson/${canonicalSlug}`, origin).toString(), {
+          maxBytes: 200_000,
+          timeoutMs: 15000,
+          headers: { Cookie: session }
+        });
+        if (lessonDoc.status >= 200 && lessonDoc.status < 400 && lessonDoc.body.length > 500) {
+          owaspGenaiBootstrap = lessonDoc.body;
+        }
+      }
+    }
+  }
+
   const combined = [
     ...pages.map((p) => p.body),
     ...scripts.map((s) => s.body),
@@ -10574,7 +10598,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     juicesecBootstrap,
     pwnshopBootstrap,
     webSecurityLearningLabsBootstrap,
-    vaultappBootstrap
+    vaultappBootstrap,
+    owaspGenaiBootstrap
   ]
     .filter(Boolean)
     .join("\n");
@@ -10897,6 +10922,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
+      if (
+        /owaspbased-lessons\.vercel\.app/i.test(origin) &&
+        /\/lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain)\b/i.test(targetInput) &&
+        p.slug.startsWith("owasp-genai-")
+      )
+        return -3;
+      if (/owaspbased-lessons\.vercel\.app/i.test(origin) && p.slug.startsWith("owasp-genai-")) return -2;
+      if (
+        /koadt\.github\.io/i.test(origin) &&
+        /\/posts\/next-public-env-(?:variable-)?leak/i.test(targetInput) &&
+        p.slug === "oopssec-next-public-env-route-live-oracle"
+      )
+        return -3;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
