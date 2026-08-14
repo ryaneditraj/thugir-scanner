@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T09:23:05.017Z",
-  "total": 2314,
-  "uniqueSlugs": 2310,
+  "generatedAt": "2026-08-14T10:12:41.929Z",
+  "total": 2318,
+  "uniqueSlugs": 2314,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2296,
+    "generic": 2300,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2229,
+    "deep": 2233,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 466,
+    "Broken access control": 468,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 112,
     "Security misconfiguration": 163,
     "Broken authentication": 138,
-    "Injection": 342,
+    "Injection": 344,
     "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
@@ -303,6 +303,8 @@
     "bypass403-secure-bearer-invalid-token-route-live-oracle",
     "bypass403-waf-live-oracle",
     "bypass403-waf-route-live-oracle",
+    "chimera-login-vulnerable-sqli-route-live-oracle",
+    "chimera-patients-search-sqli-route-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
@@ -2153,6 +2155,8 @@
     "vulnshop-admin-panel-route-live-oracle",
     "vulnshop-api-info-component-disclosure-route-live-oracle",
     "vulnshop-api-process-deserialization-route-live-oracle",
+    "vulnshop-apply-discount-payment-manipulation-live-oracle",
+    "vulnshop-apply-discount-route-live-oracle",
     "vulnshop-buy-ticket-race-live-oracle",
     "vulnshop-buy-ticket-route-live-oracle",
     "vulnshop-cart-route-live-oracle",
