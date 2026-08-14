@@ -14770,6 +14770,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-swagger-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera Swagger UI vulnerability catalog route live oracle",
+    description:
+      "When scanning /swagger on chimera.atlascrew.dev, Swagger UI exposes the Chimera vuln-api catalog with 456+ intentional API vulnerabilities — route-specific API discovery oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /swagger documents an unauthenticated vulnerability inventory for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSwaggerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Swagger UI and vulnerability inventories to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing OpenAPI/Swagger documentation.",
+        "Do not publish CHM-ID vulnerability registries on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /swagger route exposes 456+ intentional API vulnerabilities. Show how to restrict API documentation to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hack-health-lab-evidence",
     platform: "generic",
     category: "Injection",
@@ -23946,6 +23972,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnShop /api/v1/checkout/apply-discount route documents payment manipulation. Show route-specific discount validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-wallet-add-funds-race-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop wallet add-funds race condition live oracle",
+    description:
+      "POST /api/v1/wallet/add-funds credits wallet balance without mutex — concurrent requests can double funds — the VulnShop race-condition wallet funding oracle (README #35).",
+    impactOneline:
+      "Attackers can race concurrent wallet-funding requests to multiply credited balance on VulnShop training deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopWalletAddFundsRaceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialize wallet balance updates with database transactions or distributed locks.",
+      steps: [
+        "Use atomic balance increments with row-level locking.",
+        "Reject duplicate in-flight funding requests per session.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/wallet/add-funds has a race condition on wallet funding. Show atomic balance update remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-wallet-add-funds-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/wallet/add-funds race condition route live oracle",
+    description:
+      "When scanning /api/v1/wallet/add-funds, live Railway backend probe or README oracle #35 documents wallet-funding race condition on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/wallet/add-funds documents concurrent wallet-funding race conditions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopWalletAddFundsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialize wallet balance updates on /api/v1/wallet/add-funds.",
+      steps: [
+        "Use atomic balance increments with row-level locking.",
+        "Reject duplicate in-flight funding requests per session.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/wallet/add-funds route documents wallet-funding race conditions. Show route-specific locking remediation.",
     version: 1,
     enabled: true
   },
@@ -42910,6 +42988,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level routes are SSTI-vulnerable via reflexion probes. Show safe template engine configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 16–18 file upload route live oracle",
+    description:
+      "When scanning level16–18.php routes, VulnForge Academy documents file upload validation bypass techniques (extension, Content-Type, blacklist bypass) — route-specific file upload training oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy medium-tier levels 16–18 expose intentional unrestricted file upload validation bypass patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate file uploads with allowlists and content inspection in production apps.",
+      steps: [
+        "Allowlist permitted extensions and verify file magic bytes server-side.",
+        "Store uploads outside the web root and serve via authenticated download endpoints.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 16–18 routes document file upload bypass techniques. Show secure upload validation remediation.",
     version: 1,
     enabled: true
   },
