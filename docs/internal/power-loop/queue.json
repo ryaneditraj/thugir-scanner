@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-injection",
+      "source": "OWASP GenAI Security Lab Vercel — LLM prompt injection lesson route (Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/info-disclosure",
+      "source": "OWASP GenAI Security Lab Vercel — LLM info disclosure lesson route (Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/supply-chain",
+      "source": "OWASP GenAI Security Lab Vercel — LLM supply-chain lesson route (Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/data-poisoning",
+      "source": "OWASP GenAI Security Lab Vercel — LLM data-poisoning lesson route (Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.aevum.build/v1/consent/review",
+      "source": "Aevum consent-ledger demo — unauthenticated POST /v1/consent/review sigchain API (demo.aevum.build)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://zen-demo-java.fly.dev/pages/create",
       "source": "Aikido Zen WAF demo (HN Jan 2025) — SQL injection pet-creation lab /pages/create",
       "auth": "public_demo"
