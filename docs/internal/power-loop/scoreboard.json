@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T20:35:00.000Z",
+  "updated_at": "2026-08-14T20:44:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2726,
-  "total_findings": 26525,
+  "total_sites_scanned": 2731,
+  "total_findings": 26545,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22504,
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22524,
   "improvements_shipped": 1165,
-  "last_run": "2026-08-14T20:35:00.000Z",
+  "last_run": "2026-08-14T20:44:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
@@ -48,38 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses (shared with concurrent 20 UTC run)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 4,
-      "findings": 18,
-      "focus": "OWASP GenAI lesson route oracles (prompt-injection, sensitive-info/info-disclosure alias, supply-chain) + OopsSec next-public-env-leak slug alias",
-      "improvements_shipped_this_run": 4
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 20,
+      "focus": "SQLi CTF + OWASP GenAI output-handling/prompt-leakage + WSL modules 1631-1632",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "owaspbased-lessons.vercel.app/lesson/prompt-injection: +owasp-genai-prompt-injection-route-live-oracle (LLM01 session fetch)",
-      "owaspbased-lessons.vercel.app/lesson/info-disclosure: +owasp-genai-sensitive-info-route-live-oracle via sensitive-info canonical alias",
-      "owaspbased-lessons.vercel.app/lesson/supply-chain: 4→5 findings — owasp-genai-supply-chain-route-live-oracle (LLM03)",
-      "koadt.github.io/oss-oopssec-store/posts/next-public-env-leak/: 4→5 findings — oopssec-next-public-env-route-live-oracle via variable-leak canonical fetch"
+      "sql-injection-challenge.vercel.app: 1 finding only (missing-security-headers) — no SQLi login oracle despite Flask CTF README",
+      "owaspbased-lessons.vercel.app/lesson/output-handling: 1 finding — route-specific output-handling oracle still absent post-LLM01/03 ship",
+      "owaspbased-lessons.vercel.app/lesson/prompt-leakage: 4 findings — route-specific prompt-leakage oracle still absent (client-side bundle + dir-discovery only)",
+      "web-security-learning-labs.vercel.app/module/1631: 6 findings (module-route-evidence placeholder)",
+      "web-security-learning-labs.vercel.app/module/1632: 8 findings (module-route-evidence placeholder)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "sql-injection-challenge.vercel.app: route-specific SQLi login oracle absent (1-finding header-only pass on known CTF)",
+      "owaspbased-lessons.vercel.app/lesson/output-handling: route-specific LLM02 oracle still absent",
       "owaspbased-lessons.vercel.app/lesson/data-poisoning: route-specific LLM04 oracle still absent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS oracle requires OTP-authenticated session"
+      "WSL module/1631-1632: placeholder pages, module-route-evidence only",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "web-security-learning-labs.vercel.app/module/1632": 8,
+    "web-security-learning-labs.vercel.app/module/1631": 6,
+    "owaspbased-lessons.vercel.app/lesson/prompt-leakage": 4,
     "owaspbased-lessons.vercel.app/lesson/prompt-injection": 4,
-    "owaspbased-lessons.vercel.app/lesson/supply-chain": 5,
-    "koadt.github.io/oss-oopssec-store/posts/next-public-env-leak": 5,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "sql-injection-challenge.vercel.app": 1,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
