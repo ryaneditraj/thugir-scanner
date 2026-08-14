@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sql-injection-challenge.vercel.app",
+      "slug": "sql-injection-challenge-login-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Jupiterian/SQL-Injection-Challenge main.py — POST /login username=Admin123GOATee password='||'qL'||char(35)||'7vP!3tY^8mB@2fW$6zR'||' bypasses # blacklist via SQLite concat → Login Success + /flags session (HTTP curl verified); sql-injection-challenge.vercel.app findings 1→2+ with live oracle when Vercel checkpoint absent; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-data-poisoning-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard + GET /lesson/data-poisoning confirms LLM04: Data and Model Poisoning with backdoor-trigger markers (HTTP verified pre-checkpoint); added to DEEP_RULES; Vercel checkpoint blocked live fire in cloud agent this run; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-misinformation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard + GET /lesson/misinformation confirms LLM09: Misinformation & Hallucination with package-hallucination markers (HTTP verified pre-checkpoint); added to DEEP_RULES; Vercel checkpoint blocked live fire in cloud agent this run; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:owaspbased-lessons.vercel.app",
       "slug": "owasp-genai-system-prompt-leakage-route-live-oracle",
       "status": "shipped",
