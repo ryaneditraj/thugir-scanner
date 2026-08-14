@@ -3192,6 +3192,12 @@ const DEEP_RULES = new Set<string>([
   "clientSideAikidoZenDemoEvidence",
   "zenDemoExecuteShellInjectionLiveOracle",
   "zenDemoExecuteRouteLiveOracle",
+  "zenDemoCreateSqliLiveOracle",
+  "zenDemoCreateRouteLiveOracle",
+  "zenDemoRequestSsrfLiveOracle",
+  "zenDemoRequestRouteLiveOracle",
+  "zenDemoReadPathTraversalLiveOracle",
+  "zenDemoReadRouteLiveOracle",
   "codeBreakingPuzzleRouteLiveOracle",
   "clientSideAevumAgentConsentDemoEvidence",
   "aevumConsentReviewUnauthLiveOracle",
@@ -10827,6 +10833,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(origin) &&
+        /\/pages\/create\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-java-create")
+      )
+        return -3;
+      if (
+        /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(origin) &&
+        /\/pages\/request\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-java-request")
+      )
+        return -3;
+      if (
+        /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(origin) &&
+        /\/pages\/read\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-java-read")
+      )
+        return -3;
+      if (
         /code-breaking\.fly\.dev/i.test(origin) &&
         /\/puzzle\/\d+/i.test(targetInput) &&
         p.slug.startsWith("code-breaking-puzzle")
@@ -11660,6 +11684,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /secure-bank-bay\.vercel\.app/i.test(origin) &&
         /\/api\/users(?:\/\d+)?\b/i.test(targetInput) &&
         p.slug.startsWith("secure-bank-bay-api-users")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-users")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/comments\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-") &&
+        /comments/.test(p.slug)
       )
         return -3;
       if (
