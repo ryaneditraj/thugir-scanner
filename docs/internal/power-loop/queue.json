@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
+      "source": "NeuraLegion/brokencrystals — JWT x5c certificate-chain bypass oracle POST /api/auth/jwt/x5c/validate (swagger + issue #688)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/spawn",
+      "source": "NeuraLegion/brokencrystals — OS command injection oracle GET /api/spawn?command= (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/render",
+      "source": "NeuraLegion/brokencrystals — SSTI doT template oracle POST /api/render (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/process_numbers",
+      "source": "NeuraLegion/brokencrystals — expression injection oracle POST /api/process_numbers processing_expression (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/xss-vulnerable",
+      "source": "DaniSam-STU/security-lab — innerHTML XSS oracle GET /api/xss-vulnerable (seclab.vercel.app README CWE-79)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
       "source": "NeuraLegion/brokencrystals — JWT X5U rogue-certificate bypass oracle POST /api/auth/jwt/x5u/login (swagger)",
       "auth": "public_demo"
