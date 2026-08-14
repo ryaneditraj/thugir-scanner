@@ -23716,6 +23716,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-debug-api-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "VulnShop /api/v1/debug route live oracle",
+    description:
+      "When scanning /api/v1/debug, live backend probe or README oracle #30 documents unauthenticated secrets and environment exposure on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/debug documents API misconfiguration leaking secrets and environment variables.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopDebugApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate /api/v1/debug before deploying any API backend.",
+      steps: [
+        "Delete debug routes from production and staging backends.",
+        "Rotate secrets if debug endpoints were publicly reachable.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/debug route documents secrets/environment exposure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-jwt-forge-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -24128,6 +24154,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnShop /api/v1/payment/process route documents unsafe payment API consumption. Show route-specific validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-orders-modify-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "VulnShop order status manipulation live oracle",
+    description:
+      "POST /api/v1/orders/modify on the VulnShop Railway backend accepts order status changes for shipped orders without authorization checks — README oracle #36.",
+    impactOneline:
+      "Attackers can modify shipped order status via unauthenticated or over-privileged business-logic endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopOrdersModifyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce order ownership and immutable status transitions server-side.",
+      steps: [
+        "Verify the caller owns the order before any status change.",
+        "Block status downgrades or changes on shipped/delivered orders.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/orders/modify lets callers change shipped order status. Show business-logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-orders-modify-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/orders/modify route live oracle",
+    description:
+      "When scanning /api/v1/orders/modify, live Railway backend probe or README oracle #36 documents shipped-order status manipulation on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/orders/modify documents order status manipulation without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopOrdersModifyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce order ownership and immutable status transitions on /api/v1/orders/modify.",
+      steps: [
+        "Verify the caller owns the order before any status change.",
+        "Block status changes on shipped/delivered orders.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/orders/modify route documents shipped-order status manipulation. Show route-specific remediation.",
     version: 1,
     enabled: true
   },

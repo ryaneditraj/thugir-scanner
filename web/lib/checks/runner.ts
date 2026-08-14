@@ -2589,6 +2589,7 @@ const DEEP_RULES = new Set<string>([
   "dvragAdminConfigLiveOracle",
   "dvragRagPipelineLiveOracle",
   "vulnshopDebugApiLiveOracle",
+  "vulnshopDebugApiRouteLiveOracle",
   "vulnshopJwtForgeLiveOracle",
   "vulnshopLoginJwtRouteLiveOracle",
   "vulnshopProductsSqliLiveOracle",
@@ -2640,6 +2641,8 @@ const DEEP_RULES = new Set<string>([
   "vulnshopXmlImportXxeRouteLiveOracle",
   "vulnshopUploadReviewFileUploadLiveOracle",
   "vulnshopUploadReviewFileUploadRouteLiveOracle",
+  "vulnshopOrdersModifyLiveOracle",
+  "vulnshopOrdersModifyRouteLiveOracle",
   "clientSideVulnlabAuditApiEvidence",
   "clientSideVulnlabHandsOnLabEvidence",
   "clientSideVibeEvalEvidence",
@@ -11288,6 +11291,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/upload-review\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-upload-review")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/debug\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-debug")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/orders\/modify\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-orders-modify")
       )
         return -3;
       if (
