@@ -2428,6 +2428,8 @@ const DEEP_RULES = new Set<string>([
   "istEduOpenRedirectRouteLiveOracle",
   "dvwuSsrfRedirectLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
+  "dvwuOpenRedirectRouteLiveOracle",
+  "dvwuBrokenAuthRouteLiveOracle",
   "dvwuGraphqlLabRouteLiveOracle",
   "dvwuRaceConditionLabRouteLiveOracle",
   "dvwuJwtLabRouteLiveOracle",

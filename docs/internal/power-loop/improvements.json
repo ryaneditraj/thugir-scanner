@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=//https:///google.com/%2e%2e returns HTTP 302 Location //https:///google.com/.. while metadata blocked; dvwu.vercel.app/labs/open-redirect findings 11→12 (+dvwu-open-redirect-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-broken-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal {\"username\":\"20050@ist.edu.bd\",\"password\":\"password123\"} returns Welcome, RAKIB MD OSMAN FARUQUE; dvwu.vercel.app/labs/broken-auth findings 11→12 (+dvwu-broken-auth-route-live-oracle); benchmark 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-api-users-bundle-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route-only /api/users/1 scan lacked SPA corpus — secureBankBayApiUsersRouteLiveOracle now fetches /assets/index-*.js bundle; secure-bank-bay.vercel.app/api/users/1 findings 8→9 (+secure-bank-bay-api-users-route-live-oracle); benchmark 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-jwt-vulnerable-route-live-oracle",
       "status": "shipped",
@@ -10026,6 +10044,21 @@
       "source": "discovery:vulnerable-web-site.vercel.app",
       "slug": "vulnerable-web-site-sqli-path-command-route-oracles",
       "shipped_at": "2026-08-13T22:32:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-open-redirect-route-live-oracle",
+      "shipped_at": "2026-08-14T04:25:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-broken-auth-route-live-oracle",
+      "shipped_at": "2026-08-14T04:25:00.000Z"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-api-users-bundle-fallback",
+      "shipped_at": "2026-08-14T04:25:00.000Z"
     }
   ]
 }
