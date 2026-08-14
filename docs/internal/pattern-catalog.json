@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T08:35:12.194Z",
-  "total": 2311,
-  "uniqueSlugs": 2307,
+  "generatedAt": "2026-08-14T09:23:05.017Z",
+  "total": 2314,
+  "uniqueSlugs": 2310,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2293,
+    "generic": 2296,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2226,
+    "deep": 2229,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 465,
+    "Broken access control": 466,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,8 +27,8 @@
     "Information disclosure": 112,
     "Security misconfiguration": 163,
     "Broken authentication": 138,
-    "Injection": 341,
-    "Cross-site scripting": 685,
+    "Injection": 342,
+    "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
     "SSRF": 14,
@@ -1843,6 +1843,9 @@
     "secure-bank-bay-stored-xss-messages-route-live-oracle",
     "secure-bank-bay-transactions-csrf-route-live-oracle",
     "secure-bank-bay-transfer-csrf-route-live-oracle",
+    "securebank-blog-admin-rbac-route-live-oracle",
+    "securebank-blog-login-sqli-route-live-oracle",
+    "securebank-blog-messages-xss-route-live-oracle",
     "security-question-disclosure",
     "sensitive-api-password-leakage",
     "sensitive-api-token-leakage",
