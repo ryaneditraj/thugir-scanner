@@ -35304,6 +35304,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-jwk-rogue-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals JWT JWK rogue-key login live oracle",
+    description:
+      "POST /api/auth/jwt/jwk/login issues JWT tokens; companion GET /api/auth/jwt/jwk/validate accepts JWTs with empty jwk headers signed by attacker keys — the Broken Crystals JWK rogue-key login chain oracle.",
+    impactOneline:
+      "Trusting empty or attacker-supplied JWK objects in JWT headers lets attackers forge valid tokens and bypass authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJwkRogueLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWTs with empty or untrusted jwk headers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require jwk.kty and validate keys against a pinned trust store.",
+        "Never skip signature verification when jwk.kty is missing.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jwk/login and /validate endpoints accept rogue empty-jwk JWTs. Show secure JWK validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-jwk-rogue-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/jwk/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/jwk/login, POST login issues JWT and empty-jwk rogue header bypasses JWK validation on companion /validate — route-specific JWK injection confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals JWK login flow is vulnerable to rogue-key JWT forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtJwkRogueLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWTs with empty or untrusted jwk headers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require jwk.kty and validate keys against a pinned trust store.",
+        "Never skip signature verification when jwk.kty is missing.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/jwk/login route scan confirms empty-jwk rogue JWT bypass. Show secure JWK validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-hidden-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
