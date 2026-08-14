@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T00:20:00.000Z",
+  "updated_at": "2026-08-14T01:26:00.000Z",
   "discovery_urls": [
     {
       "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
@@ -11539,6 +11539,31 @@
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-15",
       "source": "OWASP WrongSecrets — challenge-15 secret exposure lab (public Heroku demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://metrobooks.vercel.app/api/users",
+      "source": "valentin-panov/ASTrain — unauthenticated users API oracle GET /api/users (GitHub README auth failures)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://metrobooks.vercel.app/api/inventory",
+      "source": "valentin-panov/ASTrain — inventory API authorization failure GET /api/inventory (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://metrobooks.vercel.app/api/dashboard-data",
+      "source": "valentin-panov/ASTrain — dashboard-data API auth bypass GET /api/dashboard-data (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/v3/check-otp",
+      "source": "APIsec crAPI v2 — OTP brute-force oracle POST /identity/api/auth/v3/check-otp (OWASPLA 2025 guide)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1616",
+      "source": "web-security-learning-labs Vercel — module 1616 security lab route (WSL catalog expansion)",
+      "auth": "oss_deploy"
     }
   ]
 }
