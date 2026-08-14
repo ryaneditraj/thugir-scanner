@@ -18,6 +18,8 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Medium article documents /admin RBAC with 403 for non-admin sessions; /admin route 404 + checkpoint — curated corpus fallback; securebank-blog.vercel.app/admin findings 2→3; benchmark 6/6 maintained"
     },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-users-api-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/users returns users[] with plaintext password fields and echoes SELECT query with vulnerabilities.id_injection hints; mock-probe + live curl when reachable; vuln-expose.vercel.app/api/users findings 0→3+ on route scan; benchmark juice-shop 47 findings 6/6 maintained"
