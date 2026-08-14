@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T12:20:00.000Z",
+  "updated_at": "2026-08-14T12:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3026,
-  "total_findings": 32958,
+  "total_sites_scanned": 3032,
+  "total_findings": 33203,
   "critical_findings": 107,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2103,
-  "discovery_findings": 25865,
-  "improvements_shipped": 1208,
-  "last_run": "2026-08-14T12:20:00.000Z",
+  "discovery_urls_added": 2108,
+  "discovery_findings": 26063,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-14T12:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 583,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent (sensitive_data covered via other slugs)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "vulnshop update-price + payment/process + products/import route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 198,
+      "focus": "brokencrystals JWT x5u/jwk/admin login oracles + seclab sqli/csrf labs from swagger/README",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "vulnshop.vercel.app/api/v1/cart/update-price: 9→12 findings — vulnshop-update-price-route-live-oracle shipped (README #34 price manipulation)",
-      "vulnshop.vercel.app/api/v1/payment/process: 8→12 findings — vulnshop-payment-process-route-live-oracle shipped (README #32 unsafe API)",
-      "vulnshop.vercel.app/api/v1/products/import: 10→13 findings — vulnshop-products-import-ssrf-route-live-oracle shipped (README #29 import SSRF)"
+      "brokencrystals.com/api/auth/jwt/x5u/login: 85 findings — full JWT bundle incl brokencrystals-jwt-x5u-rogue-route-live-oracle",
+      "brokencrystals.com/api/auth/admin/login: 83 findings — brokencrystals-admin-login-bfla-route-live-oracle + JWT oracle bundle",
+      "brokencrystals.com/api/auth/jwt/jwk/login: 20-finding thin pass — sqli-header reflexion only, no route-specific jwk-rogue live oracle",
+      "seclab.vercel.app/api/sqli-vulnerable: 5 findings — seclab-sqli-vulnerable-route-live-oracle",
+      "seclab.vercel.app/api/csrf-vulnerable: 5 findings — seclab-csrf-vulnerable-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "brokencrystals.com/api/auth/jwt/jwk/login: route-specific jwk-rogue JWT oracle absent on thin pass (20 findings vs 85 on x5u sibling endpoint)",
+      "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)",
       "vulnforge-academy level17/18: file-upload oracle fires via README fallback but live backend paths return 403"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "vulnshop.vercel.app/api/v1/cart/update-price": 12,
-    "vulnshop.vercel.app/api/v1/payment/process": 12,
-    "vulnshop.vercel.app/api/v1/products/import": 13,
-    "vulnshop.vercel.app/api/v1/wallet/add-funds": 9,
-    "chimera.atlascrew.dev/swagger": 6,
-    "vuln-expose.vercel.app/api/users": 16
+    "brokencrystals.com/api/auth/jwt/x5u/login": 85,
+    "brokencrystals.com/api/auth/admin/login": 83,
+    "brokencrystals.com/api/auth/jwt/jwk/login": 20,
+    "seclab.vercel.app/api/sqli-vulnerable": 5,
+    "seclab.vercel.app/api/csrf-vulnerable": 5,
+    "vulnshop.vercel.app/api/v1/cart/update-price": 12
   }
 }

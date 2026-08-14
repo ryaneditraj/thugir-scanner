@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T11:15:17.642Z",
+  "updated_at": "2026-08-14T12:22:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
+      "source": "NeuraLegion/brokencrystals — JWT X5U rogue-certificate bypass oracle POST /api/auth/jwt/x5u/login (swagger)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/login",
+      "source": "NeuraLegion/brokencrystals — JWT JWK rogue-key bypass oracle POST /api/auth/jwt/jwk/login (swagger)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/admin/login",
+      "source": "NeuraLegion/brokencrystals — admin credential bypass oracle POST /api/auth/admin/login (swagger Broken Authentication)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/sqli-vulnerable",
+      "source": "DaniSam-STU/security-lab — string-concat SQLi oracle GET /api/sqli-vulnerable (seclab.vercel.app README CWE-89)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/csrf-vulnerable",
+      "source": "DaniSam-STU/security-lab — CSRF oracle POST /api/csrf-vulnerable (seclab.vercel.app README CWE-352)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnshop.vercel.app/api/v1/cart/update-price",
       "source": "chethan-vinayak/vulnshop — price manipulation oracle POST /api/v1/cart/update-price (README route #34)",
