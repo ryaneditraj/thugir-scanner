@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T23:10:00.000Z",
+  "updated_at": "2026-08-14T23:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2748,
-  "total_findings": 26754,
+  "total_sites_scanned": 2753,
+  "total_findings": 26821,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 22590,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-14T23:10:00.000Z",
+  "discovery_urls_added": 1971,
+  "discovery_findings": 22609,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-14T23:14:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 586,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings, 35 juice-shop live oracles); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 13,
-      "focus": "OWASP GenAI LLM06/08/10 route oracles (excessive-agency, vector-embedding, unbounded-consumption)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 4,
+      "findings": 19,
+      "focus": "dariansweb/secure-nextjs-lesson (new OSS deploy) + OWASP GenAI misinformation/excessive-agency/vector-embedding",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "owaspbased-lessons.vercel.app/lesson/excessive-agency: 1→4 findings — owasp-genai-excessive-agency-route-live-oracle shipped (LLM06; HTTP verified)",
-      "owaspbased-lessons.vercel.app/lesson/vector-embedding: 1→4 findings — owasp-genai-vector-embedding-route-live-oracle shipped (LLM08; HTTP verified)",
-      "owaspbased-lessons.vercel.app/lesson/unbounded-consumption: 1→5 findings — owasp-genai-unbounded-consumption-route-live-oracle shipped (LLM10; HTTP verified)"
+      "nextjs-security-lesson.vercel.app/: 6 findings — dangerous-html-sinks + reflexion-escalated-ssti on homepage (new dariansweb/secure-nextjs-lesson OSS deploy)",
+      "owaspbased-lessons.vercel.app/lesson/misinformation: 4 findings — owasp-genai-misinformation-route-live-oracle (LLM09)",
+      "owaspbased-lessons.vercel.app/lesson/excessive-agency: 4 findings — owasp-genai-excessive-agency-route-live-oracle (LLM06)",
+      "owaspbased-lessons.vercel.app/lesson/vector-embedding: 5 findings — owasp-genai-vector-embedding-route-live-oracle (LLM08)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "WSL module/1634-1638: placeholder pages, module-route-evidence only (no route-specific vuln oracles)",
+      "nextjs-security-lesson.vercel.app/{admin,login,docs,protected}: scanner reach errors after homepage OK — middleware-gated routes need session/JWT seeding for live oracles",
+      "nextjs-security-lesson.vercel.app/: no route-specific CSRF/RBAC/ACL oracles yet (homepage SSTI/XSS sinks only)",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
       "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent without OTP session"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "nextjs-security-lesson.vercel.app/": 6,
+    "owaspbased-lessons.vercel.app/lesson/misinformation": 4,
     "owaspbased-lessons.vercel.app/lesson/excessive-agency": 4,
-    "owaspbased-lessons.vercel.app/lesson/vector-embedding": 4,
+    "owaspbased-lessons.vercel.app/lesson/vector-embedding": 5,
     "owaspbased-lessons.vercel.app/lesson/unbounded-consumption": 5,
-    "web-security-learning-labs.vercel.app/module/1637": 8,
-    "web-security-learning-labs.vercel.app/module/1632": 10,
-    "sql-injection-challenge.vercel.app": 3,
     "brokencrystals.com/userlogin?logobgcolor=red": 52,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
