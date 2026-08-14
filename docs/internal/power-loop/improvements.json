@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:vulnshop.vercel.app",
-      "slug": "vulnshop-update-price-route-live-oracle",
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jwk-rogue-login-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README #34 POST /api/v1/cart/update-price Price Manipulation — client-side price accepted without verification; vulnshop.vercel.app/api/v1/cart/update-price findings 9→12 (+vulnshop-update-price-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/jwt/jwk/login admin/admin returns token; GET /api/auth/jwt/jwk/validate accepts empty-jwk header JWT and returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/jwk/login findings 20→84 (+brokencrystals-jwt-jwk-rogue-login-live-oracle + route); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jwk-rogue-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /api/auth/jwt/jwk/login confirms JWK rogue-key login chain; findings 20→84; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-update-price-manipulation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: README #34 corpus fallback now always includes scanUrl; vulnshop.vercel.app/api/v1/cart/update-price findings 8→12 (+vulnshop-update-price-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:vulnshop.vercel.app",
