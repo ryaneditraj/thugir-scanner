@@ -33874,6 +33874,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-jwt-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "SecLab /api/jwt-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/jwt-vulnerable, POST alg=none JWT tokens return unsafe verification — or the route serves an Angular SPA shell instead of the documented Next.js JWT training API.",
+    impactOneline:
+      "Route-specific JWT lab oracle confirms live alg-none / weak verification training endpoints or flags dead /api/jwt-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabJwtVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab JWT API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/jwt-vulnerable on production.",
+        "Reject alg=none and enforce signature verification on all JWT parsers.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/jwt-vulnerable route is a dead Angular stub or exposes live JWT weaknesses. Show JWT verification remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-users-vulnerable-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -40657,6 +40683,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /transfer route documents CSRF-vulnerable money transfers via /api/transactions/transfer. Show anti-CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-bank-bay-api-users-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecureBank Bay /api/users route live oracle",
+    description:
+      "When scanning /api/users/{id} on secure-bank-bay.vercel.app, the SPA bundle documents /api/auth/me session user access and admin-only GET /api/admin/users with JWT role gates — route-specific broken access control training oracle.",
+    impactOneline:
+      "Educational banking SPA exposes user account API patterns without object-level /api/users/{id} authorization when route-specific scans target user ID paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBayApiUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SecureBank Bay is intentional lab software — enforce object-level authorization on user APIs.",
+      steps: [
+        "Require authentication before returning user profile data.",
+        "Authorize every /api/users/{id} request against the session subject.",
+        "Run Attack Mode labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/{id} route scan documents user APIs via /api/auth/me without proper object-reference checks. Show BOLA remediation for banking user endpoints.",
     version: 1,
     enabled: true
   },

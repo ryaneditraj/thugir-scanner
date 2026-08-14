@@ -1962,6 +1962,7 @@ const DEEP_RULES = new Set<string>([
   "secureBankBayAdminRbacRouteLiveOracle",
   "secureBankBayTransactionsCsrfRouteLiveOracle",
   "secureBankBayTransferCsrfRouteLiveOracle",
+  "secureBankBayApiUsersRouteLiveOracle",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
@@ -2689,6 +2690,7 @@ const DEEP_RULES = new Set<string>([
   "seclabAngularStubRouteLiveOracle",
   "seclabSqliVulnerableRouteLiveOracle",
   "seclabCsrfVulnerableRouteLiveOracle",
+  "seclabJwtVulnerableRouteLiveOracle",
   "seclabXssVulnerableRouteLiveOracle",
   "seclabUsersVulnerableRouteLiveOracle",
   "seclabIdorVulnerableRouteLiveOracle",
@@ -11060,6 +11062,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/jwt-vulnerable\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-jwt-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/xss-vulnerable\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-xss-vulnerable")
       )
@@ -11486,6 +11494,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /secure-bank-bay\.vercel\.app/i.test(origin) &&
         /\/transfer\b/i.test(targetInput) &&
         p.slug.startsWith("secure-bank-bay-transfer")
+      )
+        return -3;
+      if (
+        /secure-bank-bay\.vercel\.app/i.test(origin) &&
+        /\/api\/users(?:\/\d+)?\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-bank-bay-api-users")
       )
         return -3;
       if (
