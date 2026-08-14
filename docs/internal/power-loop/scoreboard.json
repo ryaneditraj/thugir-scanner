@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T18:12:00.000Z",
+  "updated_at": "2026-08-14T18:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3087,
-  "total_findings": 34226,
-  "critical_findings": 112,
+  "total_sites_scanned": 2723,
+  "total_findings": 26535,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2131,
-  "discovery_findings": 26602,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-14T18:12:00.000Z",
+  "discovery_urls_added": 1951,
+  "discovery_findings": 22514,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-14T18:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (46 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 55,
-      "focus": "Aikido Zen WAF demo SQLi/SSRF/path-traversal routes + WSL modules 1629–1630 + queue drain 1620/1616 + ai-security login",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 27,
+      "focus": "zen-demo-java Aikido Zen WAF lab routes (create SQLi, request SSRF, read path traversal)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, probes=582) — no benchmark misses",
-      "zen-demo-java.fly.dev/pages/create: 5 findings — client-side-aikido-zen-demo-evidence + generic misconfig; no route-specific SQLi live oracle",
-      "zen-demo-java.fly.dev/pages/request: 5 findings — SSRF lab route without zen-demo-java-request-ssrf-live-oracle",
-      "zen-demo-java.fly.dev/pages/read: 5 findings — path traversal lab route without zen-demo-java-read-traversal-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1629–1630: 7 findings each — placeholder module hub pattern",
-      "web-security-learning-labs.vercel.app/module/1620: 10 findings — curated module-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/login: 8 findings — ai-security-rate-limiting-bruteforce-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "zen-demo-java.fly.dev/pages/create: 5→9 findings — zen-demo-java-create-route-live-oracle shipped (POST /api/create SQLi blocked by Aikido Zen WAF)",
+      "zen-demo-java.fly.dev/pages/request: 5→9 findings — zen-demo-java-request-route-live-oracle shipped (POST /api/request SSRF blocked)",
+      "zen-demo-java.fly.dev/pages/read: 5→9 findings — zen-demo-java-read-route-live-oracle shipped (GET /api/read path traversal blocked)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zen-demo-java.fly.dev/pages/create|request|read: execute-shell-injection oracle fires cross-route (false positive); route-specific SQLi/SSRF/path-traversal oracles absent",
-      "web-security-learning-labs.vercel.app/module/1629–1630: placeholder module pages without route-specific injection oracles",
-      "vwad.owasp.org/app/voice-goat/ queued but 404 — OWASP VWAD voice lab unreachable"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "vuln-expose.vercel.app/api/users: slow API (25s+) causes 0-finding scans without early route priority",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: OTP-gated avatar SVG XSS oracle intermittent on route-only scans",
+      "damn-vulnerable-startup.fly.dev: host unreachable (BlockedTargetError)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "web-security-learning-labs.vercel.app/module/1620": 10,
-    "ai-security-platform-iota.vercel.app/login": 8,
-    "web-security-learning-labs.vercel.app/module/1616": 8,
-    "web-security-learning-labs.vercel.app/module/1629": 7,
-    "web-security-learning-labs.vercel.app/module/1630": 7,
-    "zen-demo-java.fly.dev/pages/create": 5,
-    "zen-demo-java.fly.dev/pages/request": 5,
-    "zen-demo-java.fly.dev/pages/read": 5,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop.herokuapp.com": 46,
+    "zen-demo-java.fly.dev/pages/create": 9,
+    "zen-demo-java.fly.dev/pages/request": 9,
+    "zen-demo-java.fly.dev/pages/read": 9,
+    "pwnshop.ctfsecurity.com/apply-coupon": 46,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 22,
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 86,
+    "ssrf.vulnlab.dev/parser": 15,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }

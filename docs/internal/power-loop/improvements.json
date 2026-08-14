@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-create-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/create Malicious Pet SQLi payload returns blocked SQL Injection Dialect PostgreSQL; zen-demo-java.fly.dev/pages/create findings 5→9 (+zen-demo-java-create-sqli-live-oracle +create-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-request-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/request url=http://127.0.0.1:8080 returns SSRFException blocked server-side request forgery; zen-demo-java.fly.dev/pages/request findings 5→9 (+zen-demo-java-request-ssrf-live-oracle +request-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-read-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/read?path=../secrets/key.txt returns blocked Path Traversal; zen-demo-java.fly.dev/pages/read findings 5→9 (+zen-demo-java-read-path-traversal-live-oracle +read-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1617-1623-idor-catalog",
       "status": "shipped",
@@ -10349,6 +10367,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-jwt-x5c-validate-route-priority",
       "shipped_at": "2026-08-14T17:15:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-create-route-live-oracle",
+      "shipped_at": "2026-08-14T18:45:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-request-route-live-oracle",
+      "shipped_at": "2026-08-14T18:45:00.000Z"
+    },
+    {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-read-route-live-oracle",
+      "shipped_at": "2026-08-14T18:45:00.000Z"
     }
   ]
 }
