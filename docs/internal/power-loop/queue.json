@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T10:15:00.000Z",
+  "updated_at": "2026-08-14T11:15:17.642Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/cart/update-price",
+      "source": "chethan-vinayak/vulnshop — price manipulation oracle POST /api/v1/cart/update-price (README route #34)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/payment/process",
+      "source": "chethan-vinayak/vulnshop — unsafe payment API oracle POST /api/v1/payment/process (README route #32)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/jwt-login",
+      "source": "chethan-vinayak/vulnshop — JWT none-algorithm oracle GET /jwt-login (README route #8)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/debug",
+      "source": "chethan-vinayak/vulnshop — API misconfig secrets oracle GET /api/v1/debug (README route #30)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/orders/modify",
+      "source": "chethan-vinayak/vulnshop — order status manipulation oracle POST /api/v1/orders/modify (README route #36)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
       "source": "webspoilt/vulnforge-academy — file upload bypass tier Level 16 (levels 16-18 file upload, GitHub README)",
