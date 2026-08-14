@@ -34186,6 +34186,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI prompt-injection lesson route live oracle",
+    description:
+      "When scanning /lesson/prompt-injection on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM01 interactive prompt-injection training lesson.",
+    impactOneline:
+      "Route-scoped scans of /lesson/prompt-injection should confirm LLM01 direct and indirect prompt-injection demos via authenticated lesson fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — isolate LLM lesson apps from production agent deployments.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Do not reuse prompt-injection lesson patterns in production chatbot system prompts.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/prompt-injection route scan confirms LLM01 prompt injection training. Show route-specific LLM input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-genai-sensitive-info-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI sensitive-info lesson route live oracle",
+    description:
+      "When scanning /lesson/sensitive-info or /lesson/info-disclosure on owaspbased-lessons.vercel.app, session fetch confirms LLM02 sensitive information disclosure training lesson.",
+    impactOneline:
+      "Route-scoped scans of sensitive-info lessons should confirm LLM02 training content via authenticated lesson fetch (info-disclosure slug alias supported).",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiSensitiveInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — redact training data and PII from LLM outputs in production.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Filter sensitive training data from model responses.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/sensitive-info route scan confirms LLM02 info disclosure training. Show route-specific LLM output redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-genai-supply-chain-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP GenAI supply-chain lesson route live oracle",
+    description:
+      "When scanning /lesson/supply-chain on owaspbased-lessons.vercel.app, POST /onboard session fetch confirms LLM03 supply-chain vulnerability training lesson.",
+    impactOneline:
+      "Route-scoped scans of /lesson/supply-chain should confirm LLM03 third-party plugin and model supply-chain demos via authenticated lesson fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiSupplyChainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI labs are intentional training — vet third-party LLM plugins and model artifacts in production.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Pin and verify LLM plugin and model package integrity.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /lesson/supply-chain route scan confirms LLM03 supply-chain training. Show route-specific LLM plugin vetting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ctf-defi-evidence",
     platform: "generic",
     category: "Broken access control",

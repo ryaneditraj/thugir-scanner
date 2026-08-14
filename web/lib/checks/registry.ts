@@ -6607,18 +6607,64 @@ const clientSideOopssecNextPublicEnvEvidence: Rule = async (ctx) => {
   };
 };
 
-const oopssecNextPublicEnvRouteLiveOracle: Rule = async (ctx) => {
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/next-public-env-variable-leak/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecNextPublicEnvEvidence(ctx);
-  if (!result.fired) return NEGATIVE;
+const OOPSSEC_NEXT_PUBLIC_ENV_CANONICAL_PATH = "/posts/next-public-env-variable-leak";
+
+function oopssecStoreBaseFromUrl(pageUrl: string): string {
+  const m = pageUrl.match(/^(https?:\/\/[^/]+\/oss-oopssec-store)/i);
+  return m ? m[1]! : "";
+}
+
+async function oopssecNextPublicEnvCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (!/NEXT_PUBLIC_PAYMENT_SECRET|X-Payment-Auth/i.test(corpus)) {
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+    const storeBase = oopssecStoreBaseFromUrl(pageUrl);
+    const canonicalUrl = storeBase
+      ? `${storeBase}${OOPSSEC_NEXT_PUBLIC_ENV_CANONICAL_PATH}/`
+      : new URL(OOPSSEC_NEXT_PUBLIC_ENV_CANONICAL_PATH, ctx.origin).toString();
+    const doc = await ctx.probe.get(canonicalUrl, { maxBytes: 200_000, timeoutMs: 15000 });
+    if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) corpus += `\n${doc.body}`;
+  }
+  return corpus;
+}
+
+async function oopssecNextPublicEnvEvidenceFromCorpus(
+  ctx: RuleContext,
+  corpus: string
+): Promise<RuleResult> {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_NEXT_PUBLIC_ENV_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|NEXT_PUBLIC_|X-Payment-Auth|\/checkout/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET inlined into checkout bundle and sent as X-Payment-Auth on POST /api/orders"
+    }
+  };
+}
+
+const oopssecNextPublicEnvRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/next-public-env-(?:variable-)?leak/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await oopssecNextPublicEnvCorpus(ctx);
+  const result = await oopssecNextPublicEnvEvidenceFromCorpus(ctx, corpus);
+  if (!result.fired) return NEGATIVE;
+  const aliasFetch = /\/posts\/next-public-env-leak\/?$/i.test(pageUrl);
+  return {
+    fired: true,
+    confidence: aliasFetch ? Math.min(result.confidence, 0.9) : result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/next-public-env-variable-leak route scan — walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
+      note: aliasFetch
+        ? "OopsSec Store /posts/next-public-env-leak route scan — canonical walkthrough fetched from /posts/next-public-env-variable-leak documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
+        : "OopsSec Store /posts/next-public-env-variable-leak route scan — walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
     }
   };
 };
@@ -71110,6 +71156,117 @@ const clientSideOwaspGenaiLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isOwaspGenaiLabHost(ctx: RuleContext): boolean {
+  return /owaspbased-lessons\.vercel\.app/i.test(ctx.origin);
+}
+
+const OWASP_GENAI_LESSON_ALIASES: Record<string, string> = {
+  "info-disclosure": "sensitive-info"
+};
+
+type OwaspGenaiLessonDef = {
+  slug: string;
+  aliases?: string[];
+  llmId: string;
+  titleRe: RegExp;
+  topicMarkers: RegExp[];
+};
+
+const OWASP_GENAI_LESSON_DEFS: Record<string, OwaspGenaiLessonDef> = {
+  "prompt-injection": {
+    slug: "prompt-injection",
+    llmId: "LLM01",
+    titleRe: /LLM01:\s*Prompt Injection/i,
+    topicMarkers: [
+      /Direct Prompt Injection/i,
+      /ignore all previous instructions/i,
+      /demo-player__system-prompt/i
+    ]
+  },
+  "sensitive-info": {
+    slug: "sensitive-info",
+    aliases: ["info-disclosure"],
+    llmId: "LLM02",
+    titleRe: /LLM02:\s*Sensitive Information Disclosure/i,
+    topicMarkers: [/Sensitive Information Disclosure/i, /training data|PII|personally identifiable/i]
+  },
+  "supply-chain": {
+    slug: "supply-chain",
+    llmId: "LLM03",
+    titleRe: /LLM03:\s*Supply Chain/i,
+    topicMarkers: [/Supply Chain Vulnerabilities/i, /third.party|plugin|extension/i]
+  }
+};
+
+async function ensureOwaspGenaiRegistrySession(ctx: RuleContext): Promise<string | undefined> {
+  const onboardUrl = new URL("/onboard", ctx.origin).toString();
+  const body =
+    "name=thugir&goals=prompt-injection&goals=sensitive-info&goals=supply-chain&goals=data-poisoning";
+  const res = await ctx.probe.get(onboardUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    redirect: "manual",
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  return res.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0];
+}
+
+function owaspGenaiLessonSlugFromUrl(pageUrl: string): string | null {
+  const m = pageUrl.match(/\/lesson\/([^/?#]+)/i);
+  if (!m) return null;
+  const raw = m[1]!.toLowerCase();
+  return OWASP_GENAI_LESSON_ALIASES[raw] ?? raw;
+}
+
+async function probeOwaspGenaiLessonRoute(
+  ctx: RuleContext,
+  lessonKey: string
+): Promise<RuleResult | null> {
+  if (!isOwaspGenaiLabHost(ctx)) return null;
+  const def = OWASP_GENAI_LESSON_DEFS[lessonKey];
+  if (!def) return null;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const slug = owaspGenaiLessonSlugFromUrl(pageUrl);
+  const aliases = [def.slug, ...(def.aliases ?? [])];
+  if (!slug || !aliases.includes(slug)) return null;
+
+  const session = await ensureOwaspGenaiRegistrySession(ctx);
+  if (!session) return null;
+  const lessonUrl = new URL(`/lesson/${def.slug}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(lessonUrl, {
+    maxBytes: 200_000,
+    timeoutMs: 15000,
+    headers: { Cookie: session }
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const corpus = `${ctx.combined}\n${doc.body}`;
+  if (!def.titleRe.test(corpus)) return null;
+  const markerHits = def.topicMarkers.filter((re) => re.test(corpus));
+  if (markerHits.length < 1) return null;
+  return {
+    fired: true,
+    confidence: markerHits.length >= 2 ? 0.92 : 0.9,
+    evidence: {
+      lessonUrl,
+      scannedUrl: pageUrl,
+      llmId: def.llmId,
+      snippet: doc.body.match(def.titleRe)?.[0]?.slice(0, 80) ?? def.llmId,
+      note: `owaspbased-lessons.vercel.app /lesson/${slug} route scan — ${def.llmId} interactive GenAI training lesson confirmed via authenticated session fetch`
+    }
+  };
+}
+
+const owaspGenaiPromptInjectionRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "prompt-injection")) ?? NEGATIVE;
+
+const owaspGenaiSensitiveInfoRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "sensitive-info")) ?? NEGATIVE;
+
+const owaspGenaiSupplyChainRouteLiveOracle: Rule = async (ctx) =>
+  (await probeOwaspGenaiLessonRoute(ctx, "supply-chain")) ?? NEGATIVE;
+
 // --- CTF DeFi Security 101 (ctf-maker-monorepo.vercel.app) ----------------------------
 const CLIENT_CTF_DEFI_RES: { label: string; re: RegExp }[] = [
   {
@@ -81569,6 +81726,9 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnCollegeEvidence,
   clientSideReactDomXssLabEvidence,
   clientSideOwaspGenaiLabEvidence,
+  owaspGenaiPromptInjectionRouteLiveOracle,
+  owaspGenaiSensitiveInfoRouteLiveOracle,
+  owaspGenaiSupplyChainRouteLiveOracle,
   clientSideCtfDefiEvidence,
   clientSideAtlasCrewInfernoLabEvidence,
   clientSideAtlasCrewEdgeProtectionEvidence,

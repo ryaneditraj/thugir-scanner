@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T19:30:00.000Z",
+  "updated_at": "2026-08-14T20:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2732,
-  "total_findings": 26723,
-  "critical_findings": 58,
+  "total_sites_scanned": 2726,
+  "total_findings": 26525,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1951,
-  "discovery_findings": 22541,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-14T19:30:00.000Z",
+  "discovery_findings": 22504,
+  "improvements_shipped": 1165,
+  "last_run": "2026-08-14T20:35:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (46 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 43,
-      "focus": "WSL catalog modules 1624-1630 + OopsSec Store roadmap/home route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 4,
+      "urls_scanned": 4,
+      "findings": 18,
+      "focus": "OWASP GenAI lesson route oracles (prompt-injection, sensitive-info/info-disclosure alias, supply-chain) + OopsSec next-public-env-leak slug alias",
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1624: 5→7 findings — WSL catalog 1624-1630 IDOR expansion shipped (+idor-module-route-live-oracle)",
-      "koadt.github.io/oss-oopssec-store/roadmap/: 15→16 findings — oopssec-roadmap-route-live-oracle shipped",
-      "koadt.github.io/oss-oopssec-store/: 19→20 findings — oopssec-store-home-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "owaspbased-lessons.vercel.app/lesson/prompt-injection: +owasp-genai-prompt-injection-route-live-oracle (LLM01 session fetch)",
+      "owaspbased-lessons.vercel.app/lesson/info-disclosure: +owasp-genai-sensitive-info-route-live-oracle via sensitive-info canonical alias",
+      "owaspbased-lessons.vercel.app/lesson/supply-chain: 4→5 findings — owasp-genai-supply-chain-route-live-oracle (LLM03)",
+      "koadt.github.io/oss-oopssec-store/posts/next-public-env-leak/: 4→5 findings — oopssec-next-public-env-route-live-oracle via variable-leak canonical fetch"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "damn-vulnerable-startup.fly.dev: host unreachable (BlockedTargetError)",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: OTP-gated avatar SVG XSS oracle intermittent on route-only scans",
-      "vuln-expose.vercel.app/api/users: slow API (25s+) causes 0-finding scans without early route priority"
+      "owaspbased-lessons.vercel.app/lesson/data-poisoning: route-specific LLM04 oracle still absent",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS oracle requires OTP-authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
-    "web-security-learning-labs.vercel.app/module/1624": 7,
-    "koadt.github.io/oss-oopssec-store/roadmap/": 16,
-    "koadt.github.io/oss-oopssec-store/": 20,
-    "zen-demo-java.fly.dev/pages/create": 9,
-    "pwnshop.ctfsecurity.com/apply-coupon": 46,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 86,
-    "ssrf.vulnlab.dev/parser": 15
+    "juice-shop.herokuapp.com": 48,
+    "owaspbased-lessons.vercel.app/lesson/prompt-injection": 4,
+    "owaspbased-lessons.vercel.app/lesson/supply-chain": 5,
+    "koadt.github.io/oss-oopssec-store/posts/next-public-env-leak": 5,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }

@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard session + GET /lesson/prompt-injection confirms LLM01: Prompt Injection with Direct Prompt Injection demo; owaspbased-lessons.vercel.app/lesson/prompt-injection findings 4→4 (+owasp-genai-prompt-injection-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-sensitive-info-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lesson/info-disclosure alias fetches canonical /lesson/sensitive-info confirming LLM02: Sensitive Information Disclosure; owaspbased-lessons.vercel.app/lesson/info-disclosure findings 4→4 (+owasp-genai-sensitive-info-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-supply-chain-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /onboard session + GET /lesson/supply-chain confirms LLM03: Supply Chain Vulnerabilities; owaspbased-lessons.vercel.app/lesson/supply-chain findings 4→5 (+owasp-genai-supply-chain-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-next-public-env-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/next-public-env-leak typo slug fetches canonical /oss-oopssec-store/posts/next-public-env-variable-leak/ corpus with NEXT_PUBLIC_PAYMENT_SECRET + X-Payment-Auth; koadt.github.io/oss-oopssec-store/posts/next-public-env-leak/ findings 4→5; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1624-1630-idor-catalog",
       "status": "shipped",
@@ -10400,6 +10424,26 @@
       "source": "discovery:zen-demo-java.fly.dev",
       "slug": "zen-demo-java-read-route-live-oracle",
       "shipped_at": "2026-08-14T18:45:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-prompt-injection-route-live-oracle",
+      "shipped_at": "2026-08-14T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-sensitive-info-route-live-oracle",
+      "shipped_at": "2026-08-14T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-supply-chain-route-live-oracle",
+      "shipped_at": "2026-08-14T20:35:00.000Z"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-next-public-env-route-live-oracle",
+      "shipped_at": "2026-08-14T20:35:00.000Z"
     }
   ]
 }
