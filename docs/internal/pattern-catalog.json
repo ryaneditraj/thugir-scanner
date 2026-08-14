@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-14T15:29:46.539Z",
-  "total": 2333,
-  "uniqueSlugs": 2329,
+  "generatedAt": "2026-08-14T16:30:21.040Z",
+  "total": 2335,
+  "uniqueSlugs": 2331,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2315,
+    "generic": 2317,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2248,
+    "deep": 2250,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 112,
     "Security misconfiguration": 165,
     "Broken authentication": 140,
-    "Injection": 344,
+    "Injection": 346,
     "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
@@ -169,6 +169,8 @@
     "brokencrystals-products-date-manipulation-live-oracle",
     "brokencrystals-products-date-manipulation-route-live-oracle",
     "brokencrystals-products-latest-limit-bypass-live-oracle",
+    "brokencrystals-render-dot-ssti-live-oracle",
+    "brokencrystals-render-dot-ssti-route-live-oracle",
     "brokencrystals-safe-files-rfi-live-oracle",
     "brokencrystals-search-admin-mass-assignment-route-live-oracle",
     "brokencrystals-secrets-live-oracle",
