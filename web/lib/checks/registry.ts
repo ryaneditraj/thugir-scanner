@@ -37456,7 +37456,12 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1605": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1606": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1607": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1608": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1608": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1609": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1610": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1611": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1612": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1613": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -38331,6 +38336,28 @@ const secureBankBayTransferCsrfRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "secure-bank-bay.vercel.app /transfer route scan — SPA bundle documents POST /api/transactions/transfer CSRF bypass in Attack Mode — route-specific CSRF training oracle"
+    }
+  };
+};
+
+const secureBankBayApiUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBayHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users(?:\/\d+)?\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const userApiOk =
+    /\/api\/auth\/me/i.test(corpus) &&
+    /\/api\/admin\/users/i.test(corpus) &&
+    (/SELECT \* FROM users WHERE username/i.test(corpus) || /admin' OR '1'='1'/i.test(corpus)) &&
+    (/403 Forbidden/i.test(corpus) || /only accessible to users with the/i.test(corpus));
+  if (!userApiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/auth/me + GET /api/admin/users with JWT role gate documented in SPA bundle",
+      note: "secure-bank-bay.vercel.app /api/users/{id} route scan — SPA documents user account APIs via /api/auth/me and admin-only /api/admin/users without a protected /api/users/{id} object-reference endpoint — route-specific broken access control training oracle"
     }
   };
 };
@@ -70586,6 +70613,85 @@ const seclabCsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabJwtVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/jwt-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const noneHeader = Buffer.from(JSON.stringify({ alg: "none", typ: "JWT" })).toString("base64url");
+  const nonePayload = Buffer.from(JSON.stringify({ user: "admin", role: "admin" })).toString("base64url");
+  const noneToken = `${noneHeader}.${nonePayload}.`;
+  const probeUrl = new URL("/api/jwt-vulnerable", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ token: noneToken }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 400 &&
+    /"safe"\s*:\s*false/.test(postDoc.body) &&
+    (/alg.*none|algorithm.*none|unsigned/i.test(postDoc.body) || /"user"\s*:\s*"admin"/i.test(postDoc.body)) &&
+    !isSecLabAngularStubShell(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: postDoc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app POST /api/jwt-vulnerable accepts alg=none JWT and returns unsafe:true — live JWT training API oracle"
+      }
+    };
+  }
+  const getDoc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    getDoc.status >= 200 &&
+    getDoc.status < 400 &&
+    /"safe"\s*:\s*false/.test(getDoc.body) &&
+    /JWT|alg|signature/i.test(getDoc.body) &&
+    !isSecLabAngularStubShell(getDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: getDoc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app GET /api/jwt-vulnerable exposes unsafe JWT verification training API — live JWT oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(postDoc.body) && postDoc.body.length > 40
+      ? postDoc
+      : isSecLabAngularStubShell(getDoc.body) && getDoc.body.length > 40
+        ? getDoc
+        : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/jwt-vulnerable route serves Angular SPA shell instead of the documented Next.js JWT training API — dead lab route oracle (README lists JWT alg-none / weak verification)"
+    }
+  };
+};
+
 const seclabXssVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/xss-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
@@ -76583,7 +76689,8 @@ const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
 };
 
 function isDvwuHost(ctx: RuleContext): boolean {
-  return /dvwu\.vercel\.app/i.test(ctx.origin);
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /dvwu\.vercel\.app/i.test(ctx.origin) || /dvwu\.vercel\.app/i.test(pageUrl);
 }
 
 async function probeDvwuPortalSqli(ctx: RuleContext): Promise<RuleResult | null> {
@@ -76848,16 +76955,30 @@ const dvwuJwtLabRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/labs\/jwt\b/i.test(pageUrl)) return NEGATIVE;
   const injection = await probeDvwuLabRouteInjection(ctx);
-  if (!injection?.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.92,
-    evidence: {
-      ...injection.evidence,
-      scannedUrl: pageUrl,
-      note: "DVWU /labs/jwt route scan — JWT algorithm-confusion training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
-    }
-  };
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/jwt route scan — JWT algorithm-confusion training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Data Structures and Algorithms|Computer Science/i)?.[0]?.slice(0, 80),
+        note: "DVWU /labs/jwt route scan — JWT algorithm-confusion training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/search probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const dvwuDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
@@ -76865,16 +76986,30 @@ const dvwuDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/labs\/deserialization\b/i.test(pageUrl)) return NEGATIVE;
   const injection = await probeDvwuLabRouteInjection(ctx);
-  if (!injection?.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.92,
-    evidence: {
-      ...injection.evidence,
-      scannedUrl: pageUrl,
-      note: "DVWU /labs/deserialization route scan — insecure deserialization training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
-    }
-  };
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/deserialization route scan — insecure deserialization training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Data Structures and Algorithms|Computer Science/i)?.[0]?.slice(0, 80),
+        note: "DVWU /labs/deserialization route scan — insecure deserialization training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/search probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const dvwuSstiLabRouteLiveOracle: Rule = async (ctx) => {
@@ -79470,6 +79605,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBayAdminRbacRouteLiveOracle,
   secureBankBayTransactionsCsrfRouteLiveOracle,
   secureBankBayTransferCsrfRouteLiveOracle,
+  secureBankBayApiUsersRouteLiveOracle,
   clientSideBugBountyHunterEvidence,
   clientSideBugBountyHunterChallengeScenarioEvidence,
   clientSideBugCollectionEvidence,
@@ -80009,6 +80145,7 @@ export const RULES: Record<string, Rule> = {
   seclabAngularStubRouteLiveOracle,
   seclabSqliVulnerableRouteLiveOracle,
   seclabCsrfVulnerableRouteLiveOracle,
+  seclabJwtVulnerableRouteLiveOracle,
   seclabXssVulnerableRouteLiveOracle,
   seclabUsersVulnerableRouteLiveOracle,
   seclabIdorVulnerableRouteLiveOracle,

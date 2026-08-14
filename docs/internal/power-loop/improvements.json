@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-jwt-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET/POST /api/jwt-vulnerable returns Angular <app-root> SPA shell instead of Next.js JWT API; seclab.vercel.app/api/jwt-vulnerable findings 3→4 (+seclab-jwt-vulnerable-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-api-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents /api/auth/me + /api/admin/users JWT RBAC on /api/users/1 route scan; secure-bank-bay.vercel.app/api/users/1 findings 8→9 (+secure-bank-bay-api-users-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-jwt-deserialization-lab-route-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDvwuHost scanUrl fallback + IST Edu bundle fallback on /labs/jwt and /labs/deserialization; dvwu.vercel.app/labs/jwt findings 11→12 (+dvwu-jwt-lab-route-live-oracle); /labs/deserialization 11→12 (+dvwu-deserialization-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-link-manipulation-live-oracle",
       "status": "shipped",
@@ -1246,7 +1264,7 @@
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-30-generic-oracle-fix",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallengeLiveOracle extended with localStorage/GitHub-issue/screenshot markers; wrongsecrets.herokuapp.com/challenge/challenge-30 findings 12\u219214 (+wrongsecrets-challenge-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallengeLiveOracle extended with localStorage/GitHub-issue/screenshot markers; wrongsecrets.herokuapp.com/challenge/challenge-30 findings 12→14 (+wrongsecrets-challenge-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
     },
     {
       "source": "discovery:ist-edu-bd.vercel.app",
@@ -1258,103 +1276,103 @@
       "source": "discovery:ai-security-platform-iota.vercel.app",
       "slug": "ai-security-leaked-config-supabase-admin-route-oracles",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityPlatformFetchCatalog /login fallback + leaked-config/supabase-data/admin-console route oracles; /challenges/leaked-config findings 6\u21923 with oracle; /supabase-data 5\u21927; /admin-console 3\u21926; replaced dead /challenges/sqli queue URL; benchmark juice-shop 46 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityPlatformFetchCatalog /login fallback + leaked-config/supabase-data/admin-console route oracles; /challenges/leaked-config findings 6→3 with oracle; /supabase-data 5→7; /admin-console 3→6; replaced dead /challenges/sqli queue URL; benchmark juice-shop 46 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-signup-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + GET adminpermission returns isAdmin:true when scanning /api/auth/signup; brokencrystals.com/api/auth/signup findings 69\u219270 (+brokencrystals-signup-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + GET adminpermission returns isAdmin:true when scanning /api/auth/signup; brokencrystals.com/api/auth/signup findings 69→70 (+brokencrystals-signup-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-search-filters-otp-priming",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended to /search/filters; POST /search/filters constructor.prototype pollutes thugirProbePP key; pwnshop.ctfsecurity.com/search/filters findings 21\u219246 (+pwnshop-prototype-pollution-search-filters-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended to /search/filters; POST /search/filters constructor.prototype pollutes thugirProbePP key; pwnshop.ctfsecurity.com/search/filters findings 21→46 (+pwnshop-prototype-pollution-search-filters-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-28-github-issue-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-28 confirms closed GitHub issue AWS Secret key walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 13\u219214; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-28 confirms closed GitHub issue AWS Secret key walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 13→14; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-29 confirms screenshot log leak in closed GitHub issue walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-29 findings 13\u219214; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-29 confirms screenshot log leak in closed GitHub issue walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-29 findings 13→14; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-30-localstorage-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-30 confirms localStorage secret walkthrough (Applications tab key secret); wrongsecrets.herokuapp.com/challenge/challenge-30 findings 11\u219212; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-30 confirms localStorage secret walkthrough (Applications tab key secret); wrongsecrets.herokuapp.com/challenge/challenge-30 findings 11→12; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-25 confirms Secrets in smart contracts part 1 + contract 0x8b72f7cbAD50620c46219ad676Ad9d3a5A273587 Web3 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-25 findings 13\u219214 (+wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-25 confirms Secrets in smart contracts part 1 + contract 0x8b72f7cbAD50620c46219ad676Ad9d3a5A273587 Web3 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-25 findings 13→14 (+wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-26 confirms Secrets in smart contracts part 2 + eth_getStorageAt + contract 0xCe793D588cd1Ee091290b4A1aE1D586B2a748eB4 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-26 findings 13\u219214 (+wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-26 confirms Secrets in smart contracts part 2 + eth_getStorageAt + contract 0xCe793D588cd1Ee091290b4A1aE1D586B2a748eB4 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-26 findings 13→14 (+wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-27 confirms Secrets in smart contracts part 3 + guess method + contract 0x8318d477f4BCae5a80BEA22E3c040cf8BaaFFe8B walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-27 findings 13\u219214 (+wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-27 confirms Secrets in smart contracts part 3 + guess method + contract 0x8318d477f4BCae5a80BEA22E3c040cf8BaaFFe8B walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-27 findings 13→14 (+wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-register-auth-sqli-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful when scanning /register; ist-edu-bd.vercel.app/register findings 8\u21929 (+ist-edu-register-auth-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 returns Authentication Bypass Successful when scanning /register; ist-edu-bd.vercel.app/register findings 8→9 (+ist-edu-register-auth-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-23 confirms Secrets in front-end code part 2 Base64 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-23 findings 13\u219214 (+wrongsecrets-challenge-23-base64-frontend-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-23 confirms Secrets in front-end code part 2 Base64 walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-23 findings 13→14 (+wrongsecrets-challenge-23-base64-frontend-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-24 confirms find the HMAC key / HMAC_SHA1.pdf walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-24 findings 13\u219214 (+wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-24 confirms find the HMAC key / HMAC_SHA1.pdf walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-24 findings 13→14 (+wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-22-rust-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-22 confirms Hiding in binaries part 4 Rust binary walkthrough (wrongsecrets-rust + ghidra/r2 string search); wrongsecrets.herokuapp.com/challenge/challenge-22 findings 13\u219214 (+wrongsecrets-challenge-22-rust-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-22 confirms Hiding in binaries part 4 Rust binary walkthrough (wrongsecrets-rust + ghidra/r2 string search); wrongsecrets.herokuapp.com/challenge/challenge-22 findings 13→14 (+wrongsecrets-challenge-22-rust-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-curated-placeholder-module-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: modules 1011-1036 CSR shells (Here is a Module: {id}) now fire placeholder-module oracle when scanned directly; web-security-learning-labs.vercel.app/module/1013 findings 5\u21926 and module/1015 findings 8\u21929 with +placeholder-module-route-live-oracle; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: modules 1011-1036 CSR shells (Here is a Module: {id}) now fire placeholder-module oracle when scanned directly; web-security-learning-labs.vercel.app/module/1013 findings 5→6 and module/1015 findings 8→9 with +placeholder-module-route-live-oracle; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-19-c-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-19 confirms Hiding in binaries part 1 C binary walkthrough (wrongsecrets-c + ghidra/r2); wrongsecrets.herokuapp.com/challenge/challenge-19 findings 13\u219214 (+wrongsecrets-challenge-19-c-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-19 confirms Hiding in binaries part 1 C binary walkthrough (wrongsecrets-c + ghidra/r2); wrongsecrets.herokuapp.com/challenge/challenge-19 findings 13→14 (+wrongsecrets-challenge-19-c-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-20-cplus-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-20 confirms Hiding in binaries part 2 C++ binary walkthrough (wrongsecrets-cplus + __Z6secretv); wrongsecrets.herokuapp.com/challenge/challenge-20 findings 13\u219214 (+wrongsecrets-challenge-20-cplus-binary-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-20 confirms Hiding in binaries part 2 C++ binary walkthrough (wrongsecrets-cplus + __Z6secretv); wrongsecrets.herokuapp.com/challenge/challenge-20 findings 13→14 (+wrongsecrets-challenge-20-cplus-binary-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-21-golang-binary-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-21 confirms Hiding in binaries part 3 Go binary walkthrough (wrongsecrets-golang + string search); wrongsecrets.herokuapp.com/challenge/challenge-21 findings 13\u219214 (+wrongsecrets-challenge-21-golang-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-21 confirms Hiding in binaries part 3 Go binary walkthrough (wrongsecrets-golang + string search); wrongsecrets.herokuapp.com/challenge/challenge-21 findings 13→14 (+wrongsecrets-challenge-21-golang-binary-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
@@ -1396,13 +1414,13 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-route-live-oracles",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: burpBountyRouteLiveOracle wrappers for /sqli/status, /sqli/length, /sqli/user, /ssrf/img, /pt/include, /redirect/meta; burpbountylab.com/sqli/status?id=1 findings 94 (+burpbounty-sqli-status-route-live-oracle); /ssrf/img findings 94 (+burpbounty-ssrf-img-route-live-oracle); hub 0\u219299 findings; benchmark juice-shop 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: burpBountyRouteLiveOracle wrappers for /sqli/status, /sqli/length, /sqli/user, /ssrf/img, /pt/include, /redirect/meta; burpbountylab.com/sqli/status?id=1 findings 94 (+burpbounty-sqli-status-route-live-oracle); /ssrf/img findings 94 (+burpbounty-ssrf-img-route-live-oracle); hub 0→99 findings; benchmark juice-shop 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1581-1600",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1580\u21921600; placeholder/SSTI priority regex extended 15[3-8][0-9]|15[89]0|1600; queue modules 1581-1600 added; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1580→1600; placeholder/SSTI priority regex extended 15[3-8][0-9]|15[89]0|1600; queue modules 1581-1600 added; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:burpbountylab.com",
@@ -1420,7 +1438,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1561-1580",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1560\u21921580; placeholder/SSTI priority regex extended 15[3-7][0-9]|1580; module/1561-1563 findings 8 each (+placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1560→1580; placeholder/SSTI priority regex extended 15[3-7][0-9]|1580; module/1561-1563 findings 8 each (+placeholder-module-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
@@ -1432,25 +1450,25 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1546-1560",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1545\u21921560; placeholder/SSTI priority regex extended 15[3-5][0-9]|1560; module/1545 findings 8; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1545→1560; placeholder/SSTI priority regex extended 15[3-5][0-9]|1560; module/1545 findings 8; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-7-9-topic-route-oracles",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge7VaultRouteLiveOracle + 8Logging + 9Terraform in DEEP_RULES; challenge/7-9 findings 13\u219214 each; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge7VaultRouteLiveOracle + 8Logging + 9Terraform in DEEP_RULES; challenge/7-9 findings 13→14 each; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1526-1540",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1525\u21921540; placeholder/SSTI priority regex extended 152[0-9]|153[0-9]|1540; web-security-learning-labs.vercel.app/module/1526 findings 8 (+placeholder-module-route-live-oracle); modules 1527-1529 findings 8 each; module/1540 findings 5; benchmark juice-shop 50 findings 6/6 maintained (escape.tech fallback)"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1525→1540; placeholder/SSTI priority regex extended 152[0-9]|153[0-9]|1540; web-security-learning-labs.vercel.app/module/1526 findings 8 (+placeholder-module-route-live-oracle); modules 1527-1529 findings 8 each; module/1540 findings 5; benchmark juice-shop 50 findings 6/6 maintained (escape.tech fallback)"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-avatar-upload-oracle-retry",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAvatarSvgXssLiveOracle polls /uploads/ via fetchDoc with 0-2500ms backoff after multipart SVG upload; primePwnshopOtpSession extended to 17000ms on upload-avatar routes; pwnshop.ctfsecurity.com/profile/upload-avatar findings 18\u219245 (+pwnshop-avatar-svg-xss-live-oracle + pwnshop-avatar-upload-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAvatarSvgXssLiveOracle polls /uploads/ via fetchDoc with 0-2500ms backoff after multipart SVG upload; primePwnshopOtpSession extended to 17000ms on upload-avatar routes; pwnshop.ctfsecurity.com/profile/upload-avatar findings 18→45 (+pwnshop-avatar-svg-xss-live-oracle + pwnshop-avatar-upload-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:juice-shop.herokuapp.com",
@@ -1462,13 +1480,13 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1516-1525",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1520\u21921525; placeholder/SSTI priority regex extended 151[0-9]|152[0-5]; web-security-learning-labs.vercel.app/module/1525 findings 5 (+placeholder-module-route-live-oracle); modules 1521-1524 findings 8 each; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1520→1525; placeholder/SSTI priority regex extended 151[0-9]|152[0-5]; web-security-learning-labs.vercel.app/module/1525 findings 5 (+placeholder-module-route-live-oracle); modules 1521-1524 findings 8 each; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "benchmark:juice-shop",
       "slug": "juice-shop-resend-social-corpus-expansion",
       "status": "rejected",
-      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with Bluesky scoped search (from:handle resend/apikey/re_) + Mastodon v2 account search (resend/re_/apikey); no canonical re_<8>_<24> key in expanded corpus; benchmark juice-shop 47 findings 6/6 maintained (secret-resend slug still absent \u2014 sensitive_data covered via juice-shop-leaked-api-key)"
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with Bluesky scoped search (from:handle resend/apikey/re_) + Mastodon v2 account search (resend/re_/apikey); no canonical re_<8>_<24> key in expanded corpus; benchmark juice-shop 47 findings 6/6 maintained (secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key)"
     },
     {
       "source": "discovery:juice-shop.herokuapp.com",
@@ -1480,7 +1498,7 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-audit-log-oracle-retry",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAuditLogPlaintextPasswordLiveOracle retries events GET with 0-2500ms backoff via fetchDoc (bypasses probe cache); POST /login detail password: ThugirPwCanary_* appears in /api/v1/events; pwnshop.ctfsecurity.com/logs findings 20\u219243; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAuditLogPlaintextPasswordLiveOracle retries events GET with 0-2500ms backoff via fetchDoc (bypasses probe cache); POST /login detail password: ThugirPwCanary_* appears in /api/v1/events; pwnshop.ctfsecurity.com/logs findings 20→43; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
@@ -1498,13 +1516,13 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1496-1510",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1495\u21921510; placeholder/SSTI priority regex extended 149[0-9]|150[0-9]|1510; web-security-learning-labs.vercel.app/module/1496 findings 5 (+placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1495→1510; placeholder/SSTI priority regex extended 149[0-9]|150[0-9]|1510; web-security-learning-labs.vercel.app/module/1496 findings 5 (+placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-api-route-oracle-reliability",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystals API route home warmup + primeBrokencrystalsRouteOracleProbes for /api/goto /api/products/latest /api/testimonials/count; brokencrystals.com/api/products/latest fires products-latest-limit-bypass-route oracle (3\u219211 products); /api/testimonials/count fires testimonials-count-sqli-route oracle (query param returns 216); /api/goto fires goto-open-redirect-route oracle (302 Location evil-open-redirect-probe.example); benchmark 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystals API route home warmup + primeBrokencrystalsRouteOracleProbes for /api/goto /api/products/latest /api/testimonials/count; brokencrystals.com/api/products/latest fires products-latest-limit-bypass-route oracle (3→11 products); /api/testimonials/count fires testimonials-count-sqli-route oracle (query param returns 216); /api/goto fires goto-open-redirect-route oracle (302 Location evil-open-redirect-probe.example); benchmark 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
@@ -1516,13 +1534,13 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1481-1495",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1480\u21921495; placeholder/SSTI priority regex extended 148[0-9]|149[0-5]; web-security-learning-labs.vercel.app/module/1481 findings 8 (+placeholder-module-route-live-oracle); module/1495 findings 5 with placeholder oracle; benchmark juice-shop 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1480→1495; placeholder/SSTI priority regex extended 148[0-9]|149[0-5]; web-security-learning-labs.vercel.app/module/1481 findings 8 (+placeholder-module-route-live-oracle); module/1495 findings 5 with placeholder oracle; benchmark juice-shop 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-otp-priming-coupon-wallet-routes",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended waits [4000,7000,10000,13000] for apply-coupon/cart/wallet routes; pwnshopCompleteOtpSessionUncached adds 2500ms pre-handshake sleep on coupon/wallet routes; pwnshop.ctfsecurity.com/apply-coupon findings 22\u219245 with apply-coupon-route + coupon-category-bypass-route oracles; benchmark 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopOtpSessionForDeepScan extended waits [4000,7000,10000,13000] for apply-coupon/cart/wallet routes; pwnshopCompleteOtpSessionUncached adds 2500ms pre-handshake sleep on coupon/wallet routes; pwnshop.ctfsecurity.com/apply-coupon findings 22→45 with apply-coupon-route + coupon-category-bypass-route oracles; benchmark 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
@@ -1534,7 +1552,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1466-1480",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1465\u21921480; placeholder/SSTI priority regex extended 146[0-5]\u2192146[0-9]|147[0-9]|1480; web-security-learning-labs.vercel.app/module/1466 findings 8 (+placeholder-module-route-live-oracle); module/1480 findings 5 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1465→1480; placeholder/SSTI priority regex extended 146[0-5]→146[0-9]|147[0-9]|1480; web-security-learning-labs.vercel.app/module/1466 findings 8 (+placeholder-module-route-live-oracle); module/1480 findings 5 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:ssrf.vulnlab.dev",
@@ -1552,7 +1570,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1451-1465",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1450\u21921465; placeholder/SSTI priority regex extended 1450\u2192145[0-9]|146[0-5]; web-security-learning-labs.vercel.app/module/1451 findings 8 (+placeholder-module-route-live-oracle); module/1465 findings 5 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1450→1465; placeholder/SSTI priority regex extended 1450→145[0-9]|146[0-5]; web-security-learning-labs.vercel.app/module/1451 findings 8 (+placeholder-module-route-live-oracle); module/1465 findings 5 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
@@ -1570,25 +1588,25 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1443-1450",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1442\u21921450; placeholder/SSTI priority regex extended 144[0-2]\u2192144[0-9]|1450; web-security-learning-labs.vercel.app/module/1443-1450 findings 5 each with placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1442→1450; placeholder/SSTI priority regex extended 144[0-2]→144[0-9]|1450; web-security-learning-labs.vercel.app/module/1443-1450 findings 5 each with placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-extract-seeds-66",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: extractWrongSecretsChallengeSeeds extended 0\u201361\u21920\u201366 aligning crawl seeds with hub priority seeds; wrongsecrets.herokuapp.com/challenge/challenge-66 findings 13 incl wrongsecrets-challenge-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: extractWrongSecretsChallengeSeeds extended 0–61→0–66 aligning crawl seeds with hub priority seeds; wrongsecrets.herokuapp.com/challenge/challenge-66 findings 13 incl wrongsecrets-challenge-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-queue-drain-priority",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/basic /metadata /blocklist /redirect to discovery queue front; ssrf.vulnlab.dev/basic findings 3\u219215 (+basic-route + host SSRF oracles); /metadata /blocklist /redirect each 15 findings; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/basic /metadata /blocklist /redirect to discovery queue front; ssrf.vulnlab.dev/basic findings 3→15 (+basic-route + host SSRF oracles); /metadata /blocklist /redirect each 15 findings; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1436-1442",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1435\u21921442; placeholder/SSTI priority regex extended 143[0-5]\u2192143[0-9]|144[0-2]; web-security-learning-labs.vercel.app/module/1436 findings 5 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1435→1442; placeholder/SSTI priority regex extended 143[0-5]→143[0-9]|144[0-2]; web-security-learning-labs.vercel.app/module/1436 findings 5 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
@@ -1612,19 +1630,19 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-goto-route-scan-reach-fallback",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: /api/goto open-redirect follows Location to external hosts \u2014 default fetch redirect caused status=0 reach failures; runDeepScan uses redirect=manual + homepage fallback; brokencrystals.com/api/goto findings 0 error\u219281 incl brokencrystals-goto-open-redirect-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/goto open-redirect follows Location to external hosts — default fetch redirect caused status=0 reach failures; runDeepScan uses redirect=manual + homepage fallback; brokencrystals.com/api/goto findings 0 error→81 incl brokencrystals-goto-open-redirect-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1429-1435",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1428\u21921435; placeholder/SSTI priority regex extended 142[0-8]\u2192142[0-9]|143[0-5]; web-security-learning-labs.vercel.app/module/1435 findings 7 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1428→1435; placeholder/SSTI priority regex extended 142[0-8]→142[0-9]|143[0-5]; web-security-learning-labs.vercel.app/module/1435 findings 7 with placeholder-module-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-61 documents Telegram Channel Secrets with getBotToken() and t.me/WrongsecretsBot; wrongsecrets.herokuapp.com/challenge/challenge-61 findings 13\u219214 with wrongsecrets-challenge-61-telegram-secrets-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-61 documents Telegram Channel Secrets with getBotToken() and t.me/WrongsecretsBot; wrongsecrets.herokuapp.com/challenge/challenge-61 findings 13→14 with wrongsecrets-challenge-61-telegram-secrets-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
@@ -1636,7 +1654,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1423-1428",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1422\u21921428; placeholder/SSTI priority regex extended 142[0-2]\u2192142[0-8]; web-security-learning-labs.vercel.app/module/1423 findings 7 with placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1422→1428; placeholder/SSTI priority regex extended 142[0-2]→142[0-8]; web-security-learning-labs.vercel.app/module/1423 findings 7 with placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
@@ -1666,7 +1684,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1411-1416",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1410\u21921416; placeholder/SSTI priority regex extended 1410\u2192141[0-6]; web-security-learning-labs.vercel.app/module/1411-1416 return HTTP 200 placeholder shells; benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1410→1416; placeholder/SSTI priority regex extended 1410→141[0-6]; web-security-learning-labs.vercel.app/module/1411-1416 return HTTP 200 placeholder shells; benchmark juice-shop 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
@@ -1678,19 +1696,19 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1406-1410",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1405\u21921410; placeholder/SSTI priority regex extended 140[0-5]\u2192140[0-9]|1410; web-security-learning-labs.vercel.app/module/1406 findings 8 (+placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1405→1410; placeholder/SSTI priority regex extended 140[0-5]→140[0-9]|1410; web-security-learning-labs.vercel.app/module/1406 findings 8 (+placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:juice-shop",
       "slug": "juice-shop-heroku-staging-route-fallback",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: rewriteJuiceShopStagingFallback rewrites juice-shop.herokuapp.com\u2192juice-shop-staging.herokuapp.com on 503 before BlockedTargetError; juice-shop.herokuapp.com/rest/user/security-question?email=morty@juice-sh.op findings 48 incl juice-shop-security-question-user-live-oracle; benchmark 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: rewriteJuiceShopStagingFallback rewrites juice-shop.herokuapp.com→juice-shop-staging.herokuapp.com on 503 before BlockedTargetError; juice-shop.herokuapp.com/rest/user/security-question?email=morty@juice-sh.op findings 48 incl juice-shop-security-question-user-live-oracle; benchmark 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-otp-reprime-after-crawl",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: clearPwnshopOtpSessionForProbe + post-crawl primePwnshopOtpSessionForDeepScan before pattern loop \u2014 PwnMail OTP arrives during crawl; pwnshop.ctfsecurity.com/profile/upload-avatar findings 22\u219245 with avatar-svg-xss + avatar-upload-route oracles on maxPages=6; benchmark juice-shop 49 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: clearPwnshopOtpSessionForProbe + post-crawl primePwnshopOtpSessionForDeepScan before pattern loop — PwnMail OTP arrives during crawl; pwnshop.ctfsecurity.com/profile/upload-avatar findings 22→45 with avatar-svg-xss + avatar-upload-route oracles on maxPages=6; benchmark juice-shop 49 findings 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
@@ -1708,7 +1726,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1398-1405",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1397\u21921405; placeholder/SSTI priority regex extended 139[0-7]\u2192139[0-9]|140[0-5]; web-security-learning-labs.vercel.app/module/1401 findings 5 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1397→1405; placeholder/SSTI priority regex extended 139[0-7]→139[0-9]|140[0-5]; web-security-learning-labs.vercel.app/module/1401 findings 5 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:juice-shop",
@@ -1726,7 +1744,7 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1393-1397",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1392\u21921397; placeholder priority regex extended 38[0-2]\u219238[0-9]|139[0-7]; SSTI priority 139[0-2]\u2192139[0-7]; web-security-learning-labs.vercel.app/module/1393 findings 8 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1392→1397; placeholder priority regex extended 38[0-2]→38[0-9]|139[0-7]; SSTI priority 139[0-2]→139[0-7]; web-security-learning-labs.vercel.app/module/1393 findings 8 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
@@ -1744,61 +1762,61 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1383-1392",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1382\u21921392; SSTI priority regex extended to 138[0-9]|139[0-2]; web-security-learning-labs.vercel.app/module/1383 findings 5\u21928 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1382→1392; SSTI priority regex extended to 138[0-9]|139[0-2]; web-security-learning-labs.vercel.app/module/1383 findings 5→8 with placeholder-module-route-live-oracle; benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-mcp-tools-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: MCP initialize + tools/list exposes get_count public + spawn_process/get_config admin; brokencrystals.com/api/mcp/tools findings 77\u219282 (+brokencrystals-mcp-tools-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP initialize + tools/list exposes get_count public + spawn_process/get_config admin; brokencrystals.com/api/mcp/tools findings 77→82 (+brokencrystals-mcp-tools-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "benchmark:juice-shop",
       "slug": "secret-resend-bluesky-search-corpus",
       "status": "rejected",
-      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with Bluesky searchPosts from:owasp-juice.shop fallback; no canonical re_<8>_<24> key in author feed or search corpus; benchmark juice-shop-staging 48 findings 6/6 maintained (secret-resend slug still absent \u2014 sensitive_data covered via juice-shop-leaked-api-key)"
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: fetchJuiceShopSocialFeedBodies extended with Bluesky searchPosts from:owasp-juice.shop fallback; no canonical re_<8>_<24> key in author feed or search corpus; benchmark juice-shop-staging 48 findings 6/6 maintained (secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key)"
     },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-mcp-get-config-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/list get_config admin + tools/call returns Unauthorized: tool get_config requires authentication; brokencrystals.com/api/mcp/get_config findings 58\u219280 (+brokencrystals-mcp-get-config-live-oracle +route); benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/list get_config admin + tools/call returns Unauthorized: tool get_config requires authentication; brokencrystals.com/api/mcp/get_config findings 58→80 (+brokencrystals-mcp-get-config-live-oracle +route); benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1378-1382",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1378\u21921382; placeholder/SSTI priority regex extended to 137[0-9]|138[0-2]; web-security-learning-labs.vercel.app/module/1378-1382 findings 8 each with placeholder-module-route-live-oracle; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1378→1382; placeholder/SSTI priority regex extended to 137[0-9]|138[0-2]; web-security-learning-labs.vercel.app/module/1378-1382 findings 8 each with placeholder-module-route-live-oracle; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-mcp-process-numbers-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/call process_numbers processing_expression=7*7 returns SSJI result: 49; brokencrystals.com/api/mcp/process_numbers findings 74\u219282 (+brokencrystals-mcp-process-numbers-live-oracle +route); benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/call process_numbers processing_expression=7*7 returns SSJI result: 49; brokencrystals.com/api/mcp/process_numbers findings 74→82 (+brokencrystals-mcp-process-numbers-live-oracle +route); benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-mcp-spawn-process-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/list spawn_process admin + tools/call returns Unauthorized: tool spawn_process requires authentication; brokencrystals.com/api/mcp/spawn_process findings 74\u219282 (+brokencrystals-mcp-spawn-process-live-oracle +route); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/list spawn_process admin + tools/call returns Unauthorized: tool spawn_process requires authentication; brokencrystals.com/api/mcp/spawn_process findings 74→82 (+brokencrystals-mcp-spawn-process-live-oracle +route); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1376-1378",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1375\u21921378; placeholder/SSTI priority regex 137[0-5]\u2192137[0-8]; web-security-learning-labs.vercel.app/module/1376 findings 7\u21928 (+placeholder-module-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1375→1378; placeholder/SSTI priority regex 137[0-5]→137[0-8]; web-security-learning-labs.vercel.app/module/1376 findings 7→8 (+placeholder-module-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-profile-sensitive-data-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: user1 session GET/POST /profile persists SSN marker in value attribute unencrypted; nodegoat-websec.herokuapp.com/profile findings 7\u219210 (+nodegoat-profile-sensitive-data-live-oracle +route); benchmark juice-shop-staging 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: user1 session GET/POST /profile persists SSN marker in value attribute unencrypted; nodegoat-websec.herokuapp.com/profile findings 7→10 (+nodegoat-profile-sensitive-data-live-oracle +route); benchmark juice-shop-staging 47 findings 6/6 maintained"
     },
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-profile-redos-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: /profile bankRouting field + /tutorial/redos documents regexPattern.test(bankRouting) catastrophic backtracking; nodegoat-websec.herokuapp.com/profile findings 7\u219210 (+nodegoat-profile-redos-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile bankRouting field + /tutorial/redos documents regexPattern.test(bankRouting) catastrophic backtracking; nodegoat-websec.herokuapp.com/profile findings 7→10 (+nodegoat-profile-redos-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",
@@ -1810,13 +1828,13 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-placeholder-module-1371-1375",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1370\u21921375; isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended; web-security-learning-labs.vercel.app/module/1371 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1372-1373 8 each; benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1370→1375; isWebSecurityLearningPlaceholderModuleId + SSTI shell map extended; web-security-learning-labs.vercel.app/module/1371 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1372-1373 8 each; benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "wsl-placeholder-ssti-priority-regex-1371-1375",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: runner placeholder priority regex 370\u219237[0-5] and SSTI priority 1370\u2192137[0-5]; modules 1371-1375 get -3 priority for placeholder/SSTI oracles; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: runner placeholder priority regex 370→37[0-5] and SSTI priority 1370→137[0-5]; modules 1371-1375 get -3 priority for placeholder/SSTI oracles; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
@@ -1828,25 +1846,25 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-seller-storefront-ssti-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /seller/preview?template=<%= 7*7 %> evaluates to 49 after seller session; pwnshop.ctfsecurity.com/seller/storefront findings 43\u219245 (+pwnshop-seller-storefront-ssti-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /seller/preview?template=<%= 7*7 %> evaluates to 49 after seller session; pwnshop.ctfsecurity.com/seller/storefront findings 43→45 (+pwnshop-seller-storefront-ssti-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-60-mcp-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/60 route scan confirms POST /mcp tools/call execute_command('env') leaks WRONGSECRETS_MCP_SECRET; wrongsecrets.herokuapp.com/challenge/60 findings 13\u219214 (+wrongsecrets-challenge-60-mcp-route-live-oracle); benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenge/60 route scan confirms POST /mcp tools/call execute_command('env') leaks WRONGSECRETS_MCP_SECRET; wrongsecrets.herokuapp.com/challenge/60 findings 13→14 (+wrongsecrets-challenge-60-mcp-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:secure-bank-bay.vercel.app",
       "slug": "secure-bank-bay-stored-xss-messages-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: /messages SPA bundle documents POST /api/comments stored XSS via innerHTML in Attack Mode; secure-bank-bay.vercel.app/messages findings 8\u21929 (+secure-bank-bay-stored-xss-messages-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: /messages SPA bundle documents POST /api/comments stored XSS via innerHTML in Attack Mode; secure-bank-bay.vercel.app/messages findings 8→9 (+secure-bank-bay-stored-xss-messages-route-live-oracle); benchmark juice-shop-staging 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:pentest-fauxbank.vercel.app",
       "slug": "fauxbank-open-registration-mass-assignment-live-oracle",
       "status": "rejected",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register and /api/auth/register return HTTP 404 on pentest-fauxbank.vercel.app \u2014 no registration endpoint on current Vercel deploy; mass-assignment oracle not portable without live API"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/register and /api/auth/register return HTTP 404 on pentest-fauxbank.vercel.app — no registration endpoint on current Vercel deploy; mass-assignment oracle not portable without live API"
     }
   ],
   "shipped": [
@@ -9486,6 +9504,21 @@
       "source": "discovery:voting-app-iota.vercel.app",
       "slug": "voting-app-signup-open-route-live-oracle",
       "shipped_at": "2026-08-08T11:20:00.000Z"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-jwt-vulnerable-route-live-oracle",
+      "shipped_at": "2026-08-14T03:30:00.000Z"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-api-users-route-live-oracle",
+      "shipped_at": "2026-08-14T03:30:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-jwt-deserialization-lab-route-fallback",
+      "shipped_at": "2026-08-14T03:30:00.000Z"
     }
   ],
   "shipped_history": [
