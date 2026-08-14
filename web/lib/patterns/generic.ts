@@ -55831,6 +55831,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "high",
+    title: "DVWU open redirect route live oracle",
+    description:
+      "When scanning /labs/open-redirect on dvwu.vercel.app, GET /api/redirect?url= accepts //https:/// malformed bypass with HTTP 302 while blocking AWS metadata — route-specific open redirect training oracle.",
+    impactOneline:
+      "Open redirect labs teach phishing via unvalidated redirect query parameters on university portal SPAs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — validate redirect targets against a strict hostname allowlist.",
+      steps: [
+        "Parse redirect URLs with a strict URL library and compare hostnames exactly.",
+        "Reject protocol-relative and external redirect targets on logout/login flows.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/open-redirect route documents unvalidated /api/redirect?url= phishing chains. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-broken-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "DVWU broken authentication route live oracle",
+    description:
+      "When scanning /labs/broken-auth on dvwu.vercel.app, POST /api/portal accepts hardcoded 20050@ist.edu.bd / password123 or admin' OR '1'='1 SQL injection bypass — route-specific broken authentication training oracle.",
+    impactOneline:
+      "Weak default credentials and SQL injection login bypass let attackers authenticate without valid user accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuBrokenAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — use parameterized queries and block default credentials in production.",
+      steps: [
+        "Use parameterized queries for all authentication database lookups.",
+        "Enforce account lockout and rate limiting on login endpoints.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/broken-auth route documents weak credentials and SQLi login bypass on /api/portal. Show authentication hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-files-client-lfi-route-live-oracle",
     platform: "generic",
     category: "Injection",
