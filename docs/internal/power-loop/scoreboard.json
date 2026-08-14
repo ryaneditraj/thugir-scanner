@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T05:18:28.136Z",
+  "updated_at": "2026-08-14T06:24:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2991,
-  "total_findings": 32338,
+  "total_sites_scanned": 2995,
+  "total_findings": 32452,
   "critical_findings": 106,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2083,
-  "discovery_findings": 25590,
+  "discovery_urls_added": 2088,
+  "discovery_findings": 25657,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-14T05:18:28.136Z",
+  "last_run": "2026-08-14T06:24:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (46 findings); secret-resend slug still absent (sensitive_data covered via other slugs)"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent (sensitive_data covered via other slugs)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 235,
-      "focus": "brokencrystals JWT weak-key/kid-sql/jku/hmac/x5c login oracles from swagger",
+      "urls_scanned": 3,
+      "findings": 67,
+      "focus": "pwnshop SSRF update-avatar + LLM chat/query + vulnforge medium level5 SSTI",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "brokencrystals.com/api/auth/jwt/weak-key/login: 82 findings — full JWT oracle bundle (weak-key, kid-sql, hmac-confusion, jku/x5c/x5u rogue, alg-none route oracles)",
-      "brokencrystals.com/api/auth/jwt/hmac/login: 63 findings — brokencrystals-jwt-hmac-confusion-route-live-oracle fires on targeted endpoint",
-      "brokencrystals.com/api/auth/jwt/jku/login: 29-finding generic hub without route-specific jku-rogue live oracle",
-      "brokencrystals.com/api/auth/jwt/x5c/login: 45-finding generic hub without route-specific x5c-rogue live oracle",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 16-finding generic hub without route-specific kid-sql live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/profile/update-avatar: 45 findings — pwnshop-update-avatar-route-live-oracle fires (PWN-029 SSRF via avatar URL fetch)",
+      "pwnshop.ctfsecurity.com/api/v1/chat/query: 17-finding generic hub without route-specific LLM prompt-injection live oracle (PWN-031)",
+      "vulnforge-academy.vercel.app/.../medium/level5.php: 5 findings — vulnforge-academy-level-ssti-route-live-oracle + reflexion-escalated-ssti",
+      "vuln-expose.vercel.app/api/users + /api/comments: unreachable from cloud agent (DNS/offline)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: route-specific kid-sql JWT oracle absent when scanning endpoint directly",
-      "brokencrystals.com/api/auth/jwt/jku/login: route-specific jku-rogue JWT oracle absent (generic misconfig/xss bundle only)",
-      "brokencrystals.com/api/auth/jwt/x5c/login: route-specific x5c-rogue JWT oracle absent (generic misconfig/xss bundle only)",
+      "pwnshop.ctfsecurity.com/api/v1/chat/query: route-specific direct prompt-injection live oracle absent (client-side evidence only, PWN-031)",
+      "vuln-expose.vercel.app/*: host unreachable — API route scans blocked",
       "damn-vulnerable-startup.fly.dev unreachable from cloud agent (DNS/offline)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
-    "brokencrystals.com/api/auth/jwt/weak-key/login": 82,
-    "brokencrystals.com/api/auth/jwt/hmac/login": 63,
-    "brokencrystals.com/api/auth/jwt/x5c/login": 45,
-    "brokencrystals.com/api/auth/jwt/jku/login": 29,
-    "brokencrystals.com/api/auth/jwt/kid-sql/login": 16
+    "juice-shop.herokuapp.com": 47,
+    "pwnshop.ctfsecurity.com/profile/update-avatar": 45,
+    "pwnshop.ctfsecurity.com/api/v1/chat/query": 17,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level5.php": 5
   }
 }
