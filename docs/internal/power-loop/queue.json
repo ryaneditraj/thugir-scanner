@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://web-security-learning-labs.vercel.app/module/1623",
+      "source": "web-security-learning-labs Vercel — module 1623 security lab route (WSL catalog expansion past 1619, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1622",
+      "source": "web-security-learning-labs Vercel — module 1622 security lab route (WSL catalog expansion past 1619, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1621",
+      "source": "web-security-learning-labs Vercel — module 1621 security lab route (WSL catalog expansion past 1619, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1620",
+      "source": "web-security-learning-labs Vercel — module 1620 security lab route (WSL catalog expansion past 1619, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/login",
+      "source": "AI & Security Platform — Next.js signIn server-action brute-force / auth-bypass surface (14-challenge OWASP lab README)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1616",
       "source": "Web Security Learning Labs — module catalog 1616 (WSL vercel app, Aug 2026; IDOR placeholder expansion past 1613)",
       "auth": "public_demo"
@@ -38,6 +63,8 @@
     {
       "url": "https://seclab.vercel.app/api/xss-vulnerable",
       "source": "DaniSam-STU/security-lab — innerHTML XSS oracle GET /api/xss-vulnerable (seclab.vercel.app README CWE-79)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
       "source": "NeuraLegion/brokencrystals — JWT X5U rogue-certificate bypass oracle POST /api/auth/jwt/x5u/login (swagger)",
