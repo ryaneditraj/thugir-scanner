@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-14T01:26:00.000Z",
+  "updated_at": "2026-08-14T02:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/users/search/test",
+      "source": "NeuraLegion/brokencrystals — excessive data exposure oracle GET /api/users/search/:name (README Broken Access Control)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file?path=../../../etc/passwd&type=text/plain",
+      "source": "NeuraLegion/brokencrystals — path traversal / LFI oracle via /api/file path parameter (README SSRF/file read)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/api/users/1",
+      "source": "Areeeshaa/SecureBank — unauthenticated user BOLA oracle GET /api/users/:id (Attack Mode demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/jwt-vulnerable",
+      "source": "DaniSam-STU/security-lab — JWT alg-none / weak verification oracle GET /api/jwt-vulnerable (seclab.vercel.app README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=1",
+      "source": "PortSwigger Gin & Juice Shop — blog comment stored/reflected XSS oracle surface (Web Security Academy route map)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
       "source": "0xSV1/DVS DeployBro — interactive terminal challenge (leaked creds + command injection via deploybro CLI)",
