@@ -66390,6 +66390,24 @@ const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopChatPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/chat\/init\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopChatPromptInjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop chat route scan — POST /chat with developer debug jailbreak leaks full system prompt including INTERNAL AGENT PRIVILEGED COMMANDS (PWN-031 prompt-injection oracle)"
+    }
+  };
+};
+
 const brokencrystalsChatLlmQueryLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const url = new URL("/api/chat/query", ctx.origin).toString();
@@ -79608,6 +79626,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopProductSearchSqliLiveOracle,
   pwnshopAdminLoginSqliLiveOracle,
   pwnshopChatPromptInjectionLiveOracle,
+  pwnshopChatPromptInjectionRouteLiveOracle,
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,

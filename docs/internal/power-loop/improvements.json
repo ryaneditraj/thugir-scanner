@@ -1,6 +1,12 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /chat with developer debug jailbreak returns reply with You are Pwnie + INTERNAL AGENT PRIVILEGED COMMANDS; pwnshop.ctfsecurity.com/api/v1/chat/query findings 17→41 (+pwnshop-chat-prompt-injection-route-live-oracle with scannedUrl); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-open-redirect-route-live-oracle",
       "status": "shipped",
@@ -10059,6 +10065,11 @@
       "source": "discovery:secure-bank-bay.vercel.app",
       "slug": "secure-bank-bay-api-users-bundle-fallback",
       "shipped_at": "2026-08-14T04:25:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-route-live-oracle",
+      "shipped_at": "2026-08-14T07:15:00.000Z"
     }
   ]
 }

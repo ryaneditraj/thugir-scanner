@@ -1896,6 +1896,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopProductSearchSqliLiveOracle",
   "pwnshopAdminLoginSqliLiveOracle",
   "pwnshopChatPromptInjectionLiveOracle",
+  "pwnshopChatPromptInjectionRouteLiveOracle",
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
   "pwnshopVerifyOtpBruteforceLiveOracle",
@@ -11253,6 +11254,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:api\/)?chat\/init\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-chat-init")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(targetInput) &&
+        !/\/chat\/init\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-chat-prompt-injection")
       )
         return -3;
       if (
