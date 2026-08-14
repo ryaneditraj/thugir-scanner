@@ -25952,6 +25952,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-resend-key-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "Juice Shop Resend API key live oracle",
+    description:
+      "Expanded Bluesky/Mastodon/Reddit/fosstodon social corpus plus GET api.resend.com/domains validation confirms a canonical re_<8>_<24> Resend API key leaked via OWASP Juice Shop social channels — Leaked Resend API Key challenge oracle.",
+    impactOneline:
+      "Live-validated Resend API key in Juice Shop social corpus enables email abuse as the shop domain.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopResendKeyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Revoke the exposed Resend API key and rotate immediately.",
+      steps: [
+        "Revoke the leaked Resend key in the Resend dashboard.",
+        "Never post API keys on social media or public feeds.",
+        "Use server-side-only secrets management for email providers."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop social posts leaked a Resend API key. Show revocation and secure email integration.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-backup-db-sql-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",
