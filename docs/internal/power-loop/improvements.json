@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-missing-trace-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /s/missing-trace Missing Trace GmbH + Broken trace correlation + downstream traceparent propagation mismatch; support-reliability-lab.vercel.app/s/missing-trace findings 5→12; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-csrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /csrf/index.php registration succeeds without CSRF token (Registration successful on INSECURE CSRF Demo App v1.0); compass-demo.com/csrf/ findings 4→10; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1697-1700-catalog",
       "status": "shipped",
@@ -11103,6 +11115,16 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1689-1696-idor-catalog",
       "shipped_at": "2026-08-15T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-missing-trace-live-oracle",
+      "shipped_at": "2026-08-15T23:30:00.000Z"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-csrf-live-oracle",
+      "shipped_at": "2026-08-15T23:30:00.000Z"
     }
   ]
 }

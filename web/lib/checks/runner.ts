@@ -1221,6 +1221,8 @@ const DEEP_RULES = new Set<string>([
   "compassDemoAngularjsRouteLiveOracle",
   "compassDemoXssLabReflectedLiveOracle",
   "compassDemoXssLabRouteLiveOracle",
+  "compassDemoCsrfLiveOracle",
+  "compassDemoCsrfRouteLiveOracle",
   "firingRangeEscapeServersideAttributeUnquotedLiveOracle",
   "firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle",
   "firingRangeEscapeServersideCssStyleLiveOracle",
@@ -1538,6 +1540,8 @@ const DEEP_RULES = new Set<string>([
   "supportReliabilityLabServerlessTimeoutRouteLiveOracle",
   "supportReliabilityLabStaleCacheLiveOracle",
   "supportReliabilityLabStaleCacheRouteLiveOracle",
+  "supportReliabilityLabMissingTraceLiveOracle",
+  "supportReliabilityLabMissingTraceRouteLiveOracle",
   "supportReliabilityLabBigUploadPayloadLiveOracle",
   "supportReliabilityLabBigUploadPayloadRouteLiveOracle",
   "clientSidePokemortyCtfEvidence",
@@ -3116,6 +3120,8 @@ const DEEP_RULES = new Set<string>([
   "supportReliabilityLabServerlessTimeoutRouteLiveOracle",
   "supportReliabilityLabStaleCacheLiveOracle",
   "supportReliabilityLabStaleCacheRouteLiveOracle",
+  "supportReliabilityLabMissingTraceLiveOracle",
+  "supportReliabilityLabMissingTraceRouteLiveOracle",
   "supportReliabilityLabBigUploadPayloadLiveOracle",
   "supportReliabilityLabBigUploadPayloadRouteLiveOracle",
   "xssGameLevel3DomXssLiveOracle",
@@ -10793,7 +10799,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;
       if (
         /compass-demo\.com/i.test(origin) &&
-        /\/(?:csp_demo|angularjs|xss_lab|nosql\/movies|jwt_lab|cors\/attack)\b/i.test(targetInput) &&
+        /\/(?:csp_demo|angularjs|xss_lab|nosql\/movies|jwt_lab|cors\/attack|csrf)\b/i.test(targetInput) &&
         p.slug.startsWith("compass-demo-") &&
         /-route-/.test(p.slug)
       )
@@ -11926,6 +11932,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /support-reliability-lab\.vercel\.app/i.test(origin) &&
         /\/s\/big-upload\b/i.test(targetInput) &&
         p.slug.startsWith("support-reliability-lab-big-upload")
+      )
+        return -3;
+      if (
+        /support-reliability-lab\.vercel\.app/i.test(origin) &&
+        /\/s\/missing-trace\b/i.test(targetInput) &&
+        p.slug.startsWith("support-reliability-lab-missing-trace")
       )
         return -3;
       if (
