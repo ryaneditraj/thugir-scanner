@@ -38336,7 +38336,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1688;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1696;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38445,7 +38445,15 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1685": "IDOR",
   "1686": "IDOR",
   "1687": "IDOR",
-  "1688": "IDOR"
+  "1688": "IDOR",
+  "1689": "IDOR",
+  "1690": "IDOR",
+  "1691": "IDOR",
+  "1692": "IDOR",
+  "1693": "IDOR",
+  "1694": "IDOR",
+  "1695": "IDOR",
+  "1696": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38600,7 +38608,15 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1685": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1686": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1687": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1688": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1688": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1689": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1690": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1691": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1692": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1693": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1694": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1695": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1696": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -43199,6 +43215,124 @@ const clientSideSanitizeXssDemoEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Sanitize Online Demo invites attackers to bypass Ruby Sanitize HTML filters via posted markup and relaxed config options"
+    }
+  };
+};
+
+function isSanitizeWebHost(ctx: RuleContext): boolean {
+  try {
+    return /sanitize-web\.fly\.dev$/i.test(new URL(ctx.origin).hostname);
+  } catch {
+    return false;
+  }
+}
+
+const SANITIZE_RELAXED_BYPASS_PROBE =
+  "<math><style>/*</style><img src=x onerror=alert(1)>*/</style></math>";
+
+async function probeSanitizeRelaxedConfigBypass(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isSanitizeWebHost(ctx)) return null;
+  const postUrl = new URL("/", ctx.origin).toString();
+  const body = `html=${encodeURIComponent(SANITIZE_RELAXED_BYPASS_PROBE)}&config=relaxed`;
+  const doc = await fetchDoc(postUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 32768,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const renderedMatch = doc.body.match(/<div class="html">([\s\S]*?)<\/div>/i);
+  if (!renderedMatch) return null;
+  const rendered = renderedMatch[1];
+  if (!/<img\b/i.test(rendered)) return null;
+  if (!/\*\//.test(rendered) && !/<img\s+src=/i.test(rendered)) return null;
+  return {
+    fired: true,
+    confidence:
+      /<img\s+src=["']x["']/i.test(rendered) && /\*\//.test(rendered) ? 0.92 : 0.89,
+    evidence: {
+      url: postUrl,
+      renderedSnippet: rendered.slice(0, 160),
+      note: "Sanitize Online Demo POST relaxed config — CVE-2020-4054 class math/style comment breakout leaks <img> into rendered HTML (onerror stripped in Sanitize 7.0 but tag injection survives)"
+    }
+  };
+}
+
+const sanitizeWebRelaxedBypassLiveOracle: Rule = async (ctx) => {
+  const result = await probeSanitizeRelaxedConfigBypass(ctx);
+  return result ?? NEGATIVE;
+};
+
+const sanitizeWebRelaxedBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSanitizeWebHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await probeSanitizeRelaxedConfigBypass(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "sanitize-web.fly.dev route scan — live POST relaxed config probe confirms math/style comment breakout allows img injection into rendered panel"
+    }
+  };
+};
+
+function isWebexp05Host(ctx: RuleContext): boolean {
+  try {
+    return /webexp05\.vercel\.app$/i.test(new URL(ctx.origin).hostname);
+  } catch {
+    return false;
+  }
+}
+
+async function probeWebexp05C3StoredXss(ctx: RuleContext, pageUrl?: string): Promise<RuleResult | null> {
+  if (!isWebexp05Host(ctx)) return null;
+  const probePath =
+    pageUrl && /\/c3\b/i.test(pageUrl) ? pageUrl : new URL("/c3/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probePath, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const body = doc.body;
+  const hasLocalStorageComments =
+    /localStorage\.getItem\s*\(\s*['"]comments['"]\s*\)/i.test(body) &&
+    /localStorage\.setItem\s*\(\s*['"]comments['"]\s*,/i.test(body);
+  const hasInnerHtmlSink =
+    /\.innerHTML\s*=\s*comments\.map/i.test(body) && /comment\.text/i.test(body);
+  const hasAdminFlagCookie = /document\.cookie\s*=\s*["']admin_flag=/i.test(body);
+  if (!hasLocalStorageComments || !hasInnerHtmlSink) return null;
+  return {
+    fired: true,
+    confidence: hasAdminFlagCookie ? 0.93 : 0.91,
+    evidence: {
+      url: probePath,
+      snippet:
+        body.match(/innerHTML\s*=\s*comments\.map[\s\S]{0,120}/i)?.[0]?.slice(0, 160) ??
+        body.match(/localStorage\.setItem\s*\(\s*['"]comments['"][\s\S]{0,80}/i)?.[0]?.slice(0, 160),
+      note: "webexp05 /c3/ stores comments in localStorage and renders comment.text via innerHTML without encoding — client-side stored XSS training oracle (admin_flag cookie bait)"
+    }
+  };
+}
+
+const webexp05C3StoredXssLiveOracle: Rule = async (ctx) => {
+  const result = await probeWebexp05C3StoredXss(ctx);
+  return result ?? NEGATIVE;
+};
+
+const webexp05C3StoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebexp05Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/c3\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeWebexp05C3StoredXss(ctx, pageUrl);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "webexp05.vercel.app/c3/ route scan — localStorage comment storage rendered via innerHTML without sanitization"
     }
   };
 };
@@ -82816,6 +82950,10 @@ export const RULES: Record<string, Rule> = {
   clientSideXssQuizEvidence,
   clientSideCodeBreakingEvidence,
   clientSideSanitizeXssDemoEvidence,
+  sanitizeWebRelaxedBypassLiveOracle,
+  sanitizeWebRelaxedBypassRouteLiveOracle,
+  webexp05C3StoredXssLiveOracle,
+  webexp05C3StoredXssRouteLiveOracle,
   clientSidePokemortyCtfEvidence,
   clientSideCvebenchBenchmarkEvidence,
   clientSideSploitifyExploitDatabaseEvidence,
