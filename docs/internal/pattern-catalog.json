@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T19:18:19.483Z",
-  "total": 2385,
-  "uniqueSlugs": 2381,
+  "generatedAt": "2026-08-15T20:03:28.338Z",
+  "total": 2389,
+  "uniqueSlugs": 2385,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2367,
+    "generic": 2371,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2300,
+    "deep": 2304,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 169,
     "Broken authentication": 146,
     "Injection": 358,
-    "Cross-site scripting": 693,
+    "Cross-site scripting": 697,
     "Open redirect": 21,
     "general": 20,
     "SSRF": 14,
@@ -1829,6 +1829,8 @@
     "rest-vulnweb-users-bola-live-oracle",
     "rest-vulnweb-users-bola-route-live-oracle",
     "robots-sensitive-paths",
+    "sanitize-web-relaxed-bypass-live-oracle",
+    "sanitize-web-relaxed-bypass-route-live-oracle",
     "sec-research-lab-command-injection-route-live-oracle",
     "sec-research-lab-cors-lab-route-live-oracle",
     "sec-research-lab-host-header-password-reset-poisoning-live-oracle",
@@ -2269,6 +2271,8 @@
     "web-security-learning-labs-module-route-live-oracle",
     "web-security-learning-labs-placeholder-module-route-live-oracle",
     "web-security-learning-labs-ssti-module-route-live-oracle",
+    "webexp05-c3-stored-xss-live-oracle",
+    "webexp05-c3-stored-xss-route-live-oracle",
     "whoopspay-admin-database-execute-live-oracle",
     "whoopspay-admin-database-execute-route-live-oracle",
     "whoopspay-admin-express-logs-disclosure-live-oracle",
