@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T00:24:27.768Z",
-  "total": 2356,
-  "uniqueSlugs": 2352,
+  "generatedAt": "2026-08-15T01:05:22.970Z",
+  "total": 2357,
+  "uniqueSlugs": 2353,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2338,
+    "generic": 2339,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2271,
+    "deep": 2272,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 112,
     "Security misconfiguration": 165,
     "Broken authentication": 141,
-    "Injection": 350,
+    "Injection": 351,
     "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
@@ -945,6 +945,7 @@
     "dvrag-admin-config-live-oracle",
     "dvrag-rag-pipeline-live-oracle",
     "dvwu-broken-auth-route-live-oracle",
+    "dvwu-command-injection-lab-route-live-oracle",
     "dvwu-comments-xss-route-live-oracle",
     "dvwu-crlf-client-route-live-oracle",
     "dvwu-csrf-newsletter-crlf-route-live-oracle",

@@ -41551,7 +41551,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs extended IDOR module route live oracle",
     description:
-      "When scanning extended curated IDOR catalog modules (1597–1605) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
+      "When scanning extended curated IDOR catalog modules (1597–1642) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
     impactOneline:
       "Route-specific identification of unreleased WSL IDOR catalog modules prevents missing topic context on empty Next.js shells.",
     detectorKind: "rule_ref",
@@ -56841,6 +56841,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our dvwu.vercel.app /labs/ssti route is a server-side template injection training lab. Show SSTI-safe templating remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-command-injection-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "DVWU command-injection lab route live oracle",
+    description:
+      "When scanning /labs/command-injection on dvwu.vercel.app, confirm the OS command injection training lab route with live DVWU injection oracle — route-specific command injection lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes a command injection training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuCommandInjectionLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — never pass user input to shell commands in production.",
+      steps: [
+        "Use parameterized APIs instead of shell interpolation for system operations.",
+        "Block shell metacharacters at the application layer.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/command-injection route is an OS command injection training lab. Show safe subprocess remediation.",
     version: 1,
     enabled: true
   },
