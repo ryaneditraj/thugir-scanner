@@ -57131,6 +57131,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-xss-lab-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVWU XSS lab route live oracle",
+    description:
+      "When scanning /labs/xss on dvwu.vercel.app, GET /api/search?q= reflects raw <script> payloads unescaped — route-specific reflected XSS lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes a reflected/stored XSS training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuXssLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — encode output and validate input in production.",
+      steps: [
+        "Use contextual output encoding for HTML, JavaScript, and attribute sinks.",
+        "Adopt a strict CSP and avoid inline script execution.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/xss route is a reflected XSS training lab. Show output encoding and CSP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-deserialization-lab-route-live-oracle",
     platform: "generic",
     category: "Injection",
