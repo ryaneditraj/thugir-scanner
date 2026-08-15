@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1637;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1642;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38364,7 +38364,12 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1634": "IDOR",
   "1635": "IDOR",
   "1636": "IDOR",
-  "1637": "IDOR"
+  "1637": "IDOR",
+  "1638": "IDOR",
+  "1639": "IDOR",
+  "1640": "IDOR",
+  "1641": "IDOR",
+  "1642": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38468,7 +38473,12 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1634": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1635": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1636": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1637": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1637": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1638": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1639": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1640": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1641": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1642": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -38672,6 +38682,7 @@ const webSecurityLearningLabsPlaceholderModuleRouteLiveOracle: Rule = async (ctx
   const moduleMatch = pageUrl.match(/\/module\/(\d{4})\b/i);
   if (!moduleMatch) return NEGATIVE;
   const moduleId = moduleMatch[1]!;
+  if (WEB_SECURITY_LEARNING_EXTENDED_IDOR_MODULE_IDS.has(moduleId)) return NEGATIVE;
   let corpus = `${ctx.combined}\n${pageUrl}`;
   const moduleDoc = await fetchDoc(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
   corpus += "\n" + moduleDoc.body;
@@ -78649,6 +78660,37 @@ const dvwuSstiLabRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const dvwuCommandInjectionLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/command-injection\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeDvwuLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/command-injection route scan — OS command injection training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "DVWU /labs/command-injection route scan — OS command injection training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/search probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 const dvwuDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -82762,6 +82804,7 @@ export const RULES: Record<string, Rule> = {
   dvwuJwtLabRouteLiveOracle,
   dvwuDeserializationLabRouteLiveOracle,
   dvwuSstiLabRouteLiveOracle,
+  dvwuCommandInjectionLabRouteLiveOracle,
   dvwuFilesClientLfiRouteLiveOracle,
   dvwuPathTraversalClientRouteLiveOracle,
   vampiAdminProfileUnauthLiveOracle,
