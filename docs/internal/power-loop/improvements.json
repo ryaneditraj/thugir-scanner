@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1651-1652-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1650→1652 + IDOR curated modules 1651-1652; web-security-learning-labs.vercel.app/module/1651 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle Here is a Module: 1651); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-lab-results-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/lab-results/:id IDOR — no ownership check in server.js app.get('/api/lab-results/:id'); zero-health.vercel.app/api/lab-results/1 findings 8→9 (+zerohealth-lab-results-route-live-oracle via challenges.md/server.js fallback); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-chatbot-chat-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/chatbot/chat string-interpolated INSERT INTO chat_history (user_id, message, response) VALUES (${userId} in chatbot.js; zero-health.vercel.app/api/chatbot/chat findings 8→9 (+zerohealth-chatbot-chat-route-live-oracle via chatbot.js fallback); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1646-1650-idor-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1645→1650 + IDOR curated modules 1646-1650 + topic aliases; web-security-learning-labs.vercel.app/module/1648 findings include web-security-learning-labs-idor-module-route-live-oracle (Here is a Module: 1648); benchmark juice-shop 48 findings 6/6 maintained"
