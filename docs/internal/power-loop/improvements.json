@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-admin-console-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin returns Incident Console HTML with per-tenant incident toggles (name=incident select + serverless-timeout option) without auth; live runDeepScan blocked by Vercel Security Checkpoint after repeated probes — oracle logic verified via pre-checkpoint curl; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-serverless-timeout-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /s/slow-api returns HTTP 504 with Serverless timeout on slow upstream and route tolerance 2500ms abort timing; pre-checkpoint curl confirmed; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-ssti-race-route-bundle-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwuSstiLabRouteLiveOracle + dvwuRaceConditionLabRouteLiveOracle extended with istEduVulnPortalBundleCorpus fallback (matching cmdi/xxe pattern); dvwu.vercel.app/labs/ssti fires dvwu-ssti-lab-route-live-oracle (12 findings); dvwu.vercel.app/labs/race-condition fires dvwu-race-condition-lab-route-live-oracle (12 findings); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:sanitize-web.fly.dev",
       "slug": "sanitize-web-relaxed-bypass-live-oracle",
       "status": "shipped",
