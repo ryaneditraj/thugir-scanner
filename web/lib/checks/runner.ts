@@ -1215,6 +1215,12 @@ const DEEP_RULES = new Set<string>([
   "compassDemoCorsAttackApiRouteLiveOracle",
   "compassDemoNosqlLoginBypassLiveOracle",
   "compassDemoNosqlMoviesRouteLiveOracle",
+  "compassDemoCspBypassLiveOracle",
+  "compassDemoCspDemoRouteLiveOracle",
+  "compassDemoAngularjsXssLiveOracle",
+  "compassDemoAngularjsRouteLiveOracle",
+  "compassDemoXssLabReflectedLiveOracle",
+  "compassDemoXssLabRouteLiveOracle",
   "firingRangeEscapeServersideAttributeUnquotedLiveOracle",
   "firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle",
   "firingRangeEscapeServersideCssStyleLiveOracle",
@@ -10754,6 +10760,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           targetInput
         ) &&
         p.slug.startsWith("ssrf-vulnlab-") &&
+        /-route-/.test(p.slug)
+      )
+        return -3;
+      if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;
+      if (
+        /compass-demo\.com/i.test(origin) &&
+        /\/(?:csp_demo|angularjs|xss_lab|nosql\/movies|jwt_lab|cors\/attack)\b/i.test(targetInput) &&
+        p.slug.startsWith("compass-demo-") &&
         /-route-/.test(p.slug)
       )
         return -3;

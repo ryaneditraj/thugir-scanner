@@ -60275,5 +60275,161 @@ export const genericPatterns: Pattern[] = [
       "Our Compass /nosql/movies.php route documents NoSQL login bypass. Show route-specific MongoDB operator-injection hardening.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "compass-demo-csp-bypass-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Compass Security CSP bypass lab live oracle",
+    description:
+      "GET /csp_demo/level1 serves Content-Security-Policy with unsafe-inline and documents multi-level CSP bypass challenges — Compass Security CSP bypass training oracle.",
+    impactOneline:
+      "Weak CSP directives (unsafe-inline/unsafe-eval) let attackers bypass policy and achieve script execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoCspBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove unsafe-inline from script-src and use nonces or hashes — Compass CSP demos are intentional training.",
+      steps: [
+        "Avoid unsafe-inline and unsafe-eval in Content-Security-Policy.",
+        "Use strict-dynamic or nonce-based script loading for required inline scripts.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /csp_demo serves CSP with unsafe-inline. Show Content-Security-Policy hardening without unsafe directives.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-csp-demo-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Compass Security /csp_demo CSP bypass route live oracle",
+    description:
+      "When scanning /csp_demo, live level1 unsafe-inline CSP or curated CSP Bypass Lab markers confirm Compass Security CSP bypass training module.",
+    impactOneline:
+      "Route-specific confirmation that Compass /csp_demo documents Content-Security-Policy bypass challenges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoCspDemoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove unsafe-inline from script-src on /csp_demo challenges.",
+      steps: [
+        "Avoid unsafe-inline and unsafe-eval in Content-Security-Policy.",
+        "Use nonce-based or hash-based script allowances.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /csp_demo route documents CSP bypass training. Show route-specific CSP hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-angularjs-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Compass Security AngularJS XSS sinks live oracle",
+    description:
+      "GET /angularjs/angularjs_demo.php exposes eval(userInput), ng-bind-html-unsafe, and bind-html-compile XSS sinks — Compass Security AngularJS output-encoding bypass oracle.",
+    impactOneline:
+      "Trusting unsanitized HTML or eval in AngularJS templates lets attackers inject scripts in the victim browser.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoAngularjsXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never use ng-bind-html-unsafe or eval on user input — Compass AngularJS demos are intentional training.",
+      steps: [
+        "Use $sanitize or strict contextual encoding for dynamic HTML.",
+        "Remove eval sinks and deprecated ng-bind-html-unsafe directives.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /angularjs/angularjs_demo.php uses eval and ng-bind-html-unsafe. Show AngularJS XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-angularjs-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Compass Security /angularjs XSS route live oracle",
+    description:
+      "When scanning /angularjs, live eval + ng-bind-html-unsafe sinks or curated AngularJS Demo markers confirm Compass Security XSS training module.",
+    impactOneline:
+      "Route-specific confirmation that Compass /angularjs documents AngularJS output-encoding bypass sinks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoAngularjsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove eval and ng-bind-html-unsafe from /angularjs demo routes.",
+      steps: [
+        "Use $sanitize or strict contextual encoding for dynamic HTML.",
+        "Remove eval sinks and deprecated ng-bind-html-unsafe directives.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /angularjs route documents AngularJS XSS sinks. Show route-specific output-encoding hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-xss-lab-reflected-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Compass Security XSS lab reflected injection live oracle",
+    description:
+      "GET /xss_lab/level1?inject= reflects attacker input unencoded in HTML — Compass Security reflected XSS bypass training oracle.",
+    impactOneline:
+      "Reflected XSS lets attackers execute scripts in victim browsers via crafted links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoXssLabReflectedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all reflected output — Compass XSS Lab is intentional training software.",
+      steps: [
+        "Contextually encode user input before reflecting into HTML.",
+        "Use a vetted templating library with auto-escaping.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /xss_lab/level1 reflects inject without encoding. Show reflected XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-xss-lab-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Compass Security /xss_lab reflected XSS route live oracle",
+    description:
+      "When scanning /xss_lab, live level1 inject reflection or curated XSS Lab markers confirm Compass Security reflected XSS training module.",
+    impactOneline:
+      "Route-specific confirmation that Compass /xss_lab documents reflected XSS bypass challenges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoXssLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode reflected output on /xss_lab challenge routes.",
+      steps: [
+        "Contextually encode user input before reflecting into HTML.",
+        "Use a vetted templating library with auto-escaping.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /xss_lab route documents reflected XSS training. Show route-specific output encoding.",
+    version: 1,
+    enabled: true
   }
 ];

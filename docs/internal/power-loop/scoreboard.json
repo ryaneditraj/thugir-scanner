@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T13:15:00.000Z",
+  "updated_at": "2026-08-15T14:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2864,
-  "total_findings": 28352,
+  "total_sites_scanned": 2868,
+  "total_findings": 28426,
   "critical_findings": 66,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2034,
-  "discovery_findings": 23123,
-  "improvements_shipped": 1203,
-  "last_run": "2026-08-15T13:15:00.000Z",
+  "discovery_findings": 23149,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-15T14:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -48,40 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings, 582 probes) — no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings) — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 27,
-      "focus": "WSL module 1673 IDOR catalog + vulnerable-web-site open-redirect/xxe route oracles + AI Security sqli auth-gated challenge oracle",
+      "urls_scanned": 3,
+      "findings": 26,
+      "focus": "compass-demo CSP bypass + AngularJS XSS sinks + XSS lab reflected injection route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1673: 7→9 findings — web-security-learning-labs-module-1673-idor-catalog shipped (+idor-module-route-live-oracle)",
-      "vulnerable-web-site.vercel.app/open-redirect: 5→6 findings — vulnerable-web-site-open-redirect-route-live-oracle shipped",
-      "vulnerable-web-site.vercel.app/xxe: 5→6 findings — vulnerable-web-site-xxe-route-live-oracle shipped",
-      "ai-security-platform-iota.vercel.app/challenges/sqli: 6→7 findings — ai-security-sqli-route-live-oracle shipped (HTTP 307 → /login?next=/challenges/sqli)"
+      "compass-demo.com/csp_demo: 4→9 findings — compass-demo-csp-bypass-live-oracle + csp-demo-route-live-oracle shipped (level1 unsafe-inline CSP)",
+      "compass-demo.com/angularjs/angularjs_demo.php: 4→9 findings — compass-demo-angularjs-xss-live-oracle + angularjs-route-live-oracle shipped (eval + ng-bind-html-unsafe)",
+      "compass-demo.com/xss_lab/: 3→8 findings — compass-demo-xss-lab-reflected-live-oracle + xss-lab-route-live-oracle shipped (inject param reflected unencoded)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnerable-web-site.vercel.app/open-redirect + /xxe: routes redirect to login only — no live open-redirect/XXE API on megmogmog1965/vulnerable-web-site main branch",
-      "ai-security-platform-iota.vercel.app/challenges/sqli: auth-gated route oracle shipped — live SQLi probe still requires authenticated session",
-      "web-security-learning-labs.vercel.app/module/1673: IDOR placeholder oracle shipped — module-specific injection content still absent",
-      "WSL modules 1674–1676 + VulnShop admin routes queued but not reached this run",
-      "nextjs-security-lesson.vercel.app/* — routes unreachable on discovery queue",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)"
+      "compass-demo.com/csrf/: CSRF Demo App v1.0 INSECURE registration — no route-specific CSRF live oracle yet",
+      "compass-demo.com/csp_demo/level2-8: only level1 probed live — higher CSP bypass levels not individually oracled",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "nextjs-security-lesson.vercel.app/* — routes unreachable on discovery queue"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "compass-demo.com/csp_demo": 9,
+    "compass-demo.com/angularjs/angularjs_demo.php": 9,
+    "compass-demo.com/xss_lab/": 8,
     "web-security-learning-labs.vercel.app/module/1673": 9,
-    "ai-security-platform-iota.vercel.app/challenges/sqli": 7,
-    "vulnerable-web-site.vercel.app/open-redirect": 6,
-    "vulnerable-web-site.vercel.app/xxe": 6,
-    "demo.aevum.build/v1/consent/review": 9,
-    "web-security-learning-labs.vercel.app/module/1672": 7
+    "vulnerable-web-site.vercel.app/open-redirect": 6
   }
 }
