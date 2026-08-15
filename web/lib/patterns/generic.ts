@@ -41603,7 +41603,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs extended IDOR module route live oracle",
     description:
-      "When scanning extended curated IDOR catalog modules (1597–1668) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
+      "When scanning extended curated IDOR catalog modules (1597–1671) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
     impactOneline:
       "Route-specific identification of unreleased WSL IDOR catalog modules prevents missing topic context on empty Next.js shells.",
     detectorKind: "rule_ref",
@@ -60065,6 +60065,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Compass /cors/attack/api.php CORS demo exposes PII and null-origin credential leaks. Show CORS allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-nosql-login-bypass-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Compass Security NoSQL login bypass live oracle",
+    description:
+      "POST /nosql/movies.php accepts MongoDB operator injection (password[$ne]=1) and authenticates as admin without valid credentials — Compass Security NoSQL login bypass oracle.",
+    impactOneline:
+      "Unsanitized NoSQL query operators in login filters let attackers bypass authentication without knowing the password.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoNosqlLoginBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject operator objects in login input and type-check credentials — Compass NoSQL demos are intentional training.",
+      steps: [
+        "Cast username/password to strings before querying MongoDB.",
+        "Reject keys starting with $ in user-supplied objects.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /nosql/movies.php login accepts password[$ne] operator injection. Show NoSQL injection remediation for MongoDB authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-nosql-movies-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Compass Security /nosql/movies.php NoSQL bypass route live oracle",
+    description:
+      "When scanning /nosql/movies.php, live password[$ne] operator injection authenticates as admin or MongoDB NoSQL training markers confirm Compass Security NoSQL login demo.",
+    impactOneline:
+      "Route-specific confirmation that Compass /nosql/movies.php documents MongoDB operator-injection authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoNosqlMoviesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject operator objects in login input on /nosql/movies.php.",
+      steps: [
+        "Cast username/password to strings before querying MongoDB.",
+        "Reject keys starting with $ in user-supplied objects.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /nosql/movies.php route documents NoSQL login bypass. Show route-specific MongoDB operator-injection hardening.",
     version: 1,
     enabled: true
   }
