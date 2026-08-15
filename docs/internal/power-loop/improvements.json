@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sanitize-web.fly.dev",
+      "slug": "sanitize-web-relaxed-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST relaxed config with CVE-2020-4054 class math/style comment breakout returns rendered <img src=\"x\">*/ in Filtered HTML panel; sanitize-web.fly.dev findings 3→5 (+sanitize-web-relaxed-bypass-live-oracle +route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:webexp05.vercel.app",
+      "slug": "webexp05-c3-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /c3/ page script stores comments in localStorage and renders comment.text via innerHTML without encoding + admin_flag cookie bait; webexp05.vercel.app/c3/ findings 6→8 (+webexp05-c3-stored-xss-live-oracle +route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1689-1696-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1688→1696 + IDOR curated modules 1689–1696 + topic aliases + runner priority 169[0-6]; web-security-learning-labs.vercel.app/module/1694 findings 5→9 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "client-side-pwnshop-avatar-xss-oracle",
       "status": "shipped",
@@ -11034,6 +11052,21 @@
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-basic-route-oracle-requeue",
       "shipped_at": "2026-08-15T15:20:00.000Z"
+    },
+    {
+      "source": "discovery:sanitize-web.fly.dev",
+      "slug": "sanitize-web-relaxed-bypass-live-oracle",
+      "shipped_at": "2026-08-15T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:webexp05.vercel.app",
+      "slug": "webexp05-c3-stored-xss-live-oracle",
+      "shipped_at": "2026-08-15T20:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1689-1696-idor-catalog",
+      "shipped_at": "2026-08-15T20:15:00.000Z"
     }
   ]
 }
