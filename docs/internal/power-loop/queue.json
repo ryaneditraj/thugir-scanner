@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://web-security-learning-labs.vercel.app/module/1671",
+      "source": "web-security-learning-labs Vercel — module 1671 security lab route (WSL catalog expansion past 1670, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1672",
+      "source": "web-security-learning-labs Vercel — module 1672 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://www.compass-demo.com/nosql/movies.php",
+      "source": "Compass Security NoSQL Demo — mongoDB login bypass + server-side JS injection oracle (compass-demo.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://compass-demo.com/csp_demo",
+      "source": "Compass Security CSP Bypass Lab — multi-level CSP misconfiguration challenges (compass-demo.com hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://compass-demo.com/angularjs/angularjs_demo.php",
+      "source": "Compass Security AngularJS Demo — ng-bind-html/SCE disabled XSS + CSRF misconfigs (compass-demo.com hub)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://www.compass-demo.com/jwt_lab/",
       "source": "Compass Security JWT Lab — 5-level JWT bypass training oracle (compass-demo.com demo overview)",
       "auth": "public_demo"
