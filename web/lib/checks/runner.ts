@@ -2506,6 +2506,7 @@ const DEEP_RULES = new Set<string>([
   "dvwuGraphqlLabRouteLiveOracle",
   "dvwuRaceConditionLabRouteLiveOracle",
   "dvwuJwtLabRouteLiveOracle",
+  "dvwuXssLabRouteLiveOracle",
   "dvwuDeserializationLabRouteLiveOracle",
   "dvwuSstiLabRouteLiveOracle",
   "dvwuCommandInjectionLabRouteLiveOracle",
@@ -10946,6 +10947,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/brokencrystals\.com/i.test(origin) && /adminpermission/i.test(targetInput) && p.slug.startsWith("brokencrystals-")) return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/admin\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-admin-login")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/signup\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-signup")
       )
@@ -11463,6 +11470,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/xss\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-xss-lab")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/deserialization\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-deserialization")
       )
@@ -11535,7 +11548,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-3])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-3])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;
