@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T03:07:04.788Z",
-  "total": 2363,
-  "uniqueSlugs": 2359,
+  "generatedAt": "2026-08-15T04:06:43.748Z",
+  "total": 2365,
+  "uniqueSlugs": 2361,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2345,
+    "generic": 2347,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2278,
+    "deep": 2280,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 480,
+    "Broken access control": 481,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 112,
     "Security misconfiguration": 166,
     "Broken authentication": 143,
-    "Injection": 352,
+    "Injection": 353,
     "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
@@ -2382,6 +2382,7 @@
     "zen-demo-java-request-ssrf-live-oracle",
     "zerohealth-admin-users-route-live-oracle",
     "zerohealth-ai-chat-sqli-route-live-oracle",
+    "zerohealth-chatbot-chat-route-live-oracle",
     "zerohealth-chatbot-history-route-live-oracle",
     "zerohealth-command-injection-route-live-oracle",
     "zerohealth-debug-connection-route-live-oracle",
@@ -2392,6 +2393,7 @@
     "zerohealth-health-route-live-oracle",
     "zerohealth-info-route-live-oracle",
     "zerohealth-information-disclosure-route-live-oracle",
+    "zerohealth-lab-results-route-live-oracle",
     "zerohealth-mass-assignment-route-live-oracle",
     "zerohealth-medical-records-bola-route-live-oracle",
     "zerohealth-messages-sqli-route-live-oracle",
