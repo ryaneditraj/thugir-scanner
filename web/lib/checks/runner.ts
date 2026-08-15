@@ -22,7 +22,9 @@ import {
   primeBypass403SessionForDeepScan,
   primePwnshopAuditLogOracleForDeepScan,
   primePwnshopOtpSessionForDeepScan,
+  primeSecureNextjsLessonSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
+  ensureSecureNextjsLessonSession,
   WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX,
   type RuleContext
 } from "./registry";
@@ -227,6 +229,36 @@ async function ensureOwaspGenaiLabSession(
   const cookie = onboardRes.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0];
   if (cookie) sessionRef.cookie = cookie;
   return cookie;
+}
+
+async function applySecureNextjsLessonSession(
+  url: string,
+  doc: FetchedDoc,
+  probe: ProbeCache,
+  maxBytes = 120_000
+): Promise<FetchedDoc> {
+  let host: string;
+  try {
+    host = new URL(url).hostname;
+  } catch {
+    return doc;
+  }
+  if (!/nextjs-security-lesson\.vercel\.app/i.test(host)) return doc;
+  if (!/\/(?:protected|admin|docs|account)(?:\/|$)/i.test(url)) return doc;
+  if (/Welcome|Admin panel|ACL rules/i.test(doc.body) && doc.status >= 200 && doc.status < 400) return doc;
+  const ctx: RuleContext = {
+    origin: new URL(url).origin,
+    scanUrl: url,
+    home: doc,
+    scripts: [],
+    combined: "",
+    probe
+  };
+  const session = await ensureSecureNextjsLessonSession(ctx);
+  if (!session) return doc;
+  const authed = await probe.get(url, { maxBytes, headers: { Cookie: session } });
+  if (authed.status >= 200 && authed.status < 400 && authed.body.length >= doc.body.length) return authed;
+  return doc;
 }
 
 async function applyOwaspGenaiLabSession(
@@ -1980,6 +2012,11 @@ const DEEP_RULES = new Set<string>([
   "secureBankBayTransactionsCsrfRouteLiveOracle",
   "secureBankBayTransferCsrfRouteLiveOracle",
   "secureBankBayApiUsersRouteLiveOracle",
+  "clientSideSecureNextjsLessonEvidence",
+  "secureNextjsLessonLoginCsrfRouteLiveOracle",
+  "secureNextjsLessonProtectedRouteLiveOracle",
+  "secureNextjsLessonAdminRbacRouteLiveOracle",
+  "secureNextjsLessonDocsAclRouteLiveOracle",
   "clientSideJwtlensEvidence",
   "clientSideCybersheildLabEvidence",
   "clientSideOopssecStoreEvidence",
@@ -9324,6 +9361,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   if (/voting-app[\w-]*\.vercel\.app/i.test(origin)) {
     await primeVotingAppSessionForDeepScan(probe, origin, home);
   }
+  if (/nextjs-security-lesson\.vercel\.app/i.test(origin)) {
+    await primeSecureNextjsLessonSessionForDeepScan(probe, origin, targetInput, home);
+  }
   home = await applyWargameBasicAuth(home.finalUrl || target.toString(), home, probe, home.body);
   const owaspGenaiSessionRef: { cookie?: string } = {};
   home = await applyOwaspGenaiLabSession(
@@ -9332,6 +9372,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     probe,
     owaspGenaiSessionRef
   );
+  home = await applySecureNextjsLessonSession(home.finalUrl || target.toString(), home, probe);
   const homeScriptUrls = extractScriptUrls(home.body, home.finalUrl, 8);
   const earlyScripts = await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
     probe,
@@ -10613,6 +10654,32 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
 
+  let secureNextjsLessonBootstrap = "";
+  if (
+    /nextjs-security-lesson\.vercel\.app/i.test(origin) &&
+    /\/(?:protected|admin|docs|login)\b/i.test(targetInput)
+  ) {
+    const bootCtx: RuleContext = {
+      origin,
+      scanUrl: targetInput,
+      home,
+      scripts: [],
+      combined: "",
+      probe
+    };
+    const session = await ensureSecureNextjsLessonSession(bootCtx);
+    if (session && /\/(?:protected|admin|docs)\b/i.test(targetInput)) {
+      const bootDoc = await probe.get(targetInput, {
+        maxBytes: 120_000,
+        timeoutMs: 15000,
+        headers: { Cookie: session }
+      });
+      if (bootDoc.status >= 200 && bootDoc.status < 400 && bootDoc.body.length > 200) {
+        secureNextjsLessonBootstrap = bootDoc.body;
+      }
+    }
+  }
+
   const combined = [
     ...pages.map((p) => p.body),
     ...scripts.map((s) => s.body),
@@ -10622,7 +10689,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     pwnshopBootstrap,
     webSecurityLearningLabsBootstrap,
     vaultappBootstrap,
-    owaspGenaiBootstrap
+    owaspGenaiBootstrap,
+    secureNextjsLessonBootstrap
   ]
     .filter(Boolean)
     .join("\n");
@@ -11427,7 +11495,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-2])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|1650)\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;
@@ -11770,6 +11838,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /secure-bank-bay\.vercel\.app/i.test(origin) &&
         /\/transfer\b/i.test(targetInput) &&
         p.slug.startsWith("secure-bank-bay-transfer")
+      )
+        return -3;
+      if (
+        /nextjs-security-lesson\.vercel\.app/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-nextjs-lesson-login")
+      )
+        return -3;
+      if (
+        /nextjs-security-lesson\.vercel\.app/i.test(origin) &&
+        /\/protected\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-nextjs-lesson-protected")
+      )
+        return -3;
+      if (
+        /nextjs-security-lesson\.vercel\.app/i.test(origin) &&
+        /\/admin\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-nextjs-lesson-admin")
+      )
+        return -3;
+      if (
+        /nextjs-security-lesson\.vercel\.app/i.test(origin) &&
+        /\/docs\b/i.test(targetInput) &&
+        p.slug.startsWith("secure-nextjs-lesson-docs")
       )
         return -3;
       if (

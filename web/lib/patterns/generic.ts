@@ -41551,7 +41551,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs extended IDOR module route live oracle",
     description:
-      "When scanning extended curated IDOR catalog modules (1597–1642) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
+      "When scanning extended curated IDOR catalog modules (1597–1650) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
     impactOneline:
       "Route-specific identification of unreleased WSL IDOR catalog modules prevents missing topic context on empty Next.js shells.",
     detectorKind: "rule_ref",
@@ -41567,6 +41567,136 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WSL /module/{id} IDOR route is an unreleased CSR placeholder shell. Show how to hide catalog stubs until IDOR lab content ships.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-secure-nextjs-lesson-evidence",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Secure Next.js Training app disclosed",
+    description:
+      "nextjs-security-lesson.vercel.app publishes an intentionally vulnerable Next.js 15 training app teaching JWT httpOnly sessions, CSRF double-submit, RBAC admin gates, and per-directory ACL rules for /docs/*.",
+    impactOneline:
+      "Public training deploy documents secure-auth patterns and middleware-gated routes for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecureNextjsLessonEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Training apps should not expose production credentials — isolate lab deploys.",
+      steps: [
+        "Use dedicated training credentials not shared with production.",
+        "Gate lab deploys behind auth or IP allowlists when possible.",
+        "Document that middleware-gated routes require session seeding for scanners."
+      ]
+    },
+    fixPrompt:
+      "We host a Secure Next.js Training lab on Vercel. Show how to isolate training deploys and avoid leaking session patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-nextjs-lesson-login-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Secure Next.js Training login CSRF route live oracle",
+    description:
+      "When scanning /login on nextjs-security-lesson.vercel.app, the credential form POSTs to /api/login with a hidden csrf field matching the __Host-csrf double-submit cookie — route-specific CSRF training oracle.",
+    impactOneline:
+      "Educational Next.js app documents CSRF double-submit login protection for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureNextjsLessonLoginCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Secure Next.js Training is intentional lab software — enforce CSRF on all state-changing routes.",
+      steps: [
+        "Use double-submit or synchronizer tokens on POST /api/login.",
+        "Set __Host-csrf with Secure, SameSite=Lax.",
+        "Validate Origin header on credential endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /login route documents CSRF-protected credential login. Show CSRF remediation for Next.js App Router forms.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-nextjs-lesson-protected-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Secure Next.js Training protected route live oracle",
+    description:
+      "When scanning /protected on nextjs-security-lesson.vercel.app, JWT __Host-session cookie obtained via CSRF login grants middleware-gated access to the user welcome page — route-specific session training oracle.",
+    impactOneline:
+      "Educational Next.js app confirms JWT session middleware gates /protected after authenticated login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureNextjsLessonProtectedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Secure Next.js Training is intentional lab software — verify JWT sessions in middleware.",
+      steps: [
+        "Store JWT in __Host-session httpOnly cookie.",
+        "Verify JWT in App Router middleware before serving /protected.",
+        "Use short TTL and SESSION_VERSION for revocation."
+      ]
+    },
+    fixPrompt:
+      "Our /protected route requires JWT session middleware. Show secure session verification for Next.js middleware.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-nextjs-lesson-admin-rbac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Secure Next.js Training admin RBAC route live oracle",
+    description:
+      "When scanning /admin on nextjs-security-lesson.vercel.app, admin JWT role claim grants RBAC-gated admin panel after CSRF login — route-specific RBAC training oracle.",
+    impactOneline:
+      "Educational Next.js app documents role===admin RBAC middleware gate for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureNextjsLessonAdminRbacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Secure Next.js Training is intentional lab software — enforce server-side RBAC.",
+      steps: [
+        "Gate /admin on JWT role claim verified in middleware.",
+        "Never rely on client-side role checks alone.",
+        "Use least-privilege roles in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route documents JWT RBAC gating. Show server-side role authorization for Next.js middleware.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "secure-nextjs-lesson-docs-acl-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Secure Next.js Training docs ACL route live oracle",
+    description:
+      "When scanning /docs on nextjs-security-lesson.vercel.app, per-directory ACL rules gate /docs/* subpaths by user id and role after JWT session login — route-specific ACL training oracle.",
+    impactOneline:
+      "Educational Next.js app documents per-directory ACL prefix rules for /docs/* routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureNextjsLessonDocsAclRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Secure Next.js Training is intentional lab software — enforce ACL checks server-side.",
+      steps: [
+        "Apply most-specific pathPrefix ACL rules in middleware.",
+        "Authorize by JWT sub/username and role claims.",
+        "Return 404 in production for ACL denials to avoid information leaks."
+      ]
+    },
+    fixPrompt:
+      "Our /docs route documents per-directory ACL rules. Show ACL middleware remediation for Next.js apps.",
     version: 1,
     enabled: true
   },
