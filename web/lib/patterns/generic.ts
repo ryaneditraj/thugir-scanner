@@ -26056,6 +26056,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "support-reliability-lab-stale-cache-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab stale-cache incident live oracle",
+    description:
+      "GET /s/stale-cache reproduces a stale cache / cache-miss regression incident with x-vercel-cache markers — Support Reliability Lab cache-regression oracle.",
+    impactOneline:
+      "Stale-cache incidents help validate CDN/cache playbooks but confirm the tenant is intentionally degraded.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabStaleCacheLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cache incidents are intentional in the lab — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document expected cache HIT/MISS behavior in support playbooks.",
+        "Do not expose stale-cache tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/stale-cache tenant reproduces stale cache regression incidents. Show how to isolate incident labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-stale-cache-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab /s/stale-cache route live oracle",
+    description:
+      "When scanning /s/stale-cache, the Support Reliability Lab reproduces stale cache / cache-miss regression with x-vercel-cache markers — route-specific incident oracle.",
+    impactOneline:
+      "Route scans on /s/stale-cache confirm the stale-cache tenant is in a cache-regression incident state.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabStaleCacheRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cache incidents are intentional — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document expected cache behavior in support playbooks.",
+        "Do not expose stale-cache tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/stale-cache route scan confirms stale cache regression incidents. Show route-specific isolation for support training labs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-big-upload-payload-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab payload-too-large incident live oracle",
+    description:
+      "POST /api/upload with a 150KB body returns HTTP 413 Payload Too Large (limit 100000) — Support Reliability Lab big-upload incident oracle.",
+    impactOneline:
+      "413 payload incidents help validate body-size limits but confirm oversized uploads are rejected as expected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabBigUploadPayloadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Payload limits are intentional in the lab — document expected 413 responses in playbooks.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document expected 413 responses and Blob upload alternatives.",
+        "Do not expose big-upload tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /api/upload endpoint returns 413 for oversized bodies on the big-upload tenant. Show how to isolate incident labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-big-upload-payload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab /s/big-upload route live oracle",
+    description:
+      "When scanning /s/big-upload, POST /api/upload returns HTTP 413 with a 100KB limit — route-specific payload-too-large incident oracle.",
+    impactOneline:
+      "Route scans on /s/big-upload confirm the big-upload tenant reproduces 413 payload-too-large incidents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabBigUploadPayloadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Payload limits are intentional — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document expected 413 responses in support playbooks.",
+        "Do not expose big-upload tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/big-upload route scan confirms 413 payload-too-large incidents. Show route-specific isolation for support training labs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pokemorty-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
