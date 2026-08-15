@@ -11497,7 +11497,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-6])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-8])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;
