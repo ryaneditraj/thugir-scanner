@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1646-1650-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1645→1650 + IDOR curated modules 1646-1650 + topic aliases; web-security-learning-labs.vercel.app/module/1648 findings include web-security-learning-labs-idor-module-route-live-oracle (Here is a Module: 1648); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nextjs-security-lesson.vercel.app",
+      "slug": "secure-nextjs-lesson-session-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ensureSecureNextjsLessonSession CSRF login (admin/password) + primeSecureNextjsLessonSessionForDeepScan + applySecureNextjsLessonSession; nextjs-security-lesson.vercel.app/protected 2→3 (+secure-nextjs-lesson-protected-route-live-oracle); /admin 2→3 (+admin-rbac); /docs 2→3 (+docs-acl); /login 2→3 (+login-csrf); homepage +client-side-secure-nextjs-lesson-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nextjs-security-lesson.vercel.app",
+      "slug": "secure-nextjs-lesson-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SECURE_NEXTJS_LESSON_ROUTE_FALLBACK_CORPUS for login/protected/admin/docs when Vercel Security Checkpoint blocks live fetch; route oracles fire at 0.88 via curated dariansweb/secure-nextjs-lesson corpus; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1643-1645-idor-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1642→1645 + IDOR curated modules 1643-1645 + topic aliases; web-security-learning-labs.vercel.app/module/1643 findings 6→9 (+web-security-learning-labs-idor-module-route-live-oracle); module/1645 5→9; benchmark juice-shop 48 findings 6/6 maintained"
@@ -10582,6 +10600,21 @@
       "source": "discovery:owaspbased-lessons.vercel.app",
       "slug": "owasp-genai-unbounded-consumption-route-live-oracle",
       "shipped_at": "2026-08-14T23:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1646-1650-idor-catalog",
+      "shipped_at": "2026-08-15T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:nextjs-security-lesson.vercel.app",
+      "slug": "secure-nextjs-lesson-session-oracles",
+      "shipped_at": "2026-08-15T03:10:00.000Z"
+    },
+    {
+      "source": "discovery:nextjs-security-lesson.vercel.app",
+      "slug": "secure-nextjs-lesson-checkpoint-fallback",
+      "shipped_at": "2026-08-15T03:10:00.000Z"
     }
   ]
 }
