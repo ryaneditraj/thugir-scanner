@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1633-1637-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1632→1637 + IDOR curated modules 1633-1637 + topic aliases + runner priority /module/(1597-1637); web-security-learning-labs.vercel.app/module/1634 findings 7→8 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-skip-redundant-otp-prime",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: skip pre-crawl primePwnshopOtpSessionForDeepScan on auth-gated routes that re-prime post-crawl (profile/apply-coupon/cart/wallet/review/search/filters) — reduces duplicate OTP handshakes under PwnMail rate limits; apply-coupon then upload-avatar batch scan 44 findings with pwnshop-avatar-svg-xss + avatar-upload-route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-upload-avatar-oracle-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority -4 for pwnshop avatar/upload slugs on /profile/upload-avatar (was -3) so SVG XSS oracle runs before other Pwnshop probes; pwnshop.ctfsecurity.com/profile/upload-avatar batch-after-apply-coupon 44 findings with all avatar oracles; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:owaspbased-lessons.vercel.app",
       "slug": "owasp-genai-excessive-agency-route-live-oracle",
       "status": "shipped",
