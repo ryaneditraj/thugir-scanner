@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1643-1645-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1642→1645 + IDOR curated modules 1643-1645 + topic aliases; web-security-learning-labs.vercel.app/module/1643 findings 6→9 (+web-security-learning-labs-idor-module-route-live-oracle); module/1645 5→9; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-xxe-cmdi-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwuCommandInjectionLabRouteLiveOracle matches /labs/cmdi alias; new dvwuXxeLabRouteLiveOracle for /labs/xxe + DEEP_RULES registration; dvwu.vercel.app/labs/cmdi findings 13→14 (+dvwu-command-injection-lab-route-live-oracle); /labs/xxe 13→14 (+dvwu-xxe-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeOwaspGenaiLessonRoute uses OWASP_GENAI_LESSON_FALLBACK_CORPUS when Vercel checkpoint blocks /onboard session; owaspbased-lessons.vercel.app/lesson/data-poisoning findings 1→4 (+owasp-genai-data-poisoning-route-live-oracle via LLM04 curated corpus); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1633-1637-idor-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1632→1637 + IDOR curated modules 1633-1637 + topic aliases + runner priority /module/(1597-1637); web-security-learning-labs.vercel.app/module/1634 findings 7→8 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
