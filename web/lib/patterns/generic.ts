@@ -25848,6 +25848,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sanitize-web-relaxed-bypass-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Sanitize Online Demo relaxed config bypass live oracle",
+    description:
+      "POST to sanitize-web.fly.dev with relaxed config and CVE-2020-4054 class math/style comment breakout leaks <img> tags into the rendered HTML panel — live sanitizer-bypass training oracle.",
+    impactOneline:
+      "Insufficient HTML sanitization before render allows attacker-controlled markup to survive the filter pipeline.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sanitizeWebRelaxedBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitizer demos are intentional — use strict allowlists and remove_contents for svg/math/style in production.",
+      steps: [
+        "Never rely on relaxed Sanitize configs for untrusted HTML.",
+        "Override remove_contents to strip svg/math/style element contents when not allowlisted.",
+        "Prefer text-only rendering for untrusted user content."
+      ]
+    },
+    fixPrompt:
+      "Our Sanitize relaxed config POST probe leaks img tags via math/style comment breakout. Show sanitizer-bypass remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sanitize-web-relaxed-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "sanitize-web.fly.dev relaxed config bypass route live oracle",
+    description:
+      "When scanning sanitize-web.fly.dev, live POST relaxed config probe confirms math/style comment breakout allows img injection into the rendered panel — route-specific sanitizer-bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that the public Sanitize demo relaxes filtering enough for markup injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sanitizeWebRelaxedBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden Sanitize config and remove_contents overrides on public sanitizer demo routes.",
+      steps: [
+        "Audit relaxed config allowlists on demo POST handlers.",
+        "Strip svg/math/style contents when elements are not explicitly allowlisted.",
+        "Run sanitizer demos only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sanitize-web.fly.dev route scan confirms relaxed config img injection via style comment breakout. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "webexp05-c3-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "webexp05 CTF challenge 3 stored XSS live oracle",
+    description:
+      "webexp05.vercel.app/c3/ stores comments in localStorage and renders comment.text via innerHTML without encoding — stored XSS training oracle with admin_flag cookie bait.",
+    impactOneline:
+      "Client-side comment storage rendered via innerHTML enables stored cross-site scripting in the CTF challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webexp05C3StoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use textContent instead of innerHTML for stored comments — CTF challenges are intentional training software.",
+      steps: [
+        "Encode user comments before assigning to innerHTML.",
+        "Use textContent or a strict HTML sanitizer for client-side rendering.",
+        "Run CTF challenge hubs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our webexp05 /c3/ challenge stores comments in localStorage and renders via innerHTML. Show stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "webexp05-c3-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "webexp05.vercel.app/c3/ stored XSS route live oracle",
+    description:
+      "When scanning /c3/, localStorage comment storage is rendered via innerHTML without sanitization — route-specific stored XSS oracle for the X Marks the Spot challenge.",
+    impactOneline:
+      "Route-specific confirmation that challenge 3 uses an unsafe innerHTML sink for stored comments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webexp05C3StoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode stored comments before innerHTML rendering on /c3/.",
+      steps: [
+        "Use textContent instead of innerHTML for user-generated comments.",
+        "Apply a strict HTML sanitizer if markup is required.",
+        "Run CTF challenges only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our webexp05 /c3/ route scan confirms localStorage comments reach innerHTML without encoding. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pokemorty-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
