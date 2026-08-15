@@ -1,6 +1,26 @@
 {
   "discovery_urls": [
     {
+      "url": "https://vulnerable-web-site.vercel.app/open-redirect",
+      "source": "megmogmog1965/vulnerable-web-site — open-redirect lab module (GitHub README Vercel demo, web search Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/xxe",
+      "source": "megmogmog1965/vulnerable-web-site — XXE lab module (GitHub README Vercel demo, web search Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1673",
+      "source": "web-security-learning-labs Vercel — module 1673 security lab route (WSL catalog expansion past 1672, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/sqli",
+      "source": "AI Security Platform — SQLi CWE-89 challenge route oracle (Vercel public demo, web search Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1671",
       "source": "web-security-learning-labs Vercel — module 1671 security lab route (WSL catalog expansion past 1670, Aug 2026)",
       "auth": "oss_deploy"
