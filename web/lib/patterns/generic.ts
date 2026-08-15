@@ -41623,6 +41623,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvwu-file-upload-lab-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DVWU file-upload stored XSS lab route live oracle",
+    description:
+      "When scanning /labs/file-upload on dvwu.vercel.app, the client bundle documents SVG onload and img onerror stored-XSS upload bypass payloads — route-specific file-upload training lab oracle.",
+    impactOneline:
+      "Unrestricted file uploads accepting SVG/HTML enable stored XSS when the training lab documents bypass payloads in the client bundle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuFileUploadLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — validate file types server-side and serve uploads with safe Content-Disposition in production.",
+      steps: [
+        "Allow-list safe MIME types and inspect file magic bytes server-side.",
+        "Store uploads outside the web root or serve with Content-Disposition: attachment.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/file-upload route is a stored-XSS via file-upload training lab. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bug-collection-evidence",
     platform: "generic",
     category: "Injection",
