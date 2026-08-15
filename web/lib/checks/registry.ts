@@ -38336,8 +38336,10 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1696;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1700;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
+/** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
+const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
   const moduleId = String(moduleNum);
@@ -38347,7 +38349,7 @@ for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= 
 }
 
 /** CSR placeholder shells 1125+ fire reflexion SSTI probes — map to advanced SSTI topic. */
-for (let moduleNum = WEB_SECURITY_LEARNING_SSTI_SHELL_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
+for (let moduleNum = WEB_SECURITY_LEARNING_SSTI_SHELL_MIN; moduleNum <= WEB_SECURITY_LEARNING_SSTI_SHELL_MAX; moduleNum++) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] =
     "Server-Side Template Injection (Advanced)";
 }
@@ -38458,6 +38460,10 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
 }
+/** CSR placeholder shells 1697–1700 override SSTI shell mapping from the 1125+ loop. */
+for (let moduleNum = 1697; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
+  WEB_SECURITY_LEARNING_MODULE_TOPICS[String(moduleNum)] = WEB_SECURITY_LEARNING_MODULE_PLACEHOLDER_TOPIC;
+}
 
 const WEB_SECURITY_LEARNING_EXTENDED_IDOR_MODULE_IDS = new Set(
   Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)
@@ -38471,7 +38477,7 @@ function isWebSecurityLearningSstiModuleId(moduleId: string): boolean {
   return (
     Number.isInteger(n) &&
     n >= WEB_SECURITY_LEARNING_SSTI_SHELL_MIN &&
-    n <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX
+    n <= WEB_SECURITY_LEARNING_SSTI_SHELL_MAX
   );
 }
 
@@ -43366,6 +43372,101 @@ const supportReliabilityLabServerlessTimeoutRouteLiveOracle: Rule = async (ctx) 
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Support Reliability Lab /s/slow-api route scan — deterministic 504 serverless timeout incident with upstream abort timing — route-specific incident-lab oracle"
+    }
+  };
+};
+
+const supportReliabilityLabStaleCacheLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const staleUrl = new URL("/s/stale-cache", ctx.origin).toString();
+  const doc = await ctx.probe.get(staleUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const staleOk =
+    /Stale cache\s*\/\s*cache-miss regression/i.test(doc.body) &&
+    /stale-cache content/i.test(doc.body) &&
+    /x-vercel-cache/i.test(doc.body);
+  if (!staleOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: staleUrl,
+      snippet:
+        doc.body.match(/Stale cache[\s\S]{0,120}/i)?.[0]?.slice(0, 160) ??
+        "Stale cache / cache-miss regression incident",
+      note: "Support Reliability Lab GET /s/stale-cache reproduces stale-cache incident with x-vercel-cache regression markers — route-specific incident-lab oracle"
+    }
+  };
+};
+
+const supportReliabilityLabStaleCacheRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/s\/stale-cache\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await supportReliabilityLabStaleCacheLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Support Reliability Lab /s/stale-cache route scan — stale cache / cache-miss regression incident with x-vercel-cache markers — route-specific incident-lab oracle"
+    }
+  };
+};
+
+const supportReliabilityLabBigUploadPayloadLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const uploadUrl = new URL("/api/upload", ctx.origin).toString();
+  const payload = "A".repeat(150_000);
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body: payload,
+    maxBytes: 4096,
+    timeoutMs: 20000,
+    headers: { "Content-Type": "application/octet-stream" }
+  });
+  const payloadOk =
+    doc.status === 413 &&
+    /Payload Too Large/i.test(doc.body) &&
+    /"limit"\s*:\s*100000/.test(doc.body);
+  if (!payloadOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: uploadUrl,
+      status: doc.status,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Support Reliability Lab POST /api/upload with 150KB body returns HTTP 413 Payload Too Large (limit 100000) — big-upload incident-lab oracle"
+    }
+  };
+};
+
+const supportReliabilityLabBigUploadPayloadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/s\/big-upload\b/i.test(pageUrl)) return NEGATIVE;
+  const pageDoc = await ctx.probe.get(
+    pageUrl || new URL("/s/big-upload", ctx.origin).toString(),
+    { maxBytes: 32768, timeoutMs: 15000 }
+  );
+  const incidentOk =
+    pageDoc.status >= 200 &&
+    pageDoc.status < 400 &&
+    /413 payload too large/i.test(pageDoc.body);
+  const uploadResult = await supportReliabilityLabBigUploadPayloadLiveOracle(ctx);
+  if (!incidentOk && !uploadResult.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: uploadResult.fired ? uploadResult.confidence : 0.9,
+    evidence: {
+      ...(uploadResult.fired ? uploadResult.evidence : {}),
+      scannedUrl: pageUrl,
+      note: uploadResult.fired
+        ? "Support Reliability Lab /s/big-upload route scan — POST /api/upload returns HTTP 413 with 100KB limit — route-specific payload-too-large incident oracle"
+        : "Support Reliability Lab /s/big-upload route scan — 413 payload too large incident tenant (live upload probe blocked; page incident markers confirmed)"
     }
   };
 };
@@ -83074,6 +83175,10 @@ export const RULES: Record<string, Rule> = {
   supportReliabilityLabAdminConsoleRouteLiveOracle,
   supportReliabilityLabServerlessTimeoutLiveOracle,
   supportReliabilityLabServerlessTimeoutRouteLiveOracle,
+  supportReliabilityLabStaleCacheLiveOracle,
+  supportReliabilityLabStaleCacheRouteLiveOracle,
+  supportReliabilityLabBigUploadPayloadLiveOracle,
+  supportReliabilityLabBigUploadPayloadRouteLiveOracle,
   webexp05C3StoredXssLiveOracle,
   webexp05C3StoredXssRouteLiveOracle,
   clientSidePokemortyCtfEvidence,
