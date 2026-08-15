@@ -59989,5 +59989,83 @@ export const genericPatterns: Pattern[] = [
       "Our /insecure route scan confirms unsanitized dangerouslySetInnerHTML todo rendering. Show route-specific DOMPurify remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "compass-demo-jwt-alg-none-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Compass Security JWT Lab alg:none bypass live oracle",
+    description:
+      "GET /jwt_lab/api accepts forged alg:none JWT with role:admin on Compass Security JWT Lab deploys — JWT none-algorithm authentication bypass oracle.",
+    impactOneline:
+      "Accepting alg:none JWTs lets attackers forge admin tokens without knowing the signing secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoJwtAlgNoneLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none and enforce signature verification — Compass JWT Lab is intentional training software.",
+      steps: [
+        "Whitelist allowed JWT algorithms and reject \"none\".",
+        "Verify signatures on every protected route before trusting claims.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass JWT Lab /jwt_lab/api accepts alg:none JWTs. Show JWT algorithm allow-list and signature verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-jwt-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Compass Security /jwt_lab JWT alg:none route live oracle",
+    description:
+      "When scanning /jwt_lab, live alg:none bypass on /jwt_lab/api or curated JWT training markers confirm Compass Security JWT bypass training module.",
+    impactOneline:
+      "Route-specific confirmation that Compass /jwt_lab documents JWT alg:none authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoJwtLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg:none and enforce signature verification on /jwt_lab issued tokens.",
+      steps: [
+        "Whitelist allowed JWT algorithms and reject \"none\".",
+        "Verify signatures on every protected route before trusting claims.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /jwt_lab route documents JWT alg:none bypass. Show route-specific JWT hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-cors-attack-api-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Compass Security CORS Attack API route live oracle",
+    description:
+      "When scanning /cors/attack/api.php, unauthenticated PII JSON exposure plus victim null-origin CORS credential-leak training oracle confirm Compass CORS Attack Demo.",
+    impactOneline:
+      "CORS misconfigurations that whitelist null origin with credentials let sandboxed attackers read authenticated responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoCorsAttackApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never whitelist Origin: null with Access-Control-Allow-Credentials — Compass CORS demos are intentional training.",
+      steps: [
+        "Reject null origin in CORS allow-lists when credentials are enabled.",
+        "Require authentication before returning sensitive JSON from training APIs.",
+        "Run Compass CORS labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /cors/attack/api.php CORS demo exposes PII and null-origin credential leaks. Show CORS allow-list hardening.",
+    version: 1,
+    enabled: true
   }
 ];

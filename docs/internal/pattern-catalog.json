@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T09:04:08.012Z",
-  "total": 2365,
-  "uniqueSlugs": 2361,
+  "generatedAt": "2026-08-15T10:15:07.468Z",
+  "total": 2368,
+  "uniqueSlugs": 2364,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2347,
+    "generic": 2350,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2280,
+    "deep": 2283,
     "continuous": 0
   },
   "byCategory": {
@@ -25,8 +25,8 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 112,
-    "Security misconfiguration": 166,
-    "Broken authentication": 143,
+    "Security misconfiguration": 167,
+    "Broken authentication": 145,
     "Injection": 353,
     "Cross-site scripting": 686,
     "Open redirect": 21,
@@ -854,6 +854,9 @@
     "client-side-ziran-agent-security-evidence",
     "code-breaking-puzzle-route-live-oracle",
     "command-injection-form-probe",
+    "compass-demo-cors-attack-api-route-live-oracle",
+    "compass-demo-jwt-alg-none-live-oracle",
+    "compass-demo-jwt-lab-route-live-oracle",
     "convex-open-query-no-auth",
     "cors-reflect-origin",
     "crapi-check-otp-route-live-oracle",
