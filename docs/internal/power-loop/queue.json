@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://dvwu.vercel.app/labs/crlf",
+      "source": "zahidoverflow/damn-vulnerable-web-university — CRLF injection lab module (dvwu.vercel.app README, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1643",
+      "source": "web-security-learning-labs Vercel — module 1643 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1644",
+      "source": "web-security-learning-labs Vercel — module 1644 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1645",
+      "source": "web-security-learning-labs Vercel — module 1645 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/notices",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI notices lab route (dvwu.vercel.app README, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1639",
       "source": "web-security-learning-labs Vercel — module 1639 security lab route (WSL catalog expansion, Aug 2026)",
       "auth": "public_demo"
