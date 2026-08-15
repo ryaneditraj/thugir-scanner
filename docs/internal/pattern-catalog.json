@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T16:04:39.708Z",
-  "total": 2382,
-  "uniqueSlugs": 2378,
+  "generatedAt": "2026-08-15T17:13:00.470Z",
+  "total": 2383,
+  "uniqueSlugs": 2379,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2364,
+    "generic": 2365,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2297,
+    "deep": 2298,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 169,
     "Broken authentication": 146,
     "Injection": 358,
-    "Cross-site scripting": 690,
+    "Cross-site scripting": 691,
     "Open redirect": 21,
     "general": 20,
     "SSRF": 14,
@@ -979,6 +979,7 @@
     "dvwu-ssrf-redirect-live-oracle",
     "dvwu-ssrf-redirect-route-live-oracle",
     "dvwu-ssti-lab-route-live-oracle",
+    "dvwu-xss-lab-route-live-oracle",
     "dvwu-xxe-lab-route-live-oracle",
     "euri-sec-csp-dynamic-script-live-oracle",
     "euri-sec-csp-dynamic-script-route-live-oracle",
